@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Mep.Api/mep.api.csproj"
+                "${workspaceFolder}/Mep.Api/Mep.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Mep.Api/mep.api.csproj"
+                "${workspaceFolder}/Mep.Api/Mep.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,7 +28,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/Mep.Api/mep.api.csproj"
+                "${workspaceFolder}/Mep.Api/Mep.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         }

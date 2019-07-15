@@ -1,4 +1,5 @@
-﻿using Audit.Core;
+﻿using System.Linq;
+using Audit.Core;
 using Audit.EntityFramework;
 using Mep.Data.Entities;
 using Mep.Data.Entities.Audit;
@@ -100,6 +101,21 @@ namespace Mep.Business
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+
+      base.OnModelCreating(modelBuilder);
+
+      // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+      // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+      foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+      {
+
+          // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+          // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+          entityType.GetForeignKeys()
+              .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
+              .ToList()
+              .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
+      }      
 
       modelBuilder.Entity<BankDetail>()
         .HasAlternateKey(bankDetail => new { 

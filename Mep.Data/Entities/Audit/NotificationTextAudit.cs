@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mep.Data.Entities.Audit
 {
-  public partial class NotificationTextAudit : NameDescription, INotificationText
+  public partial class NotificationTextAudit : NameDescriptionAudit, INotificationText
   {
     [MaxLength(2000)]
     [Required]

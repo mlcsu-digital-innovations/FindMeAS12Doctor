@@ -2,7 +2,7 @@
 
 namespace Mep.Data.Entities.Audit
 {
-  public partial class NonPaymentLocationTypeAudit : NameDescription, INonPaymentLocationType
+  public partial class NonPaymentLocationTypeAudit : NameDescriptionAudit, INonPaymentLocationType
   {
     // public virtual IList<NonPaymentLocationAudit> NonPaymentLocations { get; set; }
   }

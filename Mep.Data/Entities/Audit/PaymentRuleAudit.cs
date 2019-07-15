@@ -2,7 +2,7 @@
 
 namespace Mep.Data.Entities.Audit
 {
-  public partial class PaymentRuleAudit : NameDescription, IPaymentRule
+  public partial class PaymentRuleAudit : NameDescriptionAudit, IPaymentRule
   {
     [MaxLength(2000)]
     [Required]

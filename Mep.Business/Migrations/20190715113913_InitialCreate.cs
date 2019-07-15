@@ -1,7 +1,8 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace mep.api.Migrations
+namespace mep.business.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -12,7 +13,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -39,7 +40,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -59,8 +60,14 @@ namespace mep.api.Migrations
                 name: "ClaimStatusAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -69,7 +76,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClaimStatusAudits", x => x.Id);
+                    table.PrimaryKey("PK_ClaimStatusAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,7 +84,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -93,8 +100,14 @@ namespace mep.api.Migrations
                 name: "ContactDetailTypeAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -103,7 +116,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContactDetailTypeAudits", x => x.Id);
+                    table.PrimaryKey("PK_ContactDetailTypeAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,7 +124,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -128,7 +141,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -159,7 +172,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -181,8 +194,14 @@ namespace mep.api.Migrations
                 name: "NonPaymentLocationTypeAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -191,15 +210,21 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NonPaymentLocationTypeAudits", x => x.Id);
+                    table.PrimaryKey("PK_NonPaymentLocationTypeAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "NotificationTextAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -209,7 +234,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NotificationTextAudits", x => x.Id);
+                    table.PrimaryKey("PK_NotificationTextAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -217,7 +242,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -235,7 +260,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -258,8 +283,14 @@ namespace mep.api.Migrations
                 name: "OrganisationAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -268,7 +299,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrganisationAudits", x => x.Id);
+                    table.PrimaryKey("PK_OrganisationAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,7 +307,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -293,7 +324,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -319,7 +350,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -343,8 +374,14 @@ namespace mep.api.Migrations
                 name: "PaymentMethodTypeAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -353,7 +390,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentMethodTypeAudits", x => x.Id);
+                    table.PrimaryKey("PK_PaymentMethodTypeAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -361,7 +398,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -377,8 +414,14 @@ namespace mep.api.Migrations
                 name: "PaymentRuleAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -389,15 +432,21 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentRuleAudits", x => x.Id);
+                    table.PrimaryKey("PK_PaymentRuleAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PaymentRuleSetAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -409,15 +458,21 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentRuleSetAudits", x => x.Id);
+                    table.PrimaryKey("PK_PaymentRuleSetAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProfileTypeAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -426,7 +481,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfileTypeAudits", x => x.Id);
+                    table.PrimaryKey("PK_ProfileTypeAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -434,7 +489,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -451,7 +506,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -475,8 +530,14 @@ namespace mep.api.Migrations
                 name: "ReferralStatusAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -485,7 +546,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReferralStatusAudits", x => x.Id);
+                    table.PrimaryKey("PK_ReferralStatusAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,7 +554,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -516,8 +577,14 @@ namespace mep.api.Migrations
                 name: "Section12ApprovalStatusAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -526,7 +593,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Section12ApprovalStatusAudits", x => x.Id);
+                    table.PrimaryKey("PK_Section12ApprovalStatusAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -534,7 +601,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -551,7 +618,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -572,8 +639,14 @@ namespace mep.api.Migrations
                 name: "SpecialityAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -587,15 +660,21 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpecialityAudits", x => x.Id);
+                    table.PrimaryKey("PK_SpecialityAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "UnsuccessfulExaminationTypeAudits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AuditId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -604,7 +683,7 @@ namespace mep.api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UnsuccessfulExaminationTypeAudits", x => x.Id);
+                    table.PrimaryKey("PK_UnsuccessfulExaminationTypeAudits", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -612,7 +691,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -629,7 +708,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -657,7 +736,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -691,7 +770,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -719,7 +798,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -742,7 +821,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -778,7 +857,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -819,7 +898,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -865,7 +944,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     AuditId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AuditAction = table.Column<string>(nullable: true),
                     AuditDuration = table.Column<int>(nullable: false),
                     AuditErrorMessage = table.Column<string>(nullable: true),
@@ -897,7 +976,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -914,7 +993,7 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -922,7 +1001,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -946,7 +1025,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -964,7 +1043,7 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -972,7 +1051,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -992,13 +1071,13 @@ namespace mep.api.Migrations
                         column: x => x.OrganisationId,
                         principalTable: "Organisations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Users_ProfileTypes_ProfileTypeId",
                         column: x => x.ProfileTypeId,
                         principalTable: "ProfileTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Users_Section12ApprovalStatuses_Section12ApprovalStatusId",
                         column: x => x.Section12ApprovalStatusId,
@@ -1012,7 +1091,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1044,7 +1123,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1060,7 +1139,7 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_NonPaymentLocations_NonPaymentLocations_NonPaymentLocationId",
                         column: x => x.NonPaymentLocationId,
@@ -1072,7 +1151,7 @@ namespace mep.api.Migrations
                         column: x => x.NonPaymentLocationTypeId,
                         principalTable: "NonPaymentLocationTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1080,7 +1159,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1097,7 +1176,7 @@ namespace mep.api.Migrations
                         column: x => x.PaymentRuleSetId,
                         principalTable: "PaymentRuleSets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1105,7 +1184,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1126,13 +1205,13 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BankDetails_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1140,7 +1219,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1166,19 +1245,19 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ContactDetails_ContactDetailTypes_ContactDetailTypeId",
                         column: x => x.ContactDetailTypeId,
                         principalTable: "ContactDetailTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ContactDetails_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1186,7 +1265,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1218,7 +1297,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1234,7 +1313,7 @@ namespace mep.api.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1242,7 +1321,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1259,19 +1338,19 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PaymentMethods_PaymentMethodTypes_PaymentMethodTypeId",
                         column: x => x.PaymentMethodTypeId,
                         principalTable: "PaymentMethodTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PaymentMethods_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1279,7 +1358,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1294,13 +1373,13 @@ namespace mep.api.Migrations
                         column: x => x.SpecialityId,
                         principalTable: "Specialities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserSpecialities_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1308,7 +1387,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1325,19 +1404,19 @@ namespace mep.api.Migrations
                         column: x => x.CreatedByUserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Referrals_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Referrals_ReferralStatuses_ReferralStatusId",
                         column: x => x.ReferralStatusId,
                         principalTable: "ReferralStatuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1345,7 +1424,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1378,7 +1457,7 @@ namespace mep.api.Migrations
                         column: x => x.CcgId,
                         principalTable: "Ccgs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Examinations_Users_CompletedByUserId",
                         column: x => x.CompletedByUserId,
@@ -1396,19 +1475,19 @@ namespace mep.api.Migrations
                         column: x => x.CreatedByUserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Examinations_NonPaymentLocations_NonPaymentLocationId",
                         column: x => x.NonPaymentLocationId,
                         principalTable: "NonPaymentLocations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Examinations_Referrals_ReferralId",
                         column: x => x.ReferralId,
                         principalTable: "Referrals",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Examinations_Specialities_SpecialityId",
                         column: x => x.SpecialityId,
@@ -1428,7 +1507,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1460,13 +1539,13 @@ namespace mep.api.Migrations
                         column: x => x.ExaminationId,
                         principalTable: "Examinations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserExaminationClaims_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1474,7 +1553,7 @@ namespace mep.api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
@@ -1494,19 +1573,19 @@ namespace mep.api.Migrations
                         column: x => x.ExaminationId,
                         principalTable: "Examinations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserExaminationNotifications_NotificationTexts_NotificationTextId",
                         column: x => x.NotificationTextId,
                         principalTable: "NotificationTexts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserExaminationNotifications_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

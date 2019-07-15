@@ -3,25 +3,29 @@ using System;
 using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace mep.api.Migrations
+namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190715103515_InitialCreate")]
+    [Migration("20190715113913_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.BankDetailAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccountNumber");
 
@@ -73,7 +77,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.CcgAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -114,12 +119,25 @@ namespace mep.api.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.ClaimStatusAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -131,7 +149,7 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("ClaimStatusAudits");
                 });
@@ -139,7 +157,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.ContactDetailAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
@@ -202,12 +221,25 @@ namespace mep.api.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.ContactDetailTypeAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -219,7 +251,7 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("ContactDetailTypeAudits");
                 });
@@ -227,7 +259,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.DoctorStatusAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -275,7 +308,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.ExaminationAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
@@ -348,7 +382,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.GpPracticeAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -394,7 +429,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.NonPaymentLocationAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -425,12 +461,25 @@ namespace mep.api.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.NonPaymentLocationTypeAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -442,19 +491,32 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("NonPaymentLocationTypeAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.NotificationTextAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -470,7 +532,7 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("NotificationTextAudits");
                 });
@@ -478,7 +540,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.OnCallUserAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -511,12 +574,25 @@ namespace mep.api.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.OrganisationAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -528,7 +604,7 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("OrganisationAudits");
                 });
@@ -536,7 +612,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.PatientAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AlternativeIdentifier")
                         .HasMaxLength(200);
@@ -577,7 +654,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentMethodAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -612,12 +690,25 @@ namespace mep.api.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentMethodTypeAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -629,15 +720,26 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("PaymentMethodTypeAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentRuleAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Criteria")
                         .IsRequired()
@@ -646,6 +748,8 @@ namespace mep.api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -659,15 +763,26 @@ namespace mep.api.Migrations
 
                     b.Property<int>("PaymentRuleSetId");
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("PaymentRuleAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentRuleSetAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<int>("CcgId");
 
@@ -679,6 +794,8 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(2000);
 
+                    b.Property<int>("Id");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<DateTimeOffset>("ModifiedAt");
@@ -689,19 +806,32 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("PaymentRuleSetAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.ProfileTypeAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -713,7 +843,7 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("ProfileTypeAudits");
                 });
@@ -721,7 +851,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.ReferralAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -756,12 +887,25 @@ namespace mep.api.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.ReferralStatusAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -773,19 +917,32 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("ReferralStatusAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.Section12ApprovalStatusAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -797,15 +954,26 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("Section12ApprovalStatusAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.SpecialityAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -814,6 +982,8 @@ namespace mep.api.Migrations
                     b.Property<int?>("FinanceMileageSubjectiveCode");
 
                     b.Property<int?>("FinanceSubjectiveCode");
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -831,19 +1001,32 @@ namespace mep.api.Migrations
 
                     b.Property<decimal>("Section12Payment");
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("SpecialityAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Audit.UnsuccessfulExaminationTypeAudit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
 
@@ -855,7 +1038,7 @@ namespace mep.api.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.HasKey("Id");
+                    b.HasKey("AuditId");
 
                     b.ToTable("UnsuccessfulExaminationTypeAudits");
                 });
@@ -863,7 +1046,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.UserAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -907,7 +1091,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.UserExaminationClaimAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -965,7 +1150,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.UserExaminationNotificationAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -1007,7 +1193,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Audit.UserSpecialityAudit", b =>
                 {
                     b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AuditAction");
 
@@ -1039,7 +1226,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.BankDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccountNumber");
 
@@ -1077,7 +1265,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Ccg", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CostCentre");
 
@@ -1107,7 +1296,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.ClaimStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1131,7 +1321,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.ContactDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
@@ -1183,7 +1374,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.ContactDetailType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1207,7 +1399,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.DoctorStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("AvailabilityEnd");
 
@@ -1247,7 +1440,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Examination", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
@@ -1324,7 +1518,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CcgId");
 
@@ -1356,7 +1551,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocation", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CcgId");
 
@@ -1384,7 +1580,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocationType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CcgId");
 
@@ -1412,7 +1609,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.NotificationText", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1440,7 +1638,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.OnCallUser", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("DateTimeEnd");
 
@@ -1464,7 +1663,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Organisation", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1488,7 +1688,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Patient", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AlternativeIdentifier")
                         .HasMaxLength(200);
@@ -1521,7 +1722,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CcgId");
 
@@ -1549,7 +1751,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.PaymentMethodType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1573,7 +1776,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.PaymentRule", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Criteria")
                         .IsRequired()
@@ -1605,7 +1809,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.PaymentRuleSet", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CcgId");
 
@@ -1637,7 +1842,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.ProfileType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1661,7 +1867,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Referral", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset>("CreatedAt");
 
@@ -1691,7 +1898,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.ReferralStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1719,7 +1927,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Section12ApprovalStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1743,7 +1952,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.Speciality", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1777,7 +1987,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.UnsuccessfulExaminationType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1801,7 +2012,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("GmcNumber");
 
@@ -1839,7 +2051,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.UserExaminationClaim", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("ClaimReference");
 
@@ -1891,7 +2104,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.UserExaminationNotification", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("ExaminationId");
 
@@ -1925,7 +2139,8 @@ namespace mep.api.Migrations
             modelBuilder.Entity("Mep.Data.Entities.UserSpeciality", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("IsActive");
 
@@ -1979,12 +2194,12 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("BankDetails")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("BankDetails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ContactDetail", b =>
@@ -1992,17 +2207,17 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("ContactDetails")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.ContactDetailType", "ContactDetailType")
                         .WithMany("ContactDetails")
                         .HasForeignKey("ContactDetailTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("ContactDetails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.DoctorStatus", b =>
@@ -2017,7 +2232,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("Examinations")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "CompletedByUser")
                         .WithMany("CompletedExaminations")
@@ -2030,17 +2245,17 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.NonPaymentLocation", "NonPaymentLocation")
                         .WithMany()
                         .HasForeignKey("NonPaymentLocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Referral", "Referral")
                         .WithMany("Examinations")
                         .HasForeignKey("ReferralId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Speciality", "Speciality")
                         .WithMany("Examinations")
@@ -2056,7 +2271,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("GpPractices")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocation", b =>
@@ -2064,7 +2279,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany()
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.NonPaymentLocation")
                         .WithMany("NonPaymentLocations")
@@ -2073,7 +2288,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.NonPaymentLocationType", "NonPaymentLocationType")
                         .WithMany("NonPaymentLocations")
                         .HasForeignKey("NonPaymentLocationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocationType", b =>
@@ -2088,7 +2303,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("OnCallUsers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Patient", b =>
@@ -2107,17 +2322,17 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.PaymentMethodType", "PaymentMethodType")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("PaymentMethodTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentRule", b =>
@@ -2125,7 +2340,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.PaymentRuleSet", "PaymentRuleSet")
                         .WithMany("PaymentRules")
                         .HasForeignKey("PaymentRuleSetId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentRuleSet", b =>
@@ -2133,7 +2348,7 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("PaymentRuleSets")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Referral", b =>
@@ -2141,17 +2356,17 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.User", "CreatedByUser")
                         .WithMany("Referrals")
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.ReferralStatus", "ReferralStatus")
                         .WithMany()
                         .HasForeignKey("ReferralStatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ReferralStatus", b =>
@@ -2166,12 +2381,12 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Organisation", "Organisation")
                         .WithMany("Users")
                         .HasForeignKey("OrganisationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.ProfileType", "ProfileType")
                         .WithMany("Users")
                         .HasForeignKey("ProfileTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Section12ApprovalStatus", "Section12ApprovalStatus")
                         .WithMany("Users")
@@ -2187,12 +2402,12 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Examination", "Examination")
                         .WithMany("UserExaminationClaims")
                         .HasForeignKey("ExaminationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("UserExaminationClaims")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UserExaminationNotification", b =>
@@ -2200,17 +2415,17 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Examination", "Examination")
                         .WithMany("UserExaminationNotifications")
                         .HasForeignKey("ExaminationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.NotificationText", "NotificationText")
                         .WithMany("UserExaminationNotifications")
                         .HasForeignKey("NotificationTextId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("UserExaminationNotifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UserSpeciality", b =>
@@ -2218,12 +2433,12 @@ namespace mep.api.Migrations
                     b.HasOne("Mep.Data.Entities.Speciality", "Speciality")
                         .WithMany("UserSpecialities")
                         .HasForeignKey("SpecialityId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("UserSpecialities")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

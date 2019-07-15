@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mep.Data.Entities.Audit
 {
-  public partial class PaymentRuleSetAudit : NameDescription, IPaymentRuleSet
+  public partial class PaymentRuleSetAudit : NameDescriptionAudit, IPaymentRuleSet
   {
     // public virtual CcgAudit Ccg { get; set; }
     public int CcgId { get; set; }

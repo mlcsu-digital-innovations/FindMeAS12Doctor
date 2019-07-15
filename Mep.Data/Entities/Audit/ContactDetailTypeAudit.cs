@@ -2,7 +2,7 @@
 
 namespace Mep.Data.Entities.Audit
 {
-  public partial class ContactDetailTypeAudit : NameDescription, IContactDetailType
+  public partial class ContactDetailTypeAudit : NameDescriptionAudit, IContactDetailType
   {
     // public virtual IList<ContactDetailAudit> ContactDetails { get; set; }
   }

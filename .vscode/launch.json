@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Mep.Api/bin/Debug/netcoreapp2.2/mep.api.dll",
+            "program": "${workspaceFolder}/Mep.Api/bin/Debug/netcoreapp2.2/Mep.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Mep.Api",
             "stopAtEntry": false,

@@ -2,7 +2,7 @@
 
 namespace Mep.Data.Entities.Audit
 {
-  public partial class ClaimStatusAudit : NameDescription, IClaimStatus
+  public partial class ClaimStatusAudit : NameDescriptionAudit, IClaimStatus
   {
     // public virtual IList<UserExaminationClaimAudit> UserExaminationClaims { get; set; }
   }

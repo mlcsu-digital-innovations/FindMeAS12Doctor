@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace mep.api
+namespace Mep.Api
 {
     public class Startup
     {
@@ -25,12 +25,16 @@ namespace mep.api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             //TODO: Add this to a config file
-            string connection = "Data Source=MedicalExaminationsPortal.db";
+            string connection = 
+                "Server=localhost" +
+                ";DataBase=MedicalExaminationsPortal;" +
+                ";Trusted_Connection=true" +
+                ";MultipleActiveResultSets=true;" +
+                ";Application Name=MedicalExaminationsPortal;";
 
             services.AddDbContext<ApplicationContext>
-                (options => options.UseSqlite(
-                    connection, 
-                    builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
+                (options => options.UseSqlServer(
+                    connection));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
         }
