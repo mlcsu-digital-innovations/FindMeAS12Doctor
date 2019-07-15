@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("UserExaminationClaimsAudit")]
   public partial class UserExaminationClaimAudit : BaseAudit, IUserExaminationClaim
   {
     public int? ClaimReference { get; set; }

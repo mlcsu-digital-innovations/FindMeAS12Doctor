@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("PaymentRuleSetsAudit")]
   public partial class PaymentRuleSetAudit : NameDescriptionAudit, IPaymentRuleSet
   {
     // public virtual CcgAudit Ccg { get; set; }

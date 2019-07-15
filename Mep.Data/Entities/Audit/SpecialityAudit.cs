@@ -2,6 +2,7 @@
 
 namespace Mep.Data.Entities
 {
+  [Table("SpecialitiesAudit")]
   public partial class SpecialityAudit : NameDescriptionAudit, ISpeciality
   {
     // public virtual IList<ExaminationAudit> Examinations { get; set; }

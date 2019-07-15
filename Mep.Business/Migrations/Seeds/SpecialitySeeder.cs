@@ -25,7 +25,7 @@ namespace Mep.Business.Migrations.Seeds
             speciality.Description = "Speciality 1 Test";
             speciality.IsActive = true;
             speciality.ModifiedAt = now;
-            speciality.ModifiedBy = 1;            
+            speciality.ModifiedByUserId = 1;            
             speciality.Name = "Speciality 1";
 
             if ((speciality = _context.Specialities                                       
@@ -37,7 +37,7 @@ namespace Mep.Business.Migrations.Seeds
             speciality.Description = "Speciality 2 Test";
             speciality.IsActive = true;
             speciality.ModifiedAt = now;
-            speciality.ModifiedBy = 1;
+            speciality.ModifiedByUserId = 1;
             speciality.Name = "Speciality 2";
             
             _context.SaveChanges();

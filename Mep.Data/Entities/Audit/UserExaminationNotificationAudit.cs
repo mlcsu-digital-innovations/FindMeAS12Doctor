@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("UserExaminationNotificationsAudit")]
   public partial class UserExaminationNotificationAudit : BaseAudit, IUserExaminationNotification
   {
     // public virtual ExaminationAudit Examination { get; set; }

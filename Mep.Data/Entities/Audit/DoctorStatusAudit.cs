@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("DoctorStatusesAudit")]
   public partial class DoctorStatusAudit : BaseAudit, IDoctorStatus
   {
     public DateTimeOffset AvailabilityStart { get; set; }

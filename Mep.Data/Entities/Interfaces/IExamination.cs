@@ -21,7 +21,7 @@ namespace Mep.Data.Entities
     string Postcode { get; set; }
     int ReferralId { get; set; }
     DateTimeOffset ScheduledTime { get; set; }
-    int SpecialityTypeId { get; set; }
-    int? UnsuccesfulExaminationTypeId { get; set; }
+    int SpecialityId { get; set; }
+    int? UnsuccessfulExaminationTypeId { get; set; }
   }
 }

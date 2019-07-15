@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("ExaminationsAudit")]
   public partial class ExaminationAudit : BaseAudit, IExamination
   {
     [Required]
@@ -34,10 +36,10 @@ namespace Mep.Data.Entities
     public int ReferralId { get; set; }
     // public virtual ReferralAudit Referral { get; set; }
     public DateTimeOffset ScheduledTime { get; set; }
-    public int SpecialityTypeId { get; set; }
+    public int SpecialityId { get; set; }
     // [ForeignKey("CompletedByUserId")]
     // public SpecialityAudit Speciality { get; set; }
-    public int? UnsuccesfulExaminationTypeId { get; set; }
+    public int? UnsuccessfulExaminationTypeId { get; set; }
     // public UnsuccessfulExaminationTypeAudit UnsuccessfulExaminationType { get; set; }
     // public virtual IList<UserExaminationClaimAudit> UserExaminationClaims { get; set; }
     // public virtual IList<UserExaminationNotificationAudit> UserExaminationNotifications { get; set; }

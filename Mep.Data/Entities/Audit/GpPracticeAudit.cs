@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("GpPracticesAudit")]
   public partial class GpPracticeAudit : BaseAudit, IGpPractice
   {
     // public virtual CcgAudit Ccg { get; set; }
