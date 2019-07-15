@@ -4,6 +4,6 @@ namespace Mep.Data.Entities
 {
   public partial class ClaimStatus : NameDescription, IClaimStatus
   {
-    public virtual IList<IUserExaminationClaim> UserExaminationClaims { get; set; }
+    public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
   }
 }

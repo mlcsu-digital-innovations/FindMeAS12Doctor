@@ -2,11 +2,11 @@
 {
   public partial class PaymentMethod : BaseEntity, IPaymentMethod
   {
-    public virtual ICcg Ccg { get; set; }
+    public virtual Ccg Ccg { get; set; }
     public int CcgId { get; set; }
-    public IPaymentMethodType PaymentMethodType { get; set; }
+    public virtual PaymentMethodType PaymentMethodType { get; set; }
     public int PaymentMethodTypeId { get; set; }
-    public virtual IUser User { get; set; }
+    public virtual User User { get; set; }
     public int UserId { get; set; }
   }
 }

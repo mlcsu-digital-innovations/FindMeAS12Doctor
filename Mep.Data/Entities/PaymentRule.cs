@@ -7,7 +7,7 @@ namespace Mep.Data.Entities
     [MaxLength(2000)]
     [Required]
     public string Criteria { get; set; }
-    public virtual IPaymentRuleSet PaymentRuleSet { get; set; }
+    public virtual PaymentRuleSet PaymentRuleSet { get; set; }
     public int PaymentRuleSetId { get; set; }
   }
 }

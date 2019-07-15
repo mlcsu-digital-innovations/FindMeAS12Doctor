@@ -5,10 +5,10 @@ namespace Mep.Data.Entities.Audit
 {
   public partial class PaymentRuleSetAudit : NameDescription, IPaymentRuleSet
   {
-    public virtual ICcg Ccg { get; set; }
+    // public virtual CcgAudit Ccg { get; set; }
     public int CcgId { get; set; }
     public DateTimeOffset DateTimeFrom { get; set; }
     public DateTimeOffset DateTimeTo { get; set; }
-    public virtual IList<IPaymentRule> PaymentRules { get; set; }
+    // public virtual IList<PaymentRuleAudit> PaymentRules { get; set; }
   }
 }

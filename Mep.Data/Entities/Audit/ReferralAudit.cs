@@ -6,12 +6,12 @@ namespace Mep.Data.Entities.Audit
   public partial class ReferralAudit : BaseAudit, IReferral
   {
     public DateTimeOffset CreatedAt { get; set; }
-    public virtual IUser CreatedByUser { get; set; }
+    // public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
-    public virtual IList<IExamination> Examinations { get; set; }
-    public virtual IPatient Patient { get; set; }
+    // public virtual IList<ExaminationAudit> Examinations { get; set; }
+    // public virtual PatientAudit Patient { get; set; }
     public int PatientId { get; set; }
-    public virtual IReferralStatus ReferralStatus { get; set; }
+    // public virtual ReferralStatusAudit ReferralStatus { get; set; }
     public int ReferralStatusId { get; set; }
   }
 }

@@ -4,6 +4,6 @@ namespace Mep.Data.Entities.Audit
 {
   public partial class UnsuccessfulExaminationTypeAudit : NameDescription, IUnsuccessfulExaminationType
   {
-    public virtual IList<IExamination> Examinations { get; set; }
+    // public virtual IList<ExaminationAudit> Examinations { get; set; }
   }
 }

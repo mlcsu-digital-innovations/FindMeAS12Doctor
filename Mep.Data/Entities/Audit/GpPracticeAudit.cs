@@ -5,7 +5,7 @@ namespace Mep.Data.Entities.Audit
 {
   public partial class GpPracticeAudit : BaseAudit, IGpPractice
   {
-    public virtual ICcg Ccg { get; set; }
+    // public virtual CcgAudit Ccg { get; set; }
     public int CcgId { get; set; }
     [MaxLength(10)]
     [Required]
@@ -13,7 +13,7 @@ namespace Mep.Data.Entities.Audit
     [MaxLength(200)]
     [Required]
     public string Name { get; set; }
-    public virtual IList<IPatient> Patients { get; set; }
+    // public virtual IList<PatientAudit> Patients { get; set; }
     [MaxLength(10)]
     [Required]
     public string Postcode { get; set; }

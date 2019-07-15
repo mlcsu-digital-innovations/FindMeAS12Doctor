@@ -4,6 +4,6 @@ namespace Mep.Data.Entities
 {
   public partial class ReferralStatus : NameDescription, IReferralStatus
   {
-    public virtual IList<IReferralStatus> ReferralStatuses { get; set; }
+    public virtual IList<ReferralStatus> ReferralStatuses { get; set; }
   }
 }

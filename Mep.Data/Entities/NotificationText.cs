@@ -8,6 +8,6 @@ namespace Mep.Data.Entities
     [MaxLength(2000)]
     [Required]
     public string MessageTemplate { get; set; }
-    public virtual IList<IUserExaminationNotification> UserExaminationNotifications { get; set; }
+    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
   }
 }

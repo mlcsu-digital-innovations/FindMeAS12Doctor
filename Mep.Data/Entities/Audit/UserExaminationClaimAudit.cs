@@ -6,9 +6,9 @@ namespace Mep.Data.Entities.Audit
   public partial class UserExaminationClaimAudit : BaseAudit, IUserExaminationClaim
   {
     public int? ClaimReference { get; set; }
-    public virtual IClaimStatus ClaimStatus { get; set; }
+    // public virtual ClaimStatusAudit ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
-    public virtual IExamination Examination { get; set; }
+    // public virtual ExaminationAudit Examination { get; set; }
     public int ExaminationId { get; set; }
     public decimal? ExaminationPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
@@ -23,7 +23,7 @@ namespace Mep.Data.Entities.Audit
     [MaxLength(2000)]
     [Required]
     public string TravelComments { get; set; }
-    public virtual IUser User { get; set; }
+    // public virtual UserAudit User { get; set; }
     public int UserId { get; set; }
   }
 }

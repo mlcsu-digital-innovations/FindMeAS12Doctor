@@ -4,6 +4,5 @@ namespace Mep.Data.Entities
 {
   public interface IProfileType
   {
-    IList<IUser> Users { get; set; }
   }
 }

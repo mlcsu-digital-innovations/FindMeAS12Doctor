@@ -4,6 +4,6 @@ namespace Mep.Data.Entities
 {
   public class ProfileType : NameDescription, IProfileType
     {
-    public virtual IList<IUser> Users { get; set; }
+    public virtual IList<User> Users { get; set; }
   }
 }

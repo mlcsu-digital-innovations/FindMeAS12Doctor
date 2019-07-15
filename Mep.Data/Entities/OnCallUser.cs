@@ -6,7 +6,7 @@ namespace Mep.Data.Entities
   {
     public DateTimeOffset DateTimeEnd { get; set; }
     public DateTimeOffset DateTimeStart { get; set; }
-    public virtual IUser User { get; set; }
+    public virtual User User { get; set; }
     public int UserId { get; set; }
   }
 }

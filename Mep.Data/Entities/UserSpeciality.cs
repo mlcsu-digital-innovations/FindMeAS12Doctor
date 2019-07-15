@@ -2,9 +2,9 @@
 {
   public partial class UserSpeciality : BaseEntity, IUserSpeciality
   {
-    public virtual ISpeciality Speciality { get; set; }
+    public virtual Speciality Speciality { get; set; }
     public int SpecialityId { get; set; }
-    public virtual IUser User { get; set; }
+    public virtual User User { get; set; }
     public int UserId { get; set; }
   }
 }

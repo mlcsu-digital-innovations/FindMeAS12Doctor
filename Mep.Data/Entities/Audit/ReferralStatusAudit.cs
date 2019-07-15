@@ -4,6 +4,6 @@ namespace Mep.Data.Entities.Audit
 {
   public partial class ReferralStatusAudit : NameDescription, IReferralStatus
   {
-    public virtual IList<IReferralStatus> ReferralStatuses { get; set; }
+    // public virtual IList<ReferralStatusAudit> ReferralStatuses { get; set; }
   }
 }

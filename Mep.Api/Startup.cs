@@ -25,9 +25,22 @@ namespace mep.api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             //TODO: Add this to a config file
-            string connection = "Data Source=audit_test.db";
+            string connection = "Data Source=MedicalExaminationsPortal.db";
+
             services.AddDbContext<ApplicationContext>
-                (options => options.UseSqlite(connection));
+                (options => options.UseSqlite(
+                    connection, 
+                    builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
+
+            services.AddDbContext<AuditContext>
+                (options => options.UseSqlite(
+                    connection, 
+                    builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
+
+            services.AddDbContext<MigrationContext>
+                (options => options.UseSqlite(
+                    connection, 
+                    builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));                    
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
         }
