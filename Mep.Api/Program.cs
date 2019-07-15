@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,7 +9,23 @@ namespace mep.api
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            IWebHost host = CreateWebHostBuilder(args)
+                            .ConfigureLogging((hostingContext, logging) =>
+                            {
+                                logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                                logging.AddConsole();
+                                logging.AddDebug();
+                            })
+                            .Build();
+
+            if (args.Length > 0 && args[0] == "/seed")
+            {
+                //host.SeedData();
+            }
+            else
+            {
+                host.Run();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
