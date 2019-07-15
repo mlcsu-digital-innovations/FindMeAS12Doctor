@@ -1,10 +1,12 @@
-﻿using Mep.Data.Entities;
+﻿using Audit.Core;
+using Audit.EntityFramework;
+using Mep.Data.Entities;
 using Mep.Data.Entities.Audit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mep.Business
 {
-    public partial class ApplicationContext : DbContext
+    public partial class ApplicationContext : AuditDbContext
   {
     public ApplicationContext()
     {
@@ -13,6 +15,28 @@ namespace Mep.Business
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
       : base(options)
     {
+            //Audit.NET https://github.com/thepirat000/Audit.NET/tree/master/src/Audit.EntityFramework
+            Audit.EntityFramework.Configuration.Setup()
+                .ForContext<ApplicationContext>(config => config
+                    .IncludeEntityObjects()
+                    .AuditEventType("{context}:{database}"))
+                    .UseOptOut();
+
+            Audit.Core.Configuration.Setup()
+                .UseEntityFramework(x => x
+                    .AuditTypeNameMapper(typeName => typeName + "Audit")
+                    .AuditEntityAction<IBaseAudit>((auditEvent, eventEntry, auditEntity) =>
+                    {
+                        EntityFrameworkEvent efEvent = auditEvent.GetEntityFrameworkEvent();
+
+                        auditEntity.AuditAction = eventEntry.Action;
+                        auditEntity.AuditDuration = auditEvent.Duration;
+                        auditEntity.AuditErrorMessage = efEvent.ErrorMessage;
+                        auditEntity.AuditResult = efEvent.Result;
+                        auditEntity.AuditSuccess = efEvent.Success;
+
+                        return true;
+                    }));         
     }
 
     public virtual DbSet<BankDetail> BankDetails { get; set; }
