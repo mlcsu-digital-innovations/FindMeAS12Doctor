@@ -24,11 +24,11 @@ namespace mep.business.Migrations
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
                     CostCentre = table.Column<int>(nullable: false),
-                    FailedExamPayment = table.Column<decimal>(nullable: false),
+                    FailedExamPayment = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsPaymentApprovalRequired = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
-                    SuccessfulPencePerMile = table.Column<decimal>(nullable: false),
-                    UnsuccessfulPencePerMile = table.Column<decimal>(nullable: false)
+                    SuccessfulPencePerMile = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UnsuccessfulPencePerMile = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,11 +45,11 @@ namespace mep.business.Migrations
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<int>(nullable: false),
                     CostCentre = table.Column<int>(nullable: false),
-                    FailedExamPayment = table.Column<decimal>(nullable: false),
+                    FailedExamPayment = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsPaymentApprovalRequired = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
-                    SuccessfulPencePerMile = table.Column<decimal>(nullable: false),
-                    UnsuccessfulPencePerMile = table.Column<decimal>(nullable: false)
+                    SuccessfulPencePerMile = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UnsuccessfulPencePerMile = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -627,8 +627,8 @@ namespace mep.business.Migrations
                     FinanceMileageSubjectiveCode = table.Column<int>(nullable: true),
                     FinanceSubjectiveCode = table.Column<int>(nullable: true),
                     LevelOfUrgencyTimescaleMinutes = table.Column<int>(nullable: false),
-                    NonSection12Payment = table.Column<decimal>(nullable: false),
-                    Section12Payment = table.Column<decimal>(nullable: false)
+                    NonSection12Payment = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Section12Payment = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -655,8 +655,8 @@ namespace mep.business.Migrations
                     FinanceMileageSubjectiveCode = table.Column<int>(nullable: true),
                     FinanceSubjectiveCode = table.Column<int>(nullable: true),
                     LevelOfUrgencyTimescaleMinutes = table.Column<int>(nullable: false),
-                    NonSection12Payment = table.Column<decimal>(nullable: false),
-                    Section12Payment = table.Column<decimal>(nullable: false)
+                    NonSection12Payment = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Section12Payment = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -749,11 +749,11 @@ namespace mep.business.Migrations
                     ClaimReference = table.Column<int>(nullable: true),
                     ClaimStatusId = table.Column<int>(nullable: true),
                     ExaminationId = table.Column<int>(nullable: false),
-                    ExaminationPayment = table.Column<decimal>(nullable: true),
+                    ExaminationPayment = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     IsAttendanceConfirmed = table.Column<bool>(nullable: false),
                     IsClaimable = table.Column<bool>(nullable: true),
                     Mileage = table.Column<int>(nullable: true),
-                    MileagePayment = table.Column<decimal>(nullable: true),
+                    MileagePayment = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     PaymentDate = table.Column<DateTimeOffset>(nullable: true),
                     SelectedByUserId = table.Column<int>(nullable: false),
                     StartPostcode = table.Column<string>(maxLength: 10, nullable: false),
@@ -1514,11 +1514,11 @@ namespace mep.business.Migrations
                     ClaimReference = table.Column<int>(nullable: true),
                     ClaimStatusId = table.Column<int>(nullable: true),
                     ExaminationId = table.Column<int>(nullable: false),
-                    ExaminationPayment = table.Column<decimal>(nullable: true),
+                    ExaminationPayment = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     IsAttendanceConfirmed = table.Column<bool>(nullable: false),
                     IsClaimable = table.Column<bool>(nullable: true),
                     Mileage = table.Column<int>(nullable: true),
-                    MileagePayment = table.Column<decimal>(nullable: true),
+                    MileagePayment = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     PaymentDate = table.Column<DateTimeOffset>(nullable: true),
                     SelectedByUserId = table.Column<int>(nullable: false),
                     StartPostcode = table.Column<string>(maxLength: 10, nullable: false),

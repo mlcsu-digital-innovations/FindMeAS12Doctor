@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public class ProfileTypeAudit : NameDescriptionAudit, IProfileType
   {

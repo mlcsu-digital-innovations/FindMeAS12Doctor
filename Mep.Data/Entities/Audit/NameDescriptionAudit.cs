@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public abstract class NameDescriptionAudit : BaseAudit, INameDescription
   {

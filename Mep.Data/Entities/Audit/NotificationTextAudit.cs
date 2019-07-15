@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public partial class NotificationTextAudit : NameDescriptionAudit, INotificationText
   {

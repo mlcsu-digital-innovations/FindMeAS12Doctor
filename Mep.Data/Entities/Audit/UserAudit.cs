@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public partial class UserAudit : BaseAudit, IUser
   {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public partial class UserExaminationClaimAudit : BaseAudit, IUserExaminationClaim
   {
@@ -10,10 +11,12 @@ namespace Mep.Data.Entities.Audit
     public int? ClaimStatusId { get; set; }
     // public virtual ExaminationAudit Examination { get; set; }
     public int ExaminationId { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal? ExaminationPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
     public int? Mileage { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal? MileagePayment { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }
     public int SelectedByUserId { get; set; }

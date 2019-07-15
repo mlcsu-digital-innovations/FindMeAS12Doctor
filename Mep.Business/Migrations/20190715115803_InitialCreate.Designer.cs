@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190715113913_InitialCreate")]
+    [Migration("20190715115803_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,46 @@ namespace mep.business.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.BankDetailAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.BankDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountNumber");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("NameOnAccount")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<int>("SortCode");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("VsrNumber");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("CcgId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BankDetails");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.BankDetailAudit", b =>
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -74,7 +113,41 @@ namespace mep.business.Migrations
                     b.ToTable("BankDetailsAudit");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.CcgAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.Ccg", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CostCentre");
+
+                    b.Property<decimal>("FailedExamPayment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsPaymentApprovalRequired");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<decimal>("SuccessfulPencePerMile")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnsuccessfulPencePerMile")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ccgs");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.CcgAudit", b =>
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -92,7 +165,8 @@ namespace mep.business.Migrations
 
                     b.Property<int>("CostCentre");
 
-                    b.Property<decimal>("FailedExamPayment");
+                    b.Property<decimal>("FailedExamPayment")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Id");
 
@@ -108,16 +182,43 @@ namespace mep.business.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<decimal>("SuccessfulPencePerMile");
+                    b.Property<decimal>("SuccessfulPencePerMile")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("UnsuccessfulPencePerMile");
+                    b.Property<decimal>("UnsuccessfulPencePerMile")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("AuditId");
 
                     b.ToTable("CcgAudits");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ClaimStatusAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.ClaimStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClaimStatuses");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ClaimStatusAudit", b =>
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -154,7 +255,60 @@ namespace mep.business.Migrations
                     b.ToTable("ClaimStatusAudits");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ContactDetailAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.ContactDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address1")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Address2")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Address3")
+                        .HasMaxLength(200);
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<int>("ContactDetailTypeId");
+
+                    b.Property<string>("EmailAddress")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int?>("Latitude");
+
+                    b.Property<int?>("Longitude");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Postcode")
+                        .HasMaxLength(10);
+
+                    b.Property<int?>("TelephoneNumber");
+
+                    b.Property<string>("Town");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("CcgId", "ContactDetailTypeId", "UserId");
+
+                    b.HasIndex("ContactDetailTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ContactDetails");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ContactDetailAudit", b =>
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -219,7 +373,32 @@ namespace mep.business.Migrations
                     b.ToTable("ContactDetailAudits");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ContactDetailTypeAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.ContactDetailType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactDetailTypes");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ContactDetailTypeAudit", b =>
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -256,7 +435,48 @@ namespace mep.business.Migrations
                     b.ToTable("ContactDetailTypeAudits");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.DoctorStatusAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.DoctorStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTimeOffset>("AvailabilityEnd");
+
+                    b.Property<DateTimeOffset>("AvailabilityStart");
+
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1");
+
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2");
+
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3");
+
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1");
+
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2");
+
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("Latitude");
+
+                    b.Property<int>("Longitude");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DoctorStatuses");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.DoctorStatusAudit", b =>
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -303,1138 +523,6 @@ namespace mep.business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("DoctorStatusAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ExaminationAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address1")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Address2");
-
-                    b.Property<string>("Address3");
-
-                    b.Property<string>("Address4");
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int?>("CcgAuditAuditId");
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<int?>("CompletedByUserId");
-
-                    b.Property<DateTimeOffset?>("CompletedTime");
-
-                    b.Property<int?>("CompletionConfirmationByUserId");
-
-                    b.Property<int>("CreatedByUserId");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool?>("IsSuccessful");
-
-                    b.Property<string>("MeetingArrangementComment")
-                        .HasMaxLength(2000);
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<DateTimeOffset>("MustBeCompletedBy");
-
-                    b.Property<int>("NonPaymentLocationId");
-
-                    b.Property<string>("Postcode")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<int>("ReferralId");
-
-                    b.Property<DateTimeOffset>("ScheduledTime");
-
-                    b.Property<int>("SpecialityTypeId");
-
-                    b.Property<int?>("UnsuccesfulExaminationTypeId");
-
-                    b.HasKey("AuditId");
-
-                    b.HasIndex("CcgAuditAuditId");
-
-                    b.ToTable("ExaminationAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.GpPracticeAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int?>("CcgAuditAuditId");
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<string>("GpPracticeCode")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Postcode")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.HasKey("AuditId");
-
-                    b.HasIndex("CcgAuditAuditId");
-
-                    b.ToTable("GpPracticeAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.NonPaymentLocationAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("NonPaymentLocationTypeId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("NonPaymentLocationAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.NonPaymentLocationTypeAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("NonPaymentLocationTypeAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.NotificationTextAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("MessageTemplate")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("NotificationTextAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.OnCallUserAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<DateTimeOffset>("DateTimeEnd");
-
-                    b.Property<DateTimeOffset>("DateTimeStart");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("OnCallUserAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.OrganisationAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("OrganisationAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.PatientAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AlternativeIdentifier")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int?>("CcgId");
-
-                    b.Property<int?>("GpPracticeId");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int?>("NhsNumber");
-
-                    b.Property<string>("ResidentialPostcode")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("PatientAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentMethodAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("PaymentMethodTypeId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("AuditId");
-
-                    b.HasAlternateKey("CcgId", "PaymentMethodTypeId", "UserId");
-
-                    b.ToTable("PaymentMethodAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentMethodTypeAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("PaymentMethodTypeAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentRuleAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Criteria")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<int>("PaymentRuleSetId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("PaymentRuleAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.PaymentRuleSetAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<DateTimeOffset>("DateTimeFrom");
-
-                    b.Property<DateTimeOffset>("DateTimeTo");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("PaymentRuleSetAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ProfileTypeAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("ProfileTypeAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ReferralAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<DateTimeOffset>("CreatedAt");
-
-                    b.Property<int>("CreatedByUserId");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("PatientId");
-
-                    b.Property<int>("ReferralStatusId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("ReferralAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ReferralStatusAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("ReferralStatusAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.Section12ApprovalStatusAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("Section12ApprovalStatusAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.SpecialityAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int?>("FinanceMileageSubjectiveCode");
-
-                    b.Property<int?>("FinanceSubjectiveCode");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<int>("LevelOfUrgencyTimescaleMinutes");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<decimal>("NonSection12Payment");
-
-                    b.Property<decimal>("Section12Payment");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("SpecialityAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.UnsuccessfulExaminationTypeAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("UnsuccessfulExaminationTypeAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.UserAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int?>("GmcNumber");
-
-                    b.Property<bool>("HasReadTermsAndConditions");
-
-                    b.Property<int>("Id");
-
-                    b.Property<string>("IdentityServerIdentifier")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("OrganisationId");
-
-                    b.Property<int>("ProfileTypeId");
-
-                    b.Property<int?>("Section12ApprovalStatusId");
-
-                    b.Property<DateTimeOffset?>("Section12ExpiryDate");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("UserAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.UserExaminationClaimAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int?>("ClaimReference");
-
-                    b.Property<int?>("ClaimStatusId");
-
-                    b.Property<int>("ExaminationId");
-
-                    b.Property<decimal?>("ExaminationPayment");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsAttendanceConfirmed");
-
-                    b.Property<bool?>("IsClaimable");
-
-                    b.Property<int?>("Mileage");
-
-                    b.Property<decimal?>("MileagePayment");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<DateTimeOffset?>("PaymentDate");
-
-                    b.Property<int>("SelectedByUserId");
-
-                    b.Property<string>("StartPostcode")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<string>("TravelComments")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("UserExaminationClaimAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.UserExaminationNotificationAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("ExaminationId");
-
-                    b.Property<bool>("HasAccepted");
-
-                    b.Property<bool>("HasResponded");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("NotificationTextId");
-
-                    b.Property<DateTimeOffset?>("ResponsedAt");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("AuditId");
-
-                    b.HasAlternateKey("ExaminationId", "UserId");
-
-                    b.ToTable("UserExaminationNotificationAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Audit.UserSpecialityAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int>("SpecialityId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("UserSpecialitieAudits");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.BankDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountNumber");
-
-                    b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("NameOnAccount")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<int>("SortCode");
-
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("VsrNumber");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("CcgId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BankDetails");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.Ccg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CostCentre");
-
-                    b.Property<decimal>("FailedExamPayment");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsPaymentApprovalRequired");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<decimal>("SuccessfulPencePerMile");
-
-                    b.Property<decimal>("UnsuccessfulPencePerMile");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ccgs");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.ClaimStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClaimStatuses");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.ContactDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address1")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Address2")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Address3")
-                        .HasMaxLength(200);
-
-                    b.Property<int>("CcgId");
-
-                    b.Property<int>("ContactDetailTypeId");
-
-                    b.Property<string>("EmailAddress")
-                        .HasMaxLength(100);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<int?>("Latitude");
-
-                    b.Property<int?>("Longitude");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Postcode")
-                        .HasMaxLength(10);
-
-                    b.Property<int?>("TelephoneNumber");
-
-                    b.Property<string>("Town");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("CcgId", "ContactDetailTypeId", "UserId");
-
-                    b.HasIndex("ContactDetailTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ContactDetails");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.ContactDetailType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ContactDetailTypes");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.DoctorStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTimeOffset>("AvailabilityEnd");
-
-                    b.Property<DateTimeOffset>("AvailabilityStart");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<int>("Latitude");
-
-                    b.Property<int>("Longitude");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedBy");
-
-                    b.Property<int?>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DoctorStatuses");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Examination", b =>
@@ -1515,6 +603,80 @@ namespace mep.business.Migrations
                     b.ToTable("Examinations");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address1")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Address2");
+
+                    b.Property<string>("Address3");
+
+                    b.Property<string>("Address4");
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int?>("CcgAuditAuditId");
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<int?>("CompletedByUserId");
+
+                    b.Property<DateTimeOffset?>("CompletedTime");
+
+                    b.Property<int?>("CompletionConfirmationByUserId");
+
+                    b.Property<int>("CreatedByUserId");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool?>("IsSuccessful");
+
+                    b.Property<string>("MeetingArrangementComment")
+                        .HasMaxLength(2000);
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<DateTimeOffset>("MustBeCompletedBy");
+
+                    b.Property<int>("NonPaymentLocationId");
+
+                    b.Property<string>("Postcode")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<int>("ReferralId");
+
+                    b.Property<DateTimeOffset>("ScheduledTime");
+
+                    b.Property<int>("SpecialityTypeId");
+
+                    b.Property<int?>("UnsuccesfulExaminationTypeId");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("CcgAuditAuditId");
+
+                    b.ToTable("ExaminationAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
                 {
                     b.Property<int>("Id")
@@ -1548,6 +710,53 @@ namespace mep.business.Migrations
                     b.ToTable("GpPractices");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.GpPracticeAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int?>("CcgAuditAuditId");
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<string>("GpPracticeCode")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Postcode")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("CcgAuditAuditId");
+
+                    b.ToTable("GpPracticeAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocation", b =>
                 {
                     b.Property<int>("Id")
@@ -1575,6 +784,39 @@ namespace mep.business.Migrations
                     b.HasIndex("NonPaymentLocationTypeId");
 
                     b.ToTable("NonPaymentLocations");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocationAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("NonPaymentLocationTypeId");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("NonPaymentLocationAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocationType", b =>
@@ -1606,6 +848,43 @@ namespace mep.business.Migrations
                     b.ToTable("NonPaymentLocationTypes");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocationTypeAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("NonPaymentLocationTypeAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.NotificationText", b =>
                 {
                     b.Property<int>("Id")
@@ -1635,6 +914,47 @@ namespace mep.business.Migrations
                     b.ToTable("NotificationTexts");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.NotificationTextAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("MessageTemplate")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("NotificationTextAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.OnCallUser", b =>
                 {
                     b.Property<int>("Id")
@@ -1660,6 +980,41 @@ namespace mep.business.Migrations
                     b.ToTable("OnCallUsers");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.OnCallUserAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<DateTimeOffset>("DateTimeEnd");
+
+                    b.Property<DateTimeOffset>("DateTimeStart");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("OnCallUserAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.Organisation", b =>
                 {
                     b.Property<int>("Id")
@@ -1683,6 +1038,43 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Organisations");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.OrganisationAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("OrganisationAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Patient", b =>
@@ -1719,6 +1111,48 @@ namespace mep.business.Migrations
                     b.ToTable("Patients");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.PatientAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AlternativeIdentifier")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int?>("CcgId");
+
+                    b.Property<int?>("GpPracticeId");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int?>("NhsNumber");
+
+                    b.Property<string>("ResidentialPostcode")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("PatientAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
@@ -1748,6 +1182,43 @@ namespace mep.business.Migrations
                     b.ToTable("PaymentMethods");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.PaymentMethodAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("PaymentMethodTypeId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("AuditId");
+
+                    b.HasAlternateKey("CcgId", "PaymentMethodTypeId", "UserId");
+
+                    b.ToTable("PaymentMethodAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.PaymentMethodType", b =>
                 {
                     b.Property<int>("Id")
@@ -1771,6 +1242,43 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentMethodTypes");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.PaymentMethodTypeAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("PaymentMethodTypeAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentRule", b =>
@@ -1806,6 +1314,49 @@ namespace mep.business.Migrations
                     b.ToTable("PaymentRules");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.PaymentRuleAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Criteria")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<int>("PaymentRuleSetId");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("PaymentRuleAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.PaymentRuleSet", b =>
                 {
                     b.Property<int>("Id")
@@ -1839,6 +1390,49 @@ namespace mep.business.Migrations
                     b.ToTable("PaymentRuleSets");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.PaymentRuleSetAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int>("CcgId");
+
+                    b.Property<DateTimeOffset>("DateTimeFrom");
+
+                    b.Property<DateTimeOffset>("DateTimeTo");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("PaymentRuleSetAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.ProfileType", b =>
                 {
                     b.Property<int>("Id")
@@ -1862,6 +1456,43 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProfileTypes");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ProfileTypeAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("ProfileTypeAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Referral", b =>
@@ -1895,6 +1526,43 @@ namespace mep.business.Migrations
                     b.ToTable("Referrals");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.ReferralAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<int>("CreatedByUserId");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<int>("ReferralStatusId");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("ReferralAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.ReferralStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -1924,6 +1592,43 @@ namespace mep.business.Migrations
                     b.ToTable("ReferralStatuses");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.ReferralStatusAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("ReferralStatusAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.Section12ApprovalStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -1947,6 +1652,43 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Section12ApprovalStatuses");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.Section12ApprovalStatusAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("Section12ApprovalStatusAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Speciality", b =>
@@ -1975,13 +1717,64 @@ namespace mep.business.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<decimal>("NonSection12Payment");
+                    b.Property<decimal>("NonSection12Payment")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Section12Payment");
+                    b.Property<decimal>("Section12Payment")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Specialities");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.SpecialityAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int?>("FinanceMileageSubjectiveCode");
+
+                    b.Property<int?>("FinanceSubjectiveCode");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("LevelOfUrgencyTimescaleMinutes");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<decimal>("NonSection12Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Section12Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("SpecialityAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UnsuccessfulExaminationType", b =>
@@ -2007,6 +1800,43 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UnsuccessfulExaminationTypes");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.UnsuccessfulExaminationTypeAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("UnsuccessfulExaminationTypeAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.User", b =>
@@ -2048,6 +1878,51 @@ namespace mep.business.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.UserAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int?>("GmcNumber");
+
+                    b.Property<bool>("HasReadTermsAndConditions");
+
+                    b.Property<int>("Id");
+
+                    b.Property<string>("IdentityServerIdentifier")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("OrganisationId");
+
+                    b.Property<int>("ProfileTypeId");
+
+                    b.Property<int?>("Section12ApprovalStatusId");
+
+                    b.Property<DateTimeOffset?>("Section12ExpiryDate");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("UserAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.UserExaminationClaim", b =>
                 {
                     b.Property<int>("Id")
@@ -2060,7 +1935,8 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ExaminationId");
 
-                    b.Property<decimal?>("ExaminationPayment");
+                    b.Property<decimal?>("ExaminationPayment")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive");
 
@@ -2070,7 +1946,8 @@ namespace mep.business.Migrations
 
                     b.Property<int?>("Mileage");
 
-                    b.Property<decimal?>("MileagePayment");
+                    b.Property<decimal?>("MileagePayment")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
@@ -2099,6 +1976,67 @@ namespace mep.business.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserExaminationClaims");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.UserExaminationClaimAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int?>("ClaimReference");
+
+                    b.Property<int?>("ClaimStatusId");
+
+                    b.Property<int>("ExaminationId");
+
+                    b.Property<decimal?>("ExaminationPayment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsAttendanceConfirmed");
+
+                    b.Property<bool?>("IsClaimable");
+
+                    b.Property<int?>("Mileage");
+
+                    b.Property<decimal?>("MileagePayment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<DateTimeOffset?>("PaymentDate");
+
+                    b.Property<int>("SelectedByUserId");
+
+                    b.Property<string>("StartPostcode")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<string>("TravelComments")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("UserExaminationClaimAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UserExaminationNotification", b =>
@@ -2136,6 +2074,49 @@ namespace mep.business.Migrations
                     b.ToTable("UserExaminationNotifications");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.UserExaminationNotificationAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction");
+
+                    b.Property<int>("AuditDuration");
+
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int>("ExaminationId");
+
+                    b.Property<bool>("HasAccepted");
+
+                    b.Property<bool>("HasResponded");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("NotificationTextId");
+
+                    b.Property<DateTimeOffset?>("ResponsedAt");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("AuditId");
+
+                    b.HasAlternateKey("ExaminationId", "UserId");
+
+                    b.ToTable("UserExaminationNotificationAudits");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.UserSpeciality", b =>
                 {
                     b.Property<int>("Id")
@@ -2161,32 +2142,37 @@ namespace mep.business.Migrations
                     b.ToTable("UserSpecialities");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.BankDetailAudit", b =>
+            modelBuilder.Entity("Mep.Data.Entities.UserSpecialityAudit", b =>
                 {
-                    b.HasOne("Mep.Data.Entities.Audit.CcgAudit")
-                        .WithMany("BankDetails")
-                        .HasForeignKey("CcgAuditAuditId");
-                });
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ContactDetailAudit", b =>
-                {
-                    b.HasOne("Mep.Data.Entities.Audit.CcgAudit")
-                        .WithMany("ContactDetails")
-                        .HasForeignKey("CcgAuditAuditId");
-                });
+                    b.Property<string>("AuditAction");
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.ExaminationAudit", b =>
-                {
-                    b.HasOne("Mep.Data.Entities.Audit.CcgAudit")
-                        .WithMany("Examinations")
-                        .HasForeignKey("CcgAuditAuditId");
-                });
+                    b.Property<int>("AuditDuration");
 
-            modelBuilder.Entity("Mep.Data.Entities.Audit.GpPracticeAudit", b =>
-                {
-                    b.HasOne("Mep.Data.Entities.Audit.CcgAudit")
-                        .WithMany("GpPractices")
-                        .HasForeignKey("CcgAuditAuditId");
+                    b.Property<string>("AuditErrorMessage");
+
+                    b.Property<int>("AuditResult");
+
+                    b.Property<bool>("AuditSuccess");
+
+                    b.Property<int>("Id");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int>("ModifiedBy");
+
+                    b.Property<int>("SpecialityId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("UserSpecialitieAudits");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.BankDetail", b =>
@@ -2200,6 +2186,13 @@ namespace mep.business.Migrations
                         .WithMany("BankDetails")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.BankDetailAudit", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.CcgAudit")
+                        .WithMany("BankDetails")
+                        .HasForeignKey("CcgAuditAuditId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ContactDetail", b =>
@@ -2218,6 +2211,13 @@ namespace mep.business.Migrations
                         .WithMany("ContactDetails")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ContactDetailAudit", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.CcgAudit")
+                        .WithMany("ContactDetails")
+                        .HasForeignKey("CcgAuditAuditId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.DoctorStatus", b =>
@@ -2266,12 +2266,26 @@ namespace mep.business.Migrations
                         .HasForeignKey("UnsuccessfulExaminationTypeId");
                 });
 
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationAudit", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.CcgAudit")
+                        .WithMany("Examinations")
+                        .HasForeignKey("CcgAuditAuditId");
+                });
+
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
                 {
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("GpPractices")
                         .HasForeignKey("CcgId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.GpPracticeAudit", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.CcgAudit")
+                        .WithMany("GpPractices")
+                        .HasForeignKey("CcgAuditAuditId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocation", b =>

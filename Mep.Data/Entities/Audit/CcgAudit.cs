@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public partial class CcgAudit : BaseAudit, ICcg
   {
@@ -9,6 +10,7 @@ namespace Mep.Data.Entities.Audit
     public virtual IList<ContactDetailAudit> ContactDetails { get; set; }
     public int CostCentre { get; set; }
     public virtual IList<ExaminationAudit> Examinations { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal FailedExamPayment { get; set; }
     public virtual IList<GpPracticeAudit> GpPractices { get; set; }
     public bool IsPaymentApprovalRequired { get; set; }
@@ -19,7 +21,9 @@ namespace Mep.Data.Entities.Audit
     // public virtual IList<PatientAudit> Patients { get; set; }
     // public virtual IList<PaymentMethodAudit> PaymentMethods { get; set; }
     // public virtual IList<PaymentRuleSetAudit> PaymentRuleSets { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal SuccessfulPencePerMile { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal UnsuccessfulPencePerMile { get; set; }
   }
 }

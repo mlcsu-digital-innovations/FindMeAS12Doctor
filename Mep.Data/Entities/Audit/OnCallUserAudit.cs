@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mep.Data.Entities.Audit
+namespace Mep.Data.Entities
 {
   public partial class OnCallUserAudit : BaseAudit, IOnCallUser
   {
