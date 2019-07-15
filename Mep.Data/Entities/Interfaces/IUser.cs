@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Mep.Data.Entities
+{
+  public interface IUser
+  {
+    int? GmcNumber { get; set; }
+    bool HasReadTermsAndConditions { get; set; }
+    string IdentityServerIdentifier { get; set; }
+    int OrganisationId { get; set; }
+    int ProfileTypeId { get; set; }
+    int? Section12ApprovalStatusId { get; set; }
+    DateTimeOffset? Section12ExpiryDate { get; set; }
+  }
+}

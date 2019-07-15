@@ -4,6 +4,13 @@
     <ProjectReference Include="..\Mep.Data\mep.data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Audit.Entityframework.Core" Version="14.5.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlserver" Version="2.2.6" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>

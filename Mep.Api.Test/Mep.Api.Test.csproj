@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mep.Api\mep.api.csproj" />
+    <ProjectReference Include="..\Mep.Api\Mep.Api.csproj" />
   </ItemGroup>
 
 </Project>

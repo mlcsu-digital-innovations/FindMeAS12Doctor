@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mep.data", "Mep.Data\mep.da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mep.business", "Mep.Business\mep.business.csproj", "{824B8DED-7B43-4BFF-A7AD-0821AC4A93D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mep.api", "Mep.Api\mep.api.csproj", "{D31BDC09-42FC-4B2F-ADF0-CDD655B9CF4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mep.Api", "Mep.Api\Mep.Api.csproj", "{D31BDC09-42FC-4B2F-ADF0-CDD655B9CF4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mep.Api.Test", "Mep.Api.Test\Mep.Api.Test.csproj", "{0EB80613-E45D-4CF6-9432-73FAD622368A}"
 EndProject
