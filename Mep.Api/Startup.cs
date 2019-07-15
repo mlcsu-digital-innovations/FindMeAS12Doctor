@@ -32,16 +32,6 @@ namespace mep.api
                     connection, 
                     builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
 
-            services.AddDbContext<AuditContext>
-                (options => options.UseSqlite(
-                    connection, 
-                    builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));
-
-            services.AddDbContext<MigrationContext>
-                (options => options.UseSqlite(
-                    connection, 
-                    builder => builder.MigrationsAssembly(typeof(Startup).Assembly.FullName)));                    
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
         }
 
