@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Mep.Business;
+using Mep.Business.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,9 @@ namespace Mep.Api
                 (options => options.UseSqlServer(
                     connection));
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddScoped<ISpecialityService, SpecialityService>();         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

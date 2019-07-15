@@ -2,7 +2,6 @@
 using Audit.Core;
 using Audit.EntityFramework;
 using Mep.Data.Entities;
-using Mep.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mep.Business
