@@ -13,42 +13,8 @@ namespace Mep.Business.Services
     : ServiceBase<User, Entities.User>, IModelService<User>
   {
     public UserService(ApplicationContext context, IMapper mapper)
-      :base(context, mapper)
+      :base("User", context, mapper)
     {
-    }
-
-    public async Task<User> CreateAsync(
-      User userModel)
-    {
-      Entities.User userEntity = await GetEntityByIdAsync(userModel.Id, true, false);
-
-      if (userEntity == null)
-      {      
-        try
-        {
-          Entities.User newUserEntity = _mapper.Map<Entities.User>(userModel);
-          newUserEntity.IsActive = true;
-
-          UpdateModified(newUserEntity);
-          _context.Add(newUserEntity);
-          await _context.SaveChangesAsync();
-
-          userModel = await GetByIdAsync(newUserEntity.Id, true);
-          return userModel;
-        }
-        catch (Exception ex)
-        {
-          //TODO: catch and create 
-          throw new Exception("Failed to create User.", ex);
-        }        
-      }
-      else
-      {
-        //TODO: Create a specific exception
-        throw new Exception(
-          $"A {(userEntity.IsActive ? "" : "deleted")} " +
-          $"User with an id of {userModel.Id} already exists.");
-      }      
     }
 
     public override async Task<Models.User> GetByIdAsync(
@@ -83,28 +49,6 @@ namespace Mep.Business.Services
       return userModels;
     }
 
-    public async Task<User> UpdateAsync(
-      User userModel)
-    {
-      Entities.User userEntity = 
-        await GetEntityByIdAsync(userModel.Id, false, false);
-
-      if (userEntity == null)
-      {
-        //TODO: Create a specific exception
-        throw new Exception($"User with an id of {userModel.Id} does not exist.");
-      }
-      else
-      {
-        _mapper.Map<User, Entities.User>(userModel, userEntity);
-        UpdateModified(userEntity);
-        await _context.SaveChangesAsync();
-
-        userModel = await GetByIdAsync(userModel.Id, userModel.IsActive);
-        return userModel;
-      }
-    }
-
     protected override async Task<Entities.User> GetEntityByIdAsync(
       int id, 
       bool asNoTracking,
@@ -123,6 +67,15 @@ namespace Mep.Business.Services
 
       return userEntity;  
     }
-    
+
+    protected override Task<bool> InternalCreateAsync(User model, Entities.User entity)
+    {
+      return Task.FromResult<bool>(true);
+    }
+
+    protected override Task<bool> InternalUpdateAsync(User model, Entities.User entity)
+    {
+      return Task.FromResult<bool>(true);
+    }
   }
 }

@@ -6,87 +6,162 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Services
 {
-    public abstract class ServiceBase<TBusinessModel, TEntity> where TBusinessModel: BaseModel
-                                                               where TEntity: BaseEntity
+  public abstract class ServiceBase<TBusinessModel, TEntity> 
+    where TBusinessModel: BaseModel
+    where TEntity: BaseEntity
+  {
+    protected readonly ApplicationContext _context;
+    protected readonly IMapper _mapper;
+    protected readonly string _typeName;
+
+    protected abstract Task<bool> InternalCreateAsync(
+      TBusinessModel model,
+      TEntity entity
+    );
+
+    protected abstract Task<bool> InternalUpdateAsync(
+      TBusinessModel model,
+      TEntity entity
+    );
+
+    protected abstract Task<TEntity> GetEntityByIdAsync(
+      int userId,
+      bool asNoTracking,
+      bool activeOnly);
+
+    public abstract Task<TBusinessModel> GetByIdAsync(
+      int userId,
+      bool activeOnly);
+
+    public ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
     {
-        protected readonly ApplicationContext _context;
-        protected readonly IMapper _mapper;
+      _typeName = typeName;
+      _context = context;
+      _mapper = mapper;
+    }    
 
-        protected abstract Task<TEntity> GetEntityByIdAsync(
-            int userId,
-            bool asNoTracking,
-            bool activeOnly);
+  public async Task<TBusinessModel> CreateAsync(
+    TBusinessModel model)
+  {
+    TEntity entity = await GetEntityByIdAsync(model.Id, true, false);
 
-        public abstract Task<TBusinessModel> GetByIdAsync(
-            int userId,
-            bool activeOnly);
+    if (entity == null)
+    {    
+      try
+      {
+        entity = _mapper.Map<TEntity>(model);
+        entity.IsActive = true;
 
-        public ServiceBase(ApplicationContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+        UpdateModified(entity);
+        _context.Add(entity);
 
-        public async Task<int> ActivateAsync(int id)
-        {
-            return await SetActiveStatus(id, true);
-        }
+        await InternalCreateAsync(model, entity);
 
-        public async Task<int> DeactivateAsync(int id)
-        {
-            return await SetActiveStatus(id, false);
-        } 
+        await _context.SaveChangesAsync();
 
-        protected void UpdateModified(TEntity entity)
-        {
-            //TODO: Get the current users sub claim
-            entity.ModifiedByUserId = 1;
-            entity.ModifiedAt = DateTimeOffset.Now;  
-        }  
-
-        public async Task<TBusinessModel> UpdateEntityAsync(TBusinessModel model)
-        {
-            TEntity entity = 
-                await GetEntityByIdAsync(model.Id, false, false);
-
-            if (entity == null)
-            {
-                //TODO: Create a specific exception
-                throw new Exception($"{typeof(TEntity).Name} with an id of {model.Id} does not exist.");
-            }
-            else
-            {
-                _mapper.Map<TBusinessModel, TEntity>(model, entity);
-                UpdateModified(entity);
-                await _context.SaveChangesAsync();
-
-                model = await GetByIdAsync(model.Id, model.IsActive);
-                return model;
-            }
-        }        
-
-        private async Task<int> SetActiveStatus(int id, bool isActivating)
-        {
-            TEntity entity = await _context.Set<TEntity>()
-                                           .FindAsync(id);
-
-            if (entity == null)
-            {
-                //TODO: Create a specific exception
-                throw new Exception($"{typeof(TEntity).Name} with an id of {id} does not exist.");
-            }
-            else if (entity.IsActive == isActivating)
-            {
-                //TODO: Create a specific exception
-                throw new Exception(
-                    $"{typeof(TEntity).Name} with an id of {id} is already {(isActivating ? "active" : "inactive" )}.");
-            }
-            else
-            {
-                entity.IsActive = isActivating;
-                UpdateModified(entity);
-                return await _context.SaveChangesAsync();
-            }        
-        }           
+        model = await GetByIdAsync(entity.Id, true);
+        return model;
+      }
+      catch (Exception ex)
+      {
+        //TODO: catch and create 
+        throw new Exception($"Failed to create {_typeName}.", ex);
+      }    
     }
+    else
+    {
+    //TODO: Create a specific exception
+    throw new Exception(
+      $"A {(entity.IsActive ? "" : "deleted")} " +
+      $"{_typeName} with an id of {model.Id} already exists.");
+    }    
+  }
+
+    public async Task<int> ActivateAsync(int id)
+    {
+      return await SetActiveStatus(id, true);
+    }
+
+    public async Task<int> DeactivateAsync(int id)
+    {
+      return await SetActiveStatus(id, false);
+    } 
+
+    public async Task<TBusinessModel> UpdateAsync(
+      TBusinessModel model)
+    {
+      TEntity entity = 
+        await GetEntityByIdAsync(model.Id, false, false);
+
+      if (entity == null)
+      {
+        //TODO: Create a specific exception
+        throw new Exception($"A {_typeName} with an id of {model.Id} does not exist.");
+      }
+      else
+      {
+        _mapper.Map<TBusinessModel, TEntity>(model, entity);
+        UpdateModified(entity);
+
+        await InternalUpdateAsync(model, entity);
+
+        await _context.SaveChangesAsync();
+
+        model = await GetByIdAsync(model.Id, model.IsActive);
+        return model;
+      }
+    }
+
+    protected void UpdateModified(TEntity entity)
+    {
+      //TODO: Get the current users sub claim
+      entity.ModifiedByUserId = 1;
+      entity.ModifiedAt = DateTimeOffset.Now;  
+    }  
+
+    public async Task<TBusinessModel> UpdateEntityAsync(TBusinessModel model)
+    {
+      TEntity entity = 
+        await GetEntityByIdAsync(model.Id, false, false);
+
+      if (entity == null)
+      {
+        //TODO: Create a specific exception
+        throw new Exception($"{typeof(TEntity).Name} with an id of {model.Id} does not exist.");
+      }
+      else
+      {
+        _mapper.Map<TBusinessModel, TEntity>(model, entity);
+        UpdateModified(entity);
+        await _context.SaveChangesAsync();
+
+        model = await GetByIdAsync(model.Id, model.IsActive);
+        return model;
+      }
+    }    
+
+    private async Task<int> SetActiveStatus(int id, bool isActivating)
+    {
+      TEntity entity = await _context.Set<TEntity>()
+                       .FindAsync(id);
+
+      if (entity == null)
+      {
+        //TODO: Create a specific exception
+        throw new Exception($"{typeof(TEntity).Name} with an id of {id} does not exist.");
+      }
+      else if (entity.IsActive == isActivating)
+      {
+        //TODO: Create a specific exception
+        throw new Exception(
+          $"{typeof(TEntity).Name} with an id of {id} is already {(isActivating ? "active" : "inactive" )}.");
+      }
+      else
+      {
+        entity.IsActive = isActivating;
+        UpdateModified(entity);
+        return await _context.SaveChangesAsync();
+      }    
+    }       
+  }
 }
