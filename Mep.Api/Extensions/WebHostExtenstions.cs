@@ -20,8 +20,7 @@ namespace Mep.Api.Extensions
                 context.Database.Migrate();
     
                 // now that the database is up to date. Let's seed
-                new SpecialitySeeder(context).SeedData();
-                // new UserSeeder(context).SeedData();           
+                new Seeds(context).SeedAll();
 
                 return host;
             }
