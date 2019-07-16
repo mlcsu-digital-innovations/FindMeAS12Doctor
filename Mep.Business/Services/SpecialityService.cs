@@ -10,14 +10,14 @@ using Entities = Mep.Data.Entities;
 namespace Mep.Business.Services
 {
   public class SpecialityService
-    :ServiceBase<Speciality, Entities.Speciality>, ISpecialityService
+    : ServiceBase<Speciality, Entities.Speciality>, IModelService<Speciality>
   {
     public SpecialityService(ApplicationContext context, IMapper mapper)
       :base(context, mapper)
     {
     }
 
-    public async Task<Speciality> CreateSpecialityAsync(
+    public async Task<Speciality> CreateAsync(
       Speciality specialityModel)
     {
       Entities.Speciality specialityEntity = await GetEntityByIdAsync(specialityModel.Id, true, false);
@@ -42,7 +42,7 @@ namespace Mep.Business.Services
           _context.Add(newSpecialityEntity);
           await _context.SaveChangesAsync();
 
-          specialityModel = await GetModelByIdAsync(newSpecialityEntity.Id, true);
+          specialityModel = await GetByIdAsync(newSpecialityEntity.Id, true);
           return specialityModel;
         }
         catch (Exception ex)
@@ -60,7 +60,7 @@ namespace Mep.Business.Services
       }      
     }
 
-    public override async Task<Models.Speciality> GetModelByIdAsync(
+    public override async Task<Models.Speciality> GetByIdAsync(
       int id,
       bool activeOnly)
     {
@@ -77,7 +77,7 @@ namespace Mep.Business.Services
       }
     }
 
-    public async Task<IEnumerable<Models.Speciality>> GetSpecialitiesAsync(
+    public async Task<IEnumerable<Models.Speciality>> GetAllAsync(
       bool activeOnly)
     {
 
@@ -94,34 +94,7 @@ namespace Mep.Business.Services
       return specialityModels;
     }
 
-    public async Task<int> UndeleteSpecialityAsync(
-      int id)
-    {
-      Entities.Speciality specialityEntity = await GetEntityByIdAsync(id, false, false);
-
-      if (specialityEntity == null)
-      {
-        //TODO: Create a specific exception
-        throw new Exception($"Speciality with an id of {id} does not exist.");
-      }
-      else
-      {
-        if (specialityEntity.IsActive)
-        {
-          //TODO: Create a specific exception
-          throw new Exception($"Speciality with an id of {id} is not deleted.");
-        }
-        else
-        {
-          specialityEntity.IsActive = true;
-          UpdateModified(specialityEntity);
-
-          return await _context.SaveChangesAsync();
-        }
-      }    
-    }     
-
-    public async Task<Speciality> UpdateSpecialityAsync(
+    public async Task<Speciality> UpdateAsync(
       Speciality specialityModel)
     {
       Entities.Speciality specialityEntity = 
@@ -138,7 +111,7 @@ namespace Mep.Business.Services
         UpdateModified(specialityEntity);
         await _context.SaveChangesAsync();
 
-        specialityModel = await GetModelByIdAsync(specialityModel.Id, specialityModel.IsActive);
+        specialityModel = await GetByIdAsync(specialityModel.Id, specialityModel.IsActive);
         return specialityModel;
       }
     }

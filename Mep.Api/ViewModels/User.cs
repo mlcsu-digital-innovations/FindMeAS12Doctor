@@ -3,8 +3,8 @@ using Mep.Api.SharedModels;
 
 namespace Mep.Api.ViewModels
 {
-  public class Speciality : NameDescription
+  public class User
     {           
-        public int Id { get; set; }
+      public string IdentityServerIdentifier { get; set; }
     }
 }
