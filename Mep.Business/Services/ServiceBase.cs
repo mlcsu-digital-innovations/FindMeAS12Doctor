@@ -29,9 +29,22 @@ namespace Mep.Business.Services
       bool asNoTracking,
       bool activeOnly);
 
-    public abstract Task<TBusinessModel> GetByIdAsync(
-      int userId,
-      bool activeOnly);
+    public async Task<TBusinessModel> GetByIdAsync(
+      int id,
+      bool activeOnly)
+    {
+      TEntity userEntity = await GetEntityByIdAsync(id, true, activeOnly);
+      if (userEntity == null)
+      {
+        //TODO: Create a specific exception
+        throw new Exception($"{_typeName} with an id of {id} does not exist.");
+      }
+      else
+      {
+        TBusinessModel userModel = _mapper.Map<TBusinessModel>(userEntity);
+        return userModel;        
+      }
+    }
 
     public ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
     {
@@ -162,6 +175,7 @@ namespace Mep.Business.Services
         UpdateModified(entity);
         return await _context.SaveChangesAsync();
       }    
-    }       
+    }
+
   }
 }
