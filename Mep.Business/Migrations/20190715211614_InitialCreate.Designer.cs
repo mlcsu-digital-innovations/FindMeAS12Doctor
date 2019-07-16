@@ -4,14 +4,16 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190715211614_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +39,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("NameOnAccount")
                         .IsRequired()
@@ -126,7 +128,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -205,7 +207,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -286,7 +288,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Postcode")
                         .HasMaxLength(10);
@@ -385,7 +387,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -465,7 +467,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.HasKey("Id");
 
@@ -558,7 +560,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<DateTimeOffset>("MustBeCompletedBy");
 
@@ -685,7 +687,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -759,7 +761,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("NonPaymentLocationTypeId");
 
@@ -823,7 +825,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -893,7 +895,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -961,7 +963,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("UserId");
 
@@ -1023,7 +1025,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1090,7 +1092,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int?>("NhsNumber");
 
@@ -1163,7 +1165,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("PaymentMethodTypeId");
 
@@ -1233,7 +1235,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1301,7 +1303,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1381,7 +1383,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1453,7 +1455,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1517,7 +1519,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("PatientId");
 
@@ -1587,7 +1589,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1655,7 +1657,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1725,7 +1727,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1807,7 +1809,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1875,7 +1877,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("OrganisationId");
 
@@ -1971,7 +1973,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<DateTimeOffset?>("PaymentDate");
 
@@ -2079,7 +2081,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("NotificationTextId");
 
@@ -2153,7 +2155,7 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId");
 
                     b.Property<int>("SpecialityId");
 
@@ -2212,7 +2214,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("BankDetails")
@@ -2224,14 +2227,16 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ClaimStatus", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ContactDetail", b =>
@@ -2248,7 +2253,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("ContactDetails")
@@ -2260,14 +2266,16 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.DoctorStatus", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany("DoctorStatuses")
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Examination", b =>
@@ -2292,7 +2300,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.NonPaymentLocation", "NonPaymentLocation")
                         .WithMany()
@@ -2323,7 +2332,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocation", b =>
@@ -2335,7 +2345,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.NonPaymentLocationType", "NonPaymentLocationType")
                         .WithMany("NonPaymentLocations")
@@ -2351,21 +2362,24 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NotificationText", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.OnCallUser", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("OnCallUsers")
@@ -2377,7 +2391,8 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Patient", b =>
@@ -2392,7 +2407,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentMethod", b =>
@@ -2404,7 +2420,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.PaymentMethodType", "PaymentMethodType")
                         .WithMany("PaymentMethods")
@@ -2421,14 +2438,16 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentRule", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.PaymentRuleSet", "PaymentRuleSet")
                         .WithMany("PaymentRules")
@@ -2445,14 +2464,16 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ProfileType", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Referral", b =>
@@ -2464,7 +2485,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Patient", "Patient")
                         .WithMany()
@@ -2481,7 +2503,8 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.ReferralStatus")
                         .WithMany("ReferralStatuses")
@@ -2492,28 +2515,32 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Speciality", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UnsuccessfulExaminationType", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.User", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Organisation", "Organisation")
                         .WithMany("Users")
@@ -2543,7 +2570,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.User", "SelectedByUser")
                         .WithMany("UserExaminationClaimSelections")
@@ -2565,7 +2593,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.NotificationText", "NotificationText")
                         .WithMany("UserExaminationNotifications")
@@ -2582,7 +2611,8 @@ namespace mep.business.Migrations
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.Speciality", "Speciality")
                         .WithMany("UserSpecialities")

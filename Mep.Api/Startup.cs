@@ -34,8 +34,11 @@ namespace Mep.Api
         ";Application Name=MedicalExaminationsPortal;";
 
       services.AddDbContext<ApplicationContext>
-        (options => options.UseSqlServer(
-          connection));
+        (options => {
+          options.UseSqlServer(connection);
+          // TODO: Add this to development only configuration
+          options.EnableSensitiveDataLogging();
+        });
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

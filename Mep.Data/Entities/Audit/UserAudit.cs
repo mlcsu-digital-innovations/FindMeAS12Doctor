@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("UsersAudit")]
   public partial class UserAudit : BaseAudit, IUser
   {
     // public virtual IList<BankDetailAudit> BankDetails { get; set; }

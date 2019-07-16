@@ -4,6 +4,9 @@ using Audit.EntityFramework;
 using Mep.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
+// dotnet ef migrations add <migration-name> --project Mep.Business --startup-project Mep.Api
+// dotnet ef database update --project Mep.Api
+
 namespace Mep.Business
 {
     public partial class ApplicationContext : AuditDbContext

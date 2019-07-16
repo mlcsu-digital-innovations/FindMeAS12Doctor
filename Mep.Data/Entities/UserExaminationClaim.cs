@@ -19,6 +19,7 @@ namespace Mep.Data.Entities
     [Column(TypeName = "decimal(18,2)")]
     public decimal? MileagePayment { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }
+    public virtual User SelectedByUser { get; set; }
     public int SelectedByUserId { get; set; }
     [MaxLength(10)]
     [Required]

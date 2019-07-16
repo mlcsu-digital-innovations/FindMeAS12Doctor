@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
+  [Table("ContactDetailsAudit")]
   public partial class ContactDetailAudit : BaseAudit, IContactDetail
   {
     [MaxLength(200)]

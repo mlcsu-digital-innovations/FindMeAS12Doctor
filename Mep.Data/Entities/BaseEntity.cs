@@ -9,6 +9,7 @@ namespace Mep.Data.Entities
     public int Id { get; set; }
     public bool IsActive { get; set; }
     public DateTimeOffset ModifiedAt { get; set; }
-    public int ModifiedBy { get; set; }
+    public int? ModifiedByUserId { get; set; }
+    public virtual User ModifiedByUser { get; set; }
   }
 }

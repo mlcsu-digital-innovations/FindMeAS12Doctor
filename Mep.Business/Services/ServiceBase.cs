@@ -40,7 +40,7 @@ namespace Mep.Business.Services
         protected void UpdateModified(TEntity entity)
         {
             //TODO: Get the current users sub claim
-            entity.ModifiedBy = 1;
+            entity.ModifiedByUserId = 1;
             entity.ModifiedAt = DateTimeOffset.Now;  
         }  
 

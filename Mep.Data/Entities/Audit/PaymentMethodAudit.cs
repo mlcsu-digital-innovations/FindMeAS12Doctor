@@ -1,5 +1,8 @@
-﻿namespace Mep.Data.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Mep.Data.Entities
 {
+  [Table("PaymentMethodsAudit")]
   public partial class PaymentMethodAudit : BaseAudit, IPaymentMethod
   {
     // public virtual CcgAudit Ccg { get; set; }
