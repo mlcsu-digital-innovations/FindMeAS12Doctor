@@ -17,7 +17,7 @@ namespace Mep.Business.Services
             bool asNoTracking,
             bool activeOnly);
 
-        public abstract Task<TBusinessModel> GetModelByIdAsync(
+        public abstract Task<TBusinessModel> GetByIdAsync(
             int userId,
             bool activeOnly);
 
@@ -44,7 +44,7 @@ namespace Mep.Business.Services
             entity.ModifiedAt = DateTimeOffset.Now;  
         }  
 
-        public async Task<TBusinessModel> UpdateUserAsync(TBusinessModel model)
+        public async Task<TBusinessModel> UpdateEntityAsync(TBusinessModel model)
         {
             TEntity entity = 
                 await GetEntityByIdAsync(model.Id, false, false);
@@ -60,7 +60,7 @@ namespace Mep.Business.Services
                 UpdateModified(entity);
                 await _context.SaveChangesAsync();
 
-                model = await GetModelByIdAsync(model.Id, model.IsActive);
+                model = await GetByIdAsync(model.Id, model.IsActive);
                 return model;
             }
         }        
