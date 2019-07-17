@@ -22,6 +22,7 @@ namespace Mep.Api.Controllers
         [AllowAnonymous]
         public IActionResult Get()
         {
+            // TODO: Once specific exceptions are create add them in here
             // Get the details of the exception that occurred
             var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
