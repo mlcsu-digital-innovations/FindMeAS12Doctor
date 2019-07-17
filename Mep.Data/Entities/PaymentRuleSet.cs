@@ -9,6 +9,6 @@ namespace Mep.Data.Entities
     public int CcgId { get; set; }
     public DateTimeOffset DateTimeFrom { get; set; }
     public DateTimeOffset DateTimeTo { get; set; }
-    public virtual List<PaymentRule> PaymentRules { get; set; }
+    public virtual IList<PaymentRule> PaymentRules { get; set; }
   }
 }

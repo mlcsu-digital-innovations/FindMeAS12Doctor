@@ -3,6 +3,6 @@ namespace Mep.Business.Models
 {
   public class PaymentMethodType : NameDescription
   {
-    // public virtual IList<PaymentMethod> PaymentMethods { get; set; }
+    public virtual IList<PaymentMethod> PaymentMethods { get; set; }
   }
 }
