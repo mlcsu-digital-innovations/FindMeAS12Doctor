@@ -26,20 +26,16 @@ namespace Mep.Api
     {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-      //TODO: Add this to a config file
-      string connection = 
-        "Server=localhost" +
-        ";DataBase=MedicalExaminationsPortal;" +
-        ";Trusted_Connection=true" +
-        ";MultipleActiveResultSets=true;" +
-        ";Application Name=MedicalExaminationsPortal;";
-
       services.AddDbContext<ApplicationContext>
-        (options => {
-          options.UseSqlServer(connection);
-          // TODO: Add this to development only configuration
-          options.EnableSensitiveDataLogging();
-        });
+      (options => {        
+        options.UseSqlServer(Configuration.GetConnectionString("MedicalExaminationsPortal"), 
+        // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
+                             opt => opt.EnableRetryOnFailure());
+        // TODO: Add EnableSensitiveDataLogging to development only configuration
+        options.EnableSensitiveDataLogging();
+        // TODO: Add EnableDetailedErrors to development only configuration
+        options.EnableDetailedErrors();
+      });
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

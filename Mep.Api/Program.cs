@@ -1,36 +1,50 @@
-﻿using Mep.Api.Extensions;
+﻿using System;
+using Mep.Api.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Mep.Api
 {
-    public class Program
+  public class Program
+  {
+    public static int Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            IWebHost host = CreateWebHostBuilder(args)
-                            .ConfigureLogging((hostingContext, logging) =>
-                            {
-                                logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                                logging.AddConsole();
-                                logging.AddDebug();
-                            })
-                            .Build();
 
-            if (args.Length > 0 && args[0] == "/seed")
-            {
-                host.SeedData();
-            }
-            else
-            {
-                host.Run();
-            }
+
+      try
+      {
+        Log.Information("Starting web host");
+        IWebHost host = CreateWebHostBuilder(args).Build();
+
+        if (args.Length > 0 && args[0] == "/seed")
+        {
+          Log.Information("Seeding database");
+          host.SeedData();
+        }
+        else
+        {
+          Log.Information("Running web host");
+          host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        return 0;
+      }
+      catch (Exception ex)
+      {
+        Log.Fatal(ex, "Host terminated unexpectedly");
+        return 1;
+      }
+      finally
+      {
+        Log.CloseAndFlush();
+      }      
     }
+
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+      WebHost.CreateDefaultBuilder(args)
+        .UseStartup<Startup>()
+        .UseSerilog((ctx, cfg) =>
+          cfg.ReadFrom.Configuration(ctx.Configuration));
+  }
 }
