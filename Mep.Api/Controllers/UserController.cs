@@ -10,8 +10,8 @@ namespace Mep.Api.Controllers
   public class UserController : 
     ModelController<BusinessModels.User, 
                     ViewModels.User, 
-                    RequestModels.PutUser, 
-                    RequestModels.PostUser>
+                    RequestModels.UserPut, 
+                    RequestModels.UserPost>
   {
     public UserController(
       IModelService<BusinessModels.User> service, 
