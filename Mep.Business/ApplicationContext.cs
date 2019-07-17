@@ -44,6 +44,8 @@ namespace Mep.Business
 
     public virtual DbSet<BankDetail> BankDetails { get; set; }
     public virtual DbSet<BankDetailAudit> BankDetailsAudit { get; set; }
+    public virtual DbSet<BankDetailType> BankDetailTypes { get; set; }
+    public virtual DbSet<BankDetailTypeAudit> BankDetailTypesAudit { get; set; }
     public virtual DbSet<Ccg> Ccgs { get; set; }
     public virtual DbSet<CcgAudit> CcgAudits { get; set; }
     public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }    
