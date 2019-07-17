@@ -3,11 +3,11 @@ using BusinessModels = Mep.Business.Models;
 
 namespace Mep.Api.RequestModels.Profiles
 {
-    public class PutUserProfile : Profile
+    public class UserPutProfile : Profile
     {
-        public PutUserProfile()
+        public UserPutProfile()
         {
-            CreateMap<PutUser, BusinessModels.User>();
+            CreateMap<UserPut, BusinessModels.User>();
         }
     }
 }

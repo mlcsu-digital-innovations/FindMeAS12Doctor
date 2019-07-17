@@ -7,7 +7,7 @@ namespace Mep.Api.RequestModels.Profiles
     {
         public PutSpecialityProfile()
         {
-            CreateMap<PutSpeciality, BusinessModels.Speciality>();
+            CreateMap<SpecialityPut, BusinessModels.Speciality>();
         }
     }
 }

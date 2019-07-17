@@ -14,6 +14,11 @@ namespace Mep.Business.Services
     protected readonly IMapper _mapper;
     protected readonly string _typeName;
 
+    protected abstract Task<TEntity> GetEntityByIdAsync(
+      int userId,
+      bool asNoTracking,
+      bool activeOnly);
+
     protected abstract Task<bool> InternalCreateAsync(
       TBusinessModel model,
       TEntity entity
@@ -23,11 +28,6 @@ namespace Mep.Business.Services
       TBusinessModel model,
       TEntity entity
     );
-
-    protected abstract Task<TEntity> GetEntityByIdAsync(
-      int userId,
-      bool asNoTracking,
-      bool activeOnly);
 
     public async Task<TBusinessModel> GetByIdAsync(
       int id,
@@ -156,7 +156,7 @@ namespace Mep.Business.Services
     private async Task<int> SetActiveStatus(int id, bool isActivating)
     {
       TEntity entity = await _context.Set<TEntity>()
-                       .FindAsync(id);
+                                     .FindAsync(id);
 
       if (entity == null)
       {

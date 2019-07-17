@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Api.SharedModels
+namespace Mep.Api.RequestModels
 {
   public abstract class NameDescription
   {

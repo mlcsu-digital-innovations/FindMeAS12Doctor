@@ -10,8 +10,8 @@ namespace Mep.Api.Controllers
   public class SpecialityController : 
     ModelController<BusinessModels.Speciality, 
                     ViewModels.Speciality, 
-                    RequestModels.PutSpeciality, 
-                    RequestModels.PostSpeciality>
+                    RequestModels.SpecialityPut, 
+                    RequestModels.SpecialityPost>
   {
     public SpecialityController(
       IModelService<BusinessModels.Speciality> service, 

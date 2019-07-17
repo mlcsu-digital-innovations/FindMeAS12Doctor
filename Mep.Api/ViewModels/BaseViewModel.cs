@@ -1,17 +1,12 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Business.Models
+namespace Mep.Api.ViewModels
 {
-  public abstract class BaseModel : IBaseModel
+  public abstract class BaseViewModel
   {
-    [Required]
     public int Id { get; set; }
-    [Required]
     public DateTimeOffset ModifiedAt { get; set; }
-    [Required]
     public int ModifiedByUserId { get; set; }
-    [Required]
     public bool IsActive { get; set; }
   }
 }

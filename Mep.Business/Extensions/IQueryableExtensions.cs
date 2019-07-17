@@ -21,7 +21,7 @@ namespace Mep.Business.Extensions
     public static IQueryable<T> AsNoTracking<T>(
       this IQueryable<T> query, bool asNoTracking) where T : BaseEntity
     {
-      return asNoTracking ? query : query.AsNoTracking();
+      return asNoTracking ? query.AsNoTracking() : query;
     }       
   }
 }
