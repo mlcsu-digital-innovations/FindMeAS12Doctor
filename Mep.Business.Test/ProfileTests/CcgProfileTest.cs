@@ -20,13 +20,13 @@ namespace Mep.Business.Test
       };
    
     [TestMethod]
-    public void PaymentMethodProfileBusiness2EntityIsValid()
+    public void CcgProfileBusiness2EntityIsValid()
     {      
       AssertBusiness2EntityMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
-    public void PaymentMethodProfileEntity2BusinessIsValid()
+    public void CcgProfileEntity2BusinessIsValid()
     {
       AssertEntity2BusinessMappingIsValid(ignoredMappings);
     }
