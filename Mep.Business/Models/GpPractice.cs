@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
-namespace Mep.Data.Entities
+using System.Collections.Generic;
+namespace Mep.Business.Models
 {
-  public partial class GpPractice : BaseEntity, IGpPractice
+  public class GpPractice : BaseModel
   {
     public virtual Ccg Ccg { get; set; }
     public int CcgId { get; set; }

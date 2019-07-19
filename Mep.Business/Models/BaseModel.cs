@@ -11,6 +11,7 @@ namespace Mep.Business.Models
     public DateTimeOffset ModifiedAt { get; set; }
     [Required]
     public int ModifiedByUserId { get; set; }
+    public virtual User ModifiedByUser {get; set;}
     [Required]
     public bool IsActive { get; set; }
   }

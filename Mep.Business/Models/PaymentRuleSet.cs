@@ -1,14 +1,14 @@
-﻿using System;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-
-namespace Mep.Data.Entities
+namespace Mep.Business.Models
 {
-  public partial class PaymentRuleSet : NameDescription, IPaymentRuleSet
+  public class PaymentRuleSet : NameDescription
   {
     public virtual Ccg Ccg { get; set; }
     public int CcgId { get; set; }
     public DateTimeOffset DateTimeFrom { get; set; }
     public DateTimeOffset DateTimeTo { get; set; }
-    public virtual IList<PaymentRule> PaymentRules { get; set; }
+    public virtual IList<PaymentRule> PaymentRules { get; set; } 
   }
 }
