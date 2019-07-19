@@ -10,22 +10,21 @@ namespace Mep.Business.Test.ProfileTests
     where BusinessModel : Mep.Business.Models.BaseModel
     where Entity : Mep.Data.Entities.BaseEntity
   {
-    public void AssertBusiness2EntityMappingIsValid() {
+    public void AssertBusiness2EntityMappingIsValid()
+    {
       this.AssertBusiness2EntityMappingIsValid(new string[0]);
     }
 
     public void AssertBusiness2EntityMappingIsValid(IEnumerable<string> ignoredMappings)
     {
-      // Mapping business model to entity
-      MapperConfiguration config = CreateConfigurationForProfile();
-      TypeMap typeMap = config.FindTypeMapFor<BusinessModel, Entity>();
-
-      typeMap = IgnoreMappings(typeMap, ignoredMappings);
-      var mapper = config.CreateMapper();
-
       try
       {
-        mapper.ConfigurationProvider.AssertConfigurationIsValid(typeMap);
+        // Mapping business model to entity
+        IMapper mapper = CreateMapperForProfile();
+        TypeMap typeMap = mapper.ConfigurationProvider.FindTypeMapFor<BusinessModel, Entity>();
+
+        typeMap = IgnoreMappings(typeMap, ignoredMappings);
+        AssertConfigurationIsValid(mapper, typeMap);
       }
       catch (Exception ex)
       {
@@ -33,19 +32,30 @@ namespace Mep.Business.Test.ProfileTests
       }
     }
 
-    public void AssertEntity2BusinessMappingIsValid() {
+    public void AssertEntity2BusinessMappingIsValid()
+    {
       this.AssertEntity2BusinessMappingIsValid(new string[0]);
     }
 
     public void AssertEntity2BusinessMappingIsValid(IEnumerable<string> ignoredMappings)
     {
-      // Mapping business model to entity
-      MapperConfiguration config = CreateConfigurationForProfile();
-      TypeMap typeMap = config.FindTypeMapFor<Entity, BusinessModel>();
+      try
+      {
+        // Mapping entity to business model
+        IMapper mapper = CreateMapperForProfile();
+        TypeMap typeMap = mapper.ConfigurationProvider.FindTypeMapFor<Entity, BusinessModel>();
 
-      typeMap = IgnoreMappings(typeMap, ignoredMappings);
-      var mapper = config.CreateMapper();
+        typeMap = IgnoreMappings(typeMap, ignoredMappings);
+        AssertConfigurationIsValid(mapper, typeMap);
+      }
+      catch (Exception ex)
+      {
+        Assert.Fail(ex.Message);
+      }
+    }
 
+    private void AssertConfigurationIsValid(IMapper mapper, TypeMap typeMap)
+    {
       try
       {
         mapper.ConfigurationProvider.AssertConfigurationIsValid(typeMap);
@@ -58,22 +68,29 @@ namespace Mep.Business.Test.ProfileTests
 
     private TypeMap IgnoreMappings(TypeMap typeMap, IEnumerable<string> ignoredMappings)
     {
-      // update the properties that are to be ignored in the mapping
-      IEnumerable<PropertyMap> propertyMap = typeMap.PropertyMaps;
-
-      foreach (string mapping in ignoredMappings)
+      try
       {
-        if (propertyMap.Where(pm => String.Equals(pm.DestinationName, mapping)).Any())
+        // update the properties that are to be ignored in the mapping
+        IEnumerable<PropertyMap> propertyMap = typeMap.PropertyMaps;
+        foreach (string mapping in ignoredMappings)
         {
-          propertyMap.First(pm => pm.DestinationName == mapping).Ignored = true;
+          if (propertyMap.Any(pm => String.Equals(pm.DestinationName, mapping)))
+          {
+            propertyMap.First(pm => pm.DestinationName == mapping).Ignored = true;
+          }
         }
       }
+      catch (Exception ex)
+      {
+        Assert.Fail(ex.Message);
+      }
+
       return typeMap;
     }
 
-    private MapperConfiguration CreateConfigurationForProfile()
+    private IMapper CreateMapperForProfile()
     {
-      string profileName = ($"Mep.Business.Models.Profiles.{typeof(BusinessModel).Name}Profile, mep.business");
+      string profileName = ($"{typeof(BusinessModel).Namespace}.Profiles.{typeof(BusinessModel).Name}Profile, {typeof(BusinessModel).Assembly}");
       Type profileType = Type.GetType(profileName);
 
       MapperConfiguration config = new MapperConfiguration(cfg =>
@@ -81,7 +98,9 @@ namespace Mep.Business.Test.ProfileTests
         cfg.AddProfile(profileType);
       });
 
-      return config;
+      IMapper mapper = config.CreateMapper();
+
+      return mapper;
     }
   }
 }
