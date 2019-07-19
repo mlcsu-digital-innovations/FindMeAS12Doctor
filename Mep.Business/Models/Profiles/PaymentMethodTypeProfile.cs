@@ -6,8 +6,9 @@ namespace Mep.Business.Models.Profiles
   {
     public PaymentMethodTypeProfile()
     {
-      CreateMap<Entities.PaymentMethodType, Models.PaymentMethodType>()
-        .ReverseMap();
+      CreateMap<Entities.PaymentMethodType, Models.PaymentMethodType>();
+
+      CreateMap<Models.PaymentMethodType, Entities.PaymentMethodType>();
     }
   }
 }
