@@ -1,13 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AutoMapper;
 using Mep.Business.Models.Profiles;
-using System.Collections.Generic;
-using System.Linq;
 using Mep.Business.Test.ProfileTests;
-using System;
-
 using Entities = Mep.Data.Entities;
-
+using System;
 namespace Mep.Business.Test
 {
   [TestClass]
