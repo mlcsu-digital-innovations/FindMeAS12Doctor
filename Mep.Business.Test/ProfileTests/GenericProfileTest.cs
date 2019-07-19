@@ -78,6 +78,9 @@ namespace Mep.Business.Test.ProfileTests
           {
             propertyMap.First(pm => pm.DestinationName == mapping).Ignored = true;
           }
+          else {
+            Assert.Fail($"Type map profile '{typeMap.Profile.Name}' does not contain a property for the ignored mapping '{mapping}'");
+          }
         }
       }
       catch (Exception ex)
