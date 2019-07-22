@@ -7,7 +7,14 @@ namespace Mep.Business.Test
   [TestClass]
   public class UserExaminationClaimProfileTest : GenericProfileTest<Business.Models.UserExaminationClaim, Entities.UserExaminationClaim>
   {
-    private String[] ignoredMappings = new string[5] { "ClaimStatus", "Examination", "SelectedByUser", "User", "ModifiedByUser" };
+    private String[] ignoredMappings = new string[5] 
+    { 
+      "ClaimStatus", 
+      "Examination", 
+      "SelectedByUser", 
+      "User", 
+      "ModifiedByUser" 
+    };
    
     [TestMethod]
     public void UserExaminationClaimProfileBusiness2EntityIsValid()
