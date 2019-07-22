@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class UserExaminationNotificationProfileTest : GenericProfileTest<Business.Models.UserExaminationNotification, Entities.UserExaminationNotification>
   {
-    private String[] ignoredMappings = new string[4] { "Examination", "NotificationText", "User", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[4] { "Examination", "NotificationText", "User", "ModifiedByUser" };
    
     [TestMethod]
     public void UserExaminationNotificationBusiness2EntityIsValid()

@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class ReferralStatusProfileTest : GenericProfileTest<Business.Models.ReferralStatus, Entities.ReferralStatus>
   {
-    private String[] ignoredMappings = new string[1] { "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[1] { "ModifiedByUser" };
    
     [TestMethod]
     public void ReferralStatusProfileBusiness2EntityIsValid()

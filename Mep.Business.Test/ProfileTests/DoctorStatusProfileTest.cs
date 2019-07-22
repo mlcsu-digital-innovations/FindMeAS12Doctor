@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class DoctorStatusProfileTest : GenericProfileTest<Business.Models.DoctorStatus, Entities.DoctorStatus>
   {
-    private String[] ignoredMappings = new string[1] {
+    private readonly String[] ignoredMappings = new string[1] {
        "ModifiedByUser"
       };
    

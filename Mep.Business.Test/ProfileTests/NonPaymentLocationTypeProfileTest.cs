@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class NonPaymentLocationTypeProfileTest : GenericProfileTest<Business.Models.NonPaymentLocationType, Entities.NonPaymentLocationType>
   {
-    private String[] ignoredMappings = new string[2] {
+    private readonly String[] ignoredMappings = new string[2] {
        "ModifiedByUser",
        "NonPaymentLocations"
       };

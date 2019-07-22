@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class ContactDetailProfileTest : GenericProfileTest<Business.Models.ContactDetail, Entities.ContactDetail>
   {
-    private String[] ignoredMappings = new string[4] {
+    private readonly String[] ignoredMappings = new string[4] {
        "ModifiedByUser",
        "Ccg",
        "ContactDetailType",

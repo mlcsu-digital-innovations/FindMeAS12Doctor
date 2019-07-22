@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class OrganisationProfileTest : GenericProfileTest<Business.Models.Organisation, Entities.Organisation>
   {
-    private String[] ignoredMappings = new string[2] {
+    private readonly String[] ignoredMappings = new string[2] {
        "ModifiedByUser",
        "Users"
       };

@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class PaymentRuleProfileTest : GenericProfileTest<Business.Models.PaymentRule, Entities.PaymentRule>
   {
-    private String[] ignoredMappings = new string[2] { "PaymentRuleSet", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[2] { "PaymentRuleSet", "ModifiedByUser" };
    
     [TestMethod]
     public void PaymentRuleProfileBusiness2EntityIsValid()

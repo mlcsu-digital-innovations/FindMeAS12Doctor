@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class UserSpecitalityProfileTest : GenericProfileTest<Business.Models.UserSpeciality, Entities.UserSpeciality>
   {
-    private String[] ignoredMappings = new string[3] { "Speciality", "User", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[3] { "Speciality", "User", "ModifiedByUser" };
    
     [TestMethod]
     public void UserSpecitalityProfileBusiness2EntityIsValid()

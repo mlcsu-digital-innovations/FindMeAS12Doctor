@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class GpPracticeProfileTest : GenericProfileTest<Business.Models.GpPractice, Entities.GpPractice>
   {
-    private String[] ignoredMappings = new string[3] {
+    private readonly String[] ignoredMappings = new string[3] {
        "ModifiedByUser",
        "Ccg",
        "Patients"

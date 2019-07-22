@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class CcgProfileTest : GenericProfileTest<Business.Models.Ccg, Entities.Ccg>
   {
-    private String[] ignoredMappings = new string[9] {
+    private readonly String[] ignoredMappings = new string[9] {
       "BankDetails", 
       "ContactDetails", 
       "Examinations", 
