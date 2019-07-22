@@ -5,18 +5,21 @@ using System;
 namespace Mep.Business.Test
 {
   [TestClass]
-  public class PaymentMethodTypeProfileTest : GenericProfileTest<Business.Models.PaymentMethodType, Entities.PaymentMethodType>
+  public class OrganisationProfileTest : GenericProfileTest<Business.Models.Organisation, Entities.Organisation>
   {
-    private String[] ignoredMappings = new string[2] { "PaymentMethods", "ModifiedByUser" };
+    private String[] ignoredMappings = new string[2] {
+       "ModifiedByUser",
+       "Users"
+      };
 
     [TestMethod]
-    public void PaymentMethodTypeProfileBusiness2EntityIsValid()
-    {      
+    public void OrganisationProfileBusiness2EntityIsValid()
+    {
       AssertBusiness2EntityMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
-    public void PaymentMethodTypeProfileEntity2BusinessIsValid()
+    public void OrganisationProfileEntity2BusinessIsValid()
     {
       AssertEntity2BusinessMappingIsValid(ignoredMappings);
     }
