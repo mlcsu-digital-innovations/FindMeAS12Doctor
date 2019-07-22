@@ -5,9 +5,27 @@ using System;
 namespace Mep.Business.Test
 {
   [TestClass]
-  public class UserProfileTest : GenericProfileTest<Business.Models.UserSpeciality, Entities.UserSpeciality>
+  public class UserProfileTest : GenericProfileTest<Business.Models.User, Entities.User>
   {
-    private String[] ignoredMappings = new string[3] { "Speciality", "User", "ModifiedByUser" };
+    private String[] ignoredMappings = new string[16] 
+    { 
+      "BankDetails", 
+      "CompletedExaminations", 
+      "CompletionConfirmationExaminations", 
+      "ContactDetails",
+      "CreatedExaminations",
+      "DoctorStatuses",
+      "OnCallUsers",
+      "Organisation",
+      "PaymentMethods",
+      "ProfileType",
+      "Referrals",
+      "Section12ApprovalStatus",
+      "UserSpecialities",
+      "UserExaminationClaims",
+      "UserExaminationClaimSelections",
+      "UserExaminationNotifications"
+    };
    
     [TestMethod]
     public void UserProfileBusiness2EntityIsValid()
