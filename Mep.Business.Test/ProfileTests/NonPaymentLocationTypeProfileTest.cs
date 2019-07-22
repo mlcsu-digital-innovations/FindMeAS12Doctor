@@ -5,22 +5,21 @@ using System;
 namespace Mep.Business.Test
 {
   [TestClass]
-  public class NonPaymentLocationProfileTest : GenericProfileTest<Business.Models.NonPaymentLocation, Entities.NonPaymentLocation>
+  public class NonPaymentLocationTypeProfileTest : GenericProfileTest<Business.Models.NonPaymentLocationType, Entities.NonPaymentLocationType>
   {
-    private String[] ignoredMappings = new string[3] {
+    private String[] ignoredMappings = new string[2] {
        "ModifiedByUser",
-       "Ccg",
-       "NonPaymentLocationType"
+       "NonPaymentLocations"
       };
 
     [TestMethod]
-    public void NonPaymentLocationProfileBusiness2EntityIsValid()
+    public void NonPaymentLocationTypeProfileBusiness2EntityIsValid()
     {
       AssertBusiness2EntityMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
-    public void NonPaymentLocationProfileEntity2BusinessIsValid()
+    public void NonPaymentLocationTypeProfileEntity2BusinessIsValid()
     {
       AssertEntity2BusinessMappingIsValid(ignoredMappings);
     }
