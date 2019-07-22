@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class PaymentMethodTypeProfileTest : GenericProfileTest<Business.Models.PaymentMethodType, Entities.PaymentMethodType>
   {
-    private String[] ignoredMappings = new string[2] { "PaymentMethods", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[2] { "PaymentMethods", "ModifiedByUser" };
 
     [TestMethod]
     public void PaymentMethodTypeProfileBusiness2EntityIsValid()

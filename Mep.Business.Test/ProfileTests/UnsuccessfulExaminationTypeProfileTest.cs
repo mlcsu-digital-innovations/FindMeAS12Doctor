@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class UnsuccessfulExaminationTypeProfileTest : GenericProfileTest<Business.Models.UnsuccessfulExaminationType, Entities.UnsuccessfulExaminationType>
   {
-    private String[] ignoredMappings = new string[2] { "Examinations", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[2] { "Examinations", "ModifiedByUser" };
    
     [TestMethod]
     public void UnsuccessfulExaminationTypeProfileBusiness2EntityIsValid()

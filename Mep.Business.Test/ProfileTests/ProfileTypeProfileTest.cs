@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class ProfileTypeProfileTest : GenericProfileTest<Business.Models.ProfileType, Entities.ProfileType>
   {
-    private String[] ignoredMappings = new string[2] { "Users", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[2] { "Users", "ModifiedByUser" };
    
     [TestMethod]
     public void ProfileTypeProfileBusiness2EntityIsValid()

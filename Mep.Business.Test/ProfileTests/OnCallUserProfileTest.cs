@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class OnCallUserProfileTest : GenericProfileTest<Business.Models.OnCallUser, Entities.OnCallUser>
   {
-    private String[] ignoredMappings = new string[2] {
+    private readonly String[] ignoredMappings = new string[2] {
        "ModifiedByUser",
        "User"
       };

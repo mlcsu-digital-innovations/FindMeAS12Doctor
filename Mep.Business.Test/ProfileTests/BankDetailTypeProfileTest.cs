@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class BankDetailTypeProfileTest : GenericProfileTest<Business.Models.BankDetailType, Entities.BankDetailType>
   {
-    private String[] ignoredMappings = new string[2] { "BankDetails", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[2] { "BankDetails", "ModifiedByUser" };
 
     [TestMethod]
     public void BankDetailTypeProfileBusiness2EntityIsValid()

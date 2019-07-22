@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class Section12ApprovalStatusProfileTest : GenericProfileTest<Business.Models.Section12ApprovalStatus, Entities.Section12ApprovalStatus>
   {
-    private String[] ignoredMappings = new string[2] { "Users", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[2] { "Users", "ModifiedByUser" };
    
     [TestMethod]
     public void Section12ApprovalStatusProfileBusiness2EntityIsValid()
