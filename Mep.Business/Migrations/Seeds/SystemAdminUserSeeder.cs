@@ -26,6 +26,7 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.IdentityServerIdentifier = SystemAdminIdentityServerIdentifier;
       systemAdminUser.IsActive = true;
       systemAdminUser.ModifiedAt = now;
+      systemAdminUser.DisplayName = "System Admin User";
 
       Organisation systemOrganisation;
       if ((systemOrganisation = 
