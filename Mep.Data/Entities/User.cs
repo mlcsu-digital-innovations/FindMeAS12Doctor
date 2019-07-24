@@ -44,5 +44,7 @@ namespace Mep.Data.Entities
     public virtual IList<UserExaminationClaim> UserExaminationClaimSelections { get; set; }    
     [InverseProperty("User")]
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    [MaxLength(256)]
+    public string DisplayName { get; set; }
   }
 }

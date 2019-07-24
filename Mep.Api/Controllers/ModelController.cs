@@ -36,7 +36,7 @@ namespace Mep.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ViewModels.Speciality>>> Get()
+        public async Task<ActionResult<IEnumerable<ViewModels.BaseViewModel>>> Get()
         {
             IEnumerable<BusinessModel> businessModels = 
                 await _service.GetAllAsync(true);

@@ -23,13 +23,15 @@ namespace Mep.Business.Models
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
     public virtual ProfileType ProfileType { get; set; }
     public int ProfileTypeId { get; set; }
-    public virtual IList<Referral> Referrals { get; set; }    
+    public virtual IList<Referral> Referrals { get; set; }
     public virtual Section12ApprovalStatus Section12ApprovalStatus { get; set; }
     public int? Section12ApprovalStatusId { get; set; }
     public DateTimeOffset? Section12ExpiryDate { get; set; }
     public virtual IList<UserSpeciality> UserSpecialities { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
-    public virtual IList<UserExaminationClaim> UserExaminationClaimSelections { get; set; }    
+    public virtual IList<UserExaminationClaim> UserExaminationClaimSelections { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    [MaxLength(256)]
+    public string DisplayName { get; set; }
   }
 }
