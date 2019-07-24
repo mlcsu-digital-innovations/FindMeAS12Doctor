@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mep.Api\Mep.Api.csproj" />
+    <ProjectReference Include="..\Mep.Api\mep.api.csproj" />
   </ItemGroup>
 
 </Project>
