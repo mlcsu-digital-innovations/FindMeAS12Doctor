@@ -12,7 +12,7 @@ namespace Mep.Business.Services
     : ServiceBase<Speciality, Entities.Speciality>, IModelService<Speciality>
   {
     public SpecialityService(ApplicationContext context, IMapper mapper)
-      :base("Speciality", context, mapper)
+      : base("Speciality", context, mapper)
     {
     }
 
@@ -20,29 +20,34 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Entities.Speciality> entities = 
+      IEnumerable<Entities.Speciality> entities =
         await _context.Specialities
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .ToListAsync();
 
-      IEnumerable<Models.Speciality> models = 
+      IEnumerable<Models.Speciality> models =
         _mapper.Map<IEnumerable<Models.Speciality>>(entities);
 
       return models;
     }
 
     protected override async Task<Entities.Speciality> GetEntityByIdAsync(
-      int id, 
+      int id,
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.Speciality entity = await         
+      Entities.Speciality entity = await
         _context.Specialities
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
-      return entity;  
+      return entity;
+    }
+
+    protected override Task<Entities.Speciality> GetEntityLinkedObjectsAsync(Speciality model, Entities.Speciality entity)
+    {
+      return Task.FromResult(entity);
     }
 
     protected override Task<bool> InternalCreateAsync(Speciality model, Entities.Speciality entity)
