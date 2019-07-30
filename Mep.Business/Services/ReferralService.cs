@@ -58,10 +58,10 @@ namespace Mep.Business.Services
 
     protected override async Task<Entities.Referral> GetEntityLinkedObjectsAsync(Referral model, Entities.Referral entity) {
 
-        entity.Patient = await _context.Patients.SingleAsync(x => x.Id == model.PatientId);
-        entity.CreatedByUser = await _context.Users.SingleAsync(x => x.Id == model.CreatedByUserId);
-        entity.ReferralStatus = await _context.ReferralStatuses.SingleAsync(x => x.Id == model.ReferralStatusId);
-                
+        entity.Patient = await GetLinkedObjectAsync<Entities.Patient>(_context.Patients, model.PatientId);
+        entity.CreatedByUser =await GetLinkedObjectAsync<Entities.User>(_context.Users, model.CreatedByUserId);
+        entity.ReferralStatus =await GetLinkedObjectAsync<Entities.ReferralStatus>(_context.ReferralStatuses, model.ReferralStatusId);
+               
         return entity;
     }
 

@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Mep.Business.Models;
 using Mep.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Mep.Business.Services
 {
@@ -129,6 +131,24 @@ namespace Mep.Business.Services
 
         model = await GetByIdAsync(model.Id, model.IsActive);
         return model;
+      }
+    }
+
+    protected async Task<T> GetLinkedObjectAsync<T>(DbSet<T> appContext, int propertyId) where T : BaseEntity
+    {
+      try
+      {
+        return await appContext.SingleAsync(x => x.Id == propertyId);
+      }
+      catch
+      {
+        var model = _context.Model;
+        var entityTypes = model.GetEntityTypes();
+        var entityType = entityTypes.First(t => t.ClrType == typeof(T));
+        var tableNameAnnotation = entityType.GetAnnotations().First(a => a.Name == "Relational:TableName");
+        var tableName = tableNameAnnotation.Value.ToString();
+        //TODO: Create a specific exception
+        throw new Exception($"Table [{tableName}] does not contain a row with an id of {propertyId}");
       }
     }
 
