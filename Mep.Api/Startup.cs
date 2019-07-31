@@ -39,6 +39,7 @@ namespace Mep.Api
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+      services.AddScoped<IModelService<Ccg>, CcgService>();
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
       services.AddScoped<IModelService<User>, UserService>();
       services.AddScoped<IModelService<Referral>, ReferralService>();

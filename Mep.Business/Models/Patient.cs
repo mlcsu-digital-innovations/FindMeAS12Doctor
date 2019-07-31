@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System;
 namespace Mep.Business.Models
 {
   public class Patient : BaseModel
@@ -9,7 +10,7 @@ namespace Mep.Business.Models
     public int? CcgId { get; set; }
     public virtual GpPractice GpPractice { get; set; }
     public int? GpPracticeId { get; set; }
-    public int? NhsNumber { get; set; }
+    public Int64? NhsNumber { get; set; }
     [MaxLength(10)]
     [Required]
     public string ResidentialPostcode { get; set; }
