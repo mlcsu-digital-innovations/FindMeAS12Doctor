@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Mep.Api.RequestModels
 {
-    public class ReferralStatus : NameDescription
+    public abstract class ReferralStatus : NameDescription
     {
-        public virtual IList<ReferralStatus> ReferralStatuses { get; set; }
+        // public virtual IList<ReferralStatus> ReferralStatuses { get; set; }
     }
 }
