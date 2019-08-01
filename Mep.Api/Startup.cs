@@ -27,9 +27,10 @@ namespace Mep.Api
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
       services.AddDbContext<ApplicationContext>
-      (options => {        
-        options.UseSqlServer(Configuration.GetConnectionString("MedicalExaminationsPortal"), 
-        // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
+      (options =>
+      {
+        options.UseSqlServer(Configuration.GetConnectionString("MedicalExaminationsPortal"),
+                             // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
                              opt => opt.EnableRetryOnFailure());
         // TODO: Add EnableSensitiveDataLogging to development only configuration
         options.EnableSensitiveDataLogging();
@@ -40,9 +41,11 @@ namespace Mep.Api
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
       services.AddScoped<IModelService<Ccg>, CcgService>();
+      services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
+      services.AddScoped<IModelService<Referral>, ReferralService>();
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
       services.AddScoped<IModelService<User>, UserService>();
-      services.AddScoped<IModelService<Referral>, ReferralService>();
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

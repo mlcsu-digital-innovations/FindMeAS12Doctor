@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mep.Api.RequestModels
 {
-  public class GpPractice
+  public abstract class GpPractice
   {
-    public virtual Ccg Ccg { get; set; }
+    // public virtual Ccg Ccg { get; set; }
     public int CcgId { get; set; }
     [MaxLength(10)]
     [Required]
@@ -13,7 +13,7 @@ namespace Mep.Api.RequestModels
     [MaxLength(200)]
     [Required]
     public string Name { get; set; }
-    public virtual IList<Patient> Patients { get; set; }
+    // public virtual IList<Patient> Patients { get; set; }
     [MaxLength(10)]
     [Required]
     public string Postcode { get; set; }
