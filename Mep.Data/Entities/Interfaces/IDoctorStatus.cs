@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
@@ -12,7 +13,9 @@ namespace Mep.Data.Entities
     DateTimeOffset? ExtendedAvailabilityStart1 { get; set; }
     DateTimeOffset? ExtendedAvailabilityStart2 { get; set; }
     DateTimeOffset? ExtendedAvailabilityStart3 { get; set; }
-    int Latitude { get; set; }
-    int Longitude { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    decimal Latitude { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    decimal Longitude { get; set; }
   }
 }
