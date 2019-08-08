@@ -50,12 +50,6 @@ namespace Mep.Business.Services
       return models;
     }
 
-    public async Task<Models.DoctorStatus> CreateAsync(
-      Models.DoctorStatus model)
-    {
-
-    }
-
     public async Task<IEnumerable<Models.DoctorStatus>> GetAllAsync(
       bool activeOnly)
     {
