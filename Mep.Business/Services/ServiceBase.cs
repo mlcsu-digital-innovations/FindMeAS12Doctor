@@ -38,13 +38,6 @@ namespace Mep.Business.Services
       TEntity entity
     );
 
-    // public virtual async Task<IEnumerable<TBusinessModel>> SearchAsync<T>(
-    //   T searchModel
-    //   ) where T : ISearchModel 
-    // {
-    //   throw new Exception("BOOM");
-    // }
-
     public async Task<TBusinessModel> GetByIdAsync(
       int id,
       bool activeOnly)

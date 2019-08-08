@@ -16,5 +16,17 @@ namespace Mep.Data.Entities
     public decimal Latitude { get; set; }
     [Column(TypeName = "decimal(9,6)")]
     public decimal Longitude { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal? ExtendedAvailabilityLatitude1 { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? ExtendedAvailabilityLongitude1 { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal? ExtendedAvailabilityLatitude2 { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? ExtendedAvailabilityLongitude2 { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal? ExtendedAvailabilityLatitude3 { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? ExtendedAvailabilityLongitude3 { get; set; }
   }
 }

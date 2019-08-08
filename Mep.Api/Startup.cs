@@ -41,13 +41,13 @@ namespace Mep.Api
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
       services.AddScoped<IModelService<Ccg>, CcgService>();
+      services.AddScoped<IModelSearchService<DoctorStatus, Mep.Business.Models.SearchModels.DoctorStatusSearchModel>, DoctorStatusService>();
       services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
       services.AddScoped<IModelSearchService<Patient, Mep.Business.Models.SearchModels.PatientSearchModel>, PatientService>();
       services.AddScoped<IModelService<Referral>, ReferralService>();
       services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
       services.AddScoped<IModelService<User>, UserService>();
-
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
