@@ -44,7 +44,6 @@ namespace Mep.Api.Controllers
         IEnumerable<BusinessModel> results = await _service.SearchAsync(businessSearchModel);
 
         IEnumerable<ViewModel> viewModels = _mapper.Map<IEnumerable<ViewModel>>(results);
-        //TODO: Change reposonce to 201 Created
         return Ok(viewModels);
       }
       else

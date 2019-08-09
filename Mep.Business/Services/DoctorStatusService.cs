@@ -13,41 +13,11 @@ using System.Linq;
 namespace Mep.Business.Services
 {
   public class DoctorStatusService
-    : SearchServiceBase<DoctorStatus, Entities.DoctorStatus, DoctorStatusSearchModel>, IModelSearchService<DoctorStatus, DoctorStatusSearchModel>
+    : ServiceBase<DoctorStatus, Entities.DoctorStatus>, IModelService<DoctorStatus>
   {
     public DoctorStatusService(ApplicationContext context, IMapper mapper)
       : base("DoctorStatus", context, mapper)
     {
-    }
-
-    public override async Task<IEnumerable<DoctorStatus>> SearchAsync(DoctorStatusSearchModel model)
-    {
-      // build up the where statement
-      var param = Expression.Parameter(typeof(Entities.DoctorStatus), "ds");
-
-      Expression defaultExpression = Expression.GreaterThan(Expression.Property(param, "Id"), Expression.Constant(0));
-
-      Expression searchExpression = GetSearchExpression(model, param);
-
-      if (searchExpression != null)
-      {
-        defaultExpression = Expression.And(defaultExpression, searchExpression);
-      }
-
-      var whereExpression = Expression.Lambda<Func<Entities.DoctorStatus, bool>>(
-        defaultExpression, param
-      );
-
-      IEnumerable<Entities.DoctorStatus> entities =
-        await _context.DoctorStatuses
-        .Where(whereExpression)
-        .WhereIsActiveOrActiveOnly(true)
-        .ToListAsync();
-
-      IEnumerable<Models.DoctorStatus> models =
-        _mapper.Map<IEnumerable<Models.DoctorStatus>>(entities);
-
-      return models;
     }
 
     public async Task<IEnumerable<Models.DoctorStatus>> GetAllAsync(
@@ -81,17 +51,6 @@ namespace Mep.Business.Services
 
     protected override Task<Entities.DoctorStatus> GetEntityLinkedObjectsAsync(DoctorStatus model, Entities.DoctorStatus entity)
     {
-      // if (model.CcgId.HasValue)
-      // {
-      //   entity.Ccg = await GetLinkedObjectAsync<Entities.Ccg>(_context.Ccgs, model.CcgId.Value);
-      // }
-
-      // if (model.GpPracticeId.HasValue)
-      // {
-      //   entity.GpPractice = await GetLinkedObjectAsync<Entities.GpPractice>(_context.GpPractices, model.GpPracticeId.Value);
-      // }
-
-      // return entity;
       return Task.FromResult(entity);
     }
 

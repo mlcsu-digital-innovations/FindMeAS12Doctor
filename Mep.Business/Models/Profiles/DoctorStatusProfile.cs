@@ -7,7 +7,6 @@ namespace Mep.Business.Models.Profiles
     public DoctorStatusProfile()
     {
       CreateMap<Entities.DoctorStatus, Models.DoctorStatus>();
-
       CreateMap<Models.DoctorStatus, Entities.DoctorStatus>();
     }
   }

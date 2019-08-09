@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Mep.Api.RequestModels;
-using System;
 
 namespace Mep.Api.Controllers
 {
