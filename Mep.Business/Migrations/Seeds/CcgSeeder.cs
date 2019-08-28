@@ -1,11 +1,18 @@
 using System;
 using System.Linq;
 using Mep.Data.Entities;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using Mep.Business.Migrations.Seeds.SpineServiceModels;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class CcgSeeder : SeederBase
   {
+    static HttpClient client = new HttpClient();
+
     internal CcgSeeder(ApplicationContext context)
       : base(context)
     {
@@ -16,45 +23,10 @@ namespace Mep.Business.Migrations.Seeds
       Ccg ccg;
       DateTimeOffset now = DateTimeOffset.Now;
 
-      if ((ccg =
-            _context.Ccgs
-                    .SingleOrDefault(c => c.Name == "NHS Stoke on Trent CCG")) == null)
-      {
-        ccg = new Ccg();
-        _context.Add(ccg);
-      }
-
-      ccg.IsActive = true;
-      ccg.ModifiedAt = now;
-      ccg.ModifiedByUser = GetSystemAdminUser();
-      ccg.Name = "NHS Stoke on Trent CCG";
-      ccg.CostCentre = 100;
-      ccg.FailedExamPayment = 50.0m;
-      ccg.IsPaymentApprovalRequired = true;
-      ccg.SuccessfulPencePerMile = 20.0m;
-      ccg.UnsuccessfulPencePerMile = 20.0m;
-
-      if ((ccg =
-            _context.Ccgs
-                    .SingleOrDefault(c => c.Name == "NHS Stafford and Surrounds CCG")) == null)
-      {
-        ccg = new Ccg();
-        _context.Add(ccg);
-      }
-
-      ccg.IsActive = true;
-      ccg.ModifiedAt = now;
-      ccg.ModifiedByUser = GetSystemAdminUser();
-      ccg.Name = "NHS Stafford and Surrounds CCG";
-      ccg.CostCentre = 100;
-      ccg.FailedExamPayment = 50.0m;
-      ccg.IsPaymentApprovalRequired = true;
-      ccg.SuccessfulPencePerMile = 20.0m;
-      ccg.UnsuccessfulPencePerMile = 20.0m;
-
+      // create a dummy CCG for Unknown
       if ((ccg =
       _context.Ccgs
-              .SingleOrDefault(c => c.Name == "NHS North Staffordshire CCG")) == null)
+              .SingleOrDefault(c => c.Name == "Unknown")) == null)
       {
         ccg = new Ccg();
         _context.Add(ccg);
@@ -63,13 +35,44 @@ namespace Mep.Business.Migrations.Seeds
       ccg.IsActive = true;
       ccg.ModifiedAt = now;
       ccg.ModifiedByUser = GetSystemAdminUser();
-      ccg.Name = "NHS North Staffordshire CCG";
-      ccg.CostCentre = 100;
-      ccg.FailedExamPayment = 50.0m;
+      ccg.Name = "Unknown";
+      ccg.CostCentre = 1;
+      ccg.FailedExamPayment = 0.0m;
       ccg.IsPaymentApprovalRequired = true;
-      ccg.SuccessfulPencePerMile = 20.0m;
-      ccg.UnsuccessfulPencePerMile = 20.0m;
+      ccg.SuccessfulPencePerMile = 0.0m;
+      ccg.UnsuccessfulPencePerMile = 0.0m;
 
+      client.DefaultRequestHeaders.Accept.Clear();
+      client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+      using (var result = client.GetAsync("https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO98&Limit=1000").Result)
+      {
+        var content = result.Content.ReadAsStringAsync().Result;
+        var json = JsonConvert.DeserializeObject<SpineServiceResult>(content);
+
+        foreach (SpineServiceOrganisation ccgResult in json.Organisations)
+        {
+          string ccgName = $"[{ccgResult.OrgId}] - {ccgResult.Name}";
+
+          if ((ccg =
+                _context.Ccgs
+                        .SingleOrDefault(c => c.Name == ccgName)) == null)
+          {
+            ccg = new Ccg();
+            _context.Add(ccg);
+          }
+
+          ccg.IsActive = ccgResult.Status == "Inactive" ? false : true;
+          ccg.ModifiedAt = now;
+          ccg.ModifiedByUser = GetSystemAdminUser();
+          ccg.Name = ccgName;
+          ccg.CostCentre = 1;
+          ccg.FailedExamPayment = 0.0m;
+          ccg.IsPaymentApprovalRequired = true;
+          ccg.SuccessfulPencePerMile = 0.0m;
+          ccg.UnsuccessfulPencePerMile = 0.0m;
+        }
+      }
     }
   }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mep.Api.ViewModels
 {
-  public class Ccg
+  public class Ccg : BaseViewModel
   {
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }

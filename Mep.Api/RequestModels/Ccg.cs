@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mep.Api.RequestModels
 {
-  public class Ccg
+  public abstract class Ccg
   {
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }
