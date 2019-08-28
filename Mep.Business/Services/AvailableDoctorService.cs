@@ -56,8 +56,8 @@ namespace Mep.Business.Services
         }
       }
 
-      searchParams.ExaminationWindowStart = searchParams.ExaminationWindowStart == default ? new DateTimeOffset(DateTime.Now) : searchParams.ExaminationWindowStart;
-      searchParams.ExaminationWindowEnd = searchParams.ExaminationWindowEnd == default ? new DateTimeOffset(DateTime.Now).AddHours(3) : searchParams.ExaminationWindowEnd;
+      searchParams.ExaminationWindowStart = searchParams.ExaminationWindowStart == default(DateTime) ? new DateTimeOffset(DateTime.Now) : searchParams.ExaminationWindowStart;
+      searchParams.ExaminationWindowEnd = searchParams.ExaminationWindowEnd == default(DateTime) ? new DateTimeOffset(DateTime.Now).AddHours(3) : searchParams.ExaminationWindowEnd;
 
       examinationWindowStart = searchParams.ExaminationWindowStart;
       examinationWindowEnd = searchParams.ExaminationWindowEnd;
