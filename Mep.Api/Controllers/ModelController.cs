@@ -66,12 +66,13 @@ namespace Mep.Api.Controllers
     public async Task<ActionResult<ViewModel>> Post([FromBody] PostRequestModel postModel)
     {
       if (ModelState.IsValid)
-      {
+      {        
         BusinessModel businessModel = _mapper.Map<BusinessModel>(postModel);
         businessModel = await _service.CreateAsync(businessModel);
         ViewModel viewModel = _mapper.Map<ViewModel>(businessModel);
-        //TODO: Change reposonce to 201 Created
-        return Ok(viewModel);
+
+        string modelUri = $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/{businessModel.Id}";
+        return Created(modelUri, viewModel);
       }
       else
       {

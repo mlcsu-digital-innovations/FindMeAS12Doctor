@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Mep.Data.Entities
 {
   public partial class DoctorStatus : BaseEntity, IDoctorStatus
@@ -12,7 +12,21 @@ namespace Mep.Data.Entities
     public DateTimeOffset? ExtendedAvailabilityStart2 { get; set; }
     public DateTimeOffset? ExtendedAvailabilityEnd3 { get; set; }
     public DateTimeOffset? ExtendedAvailabilityStart3 { get; set; }
-    public int Latitude { get; set; }
-    public int Longitude { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal Latitude { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal Longitude { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal? ExtendedAvailabilityLatitude1 { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? ExtendedAvailabilityLongitude1 { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal? ExtendedAvailabilityLatitude2 { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? ExtendedAvailabilityLongitude2 { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal? ExtendedAvailabilityLatitude3 { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? ExtendedAvailabilityLongitude3 { get; set; }
   }
 }

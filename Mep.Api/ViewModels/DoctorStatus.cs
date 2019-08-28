@@ -1,10 +1,9 @@
-﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System;
 
-namespace Mep.Data.Entities
+namespace Mep.Api.ViewModels
 {
-  [Table("DoctorStatusesAudit")]
-  public partial class DoctorStatusAudit : BaseAudit, IDoctorStatus
+  public class DoctorStatus : BaseViewModel
   {
     public DateTimeOffset AvailabilityStart { get; set; }
     public DateTimeOffset AvailabilityEnd { get; set; }

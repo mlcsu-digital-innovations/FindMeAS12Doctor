@@ -4,14 +4,16 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190805145129_DoctorStatusLatLong")]
+    partial class DoctorStatusLatLong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -513,24 +515,6 @@ namespace mep.business.Migrations
 
                     b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3");
 
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude1")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude2")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude3")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude1")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude2")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude3")
-                        .HasColumnType("decimal(9,6)");
-
                     b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1");
 
                     b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2");
@@ -581,24 +565,6 @@ namespace mep.business.Migrations
                     b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2");
 
                     b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude1")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude2")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude3")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude1")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude2")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude3")
-                        .HasColumnType("decimal(9,6)");
 
                     b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1");
 
