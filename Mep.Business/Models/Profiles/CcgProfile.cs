@@ -6,7 +6,8 @@ namespace Mep.Business.Models.Profiles
   {
     public CcgProfile()
     {
-      CreateMap<Entities.Ccg, Models.Ccg>();
+      CreateMap<Entities.Ccg, Models.Ccg>()
+      .ForMember(c => c.Patients, opt => opt.Ignore());
 
       CreateMap<Models.Ccg, Entities.Ccg>();
     }

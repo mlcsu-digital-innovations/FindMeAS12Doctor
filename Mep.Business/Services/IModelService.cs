@@ -11,6 +11,6 @@ namespace Mep.Business.Services
         Task<T> GetByIdAsync(int Id, bool activeOnly);
         Task<IEnumerable<T>> GetAllAsync(bool activeOnly);
         Task<int> ActivateAsync(int Id);
-        Task<T> UpdateAsync(T model);        
+        Task<T> UpdateAsync(T model);
     }
 }

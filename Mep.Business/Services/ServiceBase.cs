@@ -5,6 +5,8 @@ using Mep.Business.Models;
 using Mep.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Mep.Business.Models.SearchModels;
+using System.Collections.Generic;
 
 namespace Mep.Business.Services
 {
@@ -35,6 +37,13 @@ namespace Mep.Business.Services
       TBusinessModel model,
       TEntity entity
     );
+
+    // public virtual async Task<IEnumerable<TBusinessModel>> SearchAsync<T>(
+    //   T searchModel
+    //   ) where T : ISearchModel 
+    // {
+    //   throw new Exception("BOOM");
+    // }
 
     public async Task<TBusinessModel> GetByIdAsync(
       int id,

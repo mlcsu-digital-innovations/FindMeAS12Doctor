@@ -3,7 +3,7 @@ using System;
 
 namespace Mep.Api.RequestModels
 {
-  public class Patient
+  public abstract class Patient
   {
     [MaxLength(200)]
     public string AlternativeIdentifier { get; set; }

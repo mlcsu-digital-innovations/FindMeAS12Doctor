@@ -7,6 +7,7 @@
 	"settings": {
 		"editor.tabSize": 2,
     "editor.detectIndentation": false,
-    "omnisharp.enableRoslynAnalyzers": true
+    "omnisharp.enableRoslynAnalyzers": true,
+    "workbench.colorCustomizations": {}
 	}
 }
