@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mep.Api.RequestModels
 {
-  public abstract class NameDescription
+  public abstract class NameDescription 
   {
     [StringLength(200)]
     [Required]

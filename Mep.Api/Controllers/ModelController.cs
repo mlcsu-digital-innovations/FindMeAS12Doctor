@@ -69,9 +69,9 @@ namespace Mep.Api.Controllers
             {
                 BusinessModel businessModel = _mapper.Map<BusinessModel>(postModel);
                 businessModel = await _service.CreateAsync(businessModel);
-                ViewModel specialityViewModel = _mapper.Map<ViewModel>(businessModel);
+                ViewModel viewModel = _mapper.Map<ViewModel>(businessModel);
                 //TODO: Change reposonce to 201 Created
-                return Ok(specialityViewModel);
+                return Ok(viewModel);
             }
             else
             {

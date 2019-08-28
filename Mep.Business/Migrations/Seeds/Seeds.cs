@@ -15,6 +15,10 @@ namespace Mep.Business.Migrations.Seeds
             
             new SpecialitySeeder(_context).SeedData();
 
+            new CcgSeeder(_context).SeedData();
+            new GpPracticeSeeder(_context).SeedData();
+            new PatientSeeder(_context).SeedData();
+
             _context.SaveChanges();
         }        
     }

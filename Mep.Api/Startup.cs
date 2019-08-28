@@ -41,6 +41,7 @@ namespace Mep.Api
 
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
       services.AddScoped<IModelService<User>, UserService>();
+      services.AddScoped<IModelService<Referral>, ReferralService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
