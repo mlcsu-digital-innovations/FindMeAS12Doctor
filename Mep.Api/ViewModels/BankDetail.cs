@@ -7,7 +7,7 @@ namespace Mep.Api.ViewModels
     [MaxLength(200)]
     [Required]
     public string BankName { get; set; }
-    // public virtual Ccg Ccg { get; set; }
+    public virtual Ccg Ccg { get; set; }
     public int CcgId { get; set; }
     [MaxLength(200)]
     [Required]
