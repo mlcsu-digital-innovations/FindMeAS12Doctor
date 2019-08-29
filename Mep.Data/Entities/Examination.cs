@@ -18,7 +18,7 @@ namespace Mep.Data.Entities
     public virtual User CompletedByUser { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
     public int? CompletionConfirmationByUserId { get; set; }
-    public virtual User CompletionConfirmationByUser { get; set; }    
+    public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
     public bool? IsSuccessful { get; set; }
@@ -39,5 +39,8 @@ namespace Mep.Data.Entities
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+
+    public virtual GenderType PreferredDoctorGenderType { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
   }
 }

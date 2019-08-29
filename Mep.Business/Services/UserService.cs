@@ -22,6 +22,7 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.User> entities = 
         await _context.Users
+                      .Include(u => u.GenderType)
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .ToListAsync();
 

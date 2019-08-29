@@ -32,5 +32,8 @@ namespace Mep.Data.Entities
     // public virtual IList<UserSpecialityAudit> UserSpecialities { get; set; }
     // public virtual IList<UserExaminationClaimAudit> UserExaminationClaims { get; set; }
     // public virtual IList<UserExaminationNotificationAudit> UserExaminationNotifications { get; set; }
+
+    // public virtual GenderType GenderType { get; set; }
+    public int? GenderTypeId { get; set; }
   }
 }

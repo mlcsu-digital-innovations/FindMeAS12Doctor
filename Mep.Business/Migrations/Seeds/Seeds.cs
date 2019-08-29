@@ -19,6 +19,7 @@ namespace Mep.Business.Migrations.Seeds
       new GpPracticeSeeder(_context).SeedData();
       _context.SaveChanges();
 
+      new GenderTypeSeeder(_context).SeedData();
 
       new SystemAdminUserSeeder(_context).SeedData();
 

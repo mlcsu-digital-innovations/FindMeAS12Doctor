@@ -56,6 +56,7 @@ namespace Mep.Business
     public virtual DbSet<DoctorStatusAudit> DoctorStatusAudits { get; set; }
     public virtual DbSet<Examination> Examinations { get; set; }
     public virtual DbSet<ExaminationAudit> ExaminationAudits { get; set; }
+    public virtual DbSet<GenderType> GenderTypes {get; set; }
     public virtual DbSet<GpPractice> GpPractices { get; set; }
     public virtual DbSet<GpPracticeAudit> GpPracticeAudits { get; set; }
     public virtual DbSet<Log> Logs { get; set; }
