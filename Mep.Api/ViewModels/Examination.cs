@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mep.Api.ViewModels
 {
-  public class Examination
+  public class Examination : BaseViewModel
   {
     [Required]
     [MaxLength(200)]
