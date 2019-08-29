@@ -3,12 +3,14 @@ using BusinessModels = Mep.Business.Models;
 
 namespace Mep.Api.ViewModels.Profiles
 {
-    public class UserProfile : Profile
+  public class UserProfile : Profile
+  {
+    public UserProfile()
     {
-        public UserProfile()
-        {
-            CreateMap<User, BusinessModels.User>()
-                .ReverseMap();
-        }
+      CreateMap<User, BusinessModels.User>();
+
+      CreateMap<BusinessModels.User, User>()
+      .ForMember(u => u.Gender, opt => opt.MapFrom(x => x.GenderType.Name));
     }
+  }
 }

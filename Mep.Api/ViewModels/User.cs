@@ -12,7 +12,7 @@ namespace Mep.Api.ViewModels
     public int? Section12ApprovalStatusId { get; set; }
     public DateTimeOffset? Section12ExpiryDate { get; set; }
     public string DisplayName {get; set;}
-    public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }
+    public string Gender {get; set;}
   }
 }
