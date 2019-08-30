@@ -36,5 +36,7 @@ namespace Mep.Business.Models
 
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }
+
+    public virtual IList<Referral> AmhpReferrals { get; set; }
   }
 }
