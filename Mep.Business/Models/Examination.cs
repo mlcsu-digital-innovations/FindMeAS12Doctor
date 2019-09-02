@@ -38,7 +38,7 @@ namespace Mep.Business.Models
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
-    public virtual GenderType GenderType { get; set; }
-    public int GenderTypeId { get; set; }
+    public virtual GenderType PreferredDoctorGenderType { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
   }
 }
