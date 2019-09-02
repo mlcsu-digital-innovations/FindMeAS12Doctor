@@ -12,7 +12,7 @@ namespace Mep.Business.Services
     : ServiceBase<GenderType, Entities.GenderType>, IModelService<GenderType>
   {
     public GenderTypeService(ApplicationContext context, IMapper mapper)
-      :base("Ccg", context, mapper)
+      :base("GenderType", context, mapper)
     {
     }
 
