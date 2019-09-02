@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Mep.Business.Migrations.Seeds.SpineServiceModels;
+using Mep.Business.Migrations.Seeds.OGPServiceModels;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -45,34 +46,63 @@ namespace Mep.Business.Migrations.Seeds
       client.DefaultRequestHeaders.Accept.Clear();
       client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-      using (var result = client.GetAsync("https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO98&Limit=1000").Result)
+      using (var result = client.GetAsync("https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/CCG_APR_2019_EN_NC/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json").Result)
       {
         var content = result.Content.ReadAsStringAsync().Result;
-        var json = JsonConvert.DeserializeObject<SpineServiceResult>(content);
+        var json = JsonConvert.DeserializeObject<OgpServiceResult>(content);
 
-        foreach (SpineServiceOrganisation ccgResult in json.Organisations)
+        foreach (OgpServiceFeature ccgResult in json.Features)
         {
-          string ccgName = $"[{ccgResult.OrgId}] - {ccgResult.Name}";
-
           if ((ccg =
                 _context.Ccgs
-                        .SingleOrDefault(c => c.Name == ccgName)) == null)
+                        .SingleOrDefault(c => c.LongCode == ccgResult.Attributes.CCG19CD)) == null)
           {
             ccg = new Ccg();
             _context.Add(ccg);
           }
 
-          ccg.IsActive = ccgResult.Status == "Inactive" ? false : true;
+          ccg.IsActive = true;
           ccg.ModifiedAt = now;
           ccg.ModifiedByUser = GetSystemAdminUser();
-          ccg.Name = ccgName;
+          ccg.Name = ccgResult.Attributes.CCG19NM;
           ccg.CostCentre = 1;
           ccg.FailedExamPayment = 0.0m;
           ccg.IsPaymentApprovalRequired = true;
           ccg.SuccessfulPencePerMile = 0.0m;
           ccg.UnsuccessfulPencePerMile = 0.0m;
+          ccg.ShortCode = ccgResult.Attributes.CCG19CDH;
+          ccg.LongCode = ccgResult.Attributes.CCG19CD;
         }
       }
+
+      // using (var result = client.GetAsync("https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO98&Limit=1000").Result)
+      // {
+      //   var content = result.Content.ReadAsStringAsync().Result;
+      //   var json = JsonConvert.DeserializeObject<SpineServiceResult>(content);
+
+      //   foreach (SpineServiceOrganisation ccgResult in json.Organisations)
+      //   {
+      //     string ccgName = $"[{ccgResult.OrgId}] - {ccgResult.Name}";
+
+      //     if ((ccg =
+      //           _context.Ccgs
+      //                   .SingleOrDefault(c => c.Name == ccgName)) == null)
+      //     {
+      //       ccg = new Ccg();
+      //       _context.Add(ccg);
+      //     }
+
+      //     ccg.IsActive = ccgResult.Status == "Inactive" ? false : true;
+      //     ccg.ModifiedAt = now;
+      //     ccg.ModifiedByUser = GetSystemAdminUser();
+      //     ccg.Name = ccgName;
+      //     ccg.CostCentre = 1;
+      //     ccg.FailedExamPayment = 0.0m;
+      //     ccg.IsPaymentApprovalRequired = true;
+      //     ccg.SuccessfulPencePerMile = 0.0m;
+      //     ccg.UnsuccessfulPencePerMile = 0.0m;
+      //   }
+      // }
     }
   }
 }

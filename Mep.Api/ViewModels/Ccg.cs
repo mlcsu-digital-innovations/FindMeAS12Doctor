@@ -21,5 +21,9 @@ namespace Mep.Api.ViewModels
     public virtual IList<PaymentRuleSet> PaymentRuleSets { get; set; }
     public decimal SuccessfulPencePerMile { get; set; }
     public decimal UnsuccessfulPencePerMile { get; set; }
+    [MaxLength(5)]
+    public string ShortCode { get; set; }
+    [MaxLength(10)]
+    public string LongCode { get; set; }
   }
 }
