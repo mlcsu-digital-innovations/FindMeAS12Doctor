@@ -19,5 +19,6 @@ namespace Mep.Api.RequestModels
     public DateTimeOffset? Section12ExpiryDate { get; set; }
     [MaxLength(256)]
     public string DisplayName { get; set; }
+    public int? GenderTypeId { get; set; }
   }
 }

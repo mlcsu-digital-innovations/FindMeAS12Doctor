@@ -6,7 +6,8 @@ namespace Mep.Business.Models.Profiles
   {
     public UserProfile()
     {
-      CreateMap<Entities.User, Models.User>();
+      CreateMap<Entities.User, Models.User>()
+      .ForMember(u => u.ModifiedByUser, opt => opt.Ignore());
 
       CreateMap<Models.User, Entities.User>();
     }

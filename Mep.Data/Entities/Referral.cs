@@ -13,5 +13,8 @@ namespace Mep.Data.Entities
     public int PatientId { get; set; }
     public virtual ReferralStatus ReferralStatus { get; set; }
     public int ReferralStatusId { get; set; }
+    public virtual User LeadAmhpUser {get; set;}
+    public int LeadAmhpUserId {get; set;}
+    public bool IsPlannedExamination {get; set;}
   }
 }

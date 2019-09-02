@@ -43,5 +43,7 @@ namespace Mep.Data.Entities
     // public UnsuccessfulExaminationTypeAudit UnsuccessfulExaminationType { get; set; }
     // public virtual IList<UserExaminationClaimAudit> UserExaminationClaims { get; set; }
     // public virtual IList<UserExaminationNotificationAudit> UserExaminationNotifications { get; set; }
+
+    public int GenderTypeId { get; set; }
   }
 }

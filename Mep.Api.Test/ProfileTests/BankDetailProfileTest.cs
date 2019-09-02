@@ -11,14 +11,14 @@ namespace Mep.Api.Test.ProfileTests
     [TestMethod]
     public void BankDetailProfileBusiness2ApiIsValid()
     {
-      String[] ignoredMappings = new string[4]{"User", "BankDetailType", "Ccg", "ModifiedByUser"};
+      String[] ignoredMappings = new string[3]{"User", "Ccg", "ModifiedByUser"};
       AssertBusiness2ApiMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
     public void BankDetailProfileApi2BusinessIsValid()
     {
-      String[] ignoredMappings = new string[0];
+      String[] ignoredMappings = new string[3]{"ModifiedByUser", "Ccg", "User"};
       AssertApi2BusinessMappingIsValid(ignoredMappings);
     }
   }

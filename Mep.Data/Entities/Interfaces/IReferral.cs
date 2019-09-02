@@ -9,5 +9,7 @@ namespace Mep.Data.Entities
     int CreatedByUserId { get; set; }
     int PatientId { get; set; }
     int ReferralStatusId { get; set; }
+    int LeadAmhpUserId { get; set; }
+    bool IsPlannedExamination { get; set; }
   }
 }

@@ -18,5 +18,8 @@ namespace Mep.Api.RequestModels
     public virtual ReferralStatus ReferralStatus { get; set; }
     [Required]
     public int? ReferralStatusId { get; set; }
+    public virtual User LeadAmhpUser { get; set; }
+    public int LeadAmhpUserId { get; set; }
+    public bool IsPlannedExamination { get; set; }
   }
 }

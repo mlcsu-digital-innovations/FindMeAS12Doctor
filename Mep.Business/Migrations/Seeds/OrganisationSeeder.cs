@@ -4,9 +4,9 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class OrganiationSeeder : SeederBase
+  internal class OrganisationSeeder : SeederBase
   {
-    internal OrganiationSeeder(ApplicationContext context)
+    internal OrganisationSeeder(ApplicationContext context)
       : base(context)
     {
     }

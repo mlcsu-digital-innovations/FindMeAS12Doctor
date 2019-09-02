@@ -4,14 +4,16 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190829074634_UserExaminationNotifications")]
+    partial class UserExaminationNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -608,8 +610,6 @@ namespace mep.business.Migrations
                         .IsRequired()
                         .HasMaxLength(10);
 
-                    b.Property<int?>("PreferredDoctorGenderTypeId");
-
                     b.Property<int>("ReferralId");
 
                     b.Property<DateTimeOffset>("ScheduledTime");
@@ -631,8 +631,6 @@ namespace mep.business.Migrations
                     b.HasIndex("ModifiedByUserId");
 
                     b.HasIndex("NonPaymentLocationId");
-
-                    b.HasIndex("PreferredDoctorGenderTypeId");
 
                     b.HasIndex("ReferralId");
 
@@ -679,8 +677,6 @@ namespace mep.business.Migrations
 
                     b.Property<int>("CreatedByUserId");
 
-                    b.Property<int>("GenderTypeId");
-
                     b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
@@ -713,33 +709,6 @@ namespace mep.business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("ExaminationsAudit");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.GenderType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int?>("ModifiedByUserId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.ToTable("GenderTypes");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
@@ -1612,10 +1581,6 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<bool>("IsPlannedExamination");
-
-                    b.Property<int>("LeadAmhpUserId");
-
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int?>("ModifiedByUserId");
@@ -1627,8 +1592,6 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("LeadAmhpUserId");
 
                     b.HasIndex("ModifiedByUserId");
 
@@ -1662,10 +1625,6 @@ namespace mep.business.Migrations
                     b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
-
-                    b.Property<bool>("IsPlannedExamination");
-
-                    b.Property<int>("LeadAmhpUserId");
 
                     b.Property<DateTimeOffset>("ModifiedAt");
 
@@ -1973,8 +1932,6 @@ namespace mep.business.Migrations
                     b.Property<string>("DisplayName")
                         .HasMaxLength(256);
 
-                    b.Property<int?>("GenderTypeId");
-
                     b.Property<int?>("GmcNumber");
 
                     b.Property<bool>("HasReadTermsAndConditions");
@@ -1998,8 +1955,6 @@ namespace mep.business.Migrations
                     b.Property<DateTimeOffset?>("Section12ExpiryDate");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GenderTypeId");
 
                     b.HasIndex("ModifiedByUserId");
 
@@ -2027,8 +1982,6 @@ namespace mep.business.Migrations
                     b.Property<int>("AuditResult");
 
                     b.Property<bool>("AuditSuccess");
-
-                    b.Property<int?>("GenderTypeId");
 
                     b.Property<int?>("GmcNumber");
 
@@ -2415,10 +2368,6 @@ namespace mep.business.Migrations
                         .HasForeignKey("NonPaymentLocationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Mep.Data.Entities.GenderType", "PreferredDoctorGenderType")
-                        .WithMany("Examinations")
-                        .HasForeignKey("PreferredDoctorGenderTypeId");
-
                     b.HasOne("Mep.Data.Entities.Referral", "Referral")
                         .WithMany("Examinations")
                         .HasForeignKey("ReferralId")
@@ -2432,13 +2381,6 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.UnsuccessfulExaminationType", "UnsuccessfulExaminationType")
                         .WithMany("Examinations")
                         .HasForeignKey("UnsuccessfulExaminationTypeId");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.GenderType", b =>
-                {
-                    b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
@@ -2589,11 +2531,6 @@ namespace mep.business.Migrations
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Mep.Data.Entities.User", "LeadAmhpUser")
-                        .WithMany("AmhpReferrals")
-                        .HasForeignKey("LeadAmhpUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
@@ -2643,10 +2580,6 @@ namespace mep.business.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.User", b =>
                 {
-                    b.HasOne("Mep.Data.Entities.GenderType", "GenderType")
-                        .WithMany("Users")
-                        .HasForeignKey("GenderTypeId");
-
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
