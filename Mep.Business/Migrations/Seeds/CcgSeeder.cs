@@ -46,6 +46,7 @@ namespace Mep.Business.Migrations.Seeds
       client.DefaultRequestHeaders.Accept.Clear();
       client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+      // TODO: Fetch this URI from a config file as it will change 
       using (var result = client.GetAsync("https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/CCG_APR_2019_EN_NC/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json").Result)
       {
         var content = result.Content.ReadAsStringAsync().Result;
