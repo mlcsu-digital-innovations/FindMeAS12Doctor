@@ -8,5 +8,7 @@ namespace Mep.Api.ViewModels
     public DateTimeOffset ModifiedAt { get; set; }
     public int ModifiedByUserId { get; set; }
     public bool IsActive { get; set; }
+
+    public virtual User ModifiedByUser { get; set; }
   }
 }
