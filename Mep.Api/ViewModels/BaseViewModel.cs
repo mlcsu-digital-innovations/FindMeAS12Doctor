@@ -9,5 +9,7 @@ namespace Mep.Api.ViewModels
     public virtual User ModifiedByUser { get; set; }
     public int ModifiedByUserId { get; set; }
     public bool IsActive { get; set; }
+
+    public virtual User ModifiedByUser { get; set; }
   }
 }

@@ -34,7 +34,7 @@ namespace Mep.Api.ViewModels
     public virtual Referral Referral { get; set; }
     public DateTimeOffset ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
-    public Speciality Speciality { get; set; }
+    public virtual Speciality Speciality { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
