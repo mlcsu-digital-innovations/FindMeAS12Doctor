@@ -7,8 +7,8 @@ namespace Mep.Api.ViewModels.Profiles
     {
         public ExaminationProfile()
         {
-            CreateMap<Referral, BusinessModels.Referral>();
-            CreateMap<BusinessModels.Referral, Referral>();
+            CreateMap<Examination, BusinessModels.Examination>();
+            CreateMap<BusinessModels.Examination, Examination>();
         }
     }
 }
