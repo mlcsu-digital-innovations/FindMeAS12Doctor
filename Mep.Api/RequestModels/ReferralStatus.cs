@@ -4,6 +4,5 @@ namespace Mep.Api.RequestModels
 {
     public abstract class ReferralStatus : NameDescription
     {
-        // public virtual IList<ReferralStatus> ReferralStatuses { get; set; }
     }
 }
