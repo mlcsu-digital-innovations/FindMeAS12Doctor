@@ -15,7 +15,6 @@ namespace Mep.Data.Entities
     public int? GpPracticeId { get; set; }
     public Int64? NhsNumber { get; set; }
     [MaxLength(10)]
-    [Required]
     public string ResidentialPostcode { get; set; }
   }
 }

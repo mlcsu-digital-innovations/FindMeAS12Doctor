@@ -25,5 +25,11 @@ namespace Mep.Data.Entities
     public decimal SuccessfulPencePerMile { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal UnsuccessfulPencePerMile { get; set; }
+
+    [MaxLength(5)]
+    public string ShortCode {get; set;}
+
+    [MaxLength(10)]
+    public string LongCode {get; set;}
   }
 }

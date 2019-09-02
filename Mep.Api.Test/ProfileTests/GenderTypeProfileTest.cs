@@ -11,14 +11,12 @@ namespace Mep.Api.Test.ProfileTests
     [TestMethod]
     public void GenderTypeProfileBusiness2ApiIsValid()
     {
-      //String[] ignoredMappings = new string[3]{"User", "Ccg", "ModifiedByUser"};
       AssertBusiness2ApiMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
     public void GenderTypeProfileApi2BusinessIsValid()
     {
-      //String[] ignoredMappings = new string[3]{"ModifiedByUser", "Ccg", "User"};
       AssertApi2BusinessMappingIsValid(ignoredMappings);
     }
   }
