@@ -25,5 +25,6 @@ namespace Mep.Business.Models
     public string TravelComments { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
+    public bool HasBeenDeallocated { get; set; }
   }
 }

@@ -29,5 +29,6 @@ namespace Mep.Data.Entities
     public string TravelComments { get; set; }
     // public virtual UserAudit User { get; set; }
     public int UserId { get; set; }
+    public bool HasBeenDeallocated { get; set; }
   }
 }
