@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Mep.Business.Models.SearchModels;
 using System.Collections.Generic;
+using Mep.Business.Exceptions;
 
 namespace Mep.Business.Services
 {
@@ -19,7 +20,7 @@ namespace Mep.Business.Services
     protected readonly string _typeName;
 
     protected abstract Task<TEntity> GetEntityByIdAsync(
-      int userId,
+      int entityId,
       bool asNoTracking,
       bool activeOnly);
 
@@ -45,8 +46,7 @@ namespace Mep.Business.Services
       TEntity userEntity = await GetEntityByIdAsync(id, true, activeOnly);
       if (userEntity == null)
       {
-        //TODO: Create a specific exception
-        throw new Exception($"{_typeName} with an id of {id} does not exist.");
+        throw new EntityNotFoundException(_typeName, id);
       }
       else
       {
@@ -55,7 +55,7 @@ namespace Mep.Business.Services
       }
     }
 
-    public ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
+    protected ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
     {
       _typeName = typeName;
       _context = context;

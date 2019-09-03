@@ -3,6 +3,5 @@ namespace Mep.Api.ViewModels
 {
   public class ReferralStatus : NameDescription
   {
-    // public virtual IList<ReferralStatus> ReferralStatuses { get; set; }
   }
 }

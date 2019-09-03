@@ -5,6 +5,5 @@ namespace Mep.Data.Entities
   [Table("NonPaymentLocationTypesAudit")]
   public partial class NonPaymentLocationTypeAudit : NameDescriptionAudit, INonPaymentLocationType
   {
-    // public virtual IList<NonPaymentLocationAudit> NonPaymentLocations { get; set; }
   }
 }

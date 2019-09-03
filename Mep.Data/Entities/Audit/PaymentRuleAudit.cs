@@ -9,7 +9,6 @@ namespace Mep.Data.Entities
     [MaxLength(2000)]
     [Required]
     public string Criteria { get; set; }
-    // public virtual PaymentRuleSetAudit PaymentRuleSet { get; set; }
     public int PaymentRuleSetId { get; set; }
   }
 }

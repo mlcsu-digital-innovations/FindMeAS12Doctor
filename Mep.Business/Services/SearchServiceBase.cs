@@ -20,7 +20,7 @@ namespace Mep.Business.Services
 
     public abstract Task<IEnumerable<TBusinessModel>> SearchAsync(TSearchModel searchModel);
 
-    public SearchServiceBase(string typeName, ApplicationContext context, IMapper mapper) : base(typeName, context, mapper)
+    protected SearchServiceBase(string typeName, ApplicationContext context, IMapper mapper) : base(typeName, context, mapper)
     {
     }
 

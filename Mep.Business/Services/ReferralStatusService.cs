@@ -34,7 +34,7 @@ namespace Mep.Business.Services
     }
 
     protected override async Task<Entities.ReferralStatus> GetEntityByIdAsync(
-      int id,
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
@@ -42,7 +42,7 @@ namespace Mep.Business.Services
         _context.ReferralStatuses
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(referralStatus => referralStatus.Id == entityId);
 
       return entity;
     }

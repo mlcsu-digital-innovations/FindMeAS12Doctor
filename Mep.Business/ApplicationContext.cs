@@ -107,13 +107,8 @@ namespace Mep.Business
 
       base.OnModelCreating(modelBuilder);
 
-      // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-      // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
       foreach (var entityType in modelBuilder.Model.GetEntityTypes())
       {
-
-          // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-          // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
           entityType.GetForeignKeys()
               .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
               .ToList()

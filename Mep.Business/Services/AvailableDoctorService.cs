@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Entities = Mep.Data.Entities;
+using Mep.Business.Exceptions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -29,38 +30,35 @@ namespace Mep.Business.Services
       _context = context;
     }
 
-    public async Task<IEnumerable<AvailableDoctor>> SearchAsync(AvailableDoctorSearch searchParams)
+    public async Task<IEnumerable<AvailableDoctor>> SearchAsync(AvailableDoctorSearch searchModel)
     {
-      // TODO - is there a better way of converting the object to AvailableDoctor ?
-      // TODO - is this query going to work well enough ?
-
       // if the latitude and longitude haven't been supplied then obtain them from the postcode
-      if (searchParams.Latitude == 0 && searchParams.Longitude == 0)
+      if (searchModel.Latitude == 0 && searchModel.Longitude == 0)
       {
         using (LocationDetailService locationService = new LocationDetailService(_mapper))
         {
           Postcode postcodeSearch = new Postcode()
           {
-            Code = searchParams.PostCode
+            Code = searchModel.PostCode
           };
 
           Postcode postcodeDetails = await locationService.GetPostcodeDetailsAsync(postcodeSearch);
 
           if (postcodeDetails.Latitude == null && postcodeDetails.Longitude == null)
           {
-            throw new Exception($"Details for examination postcode [{searchParams.PostCode}] not found");
+            throw new PostcodeNotFoundException(searchModel.PostCode);
           }
           examinationLatitude = postcodeDetails.Latitude;
           examinationLongitude = postcodeDetails.Longitude;
-          maxDistance = searchParams.Distance;
+          maxDistance = searchModel.Distance;
         }
       }
 
-      searchParams.ExaminationWindowStart = searchParams.ExaminationWindowStart == default(DateTime) ? new DateTimeOffset(DateTime.Now) : searchParams.ExaminationWindowStart;
-      searchParams.ExaminationWindowEnd = searchParams.ExaminationWindowEnd == default(DateTime) ? new DateTimeOffset(DateTime.Now).AddHours(3) : searchParams.ExaminationWindowEnd;
+      searchModel.ExaminationWindowStart = searchModel.ExaminationWindowStart == default(DateTime) ? new DateTimeOffset(DateTime.Now) : searchModel.ExaminationWindowStart;
+      searchModel.ExaminationWindowEnd = searchModel.ExaminationWindowEnd == default(DateTime) ? new DateTimeOffset(DateTime.Now).AddHours(3) : searchModel.ExaminationWindowEnd;
 
-      examinationWindowStart = searchParams.ExaminationWindowStart;
-      examinationWindowEnd = searchParams.ExaminationWindowEnd;
+      examinationWindowStart = searchModel.ExaminationWindowStart;
+      examinationWindowEnd = searchModel.ExaminationWindowEnd;
 
       // query should look for all active doctor statuses where there availability matches the supplied date / time
       // and their distance from the location is less than the supplied limit
@@ -68,18 +66,18 @@ namespace Mep.Business.Services
       IEnumerable<Entities.DoctorStatus> entities =
         await _context.DoctorStatuses
         .Include(d => d.ModifiedByUser)
-        .Where(d => d.IsActive == true && (
-          (d.AvailabilityStart <= searchParams.ExaminationWindowEnd && searchParams.ExaminationWindowStart <= d.AvailabilityEnd) ||
-          (d.ExtendedAvailabilityStart1 <= searchParams.ExaminationWindowEnd && searchParams.ExaminationWindowStart <= d.ExtendedAvailabilityEnd1) ||
-          (d.ExtendedAvailabilityStart2 <= searchParams.ExaminationWindowEnd && searchParams.ExaminationWindowStart <= d.ExtendedAvailabilityEnd2) ||
-          (d.ExtendedAvailabilityStart3 <= searchParams.ExaminationWindowEnd && searchParams.ExaminationWindowStart <= d.ExtendedAvailabilityEnd3)
+        .Where(d => d.IsActive && (
+          (d.AvailabilityStart <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.AvailabilityEnd) ||
+          (d.ExtendedAvailabilityStart1 <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.ExtendedAvailabilityEnd1) ||
+          (d.ExtendedAvailabilityStart2 <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.ExtendedAvailabilityEnd2) ||
+          (d.ExtendedAvailabilityStart3 <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.ExtendedAvailabilityEnd3)
         ))
         .ToListAsync();
 
       IEnumerable<DoctorStatus> doctorStatuses = _mapper.Map<IEnumerable<DoctorStatus>>(entities);
 
       // calculate the distance for each of the available doctors
-      List<AvailableDoctor> matchingDoctors = CalculateDistanceFromExamination(doctorStatuses, searchParams);
+      matchingDoctors = CalculateDistanceFromExamination(doctorStatuses);
 
       IEnumerable<Models.AvailableDoctor> models =
         _mapper.Map<IEnumerable<Models.AvailableDoctor>>(matchingDoctors);
@@ -91,7 +89,7 @@ namespace Mep.Business.Services
       return (double)degrees * Math.PI / 180;  
     }
 
-    private List<AvailableDoctor> CalculateDistanceFromExamination(IEnumerable<DoctorStatus> availableDoctors, AvailableDoctorSearch searchParams)
+    private List<AvailableDoctor> CalculateDistanceFromExamination(IEnumerable<DoctorStatus> availableDoctors)
     {
       matchingDoctors = new List<AvailableDoctor>();
 
@@ -125,10 +123,6 @@ namespace Mep.Business.Services
           matchingDoctors.Add(availableDoctor);
         }
       }
-
-
-
-      return ;
     }
 
     private double CalculateDistanceAsCrowFlies(Decimal latitude, Decimal longitude) {

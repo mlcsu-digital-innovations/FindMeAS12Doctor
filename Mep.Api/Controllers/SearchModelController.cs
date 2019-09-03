@@ -30,7 +30,7 @@ namespace Mep.Api.Controllers
 
     new protected readonly IModelSearchService<BusinessModel, BusinessSearchModel> _service;
 
-    public SearchModelController(IModelSearchService<BusinessModel, BusinessSearchModel> service, IMapper mapper) : base(service, mapper) 
+    protected SearchModelController(IModelSearchService<BusinessModel, BusinessSearchModel> service, IMapper mapper) : base(service, mapper) 
     {
       _service = service;
     }

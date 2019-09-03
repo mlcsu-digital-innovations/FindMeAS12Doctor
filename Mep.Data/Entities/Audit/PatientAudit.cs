@@ -9,9 +9,7 @@ namespace Mep.Data.Entities
   {
     [MaxLength(200)]
     public string AlternativeIdentifier { get; set; }
-    // public virtual CcgAudit Ccg { get; set; }
     public int? CcgId { get; set; }
-    // public virtual GpPracticeAudit GpPractice { get; set; }
     public int? GpPracticeId { get; set; }
     public Int64? NhsNumber { get; set; }
     [MaxLength(10)]

@@ -20,14 +20,14 @@ namespace Mep.Business.Services
     {
     }
 
-    public override async Task<IEnumerable<Patient>> SearchAsync(PatientSearchModel model)
+    public override async Task<IEnumerable<Patient>> SearchAsync(PatientSearchModel searchModel)
     {
       // build up the where statement
       var param = Expression.Parameter(typeof(Entities.Patient), "p");
 
       Expression defaultExpression = Expression.GreaterThan(Expression.Property(param, "Id"), Expression.Constant(0));
 
-      Expression searchExpression = GetSearchExpression(model, param); 
+      Expression searchExpression = GetSearchExpression(searchModel, param); 
 
       if (searchExpression != null)
       {
@@ -68,7 +68,7 @@ namespace Mep.Business.Services
     }
 
     protected override async Task<Entities.Patient> GetEntityByIdAsync(
-      int id,
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
@@ -78,7 +78,7 @@ namespace Mep.Business.Services
                 .Include(p => p.GpPractice)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(patient => patient.Id == entityId);
 
       return entity;
     }
