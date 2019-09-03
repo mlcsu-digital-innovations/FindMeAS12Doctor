@@ -28,7 +28,7 @@ namespace Mep.Api.RequestModels
     [Required]
     [Range(1,int.MaxValue)]
     public int ReferralId { get; set; }
-    public DateTimeOffset ScheduledTime { get; set; }
+    public DateTimeOffset? ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
