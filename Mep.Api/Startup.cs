@@ -32,10 +32,12 @@ namespace Mep.Api
         options.UseSqlServer(Configuration.GetConnectionString("MedicalExaminationsPortal"),
                              // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
                              opt => opt.EnableRetryOnFailure());
-        // TODO: Add EnableSensitiveDataLogging to development only configuration
-        options.EnableSensitiveDataLogging();
-        // TODO: Add EnableDetailedErrors to development only configuration
-        options.EnableDetailedErrors();
+
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        {          
+          options.EnableSensitiveDataLogging();
+          options.EnableDetailedErrors();
+        }
       });
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
