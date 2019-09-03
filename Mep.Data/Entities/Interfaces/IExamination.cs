@@ -17,7 +17,7 @@ namespace Mep.Data.Entities
     bool? IsSuccessful { get; set; }
     string MeetingArrangementComment { get; set; }
     DateTimeOffset MustBeCompletedBy { get; set; }
-    int NonPaymentLocationId { get; set; }
+    int? NonPaymentLocationId { get; set; }
     string Postcode { get; set; }
     int ReferralId { get; set; }
     DateTimeOffset ScheduledTime { get; set; }

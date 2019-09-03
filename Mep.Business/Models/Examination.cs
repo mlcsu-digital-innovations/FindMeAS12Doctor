@@ -24,7 +24,7 @@ namespace Mep.Business.Models
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset MustBeCompletedBy { get; set; }
-    public int NonPaymentLocationId { get; set; }
+    public int? NonPaymentLocationId { get; set; }
     public virtual NonPaymentLocation NonPaymentLocation { get; set; }
     [Required]
     [MaxLength(10)]
