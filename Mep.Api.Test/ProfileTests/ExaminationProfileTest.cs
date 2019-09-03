@@ -6,7 +6,7 @@ namespace Mep.Api.Test
   [TestClass]
   public class ExaminationProfileTest : GenericApiProfileTest<Business.Models.Examination, ViewModels.Examination>
   {
-    private readonly string[] ignoredMappings = new string[11] {
+    private readonly string[] ignoredMappings = new string[12] {
         "Ccg", 
         "CompletedByUser", 
         "CompletionConfirmationByUser", 
@@ -17,7 +17,9 @@ namespace Mep.Api.Test
         "UnsuccessfulExaminationType",
         "UserExaminationClaims",
         "UserExaminationNotifications",
-        "ModifiedByUser"};
+        "ModifiedByUser",
+        "PreferredDoctorGenderType",
+        };
    
     [TestMethod]
     public void ExaminationProfileBusiness2ApiIsValid()
