@@ -8,8 +8,6 @@ using Mep.Business.Extensions;
 
 namespace Mep.Business.Services
 {
-  //TODO - include CCG details in query, will report self referencing loop if mapping not corrected
-
   public class GpPracticeService
     : ServiceBase<GpPractice, Entities.GpPractice>, IModelService<GpPractice>
   {
