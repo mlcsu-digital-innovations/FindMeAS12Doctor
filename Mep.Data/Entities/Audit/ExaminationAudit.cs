@@ -27,7 +27,7 @@ namespace Mep.Data.Entities
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
-    public DateTimeOffset MustBeCompletedBy { get; set; }
+    public DateTimeOffset? MustBeCompletedBy { get; set; }
     public int? NonPaymentLocationId { get; set; }
     // public virtual NonPaymentLocationAudit NonPaymentLocation { get; set; }
     [Required]
@@ -35,7 +35,7 @@ namespace Mep.Data.Entities
     public string Postcode { get; set; }
     public int ReferralId { get; set; }
     // public virtual ReferralAudit Referral { get; set; }
-    public DateTimeOffset ScheduledTime { get; set; }
+    public DateTimeOffset? ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
     // [ForeignKey("CompletedByUserId")]
     // public SpecialityAudit Speciality { get; set; }
