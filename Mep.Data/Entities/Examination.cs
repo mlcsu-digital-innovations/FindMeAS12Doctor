@@ -32,7 +32,7 @@ namespace Mep.Data.Entities
     public string Postcode { get; set; }
     public int ReferralId { get; set; }
     public virtual Referral Referral { get; set; }
-    public DateTimeOffset ScheduledTime { get; set; }
+    public DateTimeOffset? ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
     public Speciality Speciality { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
