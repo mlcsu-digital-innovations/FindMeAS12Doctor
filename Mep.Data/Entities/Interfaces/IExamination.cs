@@ -16,11 +16,11 @@ namespace Mep.Data.Entities
     int CreatedByUserId { get; set; }
     bool? IsSuccessful { get; set; }
     string MeetingArrangementComment { get; set; }
-    DateTimeOffset MustBeCompletedBy { get; set; }
-    int NonPaymentLocationId { get; set; }
+    DateTimeOffset? MustBeCompletedBy { get; set; }
+    int? NonPaymentLocationId { get; set; }
     string Postcode { get; set; }
     int ReferralId { get; set; }
-    DateTimeOffset ScheduledTime { get; set; }
+    DateTimeOffset? ScheduledTime { get; set; }
     int SpecialityId { get; set; }
     int? UnsuccessfulExaminationTypeId { get; set; }
   }

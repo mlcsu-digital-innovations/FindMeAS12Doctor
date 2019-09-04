@@ -44,6 +44,7 @@ namespace Mep.Api
 
       services.AddScoped<IModelService<Ccg>, CcgService>();
       services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
+      services.AddScoped<IModelService<Examination>, ExaminationService>();
       services.AddScoped<IModelService<GenderType>, GenderTypeService>();
       services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
       services.AddScoped<IModelSearchService<Patient, Business.Models.SearchModels.PatientSearchModel>, PatientService>();

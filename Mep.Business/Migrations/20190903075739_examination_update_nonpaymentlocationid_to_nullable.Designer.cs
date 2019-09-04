@@ -4,14 +4,16 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190903075739_examination_update_nonpaymentlocationid_to_nullable")]
+    partial class examination_update_nonpaymentlocationid_to_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,9 +126,6 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsPaymentApprovalRequired");
 
-                    b.Property<string>("LongCode")
-                        .HasMaxLength(10);
-
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int?>("ModifiedByUserId");
@@ -134,9 +133,6 @@ namespace mep.business.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
-
-                    b.Property<string>("ShortCode")
-                        .HasMaxLength(5);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");
@@ -178,9 +174,6 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsPaymentApprovalRequired");
 
-                    b.Property<string>("LongCode")
-                        .HasMaxLength(10);
-
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int>("ModifiedByUserId");
@@ -188,9 +181,6 @@ namespace mep.business.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
-
-                    b.Property<string>("ShortCode")
-                        .HasMaxLength(5);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");
@@ -612,7 +602,7 @@ namespace mep.business.Migrations
 
                     b.Property<int?>("ModifiedByUserId");
 
-                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset>("MustBeCompletedBy");
 
                     b.Property<int?>("NonPaymentLocationId");
 
@@ -624,7 +614,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ReferralId");
 
-                    b.Property<DateTimeOffset?>("ScheduledTime");
+                    b.Property<DateTimeOffset>("ScheduledTime");
 
                     b.Property<int>("SpecialityId");
 
@@ -706,7 +696,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ModifiedByUserId");
 
-                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset>("MustBeCompletedBy");
 
                     b.Property<int?>("NonPaymentLocationId");
 
@@ -716,7 +706,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ReferralId");
 
-                    b.Property<DateTimeOffset?>("ScheduledTime");
+                    b.Property<DateTimeOffset>("ScheduledTime");
 
                     b.Property<int>("SpecialityId");
 
@@ -1204,6 +1194,7 @@ namespace mep.business.Migrations
                     b.Property<long?>("NhsNumber");
 
                     b.Property<string>("ResidentialPostcode")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.HasKey("Id");
@@ -1251,6 +1242,7 @@ namespace mep.business.Migrations
                     b.Property<long?>("NhsNumber");
 
                     b.Property<string>("ResidentialPostcode")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.HasKey("AuditId");
@@ -1710,9 +1702,13 @@ namespace mep.business.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
+                    b.Property<int?>("ReferralStatusId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("ReferralStatusId");
 
                     b.ToTable("ReferralStatuses");
                 });
@@ -2619,6 +2615,10 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
+
+                    b.HasOne("Mep.Data.Entities.ReferralStatus")
+                        .WithMany("ReferralStatuses")
+                        .HasForeignKey("ReferralStatusId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Section12ApprovalStatus", b =>

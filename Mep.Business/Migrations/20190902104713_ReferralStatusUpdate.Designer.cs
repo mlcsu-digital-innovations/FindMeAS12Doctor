@@ -4,14 +4,16 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190902104713_ReferralStatusUpdate")]
+    partial class ReferralStatusUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -612,9 +614,9 @@ namespace mep.business.Migrations
 
                     b.Property<int?>("ModifiedByUserId");
 
-                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset>("MustBeCompletedBy");
 
-                    b.Property<int?>("NonPaymentLocationId");
+                    b.Property<int>("NonPaymentLocationId");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
@@ -624,7 +626,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ReferralId");
 
-                    b.Property<DateTimeOffset?>("ScheduledTime");
+                    b.Property<DateTimeOffset>("ScheduledTime");
 
                     b.Property<int>("SpecialityId");
 
@@ -706,9 +708,9 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ModifiedByUserId");
 
-                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset>("MustBeCompletedBy");
 
-                    b.Property<int?>("NonPaymentLocationId");
+                    b.Property<int>("NonPaymentLocationId");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
@@ -716,7 +718,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ReferralId");
 
-                    b.Property<DateTimeOffset?>("ScheduledTime");
+                    b.Property<DateTimeOffset>("ScheduledTime");
 
                     b.Property<int>("SpecialityId");
 
@@ -1251,6 +1253,7 @@ namespace mep.business.Migrations
                     b.Property<long?>("NhsNumber");
 
                     b.Property<string>("ResidentialPostcode")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.HasKey("AuditId");
@@ -2418,7 +2421,8 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.NonPaymentLocation", "NonPaymentLocation")
                         .WithMany()
-                        .HasForeignKey("NonPaymentLocationId");
+                        .HasForeignKey("NonPaymentLocationId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Mep.Data.Entities.GenderType", "PreferredDoctorGenderType")
                         .WithMany("Examinations")
