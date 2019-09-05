@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections.Generic;
 namespace Mep.Business.Models
 {
   public class Patient : BaseModel
@@ -14,5 +15,6 @@ namespace Mep.Business.Models
     [MaxLength(10)]
     [Required]
     public string ResidentialPostcode { get; set; }
+    public virtual IList<Referral> Referrals { get; set; }
   }
 }

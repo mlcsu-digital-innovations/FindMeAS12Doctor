@@ -9,45 +9,47 @@ using Mep.Business.Models.SearchModels;
 using System.Linq.Expressions;
 using System;
 using System.Linq;
+using Mep.Business.Exceptions;
 
 namespace Mep.Business.Services
 {
   public class PatientService
-    : SearchServiceBase<Patient, Entities.Patient, PatientSearchModel>, IModelSearchService<Patient, PatientSearchModel>
+    : SearchServiceBase<Patient, Entities.Patient, PatientSearch>, IModelSearchService<Patient, PatientSearch>
   {
     public PatientService(ApplicationContext context, IMapper mapper)
       : base("Patient", context, mapper)
     {
     }
 
-    public override async Task<IEnumerable<Patient>> SearchAsync(PatientSearchModel searchModel)
+    public override async Task<IEnumerable<Patient>> SearchAsync(PatientSearch searchModel)
     {
       // build up the where statement
       var param = Expression.Parameter(typeof(Entities.Patient), "p");
 
-      Expression defaultExpression = Expression.GreaterThan(Expression.Property(param, "Id"), Expression.Constant(0));
-
-      Expression searchExpression = GetSearchExpression(searchModel, param); 
+      Expression searchExpression = GetSearchExpression(searchModel, param);
 
       if (searchExpression != null)
       {
-        defaultExpression = Expression.And(defaultExpression, searchExpression);
+        var whereExpression = Expression.Lambda<Func<Entities.Patient, bool>>(
+          searchExpression, param
+        );
+      
+        IEnumerable<Entities.Patient> entities =
+          await _context.Patients
+          .Include(p => p.Ccg)
+          .Include(p => p.GpPractice)
+          .Include(p => p.Referrals)
+          .Where(whereExpression)
+          .WhereIsActiveOrActiveOnly(true)
+          .ToListAsync();
+
+        IEnumerable<Models.Patient> models =
+          _mapper.Map<IEnumerable<Models.Patient>>(entities);
+
+        return models;
+      } else {
+        throw new MissingSearchParameterException();
       }
-
-      var whereExpression = Expression.Lambda<Func<Entities.Patient, bool>>(
-        defaultExpression, param
-      );
-
-      IEnumerable<Entities.Patient> entities =
-        await _context.Patients
-        .Where(whereExpression)
-        .WhereIsActiveOrActiveOnly(true)
-        .ToListAsync();
-
-      IEnumerable<Models.Patient> models =
-        _mapper.Map<IEnumerable<Models.Patient>>(entities);
-
-      return models;
     }
 
     public async Task<IEnumerable<Models.Patient>> GetAllAsync(

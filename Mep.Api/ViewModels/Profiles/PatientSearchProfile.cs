@@ -8,8 +8,8 @@ namespace Mep.Api.ViewModels.Profiles
     {
         public PatientSearchProfile()
         {
-            CreateMap<PatientSearch, BusinessModels.PatientSearchModel>();
-            CreateMap<BusinessModels.PatientSearchModel, PatientSearch>();
+            CreateMap<PatientSearch, BusinessModels.PatientSearch>();
+            CreateMap<BusinessModels.PatientSearch, PatientSearch>();
         }
     }
 }
