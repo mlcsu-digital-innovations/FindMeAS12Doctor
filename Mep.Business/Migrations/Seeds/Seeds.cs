@@ -25,7 +25,7 @@ namespace Mep.Business.Migrations.Seeds
 
       new SpecialitySeeder(_context).SeedData();
 
-      new PatientSeeder(_context).SeedData();
+      // new PatientSeeder(_context).SeedData();
 
       new ReferralStatusSeeder(_context).SeedData();
 
