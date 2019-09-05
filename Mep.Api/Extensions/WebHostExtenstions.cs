@@ -7,23 +7,40 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Mep.Api.Extensions
 {
-    public static class WebHostExtenstions
+  public static class WebHostExtenstions
+  {
+    public static IWebHost SeedData(this IWebHost host)
     {
-        public static IWebHost SeedData(this IWebHost host)
-        {
-            using (var scope = host.Services.CreateScope())
-            {
-                IServiceProvider services = scope.ServiceProvider;
-                ApplicationContext context = services.GetRequiredService<ApplicationContext>();
-    
-                // now we have the DbContext. Run migrations
-                context.Database.Migrate();
-    
-                // now that the database is up to date. Let's seed
-                new Seeds(context).SeedAll();
+      using (var scope = host.Services.CreateScope())
+      {
+        IServiceProvider services = scope.ServiceProvider;
+        ApplicationContext context = services.GetRequiredService<ApplicationContext>();
 
-                return host;
-            }
-        }        
+        // now we have the DbContext. Run migrations
+        context.Database.Migrate();
+
+        // now that the database is up to date. Let's seed
+        new Seeds(context).SeedAll();
+
+        return host;
+      }
     }
+
+    public static IWebHost SeedTestData(this IWebHost host)
+    {
+      using (var scope = host.Services.CreateScope())
+      {
+        IServiceProvider services = scope.ServiceProvider;
+        ApplicationContext context = services.GetRequiredService<ApplicationContext>();
+
+        // now we have the DbContext. Run migrations
+        context.Database.Migrate();
+
+        // now that the database is up to date. Let's seed
+        new TestSeeds(context).TestSeedAll();
+
+        return host;
+      }
+    }
+  }
 }
