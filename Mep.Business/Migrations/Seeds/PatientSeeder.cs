@@ -52,7 +52,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((patient =
       _context.Patients
-              .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #3")) == null)
+              .SingleOrDefault(p => p.NhsNumber == 4786431806)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -63,13 +63,13 @@ namespace Mep.Business.Migrations.Seeds
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.AlternativeIdentifier = "Test Patient #3";
       patient.ResidentialPostcode = "ST5 1NE";
-      patient.NhsNumber = null;
+      patient.NhsNumber = 4786431806;
       patient.CcgId = 45;
       patient.GpPracticeId = 5;
 
-            if ((patient =
+      if ((patient =
       _context.Patients
-              .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #4")) == null)
+        .SingleOrDefault(p => p.NhsNumber == 7510496667)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -80,9 +80,60 @@ namespace Mep.Business.Migrations.Seeds
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.AlternativeIdentifier = "Test Patient #4";
       patient.ResidentialPostcode = "ST4 4LX";
-      patient.NhsNumber = null;
+      patient.NhsNumber = 7510496667;
       patient.CcgId = 1;
       patient.GpPracticeId = 3502;
+
+      if ((patient =
+      _context.Patients
+        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #5")) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+
+      patient.IsActive = true;
+      patient.ModifiedAt = now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.AlternativeIdentifier = "Test Patient #5";
+      patient.ResidentialPostcode = "ST4 4QN";
+      patient.NhsNumber = null;
+      patient.CcgId = 1;
+      patient.GpPracticeId = 10967;
+
+      if ((patient =
+      _context.Patients
+        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #6")) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+
+      patient.IsActive = true;
+      patient.ModifiedAt = now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.AlternativeIdentifier = "Test Patient #6";
+      patient.ResidentialPostcode = "ST5 2ST";
+      patient.NhsNumber = null;
+      patient.CcgId = 1;
+      patient.GpPracticeId = 7980;
+
+      if ((patient =
+      _context.Patients
+        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #7")) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+
+      patient.IsActive = true;
+      patient.ModifiedAt = now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.AlternativeIdentifier = "Test Patient #7";
+      patient.ResidentialPostcode = "ST1 6TT";
+      patient.NhsNumber = null;
+      patient.CcgId = 1;
+      patient.GpPracticeId = 900;
     }
   }
 }

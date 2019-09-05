@@ -19,13 +19,13 @@ namespace Mep.Business.Migrations.Seeds
       new GpPracticeSeeder(_context).SeedData();
       _context.SaveChanges();
 
-      new GenderTypeSeeder(_context).SeedData();
+      // new GenderTypeSeeder(_context).SeedData();
 
-      new SystemAdminUserSeeder(_context).SeedData();
+      // new SystemAdminUserSeeder(_context).SeedData();
 
-      new SpecialitySeeder(_context).SeedData();
+      // new SpecialitySeeder(_context).SeedData();
 
-      new ReferralStatusSeeder(_context).SeedData();
+      // new ReferralStatusSeeder(_context).SeedData();
 
       _context.SaveChanges();
     }
