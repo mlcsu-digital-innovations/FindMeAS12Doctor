@@ -22,6 +22,11 @@ namespace Mep.Api
           Log.Information("Seeding database");
           host.SeedData();
         }
+        else if (args.Length > 0 && args[0] == "/seedtest")
+        {
+          Log.Information("Seeding test database");
+          host.SeedTestData();
+        }
         else
         {
           Log.Information("Running web host");
