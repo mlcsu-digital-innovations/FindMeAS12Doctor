@@ -16,6 +16,8 @@ namespace Mep.Business.Migrations.Seeds
       Patient patient;
       DateTimeOffset now = DateTimeOffset.Now;
 
+      // patient with NHS number
+
       if ((patient =
             _context.Patients
                     .SingleOrDefault(p => p.NhsNumber == 2750059135)) == null)
@@ -24,14 +26,16 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #1";
+      patient.CcgId = 116;
+      patient.GpPracticeId = 7;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #1";
-      patient.ResidentialPostcode = "ST3 7HH";
       patient.NhsNumber = 2750059135;
-      patient.CcgId = 116;
-      patient.GpPracticeId = 7;
+      patient.ResidentialPostcode = "ST3 7HH";
+
+      // patient with NHS number
 
       if ((patient =
             _context.Patients
@@ -41,14 +45,16 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #2";
+      patient.CcgId = 119;
+      patient.GpPracticeId = 6;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #2";
-      patient.ResidentialPostcode = "ST7 4UZ";
       patient.NhsNumber = 7468635357;
-      patient.CcgId = 119;
-      patient.GpPracticeId = 6;
+      patient.ResidentialPostcode = "ST7 4UZ";
+
+      // patient with NHS number
 
       if ((patient =
       _context.Patients
@@ -58,14 +64,16 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #3";
+      patient.CcgId = 45;
+      patient.GpPracticeId = 5;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #3";
-      patient.ResidentialPostcode = "ST5 1NE";
       patient.NhsNumber = 4786431806;
-      patient.CcgId = 45;
-      patient.GpPracticeId = 5;
+      patient.ResidentialPostcode = "ST5 1NE";
+
+      // patient with NHS number
 
       if ((patient =
       _context.Patients
@@ -75,14 +83,16 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #4";
+      patient.CcgId = 1;
+      patient.GpPracticeId = 3502;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #4";
-      patient.ResidentialPostcode = "ST4 4LX";
       patient.NhsNumber = 7510496667;
-      patient.CcgId = 1;
-      patient.GpPracticeId = 3502;
+      patient.ResidentialPostcode = "ST4 4LX";
+
+      // patient with alternative identifier
 
       if ((patient =
       _context.Patients
@@ -92,14 +102,16 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #5";
+      patient.CcgId = 1;
+      patient.GpPracticeId = 10967;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #5";
-      patient.ResidentialPostcode = "ST4 4QN";
       patient.NhsNumber = null;
-      patient.CcgId = 1;
-      patient.GpPracticeId = 10967;
+      patient.ResidentialPostcode = "ST4 4QN";
+
+      // patient with alternative identifier
 
       if ((patient =
       _context.Patients
@@ -109,14 +121,16 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #6";
+      patient.CcgId = 1;
+      patient.GpPracticeId = 7980;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #6";
-      patient.ResidentialPostcode = "ST5 2ST";
       patient.NhsNumber = null;
-      patient.CcgId = 1;
-      patient.GpPracticeId = 7980;
+      patient.ResidentialPostcode = "ST5 2ST";
+
+      // patient with alternative identifier
 
       if ((patient =
       _context.Patients
@@ -126,14 +140,14 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
+      patient.AlternativeIdentifier = "Test Patient #7";
+      patient.CcgId = 1;
+      patient.GpPracticeId = 900;
       patient.IsActive = true;
       patient.ModifiedAt = now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #7";
-      patient.ResidentialPostcode = "ST1 6TT";
       patient.NhsNumber = null;
-      patient.CcgId = 1;
-      patient.GpPracticeId = 900;
+      patient.ResidentialPostcode = "ST1 6TT";
     }
   }
 }
