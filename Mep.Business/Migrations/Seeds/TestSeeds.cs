@@ -17,6 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       new ReferralSeeder(_context).SeedData();
 
+      new UserSeeder(_context).SeedData();
+
       _context.SaveChanges();
     }
   }
