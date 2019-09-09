@@ -3,12 +3,12 @@ using BusinessSearch = Mep.Business.Models.SearchModels;
 
 namespace Mep.Api.SearchModels.Profiles
 {
-    public class GeneralSearchResultProfile : Profile
+  public class GeneralSearchResultProfile : Profile
+  {
+    public GeneralSearchResultProfile()
     {
-        public GeneralSearchResultProfile()
-        {
-            CreateMap<GeneralSearchResult, BusinessSearch.GeneralSearchResult>();
-            CreateMap<BusinessSearch.GeneralSearchResult, GeneralSearchResult>();
-        }
+      CreateMap<GeneralSearchResult, BusinessSearch.GeneralSearchResult>();
+      CreateMap<BusinessSearch.GeneralSearchResult, GeneralSearchResult>();
     }
+  }
 }
