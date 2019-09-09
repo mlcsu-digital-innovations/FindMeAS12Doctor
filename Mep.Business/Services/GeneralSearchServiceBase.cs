@@ -11,7 +11,7 @@ namespace Mep.Business.Services
     protected readonly IMapper _mapper;
     protected readonly string _typeName;
 
-    public abstract Task<IEnumerable<GeneralSearchResult>> SearchAsync(string searchString);   
+    public abstract Task<IEnumerable<GeneralSearchResult>> SearchAsync(string searchString);
 
     protected GeneralSearchServiceBase(string typeName, ApplicationContext context, IMapper mapper)
     {
