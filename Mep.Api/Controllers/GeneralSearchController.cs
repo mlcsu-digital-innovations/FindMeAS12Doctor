@@ -16,7 +16,7 @@ namespace Mep.Api.Controllers
     protected readonly IModelGeneralSearchService<BusinessModel> _service;
     protected readonly IMapper _mapper;
 
-    protected GeneralSearchController(IModelGeneralSearchService<BusinessModel> service, IMapper mapper) 
+    protected GeneralSearchController(IModelGeneralSearchService<BusinessModel> service, IMapper mapper)
     {
       _service = service;
       _mapper = mapper;
