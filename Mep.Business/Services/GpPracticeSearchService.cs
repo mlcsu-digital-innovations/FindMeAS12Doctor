@@ -28,10 +28,10 @@ namespace Mep.Business.Services
           .Select(gp => new GeneralSearchResult()
           {
             Id = gp.Id,
-            DisplayText = $"{gp.Name}, {gp.Postcode}"
+            ResultText = $"{gp.Name}, {gp.Postcode}"
           })
           .ToListAsync();
-        
+
         return entities;
       }
       else
