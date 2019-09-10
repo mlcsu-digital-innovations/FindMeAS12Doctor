@@ -54,15 +54,6 @@ namespace Mep.Api
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
       services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
-
-      services.AddCors(options => {
-        options.AddPolicy("AllowAnyOrigin",
-          builder => {
-            builder.AllowAnyOrigin();
-            builder.AllowAnyMethod();
-          }
-        );
-      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,7 +71,6 @@ namespace Mep.Api
 
       app.UseExceptionHandler("/Error");
       app.UseHttpsRedirection();
-      app.UseCors("AllowAnyOrigin");
       app.UseMvc();      
     }
   }
