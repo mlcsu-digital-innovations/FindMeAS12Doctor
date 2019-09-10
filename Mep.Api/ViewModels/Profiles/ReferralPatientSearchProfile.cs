@@ -12,7 +12,7 @@ namespace Mep.Api.ViewModels.Profiles
             .ForMember(dest => dest.CcgName, opt => opt.MapFrom(src => src.Ccg.Name))
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Id))
             .ForMember(
-              dest => dest.GpPracticeDetails, 
+              dest => dest.GpPracticeNameAndPostcode, 
               opt => opt.MapFrom(src => src.GpPractice.Name + " " + src.GpPractice.Postcode)
             )
             .ForMember(

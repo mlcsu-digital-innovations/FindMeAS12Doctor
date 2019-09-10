@@ -12,7 +12,7 @@ namespace Mep.Api.ViewModels
     public string ResidentialPostcode { get; set; }
     public int? CurrentReferralId { get; set; }
     public int? PatientId { get; set; }
-    public string GpPracticeDetails { get; set; }
+    public string GpPracticeNameAndPostcode { get; set; }
     public string CcgName{ get; set; }
   }
 }
