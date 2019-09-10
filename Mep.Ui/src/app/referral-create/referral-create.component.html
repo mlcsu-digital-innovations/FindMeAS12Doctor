@@ -5,9 +5,25 @@
     <div class="card-body">
       <h5 class="card-title">Create New Referral</h5>
       <h6 class="card-subtitle mb-2 text-muted">Create a new referral and patient (if required)</h6>
-      <p class="card-text">
-        Card content will go here and contain all fields required to create a new referral / patient
-      </p>
+
+      <!-- <form>
+        <div class="form-row">
+          <div class="col-md-4 mb-3">
+            <app-nhs-number-field></app-nhs-number-field>
+          </div>
+        </div>
+      </form> -->
+
+      <!-- <app-patient-form></app-patient-form> -->
+
+      <form [formGroup]="myForm" (ngSubmit)="submit()">
+          <label for="switch-2">Reactive Forms</label>
+          <app-switch id="switch-2" formControlName="mySwitch"></app-switch>
+          <button>Submit</button>
+        </form>
+<hr>
+
+
       <a href="#" class="card-link">Cancel (does nothing)</a>
       <a href="#" class="card-link">Save (does nothing)</a>
     </div>
