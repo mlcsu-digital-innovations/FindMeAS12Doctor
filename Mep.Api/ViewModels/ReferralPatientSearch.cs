@@ -13,6 +13,6 @@ namespace Mep.Api.ViewModels
     public int? CurrentReferralId { get; set; }
     public int? PatientId { get; set; }
     public string GpPracticeDetails { get; set; }
-    public string CcgDetails { get; set; }
+    public string CcgName{ get; set; }
   }
 }
