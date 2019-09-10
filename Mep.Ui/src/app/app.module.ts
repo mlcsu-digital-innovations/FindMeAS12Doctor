@@ -9,22 +9,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReferralCreateComponent } from './referral-create/referral-create.component';
 import { NavbarComponent } from './navbar/navbar.component';
 
-import { SwitchComponent } from './switch/switch.component';
-import { NhsNumberFieldComponent } from './nhs-number-field/nhs-number-field.component';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @NgModule({
   declarations: [
     AppComponent,
     ReferralCreateComponent,
-    NavbarComponent,
-    SwitchComponent,
-    NhsNumberFieldComponent
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DigitOnlyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

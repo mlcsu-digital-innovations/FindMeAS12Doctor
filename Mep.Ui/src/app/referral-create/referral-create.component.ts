@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
 
 @Component({
   selector: 'app-referral-create',
@@ -16,17 +18,27 @@ export class ReferralCreateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.myForm = this.formBuilder.group({
-      mySwitch: [true]
-    });
-
     this.patientForm = this.formBuilder.group({
+      nhsNumber: ['', [Validators.maxLength(10), Validators.pattern('^[1-9]\\d{9}$'), NhsNumberValidFormat]]
     });
   }
 
+  get patient() {
+    return this.patientForm.controls;
+  }
+
   submit() {
-    alert(`Value: ${this.myForm.controls.mySwitch.value}`);
-    console.log(`Value: ${this.myForm.controls.mySwitchA.value}`);
+    console.log(this.patientForm.controls.nhsNumber);
+  }
+
+  HasInvalidNHSNumber(): boolean {
+    const control = this.patientForm.controls.nhsNumber;
+    return control.value !== '' && control.errors !== null;
+  }
+
+  HasValidNHSNumber(): boolean {
+    const control = this.patientForm.controls.nhsNumber;
+    return control.value !== '' && control.errors == null;
   }
 
 }

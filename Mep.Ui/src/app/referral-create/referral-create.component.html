@@ -6,21 +6,24 @@
       <h5 class="card-title">Create New Referral</h5>
       <h6 class="card-subtitle mb-2 text-muted">Create a new referral and patient (if required)</h6>
 
-      <form [formGroup]="patientForm" (ngSubmit)="submit()">
+      <form [formGroup]="patientForm" (ngSubmit)="submit()" novalidate>
         <div class="form-row">
-          <div class="col-md-4 mb-3">
-            <app-nhs-number-field></app-nhs-number-field>
+          <div class="col-md-2 mb-2">
+            <label for="nhsNumber">NHS Number</label>
+            <input
+              type="text"
+              digitOnly
+              maxlength="10"
+              formControlName="nhsNumber"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': HasInvalidNHSNumber(), 'is-valid': HasValidNHSNumber()}"
+            />
+            <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
+              <span>Invalid NHS Number</span>
+            </div>
           </div>
         </div>
       </form>
-
-      <!-- <app-patient-form></app-patient-form> -->
-<hr>
-      <form [formGroup]="myForm" (ngSubmit)="submit()">
-          <label for="switch-2">Reactive Forms</label>
-          <app-switch id="switch-2" formControlName="mySwitch"></app-switch>
-          <button>Submit</button>
-        </form>
 
       <a href="#" class="card-link">Cancel (does nothing)</a>
       <a href="#" class="card-link">Save (does nothing)</a>
