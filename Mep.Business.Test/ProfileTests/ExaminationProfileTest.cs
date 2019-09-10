@@ -7,7 +7,7 @@ namespace Mep.Business.Test
   [TestClass]
   public class ExaminationProfileTest : GenericProfileTest<Business.Models.Examination, Entities.Examination>
   {
-    private readonly String[] ignoredMappings = new string[11] {
+    private readonly String[] ignoredMappings = new string[12] {
        "ModifiedByUser",
        "Ccg",
        "CompletedByUser",
@@ -18,7 +18,8 @@ namespace Mep.Business.Test
        "Speciality",
        "UnsuccessfulExaminationType",
        "UserExaminationClaims",
-       "UserExaminationNotifications"
+       "UserExaminationNotifications",
+       "PreferredDoctorGenderType"
       };
    
     [TestMethod]

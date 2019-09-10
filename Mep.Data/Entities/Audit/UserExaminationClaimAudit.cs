@@ -8,9 +8,7 @@ namespace Mep.Data.Entities
   public partial class UserExaminationClaimAudit : BaseAudit, IUserExaminationClaim
   {
     public int? ClaimReference { get; set; }
-    // public virtual ClaimStatusAudit ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
-    // public virtual ExaminationAudit Examination { get; set; }
     public int ExaminationId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal? ExaminationPayment { get; set; }
@@ -27,7 +25,7 @@ namespace Mep.Data.Entities
     [MaxLength(2000)]
     [Required]
     public string TravelComments { get; set; }
-    // public virtual UserAudit User { get; set; }
     public int UserId { get; set; }
+    public bool HasBeenDeallocated { get; set; }
   }
 }

@@ -6,7 +6,7 @@ using Serilog;
 
 namespace Mep.Api
 {
-  public class Program
+  public static class Program
   {
     public static int Main(string[] args)
     {
@@ -38,7 +38,7 @@ namespace Mep.Api
       finally
       {
         Log.CloseAndFlush();
-      }      
+      }
     }
 
     public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

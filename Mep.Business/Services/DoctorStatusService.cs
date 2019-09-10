@@ -36,7 +36,7 @@ namespace Mep.Business.Services
     }
 
     protected override async Task<Entities.DoctorStatus> GetEntityByIdAsync(
-      int id,
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
@@ -44,7 +44,7 @@ namespace Mep.Business.Services
         _context.DoctorStatuses
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(doctorStatus => doctorStatus.Id == entityId);
 
       return entity;
     }

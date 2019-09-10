@@ -20,5 +20,6 @@ namespace Mep.Data.Entities
     string StartPostcode { get; set; }
     string TravelComments { get; set; }
     int UserId { get; set; }
+    bool HasBeenDeallocated { get; set; }
   }
 }

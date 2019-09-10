@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mep.Api.ViewModels
 {
-  public class Examination
+  public class Examination : BaseViewModel
   {
     [Required]
     [MaxLength(200)]
@@ -25,7 +25,7 @@ namespace Mep.Api.ViewModels
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset MustBeCompletedBy { get; set; }
-    public int NonPaymentLocationId { get; set; }
+    public int? NonPaymentLocationId { get; set; }
     public virtual NonPaymentLocation NonPaymentLocation { get; set; }
     [Required]
     [MaxLength(10)]
@@ -34,10 +34,12 @@ namespace Mep.Api.ViewModels
     public virtual Referral Referral { get; set; }
     public DateTimeOffset ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
-    public Speciality Speciality { get; set; }
+    public virtual Speciality Speciality { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public virtual GenderType PreferredDoctorGenderType { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
   }
 }

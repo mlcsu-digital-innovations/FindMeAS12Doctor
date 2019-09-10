@@ -20,7 +20,7 @@ namespace Mep.Api.Controllers
     protected readonly IModelService<BusinessModel> _service;
     protected readonly IMapper _mapper;
 
-    public ModelController(
+    protected ModelController(
         IModelService<BusinessModel> service,
         IMapper mapper)
     {

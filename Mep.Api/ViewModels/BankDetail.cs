@@ -4,12 +4,10 @@ namespace Mep.Api.ViewModels
   public class BankDetail : BaseViewModel
   {
     public int AccountNumber { get; set; }
-    // public virtual BankDetailType BankDetailType { get; set; }
-    public int BankDetailTypeId { get; set; }
     [MaxLength(200)]
     [Required]
     public string BankName { get; set; }
-    // public virtual Ccg Ccg { get; set; }
+    public virtual Ccg Ccg { get; set; }
     public int CcgId { get; set; }
     [MaxLength(200)]
     [Required]

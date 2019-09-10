@@ -24,7 +24,7 @@ namespace Mep.Business.Models
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset MustBeCompletedBy { get; set; }
-    public int NonPaymentLocationId { get; set; }
+    public int? NonPaymentLocationId { get; set; }
     public virtual NonPaymentLocation NonPaymentLocation { get; set; }
     [Required]
     [MaxLength(10)]
@@ -38,5 +38,7 @@ namespace Mep.Business.Models
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public virtual GenderType PreferredDoctorGenderType { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
   }
 }

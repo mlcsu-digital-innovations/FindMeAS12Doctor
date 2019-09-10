@@ -27,8 +27,6 @@ namespace mep.business.Migrations
 
                     b.Property<int>("AccountNumber");
 
-                    b.Property<int>("BankDetailTypeId");
-
                     b.Property<string>("BankName")
                         .IsRequired()
                         .HasMaxLength(200);
@@ -55,8 +53,6 @@ namespace mep.business.Migrations
 
                     b.HasAlternateKey("CcgId", "UserId");
 
-                    b.HasIndex("BankDetailTypeId");
-
                     b.HasIndex("ModifiedByUserId");
 
                     b.HasIndex("UserId");
@@ -81,8 +77,6 @@ namespace mep.business.Migrations
                     b.Property<int>("AuditResult");
 
                     b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("BankDetailTypeId");
 
                     b.Property<string>("BankName")
                         .IsRequired()
@@ -115,62 +109,6 @@ namespace mep.business.Migrations
                     b.ToTable("BankDetailsAudit");
                 });
 
-            modelBuilder.Entity("Mep.Data.Entities.BankDetailType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int?>("ModifiedByUserId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.ToTable("BankDetailTypes");
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.BankDetailTypeAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction");
-
-                    b.Property<int>("AuditDuration");
-
-                    b.Property<string>("AuditErrorMessage");
-
-                    b.Property<int>("AuditResult");
-
-                    b.Property<bool>("AuditSuccess");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<DateTimeOffset>("ModifiedAt");
-
-                    b.Property<int>("ModifiedByUserId");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("BankDetailTypesAudit");
-                });
-
             modelBuilder.Entity("Mep.Data.Entities.Ccg", b =>
                 {
                     b.Property<int>("Id")
@@ -186,6 +124,9 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsPaymentApprovalRequired");
 
+                    b.Property<string>("LongCode")
+                        .HasMaxLength(10);
+
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int?>("ModifiedByUserId");
@@ -193,6 +134,9 @@ namespace mep.business.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<string>("ShortCode")
+                        .HasMaxLength(5);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");
@@ -234,6 +178,9 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsPaymentApprovalRequired");
 
+                    b.Property<string>("LongCode")
+                        .HasMaxLength(10);
+
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int>("ModifiedByUserId");
@@ -241,6 +188,9 @@ namespace mep.business.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<string>("ShortCode")
+                        .HasMaxLength(5);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");
@@ -662,17 +612,19 @@ namespace mep.business.Migrations
 
                     b.Property<int?>("ModifiedByUserId");
 
-                    b.Property<DateTimeOffset>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
 
-                    b.Property<int>("NonPaymentLocationId");
+                    b.Property<int?>("NonPaymentLocationId");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
                         .HasMaxLength(10);
 
+                    b.Property<int?>("PreferredDoctorGenderTypeId");
+
                     b.Property<int>("ReferralId");
 
-                    b.Property<DateTimeOffset>("ScheduledTime");
+                    b.Property<DateTimeOffset?>("ScheduledTime");
 
                     b.Property<int>("SpecialityId");
 
@@ -691,6 +643,8 @@ namespace mep.business.Migrations
                     b.HasIndex("ModifiedByUserId");
 
                     b.HasIndex("NonPaymentLocationId");
+
+                    b.HasIndex("PreferredDoctorGenderTypeId");
 
                     b.HasIndex("ReferralId");
 
@@ -737,6 +691,8 @@ namespace mep.business.Migrations
 
                     b.Property<int>("CreatedByUserId");
 
+                    b.Property<int>("GenderTypeId");
+
                     b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
@@ -750,9 +706,9 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ModifiedByUserId");
 
-                    b.Property<DateTimeOffset>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
 
-                    b.Property<int>("NonPaymentLocationId");
+                    b.Property<int?>("NonPaymentLocationId");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
@@ -760,7 +716,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ReferralId");
 
-                    b.Property<DateTimeOffset>("ScheduledTime");
+                    b.Property<DateTimeOffset?>("ScheduledTime");
 
                     b.Property<int>("SpecialityId");
 
@@ -769,6 +725,33 @@ namespace mep.business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("ExaminationsAudit");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.GenderType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<DateTimeOffset>("ModifiedAt");
+
+                    b.Property<int?>("ModifiedByUserId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("GenderTypes");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
@@ -1221,7 +1204,6 @@ namespace mep.business.Migrations
                     b.Property<long?>("NhsNumber");
 
                     b.Property<string>("ResidentialPostcode")
-                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.HasKey("Id");
@@ -1269,7 +1251,6 @@ namespace mep.business.Migrations
                     b.Property<long?>("NhsNumber");
 
                     b.Property<string>("ResidentialPostcode")
-                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.HasKey("AuditId");
@@ -1641,6 +1622,10 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsActive");
 
+                    b.Property<bool>("IsPlannedExamination");
+
+                    b.Property<int>("LeadAmhpUserId");
+
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int?>("ModifiedByUserId");
@@ -1652,6 +1637,8 @@ namespace mep.business.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("LeadAmhpUserId");
 
                     b.HasIndex("ModifiedByUserId");
 
@@ -1686,6 +1673,10 @@ namespace mep.business.Migrations
 
                     b.Property<bool>("IsActive");
 
+                    b.Property<bool>("IsPlannedExamination");
+
+                    b.Property<int>("LeadAmhpUserId");
+
                     b.Property<DateTimeOffset>("ModifiedAt");
 
                     b.Property<int>("ModifiedByUserId");
@@ -1719,13 +1710,9 @@ namespace mep.business.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<int?>("ReferralStatusId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("ReferralStatusId");
 
                     b.ToTable("ReferralStatuses");
                 });
@@ -1992,6 +1979,8 @@ namespace mep.business.Migrations
                     b.Property<string>("DisplayName")
                         .HasMaxLength(256);
 
+                    b.Property<int?>("GenderTypeId");
+
                     b.Property<int?>("GmcNumber");
 
                     b.Property<bool>("HasReadTermsAndConditions");
@@ -2015,6 +2004,8 @@ namespace mep.business.Migrations
                     b.Property<DateTimeOffset?>("Section12ExpiryDate");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GenderTypeId");
 
                     b.HasIndex("ModifiedByUserId");
 
@@ -2042,6 +2033,8 @@ namespace mep.business.Migrations
                     b.Property<int>("AuditResult");
 
                     b.Property<bool>("AuditSuccess");
+
+                    b.Property<int?>("GenderTypeId");
 
                     b.Property<int?>("GmcNumber");
 
@@ -2086,6 +2079,8 @@ namespace mep.business.Migrations
 
                     b.Property<decimal?>("ExaminationPayment")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("HasBeenDeallocated");
 
                     b.Property<bool>("IsActive");
 
@@ -2156,6 +2151,8 @@ namespace mep.business.Migrations
                     b.Property<decimal?>("ExaminationPayment")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("HasBeenDeallocated");
+
                     b.Property<int>("Id");
 
                     b.Property<bool>("IsActive");
@@ -2200,9 +2197,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ExaminationId");
 
-                    b.Property<bool>("HasAccepted");
-
-                    b.Property<bool>("HasResponded");
+                    b.Property<bool?>("HasAccepted");
 
                     b.Property<bool>("IsActive");
 
@@ -2212,7 +2207,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("NotificationTextId");
 
-                    b.Property<DateTimeOffset?>("ResponsedAt");
+                    b.Property<DateTimeOffset?>("RespondedAt");
 
                     b.Property<int>("UserId");
 
@@ -2247,9 +2242,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("ExaminationId");
 
-                    b.Property<bool>("HasAccepted");
-
-                    b.Property<bool>("HasResponded");
+                    b.Property<bool?>("HasAccepted");
 
                     b.Property<int>("Id");
 
@@ -2261,7 +2254,7 @@ namespace mep.business.Migrations
 
                     b.Property<int>("NotificationTextId");
 
-                    b.Property<DateTimeOffset?>("ResponsedAt");
+                    b.Property<DateTimeOffset?>("RespondedAt");
 
                     b.Property<int>("UserId");
 
@@ -2334,11 +2327,6 @@ namespace mep.business.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.BankDetail", b =>
                 {
-                    b.HasOne("Mep.Data.Entities.BankDetailType", "BankDetailType")
-                        .WithMany("BankDetails")
-                        .HasForeignKey("BankDetailTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("BankDetails")
                         .HasForeignKey("CcgId")
@@ -2352,13 +2340,6 @@ namespace mep.business.Migrations
                         .WithMany("BankDetails")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Mep.Data.Entities.BankDetailType", b =>
-                {
-                    b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Ccg", b =>
@@ -2437,8 +2418,11 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.NonPaymentLocation", "NonPaymentLocation")
                         .WithMany()
-                        .HasForeignKey("NonPaymentLocationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("NonPaymentLocationId");
+
+                    b.HasOne("Mep.Data.Entities.GenderType", "PreferredDoctorGenderType")
+                        .WithMany("Examinations")
+                        .HasForeignKey("PreferredDoctorGenderTypeId");
 
                     b.HasOne("Mep.Data.Entities.Referral", "Referral")
                         .WithMany("Examinations")
@@ -2453,6 +2437,13 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.UnsuccessfulExaminationType", "UnsuccessfulExaminationType")
                         .WithMany("Examinations")
                         .HasForeignKey("UnsuccessfulExaminationTypeId");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.GenderType", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.GpPractice", b =>
@@ -2603,6 +2594,11 @@ namespace mep.business.Migrations
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Mep.Data.Entities.User", "LeadAmhpUser")
+                        .WithMany("AmhpReferrals")
+                        .HasForeignKey("LeadAmhpUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
@@ -2623,10 +2619,6 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");
-
-                    b.HasOne("Mep.Data.Entities.ReferralStatus")
-                        .WithMany("ReferralStatuses")
-                        .HasForeignKey("ReferralStatusId");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Section12ApprovalStatus", b =>
@@ -2652,6 +2644,10 @@ namespace mep.business.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.User", b =>
                 {
+                    b.HasOne("Mep.Data.Entities.GenderType", "GenderType")
+                        .WithMany("Users")
+                        .HasForeignKey("GenderTypeId");
+
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId");

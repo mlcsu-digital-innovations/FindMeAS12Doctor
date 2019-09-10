@@ -33,5 +33,10 @@ namespace Mep.Business.Models
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
     [MaxLength(256)]
     public string DisplayName { get; set; }
+
+    public virtual GenderType GenderType { get; set; }
+    public int? GenderTypeId { get; set; }
+
+    public virtual IList<Referral> AmhpReferrals { get; set; }
   }
 }

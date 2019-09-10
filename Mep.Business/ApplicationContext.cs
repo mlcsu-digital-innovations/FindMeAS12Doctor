@@ -44,8 +44,6 @@ namespace Mep.Business
 
     public virtual DbSet<BankDetail> BankDetails { get; set; }
     public virtual DbSet<BankDetailAudit> BankDetailsAudit { get; set; }
-    public virtual DbSet<BankDetailType> BankDetailTypes { get; set; }
-    public virtual DbSet<BankDetailTypeAudit> BankDetailTypesAudit { get; set; }
     public virtual DbSet<Ccg> Ccgs { get; set; }
     public virtual DbSet<CcgAudit> CcgAudits { get; set; }
     public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }    
@@ -58,6 +56,7 @@ namespace Mep.Business
     public virtual DbSet<DoctorStatusAudit> DoctorStatusAudits { get; set; }
     public virtual DbSet<Examination> Examinations { get; set; }
     public virtual DbSet<ExaminationAudit> ExaminationAudits { get; set; }
+    public virtual DbSet<GenderType> GenderTypes {get; set; }
     public virtual DbSet<GpPractice> GpPractices { get; set; }
     public virtual DbSet<GpPracticeAudit> GpPracticeAudits { get; set; }
     public virtual DbSet<Log> Logs { get; set; }
@@ -108,13 +107,8 @@ namespace Mep.Business
 
       base.OnModelCreating(modelBuilder);
 
-      // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-      // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
       foreach (var entityType in modelBuilder.Model.GetEntityTypes())
       {
-
-          // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-          // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
           entityType.GetForeignKeys()
               .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
               .ToList()
