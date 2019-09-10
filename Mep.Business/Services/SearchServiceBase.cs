@@ -1,10 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mep.Business.Models;
 using Mep.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using Mep.Business.Models.SearchModels;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -41,7 +38,7 @@ namespace Mep.Business.Services
             constantExpression = Expression.Constant(stringValue);
             propertyExpression = Expression.Equal(memberExpression, constantExpression);
             break;
-          case Int64 intValue:
+          case long intValue:
             ConstantExpression value = Expression.Constant(intValue);
             UnaryExpression convertedExpression = Expression.Convert(value, memberExpression.Type);
             propertyExpression = Expression.Equal(memberExpression, convertedExpression);

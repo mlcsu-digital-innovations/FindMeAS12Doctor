@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System;
 using System.Collections.Generic;
 namespace Mep.Business.Models
 {
@@ -11,7 +10,7 @@ namespace Mep.Business.Models
     public int? CcgId { get; set; }
     public virtual GpPractice GpPractice { get; set; }
     public int? GpPracticeId { get; set; }
-    public Int64? NhsNumber { get; set; }
+    public long? NhsNumber { get; set; }
     [MaxLength(10)]
     [Required]
     public string ResidentialPostcode { get; set; }
