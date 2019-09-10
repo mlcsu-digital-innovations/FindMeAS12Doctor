@@ -1,15 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
 
 @Component({
   selector: 'app-nhs-number-field',
   templateUrl: './nhs-number-field.component.html',
   styleUrls: ['./nhs-number-field.component.css']
 })
-export class NhsNumberFieldComponent implements OnInit {
+export class NhsNumberFieldComponent implements OnChanges {
 
-  constructor() { }
+  @Input()
+  nhsNumber: string;
 
-  ngOnInit() {
+  // constructor() { }
+
+  // ngOnInit() {
+  // }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
   }
 
 }

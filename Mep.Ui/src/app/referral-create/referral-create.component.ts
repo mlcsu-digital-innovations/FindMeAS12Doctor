@@ -10,7 +10,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 export class ReferralCreateComponent implements OnInit {
 
   myForm: FormGroup;
-  myForm2: FormGroup;
+  patientForm: FormGroup;
   value = false;
 
   constructor(private formBuilder: FormBuilder) { }
@@ -20,8 +20,7 @@ export class ReferralCreateComponent implements OnInit {
       mySwitch: [true]
     });
 
-    this.myForm2 = this.formBuilder.group({
-      MyBigSwitch : [true]
+    this.patientForm = this.formBuilder.group({
     });
   }
 
