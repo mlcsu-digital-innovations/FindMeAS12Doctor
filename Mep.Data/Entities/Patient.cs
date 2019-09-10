@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,7 +12,7 @@ namespace Mep.Data.Entities
     public int? CcgId { get; set; }
     public virtual GpPractice GpPractice { get; set; }
     public int? GpPracticeId { get; set; }
-    public Int64? NhsNumber { get; set; }
+    public long? NhsNumber { get; set; }
     [MaxLength(10)]
     public string ResidentialPostcode { get; set; }
     [InverseProperty("Patient")]

@@ -19,24 +19,24 @@ namespace Mep.Business.Services
 
     public override async Task<IEnumerable<GeneralSearchResult>> SearchAsync(string searchString)
     {
-      if (searchString != "")
+      if (string.IsNullOrWhiteSpace(searchString))
       {
-        IEnumerable<GeneralSearchResult> entities =
-          await _context.GpPractices
-          .WhereIsActiveOrActiveOnly(true)
-          .Where(gp => gp.Name.Contains(searchString) || gp.Postcode.Contains(searchString))
-          .Select(gp => new GeneralSearchResult()
-          {
-            Id = gp.Id,
-            ResultText = $"{gp.Name}, {gp.Postcode}"
-          })
-          .ToListAsync();
-
-        return entities;
+        throw new MissingSearchParameterException();
       }
       else
       {
-        throw new MissingSearchParameterException();
+        IEnumerable<GeneralSearchResult> entities =
+                  await _context.GpPractices
+                  .WhereIsActiveOrActiveOnly(true)
+                  .Where(gp => gp.Name.Contains(searchString) || gp.Postcode.Contains(searchString))
+                  .Select(gp => new GeneralSearchResult()
+                  {
+                    Id = gp.Id,
+                    ResultText = $"{gp.Name}, {gp.Postcode}"
+                  })
+                  .ToListAsync();
+
+        return entities;
       }
     }
   }

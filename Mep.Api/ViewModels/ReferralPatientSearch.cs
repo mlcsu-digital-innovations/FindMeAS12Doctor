@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 namespace Mep.Api.ViewModels
 {
@@ -8,12 +7,12 @@ namespace Mep.Api.ViewModels
     public string AlternativeIdentifier { get; set; }
     public int? CcgId { get; set; }
     public int? GpPracticeId { get; set; }
-    public Int64? NhsNumber { get; set; }
+    public long? NhsNumber { get; set; }
     [MaxLength(10)]
     public string ResidentialPostcode { get; set; }
     public int? CurrentReferralId { get; set; }
     public int? PatientId { get; set; }
-    public string GpPracticeDetails { get; set; }
-    public string CcgDetails { get; set; }
+    public string GpPracticeNameAndPostcode { get; set; }
+    public string CcgName{ get; set; }
   }
 }
