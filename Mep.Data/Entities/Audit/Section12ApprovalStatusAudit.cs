@@ -5,6 +5,5 @@ namespace Mep.Data.Entities
   [Table("Section12ApprovalStatusesAudit")]
   public partial class Section12ApprovalStatusAudit : NameDescriptionAudit, ISection12ApprovalStatus
   {
-    // public virtual IList<UserAudit> Users { get; set; }
   }
 }

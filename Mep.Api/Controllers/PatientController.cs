@@ -2,8 +2,8 @@ using AutoMapper;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using BusinessModels = Mep.Business.Models;
-using Mep.Api.SearchModels;
-using Mep.Business.Models.SearchModels;
+using BusinessSearch = Mep.Business.Models.SearchModels;
+using ApiSearch = Mep.Api.SearchModels;
 
 namespace Mep.Api.Controllers
 {
@@ -14,11 +14,12 @@ namespace Mep.Api.Controllers
                     ViewModels.Patient,
                     RequestModels.PatientPut,
                     RequestModels.PatientPost,
-                    PatientSearch,
-                    PatientSearchModel>
+                    ApiSearch.PatientSearch,
+                    BusinessSearch.PatientSearch,
+                    ViewModels.ReferralPatientSearch>
   {
     public PatientController(
-      IModelSearchService<BusinessModels.Patient, PatientSearchModel> service,
+      IModelSearchService<BusinessModels.Patient, BusinessSearch.PatientSearch> service,
       IMapper mapper)
       : base(service, mapper)
     {

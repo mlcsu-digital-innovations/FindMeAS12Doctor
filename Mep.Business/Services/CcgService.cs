@@ -32,7 +32,7 @@ namespace Mep.Business.Services
     }
 
     protected override async Task<Entities.Ccg> GetEntityByIdAsync(
-      int id, 
+      int entityId, 
       bool asNoTracking,
       bool activeOnly)
     {
@@ -40,7 +40,7 @@ namespace Mep.Business.Services
         _context.Ccgs
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
 
       return entity;  
     }
