@@ -26,9 +26,6 @@
                 'is-valid': HasValidNHSNumber()
               }"
             />
-            <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
-              <span>Invalid NHS Number</span>
-            </div>
           </div>
           <div class="col-md-1 mb-1">
             <div class="column-div">
@@ -48,12 +45,6 @@
                 'is-valid': HasValidAlternativeIdentifier()
               }"
             />
-            <div
-              *ngIf="patient.alternativeIdentifier.errors"
-              class="invalid-field"
-            >
-              <span>Invalid Alternative Identifier</span>
-            </div>
           </div>
           <div class="col-md-2 mb-2">
             <div class="column-div">
@@ -69,6 +60,19 @@
               >
                 Validate
               </button>
+            </div>
+          </div>
+        </div>
+        <!-- Row for divs showing patient number validation errors -->
+        <div class="form-row">
+          <div class="col-md-2 mb-2 reduced-top-margin">
+            <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
+              <span>Invalid NHS Number</span>
+            </div>
+          </div>
+          <div class="col-md-2 mb-2 offset-md-1 reduced-top-margin">
+            <div *ngIf="patient.alternativeIdentifier.errors" class="invalid-field">
+              <span>Invalid Alternative Identifier</span>
             </div>
           </div>
         </div>

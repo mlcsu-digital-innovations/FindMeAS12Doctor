@@ -40,3 +40,7 @@ label {
 .subtle-tooltip .arrow::before {
   border-right-color: #3396ff;
 }
+
+.reduced-top-margin {
+  margin-top: -10px;
+}
