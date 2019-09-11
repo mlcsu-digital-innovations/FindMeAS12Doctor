@@ -57,6 +57,11 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   DisableIfFieldHasValue(fieldName: string): boolean {
-    return this.patientForm.controls[fieldName].value !== '';
+
+    if (fieldName in this.patientForm.controls) {
+      return this.patientForm.controls[fieldName].value !== '';
+    } else {
+      throw new Error(`DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`);
+    }
   }
 }
