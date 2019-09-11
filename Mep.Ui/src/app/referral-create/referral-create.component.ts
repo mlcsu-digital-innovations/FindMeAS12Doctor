@@ -36,10 +36,6 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.alternativeIdentifier;
   }
 
-  nhsNumberChanged(): void {
-    console.log('TaDa !!');
-  }
-
   submit() {
     console.log(this.patientForm.controls.nhsNumber);
   }
