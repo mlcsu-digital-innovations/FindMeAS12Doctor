@@ -4,7 +4,9 @@
   <div class="card" style="width: 100%;">
     <div class="card-body">
       <h5 class="card-title">Create New Referral</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Create a new referral and patient (if required)</h6>
+      <h6 class="card-subtitle mb-2 text-muted">
+        Create a new referral and patient (if required)
+      </h6>
 
       <form [formGroup]="patientForm" (ngSubmit)="submit()" novalidate>
         <div class="form-row">
@@ -15,16 +17,21 @@
               digitOnly
               maxlength="10"
               formControlName="nhsNumber"
-              [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')"
+              [appDisableControl]="
+                DisableIfFieldHasValue('alternativeIdentifier')
+              "
               class="form-control"
-              [ngClass]="{ 'is-invalid': HasInvalidNHSNumber(), 'is-valid': HasValidNHSNumber()}"
+              [ngClass]="{
+                'is-invalid': HasInvalidNHSNumber(),
+                'is-valid': HasValidNHSNumber()
+              }"
             />
             <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
               <span>Invalid NHS Number</span>
             </div>
           </div>
           <div class="col-md-1 mb-1">
-            <div class="or-class">
+            <div class="column-div">
               <span>Or</span>
             </div>
           </div>
@@ -36,10 +43,32 @@
               formControlName="alternativeIdentifier"
               [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
               class="form-control"
-              [ngClass]="{ 'is-invalid': HasInvalidAlternativeIdentifier(), 'is-valid': HasValidAlternativeIdentifier()}"
+              [ngClass]="{
+                'is-invalid': HasInvalidAlternativeIdentifier(),
+                'is-valid': HasValidAlternativeIdentifier()
+              }"
             />
-            <div *ngIf="patient.alternativeIdentifier.errors" class="invalid-field">
+            <div
+              *ngIf="patient.alternativeIdentifier.errors"
+              class="invalid-field"
+            >
               <span>Invalid Alternative Identifier</span>
+            </div>
+          </div>
+          <div class="col-md-2 mb-2">
+            <div class="column-div">
+              <button
+                type="button"
+                class="btn btn-primary"
+                placement="right"
+                ngbTooltip="Search for existing patients using these identifiers"
+                [openDelay]="1000"
+                [closeDelay]="500"
+                tooltipClass="subtle-tooltip"
+                [disabled]="DisablePatientValidationButtonIfFieldsAreInvalid()"
+              >
+                Validate
+              </button>
             </div>
           </div>
         </div>

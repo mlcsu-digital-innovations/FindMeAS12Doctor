@@ -32,3 +32,11 @@ label {
 .form-control:disabled {
   background-color:#ddd;
 }
+
+.subtle-tooltip .tooltip-inner {
+  background-color: #3396ff;
+}
+
+.subtle-tooltip .arrow::before {
+  border-right-color: #3396ff;
+}

@@ -62,4 +62,14 @@ export class ReferralCreateComponent implements OnInit {
       throw new Error(`DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`);
     }
   }
+
+  DisablePatientValidationButtonIfFieldsAreInvalid(): boolean {
+
+    // field is only valid if it has a value and there aren't any errors
+    const nhsNumberFieldInValid = this.nhsNumberField.value === '' || this.nhsNumberField.errors !== null;
+    const alternativeIdentifierFieldInValid =
+      this.alternativeIdentifierField.value === '' || this.alternativeIdentifierField.errors !== null;
+
+    return nhsNumberFieldInValid && alternativeIdentifierFieldInValid;
+  }
 }

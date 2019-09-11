@@ -1,14 +1,20 @@
-.or-class {
+.column-div {
   width: 100%;
   height:100%;
   position: relative;
 }
 
-.or-class span {
+.column-div span {
   position: absolute;
   bottom:20px;
   left: 40%;
   text-align: center;
   font-weight: 500;
   color: #666;
+}
+
+.column-div button {
+  position: absolute;
+  bottom:15px;
+  left: 10%;
 }
