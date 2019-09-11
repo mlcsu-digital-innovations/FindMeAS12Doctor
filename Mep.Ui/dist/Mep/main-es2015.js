@@ -45,20 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<!-- Toolbar -->\n<div class=\"toolbar\" role=\"banner\">\n  <span>Navbar Title</span>\n  <div class=\"spacer\"></div>\n</div>\n");
-
-/***/ }),
-
-/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/nhs-number-field/nhs-number-field.component.html":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/nhs-number-field/nhs-number-field.component.html ***!
-  \********************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<p>nhs-number-field works!</p>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<!-- Toolbar -->\r\n<div class=\"toolbar\" role=\"banner\">\r\n  <span>Navbar Title</span>\r\n  <div class=\"spacer\"></div>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -71,20 +58,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<!-- standard navbar -->\n<app-navbar></app-navbar>\n<div class=\"page-content\">\n  <div class=\"card\" style=\"width: 100%;\">\n    <div class=\"card-body\">\n      <h5 class=\"card-title\">Create New Referral</h5>\n      <h6 class=\"card-subtitle mb-2 text-muted\">Create a new referral and patient (if required)</h6>\n\n      <!-- <form>\n        <div class=\"form-row\">\n          <div class=\"col-md-4 mb-3\">\n            <app-nhs-number-field></app-nhs-number-field>\n          </div>\n        </div>\n      </form> -->\n\n      <!-- <app-patient-form></app-patient-form> -->\n\n      <form [formGroup]=\"myForm\" (ngSubmit)=\"submit()\">\n          <label for=\"switch-2\">Reactive Forms</label>\n          <app-switch id=\"switch-2\" formControlName=\"mySwitch\"></app-switch>\n          <button>Submit</button>\n        </form>\n<hr>\n\n\n      <a href=\"#\" class=\"card-link\">Cancel (does nothing)</a>\n      <a href=\"#\" class=\"card-link\">Save (does nothing)</a>\n    </div>\n  </div>\n</div>\n");
-
-/***/ }),
-
-/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/switch/switch.component.html":
-/*!************************************************************************************!*\
-  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/switch/switch.component.html ***!
-  \************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div (click)=\"switch()\" class=\"switch\" [ngClass]=\"{ 'checked': value }\">\n    <input type=\"checkbox\" class=\"switch-input\" [value]=\"value\" [attr.checked]=\"value\" [id]=\"id\">\n    <span class=\"switch-label\" data-on=\"On\" data-off=\"Off\"></span>\n    <span class=\"switch-handle\"></span>\n  </div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<!-- standard navbar -->\r\n<app-navbar></app-navbar>\r\n<div class=\"page-content\">\r\n  <div class=\"card\" style=\"width: 100%;\">\r\n    <div class=\"card-body\">\r\n      <h5 class=\"card-title\">Create New Referral</h5>\r\n      <h6 class=\"card-subtitle mb-2 text-muted\">Create a new referral and patient (if required)</h6>\r\n\r\n      <form [formGroup]=\"patientForm\" (ngSubmit)=\"submit()\" novalidate>\r\n        <div class=\"form-row\">\r\n          <div class=\"col-md-2 mb-2\">\r\n            <label for=\"nhsNumber\">NHS Number</label>\r\n            <input\r\n              type=\"text\"\r\n              digitOnly\r\n              (ngModelChange)=\"nhsNumberChanged()\"\r\n              maxlength=\"10\"\r\n              formControlName=\"nhsNumber\"\r\n              class=\"form-control\"\r\n              [ngClass]=\"{ 'is-invalid': HasInvalidNHSNumber(), 'is-valid': HasValidNHSNumber()}\"\r\n            />\r\n            <div *ngIf=\"patient.nhsNumber.errors\" class=\"invalid-field\">\r\n              <span>Invalid NHS Number</span>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-1 mb-1\">\r\n            <div class=\"or-class\">\r\n              <span>Or</span>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-md-3 mb-3\">\r\n            <label for=\"alternativeIdentifier\">Alternative Identifier</label>\r\n            <input\r\n              type=\"text\"\r\n              maxlength=\"200\"\r\n              formControlName=\"alternativeIdentifier\"\r\n              class=\"form-control\"\r\n              [ngClass]=\"{ 'is-invalid': HasInvalidAlternativeIdentifier(), 'is-valid': HasValidAlternativeIdentifier()}\"\r\n            />\r\n            <div *ngIf=\"patient.alternativeIdentifier.errors\" class=\"invalid-field\">\r\n              <span>Invalid Alternative Identifier</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </form>\r\n\r\n      <a href=\"#\" class=\"card-link\">Cancel (does nothing)</a>\r\n      <a href=\"#\" class=\"card-link\">Save (does nothing)</a>\r\n    </div>\r\n  </div>\r\n</div>\r\n");
 
 /***/ }),
 
@@ -414,8 +388,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _referral_create_referral_create_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./referral-create/referral-create.component */ "./src/app/referral-create/referral-create.component.ts");
 /* harmony import */ var _navbar_navbar_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./navbar/navbar.component */ "./src/app/navbar/navbar.component.ts");
-/* harmony import */ var _switch_switch_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./switch/switch.component */ "./src/app/switch/switch.component.ts");
-/* harmony import */ var _nhs_number_field_nhs_number_field_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./nhs-number-field/nhs-number-field.component */ "./src/app/nhs-number-field/nhs-number-field.component.ts");
+/* harmony import */ var _uiowa_digit_only__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @uiowa/digit-only */ "./node_modules/@uiowa/digit-only/fesm2015/uiowa-digit-only.js");
+/* harmony import */ var _disable_control_directive__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./disable-control.directive */ "./src/app/disable-control.directive.ts");
 
 
 
@@ -435,20 +409,108 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
             _referral_create_referral_create_component__WEBPACK_IMPORTED_MODULE_7__["ReferralCreateComponent"],
             _navbar_navbar_component__WEBPACK_IMPORTED_MODULE_8__["NavbarComponent"],
-            _switch_switch_component__WEBPACK_IMPORTED_MODULE_9__["SwitchComponent"],
-            _nhs_number_field_nhs_number_field_component__WEBPACK_IMPORTED_MODULE_10__["NhsNumberFieldComponent"]
+            _disable_control_directive__WEBPACK_IMPORTED_MODULE_10__["DisableControlDirective"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
             _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"]
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
+            _uiowa_digit_only__WEBPACK_IMPORTED_MODULE_9__["DigitOnlyModule"]
         ],
         providers: [],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
     })
 ], AppModule);
 
+
+
+/***/ }),
+
+/***/ "./src/app/disable-control.directive.ts":
+/*!**********************************************!*\
+  !*** ./src/app/disable-control.directive.ts ***!
+  \**********************************************/
+/*! exports provided: DisableControlDirective */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DisableControlDirective", function() { return DisableControlDirective; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+
+
+
+let DisableControlDirective = class DisableControlDirective {
+    constructor(ngControl) {
+        this.ngControl = ngControl;
+    }
+    set disableControl(condition) {
+        const action = condition ? 'disable' : 'enable';
+        this.ngControl.control[action]();
+    }
+};
+DisableControlDirective.ctorParameters = () => [
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControl"] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+], DisableControlDirective.prototype, "disableControl", null);
+DisableControlDirective = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Directive"])({
+        selector: '[appDisableControl]'
+    })
+], DisableControlDirective);
+
+
+
+/***/ }),
+
+/***/ "./src/app/helpers/nhs-number.validator.ts":
+/*!*************************************************!*\
+  !*** ./src/app/helpers/nhs-number.validator.ts ***!
+  \*************************************************/
+/*! exports provided: NhsNumberValidFormat */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NhsNumberValidFormat", function() { return NhsNumberValidFormat; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+
+// custom validator to check that two fields match
+function NhsNumberValidFormat(control) {
+    return ValidateNHSNumber(control.value)
+        ? null
+        : {
+            NhsNumberValidFormat: { valid: false }
+        };
+}
+function ValidateNHSNumber(nhsNumber) {
+    // a blank NHS number shouldn't be flagged as invalid
+    if (nhsNumber === '') {
+        return true;
+    }
+    return IsCheckDigitValid(nhsNumber);
+}
+function IsCheckDigitValid(nhsNumber) {
+    // NHS numbers are 10 digits long
+    if (nhsNumber.length === 10) {
+        const checkDigit = Number(nhsNumber[9]);
+        let calculatedValue = 0;
+        for (let x = 0; x < 9; x++) {
+            calculatedValue = calculatedValue + (10 - x) * Number(nhsNumber[x]);
+        }
+        let calculatedDigit = 11 - (calculatedValue % 11);
+        calculatedDigit = calculatedDigit === 11 ? 0 : calculatedDigit;
+        return calculatedDigit === checkDigit;
+    }
+    else {
+        return false;
+    }
+}
 
 
 /***/ }),
@@ -498,50 +560,6 @@ NavbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
-/***/ "./src/app/nhs-number-field/nhs-number-field.component.css":
-/*!*****************************************************************!*\
-  !*** ./src/app/nhs-number-field/nhs-number-field.component.css ***!
-  \*****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL25ocy1udW1iZXItZmllbGQvbmhzLW51bWJlci1maWVsZC5jb21wb25lbnQuY3NzIn0= */");
-
-/***/ }),
-
-/***/ "./src/app/nhs-number-field/nhs-number-field.component.ts":
-/*!****************************************************************!*\
-  !*** ./src/app/nhs-number-field/nhs-number-field.component.ts ***!
-  \****************************************************************/
-/*! exports provided: NhsNumberFieldComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NhsNumberFieldComponent", function() { return NhsNumberFieldComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-
-
-let NhsNumberFieldComponent = class NhsNumberFieldComponent {
-    constructor() { }
-    ngOnInit() {
-    }
-};
-NhsNumberFieldComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-        selector: 'app-nhs-number-field',
-        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./nhs-number-field.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/nhs-number-field/nhs-number-field.component.html")).default,
-        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./nhs-number-field.component.css */ "./src/app/nhs-number-field/nhs-number-field.component.css")).default]
-    })
-], NhsNumberFieldComponent);
-
-
-
-/***/ }),
-
 /***/ "./src/app/referral-create/referral-create.component.css":
 /*!***************************************************************!*\
   !*** ./src/app/referral-create/referral-create.component.css ***!
@@ -551,7 +569,7 @@ NhsNumberFieldComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3JlZmVycmFsLWNyZWF0ZS9yZWZlcnJhbC1jcmVhdGUuY29tcG9uZW50LmNzcyJ9 */");
+/* harmony default export */ __webpack_exports__["default"] = (".or-class {\r\n  width: 100%;\r\n  height:100%;\r\n  position: relative;\r\n}\r\n\r\n.or-class span {\r\n  position: absolute;\r\n  bottom:20px;\r\n  left: 40%;\r\n  text-align: center;\r\n  font-weight: 500;\r\n  color: #666;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVmZXJyYWwtY3JlYXRlL3JlZmVycmFsLWNyZWF0ZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsV0FBVztFQUNYLFdBQVc7RUFDWCxrQkFBa0I7QUFDcEI7O0FBRUE7RUFDRSxrQkFBa0I7RUFDbEIsV0FBVztFQUNYLFNBQVM7RUFDVCxrQkFBa0I7RUFDbEIsZ0JBQWdCO0VBQ2hCLFdBQVc7QUFDYiIsImZpbGUiOiJzcmMvYXBwL3JlZmVycmFsLWNyZWF0ZS9yZWZlcnJhbC1jcmVhdGUuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5vci1jbGFzcyB7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OjEwMCU7XHJcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG59XHJcblxyXG4ub3ItY2xhc3Mgc3BhbiB7XHJcbiAgcG9zaXRpb246IGFic29sdXRlO1xyXG4gIGJvdHRvbToyMHB4O1xyXG4gIGxlZnQ6IDQwJTtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgZm9udC13ZWlnaHQ6IDUwMDtcclxuICBjb2xvcjogIzY2NjtcclxufVxyXG4iXX0= */");
 
 /***/ }),
 
@@ -568,6 +586,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _helpers_nhs_number_validator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/nhs-number.validator */ "./src/app/helpers/nhs-number.validator.ts");
+
 
 
 
@@ -577,16 +597,41 @@ let ReferralCreateComponent = class ReferralCreateComponent {
         this.value = false;
     }
     ngOnInit() {
-        this.myForm = this.formBuilder.group({
-            mySwitch: [true]
-        });
-        this.myForm2 = this.formBuilder.group({
-            MyBigSwitch: [true]
+        this.patientForm = this.formBuilder.group({
+            nhsNumber: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].maxLength(10), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('^[1-9]\\d{9}$'), _helpers_nhs_number_validator__WEBPACK_IMPORTED_MODULE_3__["NhsNumberValidFormat"]]],
+            alternativeIdentifier: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].maxLength(200), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('.*[0-9].*')]]
         });
     }
+    get patient() {
+        return this.patientForm.controls;
+    }
+    get nhsNumberField() {
+        return this.patientForm.controls.nhsNumber;
+    }
+    get alternativeIdentifierField() {
+        return this.patientForm.controls.alternativeIdentifier;
+    }
+    nhsNumberChanged() {
+        console.log('TaDa !!');
+    }
     submit() {
-        alert(`Value: ${this.myForm.controls.mySwitch.value}`);
-        console.log(`Value: ${this.myForm.controls.mySwitchA.value}`);
+        console.log(this.patientForm.controls.nhsNumber);
+    }
+    HasInvalidNHSNumber() {
+        const control = this.patientForm.controls.nhsNumber;
+        return control.value !== '' && control.errors !== null;
+    }
+    HasValidNHSNumber() {
+        const control = this.patientForm.controls.nhsNumber;
+        return control.value !== '' && control.errors == null;
+    }
+    HasInvalidAlternativeIdentifier() {
+        const control = this.patientForm.controls.alternativeIdentifier;
+        return control.value !== '' && control.errors !== null;
+    }
+    HasValidAlternativeIdentifier() {
+        const control = this.patientForm.controls.alternativeIdentifier;
+        return control.value !== '' && control.errors == null;
     }
 };
 ReferralCreateComponent.ctorParameters = () => [
@@ -599,102 +644,6 @@ ReferralCreateComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./referral-create.component.css */ "./src/app/referral-create/referral-create.component.css")).default]
     })
 ], ReferralCreateComponent);
-
-
-
-/***/ }),
-
-/***/ "./src/app/switch/switch.component.css":
-/*!*********************************************!*\
-  !*** ./src/app/switch/switch.component.css ***!
-  \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".switch {\r\n  position: relative;\r\n  display: inline-block;\r\n  vertical-align: top;\r\n  width: 80px;\r\n  height: 30px;\r\n  padding: 3px;\r\n  background-color: none;\r\n  cursor: pointer;\r\n  overflow: visible;\r\n}\r\n\r\n.switch:focus-within {\r\n  outline: 2px solid Highlight;\r\n}\r\n\r\n.switch-input {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  opacity: 0;\r\n}\r\n\r\n.switch-label {\r\n  position: relative;\r\n  display: block;\r\n  height: inherit;\r\n  font-size: 16px;\r\n  font-weight: normal;\r\n  text-transform: uppercase;\r\n  background: #ccc;\r\n  border-radius: 4px;\r\n  transition: 0.15s ease-out;\r\n  transition-property: opacity background;\r\n  color: #2d2d2d;\r\n}\r\n\r\n.switch-label::before, .switch-label::after {\r\n  position: absolute;\r\n  top: 50%;\r\n  margin-top: -.5em;\r\n  line-height: 1;\r\n  transition: inherit;\r\n}\r\n\r\n.switch-label::before {\r\n  content: attr(data-off);\r\n  right: 11px;\r\n  color: #fff;\r\n}\r\n\r\n.switch-label::after {\r\n  content: attr(data-on);\r\n  left: 11px;\r\n  color: #fff;\r\n  opacity: 0;\r\n}\r\n\r\n.switch-handle {\r\n  position: absolute;\r\n  top: 9px;\r\n  left: 12px;\r\n  width: 18px;\r\n  height: 18px;\r\n  background: #fff;\r\n  border-radius: 10px;\r\n  box-shadow: 1px 1px 5px #2d2d2d;\r\n  transition: left 0.15s ease-out;\r\n}\r\n\r\n.checked .switch-label {\r\n  background: #4CAF50;\r\n  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), inset 0 0 3px rgba(0, 0, 0, 0.15);\r\n}\r\n\r\n.checked .switch-label::before {\r\n  opacity: 0;\r\n}\r\n\r\n.checked .switch-label::after {\r\n  opacity: 1;\r\n}\r\n\r\n.checked .switch-handle {\r\n  left: 50px;\r\n  box-shadow: -1px 1px 5px rgba(45, 45, 45, 0.41);\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc3dpdGNoL3N3aXRjaC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usa0JBQWtCO0VBQ2xCLHFCQUFxQjtFQUNyQixtQkFBbUI7RUFDbkIsV0FBVztFQUNYLFlBQVk7RUFDWixZQUFZO0VBQ1osc0JBQXNCO0VBQ3RCLGVBQWU7RUFDZixpQkFBaUI7QUFDbkI7O0FBRUE7RUFDRSw0QkFBNEI7QUFDOUI7O0FBRUE7RUFDRSxrQkFBa0I7RUFDbEIsTUFBTTtFQUNOLE9BQU87RUFDUCxVQUFVO0FBQ1o7O0FBRUE7RUFDRSxrQkFBa0I7RUFDbEIsY0FBYztFQUNkLGVBQWU7RUFDZixlQUFlO0VBQ2YsbUJBQW1CO0VBQ25CLHlCQUF5QjtFQUN6QixnQkFBZ0I7RUFDaEIsa0JBQWtCO0VBQ2xCLDBCQUEwQjtFQUMxQix1Q0FBdUM7RUFDdkMsY0FBYztBQUNoQjs7QUFFQTtFQUNFLGtCQUFrQjtFQUNsQixRQUFRO0VBQ1IsaUJBQWlCO0VBQ2pCLGNBQWM7RUFDZCxtQkFBbUI7QUFDckI7O0FBRUE7RUFDRSx1QkFBdUI7RUFDdkIsV0FBVztFQUNYLFdBQVc7QUFDYjs7QUFFQTtFQUNFLHNCQUFzQjtFQUN0QixVQUFVO0VBQ1YsV0FBVztFQUNYLFVBQVU7QUFDWjs7QUFFQTtFQUNFLGtCQUFrQjtFQUNsQixRQUFRO0VBQ1IsVUFBVTtFQUNWLFdBQVc7RUFDWCxZQUFZO0VBQ1osZ0JBQWdCO0VBQ2hCLG1CQUFtQjtFQUNuQiwrQkFBK0I7RUFDL0IsK0JBQStCO0FBQ2pDOztBQUVBO0VBQ0UsbUJBQW1CO0VBQ25CLHVGQUF1RjtBQUN6Rjs7QUFFQTtFQUNFLFVBQVU7QUFDWjs7QUFFQTtFQUNFLFVBQVU7QUFDWjs7QUFFQTtFQUNFLFVBQVU7RUFDViwrQ0FBK0M7QUFDakQiLCJmaWxlIjoic3JjL2FwcC9zd2l0Y2gvc3dpdGNoLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuc3dpdGNoIHtcclxuICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gIHZlcnRpY2FsLWFsaWduOiB0b3A7XHJcbiAgd2lkdGg6IDgwcHg7XHJcbiAgaGVpZ2h0OiAzMHB4O1xyXG4gIHBhZGRpbmc6IDNweDtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiBub25lO1xyXG4gIGN1cnNvcjogcG9pbnRlcjtcclxuICBvdmVyZmxvdzogdmlzaWJsZTtcclxufVxyXG5cclxuLnN3aXRjaDpmb2N1cy13aXRoaW4ge1xyXG4gIG91dGxpbmU6IDJweCBzb2xpZCBIaWdobGlnaHQ7XHJcbn1cclxuXHJcbi5zd2l0Y2gtaW5wdXQge1xyXG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICB0b3A6IDA7XHJcbiAgbGVmdDogMDtcclxuICBvcGFjaXR5OiAwO1xyXG59XHJcblxyXG4uc3dpdGNoLWxhYmVsIHtcclxuICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgZGlzcGxheTogYmxvY2s7XHJcbiAgaGVpZ2h0OiBpbmhlcml0O1xyXG4gIGZvbnQtc2l6ZTogMTZweDtcclxuICBmb250LXdlaWdodDogbm9ybWFsO1xyXG4gIHRleHQtdHJhbnNmb3JtOiB1cHBlcmNhc2U7XHJcbiAgYmFja2dyb3VuZDogI2NjYztcclxuICBib3JkZXItcmFkaXVzOiA0cHg7XHJcbiAgdHJhbnNpdGlvbjogMC4xNXMgZWFzZS1vdXQ7XHJcbiAgdHJhbnNpdGlvbi1wcm9wZXJ0eTogb3BhY2l0eSBiYWNrZ3JvdW5kO1xyXG4gIGNvbG9yOiAjMmQyZDJkO1xyXG59XHJcblxyXG4uc3dpdGNoLWxhYmVsOjpiZWZvcmUsIC5zd2l0Y2gtbGFiZWw6OmFmdGVyIHtcclxuICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgdG9wOiA1MCU7XHJcbiAgbWFyZ2luLXRvcDogLS41ZW07XHJcbiAgbGluZS1oZWlnaHQ6IDE7XHJcbiAgdHJhbnNpdGlvbjogaW5oZXJpdDtcclxufVxyXG5cclxuLnN3aXRjaC1sYWJlbDo6YmVmb3JlIHtcclxuICBjb250ZW50OiBhdHRyKGRhdGEtb2ZmKTtcclxuICByaWdodDogMTFweDtcclxuICBjb2xvcjogI2ZmZjtcclxufVxyXG5cclxuLnN3aXRjaC1sYWJlbDo6YWZ0ZXIge1xyXG4gIGNvbnRlbnQ6IGF0dHIoZGF0YS1vbik7XHJcbiAgbGVmdDogMTFweDtcclxuICBjb2xvcjogI2ZmZjtcclxuICBvcGFjaXR5OiAwO1xyXG59XHJcblxyXG4uc3dpdGNoLWhhbmRsZSB7XHJcbiAgcG9zaXRpb246IGFic29sdXRlO1xyXG4gIHRvcDogOXB4O1xyXG4gIGxlZnQ6IDEycHg7XHJcbiAgd2lkdGg6IDE4cHg7XHJcbiAgaGVpZ2h0OiAxOHB4O1xyXG4gIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgYm9yZGVyLXJhZGl1czogMTBweDtcclxuICBib3gtc2hhZG93OiAxcHggMXB4IDVweCAjMmQyZDJkO1xyXG4gIHRyYW5zaXRpb246IGxlZnQgMC4xNXMgZWFzZS1vdXQ7XHJcbn1cclxuXHJcbi5jaGVja2VkIC5zd2l0Y2gtbGFiZWwge1xyXG4gIGJhY2tncm91bmQ6ICM0Q0FGNTA7XHJcbiAgYm94LXNoYWRvdzogaW5zZXQgMCAxcHggMnB4IHJnYmEoMjU1LCAyNTUsIDI1NSwgMC41KSwgaW5zZXQgMCAwIDNweCByZ2JhKDAsIDAsIDAsIDAuMTUpO1xyXG59XHJcblxyXG4uY2hlY2tlZCAuc3dpdGNoLWxhYmVsOjpiZWZvcmUge1xyXG4gIG9wYWNpdHk6IDA7XHJcbn1cclxuXHJcbi5jaGVja2VkIC5zd2l0Y2gtbGFiZWw6OmFmdGVyIHtcclxuICBvcGFjaXR5OiAxO1xyXG59XHJcblxyXG4uY2hlY2tlZCAuc3dpdGNoLWhhbmRsZSB7XHJcbiAgbGVmdDogNTBweDtcclxuICBib3gtc2hhZG93OiAtMXB4IDFweCA1cHggcmdiYSg0NSwgNDUsIDQ1LCAwLjQxKTtcclxufVxyXG4iXX0= */");
-
-/***/ }),
-
-/***/ "./src/app/switch/switch.component.ts":
-/*!********************************************!*\
-  !*** ./src/app/switch/switch.component.ts ***!
-  \********************************************/
-/*! exports provided: SwitchComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SwitchComponent", function() { return SwitchComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-var SwitchComponent_1;
-
-
-
-let SwitchComponent = SwitchComponent_1 = class SwitchComponent {
-    constructor() {
-        this.externalId = '';
-        this._ID = '';
-        this._value = false;
-        this.onChange = () => { };
-        this.onTouched = () => { };
-    }
-    set id(value) {
-        this._ID = value;
-        this.externalId = null;
-    }
-    get id() {
-        return this._ID;
-    }
-    get value() {
-        return this._value;
-    }
-    set value(val) {
-        this._value = val;
-        this.onChange(val);
-        this.onTouched();
-    }
-    registerOnChange(fn) {
-        this.onChange = fn;
-    }
-    writeValue(value) {
-        if (value) {
-            this.value = value;
-        }
-    }
-    registerOnTouched(fn) {
-        this.onTouched = fn;
-    }
-    switch() {
-        this.value = !this.value;
-    }
-};
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('attr.id')
-], SwitchComponent.prototype, "externalId", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
-], SwitchComponent.prototype, "id", null);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])('value')
-], SwitchComponent.prototype, "_value", void 0);
-SwitchComponent = SwitchComponent_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-        selector: 'app-switch',
-        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./switch.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/switch/switch.component.html")).default,
-        providers: [
-            {
-                provide: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NG_VALUE_ACCESSOR"],
-                useExisting: Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["forwardRef"])(() => SwitchComponent_1),
-                multi: true
-            }
-        ],
-        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./switch.component.css */ "./src/app/switch/switch.component.css")).default]
-    })
-], SwitchComponent);
 
 
 
