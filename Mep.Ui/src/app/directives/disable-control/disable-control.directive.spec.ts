@@ -6,7 +6,6 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NgControl } from '@angular/forms';
 
 describe('Directive: DisableControlDirective', () => {
-
   let component: TestDisableControlComponent;
   let fixture: ComponentFixture<TestDisableControlComponent>;
   let InputElement: DebugElement;
@@ -14,14 +13,10 @@ describe('Directive: DisableControlDirective', () => {
   const formBuilder: FormBuilder = new FormBuilder();
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       declarations: [TestDisableControlComponent, DisableControlDirective],
       imports: [ReactiveFormsModule],
-      providers: [
-        NgControl,
-        {provide: FormBuilder, useValue: formBuilder}
-      ]
+      providers: [NgControl, { provide: FormBuilder, useValue: formBuilder }]
     }).compileComponents();
   });
 
@@ -42,11 +37,10 @@ describe('Directive: DisableControlDirective', () => {
   });
 
   it('should create an instance with a disabled field', () => {
-
     TestBed.overrideComponent(TestDisableControlComponent, {
       set: {
-        template: `<form [formGroup]="testForm">
-        <input type="text" formControlName="testField" [appDisableControl]="true"/>
+        template: `<form [formGroup]='testForm'>
+        <input type='text' formControlName='testField' [appDisableControl]='true'/>
       </form>`
       }
     });
@@ -57,11 +51,10 @@ describe('Directive: DisableControlDirective', () => {
   });
 
   it('should create an instance with an enabled field', () => {
-
     TestBed.overrideComponent(TestDisableControlComponent, {
       set: {
-        template: `<form [formGroup]="testForm">
-        <input type="text" formControlName="testField" [appDisableControl]="false"/>
+        template: `<form [formGroup]='testForm'>
+        <input type='text' formControlName='testField' [appDisableControl]='false'/>
       </form>`
       }
     });
@@ -70,5 +63,4 @@ describe('Directive: DisableControlDirective', () => {
     createComponent();
     expect('disabled' in InputElement.attributes).toBeFalsy();
   });
-
 });
