@@ -10,7 +10,7 @@ import { ReferralCreateComponent } from './referral-create/referral-create.compo
 import { NavbarComponent } from './navbar/navbar.component';
 
 import { DigitOnlyModule } from '@uiowa/digit-only';
-import { DisableControlDirective } from './directives/disable-control.directive';
+import { DisableControlDirective } from './directives/disable-control/disable-control.directive';
 
 @NgModule({
   declarations: [
