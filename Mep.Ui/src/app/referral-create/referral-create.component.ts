@@ -45,23 +45,19 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   HasInvalidNHSNumber(): boolean {
-    const control = this.patientForm.controls.nhsNumber;
-    return control.value !== '' && control.errors !== null;
+    return this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null;
   }
 
   HasValidNHSNumber(): boolean {
-    const control = this.patientForm.controls.nhsNumber;
-    return control.value !== '' && control.errors == null;
+    return this.nhsNumberField.value !== '' && this.nhsNumberField.errors == null;
   }
 
   HasInvalidAlternativeIdentifier(): boolean {
-    const control = this.patientForm.controls.alternativeIdentifier;
-    return control.value !== '' && control.errors !== null;
+    return this.alternativeIdentifierField.value !== '' && this.alternativeIdentifierField.errors !== null;
   }
 
   HasValidAlternativeIdentifier(): boolean {
-    const control = this.patientForm.controls.alternativeIdentifier;
-    return control.value !== '' && control.errors == null;
+    return this.alternativeIdentifierField.value !== '' && this.alternativeIdentifierField.errors == null;
   }
 
   DisableIfFieldHasValue(fieldName: string): boolean {
