@@ -19,12 +19,25 @@ export class ReferralCreateComponent implements OnInit {
 
   ngOnInit() {
     this.patientForm = this.formBuilder.group({
-      nhsNumber: ['', [Validators.maxLength(10), Validators.pattern('^[1-9]\\d{9}$'), NhsNumberValidFormat]]
+      nhsNumber: ['', [Validators.maxLength(10), Validators.pattern('^[1-9]\\d{9}$'), NhsNumberValidFormat]],
+      alternativeIdentifier: ['', [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]]
     });
   }
 
   get patient() {
     return this.patientForm.controls;
+  }
+
+  get nhsNumberField() {
+    return this.patientForm.controls.nhsNumber;
+  }
+
+  get alternativeIdentifierField() {
+    return this.patientForm.controls.alternativeIdentifier;
+  }
+
+  nhsNumberChanged(): void {
+    console.log('TaDa !!');
   }
 
   submit() {
@@ -41,4 +54,17 @@ export class ReferralCreateComponent implements OnInit {
     return control.value !== '' && control.errors == null;
   }
 
+  HasInvalidAlternativeIdentifier(): boolean {
+    const control = this.patientForm.controls.alternativeIdentifier;
+    return control.value !== '' && control.errors !== null;
+  }
+
+  HasValidAlternativeIdentifier(): boolean {
+    const control = this.patientForm.controls.alternativeIdentifier;
+    return control.value !== '' && control.errors == null;
+  }
+
+  DisableIfFieldHasValue(fieldName: string): boolean {
+    return this.patientForm.controls[fieldName].value !== '';
+  }
 }

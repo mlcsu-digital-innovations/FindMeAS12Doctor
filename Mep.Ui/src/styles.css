@@ -27,5 +27,8 @@ label {
 
 .form-control:focus{
   color: #666;
+}
 
+.form-control:disabled {
+  background-color:#ddd;
 }
