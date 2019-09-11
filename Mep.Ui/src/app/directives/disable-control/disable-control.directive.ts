@@ -12,6 +12,8 @@ export class DisableControlDirective {
   }
 
   constructor( private ngControl: NgControl ) {
+    console.log('----------');
+    console.log(ngControl);
   }
 
 }
