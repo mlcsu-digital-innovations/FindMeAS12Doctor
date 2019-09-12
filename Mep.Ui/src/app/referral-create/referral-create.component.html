@@ -57,6 +57,7 @@
                 [closeDelay]="500"
                 tooltipClass="subtle-tooltip"
                 [disabled]="DisablePatientValidationButtonIfFieldsAreInvalid()"
+                (click)="ValidatePatient()"
               >
                 Validate
               </button>
