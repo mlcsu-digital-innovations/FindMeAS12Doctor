@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
 import { PatientSearch } from '../classes/patient-search';
-import { PatientSearchService } from '../services/patient-search.service';
+import { PatientSearchService } from '../services/patient-search/patient-search.service';
+import { ToastService } from '../services/toast/toast.service';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-referral-create',
@@ -14,10 +16,14 @@ export class ReferralCreateComponent implements OnInit {
   patientForm: FormGroup;
   value = false;
   searchingForPatient: boolean;
+  dangerMessage: string;
+
+  @ViewChild('dangerTpl', null) dangerTpl;
 
   constructor(
     private formBuilder: FormBuilder,
-    private patientService: PatientSearchService
+    private patientService: PatientSearchService,
+    private toastService: ToastService
     ) {}
 
   ngOnInit() {
@@ -127,9 +133,16 @@ export class ReferralCreateComponent implements OnInit {
     }
 
     this.patientService.patientSearch(search)
-      .subscribe((results) => {
+      .subscribe(results => {
         this.searchingForPatient = false;
         console.log(results);
+      },
+      error => {
+
+        this.searchingForPatient = false;
+        this.dangerMessage = "Server Error: Unable to validate patient details ! Please try again in a few moments";
+        this.toastService.show(this.dangerTpl, {classname: 'bg-danger text-light', delay: 15000});
+        return throwError(error);
       });
   }
 }
