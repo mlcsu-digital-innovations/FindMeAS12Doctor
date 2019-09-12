@@ -12,6 +12,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DisableControlDirective } from './directives/disable-control/disable-control.directive';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +26,8 @@ import { DisableControlDirective } from './directives/disable-control/disable-co
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    DigitOnlyModule
+    DigitOnlyModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
