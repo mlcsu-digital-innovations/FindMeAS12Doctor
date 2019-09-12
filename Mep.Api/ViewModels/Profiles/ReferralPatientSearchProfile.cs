@@ -6,6 +6,8 @@ namespace Mep.Api.ViewModels.Profiles
 {
     public class ReferralPatientSearchProfile : Profile
     {
+      // ToDo: Replace magic number '10' with id of closed referral status
+
         public ReferralPatientSearchProfile()
         {
             CreateMap<BusinessModels.Patient, ReferralPatientSearch>()
