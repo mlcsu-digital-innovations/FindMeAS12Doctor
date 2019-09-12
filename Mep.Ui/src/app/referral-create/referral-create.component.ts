@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
 import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
 
 @Component({
@@ -19,7 +17,8 @@ export class ReferralCreateComponent implements OnInit {
 
   ngOnInit() {
     this.patientForm = this.formBuilder.group({
-      nhsNumber: ['', [Validators.maxLength(10), Validators.pattern('^[1-9]\\d{9}$'), NhsNumberValidFormat]]
+      nhsNumber: ['', [Validators.maxLength(10), Validators.pattern('^[1-9]\\d{9}$'), NhsNumberValidFormat]],
+      alternativeIdentifier: ['', [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]]
     });
   }
 
@@ -27,18 +26,40 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls;
   }
 
+  get nhsNumberField() {
+    return this.patientForm.controls.nhsNumber;
+  }
+
+  get alternativeIdentifierField() {
+    return this.patientForm.controls.alternativeIdentifier;
+  }
+
   submit() {
     console.log(this.patientForm.controls.nhsNumber);
   }
 
   HasInvalidNHSNumber(): boolean {
-    const control = this.patientForm.controls.nhsNumber;
-    return control.value !== '' && control.errors !== null;
+    return this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null;
   }
 
   HasValidNHSNumber(): boolean {
-    const control = this.patientForm.controls.nhsNumber;
-    return control.value !== '' && control.errors == null;
+    return this.nhsNumberField.value !== '' && this.nhsNumberField.errors == null;
   }
 
+  HasInvalidAlternativeIdentifier(): boolean {
+    return this.alternativeIdentifierField.value !== '' && this.alternativeIdentifierField.errors !== null;
+  }
+
+  HasValidAlternativeIdentifier(): boolean {
+    return this.alternativeIdentifierField.value !== '' && this.alternativeIdentifierField.errors == null;
+  }
+
+  DisableIfFieldHasValue(fieldName: string): boolean {
+
+    if (fieldName in this.patientForm.controls) {
+      return this.patientForm.controls[fieldName].value !== '';
+    } else {
+      throw new Error(`DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`);
+    }
+  }
 }
