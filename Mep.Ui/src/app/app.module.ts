@@ -13,13 +13,15 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DisableControlDirective } from './directives/disable-control/disable-control.directive';
 
 import { HttpClientModule } from '@angular/common/http';
+import { ToastsComponent } from './toasts/toasts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ReferralCreateComponent,
     NavbarComponent,
-    DisableControlDirective
+    DisableControlDirective,
+    ToastsComponent
   ],
   imports: [
     BrowserModule,
