@@ -60,6 +60,7 @@ namespace Mep.Api
           builder => {
             builder.AllowAnyOrigin();
             builder.AllowAnyMethod();
+            builder.AllowAnyHeader();
           }
         );
       });
@@ -79,12 +80,12 @@ namespace Mep.Api
       }
 
       app.UseExceptionHandler("/Error");
-      app.UseCors(builder => 
-      {
-        builder.WithOrigins(
-          "http://localhost:4200",
-          "https://localhost:4200");
-      });
+      // app.UseCors(builder => 
+      // {
+      //   builder.WithOrigins(
+      //     "http://localhost:4200",
+      //     "https://localhost:4200");
+      // });
       app.UseHttpsRedirection();
       app.UseCors("AllowAnyOrigin");
       app.UseMvc();      
