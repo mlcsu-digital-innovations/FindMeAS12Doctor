@@ -3,11 +3,16 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
 import { PatientSearchService } from '../services/patient-search/patient-search.service';
 import { ToastService } from '../services/toast/toast.service';
-import { throwError } from 'rxjs';
+import { GpPracticeListService } from '../services/gp-practice-list/gp-practice-list.service';
+import { throwError, Observable, of } from 'rxjs';
+import { tap, switchMap, catchError, first } from 'rxjs/operators';
 
 import { PatientSearchResult } from '../interfaces/patient-search-result';
 import { PatientSearchParams } from '../interfaces/patient-search-params';
+import { GpPractice } from '../interfaces/gp-practice';
+
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-referral-create',
@@ -22,6 +27,9 @@ export class ReferralCreateComponent implements OnInit {
   dangerMessage: string;
   patientResult: PatientSearchResult;
   patientModal: NgbModalRef;
+  gpSearching: boolean;
+  gpSearchFailed: boolean;
+  gpFieldsShown: boolean;
 
   @ViewChild('dangerTpl', null) dangerTemplate;
   @ViewChild('patientResults', null) patientResultTemplate;
@@ -31,10 +39,12 @@ export class ReferralCreateComponent implements OnInit {
     private patientService: PatientSearchService,
     private toastService: ToastService,
     private modalService: NgbModal,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private gpPracticeListService: GpPracticeListService
   ) {}
 
   ngOnInit() {
+
     this.patientForm = this.formBuilder.group({
       nhsNumber: [
         '',
@@ -47,7 +57,8 @@ export class ReferralCreateComponent implements OnInit {
       alternativeIdentifier: [
         '',
         [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]
-      ]
+      ],
+      gpPractice: ['']
     });
   }
 
@@ -61,6 +72,10 @@ export class ReferralCreateComponent implements OnInit {
 
   get alternativeIdentifierField() {
     return this.patientForm.controls.alternativeIdentifier;
+  }
+
+  get gpPracticeField() {
+    return this.patientForm.controls.gpPractice;
   }
 
   IsSearchingForPatient(): boolean {
@@ -97,6 +112,26 @@ export class ReferralCreateComponent implements OnInit {
     );
   }
 
+  FormatGpMatches(value: any): string {
+    return value.resultText || '';
+  }
+
+  gpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => this.gpSearching = true),
+      switchMap(term =>
+        this.gpPracticeListService.GetGpPracticeList(term).pipe(
+          tap(() => this.gpSearchFailed = false),
+          catchError(() => {
+            this.gpSearchFailed = true;
+            return of([]);
+          }))
+        ),
+        tap(() => this.gpSearching = false)
+    )
+
   DisableIfFieldHasValue(fieldName: string): boolean {
     if (fieldName in this.patientForm.controls) {
       return this.patientForm.controls[fieldName].value !== '';
@@ -122,8 +157,8 @@ export class ReferralCreateComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
 
-  ResetFocus(): void {
-    this.renderer.selectRootElement('#nhsNumber').focus();
+  ResetFocus(fieldName: string): void {
+    this.renderer.selectRootElement(fieldName).focus();
   }
 
   async CancelPatientResultsModal() {
@@ -133,12 +168,24 @@ export class ReferralCreateComponent implements OnInit {
 
     // ToDo: Find a better way to set focus whilst waiting for modal to close !
     await this.Delay(150);
-    this.ResetFocus();
+    this.ResetFocus('#nhsNumber');
   }
 
-  UseExistingPatient(): void {
+  async UseExistingPatient() {
     // ToDo: copy the existing patient details
+
+    this.gpFieldsShown = true;
+
+    const gpPractice = {} as GpPractice;
+    gpPractice.id = this.patientResult.gpPracticeId;
+    gpPractice.resultText = this.patientResult.gpPracticeNameAndPostcode;
+
+    this.gpPracticeField.setValue(gpPractice);
     this.patientModal.close();
+
+    // ToDo: Find a better way to set focus whilst waiting for modal to close !
+    await this.Delay(150);
+    this.ResetFocus('#gpPractice');
   }
 
   UseExistingReferral(): void {

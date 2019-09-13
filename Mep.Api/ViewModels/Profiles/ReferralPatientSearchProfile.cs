@@ -15,7 +15,7 @@ namespace Mep.Api.ViewModels.Profiles
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Id))
             .ForMember(
               dest => dest.GpPracticeNameAndPostcode, 
-              opt => opt.MapFrom(src => src.GpPractice.Name + " " + src.GpPractice.Postcode)
+              opt => opt.MapFrom(src => src.GpPractice.Name + ", " + src.GpPractice.Postcode)
             )
             .ForMember(
               dest => dest.CurrentReferralId, 

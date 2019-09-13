@@ -91,6 +91,25 @@
             </div>
           </div>
         </div>
+        <!-- GP Practice -->
+        <div class="form-row" *ngIf="gpFieldsShown">
+          <div class="col-md-6 mb-6">
+            <label for="gpPractice">GP Practice</label>
+            <input
+              type="text"
+              class="form-control"
+              id="gpPractice"
+              #gpPractice
+              [class.is-invalid]="gpSearchFailed"
+              formControlName="gpPractice"
+              [ngbTypeahead]="gpSearch"
+              [resultFormatter]="FormatGpMatches"
+              [inputFormatter]="FormatGpMatches"
+            />
+              <span *ngIf="gpSearching">searching...</span>
+              <div class="invalid-feedback" *ngIf="gpSearchFailed">Sorry, suggestions could not be loaded.</div>
+          </div>
+        </div>
       </form>
 
       <!-- format of danger toast -->
