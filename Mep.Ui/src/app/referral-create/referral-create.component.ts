@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
 import { PatientSearchService } from '../services/patient-search/patient-search.service';
 import { ToastService } from '../services/toast/toast.service';
@@ -58,8 +58,12 @@ export class ReferralCreateComponent implements OnInit {
         '',
         [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]
       ],
-      gpPractice: ['']
+      gpPractice: [''],
+      unknownGpPractice: false
     });
+
+    // used for development testing
+    // this.gpFieldsShown = true;
   }
 
   get patient() {
@@ -80,6 +84,25 @@ export class ReferralCreateComponent implements OnInit {
 
   IsSearchingForPatient(): boolean {
     return this.searchingForPatient;
+  }
+
+  SetGpPracticeField(id: number | null, text: string | null) {
+    const gpPractice = {} as GpPractice;
+    gpPractice.id = id;
+    gpPractice.resultText = text;
+
+    this.gpPracticeField.setValue(gpPractice);
+  }
+
+  ToggleGpPracticeUnknown(event: any) {
+    if (event.target.checked) {
+      // set the field to unknown, show the postcode field and set focus
+      this.SetGpPracticeField(null, 'Unknown');
+    } else {
+      // ToDo: Hide and clear the residential postcode field
+      this.SetGpPracticeField(null, '');
+      this.ResetFocus('#gpPractice');
+    }
   }
 
   submit() {
@@ -175,12 +198,7 @@ export class ReferralCreateComponent implements OnInit {
     // ToDo: copy the existing patient details
 
     this.gpFieldsShown = true;
-
-    const gpPractice = {} as GpPractice;
-    gpPractice.id = this.patientResult.gpPracticeId;
-    gpPractice.resultText = this.patientResult.gpPracticeNameAndPostcode;
-
-    this.gpPracticeField.setValue(gpPractice);
+    this.SetGpPracticeField(this.patientResult.gpPracticeId, this.patientResult.gpPracticeNameAndPostcode);
     this.patientModal.close();
 
     // ToDo: Find a better way to set focus whilst waiting for modal to close !

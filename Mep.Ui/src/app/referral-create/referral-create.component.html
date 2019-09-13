@@ -12,21 +12,12 @@
         <div class="form-row">
           <div class="col-md-2 mb-2">
             <label for="nhsNumber">NHS Number</label>
-            <input
-              type="text"
-              digitOnly
-              maxlength="10"
-              formControlName="nhsNumber"
-              id="nhsNumber"
-              [appDisableControl]="
+            <input type="text" digitOnly maxlength="10" formControlName="nhsNumber" id="nhsNumber" [appDisableControl]="
                 DisableIfFieldHasValue('alternativeIdentifier')
-              "
-              class="form-control"
-              [ngClass]="{
+              " class="form-control" [ngClass]="{
                 'is-invalid': HasInvalidNHSNumber(),
                 'is-valid': HasValidNHSNumber()
-              }"
-            />
+              }" />
           </div>
           <div class="col-md-1 mb-1">
             <div class="column-div">
@@ -35,42 +26,23 @@
           </div>
           <div class="col-md-3 mb-3">
             <label for="alternativeIdentifier">Alternative Identifier</label>
-            <input
-              type="text"
-              maxlength="200"
-              formControlName="alternativeIdentifier"
-              [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
-              class="form-control"
-              [ngClass]="{
+            <input type="text" maxlength="200" formControlName="alternativeIdentifier"
+              [appDisableControl]="DisableIfFieldHasValue('nhsNumber')" class="form-control" [ngClass]="{
                 'is-invalid': HasInvalidAlternativeIdentifier(),
                 'is-valid': HasValidAlternativeIdentifier()
-              }"
-            />
+              }" />
           </div>
           <div class="col-md-2 mb-2">
             <div class="column-div">
-              <button
-                type="button"
-                class="btn btn-primary"
-                placement="right"
-                ngbTooltip="Search for existing patients using these identifiers"
-                [openDelay]="1000"
-                [closeDelay]="500"
-                tooltipClass="subtle-tooltip"
-                [disabled]="
+              <button type="button" class="btn btn-primary" placement="right"
+                ngbTooltip="Search for existing patients using these identifiers" [openDelay]="1000" [closeDelay]="500"
+                tooltipClass="subtle-tooltip" [disabled]="
                   DisablePatientValidationButtonIfFieldsAreInvalid() ||
                   IsSearchingForPatient()
-                "
-                (click)="ValidatePatient()"
-                [ngClass]="{ validating: IsSearchingForPatient() }"
-              >
+                " (click)="ValidatePatient()" [ngClass]="{ validating: IsSearchingForPatient() }">
                 {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
-                <span
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                  *ngIf="IsSearchingForPatient()"
-                ></span>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                  *ngIf="IsSearchingForPatient()"></span>
               </button>
             </div>
           </div>
@@ -83,10 +55,7 @@
             </div>
           </div>
           <div class="col-md-2 mb-2 offset-md-1 reduced-top-margin">
-            <div
-              *ngIf="patient.alternativeIdentifier.errors"
-              class="invalid-field"
-            >
+            <div *ngIf="patient.alternativeIdentifier.errors" class="invalid-field">
               <span>Invalid Alternative Identifier</span>
             </div>
           </div>
@@ -95,35 +64,36 @@
         <div class="form-row" *ngIf="gpFieldsShown">
           <div class="col-md-6 mb-6">
             <label for="gpPractice">GP Practice</label>
-            <input
-              type="text"
-              class="form-control"
-              id="gpPractice"
-              #gpPractice
-              [class.is-invalid]="gpSearchFailed"
-              formControlName="gpPractice"
-              [ngbTypeahead]="gpSearch"
-              [resultFormatter]="FormatGpMatches"
-              [inputFormatter]="FormatGpMatches"
-            />
-              <span *ngIf="gpSearching">searching...</span>
-              <div class="invalid-feedback" *ngIf="gpSearchFailed">Sorry, suggestions could not be loaded.</div>
+            <input type="text" class="form-control" id="gpPractice" #gpPractice [class.is-invalid]="gpSearchFailed"
+              formControlName="gpPractice" [ngbTypeahead]="gpSearch" [resultFormatter]="FormatGpMatches"
+              [inputFormatter]="FormatGpMatches" />
+            <span *ngIf="gpSearching">searching...</span>
+            <div class="invalid-feedback" *ngIf="gpSearchFailed">Sorry, suggestions could not be loaded.</div>
+          </div>
+          <div class="col-md-2 mb-2">
+            <div class="checkmark-content">
+                <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      value=""
+                      id="unknownGpPractice"
+                      formControlName="unknownGpPractice"
+                      (change)="ToggleGpPracticeUnknown($event)"
+                    >
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
+            </div>
           </div>
         </div>
       </form>
 
       <!-- format of danger toast -->
       <ng-template #dangerTpl>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="#fff"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
           <path
-            d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z"
-          />
+            d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z" />
         </svg>
         {{ dangerMessage }}
       </ng-template>
@@ -157,10 +127,7 @@
               {{ patientResult.alternativeIdentifier }}
             </div>
           </div>
-          <div
-            class="row"
-            *ngIf="patientResult.gpPracticeNameAndPostcode !== null"
-          >
+          <div class="row" *ngIf="patientResult.gpPracticeNameAndPostcode !== null">
             <div class="col-md-4 row-title">
               GP Practice
             </div>
@@ -186,27 +153,15 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="CancelPatientResultsModal()"
-          >
+          <button type="button" class="btn btn-primary" (click)="CancelPatientResultsModal()">
             Cancel
           </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="UseExistingPatient()"
-            *ngIf="patientResult.currentReferralId == null"
-          >
+          <button type="button" class="btn btn-primary" (click)="UseExistingPatient()"
+            *ngIf="patientResult.currentReferralId == null">
             Use Existing Details
           </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="UseExistingReferral()"
-            *ngIf="patientResult.currentReferralId !== null"
-          >
+          <button type="button" class="btn btn-primary" (click)="UseExistingReferral()"
+            *ngIf="patientResult.currentReferralId !== null">
             Use Existing Referral
           </button>
         </div>

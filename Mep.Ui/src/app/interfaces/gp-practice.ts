@@ -1,4 +1,4 @@
 export interface GpPractice {
-  id: number;
-  resultText: string;
+  id: number | null;
+  resultText: string | null;
 }
