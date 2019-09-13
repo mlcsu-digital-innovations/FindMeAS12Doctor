@@ -157,8 +157,7 @@ export class ReferralCreateComponent implements OnInit {
 
     // prevent further buttons clicks and update the page
     this.searchingForPatient = true;
-
-    const params: PatientSearchParams = {};
+    const params = {} as PatientSearchParams;
 
     if (this.HasValidNHSNumber()) {
       params.NhsNumber = this.nhsNumberField.value;
