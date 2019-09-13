@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { PatientSearch } from '../../classes/patient-search';
 import { environment } from '../../../environments/environment';
+import { PatientSearchParams } from '../../interfaces/patient-search-params';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 export class PatientSearchService {
   constructor(private httpClient: HttpClient) {}
 
-  public patientSearch(searchParams: PatientSearch) {
+  public patientSearch(searchParams: PatientSearchParams) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post(

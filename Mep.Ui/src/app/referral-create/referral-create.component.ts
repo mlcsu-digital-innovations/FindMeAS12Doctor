@@ -1,10 +1,13 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
-import { PatientSearch } from '../classes/patient-search';
 import { PatientSearchService } from '../services/patient-search/patient-search.service';
 import { ToastService } from '../services/toast/toast.service';
 import { throwError } from 'rxjs';
+
+import { PatientSearchResult } from '../interfaces/patient-search-result';
+import { PatientSearchParams } from '../interfaces/patient-search-params';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-referral-create',
@@ -17,17 +20,21 @@ export class ReferralCreateComponent implements OnInit {
   value = false;
   searchingForPatient: boolean;
   dangerMessage: string;
+  patientResult: PatientSearchResult;
+  patientModal: NgbModalRef;
 
-  @ViewChild('dangerTpl', null) dangerTpl;
+  @ViewChild('dangerTpl', null) dangerTemplate;
+  @ViewChild('patientResults', null) patientResultTemplate;
 
   constructor(
     private formBuilder: FormBuilder,
     private patientService: PatientSearchService,
-    private toastService: ToastService
-    ) {}
+    private toastService: ToastService,
+    private modalService: NgbModal,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit() {
-
     this.patientForm = this.formBuilder.group({
       nhsNumber: [
         '',
@@ -111,38 +118,93 @@ export class ReferralCreateComponent implements OnInit {
     return nhsNumberFieldInValid && alternativeIdentifierFieldInValid;
   }
 
-  Delay(milliseconds: number) {
+  async Delay(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
 
-  ValidatePatient(): void {
+  ResetFocus(): void {
+    this.renderer.selectRootElement('#nhsNumber').focus();
+  }
 
-    if (this.searchingForPatient || this.HasInvalidNHSNumber() || this.HasInvalidAlternativeIdentifier() ) {
+  async CancelPatientResultsModal() {
+    this.alternativeIdentifierField.setValue('');
+    this.nhsNumberField.setValue('');
+    this.patientModal.close();
+
+    // ToDo: Find a better way to set focus whilst waiting for modal to close !
+    await this.Delay(150);
+    this.ResetFocus();
+  }
+
+  UseExistingPatient(): void {
+    // ToDo: copy the existing patient details
+    this.patientModal.close();
+  }
+
+  UseExistingReferral(): void {
+    // ToDo: navigate to the existing referral page
+    this.patientModal.close();
+  }
+
+  ValidatePatient(): void {
+    if (
+      this.searchingForPatient ||
+      this.HasInvalidNHSNumber() ||
+      this.HasInvalidAlternativeIdentifier()
+    ) {
       return;
     }
 
     // prevent further buttons clicks and update the page
     this.searchingForPatient = true;
 
-    const search = new PatientSearch();
+    const params: PatientSearchParams = {};
 
     if (this.HasValidNHSNumber()) {
-      search.NhsNumber = this.nhsNumberField.value;
+      params.NhsNumber = this.nhsNumberField.value;
     } else {
-      search.AlternativeIdentifier = this.alternativeIdentifierField.value;
+      params.AlternativeIdentifier = this.alternativeIdentifierField.value;
     }
 
-    this.patientService.patientSearch(search)
-      .subscribe(results => {
+    this.patientService.patientSearch(params).subscribe(
+      (results: PatientSearchResult[]) => {
         this.searchingForPatient = false;
-        console.log(results);
+        // if there are any matching results then display them in a modal
+        switch (results.length) {
+          case 0:
+            // no matching patients found, inform user with toast ?
+            this.toastService.show('No existing patients found', {
+              classname: 'bg-success text-light',
+              delay: 5000
+            });
+            break;
+          case 1:
+            this.patientResult = results[0];
+            this.patientModal = this.modalService.open(
+              this.patientResultTemplate,
+              { size: 'lg' }
+            );
+            break;
+          default:
+            this.dangerMessage =
+              'Validation Error: Multiple patients found ! Please inform a system administrator';
+            this.toastService.show(this.dangerTemplate, {
+              classname: 'bg-danger text-light',
+              delay: 15000
+            });
+            break;
+        }
       },
       error => {
-
         this.searchingForPatient = false;
-        this.dangerMessage = "Server Error: Unable to validate patient details ! Please try again in a few moments";
-        this.toastService.show(this.dangerTpl, {classname: 'bg-danger text-light', delay: 15000});
+        this.dangerMessage =
+          'Server Error: Unable to validate patient details ! Please try again in a few moments';
+        this.toastService.show(this.dangerTemplate, {
+          classname: 'bg-danger text-light',
+          delay: 15000
+        });
         return throwError(error);
-      });
+      }
+    );
   }
 }

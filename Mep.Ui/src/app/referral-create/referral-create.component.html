@@ -17,6 +17,7 @@
               digitOnly
               maxlength="10"
               formControlName="nhsNumber"
+              id="nhsNumber"
               [appDisableControl]="
                 DisableIfFieldHasValue('alternativeIdentifier')
               "
@@ -56,7 +57,10 @@
                 [openDelay]="1000"
                 [closeDelay]="500"
                 tooltipClass="subtle-tooltip"
-                [disabled]="DisablePatientValidationButtonIfFieldsAreInvalid()"
+                [disabled]="
+                  DisablePatientValidationButtonIfFieldsAreInvalid() ||
+                  IsSearchingForPatient()
+                "
                 (click)="ValidatePatient()"
                 [ngClass]="{ validating: IsSearchingForPatient() }"
               >
@@ -91,8 +95,102 @@
 
       <!-- format of danger toast -->
       <ng-template #dangerTpl>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24"><path d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z"/></svg>
-        {{dangerMessage}}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="#fff"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z"
+          />
+        </svg>
+        {{ dangerMessage }}
+      </ng-template>
+
+      <!-- patient results, used in modal -->
+      <ng-template #patientResults>
+        <div class="modal-header">
+          <h4 class="modal-title">Existing Patient Found</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row current-referral" *ngIf="patientResult.currentReferralId !== null">
+            <div class="col-md-12">
+              <span>
+                ! An active referral exists for this patient !
+              </span>
+            </div>
+          </div>
+          <div class="row" *ngIf="patientResult.nhsNumber !== null">
+            <div class="col-md-4 row-title">
+              NHS Number
+            </div>
+            <div class="col-md-8 row-value">
+              {{ patientResult.nhsNumber }}
+            </div>
+          </div>
+          <div class="row" *ngIf="patientResult.alternativeIdentifier !== null">
+            <div class="col-md-4 row-title">
+              Alternative Identifier
+            </div>
+            <div class="col-md-8 row-value">
+              {{ patientResult.alternativeIdentifier }}
+            </div>
+          </div>
+          <div
+            class="row"
+            *ngIf="patientResult.gpPracticeNameAndPostcode !== null"
+          >
+            <div class="col-md-4 row-title">
+              GP Practice
+            </div>
+            <div class="col-md-8 row-value">
+              {{ patientResult.gpPracticeNameAndPostcode }}
+            </div>
+          </div>
+          <div class="row" *ngIf="patientResult.residentialPostcode !== null">
+            <div class="col-md-4 row-title">
+              Patients Residential Postcode
+            </div>
+            <div class="col-md-8 row-value">
+              {{ patientResult.residentialPostcode }}
+            </div>
+          </div>
+          <div class="row" *ngIf="patientResult.ccgName !== null">
+            <div class="col-md-4 row-title">
+              CCG
+            </div>
+            <div class="col-md-8 row-value">
+              {{ patientResult.ccgName }}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="CancelPatientResultsModal()"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="UseExistingPatient()"
+            *ngIf="patientResult.currentReferralId == null"
+          >
+            Use Existing Details
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="UseExistingReferral()"
+            *ngIf="patientResult.currentReferralId !== null"
+          >
+            Use Existing Referral
+          </button>
+        </div>
       </ng-template>
 
       <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
