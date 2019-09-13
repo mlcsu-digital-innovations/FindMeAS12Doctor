@@ -128,4 +128,8 @@
   margin-left: 15px;
 }
 
+.checkmark-content.less-space {
+  bottom: -5px;
+}
+
 

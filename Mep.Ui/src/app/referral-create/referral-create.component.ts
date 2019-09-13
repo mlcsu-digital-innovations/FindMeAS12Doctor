@@ -30,6 +30,7 @@ export class ReferralCreateComponent implements OnInit {
   gpSearching: boolean;
   gpSearchFailed: boolean;
   gpFieldsShown: boolean;
+  residentialPostcodeFieldShown: boolean;
 
   @ViewChild('dangerTpl', null) dangerTemplate;
   @ViewChild('patientResults', null) patientResultTemplate;
@@ -45,7 +46,7 @@ export class ReferralCreateComponent implements OnInit {
 
   ngOnInit() {
 
-    const postcodeRegex = '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$';
+    const postcodeRegex = '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})|(Unknown)$';
 
     this.patientForm = this.formBuilder.group({
       nhsNumber: [
@@ -72,11 +73,13 @@ export class ReferralCreateComponent implements OnInit {
           Validators.maxLength(8),
           Validators.pattern(postcodeRegex)
         ]
-      ]
+      ],
+      unknownResidentialPostcode: false,
     });
 
     // used for development testing
     this.gpFieldsShown = true;
+    // this.residentialPostcodeFieldShown = true;
   }
 
   get patient() {
@@ -111,14 +114,33 @@ export class ReferralCreateComponent implements OnInit {
     this.gpPracticeField.setValue(gpPractice);
   }
 
-  ToggleGpPracticeUnknown(event: any) {
+  SetResidentialPostcodeField(text: string | null) {
+    this.residentialPostcodeField.setValue(text);
+  }
+
+  async ToggleGpPracticeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the postcode field and set focus
       this.SetGpPracticeField(null, 'Unknown');
+      this.residentialPostcodeFieldShown = true;
+      this.SetFieldFocus('#residentialPostcode');
     } else {
       // ToDo: Hide and clear the residential postcode field
       this.SetGpPracticeField(null, '');
-      this.ResetFocus('#gpPractice');
+      this.SetResidentialPostcodeField('');
+      this.residentialPostcodeFieldShown = false;
+      this.SetFieldFocus('#gpPractice');
+    }
+  }
+
+  ToggleResidentialPostcodeUnknown(event: any) {
+    if (event.target.checked) {
+      // set the field to unknown, show the CCG field and set focus
+      this.SetResidentialPostcodeField('Unknown');
+    } else {
+      // ToDo: Hide and clear the CCG field
+      this.SetResidentialPostcodeField('');
+      this.SetFieldFocus('#residentialPostcode');
     }
   }
 
@@ -209,7 +231,9 @@ export class ReferralCreateComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
 
-  ResetFocus(fieldName: string): void {
+  async SetFieldFocus(fieldName: string) {
+    // ToDo: Find a better way to do this !
+    await this.Delay(150);
     this.renderer.selectRootElement(fieldName).focus();
   }
 
@@ -217,10 +241,7 @@ export class ReferralCreateComponent implements OnInit {
     this.alternativeIdentifierField.setValue('');
     this.nhsNumberField.setValue('');
     this.patientModal.close();
-
-    // ToDo: Find a better way to set focus whilst waiting for modal to close !
-    await this.Delay(150);
-    this.ResetFocus('#nhsNumber');
+    this.SetFieldFocus('#nhsNumber');
   }
 
   async UseExistingPatient() {
@@ -228,11 +249,14 @@ export class ReferralCreateComponent implements OnInit {
 
     this.gpFieldsShown = true;
     this.SetGpPracticeField(this.patientResult.gpPracticeId, this.patientResult.gpPracticeNameAndPostcode);
+    this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
     this.patientModal.close();
+    this.SetFieldFocus('#gpPractice');
 
-    // ToDo: Find a better way to set focus whilst waiting for modal to close !
-    await this.Delay(150);
-    this.ResetFocus('#gpPractice');
+    if (this.patientResult.residentialPostcode !== '') {
+      this.residentialPostcodeFieldShown = true;
+    }
+
   }
 
   UseExistingReferral(): void {
