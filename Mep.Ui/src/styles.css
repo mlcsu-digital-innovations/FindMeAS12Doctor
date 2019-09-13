@@ -1,11 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
-body { background-color: #eee;}
+body {
+  background-color: #eee;
+}
 
 .page-content {
-
-  margin: 0 50px;
-
+  margin: 0 10%;
   min-height:100px;
 }
 
