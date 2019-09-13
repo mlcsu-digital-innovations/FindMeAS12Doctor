@@ -45,6 +45,8 @@ export class ReferralCreateComponent implements OnInit {
 
   ngOnInit() {
 
+    const postcodeRegex = '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$';
+
     this.patientForm = this.formBuilder.group({
       nhsNumber: [
         '',
@@ -56,14 +58,25 @@ export class ReferralCreateComponent implements OnInit {
       ],
       alternativeIdentifier: [
         '',
-        [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]
+        [
+          Validators.maxLength(200),
+          Validators.pattern('.*[0-9].*')
+        ]
       ],
       gpPractice: [''],
-      unknownGpPractice: false
+      unknownGpPractice: false,
+      residentialPostcode: [
+        '',
+        [
+          Validators.minLength(6),
+          Validators.maxLength(8),
+          Validators.pattern(postcodeRegex)
+        ]
+      ]
     });
 
     // used for development testing
-    // this.gpFieldsShown = true;
+    this.gpFieldsShown = true;
   }
 
   get patient() {
@@ -72,6 +85,10 @@ export class ReferralCreateComponent implements OnInit {
 
   get nhsNumberField() {
     return this.patientForm.controls.nhsNumber;
+  }
+
+  get residentialPostcodeField() {
+    return this.patientForm.controls.residentialPostcode;
   }
 
   get alternativeIdentifierField() {
@@ -112,6 +129,18 @@ export class ReferralCreateComponent implements OnInit {
   HasInvalidNHSNumber(): boolean {
     return (
       this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null
+    );
+  }
+
+  HasValidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' && this.residentialPostcodeField.errors == null
+    );
+  }
+
+  HasInvalidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' && this.residentialPostcodeField.errors !== null
     );
   }
 
