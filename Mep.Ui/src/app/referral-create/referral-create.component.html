@@ -126,7 +126,7 @@
         </div>
         <!-- GP Practice Errors-->
         <div class="form-row">
-          <div class="col-md-2 mb-2 reduced-top-margin">
+          <div class="col-md-2 mb-2">
               <span *ngIf="gpSearching">searching...</span>
               <div class="invalid-feedback" *ngIf="gpSearchFailed">
                 Sorry, suggestions could not be loaded.
@@ -152,7 +152,7 @@
               }"
             />
           </div>
-          <div class="col-md-2 mb-2">
+          <div class="col-md-1 mb-1">
             <div class="checkmark-content less-space">
               <label class="container">
                 <input
@@ -168,6 +168,33 @@
               </label>
             </div>
           </div>
+          <div class="col-md-2 mb-2">
+              <div class="column-div">
+                <button
+                  type="button"
+                  class="btn btn-primary less-padding"
+                  placement="right"
+                  ngbTooltip="Check that postcode is valid"
+                  [openDelay]="1000"
+                  [closeDelay]="500"
+                  tooltipClass="subtle-tooltip"
+                  [disabled]="
+                    DisablePostcodeValidationButtonIfFieldIsInvalid() ||
+                    IsSearchingForPostcode()
+                  "
+                  (click)="ValidatePostcode()"
+                  [ngClass]="{ validating: IsSearchingForPostcode() }"
+                >
+                  {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    *ngIf="IsSearchingForPostcode()"
+                  ></span>
+                </button>
+              </div>
+            </div>
         </div>
         <!-- Residential Postcode Errors-->
         <div class="form-row">
@@ -176,7 +203,7 @@
               *ngIf="patient.residentialPostcode.errors"
               class="invalid-field"
             >
-              <span>Invalid Postcode</span>
+              <span>{{residentialPostcodeValidationMessage}}</span>
             </div>
           </div>
         </div>
