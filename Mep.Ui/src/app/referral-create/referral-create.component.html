@@ -127,10 +127,10 @@
         <!-- GP Practice Errors-->
         <div class="form-row">
           <div class="col-md-2 mb-2">
-              <span *ngIf="gpSearching">searching...</span>
-              <div class="invalid-feedback" *ngIf="gpSearchFailed">
-                Sorry, suggestions could not be loaded.
-              </div>
+            <span *ngIf="gpSearching">searching...</span>
+            <div class="invalid-feedback" *ngIf="gpSearchFailed">
+              Sorry, suggestions could not be loaded.
+            </div>
           </div>
         </div>
         <!-- Residential Postcode -->
@@ -169,32 +169,32 @@
             </div>
           </div>
           <div class="col-md-2 mb-2">
-              <div class="column-div">
-                <button
-                  type="button"
-                  class="btn btn-primary less-padding"
-                  placement="right"
-                  ngbTooltip="Check that postcode is valid"
-                  [openDelay]="1000"
-                  [closeDelay]="500"
-                  tooltipClass="subtle-tooltip"
-                  [disabled]="
-                    DisablePostcodeValidationButtonIfFieldIsInvalid() ||
-                    IsSearchingForPostcode()
-                  "
-                  (click)="ValidatePostcode()"
-                  [ngClass]="{ validating: IsSearchingForPostcode() }"
-                >
-                  {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                    *ngIf="IsSearchingForPostcode()"
-                  ></span>
-                </button>
-              </div>
+            <div class="column-div">
+              <button
+                type="button"
+                class="btn btn-primary less-padding"
+                placement="right"
+                ngbTooltip="Check that postcode is valid"
+                [openDelay]="1000"
+                [closeDelay]="500"
+                tooltipClass="subtle-tooltip"
+                [disabled]="
+                  DisablePostcodeValidationButtonIfFieldIsInvalid() ||
+                  IsSearchingForPostcode()
+                "
+                (click)="ValidatePostcode()"
+                [ngClass]="{ validating: IsSearchingForPostcode() }"
+              >
+                {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  *ngIf="IsSearchingForPostcode()"
+                ></span>
+              </button>
             </div>
+          </div>
         </div>
         <!-- Residential Postcode Errors-->
         <div class="form-row">
@@ -203,7 +203,33 @@
               *ngIf="patient.residentialPostcode.errors"
               class="invalid-field"
             >
-              <span>{{residentialPostcodeValidationMessage}}</span>
+              <span>{{ residentialPostcodeValidationMessage }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- CCG -->
+        <div class="form-row" *ngIf="ccgFieldsShown">
+          <div class="col-md-6 mb-6">
+            <label for="ccg">Clinical Commissioning Group</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ccg"
+              #ccg
+              [class.is-invalid]="ccgSearchFailed"
+              formControlName="ccg"
+              [ngbTypeahead]="ccgSearch"
+              [resultFormatter]="FormatCcgMatches"
+              [inputFormatter]="FormatCcgMatches"
+            />
+          </div>
+        </div>
+        <!-- CCG Errors-->
+        <div class="form-row">
+          <div class="col-md-2 mb-2">
+            <span *ngIf="ccgSearching">searching...</span>
+            <div class="invalid-feedback" *ngIf="ccgSearchFailed">
+              Sorry, suggestions could not be loaded.
             </div>
           </div>
         </div>

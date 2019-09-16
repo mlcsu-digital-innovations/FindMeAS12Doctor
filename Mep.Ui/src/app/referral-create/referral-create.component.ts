@@ -9,6 +9,7 @@ import { NhsNumberValidFormat } from "../helpers/nhs-number.validator";
 import { PatientSearchService } from "../services/patient-search/patient-search.service";
 import { ToastService } from "../services/toast/toast.service";
 import { GpPracticeListService } from "../services/gp-practice-list/gp-practice-list.service";
+import { CcgListService } from "../services/ccg-list/ccg-list.service";
 import { PostcodeValidationService } from "../services/postcode-validation/postcode-validation.service";
 
 import { throwError, Observable, of } from "rxjs";
@@ -16,7 +17,7 @@ import { tap, switchMap, catchError, first } from "rxjs/operators";
 
 import { PatientSearchResult } from "../interfaces/patient-search-result";
 import { PatientSearchParams } from "../interfaces/patient-search-params";
-import { GpPractice } from "../interfaces/gp-practice";
+import { TypeAheadResult } from "../interfaces/typeahead-result";
 import { PostcodeSearchResult } from "../interfaces/postcode-search-result";
 
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
@@ -41,6 +42,9 @@ export class ReferralCreateComponent implements OnInit {
   gpFieldsShown: boolean;
   residentialPostcodeFieldShown: boolean;
   residentialPostcodeValidationMessage: string;
+  ccgSearching: boolean;
+  ccgSearchFailed: boolean;
+  ccgFieldsShown: boolean;
 
   @ViewChild("dangerTpl", null) dangerTemplate;
   @ViewChild("patientResults", null) patientResultTemplate;
@@ -52,7 +56,8 @@ export class ReferralCreateComponent implements OnInit {
     private modalService: NgbModal,
     private renderer: Renderer2,
     private gpPracticeListService: GpPracticeListService,
-    private postcodeValidationService: PostcodeValidationService
+    private postcodeValidationService: PostcodeValidationService,
+    private ccgListService: CcgListService
   ) {}
 
   ngOnInit() {
@@ -84,12 +89,14 @@ export class ReferralCreateComponent implements OnInit {
           Validators.pattern(postcodeRegex)
         ]
       ],
-      unknownResidentialPostcode: false
+      unknownResidentialPostcode: false,
+      ccg: [""]
     });
 
     // used for development testing
     this.gpFieldsShown = true;
     this.residentialPostcodeFieldShown = true;
+    this.ccgFieldsShown = true;
   }
 
   get patient() {
@@ -112,6 +119,10 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.gpPractice;
   }
 
+  get ccgField() {
+    return this.patientForm.controls.ccg;
+  }
+
   IsSearchingForPatient(): boolean {
     return this.searchingForPatient;
   }
@@ -121,11 +132,19 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   SetGpPracticeField(id: number | null, text: string | null) {
-    const gpPractice = {} as GpPractice;
+    const gpPractice = {} as TypeAheadResult;
     gpPractice.id = id;
     gpPractice.resultText = text;
 
     this.gpPracticeField.setValue(gpPractice);
+  }
+
+  SetCcgField(id: number | null, text: string | null) {
+    const ccg = {} as TypeAheadResult;
+    ccg.id = id;
+    ccg.resultText = text;
+
+    this.ccgField.setValue(ccg);
   }
 
   SetResidentialPostcodeField(text: string | null) {
@@ -139,7 +158,6 @@ export class ReferralCreateComponent implements OnInit {
       this.residentialPostcodeFieldShown = true;
       this.SetFieldFocus("#residentialPostcode");
     } else {
-      // ToDo: Hide and clear the residential postcode field
       this.SetGpPracticeField(null, "");
       this.SetResidentialPostcodeField("");
       this.residentialPostcodeFieldShown = false;
@@ -151,9 +169,11 @@ export class ReferralCreateComponent implements OnInit {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
       this.SetResidentialPostcodeField("Unknown");
+      this.ccgFieldsShown = true;
     } else {
-      // ToDo: Hide and clear the CCG field
       this.SetResidentialPostcodeField("");
+      this.SetCcgField(null, "");
+      this.ccgFieldsShown = false;
       this.SetFieldFocus("#residentialPostcode");
     }
   }
@@ -202,6 +222,27 @@ export class ReferralCreateComponent implements OnInit {
     );
   }
 
+  FormatCcgMatches(value: any): string {
+    return value.resultText || "";
+  }
+
+  ccgSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.ccgSearching = true)),
+      switchMap(term =>
+        this.ccgListService.GetCcgList(term).pipe(
+          tap(() => (this.ccgSearchFailed = false)),
+          catchError(() => {
+            this.ccgSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.ccgSearching = false))
+    )
+
   FormatGpMatches(value: any): string {
     return value.resultText || "";
   }
@@ -221,7 +262,7 @@ export class ReferralCreateComponent implements OnInit {
         )
       ),
       tap(() => (this.gpSearching = false))
-    );
+    )
 
   DisableIfFieldHasValue(fieldName: string): boolean {
     if (fieldName in this.patientForm.controls) {

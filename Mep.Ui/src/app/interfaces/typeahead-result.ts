@@ -1,4 +1,4 @@
-export interface GpPractice {
+export interface TypeAheadResult {
   id: number | null;
   resultText: string | null;
 }
