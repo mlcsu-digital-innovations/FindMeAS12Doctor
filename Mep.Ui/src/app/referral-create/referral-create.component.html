@@ -223,6 +223,22 @@
               [inputFormatter]="FormatCcgMatches"
             />
           </div>
+          <div class="col-md-2 mb-2">
+            <div class="checkmark-content">
+              <label class="container">
+                <input
+                  class="form-control"
+                  type="checkbox"
+                  value=""
+                  id="unknownCcg"
+                  formControlName="unknownCcg"
+                  (change)="ToggleCcgUnknown($event)"
+                />
+                <span class="checkmark"></span>
+                Unknown
+              </label>
+            </div>
+          </div>
         </div>
         <!-- CCG Errors-->
         <div class="form-row">

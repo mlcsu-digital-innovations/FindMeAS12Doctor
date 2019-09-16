@@ -90,7 +90,8 @@ export class ReferralCreateComponent implements OnInit {
         ]
       ],
       unknownResidentialPostcode: false,
-      ccg: [""]
+      ccg: [""],
+      unknownCcg: false
     });
 
     // used for development testing
@@ -151,7 +152,7 @@ export class ReferralCreateComponent implements OnInit {
     this.residentialPostcodeField.setValue(text);
   }
 
-  async ToggleGpPracticeUnknown(event: any) {
+  ToggleGpPracticeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the postcode field and set focus
       this.SetGpPracticeField(null, "Unknown");
@@ -175,6 +176,17 @@ export class ReferralCreateComponent implements OnInit {
       this.SetCcgField(null, "");
       this.ccgFieldsShown = false;
       this.SetFieldFocus("#residentialPostcode");
+    }
+  }
+
+  ToggleCcgUnknown(event: any) {
+    if (event.target.checked) {
+      // set the field to unknown, show the CCG field and set focus
+      this.SetCcgField(null, "Unknown");
+      // this.ccgFieldsShown = true;
+    } else {
+      this.SetCcgField(null, "");
+      this.SetFieldFocus("#ccg");
     }
   }
 
