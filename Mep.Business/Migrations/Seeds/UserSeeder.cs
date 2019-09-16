@@ -24,7 +24,6 @@ namespace Mep.Business.Migrations.Seeds
         user = new User();
         _context.Add(user);
       }
-
       user.DisplayName = "Doctor Female";
       user.GenderTypeId = 2;
       user.GmcNumber = null;
@@ -44,7 +43,6 @@ namespace Mep.Business.Migrations.Seeds
         user = new User();
         _context.Add(user);
       }
-
       user.DisplayName = "Doctor Male";
       user.GenderTypeId = 1;
       user.GmcNumber = null;
