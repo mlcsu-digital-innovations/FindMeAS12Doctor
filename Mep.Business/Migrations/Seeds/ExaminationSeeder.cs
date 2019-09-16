@@ -25,7 +25,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 1";
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -45,7 +44,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 2";
       examination.CcgId = 1;
       examination.CompletedByUser = GetSystemAdminUser();
@@ -67,7 +65,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 3";
       examination.CcgId = 1;
       examination.CompletedByUser = GetSystemAdminUser();
@@ -87,7 +84,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 4";
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -107,7 +103,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 5";
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -127,7 +122,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 6";
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -147,7 +141,6 @@ namespace Mep.Business.Migrations.Seeds
         examination = new Examination();
         _context.Add(examination);
       }
-
       examination.Address1 = "Examination Address 7";
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
