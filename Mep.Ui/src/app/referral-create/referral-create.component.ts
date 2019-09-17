@@ -245,10 +245,6 @@ export class ReferralCreateComponent implements OnInit {
     return value.resultText || "";
   }
 
-  FormatAmhpMatches(value: any): string {
-    return value.resultText || "";
-  }
-
   amhpSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -266,10 +262,6 @@ export class ReferralCreateComponent implements OnInit {
       tap(() => (this.amhpSearching = false))
     )
 
-  FormatCcgMatches(value: any): string {
-    return value.resultText || "";
-  }
-
   ccgSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -286,10 +278,6 @@ export class ReferralCreateComponent implements OnInit {
       ),
       tap(() => (this.ccgSearching = false))
     )
-
-  FormatGpMatches(value: any): string {
-    return value.resultText || "";
-  }
 
   gpSearch = (text$: Observable<string>) =>
     text$.pipe(

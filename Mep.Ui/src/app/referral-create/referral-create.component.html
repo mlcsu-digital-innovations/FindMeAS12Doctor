@@ -207,6 +207,48 @@
             </div>
           </div>
         </div>
+        <!-- CCG -->
+        <div class="form-row" *ngIf="ccgFieldsShown">
+          <div class="col-md-6 mb-6">
+            <label for="ccg">Clinical Commissioning Group</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ccg"
+              #ccg
+              [class.is-invalid]="ccgSearchFailed"
+              formControlName="ccg"
+              [ngbTypeahead]="ccgSearch"
+              [resultFormatter]="FormatTypeAheadResults"
+              [inputFormatter]="FormatTypeAheadResults"
+            />
+          </div>
+          <div class="col-md-2 mb-2">
+            <div class="checkmark-content">
+              <label class="container">
+                <input
+                  class="form-control"
+                  type="checkbox"
+                  value=""
+                  id="unknownCcg"
+                  formControlName="unknownCcg"
+                  (change)="ToggleCcgUnknown($event)"
+                />
+                <span class="checkmark"></span>
+                Unknown
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- CCG Errors-->
+        <div class="form-row">
+          <div class="col-md-2 mb-2">
+            <span *ngIf="ccgSearching">searching...</span>
+            <div class="invalid-feedback" *ngIf="ccgSearchFailed">
+              Sorry, suggestions could not be loaded.
+            </div>
+          </div>
+        </div>
         <!-- AMHP User -->
         <div class="form-row" *ngIf="amhpFieldsShown">
           <div class="col-md-6 mb-6">
