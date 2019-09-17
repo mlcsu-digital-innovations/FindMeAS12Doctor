@@ -48,3 +48,7 @@ label {
 .card {
   border: 1px solid #bbb;
 }
+
+.modal-header, .modal-body {
+  color: #495057;
+}

@@ -38,6 +38,7 @@ export class ReferralCreateComponent implements OnInit {
   dangerMessage: string;
   patientResult: PatientSearchResult;
   patientModal: NgbModalRef;
+  cancelModal: NgbModalRef;
   gpSearching: boolean;
   gpSearchFailed: boolean;
   gpFieldsShown: boolean;
@@ -52,6 +53,7 @@ export class ReferralCreateComponent implements OnInit {
 
   @ViewChild("dangerTpl", null) dangerTemplate;
   @ViewChild("patientResults", null) patientResultTemplate;
+  @ViewChild("cancelReferral", null) cancelReferralTemplate;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -241,6 +243,25 @@ export class ReferralCreateComponent implements OnInit {
     );
   }
 
+  CancelReferral(): void {
+    this.cancelModal = this.modalService.open(
+      this.cancelReferralTemplate,
+      { size: "lg" }
+    );
+  }
+
+  CancelCancellation(): void {
+    // close the modal
+    this.cancelModal.close();
+  }
+
+  ConfirmCancellation(): void {
+    // close the modal
+    this.cancelModal.close();
+
+    // ToDo: navigate to the previous page
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || "";
   }
@@ -377,8 +398,7 @@ export class ReferralCreateComponent implements OnInit {
         (result: PostcodeSearchResult) => {
           this.searchingForPostcode = false;
 
-          if (result.code) {
-          } else {
+          if (result.code == null) {
             this.residentialPostcodeField.setErrors(null);
             this.residentialPostcodeValidationMessage = 'Unable to validate postcode';
             this.residentialPostcodeField.setErrors({ UnableToValidatePostcode: true });

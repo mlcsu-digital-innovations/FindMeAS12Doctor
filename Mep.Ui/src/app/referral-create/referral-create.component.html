@@ -10,7 +10,7 @@
 
       <form [formGroup]="patientForm" (ngSubmit)="submit()" novalidate>
         <div class="form-row">
-          <div class="col-md-2 mb-2">
+          <div class="col-md-2 offset-md-2 mb-2">
             <label for="nhsNumber">NHS Number</label>
             <input
               type="text"
@@ -77,7 +77,7 @@
         </div>
         <!-- Row for divs showing patient number validation errors -->
         <div class="form-row">
-          <div class="col-md-2 mb-2 reduced-top-margin">
+          <div class="col-md-2 mb-2  offset-md-2 reduced-top-margin">
             <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
               <span>Invalid NHS Number</span>
             </div>
@@ -93,7 +93,7 @@
         </div>
         <!-- GP Practice -->
         <div class="form-row" *ngIf="gpFieldsShown">
-          <div class="col-md-6 mb-6">
+          <div class="col-md-6  offset-md-2 mb-6">
             <label for="gpPractice">GP Practice</label>
             <input
               type="text"
@@ -126,7 +126,7 @@
         </div>
         <!-- GP Practice Errors-->
         <div class="form-row">
-          <div class="col-md-2 mb-2">
+          <div class="col-md-2  offset-md-2 mb-2">
             <span *ngIf="gpSearching">searching...</span>
             <div class="invalid-feedback" *ngIf="gpSearchFailed">
               Sorry, suggestions could not be loaded.
@@ -135,7 +135,7 @@
         </div>
         <!-- Residential Postcode -->
         <div class="form-row" *ngIf="residentialPostcodeFieldShown">
-          <div class="col-md-2 mb-2">
+          <div class="col-md-2  offset-md-2 mb-2">
             <label for="residentialPostcode">Residential Postcode</label>
             <input
               type="text"
@@ -198,7 +198,7 @@
         </div>
         <!-- Residential Postcode Errors-->
         <div class="form-row">
-          <div class="col-md-2 mb-2 reduced-top-margin">
+          <div class="col-md-2 mb-2  offset-md-2 reduced-top-margin">
             <div
               *ngIf="patient.residentialPostcode.errors"
               class="invalid-field"
@@ -209,7 +209,7 @@
         </div>
         <!-- CCG -->
         <div class="form-row" *ngIf="ccgFieldsShown">
-          <div class="col-md-6 mb-6">
+          <div class="col-md-6 offset-md-2 mb-6">
             <label for="ccg">Clinical Commissioning Group</label>
             <input
               type="text"
@@ -242,7 +242,7 @@
         </div>
         <!-- CCG Errors-->
         <div class="form-row">
-          <div class="col-md-2 mb-2">
+          <div class="col-md-2 mb-2 offset-md-2">
             <span *ngIf="ccgSearching">searching...</span>
             <div class="invalid-feedback" *ngIf="ccgSearchFailed">
               Sorry, suggestions could not be loaded.
@@ -251,7 +251,7 @@
         </div>
         <!-- AMHP User -->
         <div class="form-row" *ngIf="amhpFieldsShown">
-          <div class="col-md-6 mb-6">
+          <div class="col-md-6  offset-md-2 mb-6">
             <label for="amhp">Lead AMHP</label>
             <input
               type="text"
@@ -268,11 +268,21 @@
         </div>
         <!-- AMHP User Errors-->
         <div class="form-row">
-          <div class="col-md-2 mb-2">
+          <div class="col-md-2 offset-md-1 mb-2">
             <span *ngIf="amhpSearching">searching...</span>
             <div class="invalid-feedback" *ngIf="amhpSearchFailed">
               Sorry, suggestions could not be loaded.
             </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-2 mb-2">
+            <span>-</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-2 mb-2 offset-md-9">
+            <button class="btn btn-primary" type="button" (click)="CancelReferral()">Cancel</button>
           </div>
         </div>
       </form>
@@ -380,10 +390,23 @@
         </div>
       </ng-template>
 
+      <ng-template #cancelReferral>
+        <div class="modal-header">
+          <h4 class="modal-title">Cancel Referral ?</h4>
+        </div>
+        <div class="modal-body">
+          <h5>Please confirm that you wish to cancel this referral creation. All changes will be lost.</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="CancelCancellation()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="ConfirmCancellation()">Confirm</button>
+        </div>
+      </ng-template>
+
       <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
-      <a href="#" class="card-link">Cancel (does nothing)</a>
-      <a href="#" class="card-link">Save (does nothing)</a>
+      <!-- <a href="#" class="card-link">Cancel (does nothing)</a>
+      <a href="#" class="card-link">Save (does nothing)</a> -->
     </div>
   </div>
 </div>
