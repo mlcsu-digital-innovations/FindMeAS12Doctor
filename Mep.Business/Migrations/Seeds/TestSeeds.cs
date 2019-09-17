@@ -11,13 +11,19 @@ namespace Mep.Business.Migrations.Seeds
 
     public void TestSeedAll()
     {
-      new PatientSeeder(_context).SeedData();
+      new UserSeeder(_context).SeedData();
 
-      new ExaminationSeeder(_context).SeedData();
+      new PatientSeeder(_context).SeedData();
+      
+      new NotificationTextsSeeder(_context).SeedData();
 
       new ReferralSeeder(_context).SeedData();
 
-      new UserSeeder(_context).SeedData();
+      new ExaminationSeeder(_context).SeedData();
+
+      new UserExaminationNotificationSeeder(_context).SeedData();
+
+      // new UserExaminationClaimSeeder(_context).SeedData();
 
       _context.SaveChanges();
     }
