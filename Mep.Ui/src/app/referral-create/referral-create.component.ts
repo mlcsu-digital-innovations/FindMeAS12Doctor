@@ -11,6 +11,7 @@ import { ToastService } from "../services/toast/toast.service";
 import { GpPracticeListService } from "../services/gp-practice-list/gp-practice-list.service";
 import { CcgListService } from "../services/ccg-list/ccg-list.service";
 import { PostcodeValidationService } from "../services/postcode-validation/postcode-validation.service";
+import { AmhpListService } from "../services/amhp-list/amhp-list.service";
 
 import { throwError, Observable, of } from "rxjs";
 import { tap, switchMap, catchError, first } from "rxjs/operators";
@@ -45,6 +46,9 @@ export class ReferralCreateComponent implements OnInit {
   ccgSearching: boolean;
   ccgSearchFailed: boolean;
   ccgFieldsShown: boolean;
+  amhpSearching: boolean;
+  amhpSearchFailed: boolean;
+  amhpFieldsShown: boolean;
 
   @ViewChild("dangerTpl", null) dangerTemplate;
   @ViewChild("patientResults", null) patientResultTemplate;
@@ -57,7 +61,8 @@ export class ReferralCreateComponent implements OnInit {
     private renderer: Renderer2,
     private gpPracticeListService: GpPracticeListService,
     private postcodeValidationService: PostcodeValidationService,
-    private ccgListService: CcgListService
+    private ccgListService: CcgListService,
+    private amhpListService: AmhpListService
   ) {}
 
   ngOnInit() {
@@ -91,13 +96,15 @@ export class ReferralCreateComponent implements OnInit {
       ],
       unknownResidentialPostcode: false,
       ccg: [""],
-      unknownCcg: false
+      unknownCcg: false,
+      amhp: [""]
     });
 
     // used for development testing
     this.gpFieldsShown = true;
     this.residentialPostcodeFieldShown = true;
     this.ccgFieldsShown = true;
+    this.amhpFieldsShown = true;
   }
 
   get patient() {
@@ -233,6 +240,31 @@ export class ReferralCreateComponent implements OnInit {
       this.alternativeIdentifierField.errors == null
     );
   }
+
+  FormatTypeAheadResults(value: any): string {
+    return value.resultText || "";
+  }
+
+  FormatAmhpMatches(value: any): string {
+    return value.resultText || "";
+  }
+
+  amhpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.amhpSearching = true)),
+      switchMap(term =>
+        this.amhpListService.GetAmhpList(term).pipe(
+          tap(() => (this.amhpSearchFailed = false)),
+          catchError(() => {
+            this.ccgSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.amhpSearching = false))
+    )
 
   FormatCcgMatches(value: any): string {
     return value.resultText || "";
