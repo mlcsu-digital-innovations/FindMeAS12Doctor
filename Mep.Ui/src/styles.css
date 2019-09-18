@@ -9,7 +9,7 @@ body {
   min-height:100px;
 }
 
-.invalid-field{ color: #f00;}
+.invalid-field{ color: #f00; font-weight: 600;}
 
 label {
   color:#666;
@@ -51,4 +51,12 @@ label {
 
 .modal-header, .modal-body {
   color: #495057;
+}
+
+.centered {
+  text-align: center;
+}
+
+.standard-button {
+  width: 100px;
 }

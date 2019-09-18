@@ -8,7 +8,7 @@
         Create a new referral and patient (if required)
       </h6>
 
-      <form [formGroup]="patientForm" (ngSubmit)="submit()" novalidate>
+      <form [formGroup]="patientForm" novalidate>
         <div class="form-row">
           <div class="col-md-2 offset-md-2 mb-2">
             <label for="nhsNumber">NHS Number</label>
@@ -18,9 +18,6 @@
               maxlength="10"
               formControlName="nhsNumber"
               id="nhsNumber"
-              [appDisableControl]="
-                DisableIfFieldHasValue('alternativeIdentifier')
-              "
               class="form-control"
               [ngClass]="{
                 'is-invalid': HasInvalidNHSNumber(),
@@ -94,12 +91,13 @@
         <!-- GP Practice -->
         <div class="form-row" *ngIf="gpFieldsShown">
           <div class="col-md-6  offset-md-2 mb-6">
-            <label for="gpPractice">GP Practice</label>
+            <label for="gpPractice">GP Practice {{gpSearchFailed}}</label>
             <input
               type="text"
               class="form-control"
               id="gpPractice"
               #gpPractice
+              [appDisableControl]="!IsPatientIdValidated()"
               [class.is-invalid]="gpSearchFailed"
               formControlName="gpPractice"
               [ngbTypeahead]="gpSearch"
@@ -114,6 +112,7 @@
                   class="form-control"
                   type="checkbox"
                   value=""
+
                   id="unknownGpPractice"
                   formControlName="unknownGpPractice"
                   (change)="ToggleGpPracticeUnknown($event)"
@@ -125,17 +124,17 @@
           </div>
         </div>
         <!-- GP Practice Errors-->
-        <div class="form-row">
-          <div class="col-md-2  offset-md-2 mb-2">
+        <div class="form-row" *ngIf="gpFieldsShown">
+          <div class="col-md-4 offset-md-2 mb-4">
             <span *ngIf="gpSearching">searching...</span>
-            <div class="invalid-feedback" *ngIf="gpSearchFailed">
+            <div class="invalid-field" *ngIf="gpSearchFailed">
               Sorry, suggestions could not be loaded.
             </div>
           </div>
         </div>
         <!-- Residential Postcode -->
         <div class="form-row" *ngIf="residentialPostcodeFieldShown">
-          <div class="col-md-2  offset-md-2 mb-2">
+          <div class="col-md-2 offset-md-2 mb-2">
             <label for="residentialPostcode">Residential Postcode</label>
             <input
               type="text"
@@ -143,6 +142,7 @@
               minlength="6"
               formControlName="residentialPostcode"
               #residentialPostcode
+              [appDisableControl]="!IsPatientIdValidated()"
               id="residentialPostcode"
               oninput="this.value = this.value.toUpperCase()"
               class="form-control"
@@ -158,6 +158,7 @@
                 <input
                   class="form-control"
                   type="checkbox"
+                  [appDisableControl]="!IsPatientIdValidated()"
                   value=""
                   id="unknownResidentialPostcode"
                   formControlName="unknownResidentialPostcode"
@@ -180,7 +181,8 @@
                 tooltipClass="subtle-tooltip"
                 [disabled]="
                   DisablePostcodeValidationButtonIfFieldIsInvalid() ||
-                  IsSearchingForPostcode()
+                  IsSearchingForPostcode() ||
+                  !IsPatientIdValidated()
                 "
                 (click)="ValidatePostcode()"
                 [ngClass]="{ validating: IsSearchingForPostcode() }"
@@ -197,7 +199,7 @@
           </div>
         </div>
         <!-- Residential Postcode Errors-->
-        <div class="form-row">
+        <div class="form-row" *ngIf="residentialPostcodeFieldShown">
           <div class="col-md-2 mb-2  offset-md-2 reduced-top-margin">
             <div
               *ngIf="patient.residentialPostcode.errors"
@@ -216,6 +218,7 @@
               class="form-control"
               id="ccg"
               #ccg
+              [appDisableControl]="!IsPatientIdValidated()"
               [class.is-invalid]="ccgSearchFailed"
               formControlName="ccg"
               [ngbTypeahead]="ccgSearch"
@@ -229,6 +232,7 @@
                 <input
                   class="form-control"
                   type="checkbox"
+                  [appDisableControl]="!IsPatientIdValidated()"
                   value=""
                   id="unknownCcg"
                   formControlName="unknownCcg"
@@ -241,16 +245,16 @@
           </div>
         </div>
         <!-- CCG Errors-->
-        <div class="form-row">
-          <div class="col-md-2 mb-2 offset-md-2">
+        <div class="form-row" *ngIf="ccgFieldsShown">
+          <div class="col-md-4 mb-4 offset-md-2">
             <span *ngIf="ccgSearching">searching...</span>
-            <div class="invalid-feedback" *ngIf="ccgSearchFailed">
+            <div class="invalid-field" *ngIf="ccgSearchFailed">
               Sorry, suggestions could not be loaded.
             </div>
           </div>
         </div>
         <!-- AMHP User -->
-        <div class="form-row" *ngIf="amhpFieldsShown">
+        <div class="form-row">
           <div class="col-md-6  offset-md-2 mb-6">
             <label for="amhp">Lead AMHP</label>
             <input
@@ -258,6 +262,7 @@
               class="form-control"
               id="amhp"
               #amhp
+              [appDisableControl]="!IsPatientIdValidated()"
               [class.is-invalid]="amhpSearchFailed"
               formControlName="amhp"
               [ngbTypeahead]="amhpSearch"
@@ -268,9 +273,9 @@
         </div>
         <!-- AMHP User Errors-->
         <div class="form-row">
-          <div class="col-md-2 offset-md-1 mb-2">
+          <div class="col-md-4 offset-md-2 mb-4">
             <span *ngIf="amhpSearching">searching...</span>
-            <div class="invalid-feedback" *ngIf="amhpSearchFailed">
+            <div class="invalid-field" *ngIf="amhpSearchFailed">
               Sorry, suggestions could not be loaded.
             </div>
           </div>
@@ -281,11 +286,20 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="col-md-2 mb-2 offset-md-9">
-            <button class="btn btn-primary" type="button" (click)="CancelReferral()">Cancel</button>
+          <div class="col-md-1 mb-1 offset-md-6">
+            <button class="btn btn-primary standard-button" type="button" (click)="CancelReferral()">Cancel</button>
+          </div>
+          <div class="col-md-1 mb-1 centered">
+            <button class="btn btn-primary standard-button" type="button" (click)="CreateReferral()" [disabled]="!HasValidReferral()">Save</button>
           </div>
         </div>
       </form>
+
+      <div class="overlay" *ngIf="creatingReferral">
+        <div class="spinner-div spinner-border">
+          <span class="spinner"></span>
+        </div>
+      </div>
 
       <!-- format of danger toast -->
       <ng-template #dangerTpl>
