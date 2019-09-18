@@ -1,5 +1,5 @@
 export interface PatientSearchParams  {
-  AlternativeIdentifier: string | null;
-  NhsNumber: number | null;
-  Postcode: string | null;
+  AlternativeIdentifier?: string;
+  NhsNumber?: number;
+  Postcode?: string;
 }
