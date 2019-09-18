@@ -12,7 +12,6 @@ namespace Mep.Api.RequestModels
     public int? GpPracticeId { get; set; }
     public long? NhsNumber { get; set; }
     [MaxLength(10)]
-    [Required]
     public string ResidentialPostcode { get; set; }
   }
 }
