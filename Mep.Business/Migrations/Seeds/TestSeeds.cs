@@ -23,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
 
       new UserExaminationNotificationSeeder(_context).SeedData();
 
-      // new UserExaminationClaimSeeder(_context).SeedData();
+      new UserExaminationClaimSeeder(_context).SeedData();
 
       _context.SaveChanges();
     }
