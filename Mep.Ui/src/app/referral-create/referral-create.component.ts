@@ -129,7 +129,6 @@ export class ReferralCreateComponent implements OnInit {
     // this.gpFieldsShown = true;
     // this.residentialPostcodeFieldShown = true;
     // this.ccgFieldsShown = true;
-    // this.amhpFieldsShown = true;
   }
 
   get nhsNumber(): string {
@@ -190,11 +189,15 @@ export class ReferralCreateComponent implements OnInit {
     });
 
     this.alternativeIdentifierField.valueChanges.subscribe((val: string) => {
-
-      if (this.patientDetails.AlternativeIdentifier) {
+      if (this.patientDetails.AlternativeIdentifier && this.patientDetails.AlternativeIdentifier !== "") {
         this.patientIdValidated = val.toUpperCase() === this.patientDetails.AlternativeIdentifier.toUpperCase();
       }
     });
+  }
+
+  IsUnknownFieldChecked(fieldName: string): boolean {
+    console.log(this.patientForm.get(fieldName).value);
+    return this.patientForm.get(fieldName).value;
   }
 
   IsSearchingForPatient(): boolean {
@@ -224,10 +227,16 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   HasValidGpOrPostcodeOrCcg(): boolean {
+
+    // All 3 fields can be 'unknown' OR at least 1 field must be populated
+    if (this.gpPractice.id === this.unknownGpPracticeId && this.residentialPostcode === "Unknown" && this.ccg.id === this.unknownCcgId) {
+      return true;
+    }
+
     return (
-      this.gpPractice.id !== undefined ||
-      this.residentialPostcode !== "" ||
-      this.ccg.id !== undefined
+      (this.gpPractice.id && this.gpPractice.id !== this.unknownGpPracticeId) ||
+      (this.residentialPostcode !== "" && this.residentialPostcode !== "Unknown") ||
+      (this.ccg.id && this.ccg.id !== this.unknownCcgId)
     );
   }
 
@@ -419,7 +428,27 @@ export class ReferralCreateComponent implements OnInit {
     // close the modal
     this.cancelModal.close();
 
+    // reset the form
+    this.FormReset();
+
     // ToDo: navigate to the previous page
+  }
+
+  FormReset(): void {
+    this.nhsNumberField.setValue(null);
+    this.alternativeIdentifierField.setValue(null);
+    this.alternativeIdentifierField.markAsUntouched();
+    this.SetGpPracticeField(null, '');
+    this.SetResidentialPostcodeField(null);
+    this.SetCcgField(null, '');
+    this.amhpField.setValue(null);
+
+    this.gpFieldsShown = false;
+    this.residentialPostcodeFieldShown = false;
+    this.ccgFieldsShown = false;
+
+    this.SetFieldFocus("#nhsNumber");
+
   }
 
   FormatTypeAheadResults(value: any): string {
@@ -640,6 +669,8 @@ export class ReferralCreateComponent implements OnInit {
               delay: 5000
             });
             this.patientIdValidated = true;
+            this.patientDetails.NhsNumber = +this.nhsNumber;
+            this.patientDetails.AlternativeIdentifier = this.alternativeIdentifier;
             this.gpFieldsShown = true;
             this.SetFieldFocus("#gpPractice");
             break;
