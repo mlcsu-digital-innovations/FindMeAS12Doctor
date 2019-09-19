@@ -42,6 +42,7 @@ export class ReferralCreateComponent implements OnInit {
   searchingForPostcode: boolean;
   creatingReferral: boolean;
   dangerMessage: string;
+  successMessage: string;
   patientResult: PatientSearchResult;
   patientModal: NgbModalRef;
   cancelModal: NgbModalRef;
@@ -58,11 +59,13 @@ export class ReferralCreateComponent implements OnInit {
   amhpFieldsShown: boolean;
   patientDetails: Patient;
   patientIdValidated: boolean;
+  patientPostcodeValidated: boolean;
 
   unknownGpPracticeId: number;
   unknownCcgId: number;
 
   @ViewChild("dangerTpl", null) dangerTemplate;
+  @ViewChild("successTpl", null) successTemplate;
   @ViewChild("patientResults", null) patientResultTemplate;
   @ViewChild("cancelReferral", null) cancelReferralTemplate;
 
@@ -124,11 +127,6 @@ export class ReferralCreateComponent implements OnInit {
     this.patientIdValidated = false;
 
     this.onChanges();
-
-    // used for development testing
-    // this.gpFieldsShown = true;
-    // this.residentialPostcodeFieldShown = true;
-    // this.ccgFieldsShown = true;
   }
 
   get nhsNumber(): string {
@@ -184,6 +182,8 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   onChanges(): void {
+
+    // fields are NOT validated if they are changed after initial validation
     this.nhsNumberField.valueChanges.subscribe(val => {
       this.patientIdValidated = val === this.patientDetails.NhsNumber;
     });
@@ -193,10 +193,20 @@ export class ReferralCreateComponent implements OnInit {
         this.patientIdValidated = val.toUpperCase() === this.patientDetails.AlternativeIdentifier.toUpperCase();
       }
     });
+
+    this.residentialPostcodeField.valueChanges.subscribe((val: string) => {
+      if (this.patientDetails.ResidentialPostcode && this.patientDetails.ResidentialPostcode !== "") {
+        this.patientPostcodeValidated =
+          this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.ResidentialPostcode).toUpperCase();
+      }
+    });
+  }
+
+  RemoveWhiteSpace(postcode: string): string {
+    return postcode.replace(/ /g, '');
   }
 
   IsUnknownFieldChecked(fieldName: string): boolean {
-    console.log(this.patientForm.get(fieldName).value);
     return this.patientForm.get(fieldName).value;
   }
 
@@ -352,7 +362,8 @@ export class ReferralCreateComponent implements OnInit {
     return (
       this.HasValidNhsNumberOrAlternativeIdentifier() &&
       this.HasValidGpOrPostcodeOrCcg() &&
-      this.HasValidLeadAmhp()
+      this.HasValidLeadAmhp() &&
+      this.patientPostcodeValidated
     );
   }
 
@@ -388,7 +399,8 @@ export class ReferralCreateComponent implements OnInit {
 
     this.referralService.createReferral(referral).subscribe(
       (result: Referral) => {
-        this.toastService.show("Referral Created", {
+        this.successMessage="Referral Created"
+        this.toastService.show(this.successTemplate, {
           classname: "bg-success text-light",
           delay: 5000
         });
@@ -589,12 +601,7 @@ export class ReferralCreateComponent implements OnInit {
     ) {
       this.residentialPostcodeFieldShown = true;
     }
-
-
     this.patientIdValidated = true;
-
-    console.log(this.patientIdValidated);
-
   }
 
   UseExistingReferral(): void {
@@ -623,6 +630,9 @@ export class ReferralCreateComponent implements OnInit {
               UnableToValidatePostcode: true
             });
             this.SetFieldFocus("#residentialPostcode");
+          } else {
+            this.patientDetails.ResidentialPostcode = result.code;
+            this.patientPostcodeValidated = true;
           }
         },
         error => {
@@ -664,9 +674,10 @@ export class ReferralCreateComponent implements OnInit {
         switch (results.length) {
           case 0:
             // no matching patients found, inform user with toast ?
-            this.toastService.show("No existing patients found", {
+            this.successMessage= "No existing patients found";
+            this.toastService.show(this.successTemplate, {
               classname: "bg-success text-light",
-              delay: 5000
+              delay: 3000
             });
             this.patientIdValidated = true;
             this.patientDetails.NhsNumber = +this.nhsNumber;
@@ -688,6 +699,7 @@ export class ReferralCreateComponent implements OnInit {
               classname: "bg-danger text-light",
               delay: 10000
             });
+            this.patientIdValidated = false;
             break;
         }
       },
