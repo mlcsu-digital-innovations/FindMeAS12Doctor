@@ -109,6 +109,9 @@ namespace Mep.Business.Migrations.Seeds
       GpPractice gp;
       DateTimeOffset now = DateTimeOffset.Now;
 
+      // Get Id of Unknown Ccg
+      unknown = _context.Ccgs.Single(c => c.Name == "Unknown");
+
       // create a dummy CCG for Unknown
       if ((gp =
       _context.GpPractices
@@ -124,10 +127,7 @@ namespace Mep.Business.Migrations.Seeds
       gp.Name = "Unknown";
       gp.GpPracticeCode = "XXX";
       gp.Postcode = "";
-      gp.CcgId = 1;
-
-      // Get Id of Unknown Ccg
-      unknown = _context.Ccgs.Single(c => c.Name == "Unknown");
+      gp.CcgId = unknown.Id;
 
       for (int offset = 0; offset < 17000; offset += 1000)
       {
