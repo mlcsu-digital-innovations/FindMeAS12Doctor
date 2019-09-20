@@ -295,11 +295,13 @@ export class ReferralCreateComponent implements OnInit {
       this.SetResidentialPostcodeField("Unknown");
       this.ccgFieldsShown = true;
       this.SetFieldFocus("#ccg");
+      this.patientPostcodeValidated = true;
     } else {
       this.SetResidentialPostcodeField("");
       this.SetCcgField(null, "");
       this.ccgFieldsShown = false;
       this.SetFieldFocus("#residentialPostcode");
+      this.patientPostcodeValidated = false;
     }
   }
 
