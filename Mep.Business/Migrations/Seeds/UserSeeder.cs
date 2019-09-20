@@ -17,6 +17,9 @@ namespace Mep.Business.Migrations.Seeds
       User user;
       DateTimeOffset now = DateTimeOffset.Now;
 
+      GenderType maleGender = _context.GenderTypes.Where(gender => gender.Name == "Male").FirstOrDefault();
+      GenderType femaleGender = _context.GenderTypes.Where(gender => gender.Name == "Female").FirstOrDefault();
+
       if ((user =
       _context.Users
                 .SingleOrDefault(g => g.DisplayName == "Doctor Female")) == null)
@@ -25,7 +28,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(user);
       }
       user.DisplayName = "Doctor Female";
-      user.GenderTypeId = 2;
+      user.GenderTypeId = femaleGender.Id;
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
@@ -44,7 +47,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(user);
       }
       user.DisplayName = "Doctor Male";
-      user.GenderTypeId = 1;
+      user.GenderTypeId = maleGender.Id;
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();

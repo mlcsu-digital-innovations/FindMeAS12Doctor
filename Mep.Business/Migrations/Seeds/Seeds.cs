@@ -11,6 +11,9 @@ namespace Mep.Business.Migrations.Seeds
 
     public void SeedAll()
     {
+      new SystemAdminUserSeeder(_context).SeedData();
+      _context.SaveChanges();
+
       // create all CCGs
       new CcgSeeder(_context).SeedData();
       _context.SaveChanges();
@@ -21,7 +24,7 @@ namespace Mep.Business.Migrations.Seeds
 
       new GenderTypeSeeder(_context).SeedData();
 
-      new SystemAdminUserSeeder(_context).SeedData();
+
 
       new SpecialitySeeder(_context).SeedData();
 

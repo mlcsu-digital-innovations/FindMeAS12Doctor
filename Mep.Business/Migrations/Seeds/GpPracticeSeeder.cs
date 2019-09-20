@@ -72,24 +72,31 @@ namespace Mep.Business.Migrations.Seeds
               try
               {
                 // RO98 is the code for CCGs
-                SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel.First(r => r.Target.PrimaryRoleId.Id == "RO98");
+                SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel.FirstOrDefault(r => r.Target.PrimaryRoleId.Id == "RO98");
 
-                string extension = relationship.Target.OrgId.Extension;
+                if (relationship != null)
+                {
+                  string extension = relationship.Target.OrgId.Extension;
 
-                try
-                {
-                  // Ccg ccg = _context.Ccgs.Single(x => x.Name.Contains($"[{extension}]"));
-                  Ccg ccg = _context.Ccgs.Single(x => x.ShortCode == extension);
-                  gpPractice.CcgId = ccg.Id;
-                }
-                catch
-                {
-                  //TODO - log the error
+                  try
+                  {
+                    // Ccg ccg = _context.Ccgs.Single(x => x.Name.Contains($"[{extension}]"));
+                    Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
+                    if (ccg != null) {
+                      gpPractice.CcgId = ccg.Id;
+                    }                    
+                  }
+                  catch (Exception ex)
+                  {
+                    //TODO - log the error
+                    Console.WriteLine(ex.Message);
+                  }
                 }
               }
-              catch
+              catch (Exception ex)
               {
                 //TODO - log the error
+                Console.WriteLine(ex.Message);
               }
             }
           }
@@ -99,6 +106,26 @@ namespace Mep.Business.Migrations.Seeds
 
     internal void SeedData()
     {
+      GpPractice gp;
+      DateTimeOffset now = DateTimeOffset.Now;
+
+      // create a dummy CCG for Unknown
+      if ((gp =
+      _context.GpPractices
+              .SingleOrDefault(g => g.Name == "Unknown")) == null)
+      {
+        gp = new GpPractice();
+        _context.Add(gp);
+      }
+
+      gp.IsActive = true;
+      gp.ModifiedAt = now;
+      gp.ModifiedByUser = GetSystemAdminUser();
+      gp.Name = "Unknown";
+      gp.GpPracticeCode = "XXX";
+      gp.Postcode = "";
+      gp.CcgId = 1;
+
       // Get Id of Unknown Ccg
       unknown = _context.Ccgs.Single(c => c.Name == "Unknown");
 
