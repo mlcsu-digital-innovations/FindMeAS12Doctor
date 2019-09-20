@@ -13,9 +13,7 @@ namespace Mep.Data.Entities
     public string Address2 { get; set; }
     [MaxLength(200)]
     public string Address3 { get; set; }
-    // public virtual CcgAudit Ccg { get; set; }
     public int CcgId { get; set; }
-    // public virtual ContactDetailTypeAudit ContactDetailType { get; set; }
     public int ContactDetailTypeId { get; set; }
     [MaxLength(100)]
     public string EmailAddress { get; set; }
@@ -25,7 +23,6 @@ namespace Mep.Data.Entities
     public string Postcode { get; set; }
     public int? TelephoneNumber { get; set; }
     public string Town { get; set; }
-    // public virtual UserAudit User { get; set; }
     public int UserId { get; set; }
   }
 }

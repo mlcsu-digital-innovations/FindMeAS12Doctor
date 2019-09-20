@@ -3,3 +3,5 @@
 Mep.Api/MedicalExaminationsPortal.db
 .scannerwork/**
 .sonarqube/**
+node_modules
+Mep.Ui/dist/*

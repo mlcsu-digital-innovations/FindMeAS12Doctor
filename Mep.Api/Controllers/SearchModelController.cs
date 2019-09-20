@@ -16,21 +16,23 @@ namespace Mep.Api.Controllers
                                         PutRequestModel,
                                         PostRequestModel,
                                         ApiSearchModel,
-                                        BusinessSearchModel>
+                                        BusinessSearchModel,
+                                        RequestedViewModel>
       : ModelController<BusinessModel,
-                                        ViewModel,
-                                        PutRequestModel,
-                                        PostRequestModel> where BusinessModel : Business.Models.BaseModel
+                        ViewModel,
+                        PutRequestModel,
+                        PostRequestModel> 
+                       where BusinessModel : Business.Models.BaseModel
                        where ViewModel : class
                        where PutRequestModel : class
                        where PostRequestModel : class
                        where ApiSearchModel : class
                        where BusinessSearchModel : Business.Models.SearchModels.BaseSearchModel
+                       where RequestedViewModel : class
   {
-
     new protected readonly IModelSearchService<BusinessModel, BusinessSearchModel> _service;
 
-    public SearchModelController(IModelSearchService<BusinessModel, BusinessSearchModel> service, IMapper mapper) : base(service, mapper) 
+    protected SearchModelController(IModelSearchService<BusinessModel, BusinessSearchModel> service, IMapper mapper) : base(service, mapper) 
     {
       _service = service;
     }
@@ -43,7 +45,7 @@ namespace Mep.Api.Controllers
         BusinessSearchModel businessSearchModel = _mapper.Map<BusinessSearchModel>(searchModel);
         IEnumerable<BusinessModel> results = await _service.SearchAsync(businessSearchModel);
 
-        IEnumerable<ViewModel> viewModels = _mapper.Map<IEnumerable<ViewModel>>(results);
+        IEnumerable<RequestedViewModel> viewModels = _mapper.Map<IEnumerable<RequestedViewModel>>(results);
         return Ok(viewModels);
       }
       else

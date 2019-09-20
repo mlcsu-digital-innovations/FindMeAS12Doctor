@@ -36,38 +36,19 @@ namespace Mep.Business.Services
       return models;
     }
 
-    public async Task<IEnumerable<Models.Referral>> GetAllDetailsAsync(
-      bool activeOnly)
+    protected override async Task<Entities.Referral> GetEntityLinkedObjectsAsync(Referral model, Entities.Referral entity)
     {
 
-      IEnumerable<Entities.Referral> entities =
-        await _context.Referrals
-                .Include(r => r.CreatedByUser)
-                .Include(r => r.Examinations)
-                .Include(r => r.Patient)
-                .Include(r => r.ReferralStatus)
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .ToListAsync();
+      entity.Patient = await GetLinkedObjectAsync<Entities.Patient>(_context.Patients, model.PatientId);
+      entity.CreatedByUser = await GetLinkedObjectAsync<Entities.User>(_context.Users, model.CreatedByUserId);
+      entity.ReferralStatus = await GetLinkedObjectAsync<Entities.ReferralStatus>(_context.ReferralStatuses, model.ReferralStatusId);
 
-      IEnumerable<Models.Referral> models =
-        _mapper.Map<IEnumerable<Models.Referral>>(entities);
-
-      return models;
-    }
-
-
-    protected override async Task<Entities.Referral> GetEntityLinkedObjectsAsync(Referral model, Entities.Referral entity) {
-
-        entity.Patient = await GetLinkedObjectAsync<Entities.Patient>(_context.Patients, model.PatientId);
-        entity.CreatedByUser =await GetLinkedObjectAsync<Entities.User>(_context.Users, model.CreatedByUserId);
-        entity.ReferralStatus =await GetLinkedObjectAsync<Entities.ReferralStatus>(_context.ReferralStatuses, model.ReferralStatusId);
-               
-        return entity;
+      return entity;
     }
 
 
     protected override async Task<Entities.Referral> GetEntityByIdAsync(
-      int id,
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
@@ -79,7 +60,7 @@ namespace Mep.Business.Services
                 .Include(r => r.ReferralStatus)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(referral => referral.Id == entityId);
 
       return entity;
     }
