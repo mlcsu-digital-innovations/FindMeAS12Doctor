@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Mep.Business.Models.SearchModels;
 using System.Collections.Generic;
+using Mep.Business.Exceptions;
 
 namespace Mep.Business.Services
 {
@@ -19,7 +20,7 @@ namespace Mep.Business.Services
     protected readonly string _typeName;
 
     protected abstract Task<TEntity> GetEntityByIdAsync(
-      int userId,
+      int entityId,
       bool asNoTracking,
       bool activeOnly);
 
@@ -45,8 +46,7 @@ namespace Mep.Business.Services
       TEntity userEntity = await GetEntityByIdAsync(id, true, activeOnly);
       if (userEntity == null)
       {
-        //TODO: Create a specific exception
-        throw new Exception($"{_typeName} with an id of {id} does not exist.");
+        throw new EntityNotFoundException(_typeName, id);
       }
       else
       {
@@ -55,7 +55,7 @@ namespace Mep.Business.Services
       }
     }
 
-    public ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
+    protected ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
     {
       _typeName = typeName;
       _context = context;
@@ -86,16 +86,12 @@ namespace Mep.Business.Services
         }
         catch (Exception ex)
         {
-          //TODO: catch and create 
-          throw new Exception($"Failed to create {_typeName}.", ex);
+          throw new EntityCreationException(_typeName, ex);
         }
       }
       else
       {
-        //TODO: Create a specific exception
-        throw new Exception(
-          $"A {(entity.IsActive ? "" : "deleted")} " +
-          $"{_typeName} with an id of {model.Id} already exists.");
+        throw new EntityExistsException(entity.IsActive, _typeName, model.Id);
       }
     }
 
@@ -117,8 +113,7 @@ namespace Mep.Business.Services
 
       if (entity == null)
       {
-        //TODO: Create a specific exception
-        throw new Exception($"A {_typeName} with an id of {model.Id} does not exist.");
+        throw new EntityNotFoundException(_typeName, model.Id);
       }
       else
       {
@@ -149,8 +144,7 @@ namespace Mep.Business.Services
         var entityType = entityTypes.First(t => t.ClrType == typeof(T));
         var tableNameAnnotation = entityType.GetAnnotations().First(a => a.Name == "Relational:TableName");
         var tableName = tableNameAnnotation.Value.ToString();
-        //TODO: Create a specific exception
-        throw new Exception($"Table [{tableName}] does not contain a row with an id of {propertyId}");
+        throw new EntityNotFoundInTableException(tableName, propertyId);
       }
     }
 
@@ -168,8 +162,7 @@ namespace Mep.Business.Services
 
       if (entity == null)
       {
-        //TODO: Create a specific exception
-        throw new Exception($"{typeof(TEntity).Name} with an id of {model.Id} does not exist.");
+        throw new EntityNotFoundException(typeof(TEntity).Name, model.Id);
       }
       else
       {
@@ -189,14 +182,11 @@ namespace Mep.Business.Services
 
       if (entity == null)
       {
-        //TODO: Create a specific exception
-        throw new Exception($"{typeof(TEntity).Name} with an id of {id} does not exist.");
+        throw new EntityNotFoundException(typeof(TEntity).Name, id);
       }
       else if (entity.IsActive == isActivating)
       {
-        //TODO: Create a specific exception
-        throw new Exception(
-          $"{typeof(TEntity).Name} with an id of {id} is already {(isActivating ? "active" : "inactive")}.");
+        throw new EntityAlreadyActiveException(isActivating, typeof(TEntity).Name, id);
       }
       else
       {

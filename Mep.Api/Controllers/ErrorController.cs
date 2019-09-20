@@ -11,7 +11,7 @@ namespace Mep.Api.Controllers
     [Route("[controller]")]
     public class ErrorController : ControllerBase
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public ErrorController(ILogger<ErrorController> logger)
         {

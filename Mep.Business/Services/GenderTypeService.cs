@@ -32,7 +32,7 @@ namespace Mep.Business.Services
     }
 
     protected override async Task<Entities.GenderType> GetEntityByIdAsync(
-      int id, 
+      int entityId, 
       bool asNoTracking,
       bool activeOnly)
     {
@@ -40,7 +40,7 @@ namespace Mep.Business.Services
         _context.GenderTypes
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(genderType => genderType.Id == entityId);
 
       return entity;  
     }

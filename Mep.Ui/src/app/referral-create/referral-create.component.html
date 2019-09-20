@@ -1,0 +1,52 @@
+<!-- standard navbar -->
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="card" style="width: 100%;">
+    <div class="card-body">
+      <h5 class="card-title">Create New Referral</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Create a new referral and patient (if required)</h6>
+
+      <form [formGroup]="patientForm" (ngSubmit)="submit()" novalidate>
+        <div class="form-row">
+          <div class="col-md-2 mb-2">
+            <label for="nhsNumber">NHS Number</label>
+            <input
+              type="text"
+              digitOnly
+              maxlength="10"
+              formControlName="nhsNumber"
+              [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': HasInvalidNHSNumber(), 'is-valid': HasValidNHSNumber()}"
+            />
+            <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
+              <span>Invalid NHS Number</span>
+            </div>
+          </div>
+          <div class="col-md-1 mb-1">
+            <div class="or-class">
+              <span>Or</span>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="alternativeIdentifier">Alternative Identifier</label>
+            <input
+              type="text"
+              maxlength="200"
+              formControlName="alternativeIdentifier"
+              [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': HasInvalidAlternativeIdentifier(), 'is-valid': HasValidAlternativeIdentifier()}"
+            />
+            <div *ngIf="patient.alternativeIdentifier.errors" class="invalid-field">
+              <span>Invalid Alternative Identifier</span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <a href="#" class="card-link">Cancel (does nothing)</a>
+      <a href="#" class="card-link">Save (does nothing)</a>
+    </div>
+  </div>
+</div>

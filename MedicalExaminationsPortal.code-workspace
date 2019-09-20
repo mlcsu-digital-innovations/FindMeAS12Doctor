@@ -8,6 +8,10 @@
 		"editor.tabSize": 2,
     "editor.detectIndentation": false,
     "omnisharp.enableRoslynAnalyzers": true,
-    "workbench.colorCustomizations": {}
+    "workbench.colorCustomizations": {},
+    "git.ignoreLimitWarning": true,
+    "team.remoteUrl": " https://einnovationteam-mlcsu.visualstudio.com",
+    "team.teamProject": "Medical Examinations Portal",
+    "team.buildDefinitionId": 92
 	}
 }

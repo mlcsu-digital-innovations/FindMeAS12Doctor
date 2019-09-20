@@ -10,7 +10,7 @@ namespace Mep.Business.Services
 {
   public class LocationDetailService : IDisposable
   {
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
     bool disposed = false;
 
     public LocationDetailService(IMapper mapper)
@@ -35,6 +35,7 @@ namespace Mep.Business.Services
     public void Dispose()
     {
       Dispose(true);
+      GC.SuppressFinalize(this);
     }
 
     protected virtual void Dispose(bool disposing) {
