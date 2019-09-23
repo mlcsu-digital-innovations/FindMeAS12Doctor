@@ -24,7 +24,7 @@ namespace Mep.Api
         }
         else if (args.Length > 0 && args[0] == "/seedtest")
         {
-          Log.Information("Seeding test database");
+          Log.Information("Seeding database with test data");
           host.SeedTestData();
         }
         else
