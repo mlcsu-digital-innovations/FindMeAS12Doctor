@@ -11,8 +11,6 @@ export class PatientService {
 
   public createPatient(newPatient: Patient ) {
 
-    console.log(newPatient);
-
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post(

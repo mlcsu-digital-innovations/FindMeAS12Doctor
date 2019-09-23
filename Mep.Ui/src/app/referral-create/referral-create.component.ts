@@ -361,11 +361,11 @@ export class ReferralCreateComponent implements OnInit {
     // NHS number OR Alternative Identifier
     // GP Practice Or Postcode OR CCG
     // Lead AMHP details
+
     return (
       this.HasValidNhsNumberOrAlternativeIdentifier() &&
       this.HasValidGpOrPostcodeOrCcg() &&
-      this.HasValidLeadAmhp() &&
-      this.patientPostcodeValidated
+      this.HasValidLeadAmhp()
     );
   }
 
