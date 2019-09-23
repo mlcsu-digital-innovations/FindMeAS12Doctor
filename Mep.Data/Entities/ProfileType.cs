@@ -7,5 +7,12 @@ namespace Mep.Data.Entities
   {
     [InverseProperty("ProfileType")]
     public virtual IList<User> Users { get; set; }
+
+    [NotMapped]
+    public bool IsAmhp {
+      get{
+        return this.Name == "AMHP";
+      }
+    }
   }
 }
