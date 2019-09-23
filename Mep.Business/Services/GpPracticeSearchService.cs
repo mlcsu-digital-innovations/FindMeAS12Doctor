@@ -25,13 +25,14 @@ namespace Mep.Business.Services
       }
       else
       {
-
-        IQueryable<Data.Entities.GpPractice> query = _context.GpPractices.WhereIsActiveOrActiveOnly(true);
+        IQueryable<Data.Entities.GpPractice> query = 
+          _context.GpPractices.WhereIsActiveOrActiveOnly(true);
 
         string[] searchParams = searchString.Split(' ');
 
         foreach (string searchParam in searchParams) {
-          query = query.Where(gp => gp.Name.Contains(searchParam) || gp.Postcode.Contains(searchParam));
+          query = 
+            query.Where(gp => gp.Name.Contains(searchParam) || gp.Postcode.Contains(searchParam));
         }
 
         IEnumerable<GeneralSearchResult> entities =
