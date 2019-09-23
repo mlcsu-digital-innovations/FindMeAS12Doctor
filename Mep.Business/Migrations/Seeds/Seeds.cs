@@ -24,7 +24,23 @@ namespace Mep.Business.Migrations.Seeds
 
       new GenderTypeSeeder(_context).SeedData();
 
+      new SpecialitySeeder(_context).SeedData();
 
+      new ReferralStatusSeeder(_context).SeedData();
+
+      _context.SaveChanges();
+    }
+
+    public void SeedAllNoGp()
+    {
+      new SystemAdminUserSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      // create all CCGs
+      new CcgSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new GenderTypeSeeder(_context).SeedData();
 
       new SpecialitySeeder(_context).SeedData();
 

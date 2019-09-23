@@ -26,6 +26,23 @@ namespace Mep.Api.Extensions
       }
     }
 
+    public static IWebHost SeedDataNoGp(this IWebHost host)
+    {
+      using (var scope = host.Services.CreateScope())
+      {
+        IServiceProvider services = scope.ServiceProvider;
+        ApplicationContext context = services.GetRequiredService<ApplicationContext>();
+
+        // now we have the DbContext. Run migrations
+        context.Database.Migrate();
+
+        // now that the database is up to date. Let's seed
+        new Seeds(context).SeedAllNoGp();
+
+        return host;
+      }
+    }
+
     public static IWebHost SeedTestData(this IWebHost host)
     {
       using (var scope = host.Services.CreateScope())

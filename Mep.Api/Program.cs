@@ -22,6 +22,11 @@ namespace Mep.Api
           Log.Information("Seeding database");
           host.SeedData();
         }
+        else if (args.Length > 0 && args[0] == "/seednogp")
+        {
+          Log.Information("Seeding database without GP Data");
+          host.SeedDataNoGp();
+        }
         else if (args.Length > 0 && args[0] == "/seedtest")
         {
           Log.Information("Seeding database with test data");
