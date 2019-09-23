@@ -32,7 +32,8 @@ namespace Mep.Business.Services
 
         foreach (string searchParam in searchParams) {
           query = 
-            query.Where(gp => gp.Name.Contains(searchParam) || gp.Postcode.Contains(searchParam));
+            query.Where(gp => gp.Name.Contains(searchParam) ||
+              gp.Postcode.Contains(searchParam));
         }
 
         IEnumerable<GeneralSearchResult> entities =
