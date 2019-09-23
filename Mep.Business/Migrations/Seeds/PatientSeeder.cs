@@ -19,7 +19,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((patient =
             _context.Patients
-                    .SingleOrDefault(p => p.NhsNumber == 2750059135)) == null)
+                    .SingleOrDefault(p => p.NhsNumber == 9486844275)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -31,14 +31,14 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = 2750059135;
+      patient.NhsNumber = 9486844275;
       patient.ResidentialPostcode = "ST3 7HH";
 
       // patient with NHS number
 
       if ((patient =
             _context.Patients
-                    .SingleOrDefault(p => p.NhsNumber == 7468635357)) == null)
+                    .SingleOrDefault(p => p.NhsNumber == 9657966272)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -50,14 +50,14 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = 7468635357;
+      patient.NhsNumber = 9657966272;
       patient.ResidentialPostcode = "ST7 4UZ";
 
       // patient with NHS number
 
       if ((patient =
       _context.Patients
-              .SingleOrDefault(p => p.NhsNumber == 4786431806)) == null)
+              .SingleOrDefault(p => p.NhsNumber == 9070304333)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -69,14 +69,14 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = 4786431806;
+      patient.NhsNumber = 9070304333;
       patient.ResidentialPostcode = "ST5 1NE";
 
       // patient with NHS number
 
       if ((patient =
       _context.Patients
-        .SingleOrDefault(p => p.NhsNumber == 7510496667)) == null)
+        .SingleOrDefault(p => p.NhsNumber == 9813607416)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -88,7 +88,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = 7510496667;
+      patient.NhsNumber = 9813607416;
       patient.ResidentialPostcode = "ST4 4LX";
 
       // patient with alternative identifier
