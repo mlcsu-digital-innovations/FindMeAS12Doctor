@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -26,8 +25,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with a current examination with no allocated doctors or notification responses
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient1.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient1.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -46,8 +45,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with a previous examination
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient2.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient2.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -66,8 +65,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with no examinations
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient3.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient3.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -86,8 +85,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with both current and previous examinations
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient4.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient4.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -106,8 +105,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with current examination and allocated doctors
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient5.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient5.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -126,8 +125,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with current examination and notification responses
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient6.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient6.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -146,8 +145,8 @@ namespace Mep.Business.Migrations.Seeds
       // referral with current examination and notification responses and allocated doctors
 
       if ((referral =
-      _context.Referrals
-                .SingleOrDefault(g => g.PatientId == patient7.Id)) == null)
+        _context.Referrals
+          .SingleOrDefault(g => g.PatientId == patient7.Id)) == null)
       {
         referral = new Referral();
         _context.Add(referral);

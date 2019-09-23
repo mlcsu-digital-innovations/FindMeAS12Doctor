@@ -11,7 +11,6 @@ namespace Mep.Api
     public static int Main(string[] args)
     {
 
-
       try
       {
         Log.Information("Starting web host");

@@ -1,5 +1,3 @@
-using Mep.Data.Entities;
-
 namespace Mep.Business.Migrations.Seeds
 {
   public class Seeds : SeederBase

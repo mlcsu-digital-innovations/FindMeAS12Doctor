@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -18,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with NHS number
 
       if ((patient =
-            _context.Patients
-                    .SingleOrDefault(p => p.NhsNumber == 9486844275)) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.NhsNumber == 9486844275)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -37,8 +36,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with NHS number
 
       if ((patient =
-            _context.Patients
-                    .SingleOrDefault(p => p.NhsNumber == 9657966272)) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.NhsNumber == 9657966272)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -56,8 +55,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with NHS number
 
       if ((patient =
-      _context.Patients
-              .SingleOrDefault(p => p.NhsNumber == 9070304333)) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.NhsNumber == 9070304333)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -75,8 +74,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with NHS number
 
       if ((patient =
-      _context.Patients
-        .SingleOrDefault(p => p.NhsNumber == 9813607416)) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.NhsNumber == 9813607416)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -94,8 +93,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with alternative identifier
 
       if ((patient =
-      _context.Patients
-        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #5")) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #5")) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -113,8 +112,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with alternative identifier
 
       if ((patient =
-      _context.Patients
-        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #6")) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #6")) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -132,8 +131,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with alternative identifier
 
       if ((patient =
-      _context.Patients
-        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #7")) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #7")) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -151,8 +150,8 @@ namespace Mep.Business.Migrations.Seeds
       // patient with alternative identifier
 
       if ((patient =
-      _context.Patients
-        .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #8")) == null)
+        _context.Patients
+          .SingleOrDefault(p => p.AlternativeIdentifier == "Test Patient #8")) == null)
       {
         patient = new Patient();
         _context.Add(patient);

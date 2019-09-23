@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -23,8 +22,8 @@ namespace Mep.Business.Migrations.Seeds
       // notification for referral with current examination and notification responses
 
       if ((userExaminationNotification =
-      _context.UserExaminationNotifications
-                .SingleOrDefault(g => g.ExaminationId == examination6.Id)) == null)
+        _context.UserExaminationNotifications
+          .SingleOrDefault(g => g.ExaminationId == examination6.Id)) == null)
       {
         userExaminationNotification = new UserExaminationNotification();
         _context.Add(userExaminationNotification);
@@ -41,8 +40,8 @@ namespace Mep.Business.Migrations.Seeds
       // notification for referral with current examination and notification responses and allocated doctors
 
       if ((userExaminationNotification =
-      _context.UserExaminationNotifications
-                .SingleOrDefault(g => g.ExaminationId == examination7.Id)) == null)
+        _context.UserExaminationNotifications
+          .SingleOrDefault(g => g.ExaminationId == examination7.Id)) == null)
       {
         userExaminationNotification = new UserExaminationNotification();
         _context.Add(userExaminationNotification);

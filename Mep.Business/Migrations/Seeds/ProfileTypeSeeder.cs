@@ -8,7 +8,7 @@ namespace Mep.Business.Migrations.Seeds
   {
     internal ProfileTypeSeeder(ApplicationContext context)
       : base(context)
-    {      
+    {
     }
 
     internal void SeedData()

@@ -6,9 +6,9 @@ namespace Mep.Business.Migrations.Seeds
   internal class SystemAdminUserSeeder : SeederBase
   {
 
-    internal SystemAdminUserSeeder(ApplicationContext context) 
+    internal SystemAdminUserSeeder(ApplicationContext context)
       : base(context)
-    {     
+    {
     }
 
     internal void SeedData()
@@ -27,13 +27,13 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.DisplayName = "System Admin User";
 
       Organisation systemOrganisation;
-      if ((systemOrganisation = 
-            _context.Organisations
-                    .SingleOrDefault(o => o.Name == "System Organisation")) == null)
+      if ((systemOrganisation =
+        _context.Organisations
+          .SingleOrDefault(o => o.Name == "System Organisation")) == null)
       {
         systemOrganisation = new Organisation();
         _context.Add(systemOrganisation);
-      }  
+      }
 
       systemOrganisation.Description = "System Organisation Description";
       systemOrganisation.IsActive = false;
@@ -41,15 +41,15 @@ namespace Mep.Business.Migrations.Seeds
       systemOrganisation.Name = "System Organisation";
 
       systemAdminUser.Organisation = systemOrganisation;
-      
+
       ProfileType systemProfileType;
-      if ((systemProfileType = 
-            _context.ProfileTypes
-                    .SingleOrDefault(o => o.Name == "System ProfileType")) == null)
+      if ((systemProfileType =
+        _context.ProfileTypes
+          .SingleOrDefault(o => o.Name == "System ProfileType")) == null)
       {
         systemProfileType = new ProfileType();
         _context.Add(systemProfileType);
-      }  
+      }
 
       systemProfileType.Description = "System ProfileType Description";
       systemProfileType.IsActive = false;

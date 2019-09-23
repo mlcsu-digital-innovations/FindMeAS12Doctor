@@ -43,8 +43,8 @@ namespace Mep.Business.Migrations.Seeds
           bool validOrganisation = false;
 
           if ((gpPractice =
-                _context.GpPractices
-                        .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
+            _context.GpPractices
+              .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
           {
             gpPractice = new GpPractice();
             _context.Add(gpPractice);
@@ -79,9 +79,10 @@ namespace Mep.Business.Migrations.Seeds
                   try
                   {
                     Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
-                    if (ccg != null) {
+                    if (ccg != null)
+                    {
                       gpPractice.CcgId = ccg.Id;
-                    }                    
+                    }
                   }
                   catch (Exception ex)
                   {

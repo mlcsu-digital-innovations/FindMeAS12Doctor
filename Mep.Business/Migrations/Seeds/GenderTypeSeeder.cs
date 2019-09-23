@@ -15,8 +15,8 @@ namespace Mep.Business.Migrations.Seeds
       GenderType genderType;
 
       if ((genderType =
-            _context.GenderTypes
-                    .SingleOrDefault(g => g.Name == "Male")) == null)
+        _context.GenderTypes
+          .SingleOrDefault(g => g.Name == "Male")) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);
@@ -29,8 +29,8 @@ namespace Mep.Business.Migrations.Seeds
       genderType.Description = "Male";
 
       if ((genderType =
-      _context.GenderTypes
-              .SingleOrDefault(g => g.Name == "Female")) == null)
+        _context.GenderTypes
+          .SingleOrDefault(g => g.Name == "Female")) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);

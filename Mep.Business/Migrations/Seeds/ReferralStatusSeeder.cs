@@ -15,8 +15,8 @@ namespace Mep.Business.Migrations.Seeds
       ReferralStatus referralStatus;
 
       if ((referralStatus =
-            _context.ReferralStatuses
-                    .SingleOrDefault(g => g.Name == "New Referral")) == null)
+        _context.ReferralStatuses
+          .SingleOrDefault(g => g.Name == "New Referral")) == null)
       {
         referralStatus = new ReferralStatus();
         _context.Add(referralStatus);

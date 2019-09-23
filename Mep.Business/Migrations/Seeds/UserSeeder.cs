@@ -20,8 +20,8 @@ namespace Mep.Business.Migrations.Seeds
       GenderType femaleGender = _context.GenderTypes.Where(gender => gender.Name == "Female").FirstOrDefault();
 
       if ((user =
-      _context.Users
-                .SingleOrDefault(g => g.DisplayName == "Doctor Female")) == null)
+        _context.Users
+          .SingleOrDefault(g => g.DisplayName == "Doctor Female")) == null)
       {
         user = new User();
         _context.Add(user);
@@ -39,8 +39,8 @@ namespace Mep.Business.Migrations.Seeds
       user.Section12ExpiryDate = null;
 
       if ((user =
-      _context.Users
-                .SingleOrDefault(g => g.DisplayName == "Doctor Male")) == null)
+        _context.Users
+          .SingleOrDefault(g => g.DisplayName == "Doctor Male")) == null)
       {
         user = new User();
         _context.Add(user);

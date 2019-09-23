@@ -1,11 +1,8 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using Mep.Business.Migrations.Seeds.SpineServiceModels;
 using Mep.Business.Migrations.Seeds.OGPServiceModels;
 
 namespace Mep.Business.Migrations.Seeds
@@ -25,8 +22,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // create a dummy CCG for Unknown
       if ((ccg =
-      _context.Ccgs
-              .SingleOrDefault(c => c.Name == "Unknown")) == null)
+        _context.Ccgs
+          .SingleOrDefault(c => c.Name == "Unknown")) == null)
       {
         ccg = new Ccg();
         _context.Add(ccg);
@@ -54,8 +51,8 @@ namespace Mep.Business.Migrations.Seeds
         foreach (OgpServiceFeature ccgResult in json.Features)
         {
           if ((ccg =
-                _context.Ccgs
-                        .SingleOrDefault(c => c.LongCode == ccgResult.Attributes.CCG19CD)) == null)
+            _context.Ccgs
+              .SingleOrDefault(c => c.LongCode == ccgResult.Attributes.CCG19CD)) == null)
           {
             ccg = new Ccg();
             _context.Add(ccg);
