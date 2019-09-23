@@ -50,7 +50,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
-      examination.Postcode = "ST14 5PP";
+      examination.Postcode = "ST2 9QL";
       examination.ReferralId = 2;
       examination.SpecialityId = 1;
 
@@ -71,7 +71,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
-      examination.Postcode = "ST14 5PP";
+      examination.Postcode = "ST4 8ZH";
       examination.ReferralId = 4;
       examination.SpecialityId = 1;
 
@@ -88,7 +88,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
-      examination.Postcode = "ST14 5PP";
+      examination.Postcode = "ST5 7UE";
       examination.ReferralId = 4;
       examination.SpecialityId = 1;
 
@@ -107,7 +107,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
-      examination.Postcode = "ST14 5PP";
+      examination.Postcode = "ST10 3JH";
       examination.ReferralId = 5;
       examination.SpecialityId = 1;
 
@@ -126,7 +126,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
-      examination.Postcode = "ST14 5PP";
+      examination.Postcode = "ST5 3DX";
       examination.ReferralId = 6;
       examination.SpecialityId = 1;
 
@@ -145,7 +145,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
-      examination.Postcode = "ST14 5PP";
+      examination.Postcode = "ST6 7HG";
       examination.ReferralId = 7;
       examination.SpecialityId = 1;
     }
