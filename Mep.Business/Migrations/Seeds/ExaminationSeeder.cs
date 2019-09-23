@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -14,7 +13,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       Examination examination;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       // examination for referral with a current examination with no allocated doctors or notification responses
 
@@ -29,7 +27,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 1;
@@ -47,10 +45,10 @@ namespace Mep.Business.Migrations.Seeds
       examination.Address1 = "Examination Address 2";
       examination.CcgId = 1;
       examination.CompletedByUser = GetSystemAdminUser();
-      examination.CompletedTime = now;
+      examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 2;
@@ -68,10 +66,10 @@ namespace Mep.Business.Migrations.Seeds
       examination.Address1 = "Examination Address 3";
       examination.CcgId = 1;
       examination.CompletedByUser = GetSystemAdminUser();
-      examination.CompletedTime = now;
+      examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 4;
@@ -88,7 +86,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 4;
@@ -107,7 +105,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 5;
@@ -126,7 +124,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 6;
@@ -145,7 +143,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.CcgId = 1;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
-      examination.ModifiedAt = now;
+      examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = 7;

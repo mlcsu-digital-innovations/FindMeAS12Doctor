@@ -15,7 +15,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       UserExaminationNotification userExaminationNotification;
-      DateTimeOffset now = DateTimeOffset.Now;
       Examination examination6 = _context.Examinations.Where(examination => examination.Address1 == "Examination Address 6").FirstOrDefault();
       Examination examination7 = _context.Examinations.Where(examination => examination.Address1 == "Examination Address 7").FirstOrDefault();
       NotificationText notificationText1 = _context.NotificationTexts.Where(notificationText => notificationText.Name == "Notification Text 1").FirstOrDefault();
@@ -33,10 +32,10 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.ExaminationId = examination6.Id;
       userExaminationNotification.HasAccepted = true;
       userExaminationNotification.IsActive = true;
-      userExaminationNotification.ModifiedAt = now;
+      userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId = notificationText1.Id;
-      userExaminationNotification.RespondedAt = now;
+      userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId = 3;
 
       // notification for referral with current examination and notification responses and allocated doctors
@@ -51,10 +50,10 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.ExaminationId = examination7.Id;
       userExaminationNotification.HasAccepted = true;
       userExaminationNotification.IsActive = true;
-      userExaminationNotification.ModifiedAt = now;
+      userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId = notificationText2.Id;
-      userExaminationNotification.RespondedAt = now;
+      userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId = 2;
     }
   }

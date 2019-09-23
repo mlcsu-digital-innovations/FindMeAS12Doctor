@@ -14,7 +14,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       Referral referral;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       // referral with a current examination with no allocated doctors or notification responses
 
@@ -26,12 +25,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 1;
       referral.ReferralStatusId = 1;
@@ -46,12 +45,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 2;
       referral.ReferralStatusId = 1;
@@ -66,12 +65,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 3;
       referral.ReferralStatusId = 1;
@@ -86,12 +85,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 4;
       referral.ReferralStatusId = 1;
@@ -106,12 +105,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 5;
       referral.ReferralStatusId = 1;
@@ -126,12 +125,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 6;
       referral.ReferralStatusId = 1;
@@ -146,12 +145,12 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(referral);
       }
 
-      referral.CreatedAt = now;
+      referral.CreatedAt = _now;
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUser = GetSystemAdminUser();
-      referral.ModifiedAt = now;
+      referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = 7;
       referral.ReferralStatusId = 1;

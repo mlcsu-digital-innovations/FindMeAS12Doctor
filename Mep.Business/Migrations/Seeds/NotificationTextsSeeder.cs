@@ -14,7 +14,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       NotificationText notificationText;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       if ((notificationText =
         _context.NotificationTexts
@@ -26,7 +25,7 @@ namespace Mep.Business.Migrations.Seeds
       notificationText.Description = "Notification Text 1";
       notificationText.IsActive = true;
       notificationText.MessageTemplate = "Notification Text 1";
-      notificationText.ModifiedAt = now;
+      notificationText.ModifiedAt = _now;
       notificationText.ModifiedByUser = GetSystemAdminUser();
       notificationText.Name = "Notification Text 1";
 
@@ -40,7 +39,7 @@ namespace Mep.Business.Migrations.Seeds
       notificationText.Description = "Notification Text 2";
       notificationText.IsActive = true;
       notificationText.MessageTemplate = "Notification Text 2";
-      notificationText.ModifiedAt = now;
+      notificationText.ModifiedAt = _now;
       notificationText.ModifiedByUser = GetSystemAdminUser();
       notificationText.Name = "Notification Text 2";
     }

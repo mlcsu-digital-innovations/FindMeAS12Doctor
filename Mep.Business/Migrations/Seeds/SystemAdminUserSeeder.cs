@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -15,7 +14,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       User systemAdminUser;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       if ((systemAdminUser = GetSystemAdminUser()) == null)
       {
@@ -25,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.HasReadTermsAndConditions = true;
       systemAdminUser.IdentityServerIdentifier = SystemAdminIdentityServerIdentifier;
       systemAdminUser.IsActive = true;
-      systemAdminUser.ModifiedAt = now;
+      systemAdminUser.ModifiedAt = _now;
       systemAdminUser.DisplayName = "System Admin User";
 
       Organisation systemOrganisation;
@@ -39,7 +37,7 @@ namespace Mep.Business.Migrations.Seeds
 
       systemOrganisation.Description = "System Organisation Description";
       systemOrganisation.IsActive = false;
-      systemOrganisation.ModifiedAt = now;
+      systemOrganisation.ModifiedAt = _now;
       systemOrganisation.Name = "System Organisation";
 
       systemAdminUser.Organisation = systemOrganisation;
@@ -55,7 +53,7 @@ namespace Mep.Business.Migrations.Seeds
 
       systemProfileType.Description = "System ProfileType Description";
       systemProfileType.IsActive = false;
-      systemProfileType.ModifiedAt = now;
+      systemProfileType.ModifiedAt = _now;
       systemProfileType.Name = "System ProfileType";
 
       systemAdminUser.ProfileType = systemProfileType;

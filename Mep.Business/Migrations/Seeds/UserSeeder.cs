@@ -15,7 +15,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       User user;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       GenderType maleGender = _context.GenderTypes.Where(gender => gender.Name == "Male").FirstOrDefault();
       GenderType femaleGender = _context.GenderTypes.Where(gender => gender.Name == "Female").FirstOrDefault();

@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Mep.Data.Entities;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -23,7 +22,6 @@ namespace Mep.Business.Migrations.Seeds
     private void BatchUpdateGpPractices(int offset)
     {
       GpPractice gpPractice;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       client.DefaultRequestHeaders.Accept.Clear();
       client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -54,7 +52,7 @@ namespace Mep.Business.Migrations.Seeds
           }
 
           gpPractice.IsActive = gpResult.Status == "Inactive" ? false : true;
-          gpPractice.ModifiedAt = now;
+          gpPractice.ModifiedAt = _now;
           gpPractice.ModifiedByUser = GetSystemAdminUser();
           gpPractice.GpPracticeCode = gpResult.OrgId;
           gpPractice.Postcode = gpResult.PostCode == null ? "" : gpResult.PostCode;
@@ -107,7 +105,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       GpPractice gp;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       // Get Id of Unknown Ccg
       unknown = _context.Ccgs.Single(c => c.Name == "Unknown");
@@ -122,7 +119,7 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       gp.IsActive = true;
-      gp.ModifiedAt = now;
+      gp.ModifiedAt = _now;
       gp.ModifiedByUser = GetSystemAdminUser();
       gp.Name = "Unknown";
       gp.GpPracticeCode = "XXX";

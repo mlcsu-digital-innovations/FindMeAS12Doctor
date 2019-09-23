@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -14,7 +13,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       ReferralStatus referralStatus;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       if ((referralStatus =
             _context.ReferralStatuses
@@ -25,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       referralStatus.IsActive = true;
-      referralStatus.ModifiedAt = now;
+      referralStatus.ModifiedAt = _now;
       referralStatus.ModifiedByUser = GetSystemAdminUser();
       referralStatus.Name = "New Referral";
       referralStatus.Description = "New Referral";

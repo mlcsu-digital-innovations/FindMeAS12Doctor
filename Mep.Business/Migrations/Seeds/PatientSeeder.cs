@@ -14,7 +14,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       Patient patient;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       // patient with NHS number
 
@@ -30,7 +29,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 116;
       patient.GpPracticeId = 7;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = 2750059135;
       patient.ResidentialPostcode = "ST3 7HH";
@@ -49,7 +48,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 118;
       patient.GpPracticeId = 6;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = 7468635357;
       patient.ResidentialPostcode = "ST7 4UZ";
@@ -68,7 +67,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 25;
       patient.GpPracticeId = 5;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = 4786431806;
       patient.ResidentialPostcode = "ST5 1NE";
@@ -87,7 +86,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 115;
       patient.GpPracticeId = 3502;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = 7510496667;
       patient.ResidentialPostcode = "ST4 4LX";
@@ -106,7 +105,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 45;
       patient.GpPracticeId = 10967;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
       patient.ResidentialPostcode = "ST4 4QN";
@@ -125,7 +124,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 78;
       patient.GpPracticeId = 7980;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
       patient.ResidentialPostcode = "ST5 2ST";
@@ -144,7 +143,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 146;
       patient.GpPracticeId = 900;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
       patient.ResidentialPostcode = "ST1 6TT";
@@ -163,7 +162,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.CcgId = 13;
       patient.GpPracticeId = 8964;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
       patient.ResidentialPostcode = "ST8 7NA";

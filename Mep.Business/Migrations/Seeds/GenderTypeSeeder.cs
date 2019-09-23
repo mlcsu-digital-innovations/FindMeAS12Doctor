@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -14,7 +13,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       GenderType genderType;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       if ((genderType =
             _context.GenderTypes
@@ -25,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       genderType.IsActive = true;
-      genderType.ModifiedAt = now;
+      genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
       genderType.Name = "Male";
       genderType.Description = "Male";
@@ -39,7 +37,7 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       genderType.IsActive = true;
-      genderType.ModifiedAt = now;
+      genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
       genderType.Name = "Female";
       genderType.Description = "Female";

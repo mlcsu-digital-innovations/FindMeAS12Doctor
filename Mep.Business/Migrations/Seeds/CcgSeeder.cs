@@ -22,7 +22,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       Ccg ccg;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       // create a dummy CCG for Unknown
       if ((ccg =
@@ -34,7 +33,7 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       ccg.IsActive = true;
-      ccg.ModifiedAt = now;
+      ccg.ModifiedAt = _now;
       ccg.ModifiedByUser = GetSystemAdminUser();
       ccg.Name = "Unknown";
       ccg.CostCentre = 1;
@@ -63,7 +62,7 @@ namespace Mep.Business.Migrations.Seeds
           }
 
           ccg.IsActive = true;
-          ccg.ModifiedAt = now;
+          ccg.ModifiedAt = _now;
           ccg.ModifiedByUser = GetSystemAdminUser();
           ccg.Name = ccgResult.Attributes.CCG19NM;
           ccg.CostCentre = 1;

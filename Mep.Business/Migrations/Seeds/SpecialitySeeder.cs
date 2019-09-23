@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mep.Data.Entities;
 
@@ -14,7 +13,6 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       Speciality speciality;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       if ((speciality = 
             _context.Specialities
@@ -25,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       speciality.Description = "Speciality 1 Test";
       speciality.IsActive = true;
-      speciality.ModifiedAt = now;
+      speciality.ModifiedAt = _now;
       speciality.ModifiedByUser = GetSystemAdminUser();
       speciality.Name = "Speciality 1";
 
@@ -38,7 +36,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       speciality.Description = "Speciality 2 Test";
       speciality.IsActive = true;
-      speciality.ModifiedAt = now;
+      speciality.ModifiedAt = _now;
       speciality.ModifiedByUser = GetSystemAdminUser();
       speciality.Name = "Speciality 2";      
     }
