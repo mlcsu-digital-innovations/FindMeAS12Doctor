@@ -18,18 +18,18 @@ import { ToastsComponent } from './toasts/toasts.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ReferralCreateComponent,
-    NavbarComponent,
     DisableControlDirective,
+    NavbarComponent,
+    ReferralCreateComponent,
     ToastsComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    NgbModule,
-    ReactiveFormsModule,
+    BrowserModule,
     DigitOnlyModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
