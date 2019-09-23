@@ -17,7 +17,7 @@ import { PostcodeValidationService } from '../services/postcode-validation/postc
 import { Referral } from '../interfaces/referral';
 import { ReferralService } from '../services/referral/referral.service';
 import { tap, switchMap, catchError } from 'rxjs/operators';
-import { throwError, Observable, of } from 'rxjs';
+import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../services/toast/toast.service';
 import { TypeAheadResult } from '../interfaces/typeahead-result';
 
@@ -78,7 +78,7 @@ export class ReferralCreateComponent implements OnInit {
   ngOnInit() {
 
     // ToDo: Get the correct values for these ?
-    this.unknownCcgId = 280;
+    this.unknownCcgId = 1;
     this.unknownGpPracticeId = 1;
 
     const postcodeRegex =
@@ -369,6 +369,7 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   CreatePatient() {
+
     this.patientDetails.nhsNumber =
       +this.nhsNumber === 0 ? null : +this.nhsNumber;
     this.patientDetails.alternativeIdentifier =
@@ -383,6 +384,16 @@ export class ReferralCreateComponent implements OnInit {
       map((result: any) => {
         this.patientDetails.id = result.id;
         this.SaveReferralDetails();
+      }),
+      catchError((err, caught) => {
+        this.dangerMessage =
+          'Server Error: Unable to create patient for referral !';
+        this.toastService.show(this.dangerTemplate, {
+          classname: 'bg-danger text-light',
+          delay: 10000
+        });
+        this.isCreatingReferral = false;
+        return empty();
       })
     );
   }
@@ -403,7 +414,6 @@ export class ReferralCreateComponent implements OnInit {
         // navigate to the create examination page
       },
       error => {
-        // this.searchingForPostcode = false;
         this.dangerMessage =
           'Server Error: Unable to create new referral ! Please try again in a few moments';
         this.toastService.show(this.dangerTemplate, {
@@ -647,7 +657,7 @@ export class ReferralCreateComponent implements OnInit {
 
   ValidatePatient(): void {
     if (
-      this.IsSearchingForPatient ||
+      this.IsSearchingForPatient() ||
       this.HasInvalidNHSNumber() ||
       this.HasInvalidAlternativeIdentifier()
     ) {

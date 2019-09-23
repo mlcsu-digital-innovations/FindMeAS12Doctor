@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { CcgListService } from './ccg-list.service';
+import { HttpClientModule } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 describe('CcgListService', () => {
   beforeEach(() => TestBed.configureTestingModule({

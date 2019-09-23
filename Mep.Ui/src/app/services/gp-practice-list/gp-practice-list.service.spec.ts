@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { GpPracticeListService } from './gp-practice-list.service';
+import { HttpClientModule } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 describe('GpPracticeListService', () => {
   beforeEach(() => TestBed.configureTestingModule({

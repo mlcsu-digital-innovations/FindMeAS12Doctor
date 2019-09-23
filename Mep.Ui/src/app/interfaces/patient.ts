@@ -1,9 +1,9 @@
 export interface Patient {
-  Id: number;
-  AlternativeIdentifier?: string;
-  NhsNumber?: number;
-  CcgId?: number;
-  GpPracticeId?: number;
-  ResidentialPostcode?: string;
-  IsExistingPatient: boolean;
+  alternativeIdentifier?: string;
+  ccgId?: number;
+  gpPracticeId?: number;
+  id: number;
+  isExistingPatient: boolean;
+  nhsNumber?: number;
+  residentialPostcode?: string;
 }

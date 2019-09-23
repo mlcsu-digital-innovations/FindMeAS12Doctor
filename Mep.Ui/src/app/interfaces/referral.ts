@@ -1,8 +1,8 @@
 export interface Referral {
-  CreatedAt: Date;
-  CreatedByUserId: number;
-  PatientId: number;
-  ReferralStatusId: number;
-  LeadAmhpUserId: number;
-  IsPlannedExamination: boolean;
+  createdAt: Date;
+  createdByUserId: number;
+  isPlannedExamination: boolean;
+  leadAmhpUserId: number;
+  patientId: number;
+  referralStatusId: number;
 }

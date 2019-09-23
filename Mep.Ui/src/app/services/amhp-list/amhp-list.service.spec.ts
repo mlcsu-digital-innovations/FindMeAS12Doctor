@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { AmhpListService } from './amhp-list.service';
+import { HttpClientModule } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 describe('AmhpListService', () => {
   beforeEach(() => TestBed.configureTestingModule({
