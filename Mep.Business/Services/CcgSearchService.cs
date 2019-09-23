@@ -1,12 +1,12 @@
 using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using Mep.Business.Exceptions;
 using Mep.Business.Extensions;
 using Mep.Business.Models.SearchModels;
-using System.Linq;
-using Mep.Business.Exceptions;
 using Mep.Business.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mep.Business.Services
 {
