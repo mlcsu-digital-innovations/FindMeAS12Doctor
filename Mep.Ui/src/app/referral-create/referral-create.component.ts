@@ -160,9 +160,9 @@ export class ReferralCreateComponent implements OnInit {
     const params = {} as PatientSearchParams;
 
     if (this.HasValidNHSNumber()) {
-      params.NhsNumber = this.nhsNumberField.value;
+      params.nhsNumber = this.nhsNumberField.value;
     } else {
-      params.AlternativeIdentifier = this.alternativeIdentifierField.value;
+      params.alternativeIdentifier = this.alternativeIdentifierField.value;
     }
 
     this.patientService.patientSearch(params).subscribe(
