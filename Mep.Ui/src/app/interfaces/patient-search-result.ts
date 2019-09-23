@@ -1,11 +1,11 @@
 export interface PatientSearchResult  {
   alternativeIdentifier: string | null;
-  ccgId?: number;
-  gpPracticeId?: number;
-  nhsNumber?: number;
-  residentialPostcode?: string;
-  currentReferralId?: number;
+  ccgId: number | null;
+  ccgName: string | null;
+  currentReferralId: number | null;
+  gpPracticeId: number | null;
+  gpPracticeNameAndPostcode: string | null;
+  nhsNumber: number | null;
   patientId: number;
-  gpPracticeNameAndPostcode?: string;
-  ccgName?: string;
+  residentialPostcode: string | null;
 }

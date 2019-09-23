@@ -1,13 +1,12 @@
 using AutoMapper;
 using BusinessModels = Mep.Business.Models;
 using System.Linq;
+using Enum = Mep.Api.Enums;
 
 namespace Mep.Api.ViewModels.Profiles
 {
     public class ReferralPatientSearchProfile : Profile
     {
-      // ToDo: Replace magic number '10' with id of closed referral status
-
         public ReferralPatientSearchProfile()
         {
             CreateMap<BusinessModels.Patient, ReferralPatientSearch>()
@@ -21,7 +20,7 @@ namespace Mep.Api.ViewModels.Profiles
               dest => dest.CurrentReferralId, 
               opt => opt.MapFrom(
                 src => src.Referrals.OrderByDescending(r => r.CreatedAt)
-                .Where(r => r.ReferralStatusId != 10)
+                .Where(r => r.ReferralStatusId != (int)Enum.ReferralStatus.ReferralClosed)
                 .FirstOrDefault().Id
               )
             );
