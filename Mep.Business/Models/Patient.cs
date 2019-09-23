@@ -15,5 +15,11 @@ namespace Mep.Business.Models
     [Required]
     public string ResidentialPostcode { get; set; }
     public virtual IList<Referral> Referrals { get; set; }
+
+    public string GpPracticeNameAndPostcode {
+      get {
+        return GpPracticeId != null ? ($"{GpPractice.Name}, {GpPractice.Postcode}") : "";
+      }
+    }
   }
 }
