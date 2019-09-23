@@ -18,7 +18,7 @@ export class ReferralCreateComponent implements OnInit {
   myForm: FormGroup;
   patientForm: FormGroup;
   value = false;
-  searchingForPatient: boolean;
+  isSearchingForPatient: boolean;
   dangerMessage: string;
   patientResult: PatientSearchResult;
   patientModal: NgbModalRef;
@@ -64,7 +64,7 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   IsSearchingForPatient(): boolean {
-    return this.searchingForPatient;
+    return this.isSearchingForPatient;
   }
 
   submit() {
@@ -110,12 +110,14 @@ export class ReferralCreateComponent implements OnInit {
   DisablePatientValidationButtonIfFieldsAreInvalid(): boolean {
     // field is only valid if it has a value and there aren't any errors
     const nhsNumberFieldInValid =
-      this.nhsNumberField.value === '' || this.nhsNumberField.errors !== null;
+      this.nhsNumberField.value === '' ||
+      this.nhsNumberField.errors !== null;
     const alternativeIdentifierFieldInValid =
       this.alternativeIdentifierField.value === '' ||
       this.alternativeIdentifierField.errors !== null;
 
-    return nhsNumberFieldInValid && alternativeIdentifierFieldInValid;
+    return nhsNumberFieldInValid &&
+      alternativeIdentifierFieldInValid;
   }
 
   async Delay(milliseconds: number) {
@@ -148,7 +150,7 @@ export class ReferralCreateComponent implements OnInit {
 
   ValidatePatient(): void {
     if (
-      this.searchingForPatient ||
+      this.IsSearchingForPatient ||
       this.HasInvalidNHSNumber() ||
       this.HasInvalidAlternativeIdentifier()
     ) {
@@ -156,7 +158,7 @@ export class ReferralCreateComponent implements OnInit {
     }
 
     // prevent further buttons clicks and update the page
-    this.searchingForPatient = true;
+    this.isSearchingForPatient = true;
     const params = {} as PatientSearchParams;
 
     if (this.HasValidNHSNumber()) {
@@ -167,7 +169,7 @@ export class ReferralCreateComponent implements OnInit {
 
     this.patientService.patientSearch(params).subscribe(
       (results: PatientSearchResult[]) => {
-        this.searchingForPatient = false;
+        this.isSearchingForPatient = false;
         // if there are any matching results then display them in a modal
         switch (results.length) {
           case 0:
@@ -195,7 +197,7 @@ export class ReferralCreateComponent implements OnInit {
         }
       },
       error => {
-        this.searchingForPatient = false;
+        this.isSearchingForPatient = false;
         this.dangerMessage =
           'Server Error: Unable to validate patient details ! Please try again in a few moments';
         this.toastService.show(this.dangerTemplate, {
