@@ -72,13 +72,15 @@ export class ReferralCreateComponent implements OnInit {
 
   HasInvalidNHSNumber(): boolean {
     return (
-      this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null
+      this.nhsNumberField.value !== '' &&
+      this.nhsNumberField.errors !== null
     );
   }
 
   HasValidNHSNumber(): boolean {
     return (
-      this.nhsNumberField.value !== '' && this.nhsNumberField.errors == null
+      this.nhsNumberField.value !== '' &&
+      this.nhsNumberField.errors == null
     );
   }
 

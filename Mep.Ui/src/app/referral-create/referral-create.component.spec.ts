@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { ReferralCreateComponent } from './referral-create.component';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { DisableControlDirective } from '../directives/disable-control/disable-control.directive';
+import { NavbarComponent } from '../navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ReferralCreateComponent } from './referral-create.component';
 
 describe('ReferralCreateComponent', () => {
   let component: ReferralCreateComponent;
@@ -11,8 +11,15 @@ describe('ReferralCreateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReferralCreateComponent, NavbarComponent, DisableControlDirective ],
-      imports: [ReactiveFormsModule, NgbModule]
+      declarations: [
+        DisableControlDirective,
+        NavbarComponent,
+        ReferralCreateComponent
+      ],
+      imports: [
+        NgbModule,
+        ReactiveFormsModule
+      ]
     })
     .compileComponents();
   }));
