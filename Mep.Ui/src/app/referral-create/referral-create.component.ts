@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
-import { PatientSearchService } from '../services/patient-search/patient-search.service';
-import { ToastService } from '../services/toast/toast.service';
-import { throwError } from 'rxjs';
-
-import { PatientSearchResult } from '../interfaces/patient-search-result';
-import { PatientSearchParams } from '../interfaces/patient-search-params';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
+import { PatientSearchParams } from '../interfaces/patient-search-params';
+import { PatientSearchResult } from '../interfaces/patient-search-result';
+import { PatientSearchService } from '../services/patient-search/patient-search.service';
+import { throwError } from 'rxjs';
+import { ToastService } from '../services/toast/toast.service';
 
 @Component({
   selector: 'app-referral-create',
