@@ -1,10 +1,10 @@
-.or-class {
+.column-div {
   width: 100%;
   height:100%;
   position: relative;
 }
 
-.or-class span {
+.column-div span {
   position: absolute;
   bottom:20px;
   left: 40%;
@@ -12,3 +12,44 @@
   font-weight: 500;
   color: #666;
 }
+
+.column-div button {
+  position: absolute;
+  bottom:12px;
+  left: 10%;
+}
+
+.column-div button .spinner-border {
+  position: absolute;
+  left: 5px;
+  bottom: 10px;
+  color: #eee;
+  padding-right: 5px;
+}
+
+.validating {
+  min-width: 130px;
+}
+
+.row-title {
+  color: #3396ff;
+  font-weight: 600;
+}
+
+.row-value {
+  color: #666;
+  font-weight: 600;
+}
+
+.current-referral {
+  background-color:#f00;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding:5px;
+  margin-bottom: 10px;
+}
+
+

@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessModels = Mep.Business.Models;
 using System.Linq;
+using Enum = Mep.Api.Enums;
 
 namespace Mep.Api.ViewModels.Profiles
 {
@@ -19,7 +20,7 @@ namespace Mep.Api.ViewModels.Profiles
               dest => dest.CurrentReferralId, 
               opt => opt.MapFrom(
                 src => src.Referrals.OrderByDescending(r => r.CreatedAt)
-                .Where(r => r.ReferralStatusId != 10)
+                .Where(r => r.ReferralStatusId != (int)Enum.ReferralStatus.ReferralClosed)
                 .FirstOrDefault().Id
               )
             );

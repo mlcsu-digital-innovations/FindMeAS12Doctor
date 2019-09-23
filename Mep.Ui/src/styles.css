@@ -1,11 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
-body { background-color: #eee;}
+body {
+  background-color: #ddd;
+}
 
 .page-content {
-
-  margin: 0 50px;
-
+  margin: 0 10%;
   min-height:100px;
 }
 
@@ -31,4 +31,16 @@ label {
 
 .form-control:disabled {
   background-color:#ddd;
+}
+
+.subtle-tooltip .tooltip-inner {
+  background-color: #3396ff;
+}
+
+.subtle-tooltip .arrow::before {
+  border-right-color: #3396ff;
+}
+
+.reduced-top-margin {
+  margin-top: -10px;
 }
