@@ -78,7 +78,6 @@ namespace Mep.Business.Migrations.Seeds
 
                   try
                   {
-                    // Ccg ccg = _context.Ccgs.Single(x => x.Name.Contains($"[{extension}]"));
                     Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
                     if (ccg != null) {
                       gpPractice.CcgId = ccg.Id;
