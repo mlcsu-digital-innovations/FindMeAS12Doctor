@@ -1,11 +1,21 @@
-using System;
-using System.Linq;
 using Mep.Data.Entities;
+using System.Linq;
+using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class UserSeeder : SeederBase
   {
+    public GenderType MaleGender { 
+      get {
+        return _maleGender;
+      }
+    }
+    public GenderType FemaleGender { 
+      get {
+        return _femaleGender;
+      }
+    }
 
     internal UserSeeder(ApplicationContext context)
       : base(context)
@@ -16,9 +26,6 @@ namespace Mep.Business.Migrations.Seeds
     {
       User user;
 
-      GenderType maleGender = _context.GenderTypes.Where(gender => gender.Name == "Male").FirstOrDefault();
-      GenderType femaleGender = _context.GenderTypes.Where(gender => gender.Name == "Female").FirstOrDefault();
-
       if ((user =
         _context.Users
           .SingleOrDefault(g => g.DisplayName == "Doctor Female")) == null)
@@ -27,7 +34,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(user);
       }
       user.DisplayName = "Doctor Female";
-      user.GenderTypeId = femaleGender.Id;
+      user.GenderTypeId = FemaleGender.Id;
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
@@ -46,7 +53,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(user);
       }
       user.DisplayName = "Doctor Male";
-      user.GenderTypeId = maleGender.Id;
+      user.GenderTypeId = MaleGender.Id;
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
