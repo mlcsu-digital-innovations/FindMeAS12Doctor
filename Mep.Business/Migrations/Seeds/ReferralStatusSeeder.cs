@@ -16,7 +16,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((referralStatus =
         _context.ReferralStatuses
-          .SingleOrDefault(g => g.Name == "New Referral")) == null)
+          .SingleOrDefault(g => g.Name == REFERRALSTATUS)) == null)
       {
         referralStatus = new ReferralStatus();
         _context.Add(referralStatus);
@@ -25,8 +25,8 @@ namespace Mep.Business.Migrations.Seeds
       referralStatus.IsActive = true;
       referralStatus.ModifiedAt = _now;
       referralStatus.ModifiedByUser = GetSystemAdminUser();
-      referralStatus.Name = "New Referral";
-      referralStatus.Description = "New Referral";
+      referralStatus.Name = REFERRALSTATUS;
+      referralStatus.Description = REFERRALSTATUS;
     }
   }
 }
