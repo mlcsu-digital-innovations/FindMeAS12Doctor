@@ -16,29 +16,16 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((speciality =
         _context.Specialities
-          .SingleOrDefault(u => u.Name == "Speciality 1")) == null)
+          .SingleOrDefault(u => u.Name == SPECIALITY)) == null)
       {
         speciality = new Speciality();
         _context.Add(speciality);
       }
-      speciality.Description = "Speciality 1 Test";
+      speciality.Description = SPECIALITY;
       speciality.IsActive = true;
       speciality.ModifiedAt = _now;
       speciality.ModifiedByUser = GetSystemAdminUser();
-      speciality.Name = "Speciality 1";
-
-      if ((speciality =
-        _context.Specialities
-          .SingleOrDefault(u => u.Name == "Speciality 2")) == null)
-      {
-        speciality = new Speciality();
-        _context.Add(speciality);
-      }
-      speciality.Description = "Speciality 2 Test";
-      speciality.IsActive = true;
-      speciality.ModifiedAt = _now;
-      speciality.ModifiedByUser = GetSystemAdminUser();
-      speciality.Name = "Speciality 2";
+      speciality.Name = SPECIALITY;
     }
   }
 }
