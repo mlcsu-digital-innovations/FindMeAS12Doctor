@@ -1,9 +1,9 @@
-using System;
-using Mep.Business;
 using Mep.Business.Migrations.Seeds;
+using Mep.Business;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Mep.Api.Extensions
 {
