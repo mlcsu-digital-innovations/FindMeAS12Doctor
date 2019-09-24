@@ -16,31 +16,31 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((notificationText =
         _context.NotificationTexts
-          .SingleOrDefault(g => g.Name == "Notification Text 1")) == null)
+          .SingleOrDefault(g => g.Name == NOTIFICATIONTEXT1)) == null)
       {
         notificationText = new NotificationText();
         _context.Add(notificationText);
       }
-      notificationText.Description = "Notification Text 1";
+      notificationText.Description = NOTIFICATIONTEXT1;
       notificationText.IsActive = true;
-      notificationText.MessageTemplate = "Notification Text 1";
+      notificationText.MessageTemplate = NOTIFICATIONTEXT1;
       notificationText.ModifiedAt = _now;
       notificationText.ModifiedByUser = GetSystemAdminUser();
-      notificationText.Name = "Notification Text 1";
+      notificationText.Name = NOTIFICATIONTEXT1;
 
       if ((notificationText =
         _context.NotificationTexts
-          .SingleOrDefault(g => g.Name == "Notification Text 2")) == null)
+          .SingleOrDefault(g => g.Name == NOTIFICATIONTEXT2)) == null)
       {
         notificationText = new NotificationText();
         _context.Add(notificationText);
       }
-      notificationText.Description = "Notification Text 2";
+      notificationText.Description = NOTIFICATIONTEXT2;
       notificationText.IsActive = true;
-      notificationText.MessageTemplate = "Notification Text 2";
+      notificationText.MessageTemplate = NOTIFICATIONTEXT2;
       notificationText.ModifiedAt = _now;
       notificationText.ModifiedByUser = GetSystemAdminUser();
-      notificationText.Name = "Notification Text 2";
+      notificationText.Name = NOTIFICATIONTEXT2;
     }
   }
 }
