@@ -1,7 +1,7 @@
 using AutoMapper;
 using BusinessModels = Mep.Business.Models;
-using System.Linq;
 using Enum = Mep.Api.Enums;
+using System.Linq;
 
 namespace Mep.Api.ViewModels.Profiles
 {
