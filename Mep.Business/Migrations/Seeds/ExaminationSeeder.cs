@@ -14,6 +14,14 @@ namespace Mep.Business.Migrations.Seeds
     {
       Examination examination;
 
+      Referral referral1 = _context.Referrals.Where(referral => referral.PatientId == _patient1.Id).FirstOrDefault();
+      Referral referral2 = _context.Referrals.Where(referral => referral.PatientId == _patient2.Id).FirstOrDefault();
+      Referral referral3 = _context.Referrals.Where(referral => referral.PatientId == _patient3.Id).FirstOrDefault();
+      Referral referral4 = _context.Referrals.Where(referral => referral.PatientId == _patient4.Id).FirstOrDefault();
+      Referral referral5 = _context.Referrals.Where(referral => referral.PatientId == _patient5.Id).FirstOrDefault();
+      Referral referral6 = _context.Referrals.Where(referral => referral.PatientId == _patient6.Id).FirstOrDefault();
+      Referral referral7 = _context.Referrals.Where(referral => referral.PatientId == _patient7.Id).FirstOrDefault();
+
       // examination for referral with a current examination with no allocated doctors or notification responses
 
       if ((examination =
@@ -30,7 +38,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
-      examination.ReferralId = 1;
+      examination.ReferralId = referral1.Id;
       examination.SpecialityId = 1;
 
       // examination for referral with a previous examination
@@ -51,7 +59,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST2 9QL";
-      examination.ReferralId = 2;
+      examination.ReferralId = referral2.Id;
       examination.SpecialityId = 1;
 
       // examinations for referral with both current and previous examinations
@@ -72,7 +80,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST4 8ZH";
-      examination.ReferralId = 4;
+      examination.ReferralId = referral4.Id;;
       examination.SpecialityId = 1;
 
       if ((examination =
@@ -89,7 +97,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 7UE";
-      examination.ReferralId = 4;
+      examination.ReferralId = referral4.Id;;
       examination.SpecialityId = 1;
 
       // examination for referral with current examination and allocated doctors
@@ -108,7 +116,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST10 3JH";
-      examination.ReferralId = 5;
+      examination.ReferralId = referral5.Id;;
       examination.SpecialityId = 1;
 
       // examination for referral with current examination and notification responses
@@ -127,7 +135,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 3DX";
-      examination.ReferralId = 6;
+      examination.ReferralId = referral6.Id;;
       examination.SpecialityId = 1;
 
       // examination for referral with current examination and notification responses and allocated doctors
@@ -146,7 +154,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST6 7HG";
-      examination.ReferralId = 7;
+      examination.ReferralId = referral7.Id;;
       examination.SpecialityId = 1;
     }
   }
