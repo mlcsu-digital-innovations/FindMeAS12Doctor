@@ -41,6 +41,20 @@ namespace Mep.Business.Migrations.Seeds
       genderType.ModifiedByUser = GetSystemAdminUser();
       genderType.Name = "Female";
       genderType.Description = "Female";
+
+      if ((genderType =
+        _context.GenderTypes
+          .SingleOrDefault(g => g.Name == "Other")) == null)
+      {
+        genderType = new GenderType();
+        _context.Add(genderType);
+      }
+
+      genderType.IsActive = true;
+      genderType.ModifiedAt = _now;
+      genderType.ModifiedByUser = GetSystemAdminUser();
+      genderType.Name = "Other";
+      genderType.Description = "Other";
     }
   }
 }
