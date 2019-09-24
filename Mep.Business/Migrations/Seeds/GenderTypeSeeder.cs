@@ -16,7 +16,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((genderType =
         _context.GenderTypes
-          .SingleOrDefault(g => g.Name == "Male")) == null)
+          .SingleOrDefault(g => g.Name == MALE)) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);
@@ -25,12 +25,12 @@ namespace Mep.Business.Migrations.Seeds
       genderType.IsActive = true;
       genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = "Male";
-      genderType.Description = "Male";
+      genderType.Name = MALE;
+      genderType.Description = MALE;
 
       if ((genderType =
         _context.GenderTypes
-          .SingleOrDefault(g => g.Name == "Female")) == null)
+          .SingleOrDefault(g => g.Name == FEMALE)) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);
@@ -39,12 +39,12 @@ namespace Mep.Business.Migrations.Seeds
       genderType.IsActive = true;
       genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = "Female";
-      genderType.Description = "Female";
+      genderType.Name = FEMALE;
+      genderType.Description = FEMALE;
 
       if ((genderType =
         _context.GenderTypes
-          .SingleOrDefault(g => g.Name == "Other")) == null)
+          .SingleOrDefault(g => g.Name == OTHER)) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);
@@ -53,8 +53,8 @@ namespace Mep.Business.Migrations.Seeds
       genderType.IsActive = true;
       genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = "Other";
-      genderType.Description = "Other";
+      genderType.Name = OTHER;
+      genderType.Description = OTHER;
     }
   }
 }
