@@ -170,6 +170,18 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected int GetOrganisationIdByName(string name)
+    {
+      try
+      {
+        return _context.Organisations.Single(organisation => organisation.Name == name).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find organisation {name} in Organisations", ex);
+      }
+    }
+
     public SeederBase(ApplicationContext context)
     {
       _context = context;

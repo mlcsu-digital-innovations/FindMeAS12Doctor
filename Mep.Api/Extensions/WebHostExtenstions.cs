@@ -9,7 +9,7 @@ namespace Mep.Api.Extensions
 {
   public static class WebHostExtenstions
   {
-    public static IWebHost SeedData(this IWebHost host)
+    public static IWebHost SeedData(this IWebHost host, string seed)
     {
       using (var scope = host.Services.CreateScope())
       {
@@ -20,41 +20,18 @@ namespace Mep.Api.Extensions
         context.Database.Migrate();
 
         // now that the database is up to date. Let's seed
-        new Seeds(context).SeedAll();
-
-        return host;
-      }
-    }
-
-    public static IWebHost SeedDataNoGp(this IWebHost host)
-    {
-      using (var scope = host.Services.CreateScope())
-      {
-        IServiceProvider services = scope.ServiceProvider;
-        ApplicationContext context = services.GetRequiredService<ApplicationContext>();
-
-        // now we have the DbContext. Run migrations
-        context.Database.Migrate();
-
-        // now that the database is up to date. Let's seed
-        new Seeds(context).SeedAllNoGp();
-
-        return host;
-      }
-    }
-
-    public static IWebHost SeedTestData(this IWebHost host)
-    {
-      using (var scope = host.Services.CreateScope())
-      {
-        IServiceProvider services = scope.ServiceProvider;
-        ApplicationContext context = services.GetRequiredService<ApplicationContext>();
-
-        // now we have the DbContext. Run migrations
-        context.Database.Migrate();
-
-        // now that the database is up to date. Let's seed
-        new TestSeeds(context).TestSeedAll();
+        if (seed == "seed")
+        {
+          new Seeds(context).SeedAll();
+        }
+        else if (seed == "seednogp")
+        {
+          new Seeds(context).SeedAllNoGp();
+        }
+        else if (seed == "seedtest")
+        {
+          new Seeds(context).TestSeedAll();
+        }        
 
         return host;
       }
