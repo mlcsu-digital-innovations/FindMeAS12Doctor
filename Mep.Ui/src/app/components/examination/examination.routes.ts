@@ -1,5 +1,5 @@
-import { Routes } from '@angular/router';
 import { ExaminationListComponent } from './examination-list/examination-list.component';
+import { Routes } from '@angular/router';
 
 export const ExaminationRoutes: Routes = [
   {
