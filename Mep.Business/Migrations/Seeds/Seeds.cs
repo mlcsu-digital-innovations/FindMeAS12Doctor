@@ -29,6 +29,7 @@ namespace Mep.Business.Migrations.Seeds
       _context.SaveChanges();
     }
 
+    // all seeders apart from GpPracticeSeeder
     public void SeedAllNoGp()
     {
       new SystemAdminUserSeeder(_context).SeedData();
@@ -44,6 +45,34 @@ namespace Mep.Business.Migrations.Seeds
 
       new ReferralStatusSeeder(_context).SeedData();
 
+      _context.SaveChanges();
+    }
+
+    // run test seeders
+    public void TestSeedAll()
+    {
+      new OrganisationSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new UserSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new PatientSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new NotificationTextsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new ReferralSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new ExaminationSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new UserExaminationNotificationSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new UserExaminationClaimSeeder(_context).SeedData();
       _context.SaveChanges();
     }
   }
