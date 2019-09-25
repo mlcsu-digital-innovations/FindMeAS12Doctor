@@ -87,7 +87,7 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = PATIENTNHSNUMBER1;
+      patient.NhsNumber = PATIENTNHSNUMBER4;
       patient.ResidentialPostcode = "ST4 4LX";
 
       // patient with alternative identifier
