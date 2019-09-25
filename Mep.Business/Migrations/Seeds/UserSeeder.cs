@@ -52,6 +52,89 @@ namespace Mep.Business.Migrations.Seeds
       user.ProfileTypeId = 1;
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
+
+
+
+
+
+
+
+
+      if ((user =
+        _context.Users
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAMEMALE)) == null)
+      {
+        user = new User();
+        _context.Add(user);
+      }
+      user.DisplayName = USERDISPLAYNAMEMALE;
+      user.GenderTypeId = GetMaleGenderTypeId();
+      user.GmcNumber = null;
+      user.HasReadTermsAndConditions = true;
+      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
+      user.IsActive = true;
+      user.ModifiedByUser = GetSystemAdminUser();
+      user.OrganisationId = 1;
+      user.ProfileTypeId = 1;
+      user.Section12ApprovalStatusId = null;
+      user.Section12ExpiryDate = null;
+            
+      if ((user =
+        _context.Users
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAMEMALE)) == null)
+      {
+        user = new User();
+        _context.Add(user);
+      }
+      user.DisplayName = USERDISPLAYNAMEMALE;
+      user.GenderTypeId = GetMaleGenderTypeId();
+      user.GmcNumber = null;
+      user.HasReadTermsAndConditions = true;
+      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
+      user.IsActive = true;
+      user.ModifiedByUser = GetSystemAdminUser();
+      user.OrganisationId = 1;
+      user.ProfileTypeId = 1;
+      user.Section12ApprovalStatusId = null;
+      user.Section12ExpiryDate = null;
+            
+      if ((user =
+        _context.Users
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAMEMALE)) == null)
+      {
+        user = new User();
+        _context.Add(user);
+      }
+      user.DisplayName = USERDISPLAYNAMEMALE;
+      user.GenderTypeId = GetMaleGenderTypeId();
+      user.GmcNumber = null;
+      user.HasReadTermsAndConditions = true;
+      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
+      user.IsActive = true;
+      user.ModifiedByUser = GetSystemAdminUser();
+      user.OrganisationId = 1;
+      user.ProfileTypeId = 1;
+      user.Section12ApprovalStatusId = null;
+      user.Section12ExpiryDate = null;
+            
+      if ((user =
+        _context.Users
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAMEMALE)) == null)
+      {
+        user = new User();
+        _context.Add(user);
+      }
+      user.DisplayName = USERDISPLAYNAMEMALE;
+      user.GenderTypeId = GetMaleGenderTypeId();
+      user.GmcNumber = null;
+      user.HasReadTermsAndConditions = true;
+      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
+      user.IsActive = true;
+      user.ModifiedByUser = GetSystemAdminUser();
+      user.OrganisationId = 1;
+      user.ProfileTypeId = 1;
+      user.Section12ApprovalStatusId = null;
+      user.Section12ExpiryDate = null;
     }
   }
 }

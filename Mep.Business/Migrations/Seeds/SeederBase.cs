@@ -20,9 +20,13 @@ namespace Mep.Business.Migrations.Seeds
     protected const string NOTIFICATIONTEXT1 = "Notification Text 1";
     protected const string NOTIFICATIONTEXT2 = "Notification Text 2";
     protected const string ORGANISATION1 = "Organisation 1";
+    protected const string ORGANISATION1USER = "Org 1 User";
     protected const string ORGANISATION2 = "Organisation 2";
+    protected const string ORGANISATION2USER = "Org 2 User";
     protected const string ORGANISATION3 = "Organisation 3";
+    protected const string ORGANISATION3USER = "Org 3 User";
     protected const string ORGANISATION4 = "Organisation 4";
+    protected const string ORGANISATION4USER = "Org 4 User";
     protected const string OTHER = "Other";
     protected const string PATIENTALTERNATIVEIDENTIFIER1 = "Test Patient #1";
     protected const string PATIENTALTERNATIVEIDENTIFIER2 = "Test Patient #2";
