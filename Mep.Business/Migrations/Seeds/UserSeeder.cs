@@ -17,12 +17,12 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user =
         _context.Users
-          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAME1)) == null)
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAMEFEMALE)) == null)
       {
         user = new User();
         _context.Add(user);
       }
-      user.DisplayName = USERDISPLAYNAME1;
+      user.DisplayName = USERDISPLAYNAMEFEMALE;
       user.GenderTypeId = GetFemaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
@@ -36,12 +36,12 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user =
         _context.Users
-          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAME2)) == null)
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAMEMALE)) == null)
       {
         user = new User();
         _context.Add(user);
       }
-      user.DisplayName = USERDISPLAYNAME2;
+      user.DisplayName = USERDISPLAYNAMEMALE;
       user.GenderTypeId = GetMaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
