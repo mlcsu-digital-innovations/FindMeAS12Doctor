@@ -7,16 +7,6 @@ namespace Mep.Business.Migrations.Seeds
   public class SeederBase
   {
     protected DateTimeOffset _now = DateTimeOffset.Now;
-    protected Patient _patient1;
-    protected Patient _patient2;
-    protected Patient _patient3;
-    protected Patient _patient4;
-    protected Patient _patient5;
-    protected Patient _patient6;
-    protected Patient _patient7;
-    protected ReferralStatus _referralStatus;
-    protected Speciality _speciality;
-
 
     protected const string EXAMINATIONADDRESS1 = "Examination Address 1";
     protected const string EXAMINATIONADDRESS2 = "Examination Address 2";
@@ -29,6 +19,10 @@ namespace Mep.Business.Migrations.Seeds
     protected const string MALE = "Male";
     protected const string NOTIFICATIONTEXT1 = "Notification Text 1";
     protected const string NOTIFICATIONTEXT2 = "Notification Text 2";
+    protected const string ORGANISATION1 = "Organisation 1";
+    protected const string ORGANISATION2 = "Organisation 2";
+    protected const string ORGANISATION3 = "Organisation 3";
+    protected const string ORGANISATION4 = "Organisation 4";
     protected const string OTHER = "Other";
     protected const string PATIENTALTERNATIVEIDENTIFIER1 = "Test Patient #1";
     protected const string PATIENTALTERNATIVEIDENTIFIER2 = "Test Patient #2";
