@@ -6,17 +6,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class UserSeeder : SeederBase
   {
-    public GenderType MaleGender { 
-      get {
-        return _maleGender;
-      }
-    }
-    public GenderType FemaleGender { 
-      get {
-        return _femaleGender;
-      }
-    }
-
     internal UserSeeder(ApplicationContext context)
       : base(context)
     {
@@ -28,13 +17,13 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user =
         _context.Users
-          .SingleOrDefault(g => g.DisplayName == "Doctor Female")) == null)
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAME1)) == null)
       {
         user = new User();
         _context.Add(user);
       }
-      user.DisplayName = "Doctor Female";
-      user.GenderTypeId = FemaleGender.Id;
+      user.DisplayName = USERDISPLAYNAME1;
+      user.GenderTypeId = GetFemaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
@@ -47,13 +36,13 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user =
         _context.Users
-          .SingleOrDefault(g => g.DisplayName == "Doctor Male")) == null)
+          .SingleOrDefault(g => g.DisplayName == USERDISPLAYNAME2)) == null)
       {
         user = new User();
         _context.Add(user);
       }
-      user.DisplayName = "Doctor Male";
-      user.GenderTypeId = MaleGender.Id;
+      user.DisplayName = USERDISPLAYNAME2;
+      user.GenderTypeId = GetMaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
