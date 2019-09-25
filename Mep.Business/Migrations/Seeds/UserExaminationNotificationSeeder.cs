@@ -14,10 +14,8 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       UserExaminationNotification userExaminationNotification;
-      Examination examination6 = _context.Examinations.Where(examination => examination.Address1 == "Examination Address 6").FirstOrDefault();
-      Examination examination7 = _context.Examinations.Where(examination => examination.Address1 == "Examination Address 7").FirstOrDefault();
-      NotificationText notificationText1 = _context.NotificationTexts.Where(notificationText => notificationText.Name == "Notification Text 1").FirstOrDefault();
-      NotificationText notificationText2 = _context.NotificationTexts.Where(notificationText => notificationText.Name == "Notification Text 2").FirstOrDefault();
+      Examination examination6 = _context.Examinations.Single(examination => examination.Address1 == "Examination Address 6");
+      Examination examination7 = _context.Examinations.Single(examination => examination.Address1 == "Examination Address 7");
 
       // notification for referral with current examination and notification responses
 
@@ -33,9 +31,9 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
-      userExaminationNotification.NotificationTextId = notificationText1.Id;
+      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATIONTEXT1);
       userExaminationNotification.RespondedAt = _now;
-      userExaminationNotification.UserId = 3;
+      userExaminationNotification.UserId = GetUserIdByDisplayname(USERDISPLAYNAMEFEMALE);
 
       // notification for referral with current examination and notification responses and allocated doctors
 
@@ -51,9 +49,9 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
-      userExaminationNotification.NotificationTextId = notificationText2.Id;
+      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATIONTEXT2);
       userExaminationNotification.RespondedAt = _now;
-      userExaminationNotification.UserId = 2;
+      userExaminationNotification.UserId = GetUserIdByDisplayname(USERDISPLAYNAMEMALE);
     }
   }
 }
