@@ -124,6 +124,18 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected int GetProfileTypeId(string profileTypeName)
+    {
+      try
+      {
+        return _context.ProfileTypes.Single(profileType => profileType.Name == profileTypeName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception("Cannot find {profileTypeName} in ProfileTypes", ex);
+      }
+    }
+
     protected int GetPatientIdByNhsNumber(long nhsNumber)
     {
       try
