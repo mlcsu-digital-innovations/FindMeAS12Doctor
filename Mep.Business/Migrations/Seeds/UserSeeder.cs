@@ -30,7 +30,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = 1;
-      user.ProfileTypeId = 1;
+      user.ProfileTypeId = GetProfileTypeId(PROFILETYPE1);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
@@ -49,7 +49,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = 1;
-      user.ProfileTypeId = 1;
+      user.ProfileTypeId = GetProfileTypeId(PROFILETYPE2);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
@@ -68,7 +68,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION1);
-      user.ProfileTypeId = 1;
+      user.ProfileTypeId = GetProfileTypeId(PROFILETYPE3);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
             
@@ -87,7 +87,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION2);
-      user.ProfileTypeId = 1;
+      user.ProfileTypeId = GetProfileTypeId(PROFILETYPE1);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
             
@@ -106,7 +106,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION3);
-      user.ProfileTypeId = 1;
+      user.ProfileTypeId = GetProfileTypeId(PROFILETYPE2);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
             
@@ -125,7 +125,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION3);
-      user.ProfileTypeId = 1;
+      user.ProfileTypeId = GetProfileTypeId(PROFILETYPE3);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
     }
