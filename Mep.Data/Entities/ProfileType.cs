@@ -11,7 +11,7 @@ namespace Mep.Data.Entities
     [NotMapped]
     public bool IsAmhp {
       get{
-        return this.Name == "AMHP";
+        return string.Compare(this.Name, "AMHP", System.StringComparison.InvariantCultureIgnoreCase) == 0;
       }
     }
   }

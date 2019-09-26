@@ -16,6 +16,7 @@ import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result
 import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
 import { Referral } from '../../../interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
+import { Router } from '@angular/router';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../../../services/toast/toast.service';
@@ -72,7 +73,8 @@ export class ReferralCreateComponent implements OnInit {
     private ccgListService: CcgListService,
     private amhpListService: AmhpListService,
     private patientService: PatientService,
-    private referralService: ReferralService
+    private referralService: ReferralService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -331,6 +333,7 @@ export class ReferralCreateComponent implements OnInit {
   HasValidNHSNumber(): boolean {
     return (
       this.nhsNumberField.value !== '' &&
+      this.nhsNumberField.value !== null &&
       this.nhsNumberField.errors == null
     );
   }
@@ -345,6 +348,7 @@ export class ReferralCreateComponent implements OnInit {
   HasValidAlternativeIdentifier(): boolean {
     return (
       this.alternativeIdentifierField.value !== '' &&
+      this.alternativeIdentifierField.value !== null &&
       this.alternativeIdentifierField.errors == null
     );
   }
@@ -444,17 +448,14 @@ export class ReferralCreateComponent implements OnInit {
   ConfirmCancellation(): void {
     // close the modal
     this.cancelModal.close();
-
-    // reset the form
-    this.FormReset();
-
-    // ToDo: navigate to the previous page
+    this.router.navigate(['/referral']);
   }
 
   FormReset(): void {
     this.nhsNumberField.setValue(null);
     this.alternativeIdentifierField.setValue(null);
     this.alternativeIdentifierField.markAsUntouched();
+
     this.SetGpPracticeField(null, '');
     this.SetResidentialPostcodeField(null);
     this.SetCcgField(null, '');
@@ -465,7 +466,6 @@ export class ReferralCreateComponent implements OnInit {
     this.isCcgFieldsShown = false;
 
     this.SetFieldFocus('#nhsNumber');
-
   }
 
   FormatTypeAheadResults(value: any): string {
