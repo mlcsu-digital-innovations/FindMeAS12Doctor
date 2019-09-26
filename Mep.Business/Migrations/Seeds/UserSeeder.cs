@@ -29,7 +29,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = 1;
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION1);
       user.ProfileTypeId = GetProfileTypeId(PROFILETYPE1);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
@@ -48,7 +48,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = 1;
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION2);
       user.ProfileTypeId = GetProfileTypeId(PROFILETYPE2);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
