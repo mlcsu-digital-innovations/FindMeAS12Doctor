@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
-using System;
 
 namespace Mep.Business.Services
 {
@@ -24,7 +23,6 @@ namespace Mep.Business.Services
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
                 .Include(r => r.CreatedByUser)
-
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .ToListAsync();
 
@@ -33,47 +31,23 @@ namespace Mep.Business.Services
 
       return models;
     }
-
-    public async Task<IEnumerable<Models.Examination>> GetAllDetailsAsync(
-      bool activeOnly)
-    {
-
-      IEnumerable<Entities.Examination> entities =
-        await _context.Examinations
-                .Include(r => r.CreatedByUser)
-                
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .ToListAsync();
-
-      IEnumerable<Models.Examination> models =
-        _mapper.Map<IEnumerable<Models.Examination>>(entities);
-
-      return models;
-    }
-
 
     protected override async Task<Entities.Examination> GetEntityLinkedObjectsAsync(Examination model, Entities.Examination entity) {
-
-        //entity.Patient = await GetLinkedObjectAsync<Entities.Patient>(_context.Patients, model.PatientId);
         entity.CreatedByUser =await GetLinkedObjectAsync<Entities.User>(_context.Users, model.CreatedByUserId);
-        //entity.ExaminationStatus =await GetLinkedObjectAsync<Entities.ExaminationStatus>(_context.ExaminationStatuses, model.ExaminationStatusId);
-               
         return entity;
     }
 
-
     protected override async Task<Entities.Examination> GetEntityByIdAsync(
-      int id,
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
       Entities.Examination entity = await
         _context.Examinations
-                .Include(r => r.CreatedByUser)
-                
+                .Include(r => r.CreatedByUser)                
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .SingleOrDefaultAsync(u => u.Id == entityId);
 
       return entity;
     }

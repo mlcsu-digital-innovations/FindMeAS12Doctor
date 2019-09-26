@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 body {
-  background-color: #ddd;
+  background-color: #dae2ef;
 }
 
 .page-content {
@@ -9,7 +9,7 @@ body {
   min-height:100px;
 }
 
-.invalid-field{ color: #f00;}
+.invalid-field{ color: #f00; font-weight: 600;}
 
 label {
   color:#666;
@@ -34,13 +34,138 @@ label {
 }
 
 .subtle-tooltip .tooltip-inner {
-  background-color: #3396ff;
+  background-color: #0db3bf;
 }
 
 .subtle-tooltip .arrow::before {
-  border-right-color: #3396ff;
+  border-right-color: #0db3bf;
 }
 
 .reduced-top-margin {
   margin-top: -10px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  xborder: none;
+}
+
+.card-body {
+  padding:0 0 1.5rem 0;
+}
+
+.card-title {
+  color: #fff;
+}
+
+.card-header {
+  background-color: #0dadb7;
+  margin-top: 0 !important;
+  height: 90px;
+}
+
+.card-subtitle {
+  color: #ddd !important;
+}
+
+.card-icon {
+  float:left;
+  margin-right: 20px;
+}
+
+.card-header-text {
+  float:left;
+  height:100px !important;
+  margin-top: 8px;
+}
+
+.card-header-text h6 {
+  margin-top: -10px;
+}
+
+.modal-header, .modal-body {
+  color: #495057;
+}
+
+.centered {
+  text-align: center;
+}
+
+.standard-button {
+  width: 100px;
+}
+
+.centered-div {
+  height: 100px;
+  position: relative;
+}
+
+.vcenter {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-45%);
+}
+
+/** change primary colour **/
+.btn-primary {
+  background-color: #0dadb7;
+  border-color: #0c9da7;
+}
+
+.btn-primary:disabled {
+  background-color: #497679;
+  border-color: #497679;
+  color: #ccc;
+}
+
+.btn-primary:hover {
+  background-color: #0a868f;
+  border-color: #0c9da7;
+}
+
+/** toast styles **/
+.toast {
+  font-size: 1em;
+}
+.bg-success {
+  background-color:#00c851 !important;
+  border: 2px solid #007e33 !important;
+}
+
+.bg-danger {
+  background-color:#ff4444 !important;
+  border: 1px solid #cc0000 !important;
+}
+
+.bg-warning {
+  background-color:#ffbb33 !important;
+  border: 1px solid #ff8800 !important;
+}
+
+/** modals **/
+
+.header-danger {
+  background-color: #ff4444;
+  color: #fff;
+}
+
+.header-success {
+  background-color: #007e33;
+  color: #fff;
+}
+
+.header-info {
+  background-color: #0db3bf;
+  color: #fff;
+}
+
+.header-warning {
+  background-color: #ffbb33;
+  color: #fff;
+}
+
+/** TypeAhead **/
+.dropdown-item.active {
+  background-color: #0a868f;
 }

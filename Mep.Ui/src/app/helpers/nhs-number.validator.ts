@@ -2,6 +2,12 @@ import { FormControl } from '@angular/forms';
 
 // custom validator to check that two fields match
 export function NhsNumberValidFormat(control: FormControl) {
+
+  // prevent programmatic changes from triggering validation
+  if (control.pristine) {
+    return null;
+  }
+
   return ValidateNHSNumber(control.value)
     ? null
     : {

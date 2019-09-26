@@ -1,12 +1,12 @@
 using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using Mep.Business.Exceptions;
 using Mep.Business.Extensions;
 using Mep.Business.Models.SearchModels;
-using System.Linq;
-using Mep.Business.Exceptions;
 using Mep.Business.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mep.Business.Services
 {
@@ -25,16 +25,24 @@ namespace Mep.Business.Services
       }
       else
       {
+        IQueryable<Data.Entities.GpPractice> query = 
+          _context.GpPractices.WhereIsActiveOrActiveOnly(true);
+
+        string[] searchParams = searchString.Split(' ');
+
+        foreach (string searchParam in searchParams) {
+          query = 
+            query.Where(gp => gp.Name.Contains(searchParam) ||
+              gp.Postcode.Contains(searchParam));
+        }
+
         IEnumerable<GeneralSearchResult> entities =
-                  await _context.GpPractices
-                  .WhereIsActiveOrActiveOnly(true)
-                  .Where(gp => gp.Name.Contains(searchString) || gp.Postcode.Contains(searchString))
-                  .Select(gp => new GeneralSearchResult()
-                  {
-                    Id = gp.Id,
-                    ResultText = $"{gp.Name}, {gp.Postcode}"
-                  })
-                  .ToListAsync();
+          await query.Select(gp => new GeneralSearchResult()
+          {
+            Id = gp.Id,
+            ResultText = $"{gp.Name}, {gp.Postcode}"
+          })
+          .ToListAsync();
 
         return entities;
       }

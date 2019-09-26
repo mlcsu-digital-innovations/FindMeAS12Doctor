@@ -53,6 +53,8 @@ namespace Mep.Api
       services.AddScoped<IModelService<User>, UserService>();
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
+      services.AddScoped<IModelGeneralSearchService<User>, AmhpUserSearchService>();
+      services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
       services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
 
       services.AddCors(options => {
