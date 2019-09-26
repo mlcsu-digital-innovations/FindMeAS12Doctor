@@ -331,6 +331,7 @@ export class ReferralCreateComponent implements OnInit {
   HasValidNHSNumber(): boolean {
     return (
       this.nhsNumberField.value !== '' &&
+      this.nhsNumberField.value !== null &&
       this.nhsNumberField.errors == null
     );
   }
@@ -345,6 +346,7 @@ export class ReferralCreateComponent implements OnInit {
   HasValidAlternativeIdentifier(): boolean {
     return (
       this.alternativeIdentifierField.value !== '' &&
+      this.alternativeIdentifierField.value !== null &&
       this.alternativeIdentifierField.errors == null
     );
   }
