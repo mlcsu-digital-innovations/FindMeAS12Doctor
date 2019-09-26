@@ -32,7 +32,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATIONADDRESS1;
-      examination.CcgId = 1;
+      examination.CcgId = GetFirstCcg();
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -51,7 +51,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATIONADDRESS2;
-      examination.CcgId = 1;
+      examination.CcgId = GetFirstCcg();
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
