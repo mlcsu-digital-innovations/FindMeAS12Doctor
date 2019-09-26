@@ -20,6 +20,8 @@ namespace Mep.Business.Migrations.Seeds
       new GpPracticeSeeder(_context).SeedData();
       _context.SaveChanges();
 
+      new ProfileTypeSeeder(_context).SeedData();
+
       new GenderTypeSeeder(_context).SeedData();
 
       new SpecialitySeeder(_context).SeedData();
@@ -38,6 +40,8 @@ namespace Mep.Business.Migrations.Seeds
       // create all CCGs
       new CcgSeeder(_context).SeedData();
       _context.SaveChanges();
+
+      new ProfileTypeSeeder(_context).SeedData();
 
       new GenderTypeSeeder(_context).SeedData();
 
