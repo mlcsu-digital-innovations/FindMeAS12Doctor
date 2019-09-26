@@ -80,7 +80,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(user);
       }
       user.DisplayName = ORGANISATION2USER;
-      user.GenderTypeId = GetMaleGenderTypeId();
+      user.GenderTypeId = GetFemaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
@@ -118,7 +118,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(user);
       }
       user.DisplayName = ORGANISATION4USER;
-      user.GenderTypeId = GetMaleGenderTypeId();
+      user.GenderTypeId = GetFemaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
