@@ -1,31 +1,26 @@
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
-import { DisableControlDirective } from './directives/disable-control/disable-control.directive';
+import { ExaminationModule } from './components/examination/examination.module';
 import { HttpClientModule } from '@angular/common/http';
-import { NavbarComponent } from './navbar/navbar.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ReferralCreateComponent } from './referral-create/referral-create.component';
-import { ToastsComponent } from './toasts/toasts.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ReferralModule } from './components/referral/referral.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DisableControlDirective,
-    NavbarComponent,
-    ReferralCreateComponent,
-    ToastsComponent
+    PageNotFoundComponent
   ],
   imports: [
-    AppRoutingModule,
     BrowserModule,
     DigitOnlyModule,
+    ExaminationModule,
     HttpClientModule,
-    NgbModule,
-    ReactiveFormsModule
+    ReferralModule,
+    RouterModule.forRoot(AppRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

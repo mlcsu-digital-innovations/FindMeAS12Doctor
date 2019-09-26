@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DisableControlDirective } from '../directives/disable-control/disable-control.directive';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { DisableControlDirective } from '../../../directives/disable-control/disable-control.directive';
+import { NavbarComponent } from '../../navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ToastsComponent } from '../toasts/toasts.component';
+import { ToastsComponent } from '../../toasts/toasts.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReferralCreateComponent } from './referral-create.component';

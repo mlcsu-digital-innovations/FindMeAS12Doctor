@@ -1,26 +1,26 @@
-import { AmhpListService } from '../services/amhp-list/amhp-list.service';
-import { CcgListService } from '../services/ccg-list/ccg-list.service';
+import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
+import { CcgListService } from '../../../services/ccg-list/ccg-list.service';
 import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GpPracticeListService } from '../services/gp-practice-list/gp-practice-list.service';
+import { GpPracticeListService } from '../../../services/gp-practice-list/gp-practice-list.service';
 import { map } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { NhsNumberValidFormat } from '../helpers/nhs-number.validator';
-import { Patient } from '../interfaces/patient';
-import { PatientSearchParams } from '../interfaces/patient-search-params';
-import { PatientSearchResult } from '../interfaces/patient-search-result';
-import { PatientSearchService } from '../services/patient-search/patient-search.service';
-import { PatientService } from '../services/patient/patient.service';
-import { PostcodeSearchResult } from '../interfaces/postcode-search-result';
-import { PostcodeValidationService } from '../services/postcode-validation/postcode-validation.service';
-import { Referral } from '../interfaces/referral';
-import { ReferralService } from '../services/referral/referral.service';
+import { NhsNumberValidFormat } from '../../../helpers/nhs-number.validator';
+import { Patient } from '../../../interfaces/patient';
+import { PatientSearchParams } from '../../../interfaces/patient-search-params';
+import { PatientSearchResult } from '../../../interfaces/patient-search-result';
+import { PatientSearchService } from '../../../services/patient-search/patient-search.service';
+import { PatientService } from '../../../services/patient/patient.service';
+import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result';
+import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
+import { Referral } from '../../../interfaces/referral';
+import { ReferralService } from '../../../services/referral/referral.service';
 import { Router } from '@angular/router';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { throwError, Observable, of, empty } from 'rxjs';
-import { ToastService } from '../services/toast/toast.service';
-import { TypeAheadResult } from '../interfaces/typeahead-result';
+import { ToastService } from '../../../services/toast/toast.service';
+import { TypeAheadResult } from '../../../interfaces/typeahead-result';
 
 @Component({
   selector: 'app-referral-create',
