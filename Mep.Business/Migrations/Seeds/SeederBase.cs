@@ -40,13 +40,15 @@ namespace Mep.Business.Migrations.Seeds
     protected const long PATIENTNHSNUMBER2 = 9657966272;
     protected const long PATIENTNHSNUMBER3 = 9070304333;
     protected const long PATIENTNHSNUMBER4 = 9813607416;
+    protected const string PROFILETYPE1 = "AMHP";
+    protected const string PROFILETYPE2 = "Doctor";
+    protected const string PROFILETYPE3 = "Finance";
     protected const string REFERRALSTATUS = "New Referral";
     protected const string SPECIALITY = "Section 12";
     protected const string USERDISPLAYNAMEFEMALE = "Doctor Female";
     protected const string USERDISPLAYNAMEMALE = "Doctor Male";
 
     protected const string SystemAdminIdentityServerIdentifier = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
-
 
     protected readonly ApplicationContext _context;
 
