@@ -16,8 +16,7 @@ namespace Mep.Api.ViewModels.Profiles
               dest => dest.CurrentReferralId, 
               opt => opt.MapFrom(
                 src => src.Referrals.OrderByDescending(r => r.CreatedAt)
-                .FirstOrDefault(r => r.ReferralStatusId != (int)Enum.ReferralStatus.ReferralClosed).Id
-              )
+                .FirstOrDefault(r => r.ReferralStatusId != (int)Enum.ReferralStatus.ReferralClosed).Id)
             );
         }
     }
