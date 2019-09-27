@@ -43,12 +43,8 @@ export class ExaminationCreateComponent implements OnInit {
       (referral: Referral) => {
         this.isRetrievingReferralData = false;
         this.referral = referral;
-        this.referral.patient.patientIdentifier =
-          this.referral.patient.nhsNumber != null
-            ? this.referral.patient.nhsNumber.toString()
-            : this.referral.patient.alternativeIdentifier;
 
-            // ToDo: Inform the user if this referral already has an active examination
+        // ToDo: Inform the user if this referral already has an active examination
       },
       err => {
         this.isRetrievingReferralData = false;
