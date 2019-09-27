@@ -168,7 +168,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find patinet with an NHS Number of {alternativeIdentifier} in Patients", ex);
+        throw new Exception($"Cannot find patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
       }
     }
 
@@ -193,6 +193,30 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception($"Cannot find organisation {name} in Organisations", ex);
+      }
+    }
+
+    protected int GetReferralIdByPatientNhsNumber(long nhsNumber)
+    {
+      try
+      {
+        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find referral with an NHS Number of {nhsNumber} in Referrals", ex);
+      }
+    }
+
+    protected int GetReferralIdByAlternativeIdentifier(string alternativeIdentifier)
+    {
+      try
+      {
+        return _context.Patients.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find referral with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
       }
     }
 

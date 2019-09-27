@@ -14,14 +14,6 @@ namespace Mep.Business.Migrations.Seeds
     {
       Examination examination;
 
-      Referral referral1 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(PATIENTNHSNUMBER1));
-      Referral referral2 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(PATIENTNHSNUMBER2));
-      Referral referral3 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(PATIENTNHSNUMBER3));
-      Referral referral4 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(PATIENTNHSNUMBER4));
-      Referral referral5 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER5));
-      Referral referral6 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER6));
-      Referral referral7 = _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER7));
-
       // examination for referral with a current examination with no allocated doctors or notification responses
 
       if ((examination =
@@ -38,7 +30,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
-      examination.ReferralId = referral1.Id;
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER1);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with a previous examination
@@ -59,7 +51,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST2 9QL";
-      examination.ReferralId = referral2.Id;
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER2);
       examination.SpecialityId = GetSpecialityId();
 
       // examinations for referral with both current and previous examinations
@@ -80,7 +72,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST4 8ZH";
-      examination.ReferralId = referral4.Id;
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER4);
       examination.SpecialityId = GetSpecialityId();
 
       if ((examination =
@@ -97,7 +89,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 7UE";
-      examination.ReferralId = referral4.Id;
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER4);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and allocated doctors
@@ -116,7 +108,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST10 3JH";
-      examination.ReferralId = referral5.Id;
+      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER5);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and notification responses
@@ -135,7 +127,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 3DX";
-      examination.ReferralId = referral6.Id;
+      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER6);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and notification responses and allocated doctors
@@ -154,7 +146,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST6 7HG";
-      examination.ReferralId = referral7.Id;
+      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER7);
       examination.SpecialityId = GetSpecialityId();
     }
   }
