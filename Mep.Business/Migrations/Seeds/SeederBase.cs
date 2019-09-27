@@ -276,6 +276,18 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected int GetExaminationIdByExaminationAddress(string examinationAddress)
+    {
+      try
+      {
+        return _context.Examinations.Single(examination => examination.Address1 == examinationAddress).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
+      }
+    }
+
     public SeederBase(ApplicationContext context)
     {
       _context = context;

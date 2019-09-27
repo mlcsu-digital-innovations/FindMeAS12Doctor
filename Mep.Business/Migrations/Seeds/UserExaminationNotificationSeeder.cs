@@ -14,44 +14,42 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       UserExaminationNotification userExaminationNotification;
-      Examination examination6 = _context.Examinations.Single(examination => examination.Address1 == "Examination Address 6");
-      Examination examination7 = _context.Examinations.Single(examination => examination.Address1 == "Examination Address 7");
 
       // notification for referral with current examination and notification responses
 
       if ((userExaminationNotification =
         _context.UserExaminationNotifications
-          .SingleOrDefault(g => g.ExaminationId == examination6.Id)) == null)
+          .SingleOrDefault(g => g.ExaminationId == GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_6))) == null)
       {
         userExaminationNotification = new UserExaminationNotification();
         _context.Add(userExaminationNotification);
       }
-      userExaminationNotification.ExaminationId = examination6.Id;
+      userExaminationNotification.ExaminationId = GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_6);
       userExaminationNotification.HasAccepted = true;
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_1);
       userExaminationNotification.RespondedAt = _now;
-      userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_FEMALE);
+      userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
 
       // notification for referral with current examination and notification responses and allocated doctors
 
       if ((userExaminationNotification =
         _context.UserExaminationNotifications
-          .SingleOrDefault(g => g.ExaminationId == examination7.Id)) == null)
+          .SingleOrDefault(g => g.ExaminationId == GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_6))) == null)
       {
         userExaminationNotification = new UserExaminationNotification();
         _context.Add(userExaminationNotification);
       }
-      userExaminationNotification.ExaminationId = examination7.Id;
+      userExaminationNotification.ExaminationId = GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_7);
       userExaminationNotification.HasAccepted = true;
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_2);
       userExaminationNotification.RespondedAt = _now;
-      userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_MALE);
+      userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
     }
   }
 }
