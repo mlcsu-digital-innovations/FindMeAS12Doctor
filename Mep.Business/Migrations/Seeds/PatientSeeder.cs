@@ -25,13 +25,13 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = "Test Patient #1";
-      patient.CcgId = 116;
-      patient.GpPracticeId = 7;
+      patient.CcgId = null;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = PATIENT_NHS_NUMBER_1;
-      patient.ResidentialPostcode = "ST3 7HH";
+      patient.ResidentialPostcode = null;
 
       // patient with NHS number
 
@@ -44,13 +44,13 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = "Test Patient #2";
-      patient.CcgId = 118;
-      patient.GpPracticeId = 6;
+      patient.CcgId = null;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_2);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = PATIENT_NHS_NUMBER_2;
-      patient.ResidentialPostcode = "ST7 4UZ";
+      patient.ResidentialPostcode = null;
 
       // patient with NHS number
 
@@ -63,8 +63,8 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = "Test Patient #3";
-      patient.CcgId = 25;
-      patient.GpPracticeId = 5;
+      patient.CcgId = null;
+      patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
@@ -82,8 +82,8 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = "Test Patient #4";
-      patient.CcgId = 115;
-      patient.GpPracticeId = 3502;
+      patient.CcgId = null;
+      patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
@@ -101,13 +101,13 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_5;
-      patient.CcgId = 45;
-      patient.GpPracticeId = 10967;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_1);
+      patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
-      patient.ResidentialPostcode = "ST4 4QN";
+      patient.ResidentialPostcode = null;
 
       // patient with alternative identifier
 
@@ -120,13 +120,13 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_6;
-      patient.CcgId = 78;
-      patient.GpPracticeId = 7980;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_1);
+      patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
-      patient.ResidentialPostcode = "ST5 2ST";
+      patient.ResidentialPostcode = null;
 
       // patient with alternative identifier
 
@@ -139,13 +139,13 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_7;
-      patient.CcgId = 146;
-      patient.GpPracticeId = 900;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_UNKNOWN);;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_UNKNOWN);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
-      patient.ResidentialPostcode = "ST1 6TT";
+      patient.ResidentialPostcode = null;
 
       // patient with alternative identifier
 
@@ -158,13 +158,13 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_8;
-      patient.CcgId = 13;
-      patient.GpPracticeId = 8964;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_UNKNOWN);
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_UNKNOWN);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
       patient.NhsNumber = null;
-      patient.ResidentialPostcode = "ST8 7NA";
+      patient.ResidentialPostcode = null;
     }
   }
 }
