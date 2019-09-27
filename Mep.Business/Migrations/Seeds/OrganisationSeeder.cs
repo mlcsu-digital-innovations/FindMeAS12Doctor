@@ -17,55 +17,55 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((organisation =
         _context.Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION1)) == null)
+          .SingleOrDefault(u => u.Name == ORGANISATION_1)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
       }
-      organisation.Description = ORGANISATION1;
+      organisation.Description = ORGANISATION_1;
       organisation.IsActive = true;
       organisation.ModifiedAt = _now;
       organisation.ModifiedByUser = GetSystemAdminUser();
-      organisation.Name = ORGANISATION1;
+      organisation.Name = ORGANISATION_1;
 
             if ((organisation =
         _context.Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION2)) == null)
+          .SingleOrDefault(u => u.Name == ORGANISATION_2)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
       }
-      organisation.Description = ORGANISATION2;
+      organisation.Description = ORGANISATION_2;
       organisation.IsActive = true;
       organisation.ModifiedAt = _now;
       organisation.ModifiedByUser = GetSystemAdminUser();
-      organisation.Name = ORGANISATION2;
+      organisation.Name = ORGANISATION_2;
 
       if ((organisation =
         _context.Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION3)) == null)
+          .SingleOrDefault(u => u.Name == ORGANISATION_3)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
       }
-      organisation.Description = ORGANISATION3;
+      organisation.Description = ORGANISATION_3;
       organisation.IsActive = true;
       organisation.ModifiedAt = _now;
       organisation.ModifiedByUser = GetSystemAdminUser();
-      organisation.Name = ORGANISATION3;
+      organisation.Name = ORGANISATION_3;
 
       if ((organisation =
         _context.Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION4)) == null)
+          .SingleOrDefault(u => u.Name == ORGANISATION_4)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
       }
-      organisation.Description = ORGANISATION4;
+      organisation.Description = ORGANISATION_4;
       organisation.IsActive = true;
       organisation.ModifiedAt = _now;
       organisation.ModifiedByUser = GetSystemAdminUser();
-      organisation.Name = ORGANISATION4;
+      organisation.Name = ORGANISATION_4;
     }
   }
 }

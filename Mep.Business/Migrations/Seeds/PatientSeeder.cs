@@ -18,7 +18,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.NhsNumber == PATIENTNHSNUMBER1)) == null)
+          .SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_1)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -30,14 +30,14 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = PATIENTNHSNUMBER1;
+      patient.NhsNumber = PATIENT_NHS_NUMBER_1;
       patient.ResidentialPostcode = "ST3 7HH";
 
       // patient with NHS number
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.NhsNumber == PATIENTNHSNUMBER2)) == null)
+          .SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_2)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -49,14 +49,14 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = PATIENTNHSNUMBER2;
+      patient.NhsNumber = PATIENT_NHS_NUMBER_2;
       patient.ResidentialPostcode = "ST7 4UZ";
 
       // patient with NHS number
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.NhsNumber == PATIENTNHSNUMBER3)) == null)
+          .SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_3)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -68,14 +68,14 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = PATIENTNHSNUMBER3;
+      patient.NhsNumber = PATIENT_NHS_NUMBER_3;
       patient.ResidentialPostcode = "ST5 1NE";
 
       // patient with NHS number
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.NhsNumber == PATIENTNHSNUMBER4)) == null)
+          .SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_4)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
@@ -87,20 +87,20 @@ namespace Mep.Business.Migrations.Seeds
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.NhsNumber = PATIENTNHSNUMBER4;
+      patient.NhsNumber = PATIENT_NHS_NUMBER_4;
       patient.ResidentialPostcode = "ST4 4LX";
 
       // patient with alternative identifier
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENTALTERNATIVEIDENTIFIER5)) == null)
+          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_5)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = PATIENTALTERNATIVEIDENTIFIER5;
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_5;
       patient.CcgId = 45;
       patient.GpPracticeId = 10967;
       patient.IsActive = true;
@@ -113,13 +113,13 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENTALTERNATIVEIDENTIFIER6)) == null)
+          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_6)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = PATIENTALTERNATIVEIDENTIFIER6;
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_6;
       patient.CcgId = 78;
       patient.GpPracticeId = 7980;
       patient.IsActive = true;
@@ -132,13 +132,13 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENTALTERNATIVEIDENTIFIER7)) == null)
+          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_7)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = PATIENTALTERNATIVEIDENTIFIER7;
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_7;
       patient.CcgId = 146;
       patient.GpPracticeId = 900;
       patient.IsActive = true;
@@ -151,13 +151,13 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((patient =
         _context.Patients
-          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENTALTERNATIVEIDENTIFIER8)) == null)
+          .SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_8)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = PATIENTALTERNATIVEIDENTIFIER8;
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_8;
       patient.CcgId = 13;
       patient.GpPracticeId = 8964;
       patient.IsActive = true;

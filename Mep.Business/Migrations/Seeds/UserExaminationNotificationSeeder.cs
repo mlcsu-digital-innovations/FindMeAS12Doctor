@@ -31,9 +31,9 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
-      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATIONTEXT1);
+      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_1);
       userExaminationNotification.RespondedAt = _now;
-      userExaminationNotification.UserId = GetUserIdByDisplayname(USERDISPLAYNAMEFEMALE);
+      userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_FEMALE);
 
       // notification for referral with current examination and notification responses and allocated doctors
 
@@ -49,9 +49,9 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
-      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATIONTEXT2);
+      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_2);
       userExaminationNotification.RespondedAt = _now;
-      userExaminationNotification.UserId = GetUserIdByDisplayname(USERDISPLAYNAMEMALE);
+      userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_MALE);
     }
   }
 }

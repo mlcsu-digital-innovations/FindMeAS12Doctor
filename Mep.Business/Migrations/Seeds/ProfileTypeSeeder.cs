@@ -16,46 +16,46 @@ namespace Mep.Business.Migrations.Seeds
       ProfileType profileType;
 
       if (
-        (profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILETYPE1)) == null)
+        (profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILE_TYPE_1)) == null)
 
       {
         profileType = new ProfileType();
         _context.Add(profileType);
       }
 
-      profileType.Description = PROFILETYPE1;
+      profileType.Description = PROFILE_TYPE_1;
       profileType.IsActive = true;
       profileType.ModifiedAt = _now;
       profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILETYPE1;
+      profileType.Name = PROFILE_TYPE_1;
 
       if (
-        (profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILETYPE2)) == null)
+        (profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILE_TYPE_2)) == null)
 
       {
         profileType = new ProfileType();
         _context.Add(profileType);
       }
 
-      profileType.Description = PROFILETYPE2;
+      profileType.Description = PROFILE_TYPE_2;
       profileType.IsActive = true;
       profileType.ModifiedAt = _now;
       profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILETYPE2;
+      profileType.Name = PROFILE_TYPE_2;
 
       if (
-        (profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILETYPE3)) == null)
+        (profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILE_TYPE_3)) == null)
 
       {
         profileType = new ProfileType();
         _context.Add(profileType);
       }
 
-      profileType.Description = PROFILETYPE3;
+      profileType.Description = PROFILE_TYPE_3;
       profileType.IsActive = true;
       profileType.ModifiedAt = _now;
       profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILETYPE3;
+      profileType.Name = PROFILE_TYPE_3;
 
     }
   }

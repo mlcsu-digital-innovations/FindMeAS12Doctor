@@ -18,31 +18,31 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS1)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_1)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS1;
+      examination.Address1 = EXAMINATION_ADDRESS_1;
       examination.CcgId = GetFirstCcg();
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
-      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER1);
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_1);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with a previous examination
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS2)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_2)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS2;
+      examination.Address1 = EXAMINATION_ADDRESS_2;
       examination.CcgId = GetFirstCcg();
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
@@ -51,19 +51,19 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST2 9QL";
-      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER2);
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_2);
       examination.SpecialityId = GetSpecialityId();
 
       // examinations for referral with both current and previous examinations
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS3)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_3)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS3;
+      examination.Address1 = EXAMINATION_ADDRESS_3;
       examination.CcgId = GetFirstCcg();
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
@@ -72,81 +72,81 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST4 8ZH";
-      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER4);
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
       examination.SpecialityId = GetSpecialityId();
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS4)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_4)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS4;
+      examination.Address1 = EXAMINATION_ADDRESS_4;
       examination.CcgId = GetFirstCcg();
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 7UE";
-      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENTNHSNUMBER4);
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and allocated doctors
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS5)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_5)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS5;
+      examination.Address1 = EXAMINATION_ADDRESS_5;
       examination.CcgId = GetFirstCcg();
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST10 3JH";
-      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER5);
+      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and notification responses
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS6)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_6)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS6;
+      examination.Address1 = EXAMINATION_ADDRESS_6;
       examination.CcgId = GetFirstCcg();
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 3DX";
-      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER6);
+      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and notification responses and allocated doctors
 
       if ((examination =
         _context.Examinations
-          .SingleOrDefault(g => g.Address1 == EXAMINATIONADDRESS7)) == null)
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_7)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
-      examination.Address1 = EXAMINATIONADDRESS7;
+      examination.Address1 = EXAMINATION_ADDRESS_7;
       examination.CcgId = GetFirstCcg();
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST6 7HG";
-      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENTALTERNATIVEIDENTIFIER7);
+      examination.ReferralId = GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7);
       examination.SpecialityId = GetSpecialityId();
     }
   }
