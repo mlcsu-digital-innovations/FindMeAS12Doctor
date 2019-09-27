@@ -49,6 +49,13 @@ namespace Mep.Business.Migrations.Seeds
     protected const string USER_DISPLAY_NAME_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_MALE = "Doctor Male";
 
+
+    protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
+    protected const string ORGANISATION_NAME_SYSTEM_ADMIN = "System Organisation";
+    protected const string ORGANISATION_DESCRIPTION_SYSTEM_ADMIN = "System Organisation Description";
+    protected const string PROFILE_TYPE_DESCRIPTION_SYSTEM = "System ProfileType Description";
+    protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
+
     protected const string SystemAdminIdentityServerIdentifier = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
 
     protected readonly ApplicationContext _context;

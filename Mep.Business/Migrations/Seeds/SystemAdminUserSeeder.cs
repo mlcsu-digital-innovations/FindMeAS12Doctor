@@ -24,37 +24,37 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.IdentityServerIdentifier = SystemAdminIdentityServerIdentifier;
       systemAdminUser.IsActive = true;
       systemAdminUser.ModifiedAt = _now;
-      systemAdminUser.DisplayName = "System Admin User";
+      systemAdminUser.DisplayName = USER_DISPLAY_NAME_SYSTEM_ADMIN;
 
       Organisation systemOrganisation;
       if ((systemOrganisation =
         _context.Organisations
-          .SingleOrDefault(o => o.Name == "System Organisation")) == null)
+          .SingleOrDefault(o => o.Name == ORGANISATION_NAME_SYSTEM_ADMIN)) == null)
       {
         systemOrganisation = new Organisation();
         _context.Add(systemOrganisation);
       }
 
-      systemOrganisation.Description = "System Organisation Description";
+      systemOrganisation.Description = ORGANISATION_DESCRIPTION_SYSTEM_ADMIN;
       systemOrganisation.IsActive = false;
       systemOrganisation.ModifiedAt = _now;
-      systemOrganisation.Name = "System Organisation";
+      systemOrganisation.Name = ORGANISATION_NAME_SYSTEM_ADMIN;
 
       systemAdminUser.Organisation = systemOrganisation;
 
       ProfileType systemProfileType;
       if ((systemProfileType =
         _context.ProfileTypes
-          .SingleOrDefault(o => o.Name == "System ProfileType")) == null)
+          .SingleOrDefault(o => o.Name == PROFILE_TYPE_NAME_SYSTEM)) == null)
       {
         systemProfileType = new ProfileType();
         _context.Add(systemProfileType);
       }
 
-      systemProfileType.Description = "System ProfileType Description";
+      systemProfileType.Description = PROFILE_TYPE_DESCRIPTION_SYSTEM;
       systemProfileType.IsActive = false;
       systemProfileType.ModifiedAt = _now;
-      systemProfileType.Name = "System ProfileType";
+      systemProfileType.Name = PROFILE_TYPE_NAME_SYSTEM;
 
       systemAdminUser.ProfileType = systemProfileType;
 
