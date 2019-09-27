@@ -8,6 +8,9 @@ namespace Mep.Business.Migrations.Seeds
   {
     protected DateTimeOffset _now = DateTimeOffset.Now;
 
+    protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
+    protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
+    protected const string CCG_NAME_UNKNOWN = "Unknown";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
@@ -19,6 +22,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_MALE = "Male";
     protected const string GENDER_TYPE_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
+    protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
+    protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
     protected const string NOTIFICATION_TEXT_1 = "Notification Text 1";
     protected const string NOTIFICATION_TEXT_2 = "Notification Text 2";
     protected const string ORGANISATION_1_USER = "Org 1 User";
@@ -57,8 +62,10 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
     protected const string REFERRAL_STATUS_NEW_REFERRAL = "New Referral";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
-    protected const string USER_DISPLAY_NAME_FEMALE = "Doctor Female";
-    protected const string USER_DISPLAY_NAME_MALE = "Doctor Male";
+    protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
+    protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
+    protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
+    protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
 
     protected const string SystemAdminIdentityServerIdentifier = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
@@ -74,6 +81,42 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception("Cannot find CCG", ex);
+      }
+    }
+
+    protected int GetFirstGpPractice()
+    {
+      try
+      {
+        return _context.GpPractices.First().Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception("Cannot find GP Practice", ex);
+      }
+    }
+
+    protected int GetCcgIdByName(string CcgName)
+    {
+      try
+      {
+        return _context.Ccgs.Single(ccg => ccg.Name == CcgName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find CCG with the name {CcgName} in Ccgs", ex);
+      }
+    }
+
+    protected int GetGpPracticeIdByName(string GpPracticeName)
+    {
+      try
+      {
+        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find GP Practice {GpPracticeName} in GpPractices", ex);
       }
     }
 
