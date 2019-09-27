@@ -21,7 +21,7 @@
               Referral Id: <strong>{{referral.id}}</strong>
             </div>
             <div class="col-md-4">
-              Patient Id: <strong></strong>
+              Patient Id: <strong>{{referral.patient.patientIdentifier | uppercase}}</strong>
             </div>
             <div class="col-md-4">
               Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
@@ -33,4 +33,13 @@
       </div>
     </div>
   </div>
+
+  <ng-template #dangerToast let-toastMessage>
+    <app-danger-toast [toastMessage]='dangerMessage'></app-danger-toast>
+  </ng-template>
+
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'" *ngIf="isRetrievingReferralData"></app-delay-spinner>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
 </div>
