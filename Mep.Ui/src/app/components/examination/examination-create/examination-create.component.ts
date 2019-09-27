@@ -36,7 +36,7 @@ export class ExaminationCreateComponent implements OnInit {
     this.referral.patient = {} as Patient;
     this.referral.patient.patientIdentifier = null;
 
-    this.isRetrievingReferralData = false;
+    this.isRetrievingReferralData = true;
 
     // fetch the latest referral details
     this.referralService.getReferral(this.referral.id).subscribe(
