@@ -43,7 +43,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILETYPE1 = "AMHP";
     protected const string PROFILETYPE2 = "Doctor";
     protected const string PROFILETYPE3 = "Finance";
-    protected const string REFERRALSTATUS = "New Referral";
+    protected const string REFERRAL_STATUS_NEW_REFERRAL = "New Referral";
     protected const string SPECIALITY = "Section 12";
     protected const string USERDISPLAYNAMEFEMALE = "Doctor Female";
     protected const string USERDISPLAYNAMEMALE = "Doctor Male";
@@ -104,11 +104,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Name == REFERRALSTATUS).Id;
+        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NEW_REFERRAL).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find New Referral in ReferralStatuses", ex);
+        throw new Exception("Cannot find {REFERRAL_STATUS_NEW_REFERRAL} in ReferralStatuses", ex);
       }
     }
 
