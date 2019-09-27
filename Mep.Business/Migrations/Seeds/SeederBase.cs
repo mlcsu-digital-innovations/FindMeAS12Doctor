@@ -212,7 +212,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Patients.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
+        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
       }
       catch (Exception ex)
       {
