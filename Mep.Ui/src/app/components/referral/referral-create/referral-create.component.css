@@ -139,26 +139,3 @@ button.less-padding {
 form {
   margin:20px;
 }
-
-.overlay {
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.spinner-div {
-  position: relative;
-  top: 50%;
-  text-align: center;
-}
-
-.spinner-div.spinner-border {
-  font-size: 3em;
-  height:100px;
-  width:100px;
-  color: #ddd;
-  left:45%;
-}
