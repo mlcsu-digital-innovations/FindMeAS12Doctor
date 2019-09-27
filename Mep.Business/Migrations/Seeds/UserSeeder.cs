@@ -29,7 +29,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_1);
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_1);
       user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
@@ -48,7 +48,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_2);
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_2);
       user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
@@ -67,7 +67,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_1);
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_1);
       user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
@@ -86,7 +86,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_2);
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_2);
       user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
@@ -105,7 +105,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_3);
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_3);
       user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
@@ -124,7 +124,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_3);
+      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
       user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
