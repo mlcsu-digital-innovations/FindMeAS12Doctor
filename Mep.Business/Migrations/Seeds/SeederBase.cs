@@ -56,7 +56,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Ccgs.FirstOrDefault().Id;
+        return _context.Ccgs.First().Id;
       }
       catch (Exception ex)
       {
