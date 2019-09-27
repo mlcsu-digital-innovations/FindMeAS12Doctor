@@ -305,138 +305,32 @@
             </div>
           </div>
 
-          <!-- format of danger toast -->
-          <ng-template #dangerTpl>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M 12.00,15.10
-              C 11.30,15.10 10.73,15.67 10.73,16.37
-                10.73,17.07 11.30,17.63 12.00,17.63
-                12.70,17.63 13.27,17.07 13.27,16.37
-                13.27,15.67 12.70,15.10 12.00,15.10 Z
-              M 12.94,6.98
-              C 12.94,6.98 12.94,13.02 12.94,13.02
-                12.94,13.53 12.52,13.95 12.00,13.95
-                11.48,13.95 11.06,13.53 11.06,13.02
-                11.06,13.02 11.06,6.98 11.06,6.98
-                11.06,6.46 11.48,6.04 12.00,6.04
-                12.52,6.04 12.94,6.46 12.94,6.98 Z
-              M 24.00,12.00
-              C 24.00,18.63 18.63,24.00 12.00,24.00
-                5.37,24.00 0.00,18.63 0.00,12.00
-                0.00,5.37 5.37,0.00 12.00,0.00
-                18.63,0.00 24.00,5.37 24.00,12.00 Z
-              M 22.13,12.00
-              C 22.13,6.40 17.60,1.88 12.00,1.88
-                6.40,1.88 1.88,6.40 1.88,12.00
-                1.88,17.60 6.40,22.13 12.00,22.13
-                17.60,22.13 22.13,17.60 22.13,12.00 Z" />
-            </svg>
-            {{ dangerMessage }}
+          <ng-template #dangerToast let-toastMessage>
+            <app-danger-toast [toastMessage]='dangerMessage'></app-danger-toast>
           </ng-template>
 
-          <!-- format of success toast -->
-          <ng-template #successTpl>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M 23.18,7.81
-              C 23.71,7.29 24.00,6.58 24.00,5.84
-                24.00,5.10 23.71,4.39 23.18,3.87
-                22.10,2.78 20.33,2.78 19.24,3.87
-                19.24,3.87 9.39,13.72 9.39,13.72
-                9.12,14.00 8.67,14.00 8.40,13.72
-                8.40,13.72 4.76,10.08 4.76,10.08
-                3.67,9.00 1.90,9.00 0.82,10.08
-                -0.27,11.17 -0.27,12.94 0.82,14.02
-                0.82,14.02 6.92,20.13 6.92,20.13
-                8.01,21.22 9.78,21.22 10.86,20.13
-                10.86,20.13 23.18,7.81 23.18,7.81 Z" />
-            </svg>
-            {{ successMessage }}
+          <ng-template #successToast let-toastMessage>
+            <app-danger-toast [toastMessage]='successMessage'></app-danger-toast>
           </ng-template>
 
-          <!-- patient results, used in modal -->
-          <ng-template #patientResults>
-            <div class="modal-header header-danger" *ngIf="patientResult.currentReferralId !== null">
-              <h4 class="modal-title" >An active referral exists for this patient !</h4>
-            </div>
-            <div class="modal-header header-info" *ngIf="patientResult.currentReferralId === null">
-              <h4 class="modal-title" >A patient with this identifer has been found</h4>
-            </div>
-            <div class="modal-body">
-              <div class="row" *ngIf="patientResult.nhsNumber !== null">
-                <div class="col-md-4 row-title">
-                  NHS Number
-                </div>
-                <div class="col-md-8 row-value">
-                  {{ patientResult.nhsNumber }}
-                </div>
-              </div>
-              <div class="row" *ngIf="patientResult.alternativeIdentifier !== null">
-                <div class="col-md-4 row-title">
-                  Alternative Identifier
-                </div>
-                <div class="col-md-8 row-value">
-                  {{ patientResult.alternativeIdentifier }}
-                </div>
-              </div>
-              <div class="row" *ngIf="patientResult.gpPracticeNameAndPostcode !== null">
-                <div class="col-md-4 row-title">
-                  GP Practice
-                </div>
-                <div class="col-md-8 row-value">
-                  {{ patientResult.gpPracticeNameAndPostcode }}
-                </div>
-              </div>
-              <div class="row" *ngIf="patientResult.residentialPostcode !== null">
-                <div class="col-md-4 row-title">
-                  Patients Residential Postcode
-                </div>
-                <div class="col-md-8 row-value">
-                  {{ patientResult.residentialPostcode }}
-                </div>
-              </div>
-              <div class="row" *ngIf="patientResult.ccgName !== null">
-                <div class="col-md-4 row-title">
-                  CCG
-                </div>
-                <div class="col-md-8 row-value">
-                  {{ patientResult.ccgName }}
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" (click)="CancelPatientResultsModal()">
-                Cancel
-              </button>
-              <button type="button" class="btn btn-primary" (click)="UseExistingPatient()"
-                *ngIf="patientResult.currentReferralId == null">
-                Use Existing Details
-              </button>
-              <button type="button" class="btn btn-primary" (click)="UseExistingReferral()"
-                *ngIf="patientResult.currentReferralId !== null">
-                Use Existing Referral
-              </button>
-            </div>
+          <!-- patient results -->
+          <ng-template #patientResults let-patientResult>
+            <app-patient-results-modal
+              [patientResult]="modalResult"
+              (actioned)="onPatientModalAction($event)"
+            >
+            </app-patient-results-modal>
           </ng-template>
 
           <ng-template #cancelReferral>
-            <div class="modal-header header-info">
-              <h4 class="modal-title">Cancel Referral ?</h4>
-            </div>
-            <div class="modal-body">
-              <h5>
-                Do you wish to cancel this referral creation ?
-                All changes will be lost.
-              </h5>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" (click)="CancelCancellation()">
-                No
-              </button>
-              <button type="button" class="btn btn-primary" (click)="ConfirmCancellation()">
-                Yes
-              </button>
-            </div>
+            <app-cancel-action-modal
+              [modalTitle]="'Cancel Referral'"
+              [modalBody]="'Do you wish to cancel this referral creation ? All changes will be lost.'"
+              (actioned)="onCancelModalAction($event)"
+            >
+            </app-cancel-action-modal>
           </ng-template>
+
           <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
         </div>
       </div>
