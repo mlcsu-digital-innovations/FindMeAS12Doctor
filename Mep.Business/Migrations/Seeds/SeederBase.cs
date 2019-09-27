@@ -44,7 +44,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILETYPE2 = "Doctor";
     protected const string PROFILETYPE3 = "Finance";
     protected const string REFERRAL_STATUS_NEW_REFERRAL = "New Referral";
-    protected const string SPECIALITY = "Section 12";
+    protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string USERDISPLAYNAMEFEMALE = "Doctor Female";
     protected const string USERDISPLAYNAMEMALE = "Doctor Male";
 
@@ -116,7 +116,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Specialities.Single(speciality => speciality.Name == SPECIALITY).Id;
+        return _context.Specialities.Single(speciality => speciality.Name == SPECIALITY_SECTION_12).Id;
       }
       catch (Exception ex)
       {
