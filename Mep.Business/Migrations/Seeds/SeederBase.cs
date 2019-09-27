@@ -15,8 +15,9 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
-    protected const string FEMALE = "Female";
-    protected const string MALE = "Male";
+    protected const string GENDER_TYPE_FEMALE = "Female";
+    protected const string GENDER_TYPE_MALE = "Male";
+    protected const string GENDER_TYPE_OTHER = "Other";
     protected const string NOTIFICATION_TEXT_1 = "Notification Text 1";
     protected const string NOTIFICATION_TEXT_2 = "Notification Text 2";
     protected const string ORGANISATION_1 = "Organisation 1";
@@ -27,7 +28,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const string ORGANISATION_3_USER = "Org 3 User";
     protected const string ORGANISATION_4 = "Organisation 4";
     protected const string ORGANISATION_4_USER = "Org 4 User";
-    protected const string OTHER = "Other";
     protected const string PATIENT_ALTERNATIVE_IDENTIFIER_1 = "Test Patient #1";
     protected const string PATIENT_ALTERNATIVE_IDENTIFIER_2 = "Test Patient #2";
     protected const string PATIENT_ALTERNATIVE_IDENTIFIER_3 = "Test Patient #3";
@@ -68,7 +68,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == FEMALE).Id;
+        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_FEMALE).Id;
       }
       catch (Exception ex)
       {
@@ -80,7 +80,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == MALE).Id;
+        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_MALE).Id;
       }
       catch (Exception ex)
       {
@@ -92,7 +92,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == OTHER).Id;
+        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_OTHER).Id;
       }
       catch (Exception ex)
       {
