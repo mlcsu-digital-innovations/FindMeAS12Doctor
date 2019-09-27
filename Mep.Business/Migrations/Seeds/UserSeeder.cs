@@ -30,7 +30,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_1);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_1);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
@@ -49,7 +49,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_2);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_2);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
@@ -68,7 +68,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_1);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_3);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
             
@@ -87,7 +87,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_2);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_1);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
             
@@ -106,7 +106,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_3);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_2);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
             
@@ -125,7 +125,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_3);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_3);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
     }

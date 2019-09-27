@@ -29,6 +29,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string ORGANISATION_3_USER = "Org 3 User";
     protected const string ORGANISATION_4 = "Organisation 4";
     protected const string ORGANISATION_4_USER = "Org 4 User";
+    protected const string ORGANISATION_DESCRIPTION_SYSTEM_ADMIN = "System Organisation Description";
+    protected const string ORGANISATION_NAME_SYSTEM_ADMIN = "System Organisation";
     protected const string PATIENT_ALTERNATIVE_IDENTIFIER_1 = "Test Patient #1";
     protected const string PATIENT_ALTERNATIVE_IDENTIFIER_2 = "Test Patient #2";
     protected const string PATIENT_ALTERNATIVE_IDENTIFIER_3 = "Test Patient #3";
@@ -41,20 +43,19 @@ namespace Mep.Business.Migrations.Seeds
     protected const long PATIENT_NHS_NUMBER_2 = 9657966272;
     protected const long PATIENT_NHS_NUMBER_3 = 9070304333;
     protected const long PATIENT_NHS_NUMBER_4 = 9813607416;
-    protected const string PROFILE_TYPE_1 = "AMHP";
-    protected const string PROFILE_TYPE_2 = "Doctor";
-    protected const string PROFILE_TYPE_3 = "Finance";
+    protected const string PROFILE_TYPE_DESCRIPTION_AMPH = "AMHP ProfileType Description";
+    protected const string PROFILE_TYPE_DESCRIPTION_DOCTOR = "AMHP ProfileType Doctor";
+    protected const string PROFILE_TYPE_DESCRIPTION_FINANCE = "AMHP ProfileType Finance";
+    protected const string PROFILE_TYPE_DESCRIPTION_SYSTEM = "System ProfileType Description";
+    protected const string PROFILE_TYPE_NAME_AMPH = "AMHP ProfileType";
+    protected const string PROFILE_TYPE_NAME_DOCTOR = "Doctor ProfileType";
+    protected const string PROFILE_TYPE_NAME_FINANCE = "Finance ProfileType";
+    protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
     protected const string REFERRAL_STATUS_NEW_REFERRAL = "New Referral";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string USER_DISPLAY_NAME_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_MALE = "Doctor Male";
-
-
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
-    protected const string ORGANISATION_NAME_SYSTEM_ADMIN = "System Organisation";
-    protected const string ORGANISATION_DESCRIPTION_SYSTEM_ADMIN = "System Organisation Description";
-    protected const string PROFILE_TYPE_DESCRIPTION_SYSTEM = "System ProfileType Description";
-    protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
 
     protected const string SystemAdminIdentityServerIdentifier = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
 
