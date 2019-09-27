@@ -29,6 +29,33 @@
           </div>
         </div>
         <div class="card-body">
+          <form [formGroup]="examinationForm" novalidate>
+            <!-- AMHP User -->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <label for="amhp">AMHP</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="amhp"
+                  #amhp
+                  [class.is-invalid]="hasAmhpSearchFailed"
+                  formControlName="amhp"
+                  [ngbTypeahead]="amhpSearch"
+                  [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults" />
+              </div>
+            </div>
+            <!-- AMHP User Errors-->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isAmhpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
