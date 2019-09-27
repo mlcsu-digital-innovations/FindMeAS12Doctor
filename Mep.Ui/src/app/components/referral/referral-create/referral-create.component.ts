@@ -29,36 +29,35 @@ import { TypeAheadResult } from '../../../interfaces/typeahead-result';
   styleUrls: ['./referral-create.component.css']
 })
 export class ReferralCreateComponent implements OnInit {
-  myForm: FormGroup;
-  patientForm: FormGroup;
-  value = false;
-  isSearchingForPatient: boolean;
-  isSearchingForPostcode: boolean;
-  isCreatingReferral: boolean;
-  dangerMessage: string;
-  successMessage: string;
-  patientResult: PatientSearchResult;
-  patientModal: NgbModalRef;
+
   cancelModal: NgbModalRef;
-  isGpSearching: boolean;
-  hasGpSearchFailed: boolean;
-  isGpFieldsShown: boolean;
-  isResidentialPostcodeFieldShown: boolean;
-  residentialPostcodeValidationMessage: string;
-  isCcgSearching: boolean;
-  hasCcgSearchFailed: boolean;
-  isCcgFieldsShown: boolean;
-  isAmhpSearching: boolean;
+  dangerMessage: string;
   hasAmhpSearchFailed: boolean;
+  hasCcgSearchFailed: boolean;
+  hasGpSearchFailed: boolean;
   isAmhpFieldsShown: boolean;
-  patientDetails: Patient;
+  isAmhpSearching: boolean;
+  isCcgFieldsShown: boolean;
+  isCcgSearching: boolean;
+  isCreatingReferral: boolean;
+  isGpFieldsShown: boolean;
+  isGpSearching: boolean;
   isPatientIdValidated: boolean;
   isPatientPostcodeValidated: boolean;
-
-  unknownGpPracticeId: number;
-  unknownCcgId: number;
-
+  isResidentialPostcodeFieldShown: boolean;
+  isSearchingForPatient: boolean;
+  isSearchingForPostcode: boolean;
   modalResult: PatientSearchResult;
+  myForm: FormGroup;
+  patientDetails: Patient;
+  patientForm: FormGroup;
+  patientModal: NgbModalRef;
+  patientResult: PatientSearchResult;
+  residentialPostcodeValidationMessage: string;
+  successMessage: string;
+  unknownCcgId: number;
+  unknownGpPracticeId: number;
+  value = false;
 
   @ViewChild('dangerToast', null) dangerTemplate;
   @ViewChild('successToast', null) successTemplate;
@@ -66,18 +65,18 @@ export class ReferralCreateComponent implements OnInit {
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private patientSearchService: PatientSearchService,
-    private toastService: ToastService,
-    private modalService: NgbModal,
-    private renderer: Renderer2,
-    private gpPracticeListService: GpPracticeListService,
-    private postcodeValidationService: PostcodeValidationService,
-    private ccgListService: CcgListService,
     private amhpListService: AmhpListService,
+    private ccgListService: CcgListService,
+    private formBuilder: FormBuilder,
+    private gpPracticeListService: GpPracticeListService,
+    private modalService: NgbModal,
+    private patientSearchService: PatientSearchService,
     private patientService: PatientService,
+    private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
-    private router: Router
+    private renderer: Renderer2,
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
