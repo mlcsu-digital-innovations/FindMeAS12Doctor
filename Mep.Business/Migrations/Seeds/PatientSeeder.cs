@@ -24,7 +24,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = "Test Patient #1";
+      patient.AlternativeIdentifier = null;
       patient.CcgId = null;
       patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
       patient.IsActive = true;
@@ -43,7 +43,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = "Test Patient #2";
+      patient.AlternativeIdentifier = null;
       patient.CcgId = null;
       patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_2);
       patient.IsActive = true;
@@ -62,7 +62,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = "Test Patient #3";
+      patient.AlternativeIdentifier = null;
       patient.CcgId = null;
       patient.GpPracticeId = null;
       patient.IsActive = true;
@@ -81,7 +81,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
 
-      patient.AlternativeIdentifier = "Test Patient #4";
+      patient.AlternativeIdentifier = null;
       patient.CcgId = null;
       patient.GpPracticeId = null;
       patient.IsActive = true;
