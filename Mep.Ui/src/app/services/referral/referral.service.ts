@@ -10,6 +10,12 @@ import { ReferralStatus } from '../../enums/ReferralStatus.enum';
 export class ReferralService {
   constructor(private httpClient: HttpClient) {}
 
+  public getReferral(referralId: number) {
+    return this.httpClient.get(
+      environment.apiEndpoint + `/referral/${referralId}`
+    );
+  }
+
   public createReferral(newReferral: Referral ) {
 
     // ToDo: Get the id of the logged on user

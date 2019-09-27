@@ -84,6 +84,12 @@ label {
   margin-top: -10px;
 }
 
+.card-header-details {
+  background-color: #0dadb7;
+  padding:10px;
+  color: #fff;
+}
+
 .modal-header, .modal-body {
   color: #495057;
 }
