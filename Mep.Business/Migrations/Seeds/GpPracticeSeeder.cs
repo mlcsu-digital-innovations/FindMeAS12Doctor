@@ -107,12 +107,12 @@ namespace Mep.Business.Migrations.Seeds
       GpPractice gp;
 
       // Get Id of Unknown Ccg
-      unknown = _context.Ccgs.Single(c => c.Name == "Unknown");
+      unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
 
       // create a dummy CCG for Unknown
       if ((gp =
       _context.GpPractices
-              .SingleOrDefault(g => g.Name == "Unknown")) == null)
+              .SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
       {
         gp = new GpPractice();
         _context.Add(gp);
@@ -121,7 +121,7 @@ namespace Mep.Business.Migrations.Seeds
       gp.IsActive = true;
       gp.ModifiedAt = _now;
       gp.ModifiedByUser = GetSystemAdminUser();
-      gp.Name = "Unknown";
+      gp.Name = GP_PRACTICE_NAME_UNKNOWN;
       gp.GpPracticeCode = "XXX";
       gp.Postcode = "";
       gp.CcgId = unknown.Id;

@@ -18,6 +18,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_FEMALE = "Female";
     protected const string GENDER_TYPE_MALE = "Male";
     protected const string GENDER_TYPE_OTHER = "Other";
+    protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const string NOTIFICATION_TEXT_1 = "Notification Text 1";
     protected const string NOTIFICATION_TEXT_2 = "Notification Text 2";
     protected const string ORGANISATION_1 = "Organisation 1";
