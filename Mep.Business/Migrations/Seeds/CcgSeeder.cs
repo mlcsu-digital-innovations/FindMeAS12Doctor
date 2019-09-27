@@ -23,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
       // create a dummy CCG for Unknown
       if ((ccg =
         _context.Ccgs
-          .SingleOrDefault(c => c.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
+          .SingleOrDefault(c => c.Name == CCG_NAME_UNKNOWN)) == null)
       {
         ccg = new Ccg();
         _context.Add(ccg);
@@ -32,7 +32,7 @@ namespace Mep.Business.Migrations.Seeds
       ccg.IsActive = true;
       ccg.ModifiedAt = _now;
       ccg.ModifiedByUser = GetSystemAdminUser();
-      ccg.Name = GP_PRACTICE_NAME_UNKNOWN;
+      ccg.Name = CCG_NAME_UNKNOWN;
       ccg.CostCentre = 1;
       ccg.FailedExamPayment = 0.0m;
       ccg.IsPaymentApprovalRequired = true;
