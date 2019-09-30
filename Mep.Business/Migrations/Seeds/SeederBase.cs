@@ -18,9 +18,12 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
-    protected const string GENDER_TYPE_FEMALE = "Female";
-    protected const string GENDER_TYPE_MALE = "Male";
-    protected const string GENDER_TYPE_OTHER = "Other";
+    protected const string GENDER_TYPE_NAME_FEMALE = "Female";
+    protected const string GENDER_TYPE_NAME_MALE = "Male";
+    protected const string GENDER_TYPE_NAME_OTHER = "Other";
+    protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female";
+    protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male";
+    protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
     protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
@@ -112,7 +115,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_FEMALE).Id;
+        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_NAME_FEMALE).Id;
       }
       catch (Exception ex)
       {
@@ -124,7 +127,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_MALE).Id;
+        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_NAME_MALE).Id;
       }
       catch (Exception ex)
       {
@@ -136,7 +139,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_OTHER).Id;
+        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_NAME_OTHER).Id;
       }
       catch (Exception ex)
       {
