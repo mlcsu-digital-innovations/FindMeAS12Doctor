@@ -39,7 +39,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       patient.AlternativeIdentifier = null;
       patient.CcgId = null;
-      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_2);
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
