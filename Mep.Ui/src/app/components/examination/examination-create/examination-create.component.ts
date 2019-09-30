@@ -22,6 +22,7 @@ export class ExaminationCreateComponent implements OnInit {
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
+  examinationPostcodeValidationMessage: string;
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
 
@@ -38,6 +39,9 @@ export class ExaminationCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    const postcodeRegex =
+      '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$';
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -68,12 +72,42 @@ export class ExaminationCreateComponent implements OnInit {
     );
 
     this.examinationForm = this.formBuilder.group({
-      amhp: ['']
+      amhp: [''],
+      examinationPostcode: [
+        '',
+        [
+          Validators.minLength(6),
+          Validators.maxLength(8),
+          Validators.pattern(postcodeRegex)
+        ]
+      ],
     });
+  }
+
+  HasValidPostcode(): boolean {
+    return (
+      this.examinationPostcodeField.value !== '' &&
+      this.examinationPostcodeField.errors == null
+    );
+  }
+
+  HasInvalidPostcode(): boolean {
+    return (
+      this.examinationPostcodeField.value !== '' &&
+      this.examinationPostcodeField.errors !== null
+    );
   }
 
   get amhpField() {
     return this.examinationForm.controls.amhp;
+  }
+
+  get examination() {
+    return this.examinationForm.controls;
+  }
+
+  get examinationPostcodeField() {
+    return this.examinationForm.controls.examinationPostcode;
   }
 
   SetAmhpField(id: number | null, text: string | null) {

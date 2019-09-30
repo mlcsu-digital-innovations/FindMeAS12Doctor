@@ -55,6 +55,33 @@
                 </div>
               </div>
             </div>
+            <!-- Residential Postcode -->
+            <div class="form-row">
+              <div class="col-md-3">
+                <label for="examinationPostcode">Examination Postcode</label>
+                <input
+                  type="text"
+                  maxlength="8"
+                  minlength="6"
+                  formControlName="examinationPostcode"
+                  #examinationPostcode
+                  id="examinationPostcode"
+                  oninput="this.value = this.value.toUpperCase()"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': HasInvalidPostcode(),
+                    'is-valid': HasValidPostcode()
+                  }" />
+              </div>
+            </div>
+            <!-- Residential Postcode Errors-->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div *ngIf="examination.examinationPostcode.errors" class="invalid-field">
+                  <span>{{ examinationPostcodeValidationMessage }}</span>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -66,11 +93,9 @@
   </ng-template>
 
   <ng-template #loading>
-    <app-delay-spinner  [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+    <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
   </ng-template>
 
   <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
 </div>
-
-
