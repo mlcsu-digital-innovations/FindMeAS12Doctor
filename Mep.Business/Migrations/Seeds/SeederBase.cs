@@ -67,7 +67,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILE_TYPE_NAME_DOCTOR = "Doctor ProfileType";
     protected const string PROFILE_TYPE_NAME_FINANCE = "Finance ProfileType";
     protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
-    protected const string REFERRAL_STATUS_NEW_REFERRAL = "New Referral";
+    protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
+    protected const string REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL = "New Referral Description";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
@@ -155,7 +156,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NEW_REFERRAL).Id;
+        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL).Id;
       }
       catch (Exception ex)
       {
