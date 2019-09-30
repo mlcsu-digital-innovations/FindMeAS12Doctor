@@ -1,7 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
@@ -20,11 +20,11 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 export class ExaminationCreateComponent implements OnInit {
 
   dangerMessage: string;
+  errMessage: string;
   examinationForm: FormGroup;
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
-  isRetrievingReferralData: boolean;
-  errMessage: string;
+
   referral$: Observable<Referral | any>;
 
   @ViewChild('dangerToast', null) dangerTemplate;
@@ -42,7 +42,13 @@ export class ExaminationCreateComponent implements OnInit {
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.referralService.getReferral(+params.get('referralId'));
+          return this.referralService.getReferral(+params.get('referralId'))
+          .pipe(
+            map(referral => {
+              this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
+              return referral;
+            })
+          );
         }
       ),
       catchError((err) => {
@@ -64,7 +70,6 @@ export class ExaminationCreateComponent implements OnInit {
     this.examinationForm = this.formBuilder.group({
       amhp: ['']
     });
-
   }
 
   get amhpField() {
