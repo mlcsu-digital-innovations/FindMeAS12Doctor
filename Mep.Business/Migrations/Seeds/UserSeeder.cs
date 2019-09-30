@@ -139,7 +139,7 @@ namespace Mep.Business.Migrations.Seeds
         user = new User();
         _context.Add(user);
       }
-      user.DisplayName = ORGANISATION_4_USER;
+      user.DisplayName = USER_DISPLAY_NAME_FINANCE;
       user.GenderTypeId = GetMaleGenderTypeId();
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
