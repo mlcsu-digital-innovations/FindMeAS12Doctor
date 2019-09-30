@@ -27,7 +27,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
-      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_1);
+      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_NAME_1);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
 
@@ -43,7 +43,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.IsActive = true;
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
-      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_2);
+      userExaminationNotification.NotificationTextId = GetNotificationTextId(NOTIFICATION_TEXT_NAME_2);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
     }
