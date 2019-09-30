@@ -1,10 +1,12 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Patient } from 'src/app/interfaces/patient';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
+import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-examination-create',
@@ -16,6 +18,7 @@ export class ExaminationCreateComponent implements OnInit {
 
   isRetrievingReferralData: boolean;
   dangerMessage: string;
+  referralQuery: Observable<any>;
 
   @ViewChild('dangerToast', null) dangerTemplate;
 
@@ -27,10 +30,6 @@ export class ExaminationCreateComponent implements OnInit {
 
   ngOnInit() {
 
-    this.referral.id = parseInt(
-      this.route.snapshot.paramMap.get('referralId'),
-      null
-    );
     this.referral.leadAmhpUser = {} as LeadAmhpUser;
     this.referral.leadAmhpUser.displayName = null;
     this.referral.patient = {} as Patient;
@@ -38,13 +37,19 @@ export class ExaminationCreateComponent implements OnInit {
 
     this.isRetrievingReferralData = true;
 
-    // fetch the latest referral details
-    this.referralService.getReferral(this.referral.id).subscribe(
+    this.referralQuery = this.route.paramMap.pipe(
+      switchMap(
+        (params: ParamMap) => {
+          this.referral.id = +params.get('referralId');
+          return this.referralService.getReferral(+params.get('referralId'));
+        }
+      )
+    );
+
+    this.referralQuery.subscribe(
       (referral: Referral) => {
         this.isRetrievingReferralData = false;
         this.referral = referral;
-
-        // ToDo: Inform the user if this referral already has an active examination
       },
       err => {
         this.isRetrievingReferralData = false;
