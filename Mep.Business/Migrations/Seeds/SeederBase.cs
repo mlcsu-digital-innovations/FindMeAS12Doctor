@@ -27,8 +27,12 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
     protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
-    protected const string NOTIFICATION_TEXT_1 = "Notification Text 1";
-    protected const string NOTIFICATION_TEXT_2 = "Notification Text 2";
+    protected const string NOTIFICATION_TEXT_DESCRIPTION_1 = "Notification Text Description 1";
+    protected const string NOTIFICATION_TEXT_DESCRIPTION_2 = "Notification Text Description 2";
+    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_1 = "Notification Text Message Template 1";
+    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_2 = "Notification Text Message Template 2";
+    protected const string NOTIFICATION_TEXT_NAME_1 = "Notification Text 1";
+    protected const string NOTIFICATION_TEXT_NAME_2 = "Notification Text 2";
     protected const string ORGANISATION_1_USER = "Org 1 User";
     protected const string ORGANISATION_2_USER = "Org 2 User";
     protected const string ORGANISATION_3_USER = "Org 3 User";
