@@ -15,9 +15,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       User user;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_DOCTOR_FEMALE)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_DOCTOR_FEMALE)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -30,13 +28,11 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_1);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_DOCTOR_MALE)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_DOCTOR_MALE)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -53,9 +49,7 @@ namespace Mep.Business.Migrations.Seeds
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_1_USER)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == ORGANISATION_1_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -72,9 +66,7 @@ namespace Mep.Business.Migrations.Seeds
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_2_USER)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == ORGANISATION_2_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -91,9 +83,7 @@ namespace Mep.Business.Migrations.Seeds
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_3_USER)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == ORGANISATION_3_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -110,9 +100,7 @@ namespace Mep.Business.Migrations.Seeds
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_4_USER)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == ORGANISATION_4_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -129,9 +117,7 @@ namespace Mep.Business.Migrations.Seeds
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_AMHP)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_AMHP)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -144,14 +130,11 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
-
-      if ((user =
-        _context.Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_FINANCE)) == null)
+      if ((user = _context.Users.SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_FINANCE)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -164,7 +147,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
     }

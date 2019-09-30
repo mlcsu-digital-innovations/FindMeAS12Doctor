@@ -84,18 +84,6 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetFirstGpPractice()
-    {
-      try
-      {
-        return _context.GpPractices.First().Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find GP Practice", ex);
-      }
-    }
-
     protected int GetCcgIdByName(string CcgName)
     {
       try
@@ -104,7 +92,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find CCG with the name {CcgName} in Ccgs", ex);
+        throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
       }
     }
 
@@ -116,7 +104,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find GP Practice {GpPracticeName} in GpPractices", ex);
+        throw new Exception($"Cannot find a GP Practice with the name {GpPracticeName} in GpPractices", ex);
       }
     }
 
@@ -128,7 +116,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find female in GenderTypes", ex);
+        throw new Exception("Cannot find Gender Type female in GenderTypes", ex);
       }
     }
 
@@ -140,7 +128,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find male in GenderTypes", ex);
+        throw new Exception("Cannot find Gender Type male in GenderTypes", ex);
       }
     }
 
@@ -152,7 +140,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find other in GenderTypes", ex);
+        throw new Exception("Cannot find Gender Type other in GenderTypes", ex);
       }
     }
 
@@ -164,7 +152,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find {REFERRAL_STATUS_NEW_REFERRAL} in ReferralStatuses", ex);
+        throw new Exception("Cannot find a Referral Status with the name {REFERRAL_STATUS_NEW_REFERRAL} in ReferralStatuses", ex);
       }
     }
 
@@ -176,7 +164,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find Section 12 in Speciality", ex);
+        throw new Exception("Cannot find a Speciality with the name {SPECIALITY_SECTION_12} in Speciality", ex);
       }
     }
 
@@ -188,7 +176,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find {profileTypeName} in ProfileTypes", ex);
+        throw new Exception("Cannot find a Profile Type with the name {profileTypeName} in ProfileTypes", ex);
       }
     }
 
@@ -200,7 +188,19 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find patinet with an NHS Number of {nhsNumber} in Patients", ex);
+        throw new Exception($"Cannot find a Patinet with an NHS Number of {nhsNumber} in Patients", ex);
+      }
+    }
+
+    protected int GetPatientIdByAlternativeIdentifier(string alternativeIdentifier)
+    {
+      try
+      {
+        return _context.Patients.Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
       }
     }
 
@@ -216,18 +216,6 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetPatientIdByAlternativeIdentifier(string alternativeIdentifier)
-    {
-      try
-      {
-        return _context.Patients.Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
-      }
-    }
-
     protected int GetUserIdByDisplayname(string displayName)
     {
       try
@@ -236,7 +224,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find user {displayName} in Users", ex);
+        throw new Exception($"Cannot find a user with the Display Name {displayName} in Users", ex);
       }
     }
 
@@ -248,7 +236,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find organisation {name} in Organisations", ex);
+        throw new Exception($"Cannot find an organisation with the Name {name} in Organisations", ex);
       }
     }
 
@@ -260,7 +248,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find referral with an NHS Number of {nhsNumber} in Referrals", ex);
+        throw new Exception($"Cannot find a Referral that has a Patient with an NHS Number of {nhsNumber} in Referrals", ex);
       }
     }
 
@@ -272,7 +260,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find referral with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
+        throw new Exception($"Cannot find a referral that has a Patient with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
       }
     }
 
@@ -295,10 +283,7 @@ namespace Mep.Business.Migrations.Seeds
 
     protected User GetSystemAdminUser()
     {
-      return _context.Users
-        .SingleOrDefault(u =>
-          u.IdentityServerIdentifier ==
-            SystemAdminIdentityServerIdentifier);
+      return _context.Users.SingleOrDefault(u => u.IdentityServerIdentifier == SystemAdminIdentityServerIdentifier);
     }
   }
 }

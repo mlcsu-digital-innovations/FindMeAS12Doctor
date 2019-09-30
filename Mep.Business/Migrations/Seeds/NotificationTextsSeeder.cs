@@ -14,9 +14,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       NotificationText notificationText;
 
-      if ((notificationText =
-        _context.NotificationTexts
-          .SingleOrDefault(g => g.Name == NOTIFICATION_TEXT_1)) == null)
+      if ((notificationText = _context.NotificationTexts.SingleOrDefault(g => g.Name == NOTIFICATION_TEXT_1)) == null)
       {
         notificationText = new NotificationText();
         _context.Add(notificationText);
@@ -28,9 +26,7 @@ namespace Mep.Business.Migrations.Seeds
       notificationText.ModifiedByUser = GetSystemAdminUser();
       notificationText.Name = NOTIFICATION_TEXT_1;
 
-      if ((notificationText =
-        _context.NotificationTexts
-          .SingleOrDefault(g => g.Name == NOTIFICATION_TEXT_2)) == null)
+      if ((notificationText = _context.NotificationTexts.SingleOrDefault(g => g.Name == NOTIFICATION_TEXT_2)) == null)
       {
         notificationText = new NotificationText();
         _context.Add(notificationText);

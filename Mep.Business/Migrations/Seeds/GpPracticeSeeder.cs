@@ -42,15 +42,12 @@ namespace Mep.Business.Migrations.Seeds
         {
           bool validOrganisation = false;
 
-          if ((gpPractice =
-            _context.GpPractices
-              .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
+          if ((gpPractice = _context.GpPractices.SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
           {
             gpPractice = new GpPractice();
             _context.Add(gpPractice);
             validOrganisation = true;
           }
-
           gpPractice.IsActive = gpResult.Status == "Inactive" ? false : true;
           gpPractice.ModifiedAt = _now;
           gpPractice.ModifiedByUser = GetSystemAdminUser();
@@ -110,14 +107,11 @@ namespace Mep.Business.Migrations.Seeds
       unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
 
       // create a dummy CCG for Unknown
-      if ((gp =
-      _context.GpPractices
-              .SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
+      if ((gp = _context.GpPractices.SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
       {
         gp = new GpPractice();
         _context.Add(gp);
       }
-
       gp.IsActive = true;
       gp.ModifiedAt = _now;
       gp.ModifiedByUser = GetSystemAdminUser();
