@@ -15,7 +15,7 @@
             </h6>
           </div>
         </div>
-        <div class="card-header-details">
+        <div class="card-header-details" *ngIf="referral$ | async as referral; else loading">
           <div class="row">
             <div class="col-md-4">
               Referral Id: <strong>{{referral.id}}</strong>
@@ -62,11 +62,15 @@
   </div>
 
   <ng-template #dangerToast let-toastMessage>
-    <app-danger-toast [toastMessage]='dangerMessage'></app-danger-toast>
+    <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>
   </ng-template>
 
-  <app-delay-spinner [delayMessage]="'Retrieving referral data'" *ngIf="isRetrievingReferralData"></app-delay-spinner>
+  <ng-template #loading>
+    <app-delay-spinner  [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+  </ng-template>
 
   <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
 </div>
+
+

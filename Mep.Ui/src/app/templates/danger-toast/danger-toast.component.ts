@@ -9,4 +9,7 @@ export class DangerToastComponent {
 
   @Input()
   toastMessage: string;
+
+  @Input()
+  errMessage: string;
 }
