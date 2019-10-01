@@ -7,6 +7,7 @@ import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
@@ -20,23 +21,25 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 })
 export class ExaminationCreateComponent implements OnInit {
 
+  addresses$: Observable<any>;
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
-
+  isSearchingForPostcode: boolean;
   referral$: Observable<Referral | any>;
 
   @ViewChild('dangerToast', null) dangerTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
+    private formBuilder: FormBuilder,
+    private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private toastService: ToastService,
-    private formBuilder: FormBuilder
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -96,6 +99,10 @@ export class ExaminationCreateComponent implements OnInit {
     );
   }
 
+  IsSearchingForPostcode(): boolean {
+    return this.isSearchingForPostcode;
+  }
+
   get amhpField() {
     return this.examinationForm.controls.amhp;
   }
@@ -138,4 +145,20 @@ export class ExaminationCreateComponent implements OnInit {
       tap(() => (this.isAmhpSearching = false))
     )
 
+  AddressSearch(): void {
+
+    this.isSearchingForPostcode = true;
+
+    this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
+    .subscribe( addresses => {
+      this.isSearchingForPostcode = false;
+
+      // ToDo: Do something with the results
+
+    }, err => {
+      this.isSearchingForPostcode = false;
+
+      // ToDo: Warn the user of the error ?
+    });
+   }
 }
