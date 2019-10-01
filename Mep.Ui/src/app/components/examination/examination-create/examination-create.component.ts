@@ -7,11 +7,11 @@ import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
-import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 
 
 @Component({
@@ -21,6 +21,7 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 })
 export class ExaminationCreateComponent implements OnInit {
 
+  addresses$: Observable<any>;
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
@@ -28,19 +29,17 @@ export class ExaminationCreateComponent implements OnInit {
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
-
   referral$: Observable<Referral | any>;
-  addresses$: Observable<any>;
 
   @ViewChild('dangerToast', null) dangerTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
-    private referralService: ReferralService,
-    private route: ActivatedRoute,
-    private toastService: ToastService,
     private formBuilder: FormBuilder,
     private postcodeValidationService: PostcodeValidationService,
+    private referralService: ReferralService,
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
