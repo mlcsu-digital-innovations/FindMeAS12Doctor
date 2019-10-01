@@ -67,16 +67,15 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILE_TYPE_NAME_DOCTOR = "Doctor ProfileType";
     protected const string PROFILE_TYPE_NAME_FINANCE = "Finance ProfileType";
     protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
-    protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
     protected const string REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL = "New Referral Description";
+    protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
+    protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
     protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
     protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
-
-    protected const string SystemAdminIdentityServerIdentifier = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
 
     protected readonly ApplicationContext _context;
 
@@ -291,7 +290,7 @@ namespace Mep.Business.Migrations.Seeds
 
     protected User GetSystemAdminUser()
     {
-      return _context.Users.SingleOrDefault(u => u.IdentityServerIdentifier == SystemAdminIdentityServerIdentifier);
+      return _context.Users.SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
     }
   }
 }
