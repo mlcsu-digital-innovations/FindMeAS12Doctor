@@ -19,7 +19,8 @@ namespace Mep.Api.ViewModels
 
     public string PatientIdentifier {
       get {
-        return this.NhsNumber == null ? this.AlternativeIdentifier : this.NhsNumber.ToString();
+        return this.NhsNumber == 
+          null ? this.AlternativeIdentifier : this.NhsNumber.ToString();
       }
     }
   }
