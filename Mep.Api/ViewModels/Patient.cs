@@ -16,5 +16,13 @@ namespace Mep.Api.ViewModels
     [Required]
     public string ResidentialPostcode { get; set; }
     public virtual IList<Referral> Referrals { get; set; }
+
+    public string PatientIdentifier {
+      get {
+        return this.NhsNumber == null
+          ? this.AlternativeIdentifier 
+          : this.NhsNumber.ToString();
+      }
+    }
   }
 }

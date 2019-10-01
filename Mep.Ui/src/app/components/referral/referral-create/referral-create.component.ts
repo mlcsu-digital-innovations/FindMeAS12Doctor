@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from '../../../helpers/nhs-number.validator';
 import { Patient } from '../../../interfaces/patient';
+import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from '../../../interfaces/patient-search-params';
 import { PatientSearchResult } from '../../../interfaces/patient-search-result';
 import { PatientSearchService } from '../../../services/patient-search/patient-search.service';
@@ -57,9 +58,11 @@ export class ReferralCreateComponent implements OnInit {
   unknownGpPracticeId: number;
   unknownCcgId: number;
 
-  @ViewChild('dangerTpl', null) dangerTemplate;
-  @ViewChild('successTpl', null) successTemplate;
-  @ViewChild('patientResults', null) patientResultTemplate;
+  modalResult: PatientSearchResult;
+
+  @ViewChild('dangerToast', null) dangerTemplate;
+  @ViewChild('successToast', null) successTemplate;
+  @ViewChild('patientResults', {static: true}) patientResultTemplate;
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
   constructor(
@@ -82,6 +85,8 @@ export class ReferralCreateComponent implements OnInit {
     // ToDo: Get the correct values for these ?
     this.unknownCcgId = 1;
     this.unknownGpPracticeId = 1;
+
+    this.modalResult = {} as PatientSearchResult;
 
     const postcodeRegex =
       '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})|(Unknown)$';
@@ -194,6 +199,28 @@ export class ReferralCreateComponent implements OnInit {
           this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
       }
     });
+  }
+
+  onCancelModalAction(action: boolean) {
+    if (action) {
+      this.ConfirmCancellation();
+    } else {
+      this.CancelCancellation();
+    }
+  }
+
+  onPatientModalAction(action: number) {
+    switch (action) {
+      case PatientAction.Cancel:
+        this.CancelPatientResultsModal();
+        break;
+      case PatientAction.ExistingPatient:
+        this.UseExistingPatient();
+        break;
+      case PatientAction.ExistingReferral:
+        this.UseExistingReferral();
+        break;
+    }
   }
 
   RemoveWhiteSpace(postcode: string): string {
@@ -694,6 +721,7 @@ export class ReferralCreateComponent implements OnInit {
             break;
           case 1:
             this.patientResult = results[0];
+            this.modalResult = results[0];
             this.patientModal = this.modalService.open(
               this.patientResultTemplate,
               { size: 'lg' }

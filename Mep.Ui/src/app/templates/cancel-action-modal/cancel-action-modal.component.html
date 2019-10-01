@@ -1,0 +1,16 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title">{{modalTitle}}</h4>
+</div>
+<div class="modal-body">
+  <h5>
+   {{modalBody}}
+  </h5>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="modalAction(false)">
+    No
+  </button>
+  <button type="button" class="btn btn-primary" (click)="modalAction(true)">
+    Yes
+  </button>
+</div>
