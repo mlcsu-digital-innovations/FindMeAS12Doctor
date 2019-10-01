@@ -10,6 +10,7 @@ import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 
 
 @Component({
@@ -25,8 +26,10 @@ export class ExaminationCreateComponent implements OnInit {
   examinationPostcodeValidationMessage: string;
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
+  isSearchingForPostcode: boolean;
 
   referral$: Observable<Referral | any>;
+  addresses$: Observable<any>;
 
   @ViewChild('dangerToast', null) dangerTemplate;
 
@@ -35,7 +38,8 @@ export class ExaminationCreateComponent implements OnInit {
     private referralService: ReferralService,
     private route: ActivatedRoute,
     private toastService: ToastService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private postcodeValidationService: PostcodeValidationService,
   ) {}
 
   ngOnInit() {
@@ -98,6 +102,10 @@ export class ExaminationCreateComponent implements OnInit {
     );
   }
 
+  IsSearchingForPostcode(): boolean {
+    return this.isSearchingForPostcode;
+  }
+
   get amhpField() {
     return this.examinationForm.controls.amhp;
   }
@@ -140,4 +148,17 @@ export class ExaminationCreateComponent implements OnInit {
       tap(() => (this.isAmhpSearching = false))
     )
 
+  AddressSearch(): void {
+
+    this.isSearchingForPostcode = true;
+
+    this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
+    .subscribe( addresses => {
+      console.log(addresses);
+      this.isSearchingForPostcode = false;
+    }, err => {
+      console.log(err);
+      this.isSearchingForPostcode = false;
+    });
+   }
 }
