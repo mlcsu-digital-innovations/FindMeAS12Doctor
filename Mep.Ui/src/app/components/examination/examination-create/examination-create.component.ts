@@ -161,4 +161,8 @@ export class ExaminationCreateComponent implements OnInit {
       this.isSearchingForPostcode = false;
     });
    }
+
+   OpenLocationTab(): void {
+
+   }
 }
