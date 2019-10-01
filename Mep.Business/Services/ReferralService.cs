@@ -24,7 +24,9 @@ namespace Mep.Business.Services
       IEnumerable<Entities.Referral> entities =
         await _context.Referrals
                 .Include(r => r.CreatedByUser)
+                  .ThenInclude(e => e.UserExaminationNotifications)
                 .Include(r => r.Examinations)
+                  .ThenInclude(e => e.UserExaminationClaims)
                 .Include(r => r.Patient)
                 .Include(r => r.ReferralStatus)
                 .WhereIsActiveOrActiveOnly(activeOnly)
