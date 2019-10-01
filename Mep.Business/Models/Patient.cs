@@ -1,5 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+using Enum = Mep.Business.Enums;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 namespace Mep.Business.Models
 {
   public class Patient : BaseModel
@@ -15,5 +17,30 @@ namespace Mep.Business.Models
     [Required]
     public string ResidentialPostcode { get; set; }
     public virtual IList<Referral> Referrals { get; set; }
+
+    public string GpPracticeNameAndPostcode
+    {
+      get
+      {
+        return GpPracticeId != null ? ($"{GpPractice.Name}, {GpPractice.Postcode}") : "";
+      }
+    }
+
+    public int? GetLatestNotClosedReferralId
+    {
+      get
+      {
+        int? latestNotClosedReferralId = null;
+
+        if (Referrals != null)
+        {
+          Referral referral = Referrals.OrderByDescending(r => r.CreatedAt)
+          .FirstOrDefault(r => r.ReferralStatusId != (int)Enum.ReferralStatus.ReferralClosed);
+
+          latestNotClosedReferralId = referral?.Id;
+        }
+        return latestNotClosedReferralId;
+      }
+    }
   }
 }

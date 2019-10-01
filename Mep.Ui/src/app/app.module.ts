@@ -1,30 +1,26 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { ReactiveFormsModule } from '@angular/forms';
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReferralCreateComponent } from './referral-create/referral-create.component';
-import { NavbarComponent } from './navbar/navbar.component';
-
+import { AppRoutes } from './app.routes';
+import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
-import { DisableControlDirective } from './directives/disable-control/disable-control.directive';
+import { ExaminationModule } from './components/examination/examination.module';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ReferralModule } from './components/referral/referral.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ReferralCreateComponent,
-    NavbarComponent,
-    DisableControlDirective
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    NgbModule,
-    ReactiveFormsModule,
-    DigitOnlyModule
+    DigitOnlyModule,
+    ExaminationModule,
+    HttpClientModule,
+    ReferralModule,
+    RouterModule.forRoot(AppRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

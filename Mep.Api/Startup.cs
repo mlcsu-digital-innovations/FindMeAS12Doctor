@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace Mep.Api
 {
@@ -24,7 +25,12 @@ namespace Mep.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+      services.AddMvc()
+              .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+              .AddJsonOptions(opt => {
+                opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+              });
+              
       services.AddDbContext<ApplicationContext>
       (options =>
       {
@@ -53,6 +59,8 @@ namespace Mep.Api
       services.AddScoped<IModelService<User>, UserService>();
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
+      services.AddScoped<IModelGeneralSearchService<User>, AmhpUserSearchService>();
+      services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
       services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
 
       services.AddCors(options => {
@@ -60,6 +68,7 @@ namespace Mep.Api
           builder => {
             builder.AllowAnyOrigin();
             builder.AllowAnyMethod();
+            builder.AllowAnyHeader();
           }
         );
       });
@@ -79,12 +88,6 @@ namespace Mep.Api
       }
 
       app.UseExceptionHandler("/Error");
-      app.UseCors(builder => 
-      {
-        builder.WithOrigins(
-          "http://localhost:4200",
-          "https://localhost:4200");
-      });
       app.UseHttpsRedirection();
       app.UseCors("AllowAnyOrigin");
       app.UseMvc();      
