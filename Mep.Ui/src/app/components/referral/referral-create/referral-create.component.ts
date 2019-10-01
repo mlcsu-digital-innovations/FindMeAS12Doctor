@@ -419,7 +419,7 @@ export class ReferralCreateComponent implements OnInit {
       },
       error => {
         this.dangerMessage =
-          'Server Error: Unable to create new referral ! Please try again in a few moments';
+          'Server Error: Unable to create new referral! Please try again in a few moments';
         this.toastService.show(this.dangerTemplate, {
           classname: 'bg-danger text-light',
           delay: 10000

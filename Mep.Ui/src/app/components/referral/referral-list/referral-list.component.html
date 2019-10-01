@@ -1,2 +1,112 @@
 <app-navbar></app-navbar>
-<p>referral-list works!</p>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-folder-plus fa-4x" style="color:#fff;"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Referral List</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-body">
+          <form novalidate>
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="searchTerm">Full text search: </label>
+                <input class="form-control" 
+                        id="searchTerm"
+                        type="text" 
+                        name="searchTerm" 
+                        [(ngModel)]="referralListService.searchTerm"/>                   
+              </div>
+              <div class="col-md-8" style="margin-top: 38px;" *ngIf="referralListService.loading$ | async">
+                  Loading...
+                  <div class="spinner-border spinner-border-sm" role="status">                      
+                      <span class="sr-only">Loading...</span>
+                  </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th scope="col" sortable="referralId" (sort)="onSort($event)">Referral Id</th>
+                  <th scope="col" sortable="patientIdentifier" (sort)="onSort($event)">Patient Identifier</th>
+                  <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
+                  <th scope="col" sortable="numberOfExamminationAttempts" (sort)="onSort($event)">No. of Exam Attempts</th>
+                  <th scope="col" sortable="examinationLocationPostcode" (sort)="onSort($event)">Exam Location Postcode</th>
+                  <th scope="col" sortable="speciality" (sort)="onSort($event)">Speciality</th>
+                  <th scope="col" sortable="timescale" (sort)="onSort($event)">Timescale</th>
+                  <th scope="col" sortable="status" (sort)="onSort($event)">Status</th>
+                  <th scope="col" sortable="responsesReceived" (sort)="onSort($event)">Responses Received</th>
+                  <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Allocated</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let referral of referralList$ | async">
+                  <td><ngb-highlight [result]="referral.referralId" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.leadAmhp" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.numberOfExaminationAttempts" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.examinationLocationPostcode" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.speciality" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.timescale" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.status" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.responsesReceived" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                  <td><ngb-highlight [result]="referral.doctorsAllocated" [term]="referralListService.searchTerm"></ngb-highlight></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+              <div class="d-flex justify-content-between p-2">
+                <ngb-pagination
+                  [collectionSize]="total$ | async" [(page)]="referralListService.page" [pageSize]="referralListService.pageSize">
+                </ngb-pagination>
+            
+                <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="referralListService.pageSize">
+                  <option [ngValue]="5">5 items per page</option>
+                  <option [ngValue]="10">10 items per page</option>
+                  <option [ngValue]="9999999">All items</option>
+                </select>
+              </div>
+            </form>          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- format of danger toast -->
+<ng-template #dangerTpl>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
+      <path d="M 12.00,15.10
+      C 11.30,15.10 10.73,15.67 10.73,16.37
+        10.73,17.07 11.30,17.63 12.00,17.63
+        12.70,17.63 13.27,17.07 13.27,16.37
+        13.27,15.67 12.70,15.10 12.00,15.10 Z
+      M 12.94,6.98
+      C 12.94,6.98 12.94,13.02 12.94,13.02
+        12.94,13.53 12.52,13.95 12.00,13.95
+        11.48,13.95 11.06,13.53 11.06,13.02
+        11.06,13.02 11.06,6.98 11.06,6.98
+        11.06,6.46 11.48,6.04 12.00,6.04
+        12.52,6.04 12.94,6.46 12.94,6.98 Z
+      M 24.00,12.00
+      C 24.00,18.63 18.63,24.00 12.00,24.00
+        5.37,24.00 0.00,18.63 0.00,12.00
+        0.00,5.37 5.37,0.00 12.00,0.00
+        18.63,0.00 24.00,5.37 24.00,12.00 Z
+      M 22.13,12.00
+      C 22.13,6.40 17.60,1.88 12.00,1.88
+        6.40,1.88 1.88,6.40 1.88,12.00
+        1.88,17.60 6.40,22.13 12.00,22.13
+        17.60,22.13 22.13,17.60 22.13,12.00 Z" />
+    </svg>
+    {{ dangerMessage }}
+  </ng-template>
