@@ -152,11 +152,14 @@ export class ExaminationCreateComponent implements OnInit {
 
     this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
     .subscribe( addresses => {
-      console.log(addresses);
       this.isSearchingForPostcode = false;
+
+      // ToDo: Do something with the results
+
     }, err => {
-      console.log(err);
       this.isSearchingForPostcode = false;
+
+      // ToDo: Warn the user of the error ?
     });
    }
 }
