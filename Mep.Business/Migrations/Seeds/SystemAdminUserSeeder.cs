@@ -21,7 +21,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(systemAdminUser);
       }
       systemAdminUser.HasReadTermsAndConditions = true;
-      systemAdminUser.IdentityServerIdentifier = SystemAdminIdentityServerIdentifier;
+      systemAdminUser.IdentityServerIdentifier = SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER;
       systemAdminUser.IsActive = true;
       systemAdminUser.ModifiedAt = _now;
       systemAdminUser.DisplayName = USER_DISPLAY_NAME_SYSTEM_ADMIN;
