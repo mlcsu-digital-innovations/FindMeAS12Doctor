@@ -73,20 +73,18 @@
                     'is-valid': HasValidPostcode()
                   }" />
               </div>
-              <div class="col-md-2 centered-div">
-                  <div class="column-div">
+              <div class="col-md-4 centered-div">
+                  <div class="button-container">
                     <button
                       type="button"
-                      class="btn btn-primary vcenter"
-                      style="margin-top:3px;"
-                      placement="right"
+                      class="btn btn-primary btn-exam"
+                      placement="top"
                       ngbTooltip="Search for addresses"
                       [openDelay]="1000"
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
                       (click)="AddressSearch()"
                       [disabled]="examination.examinationPostcode.value == '' || examination.examinationPostcode.errors != null"
-                      [ngClass]="{ validating: IsSearchingForPostcode() }"
                     >
                     {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
                     <span
@@ -94,13 +92,23 @@
                         role="status"
                         aria-hidden="true"
                         *ngIf="IsSearchingForPostcode()"
-                        style="margin-left:100px; display: inline-block;"
                       >
                     </span>
-
                     </button>
-                  </div>
+                    <button
+                    type="button"
+                    class="btn btn-primary btn-exam btn-spaced"
+                    placement="top"
+                    ngbTooltip="Locate an address using an external web site"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    (click)="OpenLocationTab()"
+                    >
+                    Locate
+                  </button>
                 </div>
+              </div>
             </div>
             <!-- Residential Postcode Errors-->
             <div class="form-row">

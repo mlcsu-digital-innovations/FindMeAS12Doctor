@@ -2,6 +2,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Observable, of } from 'rxjs';
@@ -160,5 +161,9 @@ export class ExaminationCreateComponent implements OnInit {
 
       // ToDo: Warn the user of the error ?
     });
+   }
+
+   OpenLocationTab(): void {
+      window.open(environment.locationEndpoint, '_blank');
    }
 }
