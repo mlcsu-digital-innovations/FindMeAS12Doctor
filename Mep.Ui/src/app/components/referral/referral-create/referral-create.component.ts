@@ -13,6 +13,7 @@ import { PatientSearchParams } from '../../../interfaces/patient-search-params';
 import { PatientSearchResult } from '../../../interfaces/patient-search-result';
 import { PatientSearchService } from '../../../services/patient-search/patient-search.service';
 import { PatientService } from '../../../services/patient/patient.service';
+import { PostcodeRegex } from '../../../constants/Constants';
 import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result';
 import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
 import { Referral } from '../../../interfaces/referral';
@@ -87,9 +88,6 @@ export class ReferralCreateComponent implements OnInit {
 
     this.modalResult = {} as PatientSearchResult;
 
-    const postcodeRegex =
-      '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})|(Unknown)$';
-
     this.residentialPostcodeValidationMessage = 'Invalid Postcode';
 
     this.patientForm = this.formBuilder.group({
@@ -112,7 +110,7 @@ export class ReferralCreateComponent implements OnInit {
         [
           Validators.minLength(6),
           Validators.maxLength(8),
-          Validators.pattern(postcodeRegex)
+          Validators.pattern(`${PostcodeRegex}|(Unknown)$`)
         ]
       ],
       unknownResidentialPostcode: false,

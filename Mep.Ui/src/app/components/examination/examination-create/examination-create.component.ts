@@ -2,15 +2,16 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
+import { PostcodeRegex } from '../../../constants/Constants';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
-import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 })
 export class ExaminationCreateComponent implements OnInit {
 
+  addresses$: Observable<any>;
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
@@ -27,25 +29,20 @@ export class ExaminationCreateComponent implements OnInit {
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
-
   referral$: Observable<Referral | any>;
-  addresses$: Observable<any>;
 
   @ViewChild('dangerToast', null) dangerTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
-    private referralService: ReferralService,
-    private route: ActivatedRoute,
-    private toastService: ToastService,
     private formBuilder: FormBuilder,
     private postcodeValidationService: PostcodeValidationService,
+    private referralService: ReferralService,
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
-
-    const postcodeRegex =
-      '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$';
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -82,7 +79,7 @@ export class ExaminationCreateComponent implements OnInit {
         [
           Validators.minLength(6),
           Validators.maxLength(8),
-          Validators.pattern(postcodeRegex)
+          Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
     });
@@ -154,11 +151,14 @@ export class ExaminationCreateComponent implements OnInit {
 
     this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
     .subscribe( addresses => {
-      console.log(addresses);
       this.isSearchingForPostcode = false;
+
+      // ToDo: Do something with the results
+
     }, err => {
-      console.log(err);
       this.isSearchingForPostcode = false;
+
+      // ToDo: Warn the user of the error ?
     });
    }
 
