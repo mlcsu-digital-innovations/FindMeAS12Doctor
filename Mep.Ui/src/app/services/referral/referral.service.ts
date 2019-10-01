@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Referral } from '../../interfaces/referral';
 import { ReferralStatus } from '../../enums/ReferralStatus.enum';
-import { Observable, empty, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class ReferralService {
     return this.httpClient.get(
       environment.apiEndpoint + `/referral/${referralId}`
     )
+    .pipe(delay(1000))
     .pipe
       (map(r => r as Referral)
     );
