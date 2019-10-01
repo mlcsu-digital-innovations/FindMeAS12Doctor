@@ -1,0 +1,129 @@
+<!-- standard navbar -->
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-folder-plus fa-4x" style="color:#fff;"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Create New Examination</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-header-details" *ngIf="referral$ | async as referral; else loading">
+          <div class="row">
+            <div class="col-md-4">
+              Referral Id: <strong>{{referral.id}}</strong>
+            </div>
+            <div class="col-md-4">
+              Patient Id: <strong>{{referral.patient.patientIdentifier | uppercase}}</strong>
+            </div>
+            <div class="col-md-4">
+              Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="examinationForm" novalidate>
+            <!-- AMHP User -->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <label for="amhp">AMHP</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="amhp"
+                  #amhp
+                  [class.is-invalid]="hasAmhpSearchFailed"
+                  formControlName="amhp"
+                  [ngbTypeahead]="amhpSearch"
+                  [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults" />
+              </div>
+            </div>
+            <!-- AMHP User Errors-->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isAmhpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <!-- Examination Postcode -->
+            <div class="form-row">
+              <div class="col-md-3">
+                <label for="examinationPostcode">Examination Postcode</label>
+                <input
+                  type="text"
+                  maxlength="8"
+                  minlength="6"
+                  formControlName="examinationPostcode"
+                  #examinationPostcode
+                  id="examinationPostcode"
+                  oninput="this.value = this.value.toUpperCase()"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': HasInvalidPostcode(),
+                    'is-valid': HasValidPostcode()
+                  }" />
+              </div>
+              <div class="col-md-2 centered-div">
+                  <div class="column-div">
+                    <button
+                      type="button"
+                      class="btn btn-primary vcenter"
+                      style="margin-top:3px;"
+                      placement="right"
+                      ngbTooltip="Search for addresses"
+                      [openDelay]="1000"
+                      [closeDelay]="500"
+                      tooltipClass="subtle-tooltip"
+                      (click)="AddressSearch()"
+                      [disabled]="examination.examinationPostcode.value == '' || examination.examinationPostcode.errors != null"
+                      [ngClass]="{ validating: IsSearchingForPostcode() }"
+                    >
+                    {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
+                    <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                        *ngIf="IsSearchingForPostcode()"
+                        style="margin-left:100px; display: inline-block;"
+                      >
+                    </span>
+
+                    </button>
+                  </div>
+                </div>
+            </div>
+            <!-- Residential Postcode Errors-->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div *ngIf="examination.examinationPostcode.errors" class="invalid-field">
+                  <span>{{ examinationPostcodeValidationMessage }}</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #dangerToast let-toastMessage>
+    <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>
+  </ng-template>
+
+  <ng-template #loading>
+    <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+  </ng-template>
+
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+</div>

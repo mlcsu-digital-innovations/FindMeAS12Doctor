@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Referral } from '../../interfaces/referral';
 import { ReferralStatus } from '../../enums/ReferralStatus.enum';
+import { Observable } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,17 @@ import { ReferralStatus } from '../../enums/ReferralStatus.enum';
 export class ReferralService {
   constructor(private httpClient: HttpClient) {}
 
-  public createReferral(newReferral: Referral ) {
+  public getReferral(referralId: number): Observable<Referral> {
+    return this.httpClient.get(
+      environment.apiEndpoint + `/referral/${referralId}`
+    )
+    .pipe(delay(1000))
+    .pipe
+      (map(r => r as Referral)
+    );
+  }
+
+  public createReferral(newReferral: Referral) {
 
     // ToDo: Get the id of the logged on user
     newReferral.createdByUserId = 1;

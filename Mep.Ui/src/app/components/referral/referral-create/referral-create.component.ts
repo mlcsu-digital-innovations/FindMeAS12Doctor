@@ -8,10 +8,12 @@ import { map } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from '../../../helpers/nhs-number.validator';
 import { Patient } from '../../../interfaces/patient';
+import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from '../../../interfaces/patient-search-params';
 import { PatientSearchResult } from '../../../interfaces/patient-search-result';
 import { PatientSearchService } from '../../../services/patient-search/patient-search.service';
 import { PatientService } from '../../../services/patient/patient.service';
+import { PostcodeRegex } from '../../../constants/Constants';
 import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result';
 import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
 import { Referral } from '../../../interfaces/referral';
@@ -28,53 +30,54 @@ import { TypeAheadResult } from '../../../interfaces/typeahead-result';
   styleUrls: ['./referral-create.component.css']
 })
 export class ReferralCreateComponent implements OnInit {
-  myForm: FormGroup;
-  patientForm: FormGroup;
-  value = false;
-  isSearchingForPatient: boolean;
-  isSearchingForPostcode: boolean;
-  isCreatingReferral: boolean;
-  dangerMessage: string;
-  successMessage: string;
-  patientResult: PatientSearchResult;
-  patientModal: NgbModalRef;
+
   cancelModal: NgbModalRef;
-  isGpSearching: boolean;
-  hasGpSearchFailed: boolean;
-  isGpFieldsShown: boolean;
-  isResidentialPostcodeFieldShown: boolean;
-  residentialPostcodeValidationMessage: string;
-  isCcgSearching: boolean;
-  hasCcgSearchFailed: boolean;
-  isCcgFieldsShown: boolean;
-  isAmhpSearching: boolean;
+  dangerMessage: string;
   hasAmhpSearchFailed: boolean;
+  hasCcgSearchFailed: boolean;
+  hasGpSearchFailed: boolean;
   isAmhpFieldsShown: boolean;
-  patientDetails: Patient;
+  isAmhpSearching: boolean;
+  isCcgFieldsShown: boolean;
+  isCcgSearching: boolean;
+  isCreatingReferral: boolean;
+  isGpFieldsShown: boolean;
+  isGpSearching: boolean;
   isPatientIdValidated: boolean;
   isPatientPostcodeValidated: boolean;
-
-  unknownGpPracticeId: number;
+  isResidentialPostcodeFieldShown: boolean;
+  isSearchingForPatient: boolean;
+  isSearchingForPostcode: boolean;
+  modalResult: PatientSearchResult;
+  myForm: FormGroup;
+  patientDetails: Patient;
+  patientForm: FormGroup;
+  patientModal: NgbModalRef;
+  patientResult: PatientSearchResult;
+  residentialPostcodeValidationMessage: string;
+  successMessage: string;
   unknownCcgId: number;
+  unknownGpPracticeId: number;
+  value = false;
 
-  @ViewChild('dangerTpl', null) dangerTemplate;
-  @ViewChild('successTpl', null) successTemplate;
-  @ViewChild('patientResults', null) patientResultTemplate;
+  @ViewChild('dangerToast', null) dangerTemplate;
+  @ViewChild('successToast', null) successTemplate;
+  @ViewChild('patientResults', {static: true}) patientResultTemplate;
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private patientSearchService: PatientSearchService,
-    private toastService: ToastService,
-    private modalService: NgbModal,
-    private renderer: Renderer2,
-    private gpPracticeListService: GpPracticeListService,
-    private postcodeValidationService: PostcodeValidationService,
-    private ccgListService: CcgListService,
     private amhpListService: AmhpListService,
+    private ccgListService: CcgListService,
+    private formBuilder: FormBuilder,
+    private gpPracticeListService: GpPracticeListService,
+    private modalService: NgbModal,
+    private patientSearchService: PatientSearchService,
     private patientService: PatientService,
+    private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
-    private router: Router
+    private renderer: Renderer2,
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -83,8 +86,7 @@ export class ReferralCreateComponent implements OnInit {
     this.unknownCcgId = 1;
     this.unknownGpPracticeId = 1;
 
-    const postcodeRegex =
-      '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})|(Unknown)$';
+    this.modalResult = {} as PatientSearchResult;
 
     this.residentialPostcodeValidationMessage = 'Invalid Postcode';
 
@@ -108,7 +110,7 @@ export class ReferralCreateComponent implements OnInit {
         [
           Validators.minLength(6),
           Validators.maxLength(8),
-          Validators.pattern(postcodeRegex)
+          Validators.pattern(`${PostcodeRegex}|(Unknown)$`)
         ]
       ],
       unknownResidentialPostcode: false,
@@ -194,6 +196,28 @@ export class ReferralCreateComponent implements OnInit {
           this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
       }
     });
+  }
+
+  onCancelModalAction(action: boolean) {
+    if (action) {
+      this.ConfirmCancellation();
+    } else {
+      this.CancelCancellation();
+    }
+  }
+
+  onPatientModalAction(action: number) {
+    switch (action) {
+      case PatientAction.Cancel:
+        this.CancelPatientResultsModal();
+        break;
+      case PatientAction.ExistingPatient:
+        this.UseExistingPatient();
+        break;
+      case PatientAction.ExistingReferral:
+        this.UseExistingReferral();
+        break;
+    }
   }
 
   RemoveWhiteSpace(postcode: string): string {
@@ -694,6 +718,7 @@ export class ReferralCreateComponent implements OnInit {
             break;
           case 1:
             this.patientResult = results[0];
+            this.modalResult = results[0];
             this.patientModal = this.modalService.open(
               this.patientResultTemplate,
               { size: 'lg' }
