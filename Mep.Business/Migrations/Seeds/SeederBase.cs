@@ -6,8 +6,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase
   {
-    protected DateTimeOffset _now = DateTimeOffset.Now;
-
     protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
@@ -77,19 +75,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
 
+    protected DateTimeOffset _now = DateTimeOffset.Now;
     protected readonly ApplicationContext _context;
-
-    protected int GetFirstCcg()
-    {
-      try
-      {
-        return _context.Ccgs.First().Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find CCG", ex);
-      }
-    }
 
     protected int GetCcgIdByName(string CcgName)
     {
@@ -103,15 +90,15 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetGpPracticeIdByName(string GpPracticeName)
+    protected int GetExaminationIdByExaminationAddress(string examinationAddress)
     {
       try
       {
-        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+        return _context.Examinations.Single(examination => examination.Address1 == examinationAddress).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a GP Practice with the name {GpPracticeName} in GpPractices", ex);
+        throw new Exception($"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
       }
     }
 
@@ -127,6 +114,30 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected int GetFirstCcg()
+    {
+      try
+      {
+        return _context.Ccgs.First().Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception("Cannot find CCG", ex);
+      }
+    }
+
+    protected int GetGpPracticeIdByName(string GpPracticeName)
+    {
+      try
+      {
+        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a GP Practice with the name {GpPracticeName} in GpPractices", ex);
+      }
+    }
+
     protected int GetMaleGenderTypeId()
     {
       try
@@ -139,6 +150,30 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected int GetNotificationTextId(string notificationTextName)
+    {
+      try
+      {
+        return _context.NotificationTexts.Single(notificationText => notificationText.Name == notificationTextName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find {notificationTextName} in NotificationTexts", ex);
+      }
+    }
+
+    protected int GetOrganisationIdByName(string name)
+    {
+      try
+      {
+        return _context.Organisations.Single(organisation => organisation.Name == name).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find an organisation with the Name {name} in Organisations", ex);
+      }
+    }
+
     protected int GetOtherGenderTypeId()
     {
       try
@@ -148,6 +183,66 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception("Cannot find Gender Type other in GenderTypes", ex);
+      }
+    }
+
+    protected int GetPatientIdByAlternativeIdentifier(string alternativeIdentifier)
+    {
+      try
+      {
+        return _context.Patients.Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
+      }
+    }
+
+    protected int GetPatientIdByNhsNumber(long nhsNumber)
+    {
+      try
+      {
+        return _context.Patients.Single(patient => patient.NhsNumber == nhsNumber).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Patinet with an NHS Number of {nhsNumber} in Patients", ex);
+      }
+    }
+
+    protected int GetProfileTypeId(string profileTypeName)
+    {
+      try
+      {
+        return _context.ProfileTypes.Single(profileType => profileType.Name == profileTypeName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception("Cannot find a Profile Type with the name {profileTypeName} in ProfileTypes", ex);
+      }
+    }
+
+    protected int GetReferralIdByAlternativeIdentifier(string alternativeIdentifier)
+    {
+      try
+      {
+        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a referral that has a Patient with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
+      }
+    }
+
+    protected int GetReferralIdByPatientNhsNumber(long nhsNumber)
+    {
+      try
+      {
+        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Referral that has a Patient with an NHS Number of {nhsNumber} in Referrals", ex);
       }
     }
 
@@ -175,52 +270,9 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetProfileTypeId(string profileTypeName)
+    protected User GetSystemAdminUser()
     {
-      try
-      {
-        return _context.ProfileTypes.Single(profileType => profileType.Name == profileTypeName).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find a Profile Type with the name {profileTypeName} in ProfileTypes", ex);
-      }
-    }
-
-    protected int GetPatientIdByNhsNumber(long nhsNumber)
-    {
-      try
-      {
-        return _context.Patients.Single(patient => patient.NhsNumber == nhsNumber).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find a Patinet with an NHS Number of {nhsNumber} in Patients", ex);
-      }
-    }
-
-    protected int GetPatientIdByAlternativeIdentifier(string alternativeIdentifier)
-    {
-      try
-      {
-        return _context.Patients.Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find a Patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
-      }
-    }
-
-    protected int GetNotificationTextId(string notificationTextName)
-    {
-      try
-      {
-        return _context.NotificationTexts.Single(notificationText => notificationText.Name == notificationTextName).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find {notificationTextName} in NotificationTexts", ex);
-      }
+      return _context.Users.SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
     }
 
     protected int GetUserIdByDisplayname(string displayName)
@@ -235,62 +287,9 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetOrganisationIdByName(string name)
-    {
-      try
-      {
-        return _context.Organisations.Single(organisation => organisation.Name == name).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find an organisation with the Name {name} in Organisations", ex);
-      }
-    }
-
-    protected int GetReferralIdByPatientNhsNumber(long nhsNumber)
-    {
-      try
-      {
-        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find a Referral that has a Patient with an NHS Number of {nhsNumber} in Referrals", ex);
-      }
-    }
-
-    protected int GetReferralIdByAlternativeIdentifier(string alternativeIdentifier)
-    {
-      try
-      {
-        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find a referral that has a Patient with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
-      }
-    }
-
-    protected int GetExaminationIdByExaminationAddress(string examinationAddress)
-    {
-      try
-      {
-        return _context.Examinations.Single(examination => examination.Address1 == examinationAddress).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
-      }
-    }
-
     public SeederBase(ApplicationContext context)
     {
       _context = context;
-    }
-
-    protected User GetSystemAdminUser()
-    {
-      return _context.Users.SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
     }
   }
 }
