@@ -6,10 +6,8 @@ namespace Mep.Business.Models.Profiles
   {
     public ReferralProfile()
     {
-      CreateMap<Entities.Referral, Models.Referral>()
-      .ForPath(dest => dest.Patient.Referrals, opt => opt.Ignore());
-
-      CreateMap<Models.Referral, Entities.Referral>();
+      CreateMap<Entities.Referral, Referral>();
+      CreateMap<Referral, Entities.Referral>();
     }
   }
 }
