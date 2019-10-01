@@ -2,13 +2,14 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
+import { PostcodeRegex } from '../../../constants/Constants';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 
@@ -43,9 +44,6 @@ export class ExaminationCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-    const postcodeRegex =
-      '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$';
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -82,7 +80,7 @@ export class ExaminationCreateComponent implements OnInit {
         [
           Validators.minLength(6),
           Validators.maxLength(8),
-          Validators.pattern(postcodeRegex)
+          Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
     });
