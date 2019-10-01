@@ -1,6 +1,5 @@
-using System;
-using System.Linq;
 using Mep.Data.Entities;
+using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -14,59 +13,134 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       Patient patient;
-      DateTimeOffset now = DateTimeOffset.Now;
 
-      if ((patient =
-            _context.Patients
-                    .SingleOrDefault(p => p.NhsNumber == 2750059135)) == null)
+      // patient with NHS number
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_1)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
-
+      patient.AlternativeIdentifier = null;
+      patient.CcgId = null;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #1";
-      patient.ResidentialPostcode = "ST3 7HH";
-      patient.NhsNumber = 2750059135;
-      patient.CcgId = 116;
-      patient.GpPracticeId = 7;
+      patient.NhsNumber = PATIENT_NHS_NUMBER_1;
+      patient.ResidentialPostcode = null;
 
+      // patient with NHS number
 
-      if ((patient =
-            _context.Patients
-                    .SingleOrDefault(p => p.NhsNumber == 7468635357)) == null)
+      if ((patient = _context.Patients.SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_2)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
-
+      patient.AlternativeIdentifier = null;
+      patient.CcgId = null;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #2";
-      patient.ResidentialPostcode = "ST7 4UZ";
-      patient.NhsNumber = 7468635357;
-      patient.CcgId = 119;
-      patient.GpPracticeId = 6;
+      patient.NhsNumber = PATIENT_NHS_NUMBER_2;
+      patient.ResidentialPostcode = null;
 
-      if ((patient =
-      _context.Patients
-              .SingleOrDefault(p => p.NhsNumber == 4666684068)) == null)
+      // patient with NHS number
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_3)) == null)
       {
         patient = new Patient();
         _context.Add(patient);
       }
-
+      patient.AlternativeIdentifier = null;
+      patient.CcgId = null;
+      patient.GpPracticeId = null;
       patient.IsActive = true;
-      patient.ModifiedAt = now;
+      patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
-      patient.AlternativeIdentifier = "Test Patient #3";
+      patient.NhsNumber = PATIENT_NHS_NUMBER_3;
       patient.ResidentialPostcode = "ST5 1NE";
-      patient.NhsNumber = 4666684068;
-      patient.CcgId = 45;
-      patient.GpPracticeId = 5;
+
+      // patient with NHS number
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.NhsNumber == PATIENT_NHS_NUMBER_4)) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+      patient.AlternativeIdentifier = null;
+      patient.CcgId = null;
+      patient.GpPracticeId = null;
+      patient.IsActive = true;
+      patient.ModifiedAt = _now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.NhsNumber = PATIENT_NHS_NUMBER_4;
+      patient.ResidentialPostcode = "ST4 4LX";
+
+      // patient with alternative identifier
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_5)) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_5;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_1);
+      patient.GpPracticeId = null;
+      patient.IsActive = true;
+      patient.ModifiedAt = _now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.NhsNumber = null;
+      patient.ResidentialPostcode = null;
+
+      // patient with alternative identifier
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_6)) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_6;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_2);
+      patient.GpPracticeId = null;
+      patient.IsActive = true;
+      patient.ModifiedAt = _now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.NhsNumber = null;
+      patient.ResidentialPostcode = null;
+
+      // patient with alternative identifier
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_7)) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_7;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_UNKNOWN);
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_UNKNOWN);
+      patient.IsActive = true;
+      patient.ModifiedAt = _now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.NhsNumber = null;
+      patient.ResidentialPostcode = null;
+
+      // patient with alternative identifier
+
+      if ((patient = _context.Patients.SingleOrDefault(p => p.AlternativeIdentifier == PATIENT_ALTERNATIVE_IDENTIFIER_8)) == null)
+      {
+        patient = new Patient();
+        _context.Add(patient);
+      }
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_8;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_UNKNOWN);
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_UNKNOWN);
+      patient.IsActive = true;
+      patient.ModifiedAt = _now;
+      patient.ModifiedByUser = GetSystemAdminUser();
+      patient.NhsNumber = null;
+      patient.ResidentialPostcode = null;
     }
   }
 }

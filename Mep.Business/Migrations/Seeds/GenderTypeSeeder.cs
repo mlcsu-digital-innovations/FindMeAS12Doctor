@@ -1,6 +1,5 @@
-using System;
-using System.Linq;
 using Mep.Data.Entities;
+using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -14,35 +13,39 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       GenderType genderType;
-      DateTimeOffset now = DateTimeOffset.Now;
 
-      if ((genderType =
-            _context.GenderTypes
-                    .SingleOrDefault(g => g.Name == "Male")) == null)
+      if ((genderType = _context.GenderTypes.SingleOrDefault(g => g.Name == GENDER_TYPE_NAME_MALE)) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);
       }
-
       genderType.IsActive = true;
-      genderType.ModifiedAt = now;
+      genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = "Male";
-      genderType.Description = "Male";
+      genderType.Name = GENDER_TYPE_NAME_MALE;
+      genderType.Description = GENDER_TYPE_DESCRIPTION_MALE;
 
-      if ((genderType =
-      _context.GenderTypes
-              .SingleOrDefault(g => g.Name == "Female")) == null)
+      if ((genderType = _context.GenderTypes.SingleOrDefault(g => g.Name == GENDER_TYPE_NAME_FEMALE)) == null)
       {
         genderType = new GenderType();
         _context.Add(genderType);
       }
-
       genderType.IsActive = true;
-      genderType.ModifiedAt = now;
+      genderType.ModifiedAt = _now;
       genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = "Female";
-      genderType.Description = "Female";
+      genderType.Name = GENDER_TYPE_NAME_FEMALE;
+      genderType.Description = GENDER_TYPE_DESCRIPTION_FEMALE;
+
+      if ((genderType = _context.GenderTypes.SingleOrDefault(g => g.Name == GENDER_TYPE_NAME_OTHER)) == null)
+      {
+        genderType = new GenderType();
+        _context.Add(genderType);
+      }
+      genderType.IsActive = true;
+      genderType.ModifiedAt = _now;
+      genderType.ModifiedByUser = GetSystemAdminUser();
+      genderType.Name = GENDER_TYPE_NAME_OTHER;
+      genderType.Description = GENDER_TYPE_DESCRIPTION_OTHER;
     }
   }
 }

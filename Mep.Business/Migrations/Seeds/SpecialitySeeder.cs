@@ -1,46 +1,29 @@
-using System;
-using System.Linq;
 using Mep.Data.Entities;
+using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class SpecialitySeeder : SeederBase
   {
-    internal SpecialitySeeder(ApplicationContext context) 
+    internal SpecialitySeeder(ApplicationContext context)
       : base(context)
-    {     
+    {
     }
 
     internal void SeedData()
     {
       Speciality speciality;
-      DateTimeOffset now = DateTimeOffset.Now;
 
-      if ((speciality = 
-            _context.Specialities
-                    .SingleOrDefault(u => u.Name == "Speciality 1")) == null)
+      if ((speciality = _context.Specialities.SingleOrDefault(u => u.Name == SPECIALITY_SECTION_12)) == null)
       {
         speciality = new Speciality();
         _context.Add(speciality);
       }
-      speciality.Description = "Speciality 1 Test";
+      speciality.Description = SPECIALITY_SECTION_12;
       speciality.IsActive = true;
-      speciality.ModifiedAt = now;
+      speciality.ModifiedAt = _now;
       speciality.ModifiedByUser = GetSystemAdminUser();
-      speciality.Name = "Speciality 1";
-
-      if ((speciality = 
-            _context.Specialities                     
-                    .SingleOrDefault(u => u.Name == "Speciality 2")) == null)
-      {
-        speciality = new Speciality();        
-        _context.Add(speciality);
-      }
-      speciality.Description = "Speciality 2 Test";
-      speciality.IsActive = true;
-      speciality.ModifiedAt = now;
-      speciality.ModifiedByUser = GetSystemAdminUser();
-      speciality.Name = "Speciality 2";      
+      speciality.Name = SPECIALITY_SECTION_12;
     }
   }
 }

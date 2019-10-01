@@ -1,6 +1,5 @@
-using System;
-using System.Linq;
 using Mep.Data.Entities;
+using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -14,21 +13,17 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       ReferralStatus referralStatus;
-      DateTimeOffset now = DateTimeOffset.Now;
 
-      if ((referralStatus =
-            _context.ReferralStatuses
-                    .SingleOrDefault(g => g.Name == "New Referral")) == null)
+      if ((referralStatus = _context.ReferralStatuses.SingleOrDefault(g => g.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL)) == null)
       {
         referralStatus = new ReferralStatus();
         _context.Add(referralStatus);
       }
-
       referralStatus.IsActive = true;
-      referralStatus.ModifiedAt = now;
+      referralStatus.ModifiedAt = _now;
       referralStatus.ModifiedByUser = GetSystemAdminUser();
-      referralStatus.Name = "New Referral";
-      referralStatus.Description = "New Referral";
+      referralStatus.Name = REFERRAL_STATUS_NAME_NEW_REFERRAL;
+      referralStatus.Description = REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL;
     }
   }
 }
