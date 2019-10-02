@@ -61,6 +61,7 @@ namespace Mep.Business.Services
                 .Include(r => r.Examinations)
                 .Include(r => r.Patient)
                 .Include(r => r.ReferralStatus)
+                .Include(r => r.LeadAmhpUser)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(referral => referral.Id == entityId);

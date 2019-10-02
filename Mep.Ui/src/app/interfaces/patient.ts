@@ -5,5 +5,6 @@ export interface Patient {
   id: number;
   isExistingPatient: boolean;
   nhsNumber?: number;
+  patientIdentifier?: string;
   residentialPostcode?: string;
 }

@@ -84,6 +84,12 @@ label {
   margin-top: -10px;
 }
 
+.card-header-details {
+  background-color: #0dadb7;
+  padding:10px;
+  color: #fff;
+}
+
 .modal-header, .modal-body {
   color: #495057;
 }
@@ -168,4 +174,37 @@ label {
 /** TypeAhead **/
 .dropdown-item.active {
   background-color: #0a868f;
+}
+
+.column-div {
+  width: 100%;
+  height:100%;
+  position: relative;
+}
+
+.column-div span {
+  position: absolute;
+  bottom:20px;
+  left: 40%;
+  text-align: center;
+  font-weight: 500;
+  color: #666;
+}
+
+.column-div button {
+  position: absolute;
+  bottom:12px;
+  left: 10%;
+}
+
+.column-div button .spinner-border {
+  position: absolute;
+  left: 5px;
+  bottom: 10px;
+  color: #eee;
+  padding-right: 5px;
+}
+
+.validating {
+  min-width: 130px;
 }

@@ -11,7 +11,6 @@ namespace Mep.Api
     public static int Main(string[] args)
     {
 
-
       try
       {
         Log.Information("Starting web host");
@@ -20,7 +19,17 @@ namespace Mep.Api
         if (args.Length > 0 && args[0] == "/seed")
         {
           Log.Information("Seeding database");
-          host.SeedData();
+          host.SeedData("seed");
+        }
+        else if (args.Length > 0 && args[0] == "/seednogp")
+        {
+          Log.Information("Seeding database without GP Data");
+          host.SeedData("seednogp");
+        }
+        else if (args.Length > 0 && args[0] == "/seedtest")
+        {
+          Log.Information("Seeding database with test data");
+          host.SeedData("seedtest");
         }
         else
         {

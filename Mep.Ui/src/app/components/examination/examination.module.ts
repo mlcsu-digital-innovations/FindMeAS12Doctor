@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { ExaminationCreateComponent } from './examination-create/examination-create.component';
 import { ExaminationListComponent } from './examination-list/examination-list.component';
 import { ExaminationRoutes } from './examination.routes';
 import { NgModule } from '@angular/core';
@@ -7,7 +8,8 @@ import { SharedComponentsModule } from '../shared-components.module';
 
 @NgModule({
   declarations: [
-    ExaminationListComponent
+    ExaminationListComponent,
+    ExaminationCreateComponent
   ],
   imports: [
     CommonModule,

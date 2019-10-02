@@ -6,8 +6,7 @@ namespace Mep.Business.Models.Profiles
   {
     public GenderTypeProfile()
     {
-      CreateMap<Entities.GenderType, Models.GenderType>()
-      .ForMember(g => g.ModifiedByUser, opt => opt.Ignore());
+      CreateMap<Entities.GenderType, Models.GenderType>();
 
       CreateMap<Models.GenderType, Entities.GenderType>();
     }

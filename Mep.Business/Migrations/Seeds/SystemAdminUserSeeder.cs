@@ -1,21 +1,19 @@
-using System;
-using System.Linq;
 using Mep.Data.Entities;
+using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class SystemAdminUserSeeder : SeederBase
   {
 
-    internal SystemAdminUserSeeder(ApplicationContext context) 
+    internal SystemAdminUserSeeder(ApplicationContext context)
       : base(context)
-    {     
+    {
     }
 
     internal void SeedData()
     {
       User systemAdminUser;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       if ((systemAdminUser = GetSystemAdminUser()) == null)
       {
@@ -23,40 +21,34 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(systemAdminUser);
       }
       systemAdminUser.HasReadTermsAndConditions = true;
-      systemAdminUser.IdentityServerIdentifier = SystemAdminIdentityServerIdentifier;
+      systemAdminUser.IdentityServerIdentifier = SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER;
       systemAdminUser.IsActive = true;
-      systemAdminUser.ModifiedAt = now;
-      systemAdminUser.DisplayName = "System Admin User";
+      systemAdminUser.ModifiedAt = _now;
+      systemAdminUser.DisplayName = USER_DISPLAY_NAME_SYSTEM_ADMIN;
 
       Organisation systemOrganisation;
-      if ((systemOrganisation = 
-            _context.Organisations
-                    .SingleOrDefault(o => o.Name == "System Organisation")) == null)
+      if ((systemOrganisation = _context.Organisations.SingleOrDefault(o => o.Name == ORGANISATION_NAME_SYSTEM_ADMIN)) == null)
       {
         systemOrganisation = new Organisation();
         _context.Add(systemOrganisation);
-      }  
-
-      systemOrganisation.Description = "System Organisation Description";
+      }
+      systemOrganisation.Description = ORGANISATION_DESCRIPTION_SYSTEM_ADMIN;
       systemOrganisation.IsActive = false;
-      systemOrganisation.ModifiedAt = now;
-      systemOrganisation.Name = "System Organisation";
+      systemOrganisation.ModifiedAt = _now;
+      systemOrganisation.Name = ORGANISATION_NAME_SYSTEM_ADMIN;
 
       systemAdminUser.Organisation = systemOrganisation;
-      
+
       ProfileType systemProfileType;
-      if ((systemProfileType = 
-            _context.ProfileTypes
-                    .SingleOrDefault(o => o.Name == "System ProfileType")) == null)
+      if ((systemProfileType = _context.ProfileTypes.SingleOrDefault(o => o.Name == PROFILE_TYPE_NAME_SYSTEM)) == null)
       {
         systemProfileType = new ProfileType();
         _context.Add(systemProfileType);
-      }  
-
-      systemProfileType.Description = "System ProfileType Description";
+      }
+      systemProfileType.Description = PROFILE_TYPE_DESCRIPTION_SYSTEM;
       systemProfileType.IsActive = false;
-      systemProfileType.ModifiedAt = now;
-      systemProfileType.Name = "System ProfileType";
+      systemProfileType.ModifiedAt = _now;
+      systemProfileType.Name = PROFILE_TYPE_NAME_SYSTEM;
 
       systemAdminUser.ProfileType = systemProfileType;
 

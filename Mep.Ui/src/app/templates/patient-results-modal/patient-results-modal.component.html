@@ -1,0 +1,70 @@
+<div class="modal-header header-danger" *ngIf="patientResult.currentReferralId !== null">
+  <h4 class="modal-title" >An active referral exists for this patient !</h4>
+</div>
+<div class="modal-header header-info" *ngIf="patientResult.currentReferralId === null">
+  <h4 class="modal-title" >A patient with this identifer has been found</h4>
+</div>
+<div class="modal-body">
+  <div class="row" *ngIf="patientResult.nhsNumber !== null">
+    <div class="col-md-4 row-title">
+      NHS Number
+    </div>
+    <div class="col-md-8 row-value">
+      <strong>{{ patientResult.nhsNumber }}</strong>
+    </div>
+  </div>
+  <div class="row" *ngIf="patientResult.alternativeIdentifier !== null">
+    <div class="col-md-4 row-title">
+      Alternative Identifier
+    </div>
+    <div class="col-md-8 row-value">
+      <strong>{{ patientResult.alternativeIdentifier }}</strong>
+    </div>
+  </div>
+  <div class="row" *ngIf="patientResult.gpPracticeNameAndPostcode !== null">
+    <div class="col-md-4 row-title">
+      GP Practice
+    </div>
+    <div class="col-md-8 row-value">
+      <strong>{{ patientResult.gpPracticeNameAndPostcode }}</strong>
+    </div>
+  </div>
+  <div class="row" *ngIf="patientResult.residentialPostcode !== null">
+    <div class="col-md-4 row-title">
+      Patients Residential Postcode
+    </div>
+    <div class="col-md-8 row-value">
+      <strong>{{ patientResult.residentialPostcode }}</strong>
+    </div>
+  </div>
+  <div class="row" *ngIf="patientResult.ccgName !== null">
+    <div class="col-md-4 row-title">
+      CCG
+    </div>
+    <div class="col-md-8 row-value">
+      <strong>{{ patientResult.ccgName }}</strong>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="modalAction(cancelAction)">
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="modalAction(existingPatient)"
+    *ngIf="patientResult.currentReferralId == null">
+    Use Existing Details
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="modalAction(existingReferral)"
+    *ngIf="patientResult.currentReferralId !== null">
+    Use Existing Referral
+  </button>
+</div>

@@ -1,11 +1,10 @@
-using System;
-using System.Linq;
-using Mep.Data.Entities;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using Newtonsoft.Json;
 using Mep.Business.Migrations.Seeds.SpineServiceModels;
+using Mep.Data.Entities;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System;
 
 
 namespace Mep.Business.Migrations.Seeds
@@ -23,7 +22,6 @@ namespace Mep.Business.Migrations.Seeds
     private void BatchUpdateGpPractices(int offset)
     {
       GpPractice gpPractice;
-      DateTimeOffset now = DateTimeOffset.Now;
 
       client.DefaultRequestHeaders.Accept.Clear();
       client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -44,17 +42,14 @@ namespace Mep.Business.Migrations.Seeds
         {
           bool validOrganisation = false;
 
-          if ((gpPractice =
-                _context.GpPractices
-                        .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
+          if ((gpPractice = _context.GpPractices.SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
           {
             gpPractice = new GpPractice();
             _context.Add(gpPractice);
             validOrganisation = true;
           }
-
           gpPractice.IsActive = gpResult.Status == "Inactive" ? false : true;
-          gpPractice.ModifiedAt = now;
+          gpPractice.ModifiedAt = _now;
           gpPractice.ModifiedByUser = GetSystemAdminUser();
           gpPractice.GpPracticeCode = gpResult.OrgId;
           gpPractice.Postcode = gpResult.PostCode == null ? "" : gpResult.PostCode;
@@ -72,24 +67,31 @@ namespace Mep.Business.Migrations.Seeds
               try
               {
                 // RO98 is the code for CCGs
-                SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel.First(r => r.Target.PrimaryRoleId.Id == "RO98");
+                SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel.FirstOrDefault(r => r.Target.PrimaryRoleId.Id == "RO98");
 
-                string extension = relationship.Target.OrgId.Extension;
+                if (relationship != null)
+                {
+                  string extension = relationship.Target.OrgId.Extension;
 
-                try
-                {
-                  // Ccg ccg = _context.Ccgs.Single(x => x.Name.Contains($"[{extension}]"));
-                  Ccg ccg = _context.Ccgs.Single(x => x.ShortCode == extension);
-                  gpPractice.CcgId = ccg.Id;
-                }
-                catch
-                {
-                  //TODO - log the error
+                  try
+                  {
+                    Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
+                    if (ccg != null)
+                    {
+                      gpPractice.CcgId = ccg.Id;
+                    }
+                  }
+                  catch (Exception ex)
+                  {
+                    //TODO - log the error
+                    Console.WriteLine(ex.Message);
+                  }
                 }
               }
-              catch
+              catch (Exception ex)
               {
                 //TODO - log the error
+                Console.WriteLine(ex.Message);
               }
             }
           }
@@ -99,8 +101,24 @@ namespace Mep.Business.Migrations.Seeds
 
     internal void SeedData()
     {
+      GpPractice gp;
+
       // Get Id of Unknown Ccg
-      unknown = _context.Ccgs.Single(c => c.Name == "Unknown");
+      unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
+
+      // create a dummy CCG for Unknown
+      if ((gp = _context.GpPractices.SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
+      {
+        gp = new GpPractice();
+        _context.Add(gp);
+      }
+      gp.IsActive = true;
+      gp.ModifiedAt = _now;
+      gp.ModifiedByUser = GetSystemAdminUser();
+      gp.Name = GP_PRACTICE_NAME_UNKNOWN;
+      gp.GpPracticeCode = "XXX";
+      gp.Postcode = "";
+      gp.CcgId = unknown.Id;
 
       for (int offset = 0; offset < 17000; offset += 1000)
       {
