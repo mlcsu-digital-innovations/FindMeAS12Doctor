@@ -81,7 +81,7 @@ export class ExaminationCreateComponent implements OnInit {
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
       examinationPostcode: [
-        'WS11 5UB',
+        '',
         [
           Validators.minLength(6),
           Validators.maxLength(8),
