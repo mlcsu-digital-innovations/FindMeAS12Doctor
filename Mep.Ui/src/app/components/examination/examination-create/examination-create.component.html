@@ -84,7 +84,7 @@
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
                       (click)="AddressSearch()"
-                      [disabled]="examination.examinationPostcode.value == '' || examination.examinationPostcode.errors != null"
+                      [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
                     >
                     {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
                     <span
@@ -110,12 +110,33 @@
                 </div>
               </div>
             </div>
-            <!-- Residential Postcode Errors-->
-            <div class="form-row">
+            <!-- Examination Postcode Errors-->
+            <div class="form-row" *ngIf="examinationPostcodeField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div *ngIf="examination.examinationPostcode.errors" class="invalid-field">
-                  <span>{{ examinationPostcodeValidationMessage }}</span>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.pattern">
+                  <span>Invalid Postcode Format</span>
                 </div>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.NoResultsReturned">
+                    <span>No Matches Found</span>
+                  </div>
+              </div>
+            </div>
+            <!-- Examination Address -->
+            <div class="form-row" *ngIf="addressList.length > 0">
+              <div class="col-md-8 mb-2">
+                <label for="examinationAddress">Examination Address</label>
+                <select
+                  class="custom-select custom-select-lg mb-2"
+                  formControlName="examinationAddress"
+                  #examinationAddress
+                  id="examinationAddress"
+                  appFocusOnShow
+                >
+                  <option disabled=true [selected]=true>Please Select Address</option>
+                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
+                    {{addressList[i].address}}
+                  </option>
+                </select>
               </div>
             </div>
           </form>
@@ -123,6 +144,8 @@
       </div>
     </div>
   </div>
+
+
 
   <ng-template #dangerToast let-toastMessage>
     <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>

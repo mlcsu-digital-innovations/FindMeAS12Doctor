@@ -1,4 +1,5 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
@@ -23,6 +24,7 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 export class ExaminationCreateComponent implements OnInit {
 
   addresses$: Observable<any>;
+  addressList: AddressResult[];
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
@@ -44,6 +46,8 @@ export class ExaminationCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.addressList = [];
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -83,6 +87,7 @@ export class ExaminationCreateComponent implements OnInit {
           Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
+      examinationAddress: ['']
     });
   }
 
@@ -116,6 +121,10 @@ export class ExaminationCreateComponent implements OnInit {
     return this.examinationForm.controls.examinationPostcode;
   }
 
+  get examinationAddressField() {
+    return this.examinationForm.controls.examinationAddress;
+  }
+
   SetAmhpField(id: number | null, text: string | null) {
     const amhp = {} as TypeAheadResult;
 
@@ -147,20 +156,28 @@ export class ExaminationCreateComponent implements OnInit {
     )
 
   AddressSearch(): void {
-
+    this.addressList = [];
+    this.examinationAddressField.setValue('');
     this.isSearchingForPostcode = true;
 
     this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
-    .subscribe( addresses => {
-      this.isSearchingForPostcode = false;
-
-      // ToDo: Do something with the results
-
-    }, err => {
-      this.isSearchingForPostcode = false;
-
-      // ToDo: Warn the user of the error ?
-    });
+      .subscribe(address => {
+        this.addressList.push(address);
+      }, (err) => {
+        this.isSearchingForPostcode = false;
+        this.errMessage = err.error;
+        this.dangerMessage = `Error retrieving referral information.`;
+        this.toastService.show(this.dangerTemplate, {
+          classname: 'bg-danger text-light',
+          delay: 10000
+        });
+      }, () => {
+        this.isSearchingForPostcode = false;
+        // show an error if no matching addresses are returned
+        if (this.addressList.length === 0) {
+          this.examinationPostcodeField.setErrors({NoResultsReturned: true});
+        }
+      });
    }
 
    OpenLocationTab(): void {
