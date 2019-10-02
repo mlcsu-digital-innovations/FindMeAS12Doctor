@@ -82,7 +82,7 @@ namespace Mep.Business.Migrations.Seeds
       new SpecialitySeeder(_context).SeedData();
 
       new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
-      
+
       new UserSpecialitiesSeeder(_context).SeedData();
 
       _context.SaveChanges();
@@ -113,6 +113,24 @@ namespace Mep.Business.Migrations.Seeds
       _context.SaveChanges();
 
       new UserExaminationClaimSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new BankDetailsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new ContactDetailsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new NonPaymentLocationsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new OnCallUsersSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new PaymentMethodsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new PaymentRulesSeeder(_context).SeedData();
       _context.SaveChanges();
     }
   }
