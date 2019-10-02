@@ -15,7 +15,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       ProfileType profileType;
 
-      if ((profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_AMPH)) == null)
+      if ((profileType = _context.ProfileTypes
+        .SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_AMPH)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);
@@ -26,7 +27,8 @@ namespace Mep.Business.Migrations.Seeds
       profileType.ModifiedByUser = GetSystemAdminUser();
       profileType.Name = PROFILE_TYPE_NAME_AMPH;
 
-      if ((profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_DOCTOR)) == null)
+      if ((profileType = _context.ProfileTypes
+        .SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_DOCTOR)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);
@@ -37,7 +39,8 @@ namespace Mep.Business.Migrations.Seeds
       profileType.ModifiedByUser = GetSystemAdminUser();
       profileType.Name = PROFILE_TYPE_NAME_DOCTOR;
 
-      if ((profileType = _context.ProfileTypes.SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_FINANCE)) == null)
+      if ((profileType = _context.ProfileTypes
+        .SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_FINANCE)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);

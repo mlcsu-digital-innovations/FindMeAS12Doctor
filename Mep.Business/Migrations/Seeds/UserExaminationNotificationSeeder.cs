@@ -17,7 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // notification for referral with current examination and notification responses
 
-      if ((userExaminationNotification = _context.UserExaminationNotifications.SingleOrDefault(g => g.ExaminationId == GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_6))) == null)
+      if ((userExaminationNotification = _context.UserExaminationNotifications
+        .SingleOrDefault(g => g.ExaminationId == GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_6))) == null)
       {
         userExaminationNotification = new UserExaminationNotification();
         _context.Add(userExaminationNotification);
@@ -33,7 +34,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // notification for referral with current examination and notification responses and allocated doctors
 
-      if ((userExaminationNotification = _context.UserExaminationNotifications.SingleOrDefault(g => g.ExaminationId == GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_7))) == null)
+      if ((userExaminationNotification = _context.UserExaminationNotifications
+        .SingleOrDefault(g => g.ExaminationId == GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_7))) == null)
       {
         userExaminationNotification = new UserExaminationNotification();
         _context.Add(userExaminationNotification);

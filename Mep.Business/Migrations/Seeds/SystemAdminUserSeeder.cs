@@ -27,7 +27,8 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.DisplayName = USER_DISPLAY_NAME_SYSTEM_ADMIN;
 
       Organisation systemOrganisation;
-      if ((systemOrganisation = _context.Organisations.SingleOrDefault(o => o.Name == ORGANISATION_NAME_SYSTEM_ADMIN)) == null)
+      if ((systemOrganisation = _context.Organisations
+        .SingleOrDefault(o => o.Name == ORGANISATION_NAME_SYSTEM_ADMIN)) == null)
       {
         systemOrganisation = new Organisation();
         _context.Add(systemOrganisation);
@@ -40,7 +41,8 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.Organisation = systemOrganisation;
 
       ProfileType systemProfileType;
-      if ((systemProfileType = _context.ProfileTypes.SingleOrDefault(o => o.Name == PROFILE_TYPE_NAME_SYSTEM)) == null)
+      if ((systemProfileType = _context.ProfileTypes
+        .SingleOrDefault(o => o.Name == PROFILE_TYPE_NAME_SYSTEM)) == null)
       {
         systemProfileType = new ProfileType();
         _context.Add(systemProfileType);

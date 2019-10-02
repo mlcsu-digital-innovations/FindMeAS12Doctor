@@ -16,7 +16,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with a current examination with no allocated doctors or notification responses
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_1))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_1))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -33,7 +34,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with a previous examination
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_2))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_2))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -50,7 +52,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with no examinations
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_3))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_3))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -67,7 +70,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with both current and previous examinations
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_4))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_4))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -84,7 +88,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with current examination and allocated doctors
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -101,7 +106,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with current examination and notification responses
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -118,7 +124,8 @@ namespace Mep.Business.Migrations.Seeds
 
       // referral with current examination and notification responses and allocated doctors
 
-      if ((referral = _context.Referrals.SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7))) == null)
+      if ((referral = _context.Referrals
+        .SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
