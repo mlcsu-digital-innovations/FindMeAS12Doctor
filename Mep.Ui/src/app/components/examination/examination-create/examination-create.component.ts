@@ -1,7 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -41,7 +41,6 @@ export class ExaminationCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
-    private renderer: Renderer2,
     private route: ActivatedRoute,
     private toastService: ToastService
   ) {}
@@ -137,16 +136,6 @@ export class ExaminationCreateComponent implements OnInit {
 
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
-  }
-
-  async Delay(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-  }
-
-  async SetFieldFocus(fieldName: string) {
-    // ToDo: Find a better way to do this !
-    await this.Delay(2000);
-    this.renderer.selectRootElement(fieldName).focus();
   }
 
   amhpSearch = (text$: Observable<string>) =>
