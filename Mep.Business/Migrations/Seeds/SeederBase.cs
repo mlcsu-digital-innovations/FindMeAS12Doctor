@@ -6,6 +6,11 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase
   {
+    protected const int BANK_DETAILS_ACCOUNT_NUMBER = 10000000;
+    protected const string BANK_DETAILS_BANK_NAME = "Bank Name 1";
+    protected const string BANK_DETAILS_NAME_ON_ACCOUNT = "Name on Account 1";
+    protected const int BANK_DETAILS_SORT_CODE = 100000;
+    protected const int BANK_DETAILS_VRS_NUMBER = 1000000000;
     protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
