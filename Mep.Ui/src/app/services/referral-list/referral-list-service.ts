@@ -37,21 +37,21 @@ function sort(referralList: ReferralList[], column: string, direction: string): 
 function matches(referral: ReferralList, term: string, pipe: PipeTransform) {
   return pipe.transform(referral.referralId).includes(term)
     || (referral.patientIdentifier &&
-        referral.patientIdentifier.toLowerCase().includes(term.toLowerCase()))
+      referral.patientIdentifier.toLowerCase().includes(term.toLowerCase()))
     || (referral.leadAmhp &&
-        referral.leadAmhp.toLowerCase().includes(term.toLowerCase()))
+      referral.leadAmhp.toLowerCase().includes(term.toLowerCase()))
     || (referral.numberOfExaminationAttempts &&
-        pipe.transform(referral.numberOfExaminationAttempts).includes(term))
+      pipe.transform(referral.numberOfExaminationAttempts).includes(term))
     || (referral.speciality &&
-        referral.speciality.toLowerCase().includes(term.toLowerCase()))
+      referral.speciality.toLowerCase().includes(term.toLowerCase()))
     || (referral.timescale &&
-        pipe.transform(referral.timescale).includes(term.toLowerCase()))
+      pipe.transform(referral.timescale).includes(term.toLowerCase()))
     || (referral.status &&
-        referral.status.toLowerCase().includes(term.toLowerCase()))
+      referral.status.toLowerCase().includes(term.toLowerCase()))
     || (referral.responsesReceived &&
-        pipe.transform(referral.responsesReceived).includes(term.toLowerCase()))
+      pipe.transform(referral.responsesReceived).includes(term.toLowerCase()))
     || (referral.doctorsAllocated &&
-        pipe.transform(referral.doctorsAllocated).includes(term.toLowerCase()));
+      pipe.transform(referral.doctorsAllocated).includes(term.toLowerCase()));
 }
 
 @Injectable()
@@ -97,7 +97,7 @@ export class ReferralListService {
         this._loading$.next(false);
         this._referralList$.error(
           "Server Error: Unable to obtain referral list! " +
-          "Please try again in a few moments");        
+          "Please try again in a few moments");
       }
     );
   }
@@ -116,22 +116,25 @@ export class ReferralListService {
   set sortDirection(sortDirection: SortDirection) { this._set({ sortDirection }); }
 
   private _set(patch: Partial<State>) {
-    Object.assign(this._state, patch);
-    this._search$.next();
+    if (this._rawReferralList) {
+      Object.assign(this._state, patch);
+      this._search$.next();
+    }
   }
 
   private _search(): Observable<SearchResult> {
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
-    // 1. sort
-    let referralList = sort(this._rawReferralList, sortColumn, sortDirection);
+      // 1. sort
+      let referralList = sort(this._rawReferralList, sortColumn, sortDirection);
 
-    // 2. filter
-    referralList = referralList.filter(referral => matches(referral, searchTerm, this.pipe));
-    const total = referralList.length;
+      // 2. filter
+      referralList = referralList.filter(referral => matches(referral, searchTerm, this.pipe));
+      const total = referralList.length;
 
-    // 3. paginate
-    referralList = referralList.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-    return of({ referralList: referralList, total });
+      // 3. paginate
+      referralList = referralList.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+
+      return of({ referralList: referralList, total });
   }
 }
