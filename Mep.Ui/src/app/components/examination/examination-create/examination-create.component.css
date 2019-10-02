@@ -16,3 +16,7 @@ form {
   align-items: center;
   height: 100%;
 }
+
+.additional-details {
+  resize: none;
+}

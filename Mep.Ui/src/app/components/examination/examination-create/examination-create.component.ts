@@ -87,7 +87,12 @@ export class ExaminationCreateComponent implements OnInit {
           Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
-      examinationAddress: ['']
+      examinationAddress: [''],
+      additionalDetails: ['',
+      [
+        Validators.maxLength(2000)
+      ]
+    ]
     });
   }
 
@@ -107,6 +112,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   IsSearchingForPostcode(): boolean {
     return this.isSearchingForPostcode;
+  }
+
+  get additionalDetailsField() {
+    return this.examinationForm.controls.additionalDetails;
   }
 
   get amhpField() {
