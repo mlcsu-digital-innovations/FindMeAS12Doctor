@@ -134,9 +134,22 @@
                 >
                   <option disabled=true [selected]=true>Please Select Address</option>
                   <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
-                    {{addressList[i].address}}{{i}}
+                    {{addressList[i].address}}
                   </option>
                 </select>
+              </div>
+            </div>
+            <!-- Additional location details -->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <label for="additionalDetails">Additional Location Details</label>
+                <textarea
+                  class="form-control additional-details"
+                  formControlName="additionalDetails"
+                  #additionalDetails
+                  id=additionalDetails
+                >
+                </textarea>
               </div>
             </div>
           </form>
