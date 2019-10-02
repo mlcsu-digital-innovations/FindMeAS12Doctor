@@ -14,6 +14,13 @@ namespace Mep.Business.Migrations.Seeds
     protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
+    protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
+    protected const string EMAIL_ADDRESS = "mlcsu.digitalinnovations@nhs.net";
+    protected const decimal LATITUDE = 0.000000m;
+    protected const decimal LONGITUDE  = 0.000000m;
+    protected const string POSTCODE = "AB12CD";
+    protected const int TELEPHONE_NUMBER  = 01000100000;
+    protected const string TOWN = "Test Town";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
