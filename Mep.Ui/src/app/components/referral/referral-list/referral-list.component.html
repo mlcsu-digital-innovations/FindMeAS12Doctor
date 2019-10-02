@@ -52,7 +52,7 @@
                 <tbody>
                   <tr *ngFor="let referral of referralList$ | async">
                     <td>
-                      <a routerLink="/referral/edit/{{referral.patientId}}" routerLinkActive="active">
+                      <a routerLink="/referral/edit/{{referral.referralId}}" routerLinkActive="active">
                         <ngb-highlight [result]="referral.referralId" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>

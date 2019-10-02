@@ -4,6 +4,7 @@ export interface ReferralList {
   leadAmhp: string;
   numberOfExaminationAttempts: number;
   patientIdentifier: string;
+  patientId: number;
   referralId: number;
   responsesReceived: number;
   speciality: string;
