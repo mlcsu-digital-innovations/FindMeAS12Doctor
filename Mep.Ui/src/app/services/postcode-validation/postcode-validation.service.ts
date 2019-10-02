@@ -1,9 +1,9 @@
+import { AddressResult } from 'src/app/interfaces/address-result';
 import { environment } from '../../../environments/environment';
+import { filter, delay } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { filter, delay, map, defaultIfEmpty, flatMap } from 'rxjs/operators';
-import { from, Observable } from 'rxjs';
-import { AddressResult } from 'src/app/interfaces/address-result';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class PostcodeValidationService {
     );
   }
 
-  public searchPostcode(postcode: string) {
+  public searchPostcode(postcode: string): Observable<AddressResult> {
 
     // Dummy data for postcode searching !!
 
@@ -63,11 +63,8 @@ export class PostcodeValidationService {
       {postcode: 'WS12 4SY', address: '5 White Bark Close, Hednesford, Cannock, Staffs, WS12 4SY'}
     ]);
 
-
-
     return addresses
       .pipe(delay(2000))
-      .pipe(filter(address => address.postcode === postcode))
-      .pipe(defaultIfEmpty({postcode: '', address: ''}));
+      .pipe(filter(address => address.postcode === postcode || address.postcode === ''));
   }
 }

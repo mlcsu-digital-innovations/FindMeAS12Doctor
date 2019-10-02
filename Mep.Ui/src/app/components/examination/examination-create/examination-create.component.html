@@ -55,7 +55,6 @@
                 </div>
               </div>
             </div>
-            **{{examinationPostcodeField.errors}}**
             <!-- Examination Postcode -->
             <div class="form-row">
               <div class="col-md-3">
@@ -85,7 +84,7 @@
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
                       (click)="AddressSearch()"
-                      [disabled]="examinationPostcodeField.value == '' || examinationPostcodeField.errors != null"
+                      [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
                     >
                     {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
                     <span
@@ -112,15 +111,18 @@
               </div>
             </div>
             <!-- Examination Postcode Errors-->
-            <div class="form-row" >
+            <div class="form-row" *ngIf="examinationPostcodeField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div  class="invalid-field">
-                  <span>Bob</span>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.pattern">
+                  <span>Invalid Postcode Format</span>
                 </div>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.NoResultsReturned">
+                    <span>No Matches Found</span>
+                  </div>
               </div>
             </div>
             <!-- Examination Address -->
-            <div class="form-row">
+            <div class="form-row" *ngIf="addressList.length > 0">
               <div class="col-md-8 mb-2">
                 <label for="examinationAddress">Examination Address</label>
                 <select
@@ -128,9 +130,11 @@
                   formControlName="examinationAddress"
                   #examinationAddress
                   id="examinationAddress"
+                  appFocusOnShow
                 >
+                  <option disabled=true [selected]=true>Please Select Address</option>
                   <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
-                    {{addressList[i].address}}
+                    {{addressList[i].address}}{{i}}
                   </option>
                 </select>
               </div>

@@ -1,6 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -13,7 +14,6 @@ import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
-import { AddressResult } from 'src/app/interfaces/address-result';
 
 
 @Component({
@@ -41,6 +41,7 @@ export class ExaminationCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
+    private renderer: Renderer2,
     private route: ActivatedRoute,
     private toastService: ToastService
   ) {}
@@ -121,6 +122,10 @@ export class ExaminationCreateComponent implements OnInit {
     return this.examinationForm.controls.examinationPostcode;
   }
 
+  get examinationAddressField() {
+    return this.examinationForm.controls.examinationAddress;
+  }
+
   SetAmhpField(id: number | null, text: string | null) {
     const amhp = {} as TypeAheadResult;
 
@@ -132,6 +137,16 @@ export class ExaminationCreateComponent implements OnInit {
 
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
+  }
+
+  async Delay(milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
+  async SetFieldFocus(fieldName: string) {
+    // ToDo: Find a better way to do this !
+    await this.Delay(2000);
+    this.renderer.selectRootElement(fieldName).focus();
   }
 
   amhpSearch = (text$: Observable<string>) =>
@@ -152,16 +167,27 @@ export class ExaminationCreateComponent implements OnInit {
     )
 
   AddressSearch(): void {
-
+    this.addressList = [];
+    this.examinationAddressField.setValue('');
     this.isSearchingForPostcode = true;
 
     this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
       .subscribe(address => {
-        this.isSearchingForPostcode = false;
         this.addressList.push(address);
       }, (err) => {
         this.isSearchingForPostcode = false;
-        console.log(err);
+        this.errMessage = err.error;
+        this.dangerMessage = `Error retrieving referral information.`;
+        this.toastService.show(this.dangerTemplate, {
+          classname: 'bg-danger text-light',
+          delay: 10000
+        });
+      }, () => {
+        this.isSearchingForPostcode = false;
+        // show an error if no matching addresses are returned
+        if (this.addressList.length === 0) {
+          this.examinationPostcodeField.setErrors({NoResultsReturned: true});
+        }
       });
    }
 
