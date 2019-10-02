@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
@@ -17,8 +18,10 @@ namespace Mep.Data.Entities
     public int ContactDetailTypeId { get; set; }
     [MaxLength(100)]
     public string EmailAddress { get; set; }
-    public int? Latitude { get; set; }
-    public int? Longitude { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal Latitude { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal Longitude { get; set; }
     [MaxLength(10)]
     public string Postcode { get; set; }
     public int? TelephoneNumber { get; set; }
