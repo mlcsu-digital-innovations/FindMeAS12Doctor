@@ -17,7 +17,6 @@ steps:
 
 - script:     
     npm install -g @angular/cli
-    cd Mep.Ui
     npm install
     ng build
   displayName: 'npm install and build'
