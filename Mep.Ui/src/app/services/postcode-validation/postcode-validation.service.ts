@@ -1,8 +1,9 @@
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { filter, delay, map, defaultIfEmpty } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { filter, delay, map, defaultIfEmpty, flatMap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { AddressResult } from 'src/app/interfaces/address-result';
 
 @Injectable({
   providedIn: 'root'
@@ -60,9 +61,9 @@ export class PostcodeValidationService {
       {postcode: 'WS12 4SY', address: '3 White Bark Close, Hednesford, Cannock, Staffs, WS12 4SY'},
       {postcode: 'WS12 4SY', address: '4 White Bark Close, Hednesford, Cannock, Staffs, WS12 4SY'},
       {postcode: 'WS12 4SY', address: '5 White Bark Close, Hednesford, Cannock, Staffs, WS12 4SY'}
-
-
     ]);
+
+
 
     return addresses
       .pipe(delay(2000))

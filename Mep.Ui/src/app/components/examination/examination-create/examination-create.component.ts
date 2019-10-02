@@ -13,6 +13,7 @@ import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
+import { AddressResult } from 'src/app/interfaces/address-result';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 export class ExaminationCreateComponent implements OnInit {
 
   addresses$: Observable<any>;
+  addressList: AddressResult[];
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
@@ -44,6 +46,8 @@ export class ExaminationCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.addressList = [];
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -76,13 +80,14 @@ export class ExaminationCreateComponent implements OnInit {
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
       examinationPostcode: [
-        '',
+        'WS11 5UB',
         [
           Validators.minLength(6),
           Validators.maxLength(8),
           Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
+      examinationAddress: ['']
     });
   }
 
@@ -151,16 +156,13 @@ export class ExaminationCreateComponent implements OnInit {
     this.isSearchingForPostcode = true;
 
     this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
-    .subscribe( addresses => {
-      this.isSearchingForPostcode = false;
-
-      // ToDo: Do something with the results
-
-    }, err => {
-      this.isSearchingForPostcode = false;
-
-      // ToDo: Warn the user of the error ?
-    });
+      .subscribe(address => {
+        this.isSearchingForPostcode = false;
+        this.addressList.push(address);
+      }, (err) => {
+        this.isSearchingForPostcode = false;
+        console.log(err);
+      });
    }
 
    OpenLocationTab(): void {
