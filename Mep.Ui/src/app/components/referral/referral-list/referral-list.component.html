@@ -58,8 +58,10 @@
                       </a>
                     </td>
                     <td>
-                      <ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm">
-                      </ngb-highlight>
+                      <a routerLink="/patient/edit/{{referral.patientId}}" routerLinkActive="active">
+                        <ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm">
+                        </ngb-highlight>
+                      </a>
                     </td>
                     <td>
                       <ngb-highlight [result]="referral.leadAmhp" [term]="referralListService.searchTerm">
