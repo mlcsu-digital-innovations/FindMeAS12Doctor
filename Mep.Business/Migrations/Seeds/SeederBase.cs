@@ -82,7 +82,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Ccgs.Single(ccg => ccg.Name == CcgName).Id;
+        return _context.Ccgs
+          .Single(ccg => ccg.Name == CcgName).Id;
       }
       catch (Exception ex)
       {
@@ -94,7 +95,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Examinations.Single(examination => examination.Address1 == examinationAddress).Id;
+        return _context.Examinations
+          .Single(examination => examination.Address1 == examinationAddress).Id;
       }
       catch (Exception ex)
       {
@@ -106,7 +108,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_NAME_FEMALE).Id;
+        return _context.GenderTypes
+          .Single(gender => gender.Name == GENDER_TYPE_NAME_FEMALE).Id;
       }
       catch (Exception ex)
       {
@@ -130,7 +133,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+        return _context.GpPractices
+          .Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
       }
       catch (Exception ex)
       {
@@ -142,7 +146,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_NAME_MALE).Id;
+        return _context.GenderTypes
+          .Single(gender => gender.Name == GENDER_TYPE_NAME_MALE).Id;
       }
       catch (Exception ex)
       {
@@ -154,7 +159,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.NotificationTexts.Single(notificationText => notificationText.Name == notificationTextName).Id;
+        return _context.NotificationTexts
+          .Single(notificationText => notificationText.Name == notificationTextName).Id;
       }
       catch (Exception ex)
       {
@@ -166,7 +172,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Organisations.Single(organisation => organisation.Name == name).Id;
+        return _context.Organisations
+          .Single(organisation => organisation.Name == name).Id;
       }
       catch (Exception ex)
       {
@@ -178,7 +185,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gender => gender.Name == GENDER_TYPE_NAME_OTHER).Id;
+        return _context.GenderTypes
+          .Single(gender => gender.Name == GENDER_TYPE_NAME_OTHER).Id;
       }
       catch (Exception ex)
       {
@@ -190,7 +198,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Patients.Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
+        return _context.Patients
+          .Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
       }
       catch (Exception ex)
       {
@@ -202,7 +211,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Patients.Single(patient => patient.NhsNumber == nhsNumber).Id;
+        return _context.Patients
+          .Single(patient => patient.NhsNumber == nhsNumber).Id;
       }
       catch (Exception ex)
       {
@@ -214,7 +224,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ProfileTypes.Single(profileType => profileType.Name == profileTypeName).Id;
+        return _context.ProfileTypes
+          .Single(profileType => profileType.Name == profileTypeName).Id;
       }
       catch (Exception ex)
       {
@@ -226,7 +237,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
+        return _context.Referrals
+          .Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
       }
       catch (Exception ex)
       {
@@ -238,7 +250,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Referrals.Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
+        return _context.Referrals
+          .Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
       }
       catch (Exception ex)
       {
@@ -250,7 +263,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL).Id;
+        return _context.ReferralStatuses
+          .Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL).Id;
       }
       catch (Exception ex)
       {
@@ -262,7 +276,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Specialities.Single(speciality => speciality.Name == SPECIALITY_SECTION_12).Id;
+        return _context.Specialities
+          .Single(speciality => speciality.Name == SPECIALITY_SECTION_12).Id;
       }
       catch (Exception ex)
       {
@@ -272,14 +287,16 @@ namespace Mep.Business.Migrations.Seeds
 
     protected User GetSystemAdminUser()
     {
-      return _context.Users.SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
+      return _context.Users
+        .SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
     }
 
     protected int GetUserIdByDisplayname(string displayName)
     {
       try
       {
-        return _context.Users.Single(user => user.DisplayName == displayName).Id;
+        return _context.Users
+          .Single(user => user.DisplayName == displayName).Id;
       }
       catch (Exception ex)
       {
