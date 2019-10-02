@@ -5,7 +5,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
-            <i class="fas fa-folder-plus fa-4x" style="color:#fff;"></i>
+            <em class="fas fa-folder-plus fa-4x" style="color:#fff;"></em>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">Referral List</h4>
@@ -22,21 +22,23 @@
                 <input class="form-control" id="searchTerm" type="text" name="searchTerm"
                   [(ngModel)]="referralListService.searchTerm" />
               </div>
-              <div class="col-md-8" style="margin-top: 38px;" *ngIf="referralListService.loading$ | async">
-                Loading...
-                <div class="spinner-border spinner-border-sm" role="status">
-                  <span class="sr-only">Loading...</span>
+              <div class="col-md-4" style="margin-top: 38px;">
+                <div *ngIf="referralListService.loading$ | async">
+                  Loading...
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <table class="table table-striped">
+            <div class="form-row" style="padding-top:10px;">
+              <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
                     <th scope="col" sortable="referralId" (sort)="onSort($event)">Referral Id</th>
                     <th scope="col" sortable="patientIdentifier" (sort)="onSort($event)">Patient Identifier</th>
                     <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
-                    <th scope="col" sortable="numberOfExamminationAttempts" (sort)="onSort($event)">No. of Exam Attempts
+                    <th scope="col" sortable="numberOfExaminationAttempts" (sort)="onSort($event)">No. of Exam Attempts
                     </th>
                     <th scope="col" sortable="examinationLocationPostcode" (sort)="onSort($event)">Exam Location
                       Postcode</th>
@@ -50,8 +52,10 @@
                 <tbody>
                   <tr *ngFor="let referral of referralList$ | async">
                     <td>
-                      <ngb-highlight [result]="referral.referralId" [term]="referralListService.searchTerm">
-                      </ngb-highlight>
+                      <a routerLink="/referral/edit/{{referral.patientId}}" routerLinkActive="active">
+                        <ngb-highlight [result]="referral.referralId" [term]="referralListService.searchTerm">
+                        </ngb-highlight>
+                      </a>
                     </td>
                     <td>
                       <ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm">
@@ -74,7 +78,8 @@
                       </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="referral.timescale" [term]="referralListService.searchTerm">
+                      <ngb-highlight [result]="referral.timescale | date:'dd/MM/yyyy HH:mm'"
+                        [term]="referralListService.searchTerm">
                       </ngb-highlight>
                     </td>
                     <td>

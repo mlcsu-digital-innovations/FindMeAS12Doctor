@@ -49,9 +49,9 @@ function matches(referral: ReferralList, term: string, pipe: PipeTransform) {
     || (referral.status &&
       referral.status.toLowerCase().includes(term.toLowerCase()))
     || (referral.responsesReceived &&
-      pipe.transform(referral.responsesReceived).includes(term.toLowerCase()))
+      pipe.transform(referral.responsesReceived).includes(term))
     || (referral.doctorsAllocated &&
-      pipe.transform(referral.doctorsAllocated).includes(term.toLowerCase()));
+      pipe.transform(referral.doctorsAllocated).includes(term));
 }
 
 @Injectable()
