@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ReferralListComponent } from './referral-list.component';
+import { SharedComponentsModule } from '../../shared-components.module';
 
 describe('ReferralListComponent', () => {
   let component: ReferralListComponent;
@@ -8,7 +8,8 @@ describe('ReferralListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReferralListComponent ]
+      declarations: [ ReferralListComponent ],
+      imports: [ SharedComponentsModule ]
     })
     .compileComponents();
   }));
