@@ -14,6 +14,19 @@ namespace Mep.Business.Migrations.Seeds
 
     internal void SeedData()
     {
+      ClaimStatus claimStatus;
+
+      if ((claimStatus = _context.ClaimStatuses
+        .SingleOrDefault(g => g.Id == GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED))) == null)
+      {
+        claimStatus = new ClaimStatus();
+        _context.Add(claimStatus);
+      }
+      claimStatus.Description = CLAIM_STATUS_DESCRIPTION_ACCEPTED;
+      claimStatus.IsActive = true;
+      claimStatus.ModifiedAt = _now;
+      claimStatus.ModifiedByUser = GetSystemAdminUser();
+      claimStatus.Name = CLAIM_STATUS_NAME_ACCEPTED;
     }
   }
 }

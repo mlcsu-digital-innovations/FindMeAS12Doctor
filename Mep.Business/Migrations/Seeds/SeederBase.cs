@@ -15,6 +15,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
+    protected const string CLAIM_STATUS_NAME_ACCEPTED = "Accepted";
+    protected const string CLAIM_STATUS_DESCRIPTION_ACCEPTED = "Accepted";
     protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
     protected const string EMAIL_ADDRESS = "mlcsu.digitalinnovations@nhs.net";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
@@ -103,6 +105,38 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
+      }
+    }
+
+    protected int GetClaimStatusIdByClaimStatusDescription(string ClaimStatusDescription)
+    {
+      try
+      {
+        return _context.ClaimStatuses
+          .Single(claimStatus => claimStatus.Description == ClaimStatusDescription).Id;
+          {
+              
+          }
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Claim Status with the description {ClaimStatusDescription} in ClaimStatuses", ex);
+      }
+    }
+
+    protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
+    {
+      try
+      {
+        return _context.ClaimStatuses
+          .Single(claimStatus => claimStatus.Name == ClaimStatusName).Id;
+          {
+              
+          }
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Claim Status with the name {ClaimStatusName} in ClaimStatuses", ex);
       }
     }
 
