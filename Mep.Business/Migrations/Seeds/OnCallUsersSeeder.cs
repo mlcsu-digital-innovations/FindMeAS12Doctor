@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -14,6 +13,33 @@ namespace Mep.Business.Migrations.Seeds
 
     internal void SeedData()
     {
+      OnCallUser onCallUser;
+
+      if ((onCallUser = _context.OnCallUsers
+        .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE))) == null)
+      {
+        onCallUser = new OnCallUser();
+        _context.Add(onCallUser);
+      }
+      onCallUser.DateTimeEnd = _now;
+      onCallUser.DateTimeStart = _now;
+      onCallUser.IsActive = true;
+      onCallUser.ModifiedAt = _now;
+      onCallUser.ModifiedByUser = GetSystemAdminUser();
+      onCallUser.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+
+      if ((onCallUser = _context.OnCallUsers
+        .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
+      {
+        onCallUser = new OnCallUser();
+        _context.Add(onCallUser);
+      }
+      onCallUser.DateTimeEnd = _now;
+      onCallUser.DateTimeStart = _now;
+      onCallUser.IsActive = true;
+      onCallUser.ModifiedAt = _now;
+      onCallUser.ModifiedByUser = GetSystemAdminUser();
+      onCallUser.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
     }
   }
 }
