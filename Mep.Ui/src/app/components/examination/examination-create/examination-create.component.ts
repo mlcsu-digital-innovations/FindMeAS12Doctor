@@ -13,9 +13,9 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { SimpleList } from 'src/app/interfaces/simple-list';
+import { SimpleListService } from 'src/app/services/simple-list/simple-list.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
-import { SimpleListService } from 'src/app/services/simple-list/simple-list.service';
 
 
 @Component({
@@ -25,8 +25,8 @@ import { SimpleListService } from 'src/app/services/simple-list/simple-list.serv
 })
 export class ExaminationCreateComponent implements OnInit {
 
-  addresses$: Observable<any>;
   addressList: AddressResult[];
+  addresses$: Observable<any>;
   dangerMessage: string;
   errMessage: string;
   examinationForm: FormGroup;
@@ -35,7 +35,7 @@ export class ExaminationCreateComponent implements OnInit {
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
   referral$: Observable<Referral | any>;
-  specialities$: Observable<SimpleList>;
+  specialities: SimpleList[];
 
   @ViewChild('dangerToast', null) dangerTemplate;
 
@@ -45,8 +45,8 @@ export class ExaminationCreateComponent implements OnInit {
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private toastService: ToastService,
-    private simpleListService: SimpleListService
+    private simpleListService: SimpleListService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -79,13 +79,13 @@ export class ExaminationCreateComponent implements OnInit {
 
         return of(emptyReferral);
       })
-
-      this.specialities$ = this.simpleListService.GetList('speciality')
-      .pipe(
-        map(r => console.log(r))
-      )
-
     );
+
+    // get the list of specialities for the dropdown
+    this.simpleListService.GetListData('speciality')
+      .subscribe(specialities => {
+        this.specialities = specialities;
+      });
 
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
@@ -99,10 +99,11 @@ export class ExaminationCreateComponent implements OnInit {
       ],
       examinationAddress: [''],
       additionalDetails: ['',
-      [
-        Validators.maxLength(2000)
-      ]
-    ]
+        [
+          Validators.maxLength(2000)
+        ]
+      ],
+      speciality: ['']
     });
   }
 
