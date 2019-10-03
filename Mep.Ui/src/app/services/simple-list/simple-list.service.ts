@@ -14,7 +14,7 @@ export class SimpleListService {
   }
 
   GetListData(listType: string): Observable<SimpleList[]> {
-    return this.httpClient.get<SimpleList[]>(`${environment.apiEndpoint}\\${listType}`)
+    return this.httpClient.get<SimpleList[]>(`${environment.apiEndpoint}/${listType}`)
     .pipe(
       map(listValues => listValues)
     );
