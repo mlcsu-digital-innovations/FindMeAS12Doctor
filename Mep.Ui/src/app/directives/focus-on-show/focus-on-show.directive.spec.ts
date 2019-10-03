@@ -1,13 +1,11 @@
-import { FocusOnShowDirective } from './focus-on-show.directive';
-import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestFocusOnShowComponent } from './TestFocusOnShowComponent';
+import { FocusOnShowDirective } from './focus-on-show.directive';
 import { NgControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { TestFocusOnShowComponent } from './TestFocusOnShowComponent';
 
-fdescribe('FocusOnShowDirective', () => {
+describe('FocusOnShowDirective', () => {
   let component: TestFocusOnShowComponent;
   let fixture: ComponentFixture<TestFocusOnShowComponent>;
-  let InputElement: DebugElement;
 
   const formBuilder: FormBuilder = new FormBuilder();
 
@@ -22,7 +20,6 @@ fdescribe('FocusOnShowDirective', () => {
   function createComponent() {
     fixture = TestBed.createComponent(TestFocusOnShowComponent);
     component = fixture.componentInstance;
-    InputElement = fixture.debugElement.nativeElement.querySelector('input');
 
     component.testForm = formBuilder.group({
       otherField: '',
