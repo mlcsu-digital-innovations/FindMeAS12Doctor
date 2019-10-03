@@ -18,6 +18,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string CLAIM_STATUS_NAME_ACCEPTED = "Accepted";
     protected const string CLAIM_STATUS_DESCRIPTION_ACCEPTED = "Accepted";
     protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
+    protected const string CONTACT_DETAIL_TYPE_NAME = "Contact Detail Type";
+    protected const string CONTACT_DETAIL_TYPE_DESCRIPTION = "Contact Detail Type Description";
     protected const string EMAIL_ADDRESS = "mlcsu.digitalinnovations@nhs.net";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
@@ -108,22 +110,6 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetClaimStatusIdByClaimStatusDescription(string ClaimStatusDescription)
-    {
-      try
-      {
-        return _context.ClaimStatuses
-          .Single(claimStatus => claimStatus.Description == ClaimStatusDescription).Id;
-          {
-              
-          }
-      }
-      catch (Exception ex)
-      {
-        throw new Exception($"Cannot find a Claim Status with the description {ClaimStatusDescription} in ClaimStatuses", ex);
-      }
-    }
-
     protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
     {
       try
@@ -137,6 +123,22 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception($"Cannot find a Claim Status with the name {ClaimStatusName} in ClaimStatuses", ex);
+      }
+    }
+
+    protected int GetContactDetailTypeIdByContactDetailTypeName(string ContactDetailTypeName)
+    {
+      try
+      {
+        return _context.ContactDetailTypes
+          .Single(contactDetailType => contactDetailType.Name == ContactDetailTypeName).Id;
+          {
+              
+          }
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find a Contact Detail Type with the name of {ContactDetailTypeName} in ContactDetailTypes", ex);
       }
     }
 

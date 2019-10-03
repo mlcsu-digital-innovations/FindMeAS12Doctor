@@ -24,7 +24,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       contactDetail.Address1 = CONTACT_DETAIL_ADDRESS_1;
       contactDetail.CcgId = GetFirstCcg();
-      contactDetail.ContactDetailTypeId = 2;
+      contactDetail.ContactDetailTypeId = GetContactDetailTypeIdByContactDetailTypeName(CONTACT_DETAIL_TYPE_NAME);
       contactDetail.EmailAddress = EMAIL_ADDRESS;
       contactDetail.IsActive = true;
       contactDetail.Latitude = LATITUDE;
