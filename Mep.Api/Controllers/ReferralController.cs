@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,5 +21,18 @@ namespace Mep.Api.Controllers
       : base(service, mapper)
     {
     }
+
+    [HttpGet]
+    [Route("list")]
+    public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetList()
+    {
+      IEnumerable<BusinessModels.Referral> businessModels =
+          await _service.GetAllAsync(true);
+
+      IEnumerable<ViewModels.ReferralList> viewModels =
+          _mapper.Map<IEnumerable<ViewModels.ReferralList>>(businessModels);
+
+      return Ok(viewModels);
+    }      
   }
 }

@@ -40,5 +40,13 @@ namespace Mep.Business.Models
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
     public virtual GenderType PreferredDoctorGenderType { get; set; }
     public int? PreferredDoctorGenderTypeId { get; set; }
+
+    public bool IsCurrent { 
+      get { 
+        return IsActive && 
+               UnsuccessfulExaminationTypeId == null &&
+               CompletionConfirmationByUserId == null;
+      } 
+    }    
   }
 }
