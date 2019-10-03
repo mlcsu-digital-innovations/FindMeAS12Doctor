@@ -6,6 +6,7 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase
   {
+    protected const int TELEPHONE_NUMBER  = 01000100000;
     protected const int BANK_DETAILS_ACCOUNT_NUMBER = 10000000;
     protected const string BANK_DETAILS_BANK_NAME = "Bank Name 1";
     protected const string BANK_DETAILS_NAME_ON_ACCOUNT = "Name on Account 1";
@@ -16,11 +17,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const string CCG_NAME_UNKNOWN = "Unknown";
     protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
     protected const string EMAIL_ADDRESS = "mlcsu.digitalinnovations@nhs.net";
-    protected const decimal LATITUDE = 0.000000m;
-    protected const decimal LONGITUDE  = 0.000000m;
-    protected const string POSTCODE = "AB12CD";
-    protected const int TELEPHONE_NUMBER  = 01000100000;
-    protected const string TOWN = "Test Town";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
@@ -28,15 +24,17 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
-    protected const string GENDER_TYPE_NAME_FEMALE = "Female";
-    protected const string GENDER_TYPE_NAME_MALE = "Male";
-    protected const string GENDER_TYPE_NAME_OTHER = "Other";
     protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female";
     protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male";
     protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
-    protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
+    protected const string GENDER_TYPE_NAME_FEMALE = "Female";
+    protected const string GENDER_TYPE_NAME_MALE = "Male";
+    protected const string GENDER_TYPE_NAME_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
     protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
+    protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
+    protected const decimal LATITUDE = 0.000000m;
+    protected const decimal LONGITUDE  = 0.000000m;
     protected const string NOTIFICATION_TEXT_DESCRIPTION_1 = "Notification Text Description 1";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_2 = "Notification Text Description 2";
     protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_1 = "Notification Text Message Template 1";
@@ -69,6 +67,10 @@ namespace Mep.Business.Migrations.Seeds
     protected const long PATIENT_NHS_NUMBER_2 = 9657966272;
     protected const long PATIENT_NHS_NUMBER_3 = 9070304333;
     protected const long PATIENT_NHS_NUMBER_4 = 9813607416;
+    protected const string PAYMENT_RULE_CRITERIA_1 = "Payment Rule Criteria 1";
+    protected const string PAYMENT_RULE_DESCRIPTION_1 = "Payment Rule Description 1";
+    protected const string PAYMENT_RULE_NAME_1 = "Payment Rule 1";
+    protected const string POSTCODE = "AB12CD";
     protected const string PROFILE_TYPE_DESCRIPTION_AMPH = "AMHP ProfileType Description";
     protected const string PROFILE_TYPE_DESCRIPTION_DOCTOR = "AMHP ProfileType Doctor";
     protected const string PROFILE_TYPE_DESCRIPTION_FINANCE = "AMHP ProfileType Finance";
@@ -81,6 +83,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
+    protected const string TOWN = "Test Town";
     protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
