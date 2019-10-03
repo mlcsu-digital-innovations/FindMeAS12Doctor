@@ -175,10 +175,9 @@
     </div>
   </div>
 
-
-
-  <ng-template #dangerToast let-toastMessage>
-    <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>
+  <ng-template #dangerToast let-message="message">
+    **{{message}}**
+    <app-danger-toast toastMessage='fred'></app-danger-toast>
   </ng-template>
 
   <ng-template #loading>

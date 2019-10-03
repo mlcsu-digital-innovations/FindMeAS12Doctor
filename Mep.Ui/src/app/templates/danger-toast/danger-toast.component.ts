@@ -1,15 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-danger-toast',
   templateUrl: './danger-toast.component.html',
   styleUrls: ['./danger-toast.component.css']
 })
-export class DangerToastComponent {
+export class DangerToastComponent implements OnInit{
 
   @Input()
   toastMessage: string;
 
-  @Input()
-  errMessage: string;
+ngOnInit() {
+  console.log(this.toastMessage);
+}
+
+
 }
