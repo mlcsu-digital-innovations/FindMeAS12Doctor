@@ -126,7 +126,7 @@
               <div class="col-md-8 mb-2">
                 <label for="examinationAddress">Examination Address</label>
                 <select
-                  class="custom-select custom-select-lg mb-2"
+                  class="custom-select custom-select-lg mb-2 form-control"
                   formControlName="examinationAddress"
                   #examinationAddress
                   id="examinationAddress"
@@ -152,12 +152,12 @@
                 </textarea>
               </div>
             </div>
-            <!-- speciality dropdown -->
             <div class="form-row">
+              <!-- speciality dropdown -->
               <div class="col-md-4 mb-2">
                 <label for="speciality">Speciality</label>
                 <select
-                class="custom-select custom-select-lg mb-2"
+                class="custom-select custom-select-lg mb-2 form-control"
                 formControlName="speciality"
                 #speciality
                 id="speciality"
@@ -165,6 +165,21 @@
                 <option [selected]=true></option>
                 <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
                   {{specialities[i].name}}
+                </option>
+                </select>
+              </div>
+              <!-- gender dropdown -->
+              <div class="col-md-4 mb-2">
+                <label for="preferredGender">Preferred Doctor Gender</label>
+                <select
+                class="custom-select custom-select-lg mb-2 form-control"
+                formControlName="preferredGender"
+                #preferredGender
+                id="preferredGender"
+                >
+                <option [selected]=true></option>
+                <option *ngFor="let gender of genderTypes; let i=index" [value]="genderTypes[i].id">
+                  {{genderTypes[i].name}}
                 </option>
                 </select>
               </div>

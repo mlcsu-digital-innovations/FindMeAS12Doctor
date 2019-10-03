@@ -31,6 +31,7 @@ export class ExaminationCreateComponent implements OnInit {
   errMessage: string;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
+  genderTypes: SimpleList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
@@ -87,6 +88,12 @@ export class ExaminationCreateComponent implements OnInit {
         this.specialities = specialities;
       });
 
+    // get the list of genders for the dropdown
+    this.simpleListService.GetListData('gendertype')
+      .subscribe(genders => {
+        this.genderTypes = genders;
+      });
+
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
       examinationPostcode: [
@@ -103,7 +110,8 @@ export class ExaminationCreateComponent implements OnInit {
           Validators.maxLength(2000)
         ]
       ],
-      speciality: ['']
+      speciality: [''],
+      preferredGender: ['']
     });
   }
 
