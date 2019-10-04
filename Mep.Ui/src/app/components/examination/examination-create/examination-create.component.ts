@@ -28,6 +28,7 @@ export class ExaminationCreateComponent implements OnInit {
   addresses$: Observable<any>;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
+  genderTypes: SimpleList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
@@ -89,6 +90,18 @@ export class ExaminationCreateComponent implements OnInit {
         });
       });
 
+    // get the list of genders for the dropdown
+    this.nameIdListService.GetListData('gendertype')
+      .subscribe(genders => {
+        this.genderTypes = genders;
+      },
+      (err) => {
+      this.toastService.displayError(this.toast, {
+        title: 'Error',
+        message: 'Error Retrieving Gender Data'
+      });
+    });
+
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
       examinationPostcode: [
@@ -105,7 +118,8 @@ export class ExaminationCreateComponent implements OnInit {
           Validators.maxLength(2000)
         ]
       ],
-      speciality: ['']
+      speciality: [''],
+      preferredGender: ['']
     });
   }
 
