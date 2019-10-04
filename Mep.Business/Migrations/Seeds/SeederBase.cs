@@ -73,11 +73,13 @@ namespace Mep.Business.Migrations.Seeds
     protected const long PATIENT_NHS_NUMBER_2 = 9657966272;
     protected const long PATIENT_NHS_NUMBER_3 = 9070304333;
     protected const long PATIENT_NHS_NUMBER_4 = 9813607416;
-    protected const string PAYMENT_METHOD_TYPE_NAME = "Payment Method Type Name";
     protected const string PAYMENT_METHOD_TYPE_DESCRIPTION = "Payment Method Type Description";
+    protected const string PAYMENT_METHOD_TYPE_NAME = "Payment Method Type Name";
     protected const string PAYMENT_RULE_CRITERIA_1 = "Payment Rule Criteria 1";
     protected const string PAYMENT_RULE_DESCRIPTION_1 = "Payment Rule Description 1";
     protected const string PAYMENT_RULE_NAME_1 = "Payment Rule 1";
+    protected const string PAYMENT_RULE_SET_DESCRIPTION = "Payment Rule Set Description";
+    protected const string PAYMENT_RULE_SET_NAME = "Payment Rule Set";
     protected const string POSTCODE = "AB12CD";
     protected const string PROFILE_TYPE_DESCRIPTION_AMPH = "AMHP ProfileType Description";
     protected const string PROFILE_TYPE_DESCRIPTION_DOCTOR = "AMHP ProfileType Doctor";
@@ -299,7 +301,22 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find Payment Method Type with the name of {paymentMethodTypeName} in paymentMethodTypes", ex);
+        throw new Exception($"Cannot find Payment Method Type with the name of {paymentMethodTypeName} in PaymentMethodTypes", ex);
+      }
+    }
+
+    protected int GetPaymentRuleSetIdByPaymentRuleSetName(string paymentRuleSetName)
+    {
+      try
+      {
+        return _context
+          .PaymentRuleSets
+            .Single(paymentRuleSet => paymentRuleSet
+              .Name == paymentRuleSetName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find Payment Rule Set with the name of {paymentRuleSetName} in PaymentRuleSets", ex);
       }
     }
 
