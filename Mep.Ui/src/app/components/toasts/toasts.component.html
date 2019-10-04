@@ -7,10 +7,9 @@
 >
   <ng-template [ngIf]="isTemplate(toast)" [ngIfElse]="text">
 
-
-      <div class="toast-close">
-        <button type="button" class="toast-btn" (click)="toastService.remove(toast)">X</button>
-      </div>
+    <div class="toast-close">
+      <button type="button" class="toast-btn" (click)="toastService.remove(toast)">X</button>
+    </div>
 
     <div class="row">
       <div class="col-md-2 toast-icon">

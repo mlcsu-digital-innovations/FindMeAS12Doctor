@@ -34,7 +34,7 @@
                 />
               </div>
               <div class="col-md-1 centered-div">
-                <span class="vcenter" style="padding-left:15px;">Or</span>
+                <span class="vcenter" style="padding-left:15px; font-weight:600; color: #666;">Or</span>
               </div>
               <div class="col-md-4">
                 <label for="alternativeIdentifier">Alternative Identifier</label>
@@ -75,9 +75,14 @@
             </div>
             <!-- Row for divs showing patient number validation errors -->
             <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
-              <div class="col-md-3 mb-2 reduced-top-margin">
-                <div *ngIf="patient.nhsNumber.errors" class="invalid-field">
-                  <span>Invalid NHS Number</span>
+              <div class="col-md-3 mb-2" style="margin-top:-20px;">
+                <div *ngIf="patient.nhsNumber.errors != null">
+                  <div *ngIf="patient.nhsNumber.errors.NhsNumberValidFormat" class="invalid-field">
+                    <span>Invalid NHS Number</span>
+                  </div>
+                  <div *ngIf="patient.nhsNumber.errors.InvalidPatientIdentifier" class="invalid-field">
+                    <span>* Invalid Patient Identifier</span>
+                  </div>
                 </div>
               </div>
               <div class="col-md-4 mb-2 offset-md-1 reduced-top-margin">
@@ -125,6 +130,11 @@
             </div>
             <!-- GP Practice Errors-->
             <div class="form-row" *ngIf="isGpFieldsShown">
+              <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
+                <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
+                  <span>* GP practice, Postcode or CCG Required </span>
+                </div>
+              </div>
               <div class="col-md-8 mb-2">
                 <span *ngIf="isGpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasGpSearchFailed">
@@ -279,6 +289,13 @@
                 </div>
               </div>
             </div>
+            <div class="form-row" style="margin-top:-10px;">
+              <div class="col-md-12" *ngIf="amhpField.errors != null">
+                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
+                  <span>* Invalid Lead AMHP </span>
+                </div>
+              </div>
+            </div>
             <div class="form-row">
               <div class="col-md-2 mb-2">
                 <span>&nbsp;</span>
@@ -291,8 +308,7 @@
                 </button>
               </div>
               <div class="col-md-2 mb-2 centered">
-                <button class="btn btn-primary standard-button" type="button" (click)="CreateReferral()"
-                  [disabled]="!HasValidReferral()">
+                <button class="btn btn-primary standard-button" type="button" (click)="CreateReferral()">
                   Save
                 </button>
               </div>
