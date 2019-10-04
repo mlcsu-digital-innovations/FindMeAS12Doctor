@@ -28,7 +28,7 @@ export class ExaminationCreateComponent implements OnInit {
   addresses$: Observable<any>;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
-  genderTypes: SimpleList[];
+  genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;

@@ -2,14 +2,16 @@ import { CommonModule } from '@angular/common';
 import { ExaminationCreateComponent } from './examination-create/examination-create.component';
 import { ExaminationListComponent } from './examination-list/examination-list.component';
 import { ExaminationRoutes } from './examination.routes';
+import { ExaminationViewComponent } from './examination-view/examination-view.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedComponentsModule } from '../shared-components.module';
 
 @NgModule({
   declarations: [
+    ExaminationCreateComponent,
     ExaminationListComponent,
-    ExaminationCreateComponent
+    ExaminationViewComponent
   ],
   imports: [
     CommonModule,
