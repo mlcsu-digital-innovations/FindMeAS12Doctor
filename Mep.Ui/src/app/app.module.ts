@@ -6,6 +6,7 @@ import { ExaminationModule } from './components/examination/examination.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 
@@ -19,6 +20,7 @@ import { RouterModule } from '@angular/router';
     DigitOnlyModule,
     ExaminationModule,
     HttpClientModule,
+    PatientModule,
     ReferralModule,
     RouterModule.forRoot(AppRoutes)
   ],

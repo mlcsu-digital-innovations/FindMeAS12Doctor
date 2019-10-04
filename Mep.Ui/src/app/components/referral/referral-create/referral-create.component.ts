@@ -118,7 +118,6 @@ export class ReferralCreateComponent implements OnInit {
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
-
     this.onChanges();
   }
 
@@ -259,9 +258,9 @@ export class ReferralCreateComponent implements OnInit {
     }
 
     return (
-      (this.gpPractice.id && this.gpPractice.id !== this.unknownGpPracticeId) ||
+      (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
       (this.residentialPostcode !== '' && this.residentialPostcode !== 'Unknown') ||
-      (this.ccg.id && this.ccg.id !== this.unknownCcgId)
+      (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
     );
   }
 
@@ -433,6 +432,7 @@ export class ReferralCreateComponent implements OnInit {
         });
         this.isCreatingReferral = false;
         // navigate to the create examination page
+        this.router.navigate([`/examination/new/${result.id}`]);
       },
       error => {
         this.toastService.displayError(this.toast, {
@@ -446,13 +446,41 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   CreateReferral() {
-    this.isCreatingReferral = true;
-    // create a new patient ?
-    if (this.patientDetails.isExistingPatient) {
-      this.SaveReferralDetails();
-    } else {
-      this.CreatePatient().subscribe();
+
+    let canContinue = true;
+
+    // only continue if the referral is valid
+    if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
+      this.nhsNumberField.setErrors({InvalidPatientIdentifier: true});
+      canContinue = false;
     }
+
+    if (!this.HasValidGpOrPostcodeOrCcg()) {
+      this.isGpFieldsShown = true;
+      this.gpPracticeField.enable();
+      this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
+      canContinue = false;
+
+      console.log(this.gpPracticeField.errors);
+    }
+
+    if (!this.HasValidLeadAmhp()) {
+      this.amhpField.setErrors({InvalidAmhp: true});
+      canContinue = false;
+    }
+
+    if (canContinue) {
+      this.isCreatingReferral = true;
+      // create a new patient ?
+      if (this.patientDetails.isExistingPatient) {
+        this.SaveReferralDetails();
+      } else {
+        this.CreatePatient().subscribe();
+      }
+    } else {
+      return;
+    }
+
   }
 
   CancelCancellation(): void {
@@ -701,9 +729,11 @@ export class ReferralCreateComponent implements OnInit {
             this.patientDetails.nhsNumber = +this.nhsNumber;
             this.patientDetails.alternativeIdentifier = this.alternativeIdentifier;
             this.isGpFieldsShown = true;
+            this.nhsNumberField.setErrors(null);
             this.SetFieldFocus('#gpPractice');
             break;
           case 1:
+            this.nhsNumberField.setErrors(null);
             this.patientResult = results[0];
             this.modalResult = results[0];
             this.patientModal = this.modalService.open(
