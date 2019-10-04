@@ -299,11 +299,7 @@
             </div>
           </form>
 
-          <div class="overlay" *ngIf="isCreatingReferral">
-            <div class="spinner-div spinner-border">
-              <span class="spinner"></span>
-            </div>
-          </div>
+          <app-delay-spinner *ngIf="isCreatingReferral" [delayMessage]="'Saving Referral'"></app-delay-spinner>
 
           <ng-template #Toast let-title='title' let-message='message'>
           </ng-template>
