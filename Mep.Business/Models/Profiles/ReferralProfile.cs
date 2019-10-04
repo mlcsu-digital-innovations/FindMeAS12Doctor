@@ -6,8 +6,8 @@ namespace Mep.Business.Models.Profiles
   {
     public ReferralProfile()
     {
-      CreateMap<Entities.Referral, Models.Referral>();
-      CreateMap<Models.Referral, Entities.Referral>();
+      CreateMap<Entities.Referral, Referral>();
+      CreateMap<Referral, Entities.Referral>();
     }
   }
 }

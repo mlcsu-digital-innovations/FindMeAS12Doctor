@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReferralCreateComponent } from './referral-create/referral-create.component';
@@ -18,6 +18,8 @@ import { SharedComponentsModule } from '../shared-components.module';
     RouterModule.forChild(ReferralRoutes),
     SharedComponentsModule
   ],
-  providers: []
+  providers: [
+    DecimalPipe
+  ]
 })
 export class ReferralModule {}
