@@ -96,6 +96,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
     protected const string TOWN = "Test Town";
+    protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
+    protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";    
     protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
