@@ -17,7 +17,8 @@ namespace Mep.Business.Migrations.Seeds
       NonPaymentLocation nonPaymentLocation;
 
       if ((nonPaymentLocation = _context.NonPaymentLocations
-        .SingleOrDefault(g => g.NonPaymentLocationTypeId == 1)) == null)
+        .SingleOrDefault(g => g.NonPaymentLocationTypeId == 
+          GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME))) == null)
       {
         nonPaymentLocation = new NonPaymentLocation();
         _context.Add(nonPaymentLocation);
@@ -26,8 +27,7 @@ namespace Mep.Business.Migrations.Seeds
       nonPaymentLocation.ModifiedAt = _now;
       nonPaymentLocation.ModifiedByUser = GetSystemAdminUser();
       nonPaymentLocation.CcgId = GetFirstCcg();
-      // TODO: replace NonPaymentLocationTypeId = 1 with Get function when NonPaymentLocationTypeSeeder is populated with data
-      nonPaymentLocation.NonPaymentLocationTypeId = 1;
+      nonPaymentLocation.NonPaymentLocationTypeId = GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME);
     }
   }
 }

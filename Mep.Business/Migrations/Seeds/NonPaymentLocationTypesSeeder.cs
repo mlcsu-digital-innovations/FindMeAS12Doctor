@@ -14,6 +14,19 @@ namespace Mep.Business.Migrations.Seeds
 
     internal void SeedData()
     {
+      NonPaymentLocationType nonPaymentLocationType;
+
+      if ((nonPaymentLocationType = _context.NonPaymentLocationTypes
+        .SingleOrDefault(g => g.Id == GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME))) == null)
+      {
+        nonPaymentLocationType = new NonPaymentLocationType();
+        _context.Add(nonPaymentLocationType);
+      }
+      nonPaymentLocationType.IsActive = true;
+      nonPaymentLocationType.ModifiedAt = _now;
+      nonPaymentLocationType.ModifiedByUser = GetSystemAdminUser();
+      nonPaymentLocationType.Name = NON_PAYMENT_LOCATION_TYPE_NAME;
+      nonPaymentLocationType.Description = NON_PAYMENT_LOCATION_TYPE_DESCRIPTION;
     }
   }
 }

@@ -39,6 +39,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const decimal LATITUDE = 0.000000m;
     protected const decimal LONGITUDE  = 0.000000m;
+    protected const string NON_PAYMENT_LOCATION_TYPE_NAME = "Non Payment Location Type Name";
+    protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION = "Non Payment Location Type Description";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_1 = "Notification Text Description 1";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_2 = "Notification Text Description 2";
     protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_1 = "Notification Text Message Template 1";
@@ -206,6 +208,19 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected int GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(string nonPaymentLocationTypeName)
+    {
+      try
+      {
+        return _context.NonPaymentLocationTypes
+          .Single(nonPaymentLocationType => nonPaymentLocationType.Name == nonPaymentLocationTypeName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find Non Payment Location Type with the name of {nonPaymentLocationTypeName} in NonPaymentLocationTypes", ex);
+      }
+    }
+    
     protected int GetNotificationTextId(string notificationTextName)
     {
       try
