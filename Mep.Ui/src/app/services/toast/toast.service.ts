@@ -15,7 +15,7 @@ export class ToastService {
   displayError(textOrTpl: string | TemplateRef<any>, options: ToastOptions) {
     options.delay = 60000;
     options.classname = 'bg-danger';
-    options.hide = false;
+    options.autohide = false;
     options.iconClass = 'fas fa-times-circle';
     this.show(textOrTpl, options);
   }
