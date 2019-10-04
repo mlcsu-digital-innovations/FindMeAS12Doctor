@@ -305,12 +305,7 @@
             </div>
           </div>
 
-          <ng-template #dangerToast let-toastMessage>
-            <app-danger-toast [toastMessage]='dangerMessage'></app-danger-toast>
-          </ng-template>
-
-          <ng-template #successToast let-toastMessage>
-            <app-danger-toast [toastMessage]='successMessage'></app-danger-toast>
+          <ng-template #Toast let-title='title' let-message='message'>
           </ng-template>
 
           <!-- patient results -->

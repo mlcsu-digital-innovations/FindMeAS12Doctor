@@ -152,16 +152,30 @@
                 </textarea>
               </div>
             </div>
+            <!-- speciality dropdown -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2">
+                <label for="speciality">Speciality</label>
+                <select
+                class="custom-select custom-select-lg mb-2"
+                formControlName="speciality"
+                #speciality
+                id="speciality"
+                >
+                <option [selected]=true></option>
+                <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
+                  {{specialities[i].name}}
+                </option>
+                </select>
+              </div>
+            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-
-
-  <ng-template #dangerToast let-toastMessage>
-    <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>
+  <ng-template #Toast let-title='title' let-message='message'>
   </ng-template>
 
   <ng-template #loading>
