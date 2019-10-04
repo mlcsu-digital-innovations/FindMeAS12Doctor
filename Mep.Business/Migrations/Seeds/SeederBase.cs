@@ -73,6 +73,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const long PATIENT_NHS_NUMBER_2 = 9657966272;
     protected const long PATIENT_NHS_NUMBER_3 = 9070304333;
     protected const long PATIENT_NHS_NUMBER_4 = 9813607416;
+    protected const string PAYMENT_METHOD_TYPE_NAME = "Payment Method Type Name";
+    protected const string PAYMENT_METHOD_TYPE_DESCRIPTION = "Payment Method Type Description";
     protected const string PAYMENT_RULE_CRITERIA_1 = "Payment Rule Criteria 1";
     protected const string PAYMENT_RULE_DESCRIPTION_1 = "Payment Rule Description 1";
     protected const string PAYMENT_RULE_NAME_1 = "Payment Rule 1";
@@ -283,6 +285,21 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception($"Cannot find a Patinet with an NHS Number of {nhsNumber} in Patients", ex);
+      }
+    }
+
+    protected int GetPaymentMethodTypeIdByPaymentMethodTypeName(string paymentMethodTypeName)
+    {
+      try
+      {
+        return _context
+          .PaymentMethodTypes
+            .Single(paymentMethodType => paymentMethodType
+              .Name == paymentMethodTypeName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find Payment Method Type with the name of {paymentMethodTypeName} in paymentMethodTypes", ex);
       }
     }
 

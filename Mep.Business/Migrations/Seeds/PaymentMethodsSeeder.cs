@@ -16,8 +16,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       PaymentMethod paymentMethod;
 
-      if ((paymentMethod = _context.PaymentMethods
-        .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
+      if ((paymentMethod = _context
+        .PaymentMethods
+          .SingleOrDefault(g => g.UserId == 
+            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
       {
         paymentMethod = new PaymentMethod();
         _context.Add(paymentMethod);
@@ -26,8 +28,7 @@ namespace Mep.Business.Migrations.Seeds
       paymentMethod.IsActive = true;
       paymentMethod.ModifiedAt = _now;
       paymentMethod.ModifiedByUser = GetSystemAdminUser();
-      // TODO: replace PaymentMethodTypeId = 1 with Get function when PaymentMethodTypeSeeder is populated with data
-      paymentMethod.PaymentMethodTypeId = 1;
+      paymentMethod.PaymentMethodTypeId = GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME);
       paymentMethod.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
 
       if ((paymentMethod = _context.PaymentMethods
@@ -40,8 +41,7 @@ namespace Mep.Business.Migrations.Seeds
       paymentMethod.IsActive = true;
       paymentMethod.ModifiedAt = _now;
       paymentMethod.ModifiedByUser = GetSystemAdminUser();
-      // TODO: replace PaymentMethodTypeId = 1 with Get function when PaymentMethodTypeSeeder is populated with data
-      paymentMethod.PaymentMethodTypeId = 1;
+      paymentMethod.PaymentMethodTypeId = GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME);
       paymentMethod.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
     }
   }
