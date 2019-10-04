@@ -26,8 +26,6 @@ export class ExaminationCreateComponent implements OnInit {
 
   addressList: AddressResult[];
   addresses$: Observable<any>;
-  dangerMessage: string;
-  errMessage: string;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
   hasAmhpSearchFailed: boolean;
@@ -193,11 +191,9 @@ export class ExaminationCreateComponent implements OnInit {
         this.addressList.push(address);
       }, (err) => {
         this.isSearchingForPostcode = false;
-        this.errMessage = err.error;
-        this.dangerMessage = `Error retrieving referral information.`;
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+        this.toastService.displayError(this.toast, {
+          title: 'Search Error',
+          message: 'Error Retrieving Address Information'
         });
       }, () => {
         this.isSearchingForPostcode = false;
