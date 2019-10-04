@@ -1,22 +1,21 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
+import { NameIdList } from 'src/app/interfaces/name-id-list';
+import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
-import { SimpleList } from 'src/app/interfaces/simple-list';
-import { SimpleListService } from 'src/app/services/simple-list/simple-list.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
-
 
 @Component({
   selector: 'app-examination-create',
@@ -27,8 +26,6 @@ export class ExaminationCreateComponent implements OnInit {
 
   addressList: AddressResult[];
   addresses$: Observable<any>;
-  dangerMessage: string;
-  errMessage: string;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
   genderTypes: SimpleList[];
@@ -36,9 +33,9 @@ export class ExaminationCreateComponent implements OnInit {
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
   referral$: Observable<Referral | any>;
-  specialities: SimpleList[];
+  specialities: NameIdList[];
 
-  @ViewChild('dangerToast', null) dangerTemplate;
+  @ViewChild('Toast', null) toast;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -46,8 +43,8 @@ export class ExaminationCreateComponent implements OnInit {
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private simpleListService: SimpleListService,
-    private toastService: ToastService
+    private nameIdListService: NameIdListService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
@@ -67,11 +64,10 @@ export class ExaminationCreateComponent implements OnInit {
         }
       ),
       catchError((err) => {
-        this.errMessage = err.error;
-        this.dangerMessage = `Error retrieving referral information.`;
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: 'Error Retrieving Referral Information'
         });
 
         const emptyReferral = {} as Referral;
@@ -83,9 +79,15 @@ export class ExaminationCreateComponent implements OnInit {
     );
 
     // get the list of specialities for the dropdown
-    this.simpleListService.GetListData('speciality')
+    this.nameIdListService.GetListData('speciality')
       .subscribe(specialities => {
         this.specialities = specialities;
+      },
+      (err) => {
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: 'Error Retrieving Speciality Data'
+        });
       });
 
     // get the list of genders for the dropdown
@@ -113,6 +115,10 @@ export class ExaminationCreateComponent implements OnInit {
       speciality: [''],
       preferredGender: ['']
     });
+  }
+
+  ToastStuff() {
+    console.log('toast stuff');
   }
 
   HasValidPostcode(): boolean {
@@ -193,11 +199,9 @@ export class ExaminationCreateComponent implements OnInit {
         this.addressList.push(address);
       }, (err) => {
         this.isSearchingForPostcode = false;
-        this.errMessage = err.error;
-        this.dangerMessage = `Error retrieving referral information.`;
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+        this.toastService.displayError(this.toast, {
+          title: 'Search Error',
+          message: 'Error Retrieving Address Information'
         });
       }, () => {
         this.isSearchingForPostcode = false;

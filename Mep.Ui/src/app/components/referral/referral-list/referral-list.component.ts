@@ -13,18 +13,17 @@ import { ToastService } from '../../../services/toast/toast.service';
 })
 export class ReferralListComponent {
 
-  dangerMessage: string;
   error: any;
   noOfReferralsInList: number;
-  referralList$: Observable<ReferralList[]>;  
+  referralList$: Observable<ReferralList[]>;
   total$: Observable<number>;
 
-  @ViewChild('dangerTpl', null) dangerTemplate;
+  @ViewChild('Toast', null) toast;
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
 
   constructor(
     public referralListService: ReferralListService,
-    private toastService: ToastService) { 
+    private toastService: ToastService) {
 
     this.referralList$ = referralListService.referralList$;
     this.total$ = referralListService.total$;
@@ -32,13 +31,12 @@ export class ReferralListComponent {
     this.referralList$.subscribe(
       result => this.noOfReferralsInList = result.length,
       error => {
-        this.dangerMessage = error;
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
-        }); 
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: error
+        });
       }
-    )
+    );
   }
 
   onSort({column, direction}: SortEvent) {

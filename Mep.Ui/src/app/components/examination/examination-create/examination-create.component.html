@@ -190,10 +190,7 @@
     </div>
   </div>
 
-
-
-  <ng-template #dangerToast let-toastMessage>
-    <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>
+  <ng-template #Toast let-title='title' let-message='message'>
   </ng-template>
 
   <ng-template #loading>

@@ -3,18 +3,18 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
-import { SimpleList } from 'src/app/interfaces/simple-list';
+import { NameIdList } from 'src/app/interfaces/name-id-list';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleListService {
+export class NameIdListService {
 
   constructor(private httpClient: HttpClient) {
   }
 
-  GetListData(listType: string): Observable<SimpleList[]> {
-    return this.httpClient.get<SimpleList[]>(`${environment.apiEndpoint}\\${listType}`)
+  GetListData(listType: string): Observable<NameIdList[]> {
+    return this.httpClient.get<NameIdList[]>(`${environment.apiEndpoint}/${listType}`)
     .pipe(
       map(listValues => listValues)
     );
