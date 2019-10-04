@@ -15,6 +15,8 @@ namespace Mep.Api
 {
   public class Startup
   {
+    private const string ENV_AZURE_DEVELOPMENT = "AzureDevelopment";
+
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
@@ -77,7 +79,7 @@ namespace Mep.Api
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
-      if (env.IsDevelopment())
+      if (env.IsDevelopment() || env.IsEnvironment(ENV_AZURE_DEVELOPMENT))
       {
         app.UseDeveloperExceptionPage();
       }
