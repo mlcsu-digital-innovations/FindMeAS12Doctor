@@ -91,10 +91,16 @@ export class ExaminationCreateComponent implements OnInit {
       });
 
     // get the list of genders for the dropdown
-    this.simpleListService.GetListData('gendertype')
+    this.nameIdListService.GetListData('gendertype')
       .subscribe(genders => {
         this.genderTypes = genders;
+      },
+      (err) => {
+      this.toastService.displayError(this.toast, {
+        title: 'Error',
+        message: 'Error Retrieving Gender Data'
       });
+    });
 
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
