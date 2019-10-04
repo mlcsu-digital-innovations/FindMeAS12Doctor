@@ -91,6 +91,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILE_TYPE_NAME_SYSTEM = "System ProfileType";
     protected const string REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL = "New Referral Description";
     protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
+    protected const string SECTION_12_APPROVAL_STATUS_DESCRIPTION = "Section 12 Approval Status Description";
+    protected const string SECTION_12_APPROVAL_STATUS_NAME = "Section 12 Approval Status Name";    
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
     protected const string TOWN = "Test Town";
@@ -369,6 +371,19 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception("Cannot find a Referral Status with the name {REFERRAL_STATUS_NEW_REFERRAL} in ReferralStatuses", ex);
+      }
+    }
+
+    protected int GetSection12ApprovalStatusIdBySection12ApprovalStatusName(string section12ApprovalStatusName)
+    {
+      try
+      {
+        return _context.Section12ApprovalStatuses
+          .Single(section12ApprovalStatus => section12ApprovalStatus.Name == section12ApprovalStatusName).Id;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find Section 12 Approval Status with the name of {section12ApprovalStatusName} in Section12ApprovalStatuses", ex);
       }
     }
 
