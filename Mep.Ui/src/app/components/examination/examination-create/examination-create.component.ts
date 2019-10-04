@@ -36,7 +36,7 @@ export class ExaminationCreateComponent implements OnInit {
   referral$: Observable<Referral | any>;
   specialities: NameIdList[];
 
-  @ViewChild('dangerToast', null) dangerTemplate;
+  @ViewChild('Toast', null) toast;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -66,10 +66,9 @@ export class ExaminationCreateComponent implements OnInit {
       ),
       catchError((err) => {
 
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000,
-          message: 'Error retrieving referral information'
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: 'Error Retrieving Referral Information'
         });
 
         const emptyReferral = {} as Referral;
@@ -86,10 +85,9 @@ export class ExaminationCreateComponent implements OnInit {
         this.specialities = specialities;
       },
       (err) => {
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000,
-          message: `Error retrieving speciality information.`
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: 'Error Retrieving Speciality Data'
         });
       });
 
