@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       ClaimStatus claimStatus;
 
-      if ((claimStatus = _context.ClaimStatuses
-        .SingleOrDefault(g => g.Id == GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED))) == null)
+      if ((claimStatus = _context
+        .ClaimStatuses
+          .SingleOrDefault(g => g.Id == GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED)))
+            == null)
       {
         claimStatus = new ClaimStatus();
         _context.Add(claimStatus);

@@ -14,8 +14,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       Organisation organisation;
 
-      if ((organisation = _context.Organisations
-        .SingleOrDefault(u => u.Name == ORGANISATION_NAME_1)) == null)
+      if ((organisation = _context
+        .Organisations
+          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_1))
+            == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
@@ -26,8 +28,10 @@ namespace Mep.Business.Migrations.Seeds
       organisation.ModifiedByUser = GetSystemAdminUser();
       organisation.Name = ORGANISATION_NAME_1;
 
-      if ((organisation = _context.Organisations
-        .SingleOrDefault(u => u.Name == ORGANISATION_NAME_2)) == null)
+      if ((organisation = _context
+        .Organisations
+          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_2))
+            == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
@@ -38,8 +42,10 @@ namespace Mep.Business.Migrations.Seeds
       organisation.ModifiedByUser = GetSystemAdminUser();
       organisation.Name = ORGANISATION_NAME_2;
 
-      if ((organisation = _context.Organisations
-        .SingleOrDefault(u => u.Name == ORGANISATION_NAME_3)) == null)
+      if ((organisation = _context
+        .Organisations
+          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_3))
+            == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
@@ -50,8 +56,10 @@ namespace Mep.Business.Migrations.Seeds
       organisation.ModifiedByUser = GetSystemAdminUser();
       organisation.Name = ORGANISATION_NAME_3;
 
-      if ((organisation = _context.Organisations
-        .SingleOrDefault(u => u.Name == ORGANISATION_NAME_4)) == null)
+      if ((organisation = _context
+        .Organisations
+          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_4))
+            == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);

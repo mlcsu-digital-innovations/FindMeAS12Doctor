@@ -16,8 +16,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // examination for referral with a current examination with no allocated doctors or notification responses
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_1)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_1))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);
@@ -34,8 +36,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // examination for referral with a previous examination
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_2)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_2))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);
@@ -54,8 +58,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // examinations for referral with both current and previous examinations
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_3)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_3))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);
@@ -72,8 +78,10 @@ namespace Mep.Business.Migrations.Seeds
       examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
       examination.SpecialityId = GetSpecialityId();
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_4)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_4))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);
@@ -90,8 +98,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // examination for referral with current examination and allocated doctors
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_5)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_5))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);
@@ -108,8 +118,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // examination for referral with current examination and notification responses
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_6)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_6))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);
@@ -126,8 +138,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // examination for referral with current examination and notification responses and allocated doctors
 
-      if ((examination = _context.Examinations
-        .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_7)) == null)
+      if ((examination = _context
+        .Examinations
+          .SingleOrDefault(g => g.Address1 == EXAMINATION_ADDRESS_7))
+            == null)
       {
         examination = new Examination();
         _context.Add(examination);

@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -18,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((paymentMethodType = _context
         .PaymentMethodTypes
-          .SingleOrDefault(g => g.Id == 
-            GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME))) == null)
+          .SingleOrDefault(g => g.Id == GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME)))
+            == null)
       {
         paymentMethodType = new PaymentMethodType();
         _context.Add(paymentMethodType);

@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       PaymentRule paymentRule;
 
-      if ((paymentRule = _context.PaymentRules
-        .SingleOrDefault(g => g.Name == PAYMENT_RULE_NAME_1)) == null)
+      if ((paymentRule = _context
+        .PaymentRules
+          .SingleOrDefault(g => g.Name == PAYMENT_RULE_NAME_1))
+            == null)
       {
         paymentRule = new PaymentRule();
         _context.Add(paymentRule);

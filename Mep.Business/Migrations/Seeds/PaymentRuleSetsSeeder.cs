@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       PaymentRuleSet paymentRuleSet;
 
-      if ((paymentRuleSet = _context.PaymentRuleSets
-        .SingleOrDefault(g => g.Id == GetPaymentRuleSetIdByPaymentRuleSetName(PAYMENT_RULE_SET_NAME))) == null)
+      if ((paymentRuleSet = _context
+        .PaymentRuleSets
+          .SingleOrDefault(g => g.Id == GetPaymentRuleSetIdByPaymentRuleSetName(PAYMENT_RULE_SET_NAME)))
+            == null)
       {
         paymentRuleSet = new PaymentRuleSet();
         _context.Add(paymentRuleSet);

@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       ContactDetail contactDetail;
 
-      if ((contactDetail = _context.ContactDetails
-        .SingleOrDefault(g => g.Address1 == CONTACT_DETAIL_ADDRESS_1)) == null)
+      if ((contactDetail = _context
+        .ContactDetails
+          .SingleOrDefault(g => g.Address1 == CONTACT_DETAIL_ADDRESS_1))
+            == null)
       {
         contactDetail = new ContactDetail();
         _context.Add(contactDetail);
@@ -28,7 +29,7 @@ namespace Mep.Business.Migrations.Seeds
       contactDetail.EmailAddress = EMAIL_ADDRESS;
       contactDetail.IsActive = true;
       contactDetail.Latitude = LATITUDE;
-      contactDetail.Longitude = LONGITUDE ;
+      contactDetail.Longitude = LONGITUDE;
       contactDetail.ModifiedAt = _now;
       contactDetail.ModifiedByUser = GetSystemAdminUser();
       contactDetail.Postcode = POSTCODE;

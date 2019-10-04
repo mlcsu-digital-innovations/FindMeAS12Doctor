@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       ContactDetailType contactDetailType;
 
-      if ((contactDetailType = _context.ContactDetailTypes
-        .SingleOrDefault(g => g.Name == CONTACT_DETAIL_TYPE_NAME)) == null)
+      if ((contactDetailType = _context
+        .ContactDetailTypes
+          .SingleOrDefault(g => g.Name == CONTACT_DETAIL_TYPE_NAME))
+            == null)
       {
         contactDetailType = new ContactDetailType();
         _context.Add(contactDetailType);

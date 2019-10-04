@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       NonPaymentLocationType nonPaymentLocationType;
 
-      if ((nonPaymentLocationType = _context.NonPaymentLocationTypes
-        .SingleOrDefault(g => g.Id == GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME))) == null)
+      if ((nonPaymentLocationType = _context
+        .NonPaymentLocationTypes
+          .SingleOrDefault(g => g.Id == GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME)))
+            == null)
       {
         nonPaymentLocationType = new NonPaymentLocationType();
         _context.Add(nonPaymentLocationType);

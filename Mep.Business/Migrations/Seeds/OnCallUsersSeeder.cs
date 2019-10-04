@@ -15,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       OnCallUser onCallUser;
 
-      if ((onCallUser = _context.OnCallUsers
-        .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE))) == null)
+      if ((onCallUser = _context
+        .OnCallUsers
+          .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE)))
+            == null)
       {
         onCallUser = new OnCallUser();
         _context.Add(onCallUser);
@@ -28,8 +30,10 @@ namespace Mep.Business.Migrations.Seeds
       onCallUser.ModifiedByUser = GetSystemAdminUser();
       onCallUser.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
 
-      if ((onCallUser = _context.OnCallUsers
-        .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
+      if ((onCallUser = _context
+        .OnCallUsers
+          .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE)))
+            == null)
       {
         onCallUser = new OnCallUser();
         _context.Add(onCallUser);

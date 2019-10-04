@@ -43,8 +43,10 @@ namespace Mep.Business.Migrations.Seeds
         {
           bool validOrganisation = false;
 
-          if ((gpPractice = _context.GpPractices
-            .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
+          if ((gpPractice = _context
+            .GpPractices
+              .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId))
+                == null)
           {
             gpPractice = new GpPractice();
             _context.Add(gpPractice);
@@ -78,7 +80,9 @@ namespace Mep.Business.Migrations.Seeds
 
                   try
                   {
-                    Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
+                    Ccg ccg = _context
+                      .Ccgs
+                        .SingleOrDefault(x => x.ShortCode == extension);
                     if (ccg != null)
                     {
                       gpPractice.CcgId = ccg.Id;
@@ -107,11 +111,15 @@ namespace Mep.Business.Migrations.Seeds
       GpPractice gp;
 
       // Get Id of Unknown Ccg
-      unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
+      unknown = _context
+        .Ccgs
+          .Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
 
       // create a dummy CCG for Unknown
-      if ((gp = _context.GpPractices
-        .SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
+      if ((gp = _context
+        .GpPractices
+          .SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN))
+            == null)
       {
         gp = new GpPractice();
         _context.Add(gp);

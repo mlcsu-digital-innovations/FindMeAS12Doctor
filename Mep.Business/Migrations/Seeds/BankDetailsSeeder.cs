@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,8 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       BankDetail bankDetail;
 
-      if ((bankDetail = _context.BankDetails
-        .SingleOrDefault(g => g.BankName == BANK_DETAILS_NAME_ON_ACCOUNT)) == null)
+      if ((bankDetail = _context
+        .BankDetails
+          .SingleOrDefault(g => g.BankName == BANK_DETAILS_NAME_ON_ACCOUNT))
+            == null)
       {
         bankDetail = new BankDetail();
         _context.Add(bankDetail);

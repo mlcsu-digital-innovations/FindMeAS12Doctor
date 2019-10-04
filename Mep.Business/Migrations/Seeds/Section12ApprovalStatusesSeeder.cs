@@ -1,6 +1,5 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -18,8 +17,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((section12ApprovalStatus = _context
         .Section12ApprovalStatuses
-          .SingleOrDefault(g => g.Id == 
-            GetSection12ApprovalStatusIdBySection12ApprovalStatusName(SECTION_12_APPROVAL_STATUS_NAME)))
+          .SingleOrDefault(g => g.Id == GetSection12ApprovalStatusIdBySection12ApprovalStatusName(SECTION_12_APPROVAL_STATUS_NAME)))
               == null)
       {
         section12ApprovalStatus = new Section12ApprovalStatus();
