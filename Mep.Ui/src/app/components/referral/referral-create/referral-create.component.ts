@@ -433,6 +433,7 @@ export class ReferralCreateComponent implements OnInit {
         });
         this.isCreatingReferral = false;
         // navigate to the create examination page
+        this.router.navigate([`/examination/new/${result.id}`]);
       },
       error => {
         this.toastService.displayError(this.toast, {
