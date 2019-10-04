@@ -16,8 +16,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       Section12ApprovalStatus section12ApprovalStatus;
 
-      if ((section12ApprovalStatus = _context.Section12ApprovalStatuses
-        .SingleOrDefault(g => g.Id == GetSection12ApprovalStatusIdBySection12ApprovalStatusName(SECTION_12_APPROVAL_STATUS_NAME))) == null)
+      if ((section12ApprovalStatus = _context
+        .Section12ApprovalStatuses
+          .SingleOrDefault(g => g.Id == 
+            GetSection12ApprovalStatusIdBySection12ApprovalStatusName(SECTION_12_APPROVAL_STATUS_NAME)))
+              == null)
       {
         section12ApprovalStatus = new Section12ApprovalStatus();
         _context.Add(section12ApprovalStatus);
