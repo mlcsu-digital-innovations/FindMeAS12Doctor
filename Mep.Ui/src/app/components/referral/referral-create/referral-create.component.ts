@@ -58,7 +58,6 @@ export class ReferralCreateComponent implements OnInit {
   unknownGpPracticeId: number;
   value = false;
 
-  @ViewChild('Toast', null) toast;
   @ViewChild('patientResults', {static: true}) patientResultTemplate;
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
@@ -410,7 +409,7 @@ export class ReferralCreateComponent implements OnInit {
         this.SaveReferralDetails();
       }),
       catchError((err, caught) => {
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to create patient for referral'
         });
@@ -427,7 +426,7 @@ export class ReferralCreateComponent implements OnInit {
 
     this.referralService.createReferral(referral).subscribe(
       (result: Referral) => {
-        this.toastService.displaySuccess(this.toast, {
+        this.toastService.displaySuccess({
           message: 'Referral Created'
         });
         this.isCreatingReferral = false;
@@ -435,7 +434,7 @@ export class ReferralCreateComponent implements OnInit {
         this.router.navigate([`/examination/new/${result.id}`]);
       },
       error => {
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to create new referral ! Please try again in a few moments'
         });
@@ -687,7 +686,7 @@ export class ReferralCreateComponent implements OnInit {
         },
         error => {
           this.isSearchingForPostcode = false;
-          this.toastService.displayError(this.toast, {
+          this.toastService.displayError({
             title: 'Server Error',
             message: 'Unable to validate residential postcode ! Please try again in a few moments'
           });
@@ -722,7 +721,7 @@ export class ReferralCreateComponent implements OnInit {
         switch (results.length) {
           case 0:
             // no matching patients found, inform user with toast ?
-            this.toastService.displayInfo(this.toast, {
+            this.toastService.displayInfo({
               message: 'No existing patients found'
             });
             this.isPatientIdValidated = true;
@@ -742,7 +741,7 @@ export class ReferralCreateComponent implements OnInit {
             );
             break;
           default:
-            this.toastService.displayError(this.toast, {
+            this.toastService.displayError({
               title: 'Validation Error',
               message: 'Multiple patients found ! Please inform a system administrator'
             });
@@ -752,7 +751,7 @@ export class ReferralCreateComponent implements OnInit {
       },
       error => {
         this.isSearchingForPatient = false;
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to validate patient details ! Please try again in a few moments'
         });
