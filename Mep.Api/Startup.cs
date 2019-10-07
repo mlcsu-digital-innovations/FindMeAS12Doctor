@@ -27,13 +27,9 @@ namespace Mep.Api
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc()
-              // .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
               .AddNewtonsoftJson(opt => {
                 opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
               });
-              // .AddJsonOptions(opt => {
-              //   opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-              // });
               
       services.AddDbContext<ApplicationContext>
       (options =>
