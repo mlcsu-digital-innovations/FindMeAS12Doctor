@@ -73,20 +73,18 @@
                     'is-valid': HasValidPostcode()
                   }" />
               </div>
-              <div class="col-md-2 centered-div">
-                  <div class="column-div">
+              <div class="col-md-4 centered-div">
+                  <div class="button-container">
                     <button
                       type="button"
-                      class="btn btn-primary vcenter"
-                      style="margin-top:3px;"
-                      placement="right"
+                      class="btn btn-primary btn-exam"
+                      placement="top"
                       ngbTooltip="Search for addresses"
                       [openDelay]="1000"
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
                       (click)="AddressSearch()"
-                      [disabled]="examination.examinationPostcode.value == '' || examination.examinationPostcode.errors != null"
-                      [ngClass]="{ validating: IsSearchingForPostcode() }"
+                      [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
                     >
                     {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
                     <span
@@ -94,20 +92,96 @@
                         role="status"
                         aria-hidden="true"
                         *ngIf="IsSearchingForPostcode()"
-                        style="margin-left:100px; display: inline-block;"
                       >
                     </span>
-
                     </button>
-                  </div>
+                    <button
+                    type="button"
+                    class="btn btn-primary btn-exam btn-spaced"
+                    placement="top"
+                    ngbTooltip="Locate an address using an external web site"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    (click)="OpenLocationTab()"
+                    >
+                    Locate
+                  </button>
                 </div>
+              </div>
             </div>
-            <!-- Residential Postcode Errors-->
-            <div class="form-row">
+            <!-- Examination Postcode Errors-->
+            <div class="form-row" *ngIf="examinationPostcodeField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div *ngIf="examination.examinationPostcode.errors" class="invalid-field">
-                  <span>{{ examinationPostcodeValidationMessage }}</span>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.pattern">
+                  <span>Invalid Postcode Format</span>
                 </div>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.NoResultsReturned">
+                    <span>No Matches Found</span>
+                  </div>
+              </div>
+            </div>
+            <!-- Examination Address -->
+            <div class="form-row" *ngIf="addressList.length > 0">
+              <div class="col-md-8 mb-2">
+                <label for="examinationAddress">Examination Address</label>
+                <select
+                  class="custom-select custom-select-lg mb-2 form-control"
+                  formControlName="examinationAddress"
+                  #examinationAddress
+                  id="examinationAddress"
+                  appFocusOnShow
+                >
+                  <option disabled=true [selected]=true>Please Select Address</option>
+                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
+                    {{addressList[i].address}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <!-- Additional location details -->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <label for="additionalDetails">Additional Location Details</label>
+                <textarea
+                  class="form-control additional-details"
+                  formControlName="additionalDetails"
+                  #additionalDetails
+                  id=additionalDetails
+                >
+                </textarea>
+              </div>
+            </div>
+            <div class="form-row">
+              <!-- speciality dropdown -->
+              <div class="col-md-4 mb-2">
+                <label for="speciality">Speciality</label>
+                <select
+                class="custom-select custom-select-lg mb-2 form-control"
+                formControlName="speciality"
+                #speciality
+                id="speciality"
+                >
+                <option [selected]=true></option>
+                <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
+                  {{specialities[i].name}}
+                </option>
+                </select>
+              </div>
+              <!-- gender dropdown -->
+              <div class="col-md-4 mb-2">
+                <label for="preferredGender">Preferred Doctor Gender</label>
+                <select
+                class="custom-select custom-select-lg mb-2 form-control"
+                formControlName="preferredGender"
+                #preferredGender
+                id="preferredGender"
+                >
+                <option [selected]=true></option>
+                <option *ngFor="let gender of genderTypes; let i=index" [value]="genderTypes[i].id">
+                  {{genderTypes[i].name}}
+                </option>
+                </select>
               </div>
             </div>
           </form>
@@ -116,8 +190,7 @@
     </div>
   </div>
 
-  <ng-template #dangerToast let-toastMessage>
-    <app-danger-toast [toastMessage]='dangerMessage' [errMessage]='errMessage'></app-danger-toast>
+  <ng-template #Toast let-title='title' let-message='message'>
   </ng-template>
 
   <ng-template #loading>

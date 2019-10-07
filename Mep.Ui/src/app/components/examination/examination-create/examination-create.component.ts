@@ -1,9 +1,13 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
+import { NameIdList } from 'src/app/interfaces/name-id-list';
+import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
@@ -13,7 +17,6 @@ import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 
-
 @Component({
   selector: 'app-examination-create',
   templateUrl: './examination-create.component.html',
@@ -21,17 +24,18 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 })
 export class ExaminationCreateComponent implements OnInit {
 
+  addressList: AddressResult[];
   addresses$: Observable<any>;
-  dangerMessage: string;
-  errMessage: string;
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
+  genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
   referral$: Observable<Referral | any>;
+  specialities: NameIdList[];
 
-  @ViewChild('dangerToast', null) dangerTemplate;
+  @ViewChild('Toast', null) toast;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -39,10 +43,13 @@ export class ExaminationCreateComponent implements OnInit {
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private nameIdListService: NameIdListService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
+
+    this.addressList = [];
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -57,11 +64,10 @@ export class ExaminationCreateComponent implements OnInit {
         }
       ),
       catchError((err) => {
-        this.errMessage = err.error;
-        this.dangerMessage = `Error retrieving referral information.`;
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: 'Error Retrieving Referral Information'
         });
 
         const emptyReferral = {} as Referral;
@@ -71,6 +77,30 @@ export class ExaminationCreateComponent implements OnInit {
         return of(emptyReferral);
       })
     );
+
+    // get the list of specialities for the dropdown
+    this.nameIdListService.GetListData('speciality')
+      .subscribe(specialities => {
+        this.specialities = specialities;
+      },
+      (err) => {
+        this.toastService.displayError(this.toast, {
+          title: 'Error',
+          message: 'Error Retrieving Speciality Data'
+        });
+      });
+
+    // get the list of genders for the dropdown
+    this.nameIdListService.GetListData('gendertype')
+      .subscribe(genders => {
+        this.genderTypes = genders;
+      },
+      (err) => {
+      this.toastService.displayError(this.toast, {
+        title: 'Error',
+        message: 'Error Retrieving Gender Data'
+      });
+    });
 
     this.examinationForm = this.formBuilder.group({
       amhp: [''],
@@ -82,7 +112,19 @@ export class ExaminationCreateComponent implements OnInit {
           Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
+      examinationAddress: [''],
+      additionalDetails: ['',
+        [
+          Validators.maxLength(2000)
+        ]
+      ],
+      speciality: [''],
+      preferredGender: ['']
     });
+  }
+
+  ToastStuff() {
+    console.log('toast stuff');
   }
 
   HasValidPostcode(): boolean {
@@ -103,6 +145,10 @@ export class ExaminationCreateComponent implements OnInit {
     return this.isSearchingForPostcode;
   }
 
+  get additionalDetailsField() {
+    return this.examinationForm.controls.additionalDetails;
+  }
+
   get amhpField() {
     return this.examinationForm.controls.amhp;
   }
@@ -113,6 +159,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   get examinationPostcodeField() {
     return this.examinationForm.controls.examinationPostcode;
+  }
+
+  get examinationAddressField() {
+    return this.examinationForm.controls.examinationAddress;
   }
 
   SetAmhpField(id: number | null, text: string | null) {
@@ -146,19 +196,29 @@ export class ExaminationCreateComponent implements OnInit {
     )
 
   AddressSearch(): void {
-
+    this.addressList = [];
+    this.examinationAddressField.setValue('');
     this.isSearchingForPostcode = true;
 
     this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
-    .subscribe( addresses => {
-      this.isSearchingForPostcode = false;
+      .subscribe(address => {
+        this.addressList.push(address);
+      }, (err) => {
+        this.isSearchingForPostcode = false;
+        this.toastService.displayError(this.toast, {
+          title: 'Search Error',
+          message: 'Error Retrieving Address Information'
+        });
+      }, () => {
+        this.isSearchingForPostcode = false;
+        // show an error if no matching addresses are returned
+        if (this.addressList.length === 0) {
+          this.examinationPostcodeField.setErrors({NoResultsReturned: true});
+        }
+      });
+   }
 
-      // ToDo: Do something with the results
-
-    }, err => {
-      this.isSearchingForPostcode = false;
-
-      // ToDo: Warn the user of the error ?
-    });
+   OpenLocationTab(): void {
+      window.open(environment.locationEndpoint, '_blank');
    }
 }

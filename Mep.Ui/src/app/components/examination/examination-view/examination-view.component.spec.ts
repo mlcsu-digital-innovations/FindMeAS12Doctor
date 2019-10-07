@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WarningToastComponent } from './warning-toast.component';
+import { ExaminationViewComponent } from './examination-view.component';
 
-describe('WarningToastComponent', () => {
-  let component: WarningToastComponent;
-  let fixture: ComponentFixture<WarningToastComponent>;
+describe('ExaminationViewComponent', () => {
+  let component: ExaminationViewComponent;
+  let fixture: ComponentFixture<ExaminationViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WarningToastComponent ]
+      declarations: [ ExaminationViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WarningToastComponent);
+    fixture = TestBed.createComponent(ExaminationViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

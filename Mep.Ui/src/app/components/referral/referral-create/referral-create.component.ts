@@ -32,7 +32,6 @@ import { TypeAheadResult } from '../../../interfaces/typeahead-result';
 export class ReferralCreateComponent implements OnInit {
 
   cancelModal: NgbModalRef;
-  dangerMessage: string;
   hasAmhpSearchFailed: boolean;
   hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
@@ -55,13 +54,11 @@ export class ReferralCreateComponent implements OnInit {
   patientModal: NgbModalRef;
   patientResult: PatientSearchResult;
   residentialPostcodeValidationMessage: string;
-  successMessage: string;
   unknownCcgId: number;
   unknownGpPracticeId: number;
   value = false;
 
-  @ViewChild('dangerToast', null) dangerTemplate;
-  @ViewChild('successToast', null) successTemplate;
+  @ViewChild('Toast', null) toast;
   @ViewChild('patientResults', {static: true}) patientResultTemplate;
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
@@ -121,7 +118,6 @@ export class ReferralCreateComponent implements OnInit {
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
-
     this.onChanges();
   }
 
@@ -262,9 +258,9 @@ export class ReferralCreateComponent implements OnInit {
     }
 
     return (
-      (this.gpPractice.id && this.gpPractice.id !== this.unknownGpPracticeId) ||
+      (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
       (this.residentialPostcode !== '' && this.residentialPostcode !== 'Unknown') ||
-      (this.ccg.id && this.ccg.id !== this.unknownCcgId)
+      (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
     );
   }
 
@@ -414,11 +410,9 @@ export class ReferralCreateComponent implements OnInit {
         this.SaveReferralDetails();
       }),
       catchError((err, caught) => {
-        this.dangerMessage =
-          'Server Error: Unable to create patient for referral !';
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+        this.toastService.displayError(this.toast, {
+          title: 'Server Error',
+          message: 'Unable to create patient for referral'
         });
         this.isCreatingReferral = false;
         return empty();
@@ -433,20 +427,17 @@ export class ReferralCreateComponent implements OnInit {
 
     this.referralService.createReferral(referral).subscribe(
       (result: Referral) => {
-        this.successMessage = 'Referral Created';
-        this.toastService.show(this.successTemplate, {
-          classname: 'bg-success text-light',
-          delay: 5000
+        this.toastService.displaySuccess(this.toast, {
+          message: 'Referral Created'
         });
         this.isCreatingReferral = false;
         // navigate to the create examination page
+        this.router.navigate([`/examination/new/${result.id}`]);
       },
       error => {
-        this.dangerMessage =
-          'Server Error: Unable to create new referral ! Please try again in a few moments';
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+        this.toastService.displayError(this.toast, {
+          title: 'Server Error',
+          message: 'Unable to create new referral ! Please try again in a few moments'
         });
         this.isCreatingReferral = false;
         return throwError(error);
@@ -455,13 +446,41 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   CreateReferral() {
-    this.isCreatingReferral = true;
-    // create a new patient ?
-    if (this.patientDetails.isExistingPatient) {
-      this.SaveReferralDetails();
-    } else {
-      this.CreatePatient().subscribe();
+
+    let canContinue = true;
+
+    // only continue if the referral is valid
+    if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
+      this.nhsNumberField.setErrors({InvalidPatientIdentifier: true});
+      canContinue = false;
     }
+
+    if (!this.HasValidGpOrPostcodeOrCcg()) {
+      this.isGpFieldsShown = true;
+      this.gpPracticeField.enable();
+      this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
+      canContinue = false;
+
+      console.log(this.gpPracticeField.errors);
+    }
+
+    if (!this.HasValidLeadAmhp()) {
+      this.amhpField.setErrors({InvalidAmhp: true});
+      canContinue = false;
+    }
+
+    if (canContinue) {
+      this.isCreatingReferral = true;
+      // create a new patient ?
+      if (this.patientDetails.isExistingPatient) {
+        this.SaveReferralDetails();
+      } else {
+        this.CreatePatient().subscribe();
+      }
+    } else {
+      return;
+    }
+
   }
 
   CancelCancellation(): void {
@@ -668,11 +687,9 @@ export class ReferralCreateComponent implements OnInit {
         },
         error => {
           this.isSearchingForPostcode = false;
-          this.dangerMessage =
-            'Server Error: Unable to validate residential postcode ! Please try again in a few moments';
-          this.toastService.show(this.dangerTemplate, {
-            classname: 'bg-danger text-light',
-            delay: 15000
+          this.toastService.displayError(this.toast, {
+            title: 'Server Error',
+            message: 'Unable to validate residential postcode ! Please try again in a few moments'
           });
           return throwError(error);
         }
@@ -705,18 +722,18 @@ export class ReferralCreateComponent implements OnInit {
         switch (results.length) {
           case 0:
             // no matching patients found, inform user with toast ?
-            this.successMessage = 'No existing patients found';
-            this.toastService.show(this.successTemplate, {
-              classname: 'bg-success text-light',
-              delay: 3000
+            this.toastService.displayInfo(this.toast, {
+              message: 'No existing patients found'
             });
             this.isPatientIdValidated = true;
             this.patientDetails.nhsNumber = +this.nhsNumber;
             this.patientDetails.alternativeIdentifier = this.alternativeIdentifier;
             this.isGpFieldsShown = true;
+            this.nhsNumberField.setErrors(null);
             this.SetFieldFocus('#gpPractice');
             break;
           case 1:
+            this.nhsNumberField.setErrors(null);
             this.patientResult = results[0];
             this.modalResult = results[0];
             this.patientModal = this.modalService.open(
@@ -725,11 +742,9 @@ export class ReferralCreateComponent implements OnInit {
             );
             break;
           default:
-            this.dangerMessage =
-              'Validation Error: Multiple patients found ! Please inform a system administrator';
-            this.toastService.show(this.dangerTemplate, {
-              classname: 'bg-danger text-light',
-              delay: 10000
+            this.toastService.displayError(this.toast, {
+              title: 'Validation Error',
+              message: 'Multiple patients found ! Please inform a system administrator'
             });
             this.isPatientIdValidated = false;
             break;
@@ -737,11 +752,9 @@ export class ReferralCreateComponent implements OnInit {
       },
       error => {
         this.isSearchingForPatient = false;
-        this.dangerMessage =
-          'Server Error: Unable to validate patient details ! Please try again in a few moments';
-        this.toastService.show(this.dangerTemplate, {
-          classname: 'bg-danger text-light',
-          delay: 10000
+        this.toastService.displayError(this.toast, {
+          title: 'Server Error',
+          message: 'Unable to validate patient details ! Please try again in a few moments'
         });
         return throwError(error);
       }
