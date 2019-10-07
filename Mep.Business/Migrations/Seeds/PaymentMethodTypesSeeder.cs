@@ -17,7 +17,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((paymentMethodType = _context
         .PaymentMethodTypes
-          .SingleOrDefault(g => g.Id == GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME)))
+          .SingleOrDefault(g => g.Name == PAYMENT_METHOD_TYPE_NAME))
             == null)
       {
         paymentMethodType = new PaymentMethodType();
