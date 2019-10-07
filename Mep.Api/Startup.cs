@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace Mep.Api
@@ -28,10 +29,13 @@ namespace Mep.Api
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc()
-              .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-              .AddJsonOptions(opt => {
+              // .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+              .AddNewtonsoftJson(opt => {
                 opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
               });
+              // .AddJsonOptions(opt => {
+              //   opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+              // });
               
       services.AddDbContext<ApplicationContext>
       (options =>
@@ -77,7 +81,7 @@ namespace Mep.Api
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       if (env.IsDevelopment() || env.IsEnvironment(ENV_AZURE_DEVELOPMENT))
       {
@@ -91,8 +95,11 @@ namespace Mep.Api
 
       app.UseExceptionHandler("/Error");
       app.UseHttpsRedirection();
+      app.UseRouting();
       app.UseCors("AllowAnyOrigin");
-      app.UseMvc();      
+      app.UseEndpoints(endpoints => {
+        endpoints.MapControllers();
+      });      
     }
   }
 }

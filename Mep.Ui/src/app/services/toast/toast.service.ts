@@ -1,41 +1,37 @@
-import { Injectable, TemplateRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ToastOptions } from 'src/app/interfaces/toast-options';
 
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   toasts: any[] = [];
 
-  show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
+  showWithOptions(options: ToastOptions, classname: string, iconClass: string) {
+    options.classname = classname;
+    options.iconClass = iconClass;
+    this.show(options);
+  }
 
+  show(options: any = {}) {
     options.classname += ' text-light fade-in toast-container';
-
-    this.toasts.push({ textOrTpl, ...options });
+    this.toasts.push({ ...options });
   }
 
-  displayError(textOrTpl: string | TemplateRef<any>, options: ToastOptions) {
+  displayError(options: ToastOptions) {
     options.delay = 60000;
-    options.classname = 'bg-danger';
     options.autohide = false;
-    options.iconClass = 'fas fa-times-circle';
-    this.show(textOrTpl, options);
+    this.showWithOptions(options, 'bg-danger', 'fas fa-times-circle');
   }
 
-  displayWarning(textOrTpl: string | TemplateRef<any>, options: ToastOptions) {
-    options.classname = 'bg-warning';
-    options.iconClass = 'fas fa-exclamation-triangle';
-    this.show(textOrTpl, options);
+  displayWarning(options: ToastOptions) {
+    this.showWithOptions(options, 'bg-warning', 'fas fa-exclamation-triangle');
   }
 
-  displayInfo(textOrTpl: string | TemplateRef<any>, options: ToastOptions) {
-    options.classname = 'bg-info';
-    options.iconClass = 'fas fa-info-circle';
-    this.show(textOrTpl, options);
+  displayInfo(options: ToastOptions) {
+    this.showWithOptions(options, 'bg-info', 'fas fa-info-circle');
   }
 
-  displaySuccess(textOrTpl: string | TemplateRef<any>, options: ToastOptions) {
-    options.classname = 'bg-success';
-    options.iconClass = 'fas fa-check';
-    this.show(textOrTpl, options);
+  displaySuccess(options: ToastOptions) {
+    this.showWithOptions(options, 'bg-success', 'fas fa-check');
   }
 
   remove(toast) {
