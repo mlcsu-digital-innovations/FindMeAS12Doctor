@@ -22,7 +22,7 @@ namespace Mep.Business.Migrations.Seeds
 
       new ClaimStatusesSeeder(_context).SeedData();
 
-      new ContactDetailsSeeder(_context).SeedData();
+      new ContactDetailTypesSeeder(_context).SeedData();
 
       new DoctorStatusesSeeder(_context).SeedData();
 
@@ -61,7 +61,7 @@ namespace Mep.Business.Migrations.Seeds
 
       new ClaimStatusesSeeder(_context).SeedData();
 
-      new ContactDetailsSeeder(_context).SeedData();
+      new ContactDetailTypesSeeder(_context).SeedData();
 
       new DoctorStatusesSeeder(_context).SeedData();
 
