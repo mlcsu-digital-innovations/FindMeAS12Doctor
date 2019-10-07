@@ -17,7 +17,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((nonPaymentLocationType = _context
         .NonPaymentLocationTypes
-          .SingleOrDefault(g => g.Id == GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME)))
+          .SingleOrDefault(g => g.Name == NON_PAYMENT_LOCATION_TYPE_NAME))
             == null)
       {
         nonPaymentLocationType = new NonPaymentLocationType();
