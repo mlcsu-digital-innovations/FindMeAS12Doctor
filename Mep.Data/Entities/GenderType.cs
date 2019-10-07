@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
-  public class GenderType : NameDescription, IPaymentMethodType
+  public class GenderType : NameDescription, IGenderType
   {
     [InverseProperty("PreferredDoctorGenderType")]
     public virtual IList<Examination> Examinations { get; set; }

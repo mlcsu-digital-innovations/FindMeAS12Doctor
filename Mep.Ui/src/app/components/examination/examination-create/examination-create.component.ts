@@ -35,8 +35,6 @@ export class ExaminationCreateComponent implements OnInit {
   referral$: Observable<Referral | any>;
   specialities: NameIdList[];
 
-  @ViewChild('Toast', null) toast;
-
   constructor(
     private amhpListService: AmhpListService,
     private formBuilder: FormBuilder,
@@ -65,7 +63,7 @@ export class ExaminationCreateComponent implements OnInit {
       ),
       catchError((err) => {
 
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError({
           title: 'Error',
           message: 'Error Retrieving Referral Information'
         });
@@ -84,7 +82,7 @@ export class ExaminationCreateComponent implements OnInit {
         this.specialities = specialities;
       },
       (err) => {
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError({
           title: 'Error',
           message: 'Error Retrieving Speciality Data'
         });
@@ -96,7 +94,7 @@ export class ExaminationCreateComponent implements OnInit {
         this.genderTypes = genders;
       },
       (err) => {
-      this.toastService.displayError(this.toast, {
+      this.toastService.displayError({
         title: 'Error',
         message: 'Error Retrieving Gender Data'
       });
@@ -205,7 +203,7 @@ export class ExaminationCreateComponent implements OnInit {
         this.addressList.push(address);
       }, (err) => {
         this.isSearchingForPostcode = false;
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError({
           title: 'Search Error',
           message: 'Error Retrieving Address Information'
         });

@@ -317,9 +317,6 @@
 
           <app-delay-spinner *ngIf="isCreatingReferral" [delayMessage]="'Saving Referral'"></app-delay-spinner>
 
-          <ng-template #Toast let-title='title' let-message='message'>
-          </ng-template>
-
           <!-- patient results -->
           <ng-template #patientResults let-patientResult>
             <app-patient-results-modal
