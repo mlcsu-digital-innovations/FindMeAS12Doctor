@@ -14,8 +14,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
-    protected const string CLAIM_STATUS_NAME_ACCEPTED = "Accepted";
-    protected const string CLAIM_STATUS_DESCRIPTION_ACCEPTED = "Accepted";
+    protected const string CLAIM_STATUS_ACCEPTED_NAME = "Accepted";
+    protected const string CLAIM_STATUS_ACCEPTED_DESCRIPTION = "Accepted";
     protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
     protected const string CONTACT_DETAIL_TYPE_NAME = "Contact Detail Type";
     protected const string CONTACT_DETAIL_TYPE_DESCRIPTION = "Contact Detail Type Description";
