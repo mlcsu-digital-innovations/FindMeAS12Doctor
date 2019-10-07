@@ -18,7 +18,6 @@ export class ReferralListComponent {
   referralList$: Observable<ReferralList[]>;
   total$: Observable<number>;
 
-  @ViewChild('Toast', null) toast;
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
 
   constructor(
@@ -31,7 +30,7 @@ export class ReferralListComponent {
     this.referralList$.subscribe(
       result => this.noOfReferralsInList = result.length,
       error => {
-        this.toastService.displayError(this.toast, {
+        this.toastService.displayError( {
           title: 'Error',
           message: error
         });

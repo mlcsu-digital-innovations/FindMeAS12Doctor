@@ -23,31 +23,42 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountNumber");
+                    b.Property<int>("AccountNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("BankName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NameOnAccount")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("SortCode");
+                    b.Property<int>("SortCode")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("VsrNumber");
+                    b.Property<int>("VsrNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -64,43 +75,60 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountNumber");
+                    b.Property<int>("AccountNumber")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("BankName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NameOnAccount")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("SortCode");
+                    b.Property<int>("SortCode")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("VsrNumber");
+                    b.Property<int>("VsrNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -113,29 +141,38 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CostCentre");
+                    b.Property<int>("CostCentre")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("FailedExamPayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsPaymentApprovalRequired");
+                    b.Property<bool>("IsPaymentApprovalRequired")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LongCode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ShortCode")
+                        .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
@@ -155,41 +192,56 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CostCentre");
+                    b.Property<int>("CostCentre")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("FailedExamPayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsPaymentApprovalRequired");
+                    b.Property<bool>("IsPaymentApprovalRequired")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LongCode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ShortCode")
+                        .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
@@ -207,20 +259,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -234,32 +292,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -271,45 +341,59 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Address3")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ContactDetailTypeId");
+                    b.Property<int>("ContactDetailTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(8,6)");
+                    b.Property<int?>("Latitude")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9,6)");
+                    b.Property<int?>("Longitude")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("TelephoneNumber");
+                    b.Property<int?>("TelephoneNumber")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Town");
+                    b.Property<string>("Town")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -328,57 +412,77 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Address3")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ContactDetailTypeId");
+                    b.Property<int>("ContactDetailTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(8,6)");
+                    b.Property<int?>("Latitude")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9,6)");
+                    b.Property<int?>("Longitude")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("TelephoneNumber");
+                    b.Property<int?>("TelephoneNumber")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Town");
+                    b.Property<string>("Town")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -391,20 +495,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -418,32 +528,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -455,17 +577,23 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTimeOffset>("AvailabilityEnd");
+                    b.Property<DateTimeOffset>("AvailabilityEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("AvailabilityStart");
+                    b.Property<DateTimeOffset>("AvailabilityStart")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<decimal?>("ExtendedAvailabilityLatitude1")
                         .HasColumnType("decimal(8,6)");
@@ -485,13 +613,17 @@ namespace mep.business.Migrations
                     b.Property<decimal?>("ExtendedAvailabilityLongitude3")
                         .HasColumnType("decimal(9,6)");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(8,6)");
@@ -499,9 +631,11 @@ namespace mep.business.Migrations
                     b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(9,6)");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -514,27 +648,38 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("AvailabilityEnd");
+                    b.Property<DateTimeOffset>("AvailabilityEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("AvailabilityStart");
+                    b.Property<DateTimeOffset>("AvailabilityStart")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<decimal?>("ExtendedAvailabilityLatitude1")
                         .HasColumnType("decimal(8,6)");
@@ -554,15 +699,20 @@ namespace mep.business.Migrations
                     b.Property<decimal?>("ExtendedAvailabilityLongitude3")
                         .HasColumnType("decimal(9,6)");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3");
+                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(8,6)");
@@ -570,9 +720,11 @@ namespace mep.business.Migrations
                     b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(9,6)");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -583,56 +735,79 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("Address2");
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address3");
+                    b.Property<string>("Address3")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address4");
+                    b.Property<string>("Address4")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("CompletedByUserId");
+                    b.Property<int?>("CompletedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("CompletedTime");
+                    b.Property<DateTimeOffset?>("CompletedTime")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("CompletionConfirmationByUserId");
+                    b.Property<int?>("CompletionConfirmationByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool?>("IsSuccessful");
+                    b.Property<bool?>("IsSuccessful")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MeetingArrangementComment")
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset?>("MustBeCompletedBy")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("NonPaymentLocationId");
+                    b.Property<int?>("NonPaymentLocationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("PreferredDoctorGenderTypeId");
+                    b.Property<int?>("PreferredDoctorGenderTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ReferralId");
+                    b.Property<int>("ReferralId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("ScheduledTime");
+                    b.Property<DateTimeOffset?>("ScheduledTime")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SpecialityId");
+                    b.Property<int>("SpecialityId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("UnsuccessfulExaminationTypeId");
+                    b.Property<int?>("UnsuccessfulExaminationTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -663,68 +838,97 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("Address2");
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address3");
+                    b.Property<string>("Address3")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address4");
+                    b.Property<string>("Address4")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("CompletedByUserId");
+                    b.Property<int?>("CompletedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("CompletedTime");
+                    b.Property<DateTimeOffset?>("CompletedTime")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("CompletionConfirmationByUserId");
+                    b.Property<int?>("CompletionConfirmationByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("GenderTypeId");
+                    b.Property<int>("GenderTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool?>("IsSuccessful");
+                    b.Property<bool?>("IsSuccessful")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MeetingArrangementComment")
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("MustBeCompletedBy");
+                    b.Property<DateTimeOffset?>("MustBeCompletedBy")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("NonPaymentLocationId");
+                    b.Property<int?>("NonPaymentLocationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("ReferralId");
+                    b.Property<int>("ReferralId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("ScheduledTime");
+                    b.Property<DateTimeOffset?>("ScheduledTime")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SpecialityId");
+                    b.Property<int>("SpecialityId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("UnsuccessfulExaminationTypeId");
+                    b.Property<int?>("UnsuccessfulExaminationTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -735,20 +939,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -762,26 +972,34 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
                     b.Property<string>("GpPracticeCode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Postcode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.HasKey("Id");
@@ -797,38 +1015,52 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
                     b.Property<string>("GpPracticeCode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Postcode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.HasKey("AuditId");
@@ -840,20 +1072,27 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Exception");
+                    b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Level")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MessageTemplate");
+                    b.Property<string>("MessageTemplate")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Properties");
+                    b.Property<string>("Properties")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TimeStamp");
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -864,17 +1103,23 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("NonPaymentLocationTypeId");
+                    b.Property<int>("NonPaymentLocationTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -891,29 +1136,41 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("NonPaymentLocationTypeId");
+                    b.Property<int>("NonPaymentLocationTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -924,22 +1181,29 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CcgId");
+                    b.Property<int?>("CcgId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -955,32 +1219,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -992,24 +1268,31 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MessageTemplate")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1023,36 +1306,49 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MessageTemplate")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1064,19 +1360,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTimeOffset>("DateTimeEnd");
+                    b.Property<DateTimeOffset>("DateTimeEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateTimeStart");
+                    b.Property<DateTimeOffset>("DateTimeStart")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1091,31 +1394,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("DateTimeEnd");
+                    b.Property<DateTimeOffset>("DateTimeEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateTimeStart");
+                    b.Property<DateTimeOffset>("DateTimeStart")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -1126,20 +1442,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1153,32 +1475,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1190,24 +1524,33 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AlternativeIdentifier")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int?>("CcgId");
+                    b.Property<int?>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("GpPracticeId");
+                    b.Property<int?>("GpPracticeId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("NhsNumber");
+                    b.Property<long?>("NhsNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ResidentialPostcode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.HasKey("Id");
@@ -1225,36 +1568,51 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AlternativeIdentifier")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("CcgId");
+                    b.Property<int?>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("GpPracticeId");
+                    b.Property<int?>("GpPracticeId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("NhsNumber");
+                    b.Property<long?>("NhsNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ResidentialPostcode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.HasKey("AuditId");
@@ -1266,19 +1624,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PaymentMethodTypeId");
+                    b.Property<int>("PaymentMethodTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1297,31 +1662,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PaymentMethodTypeId");
+                    b.Property<int>("PaymentMethodTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -1334,20 +1712,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1361,32 +1745,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1398,27 +1794,35 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Criteria")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("PaymentRuleSetId");
+                    b.Property<int>("PaymentRuleSetId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1433,39 +1837,53 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Criteria")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("PaymentRuleSetId");
+                    b.Property<int>("PaymentRuleSetId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -1476,26 +1894,35 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("DateTimeFrom");
+                    b.Property<DateTimeOffset>("DateTimeFrom")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateTimeTo");
+                    b.Property<DateTimeOffset>("DateTimeTo")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1511,38 +1938,53 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CcgId");
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("DateTimeFrom");
+                    b.Property<DateTimeOffset>("DateTimeFrom")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateTimeTo");
+                    b.Property<DateTimeOffset>("DateTimeTo")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1554,20 +1996,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1581,32 +2029,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1618,25 +2078,35 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsPlannedExamination");
+                    b.Property<bool>("IsPlannedExamination")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("LeadAmhpUserId");
+                    b.Property<int>("LeadAmhpUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PatientId");
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ReferralStatusId");
+                    b.Property<int>("ReferralStatusId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1657,37 +2127,53 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsPlannedExamination");
+                    b.Property<bool>("IsPlannedExamination")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("LeadAmhpUserId");
+                    b.Property<int>("LeadAmhpUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PatientId");
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ReferralStatusId");
+                    b.Property<int>("ReferralStatusId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -1698,20 +2184,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1725,32 +2217,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1762,20 +2266,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1789,32 +2299,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1826,26 +2348,35 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int?>("FinanceMileageSubjectiveCode");
+                    b.Property<int?>("FinanceMileageSubjectiveCode")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("FinanceSubjectiveCode");
+                    b.Property<int?>("FinanceSubjectiveCode")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("LevelOfUrgencyTimescaleMinutes");
+                    b.Property<int>("LevelOfUrgencyTimescaleMinutes")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<decimal>("NonSection12Payment")
@@ -1865,38 +2396,53 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int?>("FinanceMileageSubjectiveCode");
+                    b.Property<int?>("FinanceMileageSubjectiveCode")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("FinanceSubjectiveCode");
+                    b.Property<int?>("FinanceSubjectiveCode")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("LevelOfUrgencyTimescaleMinutes");
+                    b.Property<int>("LevelOfUrgencyTimescaleMinutes")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<decimal>("NonSection12Payment")
@@ -1914,20 +2460,26 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1941,32 +2493,44 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("AuditId");
@@ -1978,34 +2542,47 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int?>("GenderTypeId");
+                    b.Property<int?>("GenderTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("GmcNumber");
+                    b.Property<int?>("GmcNumber")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("HasReadTermsAndConditions");
+                    b.Property<bool>("HasReadTermsAndConditions")
+                        .HasColumnType("bit");
 
                     b.Property<string>("IdentityServerIdentifier")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("OrganisationId");
+                    b.Property<int>("OrganisationId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ProfileTypeId");
+                    b.Property<int>("ProfileTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("Section12ApprovalStatusId");
+                    b.Property<int?>("Section12ApprovalStatusId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("Section12ExpiryDate");
+                    b.Property<DateTimeOffset?>("Section12ExpiryDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -2026,43 +2603,61 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("GenderTypeId");
+                    b.Property<int?>("GenderTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("GmcNumber");
+                    b.Property<int?>("GmcNumber")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("HasReadTermsAndConditions");
+                    b.Property<bool>("HasReadTermsAndConditions")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("IdentityServerIdentifier")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("OrganisationId");
+                    b.Property<int>("OrganisationId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ProfileTypeId");
+                    b.Property<int>("ProfileTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("Section12ApprovalStatusId");
+                    b.Property<int?>("Section12ApprovalStatusId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("Section12ExpiryDate");
+                    b.Property<DateTimeOffset?>("Section12ExpiryDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("AuditId");
 
@@ -2073,47 +2668,63 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ClaimReference");
+                    b.Property<int?>("ClaimReference")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ClaimStatusId");
+                    b.Property<int?>("ClaimStatusId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ExaminationId");
+                    b.Property<int>("ExaminationId")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("ExaminationPayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("HasBeenDeallocated");
+                    b.Property<bool>("HasBeenDeallocated")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsAttendanceConfirmed");
+                    b.Property<bool>("IsAttendanceConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<bool?>("IsClaimable");
+                    b.Property<bool?>("IsClaimable")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("Mileage");
+                    b.Property<int?>("Mileage")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("MileagePayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("PaymentDate");
+                    b.Property<DateTimeOffset?>("PaymentDate")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SelectedByUserId");
+                    b.Property<int>("SelectedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("StartPostcode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("TravelComments")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -2134,59 +2745,81 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("ClaimReference");
+                    b.Property<int?>("ClaimReference")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ClaimStatusId");
+                    b.Property<int?>("ClaimStatusId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ExaminationId");
+                    b.Property<int>("ExaminationId")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("ExaminationPayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("HasBeenDeallocated");
+                    b.Property<bool>("HasBeenDeallocated")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsAttendanceConfirmed");
+                    b.Property<bool>("IsAttendanceConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<bool?>("IsClaimable");
+                    b.Property<bool?>("IsClaimable")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("Mileage");
+                    b.Property<int?>("Mileage")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("MileagePayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("PaymentDate");
+                    b.Property<DateTimeOffset?>("PaymentDate")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SelectedByUserId");
+                    b.Property<int>("SelectedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("StartPostcode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("TravelComments")
                         .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -2197,23 +2830,32 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ExaminationId");
+                    b.Property<int>("ExaminationId")
+                        .HasColumnType("int");
 
-                    b.Property<bool?>("HasAccepted");
+                    b.Property<bool?>("HasAccepted")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("NotificationTextId");
+                    b.Property<int>("NotificationTextId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("RespondedAt");
+                    b.Property<DateTimeOffset?>("RespondedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -2232,35 +2874,50 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("ExaminationId");
+                    b.Property<int>("ExaminationId")
+                        .HasColumnType("int");
 
-                    b.Property<bool?>("HasAccepted");
+                    b.Property<bool?>("HasAccepted")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("NotificationTextId");
+                    b.Property<int>("NotificationTextId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("RespondedAt");
+                    b.Property<DateTimeOffset?>("RespondedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -2273,17 +2930,23 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ModifiedByUserId");
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("SpecialityId");
+                    b.Property<int>("SpecialityId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -2300,29 +2963,41 @@ namespace mep.business.Migrations
                 {
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuditAction");
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditDuration");
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
 
-                    b.Property<string>("AuditErrorMessage");
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuditResult");
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("AuditSuccess");
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("ModifiedAt");
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("ModifiedByUserId");
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("SpecialityId");
+                    b.Property<int>("SpecialityId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("AuditId");
 
@@ -2334,7 +3009,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("BankDetails")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2343,7 +3019,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("BankDetails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Ccg", b =>
@@ -2365,12 +3042,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("ContactDetails")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.ContactDetailType", "ContactDetailType")
                         .WithMany("ContactDetails")
                         .HasForeignKey("ContactDetailTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2379,7 +3058,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("ContactDetails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ContactDetailType", b =>
@@ -2401,7 +3081,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("Examinations")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "CompletedByUser")
                         .WithMany("CompletedExaminations")
@@ -2414,7 +3095,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "CreatedByUser")
                         .WithMany("CreatedExaminations")
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2431,12 +3113,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Referral", "Referral")
                         .WithMany("Examinations")
                         .HasForeignKey("ReferralId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.Speciality", "Speciality")
                         .WithMany("Examinations")
                         .HasForeignKey("SpecialityId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.UnsuccessfulExaminationType", "UnsuccessfulExaminationType")
                         .WithMany("Examinations")
@@ -2455,7 +3139,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("GpPractices")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2467,7 +3152,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany()
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2476,12 +3162,13 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.NonPaymentLocationType", "NonPaymentLocationType")
                         .WithMany("NonPaymentLocations")
                         .HasForeignKey("NonPaymentLocationTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.NonPaymentLocationType", b =>
                 {
-                    b.HasOne("Mep.Data.Entities.Ccg")
+                    b.HasOne("Mep.Data.Entities.Ccg", null)
                         .WithMany("NonPaymentLocationTypes")
                         .HasForeignKey("CcgId");
 
@@ -2506,7 +3193,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("OnCallUsers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.Organisation", b =>
@@ -2536,7 +3224,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2545,12 +3234,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.PaymentMethodType", "PaymentMethodType")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("PaymentMethodTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentMethodType", b =>
@@ -2569,7 +3260,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.PaymentRuleSet", "PaymentRuleSet")
                         .WithMany("PaymentRules")
                         .HasForeignKey("PaymentRuleSetId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.PaymentRuleSet", b =>
@@ -2577,7 +3269,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("PaymentRuleSets")
                         .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2596,12 +3289,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "CreatedByUser")
                         .WithMany("Referrals")
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "LeadAmhpUser")
                         .WithMany("AmhpReferrals")
                         .HasForeignKey("LeadAmhpUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2610,12 +3305,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Patient", "Patient")
                         .WithMany("Referrals")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.ReferralStatus", "ReferralStatus")
                         .WithMany()
                         .HasForeignKey("ReferralStatusId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ReferralStatus", b =>
@@ -2659,12 +3356,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Organisation", "Organisation")
                         .WithMany("Users")
                         .HasForeignKey("OrganisationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.ProfileType", "ProfileType")
                         .WithMany("Users")
                         .HasForeignKey("ProfileTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.Section12ApprovalStatus", "Section12ApprovalStatus")
                         .WithMany("Users")
@@ -2680,7 +3379,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Examination", "Examination")
                         .WithMany("UserExaminationClaims")
                         .HasForeignKey("ExaminationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2689,12 +3389,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.User", "SelectedByUser")
                         .WithMany("UserExaminationClaimSelections")
                         .HasForeignKey("SelectedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("UserExaminationClaims")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UserExaminationNotification", b =>
@@ -2702,7 +3404,8 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Examination", "Examination")
                         .WithMany("UserExaminationNotifications")
                         .HasForeignKey("ExaminationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
@@ -2711,12 +3414,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.NotificationText", "NotificationText")
                         .WithMany("UserExaminationNotifications")
                         .HasForeignKey("NotificationTextId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("UserExaminationNotifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.UserSpeciality", b =>
@@ -2728,12 +3433,14 @@ namespace mep.business.Migrations
                     b.HasOne("Mep.Data.Entities.Speciality", "Speciality")
                         .WithMany("UserSpecialities")
                         .HasForeignKey("SpecialityId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.User", "User")
                         .WithMany("UserSpecialities")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

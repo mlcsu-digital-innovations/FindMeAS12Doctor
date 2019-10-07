@@ -5,8 +5,7 @@
   [delay]="toast.delay || 5000"
   (hide)="toastService.remove(toast)"
 >
-  <ng-template [ngIf]="isTemplate(toast)" [ngIfElse]="text">
-
+  <ng-template [ngIf]="toast">
     <div class="toast-close">
       <button type="button" class="toast-btn" (click)="toastService.remove(toast)">X</button>
     </div>
@@ -28,8 +27,5 @@
         </div>
       </div>
     </div>
-
   </ng-template>
-
-  <ng-template #text>{{ toast.textOrTpl }}</ng-template>
 </ngb-toast>
