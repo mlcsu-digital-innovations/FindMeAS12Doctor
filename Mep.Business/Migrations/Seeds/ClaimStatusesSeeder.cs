@@ -17,7 +17,7 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((claimStatus = _context
         .ClaimStatuses
-          .SingleOrDefault(g => g.Id == GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED)))
+          .SingleOrDefault(g => g.Name == CLAIM_STATUS_NAME_ACCEPTED))
             == null)
       {
         claimStatus = new ClaimStatus();
