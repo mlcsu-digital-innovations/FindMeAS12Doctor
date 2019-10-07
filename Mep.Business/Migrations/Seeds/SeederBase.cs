@@ -6,7 +6,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase
   {
-    protected const int TELEPHONE_NUMBER  = 01000100000;
     protected const int BANK_DETAILS_ACCOUNT_NUMBER = 10000000;
     protected const string BANK_DETAILS_BANK_NAME = "Bank Name 1";
     protected const string BANK_DETAILS_NAME_ON_ACCOUNT = "Name on Account 1";
@@ -38,7 +37,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const decimal LATITUDE = 0.000000m;
-    protected const decimal LONGITUDE  = 0.000000m;
+    protected const decimal LONGITUDE = 0.000000m;
     protected const string NON_PAYMENT_LOCATION_TYPE_NAME = "Non Payment Location Type Name";
     protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION = "Non Payment Location Type Description";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_1 = "Notification Text Description 1";
@@ -92,12 +91,13 @@ namespace Mep.Business.Migrations.Seeds
     protected const string REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL = "New Referral Description";
     protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
     protected const string SECTION_12_APPROVAL_STATUS_DESCRIPTION = "Section 12 Approval Status Description";
-    protected const string SECTION_12_APPROVAL_STATUS_NAME = "Section 12 Approval Status Name";    
+    protected const string SECTION_12_APPROVAL_STATUS_NAME = "Section 12 Approval Status Name";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
+    protected const int TELEPHONE_NUMBER = 01000100000;
     protected const string TOWN = "Test Town";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
-    protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";    
+    protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
     protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
@@ -111,8 +111,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Ccgs
-          .Single(ccg => ccg.Name == CcgName).Id;
+        return _context
+          .Ccgs
+            .Single(ccg => ccg.Name == CcgName).Id;
       }
       catch (Exception ex)
       {
@@ -124,11 +125,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ClaimStatuses
-          .Single(claimStatus => claimStatus.Name == ClaimStatusName).Id;
-          {
-              
-          }
+        return _context
+          .ClaimStatuses
+            .Single(claimStatus => claimStatus.Name == ClaimStatusName).Id;
       }
       catch (Exception ex)
       {
@@ -140,11 +139,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ContactDetailTypes
-          .Single(contactDetailType => contactDetailType.Name == ContactDetailTypeName).Id;
-          {
-              
-          }
+        return _context
+          .ContactDetailTypes
+            .Single(contactDetailType => contactDetailType.Name == ContactDetailTypeName).Id;
       }
       catch (Exception ex)
       {
@@ -156,8 +153,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Examinations
-          .Single(examination => examination.Address1 == examinationAddress).Id;
+        return _context
+          .Examinations
+            .Single(examination => examination.Address1 == examinationAddress).Id;
       }
       catch (Exception ex)
       {
@@ -169,8 +167,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes
-          .Single(gender => gender.Name == GENDER_TYPE_NAME_FEMALE).Id;
+        return _context
+          .GenderTypes
+            .Single(gender => gender.Name == GENDER_TYPE_NAME_FEMALE).Id;
       }
       catch (Exception ex)
       {
@@ -182,7 +181,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Ccgs.First().Id;
+        return _context
+          .Ccgs
+            .First().Id;
       }
       catch (Exception ex)
       {
@@ -194,8 +195,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GpPractices
-          .Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+        return _context
+          .GpPractices
+            .Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
       }
       catch (Exception ex)
       {
@@ -207,8 +209,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes
-          .Single(gender => gender.Name == GENDER_TYPE_NAME_MALE).Id;
+        return _context
+          .GenderTypes
+            .Single(gender => gender.Name == GENDER_TYPE_NAME_MALE).Id;
       }
       catch (Exception ex)
       {
@@ -220,21 +223,23 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.NonPaymentLocationTypes
-          .Single(nonPaymentLocationType => nonPaymentLocationType.Name == nonPaymentLocationTypeName).Id;
+        return _context
+          .NonPaymentLocationTypes
+            .Single(nonPaymentLocationType => nonPaymentLocationType.Name == nonPaymentLocationTypeName).Id;
       }
       catch (Exception ex)
       {
         throw new Exception($"Cannot find Non Payment Location Type with the name of {nonPaymentLocationTypeName} in NonPaymentLocationTypes", ex);
       }
     }
-    
+
     protected int GetNotificationTextId(string notificationTextName)
     {
       try
       {
-        return _context.NotificationTexts
-          .Single(notificationText => notificationText.Name == notificationTextName).Id;
+        return _context
+          .NotificationTexts
+            .Single(notificationText => notificationText.Name == notificationTextName).Id;
       }
       catch (Exception ex)
       {
@@ -246,8 +251,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Organisations
-          .Single(organisation => organisation.Name == name).Id;
+        return _context
+          .Organisations
+            .Single(organisation => organisation.Name == name).Id;
       }
       catch (Exception ex)
       {
@@ -259,8 +265,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes
-          .Single(gender => gender.Name == GENDER_TYPE_NAME_OTHER).Id;
+        return _context
+          .GenderTypes
+            .Single(gender => gender.Name == GENDER_TYPE_NAME_OTHER).Id;
       }
       catch (Exception ex)
       {
@@ -272,8 +279,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Patients
-          .Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
+        return _context
+          .Patients
+            .Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
       }
       catch (Exception ex)
       {
@@ -285,8 +293,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Patients
-          .Single(patient => patient.NhsNumber == nhsNumber).Id;
+        return _context
+          .Patients
+            .Single(patient => patient.NhsNumber == nhsNumber).Id;
       }
       catch (Exception ex)
       {
@@ -300,8 +309,7 @@ namespace Mep.Business.Migrations.Seeds
       {
         return _context
           .PaymentMethodTypes
-            .Single(paymentMethodType => paymentMethodType
-              .Name == paymentMethodTypeName).Id;
+            .Single(paymentMethodType => paymentMethodType.Name == paymentMethodTypeName).Id;
       }
       catch (Exception ex)
       {
@@ -315,8 +323,7 @@ namespace Mep.Business.Migrations.Seeds
       {
         return _context
           .PaymentRuleSets
-            .Single(paymentRuleSet => paymentRuleSet
-              .Name == paymentRuleSetName).Id;
+            .Single(paymentRuleSet => paymentRuleSet.Name == paymentRuleSetName).Id;
       }
       catch (Exception ex)
       {
@@ -328,8 +335,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ProfileTypes
-          .Single(profileType => profileType.Name == profileTypeName).Id;
+        return _context
+          .ProfileTypes
+            .Single(profileType => profileType.Name == profileTypeName).Id;
       }
       catch (Exception ex)
       {
@@ -341,8 +349,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Referrals
-          .Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
+        return _context
+          .Referrals
+            .Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
       }
       catch (Exception ex)
       {
@@ -354,8 +363,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Referrals
-          .Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
+        return _context
+          .Referrals
+            .Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
       }
       catch (Exception ex)
       {
@@ -367,8 +377,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ReferralStatuses
-          .Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL).Id;
+        return _context
+          .ReferralStatuses
+            .Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL).Id;
       }
       catch (Exception ex)
       {
@@ -380,8 +391,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Section12ApprovalStatuses
-          .Single(section12ApprovalStatus => section12ApprovalStatus.Name == section12ApprovalStatusName).Id;
+        return _context
+          .Section12ApprovalStatuses
+            .Single(section12ApprovalStatus => section12ApprovalStatus.Name == section12ApprovalStatusName).Id;
       }
       catch (Exception ex)
       {
@@ -393,8 +405,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Specialities
-          .Single(speciality => speciality.Name == SPECIALITY_SECTION_12).Id;
+        return _context
+          .Specialities
+            .Single(speciality => speciality.Name == SPECIALITY_SECTION_12).Id;
       }
       catch (Exception ex)
       {
@@ -404,16 +417,18 @@ namespace Mep.Business.Migrations.Seeds
 
     protected User GetSystemAdminUser()
     {
-      return _context.Users
-        .SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
+      return _context
+        .Users
+          .SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
     }
 
     protected int GetUserIdByDisplayname(string displayName)
     {
       try
       {
-        return _context.Users
-          .Single(user => user.DisplayName == displayName).Id;
+        return _context
+          .Users
+            .Single(user => user.DisplayName == displayName).Id;
       }
       catch (Exception ex)
       {
