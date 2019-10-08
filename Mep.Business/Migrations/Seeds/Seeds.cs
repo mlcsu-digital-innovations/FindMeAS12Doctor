@@ -112,7 +112,7 @@ namespace Mep.Business.Migrations.Seeds
       new UserExaminationNotificationSeeder(_context).SeedData();
       _context.SaveChanges();
 
-      new UserExaminationClaimSeeder(_context).SeedData();
+      new UserExaminationClaimsSeeder(_context).SeedData();
       _context.SaveChanges();
 
       new BankDetailsSeeder(_context).SeedData();
