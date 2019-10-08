@@ -42,7 +42,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.SelectedByUserId =
         GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       userExaminationClaim.StartPostcode = POSTCODE;
-      userExaminationClaim.TravelComments = null;
+      userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
         GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
 
@@ -73,7 +73,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.SelectedByUserId =
         GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       userExaminationClaim.StartPostcode = POSTCODE;
-      userExaminationClaim.TravelComments = null;
+      userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
         GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
     }
