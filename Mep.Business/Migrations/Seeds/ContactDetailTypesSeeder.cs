@@ -23,12 +23,11 @@ namespace Mep.Business.Migrations.Seeds
         contactDetailType = new ContactDetailType();
         _context.Add(contactDetailType);
       }
+      contactDetailType.Description = CONTACT_DETAIL_TYPE_DESCRIPTION;
       contactDetailType.IsActive = true;
       contactDetailType.ModifiedAt = _now;
       contactDetailType.ModifiedByUser = GetSystemAdminUser();
       contactDetailType.Name = CONTACT_DETAIL_TYPE_NAME;
-      contactDetailType.Description =
-        CONTACT_DETAIL_TYPE_DESCRIPTION;
     }
   }
 }

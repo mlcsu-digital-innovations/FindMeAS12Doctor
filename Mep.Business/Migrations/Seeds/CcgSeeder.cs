@@ -29,13 +29,13 @@ namespace Mep.Business.Migrations.Seeds
         ccg = new Ccg();
         _context.Add(ccg);
       }
+      ccg.CostCentre = 1;
+      ccg.FailedExamPayment = 0.0m;
       ccg.IsActive = true;
+      ccg.IsPaymentApprovalRequired = true;
       ccg.ModifiedAt = _now;
       ccg.ModifiedByUser = GetSystemAdminUser();
       ccg.Name = CCG_NAME_UNKNOWN;
-      ccg.CostCentre = 1;
-      ccg.FailedExamPayment = 0.0m;
-      ccg.IsPaymentApprovalRequired = true;
       ccg.SuccessfulPencePerMile = 0.0m;
       ccg.UnsuccessfulPencePerMile = 0.0m;
 
@@ -62,17 +62,17 @@ namespace Mep.Business.Migrations.Seeds
             ccg = new Ccg();
             _context.Add(ccg);
           }
+          ccg.CostCentre = 1;
+          ccg.FailedExamPayment = 0.0m;
           ccg.IsActive = true;
+          ccg.IsPaymentApprovalRequired = true;
+          ccg.LongCode = ccgResult.Attributes.CCG19CD;
           ccg.ModifiedAt = _now;
           ccg.ModifiedByUser = GetSystemAdminUser();
           ccg.Name = ccgResult.Attributes.CCG19NM;
-          ccg.CostCentre = 1;
-          ccg.FailedExamPayment = 0.0m;
-          ccg.IsPaymentApprovalRequired = true;
+          ccg.ShortCode = ccgResult.Attributes.CCG19CDH;
           ccg.SuccessfulPencePerMile = 0.0m;
           ccg.UnsuccessfulPencePerMile = 0.0m;
-          ccg.ShortCode = ccgResult.Attributes.CCG19CDH;
-          ccg.LongCode = ccgResult.Attributes.CCG19CD;
         }
       }
     }

@@ -22,12 +22,12 @@ namespace Mep.Business.Migrations.Seeds
         referralStatus = new ReferralStatus();
         _context.Add(referralStatus);
       }
+      referralStatus.Description =
+        REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL;
       referralStatus.IsActive = true;
       referralStatus.ModifiedAt = _now;
       referralStatus.ModifiedByUser = GetSystemAdminUser();
       referralStatus.Name = REFERRAL_STATUS_NAME_NEW_REFERRAL;
-      referralStatus.Description =
-        REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL;
     }
   }
 }

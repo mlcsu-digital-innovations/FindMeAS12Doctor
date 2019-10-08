@@ -23,12 +23,12 @@ namespace Mep.Business.Migrations.Seeds
         unsuccessfulExaminationType = new UnsuccessfulExaminationType();
         _context.Add(unsuccessfulExaminationType);
       }
+      unsuccessfulExaminationType.Description =
+        UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION;
       unsuccessfulExaminationType.IsActive = true;
       unsuccessfulExaminationType.ModifiedAt = _now;
       unsuccessfulExaminationType.ModifiedByUser = GetSystemAdminUser();
       unsuccessfulExaminationType.Name = UNSUCCESSFUL_EXAMINATION_TYPE_NAME;
-      unsuccessfulExaminationType.Description =
-        UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION;
     }
   }
 }

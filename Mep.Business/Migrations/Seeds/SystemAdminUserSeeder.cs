@@ -20,12 +20,12 @@ namespace Mep.Business.Migrations.Seeds
         systemAdminUser = new User();
         _context.Add(systemAdminUser);
       }
+      systemAdminUser.DisplayName = USER_DISPLAY_NAME_SYSTEM_ADMIN;
       systemAdminUser.HasReadTermsAndConditions = true;
       systemAdminUser.IdentityServerIdentifier =
         SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER;
       systemAdminUser.IsActive = true;
       systemAdminUser.ModifiedAt = _now;
-      systemAdminUser.DisplayName = USER_DISPLAY_NAME_SYSTEM_ADMIN;
 
       Organisation systemOrganisation;
       if ((systemOrganisation = _context
@@ -36,7 +36,8 @@ namespace Mep.Business.Migrations.Seeds
         systemOrganisation = new Organisation();
         _context.Add(systemOrganisation);
       }
-      systemOrganisation.Description = ORGANISATION_DESCRIPTION_SYSTEM_ADMIN;
+      systemOrganisation.Description =
+        ORGANISATION_DESCRIPTION_SYSTEM_ADMIN;
       systemOrganisation.IsActive = false;
       systemOrganisation.ModifiedAt = _now;
       systemOrganisation.Name = ORGANISATION_NAME_SYSTEM_ADMIN;
@@ -64,7 +65,6 @@ namespace Mep.Business.Migrations.Seeds
       systemAdminUser.ModifiedByUser = systemAdminUser;
       systemOrganisation.ModifiedByUser = systemAdminUser;
       systemProfileType.ModifiedByUser = systemAdminUser;
-
     }
   }
 }

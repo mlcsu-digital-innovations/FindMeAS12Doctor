@@ -23,11 +23,11 @@ namespace Mep.Business.Migrations.Seeds
         paymentMethodType = new PaymentMethodType();
         _context.Add(paymentMethodType);
       }
+      paymentMethodType.Description = PAYMENT_METHOD_TYPE_DESCRIPTION;
       paymentMethodType.IsActive = true;
       paymentMethodType.ModifiedAt = _now;
       paymentMethodType.ModifiedByUser = GetSystemAdminUser();
       paymentMethodType.Name = PAYMENT_METHOD_TYPE_NAME;
-      paymentMethodType.Description = PAYMENT_METHOD_TYPE_DESCRIPTION;
     }
   }
 }

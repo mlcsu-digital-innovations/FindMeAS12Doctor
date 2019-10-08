@@ -23,14 +23,14 @@ namespace Mep.Business.Migrations.Seeds
         paymentRuleSet = new PaymentRuleSet();
         _context.Add(paymentRuleSet);
       }
+      paymentRuleSet.CcgId = GetFirstCcg();
+      paymentRuleSet.DateTimeFrom = _now;
+      paymentRuleSet.DateTimeTo = _now;
+      paymentRuleSet.Description = PAYMENT_RULE_SET_DESCRIPTION;
       paymentRuleSet.IsActive = true;
       paymentRuleSet.ModifiedAt = _now;
       paymentRuleSet.ModifiedByUser = GetSystemAdminUser();
       paymentRuleSet.Name = PAYMENT_RULE_SET_NAME;
-      paymentRuleSet.Description = PAYMENT_RULE_SET_DESCRIPTION;
-      paymentRuleSet.CcgId = GetFirstCcg();
-      paymentRuleSet.DateTimeFrom = _now;
-      paymentRuleSet.DateTimeTo = _now;
     }
   }
 }

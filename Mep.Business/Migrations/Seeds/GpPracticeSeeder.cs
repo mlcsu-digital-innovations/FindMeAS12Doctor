@@ -52,14 +52,14 @@ namespace Mep.Business.Migrations.Seeds
             _context.Add(gpPractice);
             validOrganisation = true;
           }
+          gpPractice.CcgId = unknown.Id;
+          gpPractice.GpPracticeCode = gpResult.OrgId;
           gpPractice.IsActive = gpResult.Status == "Inactive" ? false : true;
           gpPractice.ModifiedAt = _now;
           gpPractice.ModifiedByUser = GetSystemAdminUser();
-          gpPractice.GpPracticeCode = gpResult.OrgId;
-          gpPractice.Postcode =
-            gpResult.PostCode == null ? "" : gpResult.PostCode;
           gpPractice.Name = gpResult.Name;
-          gpPractice.CcgId = unknown.Id;
+          gpPractice.Postcode = 
+            gpResult.PostCode == null ? "" : gpResult.PostCode;
 
           if (validOrganisation)
           {
@@ -128,13 +128,13 @@ namespace Mep.Business.Migrations.Seeds
         gp = new GpPractice();
         _context.Add(gp);
       }
+      gp.CcgId = unknown.Id;
+      gp.GpPracticeCode = "XXX";
       gp.IsActive = true;
       gp.ModifiedAt = _now;
       gp.ModifiedByUser = GetSystemAdminUser();
       gp.Name = GP_PRACTICE_NAME_UNKNOWN;
-      gp.GpPracticeCode = "XXX";
       gp.Postcode = "";
-      gp.CcgId = unknown.Id;
 
       for (int offset = 0; offset < 17000; offset += 1000)
       {

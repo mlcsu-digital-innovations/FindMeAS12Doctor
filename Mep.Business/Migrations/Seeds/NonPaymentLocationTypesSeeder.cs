@@ -23,12 +23,12 @@ namespace Mep.Business.Migrations.Seeds
         nonPaymentLocationType = new NonPaymentLocationType();
         _context.Add(nonPaymentLocationType);
       }
+      nonPaymentLocationType.Description =
+        NON_PAYMENT_LOCATION_TYPE_DESCRIPTION;
       nonPaymentLocationType.IsActive = true;
       nonPaymentLocationType.ModifiedAt = _now;
       nonPaymentLocationType.ModifiedByUser = GetSystemAdminUser();
       nonPaymentLocationType.Name = NON_PAYMENT_LOCATION_TYPE_NAME;
-      nonPaymentLocationType.Description =
-        NON_PAYMENT_LOCATION_TYPE_DESCRIPTION;
     }
   }
 }
