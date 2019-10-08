@@ -17,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((section12ApprovalStatus = _context
         .Section12ApprovalStatuses
-          .SingleOrDefault(g => g.Name == SECTION_12_APPROVAL_STATUS_NAME))
-              == null)
+          .SingleOrDefault(g => g.Name ==
+            SECTION_12_APPROVAL_STATUS_NAME)) == null)
       {
         section12ApprovalStatus = new Section12ApprovalStatus();
         _context.Add(section12ApprovalStatus);
@@ -27,7 +27,8 @@ namespace Mep.Business.Migrations.Seeds
       section12ApprovalStatus.ModifiedAt = _now;
       section12ApprovalStatus.ModifiedByUser = GetSystemAdminUser();
       section12ApprovalStatus.Name = SECTION_12_APPROVAL_STATUS_NAME;
-      section12ApprovalStatus.Description = SECTION_12_APPROVAL_STATUS_DESCRIPTION;
+      section12ApprovalStatus.Description =
+        SECTION_12_APPROVAL_STATUS_DESCRIPTION;
     }
   }
 }

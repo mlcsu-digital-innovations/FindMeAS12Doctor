@@ -17,17 +17,17 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((claimStatus = _context
         .ClaimStatuses
-          .SingleOrDefault(g => g.Name == CLAIM_STATUS_NAME_ACCEPTED))
-            == null)
+          .SingleOrDefault(g => g.Name ==
+            CLAIM_STATUS_ACCEPTED_NAME)) == null)
       {
         claimStatus = new ClaimStatus();
         _context.Add(claimStatus);
       }
-      claimStatus.Description = CLAIM_STATUS_DESCRIPTION_ACCEPTED;
+      claimStatus.Description = CLAIM_STATUS_ACCEPTED_DESCRIPTION;
       claimStatus.IsActive = true;
       claimStatus.ModifiedAt = _now;
       claimStatus.ModifiedByUser = GetSystemAdminUser();
-      claimStatus.Name = CLAIM_STATUS_NAME_ACCEPTED;
+      claimStatus.Name = CLAIM_STATUS_ACCEPTED_NAME;
     }
   }
 }

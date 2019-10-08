@@ -17,15 +17,16 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((contactDetail = _context
         .ContactDetails
-          .SingleOrDefault(g => g.Address1 == CONTACT_DETAIL_ADDRESS_1))
-            == null)
+          .SingleOrDefault(g => g.Address1 ==
+            CONTACT_DETAIL_ADDRESS_1)) == null)
       {
         contactDetail = new ContactDetail();
         _context.Add(contactDetail);
       }
       contactDetail.Address1 = CONTACT_DETAIL_ADDRESS_1;
       contactDetail.CcgId = GetFirstCcg();
-      contactDetail.ContactDetailTypeId = GetContactDetailTypeIdByContactDetailTypeName(CONTACT_DETAIL_TYPE_NAME);
+      contactDetail.ContactDetailTypeId =
+        GetContactDetailTypeIdByContactDetailTypeName(CONTACT_DETAIL_TYPE_NAME);
       contactDetail.EmailAddress = EMAIL_ADDRESS;
       contactDetail.IsActive = true;
       contactDetail.Latitude = LATITUDE;

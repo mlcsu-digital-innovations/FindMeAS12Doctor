@@ -23,8 +23,8 @@ namespace Mep.Business.Migrations.Seeds
       // create a dummy CCG for Unknown
       if ((ccg = _context
         .Ccgs
-          .SingleOrDefault(c => c.Name == CCG_NAME_UNKNOWN))
-            == null)
+          .SingleOrDefault(c => c.Name ==
+            CCG_NAME_UNKNOWN)) == null)
       {
         ccg = new Ccg();
         _context.Add(ccg);
@@ -56,8 +56,8 @@ namespace Mep.Business.Migrations.Seeds
         {
           if ((ccg = _context
             .Ccgs
-              .SingleOrDefault(c => c.LongCode == ccgResult.Attributes.CCG19CD))
-                == null)
+              .SingleOrDefault(c => c.LongCode ==
+                ccgResult.Attributes.CCG19CD)) == null)
           {
             ccg = new Ccg();
             _context.Add(ccg);

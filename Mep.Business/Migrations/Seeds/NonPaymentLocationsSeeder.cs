@@ -29,7 +29,8 @@ namespace Mep.Business.Migrations.Seeds
       nonPaymentLocation.ModifiedAt = _now;
       nonPaymentLocation.ModifiedByUser = GetSystemAdminUser();
       nonPaymentLocation.CcgId = GetFirstCcg();
-      nonPaymentLocation.NonPaymentLocationTypeId = GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME);
+      nonPaymentLocation.NonPaymentLocationTypeId =
+        GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME);
     }
   }
 }

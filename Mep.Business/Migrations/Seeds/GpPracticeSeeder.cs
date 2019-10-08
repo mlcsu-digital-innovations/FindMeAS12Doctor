@@ -45,8 +45,8 @@ namespace Mep.Business.Migrations.Seeds
 
           if ((gpPractice = _context
             .GpPractices
-              .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId))
-                == null)
+              .SingleOrDefault(gp => gp.GpPracticeCode ==
+                gpResult.OrgId)) == null)
           {
             gpPractice = new GpPractice();
             _context.Add(gpPractice);
@@ -56,7 +56,8 @@ namespace Mep.Business.Migrations.Seeds
           gpPractice.ModifiedAt = _now;
           gpPractice.ModifiedByUser = GetSystemAdminUser();
           gpPractice.GpPracticeCode = gpResult.OrgId;
-          gpPractice.Postcode = gpResult.PostCode == null ? "" : gpResult.PostCode;
+          gpPractice.Postcode =
+            gpResult.PostCode == null ? "" : gpResult.PostCode;
           gpPractice.Name = gpResult.Name;
           gpPractice.CcgId = unknown.Id;
 
@@ -66,13 +67,16 @@ namespace Mep.Business.Migrations.Seeds
             using (var ccgResult = client.GetAsync(gpResult.OrgLink).Result)
             {
               var ccgContent = ccgResult.Content.ReadAsStringAsync().Result;
-              var ccgJson = JsonConvert.DeserializeObject<SpineServiceDetail>(ccgContent);
+              var ccgJson =
+                JsonConvert.DeserializeObject<SpineServiceDetail>(ccgContent);
 
               try
               {
                 // RO98 is the code for CCGs
-                SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel
-                  .FirstOrDefault(r => r.Target.PrimaryRoleId.Id == "RO98");
+                SpineServiceRelationship relationship = ccgJson
+                  .Organisation.Rels.Rel
+                    .FirstOrDefault(r => r.Target.PrimaryRoleId.Id ==
+                      "RO98");
 
                 if (relationship != null)
                 {

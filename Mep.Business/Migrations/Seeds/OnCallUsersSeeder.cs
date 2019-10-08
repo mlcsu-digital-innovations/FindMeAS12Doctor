@@ -17,8 +17,9 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((onCallUser = _context
         .OnCallUsers
-          .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE)))
-            == null)
+          .SingleOrDefault(g => g.UserId ==
+            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE)))
+              == null)
       {
         onCallUser = new OnCallUser();
         _context.Add(onCallUser);
@@ -28,12 +29,14 @@ namespace Mep.Business.Migrations.Seeds
       onCallUser.IsActive = true;
       onCallUser.ModifiedAt = _now;
       onCallUser.ModifiedByUser = GetSystemAdminUser();
-      onCallUser.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+      onCallUser.UserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
 
       if ((onCallUser = _context
         .OnCallUsers
-          .SingleOrDefault(g => g.UserId == GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE)))
-            == null)
+          .SingleOrDefault(g => g.UserId ==
+            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE)))
+              == null)
       {
         onCallUser = new OnCallUser();
         _context.Add(onCallUser);
@@ -43,7 +46,8 @@ namespace Mep.Business.Migrations.Seeds
       onCallUser.IsActive = true;
       onCallUser.ModifiedAt = _now;
       onCallUser.ModifiedByUser = GetSystemAdminUser();
-      onCallUser.UserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+      onCallUser.UserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
     }
   }
 }

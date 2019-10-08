@@ -18,8 +18,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_1)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_1))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -28,7 +28,8 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_1);
@@ -38,8 +39,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_2)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_2))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -48,18 +49,20 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
-      referral.PatientId = GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_2);
+      referral.PatientId =
+        GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_2);
       referral.ReferralStatusId = GetReferralStatusId();
 
       // referral with no examinations
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_3)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_3))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -68,18 +71,20 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
-      referral.PatientId = GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_3);
+      referral.PatientId =
+        GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_3);
       referral.ReferralStatusId = GetReferralStatusId();
 
       // referral with both current and previous examinations
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_4)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_4))) == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -88,18 +93,21 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
-      referral.PatientId = GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_4);
+      referral.PatientId =
+        GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_4);
       referral.ReferralStatusId = GetReferralStatusId();
 
       // referral with current examination and allocated doctors
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5)))
+              == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -108,18 +116,21 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
-      referral.PatientId = GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5);
+      referral.PatientId =
+        GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5);
       referral.ReferralStatusId = GetReferralStatusId();
 
       // referral with current examination and notification responses
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6)))
+              == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -128,18 +139,21 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
-      referral.PatientId = GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6);
+      referral.PatientId =
+        GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6);
       referral.ReferralStatusId = GetReferralStatusId();
 
       // referral with current examination and notification responses and allocated doctors
 
       if ((referral = _context
         .Referrals
-          .SingleOrDefault(g => g.PatientId == GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7)))
-            == null)
+          .SingleOrDefault(g => g.PatientId ==
+            GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7)))
+              == null)
       {
         referral = new Referral();
         _context.Add(referral);
@@ -148,10 +162,12 @@ namespace Mep.Business.Migrations.Seeds
       referral.CreatedByUser = GetSystemAdminUser();
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
-      referral.LeadAmhpUserId = GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+      referral.LeadAmhpUserId =
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
-      referral.PatientId = GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7);
+      referral.PatientId =
+        GetPatientIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7);
       referral.ReferralStatusId = GetReferralStatusId();
     }
   }

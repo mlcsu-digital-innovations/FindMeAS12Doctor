@@ -16,8 +16,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((organisation = _context
         .Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_1))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            ORGANISATION_NAME_1)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
@@ -30,8 +30,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((organisation = _context
         .Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_2))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            ORGANISATION_NAME_2)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
@@ -44,8 +44,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((organisation = _context
         .Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_3))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            ORGANISATION_NAME_3)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);
@@ -58,8 +58,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((organisation = _context
         .Organisations
-          .SingleOrDefault(u => u.Name == ORGANISATION_NAME_4))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            ORGANISATION_NAME_4)) == null)
       {
         organisation = new Organisation();
         _context.Add(organisation);

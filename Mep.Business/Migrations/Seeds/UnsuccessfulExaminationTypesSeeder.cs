@@ -17,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((unsuccessfulExaminationType = _context.
         UnsuccessfulExaminationTypes
-          .SingleOrDefault(g => g.Name == UNSUCCESSFUL_EXAMINATION_TYPE_NAME))
-            == null)
+          .SingleOrDefault(g => g.Name ==
+            UNSUCCESSFUL_EXAMINATION_TYPE_NAME)) == null)
       {
         unsuccessfulExaminationType = new UnsuccessfulExaminationType();
         _context.Add(unsuccessfulExaminationType);
@@ -27,7 +27,8 @@ namespace Mep.Business.Migrations.Seeds
       unsuccessfulExaminationType.ModifiedAt = _now;
       unsuccessfulExaminationType.ModifiedByUser = GetSystemAdminUser();
       unsuccessfulExaminationType.Name = UNSUCCESSFUL_EXAMINATION_TYPE_NAME;
-      unsuccessfulExaminationType.Description = UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION;
+      unsuccessfulExaminationType.Description =
+        UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION;
     }
   }
 }

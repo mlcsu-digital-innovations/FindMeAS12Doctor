@@ -17,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((bankDetail = _context
         .BankDetails
-          .SingleOrDefault(g => g.BankName == BANK_DETAILS_NAME_ON_ACCOUNT))
-            == null)
+          .SingleOrDefault(g => g.BankName ==
+            BANK_DETAILS_NAME_ON_ACCOUNT)) == null)
       {
         bankDetail = new BankDetail();
         _context.Add(bankDetail);

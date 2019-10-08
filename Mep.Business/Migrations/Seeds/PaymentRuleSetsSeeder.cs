@@ -17,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((paymentRuleSet = _context
         .PaymentRuleSets
-          .SingleOrDefault(g => g.Name == PAYMENT_RULE_SET_NAME))
-            == null)
+          .SingleOrDefault(g => g.Name ==
+            PAYMENT_RULE_SET_NAME)) == null)
       {
         paymentRuleSet = new PaymentRuleSet();
         _context.Add(paymentRuleSet);

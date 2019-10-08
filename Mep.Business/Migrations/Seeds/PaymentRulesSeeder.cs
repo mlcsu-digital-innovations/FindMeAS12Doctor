@@ -17,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((paymentRule = _context
         .PaymentRules
-          .SingleOrDefault(g => g.Name == PAYMENT_RULE_NAME_1))
-            == null)
+          .SingleOrDefault(g => g.Name ==
+            PAYMENT_RULE_NAME_1)) == null)
       {
         paymentRule = new PaymentRule();
         _context.Add(paymentRule);
@@ -29,7 +29,8 @@ namespace Mep.Business.Migrations.Seeds
       paymentRule.ModifiedAt = _now;
       paymentRule.ModifiedByUser = GetSystemAdminUser();
       paymentRule.Name = PAYMENT_RULE_NAME_1;
-      paymentRule.PaymentRuleSetId = GetPaymentRuleSetIdByPaymentRuleSetName(PAYMENT_RULE_SET_NAME);
+      paymentRule.PaymentRuleSetId =
+        GetPaymentRuleSetIdByPaymentRuleSetName(PAYMENT_RULE_SET_NAME);
     }
   }
 }

@@ -16,8 +16,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((profileType = _context
         .ProfileTypes
-          .SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_AMPH))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            PROFILE_TYPE_NAME_AMPH)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);
@@ -30,8 +30,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((profileType = _context
         .ProfileTypes
-          .SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_DOCTOR))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            PROFILE_TYPE_NAME_DOCTOR)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);
@@ -44,8 +44,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((profileType = _context
         .ProfileTypes
-          .SingleOrDefault(u => u.Name == PROFILE_TYPE_NAME_FINANCE))
-            == null)
+          .SingleOrDefault(u => u.Name ==
+            PROFILE_TYPE_NAME_FINANCE)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);

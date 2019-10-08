@@ -17,8 +17,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_DOCTOR_FEMALE))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            USER_DISPLAY_NAME_DOCTOR_FEMALE)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -37,8 +37,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_DOCTOR_MALE))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            USER_DISPLAY_NAME_DOCTOR_MALE)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -57,8 +57,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_1_USER))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            ORGANISATION_1_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -77,8 +77,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_2_USER))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            ORGANISATION_2_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -97,8 +97,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_3_USER))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            ORGANISATION_3_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -117,8 +117,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == ORGANISATION_4_USER))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            ORGANISATION_4_USER)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -137,8 +137,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_AMHP))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            USER_DISPLAY_NAME_AMHP)) == null)
       {
         user = new User();
         _context.Add(user);
@@ -157,8 +157,8 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((user = _context
         .Users
-          .SingleOrDefault(g => g.DisplayName == USER_DISPLAY_NAME_FINANCE))
-            == null)
+          .SingleOrDefault(g => g.DisplayName ==
+            USER_DISPLAY_NAME_FINANCE)) == null)
       {
         user = new User();
         _context.Add(user);
