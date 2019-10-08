@@ -5,6 +5,7 @@ import { DecimalPipe } from '@angular/common';
 import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { ReferralList } from '../../interfaces/referral-list';
 import { SortDirection } from '../../directives/table-header-sortable/table-header-sortable.directive';
+import { environment } from 'src/environments/environment';
 
 interface SearchResult {
   referralList: ReferralList[];
@@ -76,8 +77,6 @@ export class ReferralListService {
     private pipe: DecimalPipe,
     private http: HttpClient) {
 
-    let configUrl = 'https://localhost:5001/api/referral/list';
-
     this._search$.pipe(
       tap(() => this._loading$.next(true)),
       debounceTime(200),
@@ -88,7 +87,9 @@ export class ReferralListService {
       this._total$.next(result.total);
     });
 
-    this.http.get<ReferralList[]>(configUrl).subscribe(
+
+    let endpoint = environment.apiEndpoint + '/referral/list';
+    this.http.get<ReferralList[]>(endpoint).subscribe(
       (data: ReferralList[]) => {
         this._rawReferralList = data;
         this._search$.next();
@@ -96,8 +97,8 @@ export class ReferralListService {
       (error: any) => {
         this._loading$.next(false);
         this._referralList$.error(
-          "Server Error: Unable to obtain referral list! " +
-          "Please try again in a few moments");
+          'Server Error: Unable to obtain referral list! ' +
+          'Please try again in a few moments');
       }
     );
   }

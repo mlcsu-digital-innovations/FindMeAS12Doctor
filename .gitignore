@@ -5,3 +5,4 @@ Mep.Api/MedicalExaminationsPortal.db
 .sonarqube/**
 node_modules
 Mep.Ui/dist/*
+**/.vs/**
