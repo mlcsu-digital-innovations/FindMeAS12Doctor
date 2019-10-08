@@ -87,7 +87,9 @@ export class ReferralListService {
       this._total$.next(result.total);
     });
 
-    this.http.get<ReferralList[]>(environment.apiEndpoint).subscribe(
+
+    let endpoint = environment.apiEndpoint + '/referral/list';
+    this.http.get<ReferralList[]>(endpoint).subscribe(
       (data: ReferralList[]) => {
         this._rawReferralList = data;
         this._search$.next();
@@ -95,8 +97,8 @@ export class ReferralListService {
       (error: any) => {
         this._loading$.next(false);
         this._referralList$.error(
-          "Server Error: Unable to obtain referral list! " +
-          "Please try again in a few moments");
+          'Server Error: Unable to obtain referral list! ' +
+          'Please try again in a few moments');
       }
     );
   }
