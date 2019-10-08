@@ -98,6 +98,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string TOWN = "Test Town";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
+    protected const string USER_COMMENTS = "Test Comments";
     protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
