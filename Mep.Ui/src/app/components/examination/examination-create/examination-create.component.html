@@ -184,6 +184,17 @@
                 </select>
               </div>
             </div>
+            <!-- To Be Completed By -->
+            <div class="form-row">
+              <div class="col-md-3">
+                <label for="toBeCompletedBy">To Be Completed By</label>
+                <input class="form-control" formControlName='toBeCompletedBy' placeholder="yyyy-mm-dd" name="toBeCompletedBy" [minDate]='currentDate' ngbDatepicker
+                #d="ngbDatepicker"/>
+              </div>
+              <div class="col-md-2" style="margin-top: 2.1rem;">
+                <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

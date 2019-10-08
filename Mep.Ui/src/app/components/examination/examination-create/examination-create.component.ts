@@ -1,7 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -16,6 +16,7 @@ import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-examination-create',
@@ -34,6 +35,7 @@ export class ExaminationCreateComponent implements OnInit {
   isSearchingForPostcode: boolean;
   referral$: Observable<Referral | any>;
   specialities: NameIdList[];
+  currentDate: NgbDateStruct;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -43,9 +45,13 @@ export class ExaminationCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private nameIdListService: NameIdListService,
     private toastService: ToastService,
+    private calendar: NgbCalendar
   ) {}
 
   ngOnInit() {
+
+    const now = this.calendar.getToday();
+    this.currentDate = {year: now.year, month: now.month, day: now.day};
 
     this.addressList = [];
 
@@ -117,12 +123,11 @@ export class ExaminationCreateComponent implements OnInit {
         ]
       ],
       speciality: [''],
-      preferredGender: ['']
+      preferredGender: [''],
+      toBeCompletedBy: ['']
     });
-  }
 
-  ToastStuff() {
-    console.log('toast stuff');
+    this.toBeCompletedByField.setValue(this.currentDate);
   }
 
   HasValidPostcode(): boolean {
@@ -141,6 +146,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   IsSearchingForPostcode(): boolean {
     return this.isSearchingForPostcode;
+  }
+
+  get toBeCompletedByField() {
+    return this.examinationForm.controls.toBeCompletedBy;
   }
 
   get additionalDetailsField() {

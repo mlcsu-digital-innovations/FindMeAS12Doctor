@@ -15,7 +15,7 @@ import { TableHeaderSortable } from '../directives/table-header-sortable/table-h
 @NgModule({
   declarations: [
     DelaySpinnerComponent,
-    DisableControlDirective,    
+    DisableControlDirective,
     FocusOnShowDirective,
     NavbarComponent,
     TableHeaderSortable,
