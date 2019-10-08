@@ -17,16 +17,16 @@ namespace Mep.Business.Migrations.Seeds
       if ((profileType = _context
         .ProfileTypes
           .SingleOrDefault(u => u.Name ==
-            PROFILE_TYPE_NAME_AMPH)) == null)
+            PROFILE_TYPE_NAME_AMHP)) == null)
       {
         profileType = new ProfileType();
         _context.Add(profileType);
       }
-      profileType.Description = PROFILE_TYPE_DESCRIPTION_AMPH;
+      profileType.Description = PROFILE_TYPE_DESCRIPTION_AMHP;
       profileType.IsActive = true;
       profileType.ModifiedAt = _now;
       profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILE_TYPE_NAME_AMPH;
+      profileType.Name = PROFILE_TYPE_NAME_AMHP;
 
       if ((profileType = _context
         .ProfileTypes

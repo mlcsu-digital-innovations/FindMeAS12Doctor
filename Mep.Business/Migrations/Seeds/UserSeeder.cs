@@ -91,7 +91,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_2);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMHP);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 
@@ -151,7 +151,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IsActive = true;
       user.ModifiedByUser = GetSystemAdminUser();
       user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMPH);
+      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMHP);
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
 

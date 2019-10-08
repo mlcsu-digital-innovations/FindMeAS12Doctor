@@ -80,11 +80,11 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PAYMENT_RULE_SET_DESCRIPTION = "Payment Rule Set Description";
     protected const string PAYMENT_RULE_SET_NAME = "Payment Rule Set Name";
     protected const string POSTCODE = "AB12CD";
-    protected const string PROFILE_TYPE_DESCRIPTION_AMPH = "ProfileType Description AMHP";
+    protected const string PROFILE_TYPE_DESCRIPTION_AMHP = "Profile Type Description AMHP";
     protected const string PROFILE_TYPE_DESCRIPTION_DOCTOR = "ProfileType Description Doctor";
     protected const string PROFILE_TYPE_DESCRIPTION_FINANCE = "ProfileType Description Finance";
     protected const string PROFILE_TYPE_DESCRIPTION_SYSTEM = "ProfileType Description System";
-    protected const string PROFILE_TYPE_NAME_AMPH = "ProfileType Name AMHP";
+    protected const string PROFILE_TYPE_NAME_AMHP = "ProfileType Name AMHP";
     protected const string PROFILE_TYPE_NAME_DOCTOR = "ProfileType Name Doctor";
     protected const string PROFILE_TYPE_NAME_FINANCE = "ProfileType Name Finance";
     protected const string PROFILE_TYPE_NAME_SYSTEM = "ProfileType Name System";
