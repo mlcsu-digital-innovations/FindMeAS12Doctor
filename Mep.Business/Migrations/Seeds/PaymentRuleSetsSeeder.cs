@@ -25,7 +25,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       paymentRuleSet.CcgId = GetFirstCcg();
       paymentRuleSet.DateTimeFrom = _now;
-      paymentRuleSet.DateTimeTo = _now;
+      paymentRuleSet.DateTimeTo = _now.AddYears(1);
       paymentRuleSet.Description = PAYMENT_RULE_SET_DESCRIPTION;
       paymentRuleSet.IsActive = true;
       paymentRuleSet.ModifiedAt = _now;
