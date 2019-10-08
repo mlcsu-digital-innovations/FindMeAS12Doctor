@@ -44,8 +44,6 @@ namespace Mep.Business.Migrations.Seeds
 
       new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
 
-      new UserSpecialitiesSeeder(_context).SeedData();
-
       _context.SaveChanges();
     }
 
@@ -82,8 +80,6 @@ namespace Mep.Business.Migrations.Seeds
       new SpecialitySeeder(_context).SeedData();
 
       new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
-
-      new UserSpecialitiesSeeder(_context).SeedData();
 
       _context.SaveChanges();
     }
@@ -131,6 +127,9 @@ namespace Mep.Business.Migrations.Seeds
       _context.SaveChanges();
 
       new PaymentRulesSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new UserSpecialitiesSeeder(_context).SeedData();
       _context.SaveChanges();
     }
   }
