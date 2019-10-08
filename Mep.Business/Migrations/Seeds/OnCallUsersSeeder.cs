@@ -1,4 +1,5 @@
 using Mep.Data.Entities;
+using System;
 using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
@@ -24,7 +25,7 @@ namespace Mep.Business.Migrations.Seeds
         onCallUser = new OnCallUser();
         _context.Add(onCallUser);
       }
-      onCallUser.DateTimeEnd = _now;
+      onCallUser.DateTimeEnd = _now.AddHours(1);
       onCallUser.DateTimeStart = _now;
       onCallUser.IsActive = true;
       onCallUser.ModifiedAt = _now;
@@ -41,7 +42,7 @@ namespace Mep.Business.Migrations.Seeds
         onCallUser = new OnCallUser();
         _context.Add(onCallUser);
       }
-      onCallUser.DateTimeEnd = _now;
+      onCallUser.DateTimeEnd = _now.AddHours(1);
       onCallUser.DateTimeStart = _now;
       onCallUser.IsActive = true;
       onCallUser.ModifiedAt = _now;
