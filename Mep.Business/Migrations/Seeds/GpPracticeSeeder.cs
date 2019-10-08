@@ -11,8 +11,8 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class GpPracticeSeeder : SeederBase
   {
-    static HttpClient client = new HttpClient();
-    Ccg unknown;
+    static readonly HttpClient _client = new HttpClient();
+    Ccg _unknown;
 
     internal GpPracticeSeeder(ApplicationContext context)
       : base(context)
@@ -23,8 +23,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       GpPractice gpPractice;
 
-      client.DefaultRequestHeaders.Accept.Clear();
-      client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+      _client.DefaultRequestHeaders.Accept.Clear();
+      _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
       string uri = "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO177&Limit=1000";
 
@@ -33,59 +33,50 @@ namespace Mep.Business.Migrations.Seeds
         uri = $"https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO177&Limit=1000&Offset={offset}";
       }
 
-      using (var result = client.GetAsync(uri).Result)
+      using var result = _client.GetAsync(uri).Result;
+      var content = result.Content.ReadAsStringAsync().Result;
+      var json = JsonConvert.DeserializeObject<SpineServiceResult>(content);
+
+      foreach (SpineServiceOrganisation gpResult in json.Organisations)
       {
-        var content = result.Content.ReadAsStringAsync().Result;
-        var json = JsonConvert.DeserializeObject<SpineServiceResult>(content);
+        bool validOrganisation = false;
 
-        foreach (SpineServiceOrganisation gpResult in json.Organisations)
+        if ((gpPractice = _context.GpPractices.SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
         {
-          bool validOrganisation = false;
+          gpPractice = new GpPractice();
+          _context.Add(gpPractice);
+          validOrganisation = true;
+        }
+        gpPractice.IsActive = gpResult.Status == "Inactive" ? false : true;
+        gpPractice.ModifiedAt = _now;
+        gpPractice.ModifiedByUser = GetSystemAdminUser();
+        gpPractice.GpPracticeCode = gpResult.OrgId;
+        gpPractice.Postcode = gpResult.PostCode ?? "";
+        gpPractice.Name = gpResult.Name;
+        gpPractice.CcgId = _unknown.Id;
 
-          if ((gpPractice = _context.GpPractices.SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
-          {
-            gpPractice = new GpPractice();
-            _context.Add(gpPractice);
-            validOrganisation = true;
-          }
-          gpPractice.IsActive = gpResult.Status == "Inactive" ? false : true;
-          gpPractice.ModifiedAt = _now;
-          gpPractice.ModifiedByUser = GetSystemAdminUser();
-          gpPractice.GpPracticeCode = gpResult.OrgId;
-          gpPractice.Postcode = gpResult.PostCode == null ? "" : gpResult.PostCode;
-          gpPractice.Name = gpResult.Name;
-          gpPractice.CcgId = unknown.Id;
+        if (validOrganisation)
+        {
+          // try to find a matching CCG
+          using var ccgResult = _client.GetAsync(gpResult.OrgLink).Result;
+          var ccgContent = ccgResult.Content.ReadAsStringAsync().Result;
+          var ccgJson = JsonConvert.DeserializeObject<SpineServiceDetail>(ccgContent);
 
-          if (validOrganisation)
+          try
           {
-            // try to find a matching CCG
-            using (var ccgResult = client.GetAsync(gpResult.OrgLink).Result)
+            // RO98 is the code for CCGs
+            SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel.FirstOrDefault(r => r.Target.PrimaryRoleId.Id == "RO98");
+
+            if (relationship != null)
             {
-              var ccgContent = ccgResult.Content.ReadAsStringAsync().Result;
-              var ccgJson = JsonConvert.DeserializeObject<SpineServiceDetail>(ccgContent);
+              string extension = relationship.Target.OrgId.Extension;
 
               try
               {
-                // RO98 is the code for CCGs
-                SpineServiceRelationship relationship = ccgJson.Organisation.Rels.Rel.FirstOrDefault(r => r.Target.PrimaryRoleId.Id == "RO98");
-
-                if (relationship != null)
+                Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
+                if (ccg != null)
                 {
-                  string extension = relationship.Target.OrgId.Extension;
-
-                  try
-                  {
-                    Ccg ccg = _context.Ccgs.SingleOrDefault(x => x.ShortCode == extension);
-                    if (ccg != null)
-                    {
-                      gpPractice.CcgId = ccg.Id;
-                    }
-                  }
-                  catch (Exception ex)
-                  {
-                    //TODO - log the error
-                    Console.WriteLine(ex.Message);
-                  }
+                  gpPractice.CcgId = ccg.Id;
                 }
               }
               catch (Exception ex)
@@ -94,6 +85,11 @@ namespace Mep.Business.Migrations.Seeds
                 Console.WriteLine(ex.Message);
               }
             }
+          }
+          catch (Exception ex)
+          {
+            //TODO - log the error
+            Console.WriteLine(ex.Message);
           }
         }
       }
@@ -104,7 +100,7 @@ namespace Mep.Business.Migrations.Seeds
       GpPractice gp;
 
       // Get Id of Unknown Ccg
-      unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
+      _unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
 
       // create a dummy CCG for Unknown
       if ((gp = _context.GpPractices.SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
@@ -118,14 +114,14 @@ namespace Mep.Business.Migrations.Seeds
       gp.Name = GP_PRACTICE_NAME_UNKNOWN;
       gp.GpPracticeCode = "XXX";
       gp.Postcode = "";
-      gp.CcgId = unknown.Id;
+      gp.CcgId = _unknown.Id;
 
       for (int offset = 0; offset < 17000; offset += 1000)
       {
         BatchUpdateGpPractices(offset);
       }
 
-      client.Dispose();
+      _client.Dispose();
     }
   }
 }
