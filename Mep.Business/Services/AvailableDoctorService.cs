@@ -35,23 +35,21 @@ namespace Mep.Business.Services
       // if the latitude and longitude haven't been supplied then obtain them from the postcode
       if (searchModel.Latitude == 0 && searchModel.Longitude == 0)
       {
-        using (LocationDetailService locationService = new LocationDetailService(_mapper))
+        using LocationDetailService locationService = new LocationDetailService(_mapper);
+        Postcode postcodeSearch = new Postcode()
         {
-          Postcode postcodeSearch = new Postcode()
-          {
-            Code = searchModel.PostCode
-          };
+          Code = searchModel.PostCode
+        };
 
-          Postcode postcodeDetails = await locationService.GetPostcodeDetailsAsync(postcodeSearch);
+        Postcode postcodeDetails = await locationService.GetPostcodeDetailsAsync(postcodeSearch);
 
-          if (postcodeDetails.Latitude == null && postcodeDetails.Longitude == null)
-          {
-            throw new PostcodeNotFoundException(searchModel.PostCode);
-          }
-          examinationLatitude = postcodeDetails.Latitude;
-          examinationLongitude = postcodeDetails.Longitude;
-          maxDistance = searchModel.Distance;
+        if (postcodeDetails.Latitude == null && postcodeDetails.Longitude == null)
+        {
+          throw new PostcodeNotFoundException(searchModel.PostCode);
         }
+        examinationLatitude = postcodeDetails.Latitude;
+        examinationLongitude = postcodeDetails.Longitude;
+        maxDistance = searchModel.Distance;
       }
 
       searchModel.ExaminationWindowStart = searchModel.ExaminationWindowStart == default(DateTime) ? new DateTimeOffset(DateTime.Now) : searchModel.ExaminationWindowStart;

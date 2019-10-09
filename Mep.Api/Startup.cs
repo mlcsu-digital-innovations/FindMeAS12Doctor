@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Mep.Business;
 using Mep.Business.Models;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Mep.Api
 {
@@ -29,10 +31,26 @@ namespace Mep.Api
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc()
-              .AddNewtonsoftJson(opt => {
-                opt.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+              .AddNewtonsoftJson(options =>
+              {
+                options.SerializerSettings.PreserveReferencesHandling =
+                  PreserveReferencesHandling.Objects;
               });
-              
+
+      // log all api bad requests
+      services.PostConfigure<ApiBehaviorOptions>(options =>
+      {
+        var builtInFactory = options.InvalidModelStateResponseFactory;
+        options.InvalidModelStateResponseFactory = context =>
+        {
+          Serilog.Log.Warning(
+            "Bad Request {ActionName}: {ModelStateErrors}",
+            context.ActionDescriptor.DisplayName,
+            context.ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
+          return builtInFactory(context);
+        };
+      });
+
       services.AddDbContext<ApplicationContext>
       (options =>
       {
@@ -41,7 +59,7 @@ namespace Mep.Api
                              opt => opt.EnableRetryOnFailure());
 
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-        {          
+        {
           options.EnableSensitiveDataLogging();
           options.EnableDetailedErrors();
         }
@@ -65,9 +83,11 @@ namespace Mep.Api
       services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
       services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
 
-      services.AddCors(options => {
+      services.AddCors(options =>
+      {
         options.AddPolicy("AllowAnyOrigin",
-          builder => {
+          builder =>
+          {
             builder.AllowAnyOrigin();
             builder.AllowAnyMethod();
             builder.AllowAnyHeader();
@@ -87,15 +107,17 @@ namespace Mep.Api
       {
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
-      }
+        app.UseExceptionHandler("/Error");
+      }      
 
-      app.UseExceptionHandler("/Error");
+      app.UseSerilogRequestLogging();
       app.UseHttpsRedirection();
       app.UseRouting();
       app.UseCors("AllowAnyOrigin");
-      app.UseEndpoints(endpoints => {
+      app.UseEndpoints(endpoints =>
+      {
         endpoints.MapControllers();
-      });      
+      });
     }
   }
 }

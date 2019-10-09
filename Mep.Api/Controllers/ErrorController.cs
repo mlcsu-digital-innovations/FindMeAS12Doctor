@@ -3,45 +3,55 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Mep.Api.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class ErrorController : ControllerBase
+  [ApiController]
+  [Route("[controller]")]
+  public class ErrorController : ControllerBase
+  {
+    public ErrorController()
+    { }
+
+    [Route("")]
+    [AllowAnonymous]
+    public IActionResult Get()
     {
-        private readonly ILogger _logger;
+      // TODO: Once specific exceptions are create add them in here
+      // Get the details of the exception that occurred
+      var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-        public ErrorController(ILogger<ErrorController> logger)
-        {
-            _logger = logger;
-        }
+      if (exceptionFeature != null)
+      {
+        // Get which route the exception occurred at
+        string routeWhereExceptionOccurred = exceptionFeature.Path;
 
-        [Route("")]
-        [AllowAnonymous]
-        public IActionResult Get()
-        {
-            // TODO: Once specific exceptions are create add them in here
-            // Get the details of the exception that occurred
-            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+        // Get the exception that occurred
+        Exception exceptionThatOccurred = exceptionFeature.Error;
 
-            if (exceptionFeature != null)
-            {
-                // Get which route the exception occurred at
-                string routeWhereExceptionOccurred = exceptionFeature.Path;
+        Log.Error(
+          exceptionThatOccurred,
+          exceptionThatOccurred.Message,
+          routeWhereExceptionOccurred);
 
-                // Get the exception that occurred
-                Exception exceptionThatOccurred = exceptionFeature.Error;
-                
-                _logger.LogError(exceptionThatOccurred, routeWhereExceptionOccurred);
+        return StatusCodeAndErrorMessage(exceptionThatOccurred);
 
-                return StatusCode(StatusCodes.Status500InternalServerError, exceptionThatOccurred.Message);
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }            
-        }
+      }
+      else
+      {
+        return StatusCode(StatusCodes.Status500InternalServerError);
+      }
     }
+
+    private IActionResult StatusCodeAndErrorMessage(Exception exceptionThatOccurred)
+    {
+      if (exceptionThatOccurred is Business.Exceptions.MissingSearchParameterException) {
+        return StatusCode(StatusCodes.Status400BadRequest, exceptionThatOccurred.Message);
+      }
+      else {
+        return StatusCode(StatusCodes.Status500InternalServerError, exceptionThatOccurred.Message);
+      }
+    }
+  }
 }
