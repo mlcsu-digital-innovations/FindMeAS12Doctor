@@ -35,6 +35,7 @@ export class ExaminationCreateComponent implements OnInit {
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
+  minDate: NgbDateStruct;
   referral$: Observable<Referral | any>;
   specialities: NameIdList[];
 
@@ -82,6 +83,12 @@ export class ExaminationCreateComponent implements OnInit {
                 hour: referenceDate.getHours(),
                 minute: this.RoundToNearestFiveMinutes(referenceDate.getMinutes()),
                 second: 0
+              };
+
+              this.minDate = {
+                year: referenceDate.getFullYear(),
+                month: referenceDate.getMonth() + 1,
+                day: referenceDate.getDate()
               };
 
               this.toBeCompletedByDateField.setValue(this.examinationShouldBeCompletedByDate);
