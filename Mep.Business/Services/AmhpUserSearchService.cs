@@ -30,11 +30,11 @@ namespace Mep.Business.Services
                   .Include(user => user.ProfileType)
                   .WhereIsActiveOrActiveOnly(true)
                   .Where(user => user.DisplayName.Contains(searchString))
-                  .Where(user => user.ProfileType.IsAmhp)
+                  .Where(user => user.ProfileTypeId == Data.Entities.ProfileType.AMHP)
                   .Select(user => new GeneralSearchResult()
                   {
                     Id = user.Id,
-                    ResultText = $"{user.DisplayName}"
+                    ResultText = user.DisplayName
                   })
                   .ToListAsync();
 

@@ -1,4 +1,3 @@
-using Enum = Mep.Business.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace Mep.Business.Models
         if (Referrals != null)
         {
           Referral referral = Referrals.OrderByDescending(r => r.CreatedAt)
-          .FirstOrDefault(r => r.ReferralStatusId != (int)Enum.ReferralStatus.ReferralClosed);
+          .FirstOrDefault(r => r.ReferralStatusId != Data.Entities.ReferralStatus.CLOSED);
 
           latestNotClosedReferralId = referral?.Id;
         }

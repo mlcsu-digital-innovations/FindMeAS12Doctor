@@ -26,14 +26,12 @@ namespace Mep.Api.Controllers
         Code = postcode
       };
 
-      using (LocationDetailService locationDetailService = new LocationDetailService(_mapper))
-      {
-        Business.Models.Postcode businessModel = _mapper.Map<Business.Models.Postcode>(postcodeDetail);
-        businessModel = await locationDetailService.GetPostcodeDetailsAsync(businessModel);
+      using LocationDetailService locationDetailService = new LocationDetailService(_mapper);
+      Business.Models.Postcode businessModel = _mapper.Map<Business.Models.Postcode>(postcodeDetail);
+      businessModel = await locationDetailService.GetPostcodeDetailsAsync(businessModel);
 
-        Postcode postcodeWithDetails = _mapper.Map<Postcode>(businessModel);
-        return Ok(postcodeWithDetails);
-      }
+      Postcode postcodeWithDetails = _mapper.Map<Postcode>(businessModel);
+      return Ok(postcodeWithDetails);
     }
   }
 }
