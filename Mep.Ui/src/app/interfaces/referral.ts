@@ -4,6 +4,7 @@ import { LeadAmhpUser } from './user';
 export interface Referral {
   createdAt: Date;
   createdByUserId: number;
+  examinations: any[];
   id: number;
   isPlannedExamination: boolean;
   leadAmhpUser: LeadAmhpUser;

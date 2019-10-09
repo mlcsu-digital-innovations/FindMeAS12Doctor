@@ -186,13 +186,22 @@
             </div>
             <!-- To Be Completed By -->
             <div class="form-row">
-              <div class="col-md-3">
-                <label for="toBeCompletedBy">To Be Completed By</label>
-                <input class="form-control" formControlName='toBeCompletedBy' placeholder="yyyy-mm-dd" name="toBeCompletedBy" [minDate]='currentDate' ngbDatepicker
-                #d="ngbDatepicker"/>
-              </div>
-              <div class="col-md-2" style="margin-top: 2.1rem;">
-                <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+              <div class="col-md-12">
+                <label for="picker">To Be Completed By</label>
+
+                <div class="row" name="picker">
+                  <div class="col-md-2">
+                      <input class="form-control" formControlName='toBeCompletedByDate' placeholder="dd/mm/yyyy" name="toBeCompletedByDate" [minDate]='currentDate' ngbDatepicker
+                      #d="ngbDatepicker"/>
+                  </div>
+                  <div class="col-md-1" style="padding-left: 1px;">
+                      <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                  </div>
+                  <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666; margin-left: -2rem;">@</div>
+                  <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -3.5rem;">
+                      <ngb-timepicker formControlName="toBeCompletedByTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
               </div>
             </div>
           </form>

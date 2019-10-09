@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
+import { NgbDateStruct, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
@@ -16,7 +17,6 @@ import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-examination-create',
@@ -25,33 +25,31 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ExaminationCreateComponent implements OnInit {
 
-  addressList: AddressResult[];
   addresses$: Observable<any>;
+  addressList: AddressResult[];
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
+  examinationShouldBeCompletedByDate: NgbDateStruct;
+  examinationShouldBeCompletedByTime: NgbTimeStruct;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
   referral$: Observable<Referral | any>;
   specialities: NameIdList[];
-  currentDate: NgbDateStruct;
 
   constructor(
     private amhpListService: AmhpListService,
+    private calendar: NgbCalendar,
     private formBuilder: FormBuilder,
+    private nameIdListService: NameIdListService,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private nameIdListService: NameIdListService,
-    private toastService: ToastService,
-    private calendar: NgbCalendar
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
-
-    const now = this.calendar.getToday();
-    this.currentDate = {year: now.year, month: now.month, day: now.day};
 
     this.addressList = [];
 
@@ -62,6 +60,33 @@ export class ExaminationCreateComponent implements OnInit {
           .pipe(
             map(referral => {
               this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
+
+              let referenceDate = new Date();
+
+              // if there aren't any other examinations then the completed by
+              // date / time should be 3 hours after the referral creation
+              if (referral.examinations.length === 0) {
+                referenceDate = new Date(referral.createdAt);
+              }
+
+              // allow X hours to complete the examination
+              referenceDate.setHours(referenceDate.getHours() + environment.defaultExaminationCompletedInHours);
+
+              this.examinationShouldBeCompletedByDate = {
+                year: referenceDate.getFullYear(),
+                month: referenceDate.getMonth() + 1,
+                day: referenceDate.getDate()
+              };
+
+              this.examinationShouldBeCompletedByTime = {
+                hour: referenceDate.getHours(),
+                minute: this.RoundToNearestFiveMinutes(referenceDate.getMinutes()),
+                second: 0
+              };
+
+              this.toBeCompletedByDateField.setValue(this.examinationShouldBeCompletedByDate);
+              this.toBeCompletedByTimeField.setValue(this.examinationShouldBeCompletedByTime);
+
               return referral;
             })
           );
@@ -124,10 +149,13 @@ export class ExaminationCreateComponent implements OnInit {
       ],
       speciality: [''],
       preferredGender: [''],
-      toBeCompletedBy: ['']
+      toBeCompletedByDate: [this.examinationShouldBeCompletedByDate],
+      toBeCompletedByTime: [this.examinationShouldBeCompletedByTime]
     });
+  }
 
-    this.toBeCompletedByField.setValue(this.currentDate);
+  RoundToNearestFiveMinutes(minute: number): number {
+    return Math.ceil(minute / 5) * 5;
   }
 
   HasValidPostcode(): boolean {
@@ -148,8 +176,12 @@ export class ExaminationCreateComponent implements OnInit {
     return this.isSearchingForPostcode;
   }
 
-  get toBeCompletedByField() {
-    return this.examinationForm.controls.toBeCompletedBy;
+  get toBeCompletedByDateField() {
+    return this.examinationForm.controls.toBeCompletedByDate;
+  }
+
+  get toBeCompletedByTimeField() {
+    return this.examinationForm.controls.toBeCompletedByTime;
   }
 
   get additionalDetailsField() {
