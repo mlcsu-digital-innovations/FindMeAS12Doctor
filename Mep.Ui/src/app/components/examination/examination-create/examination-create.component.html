@@ -48,6 +48,24 @@
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults" />
               </div>
+              <!-- Planned examination -->
+              <div class="col-md-4">
+                  <div class="checkmark-content">
+                      <label class="container">
+                        <input
+                          class="form-control"
+                          type="checkbox"
+                          value=""
+                          id="plannedExamination"
+                          formControlName="plannedExamination"
+                          #plannedExamination
+                          (change)="TogglePlannedExamination($event)"
+                        />
+                        <span class="checkmark"></span>
+                        Planned Examination
+                      </label>
+                    </div>
+              </div>
             </div>
             <!-- AMHP User Errors-->
             <div class="form-row" *ngIf="hasAmhpSearchFailed">
@@ -55,6 +73,44 @@
                 <span *ngIf="isAmhpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
                   Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <!-- Planned examination date / time -->
+            <div class="form-row" *ngIf="plannedExamination.checked">
+              <div class="col-md-6">
+                <label for="plannedPicker">Planned Examination Date / Time</label>
+                <div class="row" name="plannedPicker">
+                  <div class="col-md-5">
+                    <input
+                      class="form-control"
+                      formControlName='scheduledDate'
+                      placeholder="dd/mm/yyyy"
+                      name="scheduledDate"
+                      [minDate]='minDate'
+                      ngbDatepicker
+                      #s="ngbDatepicker"/>
+                  </div>
+                  <div class="col-md-1" style="padding-left: 1px;">
+                    <button
+                      class="btn btn-outline-secondary calendar"
+                      (click)="s.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666;">@</div>
+                  <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -1rem;">
+                    <ngb-timepicker formControlName="scheduledTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Date Format Errors-->
+            <div class="form-row" *ngIf="toBeCompletedByDateField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
+                  <span>Invalid Date Format</span>
                 </div>
               </div>
             </div>
@@ -202,7 +258,7 @@
               </div>
             </div>
             <!-- To Be Completed By -->
-            <div class="form-row">
+            <div class="form-row" *ngIf="!plannedExamination.checked">
               <div class="col-md-6">
                 <label for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
@@ -218,7 +274,13 @@
                       />
                   </div>
                   <div class="col-md-1" style="padding-left: 1px;">
-                      <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                      <button
+                        id="calendarBtn"
+                        class="btn btn-outline-secondary calendar"
+                        (click)="d.toggle()"
+                        type="button">
+                        <i class="far fa-calendar-alt"></i>
+                      </button>
                   </div>
                   <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666;">@</div>
                   <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -1rem;">
@@ -233,6 +295,24 @@
                 <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
                   <span>Invalid Date Format</span>
                 </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  *ngIf="plannedExamination.checked"
+                >
+                  Enter / Search Doctor
+                </button>
+                <button
+                  type="button"
+                   class="btn btn-primary"
+                    *ngIf="!plannedExamination.checked"
+                >
+                  Select Doctor
+                </button>
               </div>
             </div>
           </form>
