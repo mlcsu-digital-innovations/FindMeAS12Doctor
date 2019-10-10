@@ -56,9 +56,19 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    protected override Task<bool> InternalCreateAsync(Examination model, Entities.Examination entity)
+    protected override async Task<bool> InternalCreateAsync(Examination model, Entities.Examination entity)
     {
-      return Task.FromResult<bool>(true);
+      // the CCG id is set from the referral patient's ccg, it's duplicated on the examination so that
+      // the patient's CCG is fixed at the time of the examination so if they change their CCG
+      // after the examination has taken place to won't change the CCG of the claim 
+      ReferralService service = new ReferralService(_context, _mapper);
+      Referral referral = await service.GetByIdAsync(model.ReferralId, true);
+      entity.CcgId = (int)referral.Patient.CcgId;
+
+      // the modified user id has already been set from the service base
+      entity.CreatedByUserId = (int)entity.ModifiedByUserId;
+
+      return true;
     }
 
     protected override Task<bool> InternalUpdateAsync(Examination model, Entities.Examination entity)
