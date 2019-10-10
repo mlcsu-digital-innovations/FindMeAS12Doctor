@@ -23,6 +23,8 @@ namespace Mep.Business.Services
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
                 .Include(r => r.CreatedByUser)
+                .Include(e => e.Details)
+                  .ThenInclude(d => d.ExaminationDetailType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .ToListAsync();
 
@@ -44,7 +46,9 @@ namespace Mep.Business.Services
     {
       Entities.Examination entity = await
         _context.Examinations
-                .Include(r => r.CreatedByUser)                
+                .Include(e => e.CreatedByUser)
+                .Include(e => e.Details)
+                  .ThenInclude(d => d.ExaminationDetailType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == entityId);

@@ -18,6 +18,9 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
+    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME = "Dangerous Animal";
+    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_DESCRIPTION =
+      "A dangerous animal has been reported to be present on the premises";
     protected const string GENDER_TYPE_NAME_FEMALE = "Female";
     protected const string GENDER_TYPE_NAME_MALE = "Male";
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
