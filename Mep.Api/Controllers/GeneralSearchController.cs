@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Mep.Api.SearchModels;
 using business = Mep.Business.Models.SearchModels;
 using Mep.Business.Models;
+using Mep.Api.RequestModels;
+using System.Linq;
 
 namespace Mep.Api.Controllers
 {
@@ -23,13 +25,21 @@ namespace Mep.Api.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<GeneralSearchResult>>> Post([FromForm] string searchString)
+    public async Task<ActionResult<IEnumerable<GeneralSearchResult>>> Get([FromForm] SearchString searchString )
     {
-      IEnumerable<business.GeneralSearchResult> businessSearchResult = await _service.SearchAsync(searchString);
+      IEnumerable<business.GeneralSearchResult> businessSearchResult = await _service.SearchAsync(searchString.Search);
 
       IEnumerable<GeneralSearchResult> searchResults = _mapper.Map<IEnumerable<GeneralSearchResult>>(businessSearchResult);
 
-      return Ok(searchResults);
+      if (searchResults.Count() > 0)
+      {
+        return Ok(searchResults);
+      }
+      else
+      {
+        return NoContent();
+      }      
     }
+
   }
 }

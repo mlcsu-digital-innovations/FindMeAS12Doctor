@@ -32,7 +32,7 @@ namespace Mep.Business.Services
                   .Select(ccg => new GeneralSearchResult()
                   {
                     Id = ccg.Id,
-                    ResultText = $"{ccg.Name}"
+                    ResultText = ccg.Name
                   })
                   .ToListAsync();
 

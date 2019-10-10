@@ -23,13 +23,11 @@ namespace Mep.Business.Services
       HttpClient client = new HttpClient();
       string uri = $"https://api.postcodes.io/postcodes/{postcode.Code}";
 
-      using (var response = await client.GetAsync(uri))
-      {
-        string content = response.Content.ReadAsStringAsync().Result;
-        PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
-        client.Dispose();
-        return _mapper.Map<Postcode>(convertedResult);
-      }
+      using var response = await client.GetAsync(uri);
+      string content = response.Content.ReadAsStringAsync().Result;
+      PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
+      client.Dispose();
+      return _mapper.Map<Postcode>(convertedResult);
     }
 
     public void Dispose()
