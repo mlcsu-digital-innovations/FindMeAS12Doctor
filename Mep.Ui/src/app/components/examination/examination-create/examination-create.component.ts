@@ -169,6 +169,7 @@ export class ExaminationCreateComponent implements OnInit {
     // });
 
     this.examinationForm = this.formBuilder.group({
+      plannedExamination: false,
       amhp: [''],
       examinationPostcode: [
         '',
@@ -188,8 +189,33 @@ export class ExaminationCreateComponent implements OnInit {
       preferredGender: [''],
       toBeCompletedByDate: [this.examinationShouldBeCompletedByDate],
       toBeCompletedByTime: [this.examinationShouldBeCompletedByTime],
-      examinationDetails: ['']
+      examinationDetails: [''],
+      scheduledDate: [''],
+      scheduledTime: ['']
     });
+  }
+
+  TogglePlannedExamination(event: any) {
+
+    if (this.examinationForm.controls.plannedExamination.value === true) {
+      // planned examination
+      const now = new Date();
+      const scheduledDate = {
+        year: now.getFullYear(),
+        month: now.getMonth() + 1,
+        day: now.getDate()
+      };
+
+      const scheduledTime = {
+        hour: 12,
+        minute: 0,
+        second: 0
+      };
+
+      this.examinationForm.controls.scheduledDate.setValue(scheduledDate);
+      this.examinationForm.controls.scheduledTime.setValue(scheduledTime);
+    }
+
   }
 
   onItemSelect(item: NameIdList) {
