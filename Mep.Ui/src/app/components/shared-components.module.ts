@@ -5,17 +5,19 @@ import { DisableControlDirective } from '../directives/disable-control/disable-c
 import { FormsModule } from '@angular/forms';
 import { FocusOnShowDirective } from '../directives/focus-on-show/focus-on-show.directive';
 import { NavbarComponent } from './navbar/navbar.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TemplateModule } from '../templates/template.module';
 import { ToastsComponent } from './toasts/toasts.component';
 import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
 
+import { NgbDateCustomParserFormatter } from '../components/datePicker-format/datePicker-format';
+
 @NgModule({
   declarations: [
     DelaySpinnerComponent,
-    DisableControlDirective,    
+    DisableControlDirective,
     FocusOnShowDirective,
     NavbarComponent,
     TableHeaderSortable,
@@ -41,6 +43,10 @@ import { TableHeaderSortable } from '../directives/table-header-sortable/table-h
     TemplateModule,
     ToastsComponent
   ],
-  providers: []
+  providers: [
+    {
+      provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter
+    }
+  ]
 })
 export class SharedComponentsModule {}

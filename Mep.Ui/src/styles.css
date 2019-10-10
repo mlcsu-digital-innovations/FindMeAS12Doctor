@@ -194,3 +194,19 @@ label {
 .less-top-space {
   margin-top: -30px;
 }
+
+.calendar {
+  margin-top: 2px;
+  background-color: #0db3bf;
+  color: #fff;
+  border: none;
+}
+
+.calendar:hover {
+  background-color: #0a868f;
+  border-color: #0c9da7;
+}
+
+.btn.btn-link {
+  color: #0db3bf;
+}

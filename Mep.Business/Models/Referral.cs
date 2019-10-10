@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mep.Business.Models.Interfaces;
 
 namespace Mep.Business.Models
 {
@@ -111,10 +112,61 @@ namespace Mep.Business.Models
                             ?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.MustBeCompletedBy.UtcDateTime;
-                            
-        return timescale == default(DateTime) 
+
+        return timescale == default(DateTime)
                ? null
-               : timescale;                            
+               : timescale;
+      }
+    }
+
+    public DatePicker ReferralCreatedAtAsDatePicker
+    {
+      get
+      {
+        DateTime workingDate = CreatedAt.UtcDateTime;
+
+        DatePicker referralCreatedAtAsDatePicker = new DatePicker()
+        {
+          day = workingDate.Day,
+          month = workingDate.Month,
+          year = workingDate.Year
+        };
+
+        return referralCreatedAtAsDatePicker;
+      }
+    }
+
+    public DatePicker DefaultToBeCompletedByDate
+    {
+      get
+      {
+        DateTime workingDate = Examinations.Count > 0 ? DateTime.Now.AddHours(3) : CreatedAt.UtcDateTime.AddHours(3);
+
+        DatePicker defaultToBeCompletedByDate = new DatePicker()
+        {
+          day = workingDate.Day,
+          month = workingDate.Month,
+          year = workingDate.Year
+        };
+
+        return defaultToBeCompletedByDate;
+      }
+    }
+
+    public TimePicker DefaultToBeCompletedByTime
+    {
+      get
+      {
+        DateTime workingDate = Examinations.Count > 0 ? DateTime.Now.AddHours(3) : CreatedAt.UtcDateTime.AddHours(3);
+
+        TimePicker defaultToBeCompletedByTime = new TimePicker()
+        {
+          hour = workingDate.Hour,
+          minute = workingDate.Minute,
+          second = workingDate.Second
+        };
+
+        return defaultToBeCompletedByTime;
       }
     }
   }

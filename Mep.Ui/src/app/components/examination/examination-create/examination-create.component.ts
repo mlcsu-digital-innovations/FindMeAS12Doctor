@@ -1,13 +1,15 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
@@ -24,25 +26,28 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 })
 export class ExaminationCreateComponent implements OnInit {
 
-  addressList: AddressResult[];
   addresses$: Observable<any>;
+  addressList: AddressResult[];
   examinationForm: FormGroup;
   examinationPostcodeValidationMessage: string;
+  examinationShouldBeCompletedByDate: NgbDateStruct;
+  examinationShouldBeCompletedByTime: NgbTimeStruct;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isSearchingForPostcode: boolean;
+  minDate: NgbDateStruct;
   referral$: Observable<Referral | any>;
   specialities: NameIdList[];
 
   constructor(
     private amhpListService: AmhpListService,
     private formBuilder: FormBuilder,
+    private nameIdListService: NameIdListService,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private nameIdListService: NameIdListService,
-    private toastService: ToastService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -56,6 +61,10 @@ export class ExaminationCreateComponent implements OnInit {
           .pipe(
             map(referral => {
               this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
+              this.minDate = referral.referralCreatedAtAsDatePicker;
+              this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
+              this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
+
               return referral;
             })
           );
@@ -117,12 +126,19 @@ export class ExaminationCreateComponent implements OnInit {
         ]
       ],
       speciality: [''],
-      preferredGender: ['']
+      preferredGender: [''],
+      toBeCompletedByDate: [
+        this.examinationShouldBeCompletedByDate,
+        [
+          DatePickerFormat
+        ]
+      ],
+      toBeCompletedByTime: [this.examinationShouldBeCompletedByTime]
     });
   }
 
-  ToastStuff() {
-    console.log('toast stuff');
+  RoundToNearestFiveMinutes(minute: number): number {
+    return Math.ceil(minute / 5) * 5;
   }
 
   HasValidPostcode(): boolean {
@@ -141,6 +157,18 @@ export class ExaminationCreateComponent implements OnInit {
 
   IsSearchingForPostcode(): boolean {
     return this.isSearchingForPostcode;
+  }
+
+  get toBeCompletedByDateField() {
+
+    // console.log(this.examinationForm.controls.toBeCompletedByDate.errors);
+
+
+    return this.examinationForm.controls.toBeCompletedByDate;
+  }
+
+  get toBeCompletedByTimeField() {
+    return this.examinationForm.controls.toBeCompletedByTime;
   }
 
   get additionalDetailsField() {
