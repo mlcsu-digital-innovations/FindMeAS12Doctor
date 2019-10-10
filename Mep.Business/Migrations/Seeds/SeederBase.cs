@@ -8,8 +8,8 @@ namespace Mep.Business.Migrations.Seeds
   {
     protected DateTimeOffset _now = DateTimeOffset.Now;
 
-    protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
-    protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
+    protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
+    protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
@@ -108,15 +108,20 @@ namespace Mep.Business.Migrations.Seeds
 
     protected int GetGpPracticeIdByName(string GpPracticeName)
     {
+      return GetGpPracticeByName(GpPracticeName).Id;
+    }
+
+    protected GpPractice GetGpPracticeByName(string GpPracticeName)
+    {
       try
       {
-        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName);
       }
       catch (Exception ex)
       {
         throw new Exception($"Cannot find a GP Practice with the name {GpPracticeName} in GpPractices", ex);
       }
-    }
+    }    
 
     protected int GetFemaleGenderTypeId()
     {
