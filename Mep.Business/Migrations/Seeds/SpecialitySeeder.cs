@@ -14,7 +14,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       Speciality speciality;
 
-      if ((speciality = _context.Specialities.SingleOrDefault(u => u.Name == SPECIALITY_SECTION_12)) == null)
+      if ((speciality = _context
+        .Specialities
+          .SingleOrDefault(u => u.Name ==
+            SPECIALITY_SECTION_12)) == null)
       {
         speciality = new Speciality();
         _context.Add(speciality);

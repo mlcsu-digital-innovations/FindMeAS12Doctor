@@ -2,6 +2,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit } from '@angular/core';
+import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -73,38 +74,9 @@ export class ExaminationCreateComponent implements OnInit {
           .pipe(
             map(referral => {
               this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
-
-              let referenceDate = new Date();
-
-              // if there aren't any other examinations then the completed by
-              // date / time should be 3 hours after the referral creation
-              if (referral.examinations.length === 0) {
-                referenceDate = new Date(referral.createdAt);
-              }
-
-              // allow X hours to complete the examination
-              referenceDate.setHours(referenceDate.getHours() + environment.defaultExaminationCompletedInHours);
-
-              this.examinationShouldBeCompletedByDate = {
-                year: referenceDate.getFullYear(),
-                month: referenceDate.getMonth() + 1,
-                day: referenceDate.getDate()
-              };
-
-              this.examinationShouldBeCompletedByTime = {
-                hour: referenceDate.getHours(),
-                minute: this.RoundToNearestFiveMinutes(referenceDate.getMinutes()),
-                second: 0
-              };
-
-              this.minDate = {
-                year: referenceDate.getFullYear(),
-                month: referenceDate.getMonth() + 1,
-                day: referenceDate.getDate()
-              };
-
-              this.toBeCompletedByDateField.setValue(this.examinationShouldBeCompletedByDate);
-              this.toBeCompletedByTimeField.setValue(this.examinationShouldBeCompletedByTime);
+              this.minDate = referral.referralCreatedAtAsDatePicker;
+              this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
+              this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
 
               return referral;
             })
@@ -186,9 +158,14 @@ export class ExaminationCreateComponent implements OnInit {
       ],
       speciality: [''],
       preferredGender: [''],
-      toBeCompletedByDate: [this.examinationShouldBeCompletedByDate],
-      toBeCompletedByTime: [this.examinationShouldBeCompletedByTime],
-      examinationDetails: ['']
+      examinationDetails: [''],
+      toBeCompletedByDate: [
+        this.examinationShouldBeCompletedByDate,
+        [
+          DatePickerFormat
+        ]
+      ],
+      toBeCompletedByTime: [this.examinationShouldBeCompletedByTime]
     });
   }
 
@@ -224,6 +201,10 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   get toBeCompletedByDateField() {
+
+    // console.log(this.examinationForm.controls.toBeCompletedByDate.errors);
+
+
     return this.examinationForm.controls.toBeCompletedByDate;
   }
 
