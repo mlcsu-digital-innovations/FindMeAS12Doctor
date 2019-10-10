@@ -210,8 +210,6 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   CancelExamination() {
-    console.log('Cancelling examination');
-    console.log(this.examinationForm.dirty);
 
     if (this.examinationForm.dirty) {
       this.cancelModal = this.modalService.open(this.cancelExaminationTemplate, {
