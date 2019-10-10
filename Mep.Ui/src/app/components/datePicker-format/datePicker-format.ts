@@ -37,7 +37,7 @@ export class NgbDateCustomParserFormatter extends NgbDateParserFormatter {
 
   isNumber(value: any): boolean {
     return (
-      (value != null) &&
+      (value !== null) &&
       !isNaN(Number(value.toString()))
     );
   }
@@ -53,11 +53,11 @@ export class NgbDateCustomParserFormatter extends NgbDateParserFormatter {
 
   format(date: NgbDateStruct): string {
     return date ?
-        `${this.isNumber(date.day) ?
-          this.padNumber(date.day) :
-          ''}/${this.isNumber(date.month) ?
-            this.padNumber(date.month) :
-            ''}/${date.year}` :
-        '';
+      `${this.isNumber(date.day) ?
+        this.padNumber(date.day) :
+        ''}/${this.isNumber(date.month) ?
+          this.padNumber(date.month) :
+          ''}/${date.year}` :
+      '';
   }
 }

@@ -12,21 +12,12 @@ namespace Mep.Business.Migrations.Seeds
       new SystemAdminUserSeeder(_context).SeedData();
       _context.SaveChanges();
 
-      // create all CCGs
-      new CcgSeeder(_context).SeedData();
-      _context.SaveChanges();
-
       // create all GP Practices
       new GpPracticeSeeder(_context).SeedData();
       _context.SaveChanges();
 
-      new ProfileTypeSeeder(_context).SeedData();
-
-      new GenderTypeSeeder(_context).SeedData();
-
-      new SpecialitySeeder(_context).SeedData();
-
-      new ReferralStatusSeeder(_context).SeedData();
+      // run all other seeders from SeedAllNoGp
+      SeedAllNoGp();
 
       _context.SaveChanges();
     }
@@ -41,13 +32,29 @@ namespace Mep.Business.Migrations.Seeds
       new CcgSeeder(_context).SeedData();
       _context.SaveChanges();
 
-      new ProfileTypeSeeder(_context).SeedData();
+      new ClaimStatusesSeeder(_context).SeedData();
+
+      new ContactDetailTypesSeeder(_context).SeedData();
+
+      new DoctorStatusesSeeder(_context).SeedData();
 
       new GenderTypeSeeder(_context).SeedData();
 
-      new SpecialitySeeder(_context).SeedData();
+      new NonPaymentLocationTypesSeeder(_context).SeedData();
+
+      new PaymentMethodTypesSeeder(_context).SeedData();
+
+      new PaymentRuleSetsSeeder(_context).SeedData();
+
+      new ProfileTypeSeeder(_context).SeedData();
 
       new ReferralStatusSeeder(_context).SeedData();
+
+      new Section12ApprovalStatusesSeeder(_context).SeedData();
+
+      new SpecialitySeeder(_context).SeedData();
+
+      new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
 
       _context.SaveChanges();
     }
@@ -76,7 +83,28 @@ namespace Mep.Business.Migrations.Seeds
       new UserExaminationNotificationSeeder(_context).SeedData();
       _context.SaveChanges();
 
-      new UserExaminationClaimSeeder(_context).SeedData();
+      new UserExaminationClaimsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new BankDetailsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new ContactDetailsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new NonPaymentLocationsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new OnCallUsersSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new PaymentMethodsSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new PaymentRulesSeeder(_context).SeedData();
+      _context.SaveChanges();
+
+      new UserSpecialitiesSeeder(_context).SeedData();
       _context.SaveChanges();
     }
   }
