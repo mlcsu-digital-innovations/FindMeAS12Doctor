@@ -21,13 +21,6 @@ form {
   resize: none;
 }
 
-.xcheckmark-content {
-  position: relative;
-  margin-left: 5px;
-  padding: 0;
-  bottom: 0;
-}
-
 .checkmark-content {
   bottom: 8px;
 }
