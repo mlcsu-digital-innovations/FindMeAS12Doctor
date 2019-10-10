@@ -191,8 +191,15 @@
 
                 <div class="row" name="picker">
                   <div class="col-md-2">
-                      <input class="form-control" formControlName='toBeCompletedByDate' placeholder="dd/mm/yyyy" name="toBeCompletedByDate" [minDate]='minDate' ngbDatepicker
-                      #d="ngbDatepicker"/>
+                      <input
+                        class="form-control"
+                        formControlName='toBeCompletedByDate'
+                        placeholder="dd/mm/yyyy"
+                        name="toBeCompletedByDate"
+                        [minDate]='minDate'
+                        ngbDatepicker
+                        #d="ngbDatepicker"
+                      />
                   </div>
                   <div class="col-md-1" style="padding-left: 1px;">
                       <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
@@ -201,6 +208,14 @@
                   <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -3.5rem;">
                       <ngb-timepicker formControlName="toBeCompletedByTime" [minuteStep]="5"></ngb-timepicker>
                   </div>
+                </div>
+              </div>
+            </div>
+            <!-- Examination Postcode Errors-->
+            <div class="form-row" *ngIf="toBeCompletedByDateField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
+                  <span>Invalid Date Format</span>
                 </div>
               </div>
             </div>

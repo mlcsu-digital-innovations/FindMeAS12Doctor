@@ -2,13 +2,14 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
-import { NgbDateStruct, NgbCalendar, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
@@ -41,7 +42,6 @@ export class ExaminationCreateComponent implements OnInit {
 
   constructor(
     private amhpListService: AmhpListService,
-    private calendar: NgbCalendar,
     private formBuilder: FormBuilder,
     private nameIdListService: NameIdListService,
     private postcodeValidationService: PostcodeValidationService,
@@ -156,7 +156,12 @@ export class ExaminationCreateComponent implements OnInit {
       ],
       speciality: [''],
       preferredGender: [''],
-      toBeCompletedByDate: [this.examinationShouldBeCompletedByDate],
+      toBeCompletedByDate: [
+        this.examinationShouldBeCompletedByDate,
+        [
+          DatePickerFormat
+        ]
+      ],
       toBeCompletedByTime: [this.examinationShouldBeCompletedByTime]
     });
   }
@@ -184,6 +189,10 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   get toBeCompletedByDateField() {
+
+    // console.log(this.examinationForm.controls.toBeCompletedByDate.errors);
+
+
     return this.examinationForm.controls.toBeCompletedByDate;
   }
 
