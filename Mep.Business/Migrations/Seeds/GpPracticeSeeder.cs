@@ -24,7 +24,8 @@ namespace Mep.Business.Migrations.Seeds
       GpPractice gpPractice;
 
       _client.DefaultRequestHeaders.Accept.Clear();
-      _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+      _client.DefaultRequestHeaders.Accept
+        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
       string uri = "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO177&Limit=1000";
 
@@ -41,7 +42,8 @@ namespace Mep.Business.Migrations.Seeds
       {
         bool validOrganisation = false;
 
-        if ((gpPractice = _context.GpPractices.SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
+        if ((gpPractice = _context.GpPractices
+          .SingleOrDefault(gp => gp.GpPracticeCode == gpResult.OrgId)) == null)
         {
           gpPractice = new GpPractice();
           _context.Add(gpPractice);
@@ -103,18 +105,21 @@ namespace Mep.Business.Migrations.Seeds
       _unknown = _context.Ccgs.Single(c => c.Name == GP_PRACTICE_NAME_UNKNOWN);
 
       // create a dummy CCG for Unknown
-      if ((gp = _context.GpPractices.SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN)) == null)
+      if ((gp = _context
+        .GpPractices
+          .SingleOrDefault(g => g.Name == GP_PRACTICE_NAME_UNKNOWN))
+            == null)
       {
         gp = new GpPractice();
         _context.Add(gp);
       }
+      gp.CcgId = _unknown.Id;
+      gp.GpPracticeCode = "XXX";
       gp.IsActive = true;
       gp.ModifiedAt = _now;
       gp.ModifiedByUser = GetSystemAdminUser();
       gp.Name = GP_PRACTICE_NAME_UNKNOWN;
-      gp.GpPracticeCode = "XXX";
       gp.Postcode = "";
-      gp.CcgId = _unknown.Id;
 
       for (int offset = 0; offset < 17000; offset += 1000)
       {
