@@ -209,9 +209,11 @@ export class ExaminationCreateComponent implements OnInit {
       this.selectedDetails.filter(obj => obj.id !== item.id);
   }
 
+  SaveExamination() {
+    console.log("saving examination ...")
+  }
+
   CancelExamination() {
-    console.log('Cancelling examination');
-    console.log(this.examinationForm.dirty);
 
     if (this.examinationForm.dirty) {
       this.cancelModal = this.modalService.open(this.cancelExaminationTemplate, {
