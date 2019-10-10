@@ -180,7 +180,7 @@ export class ExaminationCreateComponent implements OnInit {
       const scheduledDate = {
         year: now.getFullYear(),
         month: now.getMonth() + 1,
-        day: now.getDate()
+        day: now.getDate() + 1
       };
 
       const scheduledTime = {

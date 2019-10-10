@@ -95,6 +95,14 @@
                 </div>
               </div>
             </div>
+            <!-- Date Format Errors-->
+            <div class="form-row" *ngIf="toBeCompletedByDateField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
+                  <span>Invalid Date Format</span>
+                </div>
+              </div>
+            </div>
             <!-- Examination Postcode -->
             <div class="form-row">
               <div class="col-md-3 mb-2">
@@ -270,6 +278,24 @@
                 <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
                   <span>Invalid Date Format</span>
                 </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  *ngIf="plannedExamination.checked"
+                >
+                  Enter / Search Doctor
+                </button>
+                <button
+                  type="button"
+                   class="btn btn-primary"
+                    *ngIf="!plannedExamination.checked"
+                >
+                  Select Doctor
+                </button>
               </div>
             </div>
           </form>
