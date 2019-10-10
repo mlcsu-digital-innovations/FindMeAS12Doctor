@@ -39,8 +39,8 @@ namespace Mep.Business.Migrations.Seeds
       ccg.SuccessfulPencePerMile = 0.0m;
       ccg.UnsuccessfulPencePerMile = 0.0m;
 
-      client.DefaultRequestHeaders.Accept.Clear();
-      client.DefaultRequestHeaders.Accept
+      _client.DefaultRequestHeaders.Accept.Clear();
+      _client.DefaultRequestHeaders.Accept
         .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
       // TODO: Fetch this URI from a config file as it will change

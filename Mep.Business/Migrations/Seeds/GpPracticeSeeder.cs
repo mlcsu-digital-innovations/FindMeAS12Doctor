@@ -23,8 +23,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       GpPractice gpPractice;
 
-      client.DefaultRequestHeaders.Accept.Clear();
-      client.DefaultRequestHeaders.Accept
+      _client.DefaultRequestHeaders.Accept.Clear();
+      _client.DefaultRequestHeaders.Accept
         .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
       string uri = "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO177&Limit=1000";
@@ -113,7 +113,7 @@ namespace Mep.Business.Migrations.Seeds
         gp = new GpPractice();
         _context.Add(gp);
       }
-      gp.CcgId = unknown.Id;
+      gp.CcgId = _unknown.Id;
       gp.GpPracticeCode = "XXX";
       gp.IsActive = true;
       gp.ModifiedAt = _now;
