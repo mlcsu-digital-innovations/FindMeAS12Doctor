@@ -206,7 +206,7 @@
               <div class="col-md-6">
                 <label for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
-                  <div class="col-md-2">
+                  <div class="col-md-4">
                       <input
                         class="form-control"
                         formControlName='toBeCompletedByDate'
@@ -227,7 +227,7 @@
                 </div>
               </div>
             </div>
-            <!-- Examination Postcode Errors-->
+            <!-- Date Format Errors-->
             <div class="form-row" *ngIf="toBeCompletedByDateField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
                 <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
