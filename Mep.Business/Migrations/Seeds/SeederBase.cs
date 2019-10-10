@@ -29,7 +29,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
-    protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
+    protected const string GP_PRACTICE_NAME_2 = "STAFFORD MEDICAL CENTRE";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_1 = "Notification Text Description 1";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_2 = "Notification Text Description 2";
     protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_1 = "Notification Text Message Template 1";
