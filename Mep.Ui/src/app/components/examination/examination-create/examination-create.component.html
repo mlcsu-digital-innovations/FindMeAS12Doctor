@@ -82,11 +82,22 @@
                 <label for="plannedPicker">Planned Examination Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-5">
-                    <input class="form-control" formControlName='scheduledDate' placeholder="dd/mm/yyyy" name="scheduledDate" [minDate]='minDate' ngbDatepicker
+                    <input
+                      class="form-control"
+                      formControlName='scheduledDate'
+                      placeholder="dd/mm/yyyy"
+                      name="scheduledDate"
+                      [minDate]='minDate'
+                      ngbDatepicker
                       #s="ngbDatepicker"/>
                   </div>
                   <div class="col-md-1" style="padding-left: 1px;">
-                    <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="s.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                    <button
+                      class="btn btn-outline-secondary calendar"
+                      (click)="s.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
                   </div>
                   <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666;">@</div>
                   <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -1rem;">
@@ -263,7 +274,13 @@
                       />
                   </div>
                   <div class="col-md-1" style="padding-left: 1px;">
-                      <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                      <button
+                        id="calendarBtn"
+                        class="btn btn-outline-secondary calendar"
+                        (click)="d.toggle()"
+                        type="button">
+                        <i class="far fa-calendar-alt"></i>
+                      </button>
                   </div>
                   <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666;">@</div>
                   <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -1rem;">
