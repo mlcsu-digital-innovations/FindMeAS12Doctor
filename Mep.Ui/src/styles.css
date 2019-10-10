@@ -210,3 +210,24 @@ label {
 .btn.btn-link {
   color: #0db3bf;
 }
+
+/* dropdown multi select */
+
+.selected-item {
+  background-color: #0db3bf !important;
+  border: 1px solid #fff !important;
+}
+
+.multiselect-item-checkbox input[type=checkbox] + div:before {
+  border-color: #0db3bf !important;
+}
+
+.multiselect-item-checkbox input[type=checkbox]:checked + div:before {
+  background-color: #0db3bf !important;
+}
+
+.multiselect-dropdown .dropdown-btn {
+  color: #fff; font-weight: 600!important;
+  border: 1px solid #ced4da !important;
+}
+
