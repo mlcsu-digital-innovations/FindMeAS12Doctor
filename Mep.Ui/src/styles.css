@@ -313,3 +313,12 @@ label {
   bottom: 0;
 }
 
+.btn-cancel {
+  color: #666;
+  border: 1px solid #666;
+}
+
+.btn-cancel:hover {
+  background-color: #dadada;
+}
+

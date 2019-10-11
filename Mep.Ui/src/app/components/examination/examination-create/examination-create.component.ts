@@ -5,7 +5,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
@@ -30,6 +30,8 @@ export class ExaminationCreateComponent implements OnInit {
   addresses$: Observable<any>;
   addressList: AddressResult[];
   cancelModal: NgbModalRef;
+  defaultCompletionDate: NgbDateStruct;
+  defaultCompletionTime: NgbTimeStruct;
   dropdownSettings: IDropdownSettings;
   examinationDetails: NameIdList[] = [];
   examinationForm: FormGroup;
@@ -42,6 +44,7 @@ export class ExaminationCreateComponent implements OnInit {
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
   referral$: Observable<Referral | any>;
+  referralCreated: Date;
   selectedDetails: NameIdList[] = [];
   specialities: NameIdList[];
 
@@ -80,8 +83,13 @@ export class ExaminationCreateComponent implements OnInit {
               map(referral => {
                 this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
                 this.minDate = referral.referralCreatedAtAsDatePicker;
+                this.referralCreated =
+                  this.CreateDateFromPickerObjects(referral.referralCreatedAtAsDatePicker, referral.referralCreatedAtAsTimePicker);
                 this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
                 this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
+
+                this.defaultCompletionDate = referral.defaultToBeCompletedByDate;
+                this.defaultCompletionTime = referral.defaultToBeCompletedByTime;
 
                 return referral;
               })
@@ -228,6 +236,18 @@ export class ExaminationCreateComponent implements OnInit {
     }
   }
 
+  CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
+    return new Date(
+      datePart.year,
+      datePart.month - 1,
+      datePart.day,
+      timePart.hour,
+      timePart.minute,
+      timePart.second,
+      0
+    );
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
   }
@@ -256,12 +276,28 @@ export class ExaminationCreateComponent implements OnInit {
     return this.examinationForm.controls.examinationPostcode;
   }
 
+  get plannedExaminationField() {
+    return this.examinationForm.controls.plannedExamination;
+  }
+
   get toBeCompletedByDateField() {
     return this.examinationForm.controls.toBeCompletedByDate;
   }
 
   get toBeCompletedByTimeField() {
     return this.examinationForm.controls.toBeCompletedByTime;
+  }
+
+  get scheduledDateField() {
+    return this.examinationForm.controls.scheduledDate;
+  }
+
+  get scheduledTimeField() {
+    return this.examinationForm.controls.scheduledTime;
+  }
+
+  HasValidAddress(): boolean {
+    return this.examinationAddressField.value !== '';
   }
 
   HasValidAmhp(): boolean {
@@ -273,6 +309,21 @@ export class ExaminationCreateComponent implements OnInit {
       this.examinationPostcodeField.value !== '' &&
       this.examinationPostcodeField.errors == null
     );
+  }
+
+  IsExaminationBeforeReferralCreationDate(dateField: AbstractControl, timeField: AbstractControl ): boolean {
+
+    const examinationDateIsBeforeReferralCreatedAt =
+      (this.CreateDateFromPickerObjects(dateField.value, timeField.value)) < this.referralCreated;
+
+
+    if (examinationDateIsBeforeReferralCreatedAt) {
+      dateField.setErrors({InvalidExaminationDate: true});
+    } else {
+      dateField.setErrors({InvalidExaminationDate: false});
+    }
+
+    return examinationDateIsBeforeReferralCreatedAt;
   }
 
   HasInvalidPostcode(): boolean {
@@ -309,8 +360,6 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   SaveExamination() {
-    console.log('saving examination ...');
-
     let canContinue = true;
 
     // check AMHP
@@ -320,14 +369,36 @@ export class ExaminationCreateComponent implements OnInit {
     }
 
     // check postcode
+    if (!this.HasValidPostcode()) {
+      this.examinationPostcodeField.setErrors({ MissingPostcode: true });
+      canContinue = false;
+    }
 
     // check address
+    if (!this.HasValidAddress()) {
+      this.examinationAddressField.setErrors({ InvalidAddress: true });
+      canContinue = false;
+    }
 
-    // check date time(s)
+
+    if (this.plannedExaminationField.value === true ) {
+      // check the scheduled examination date
+      canContinue =
+        this.IsExaminationBeforeReferralCreationDate(
+          this.scheduledDateField,
+          this.scheduledTimeField
+        ) ? false : canContinue;
+
+    } else {
+      // check the to be completed by date
+      canContinue =
+        this.IsExaminationBeforeReferralCreationDate(
+          this.toBeCompletedByDateField,
+          this.toBeCompletedByTimeField
+        ) ? false : canContinue;
+    }
 
     console.log('can continue = ' + canContinue);
-    console.log(this.amhpField.errors);
-
   }
 
   SetAmhpField(id: number | null, text: string | null) {
@@ -356,8 +427,14 @@ export class ExaminationCreateComponent implements OnInit {
         second: 0
       };
 
-      this.examinationForm.controls.scheduledDate.setValue(scheduledDate);
-      this.examinationForm.controls.scheduledTime.setValue(scheduledTime);
+      this.scheduledDateField.setValue(scheduledDate);
+      this.scheduledTimeField.setValue(scheduledTime);
+      this.scheduledDateField.setErrors(null);
+
+    } else {
+      this.toBeCompletedByDateField.setValue(this.defaultCompletionDate);
+      this.toBeCompletedByTimeField.setValue(this.defaultCompletionTime);
+      this.toBeCompletedByDateField.setErrors(null);
     }
   }
 
