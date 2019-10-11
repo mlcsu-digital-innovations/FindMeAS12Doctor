@@ -6,6 +6,7 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase
   {
+    #region CONSTANTS
     protected const int BANK_DETAILS_ACCOUNT_NUMBER = 10000000;
     protected const string BANK_DETAILS_BANK_NAME = "Bank Name 1";
     protected const string BANK_DETAILS_NAME_ON_ACCOUNT = "Name on Account 1";
@@ -27,9 +28,15 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
-    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME = "Dangerous Animal";
+    protected const string EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_NAME = "Agressive neighbour";
+    protected const string EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_DESCRIPTION =
+      "There is an agressive neighbour at the location";
+    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME = "Dangerous animal";
     protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_DESCRIPTION =
       "A dangerous animal has been reported to be present on the premises";
+    protected const string EXAMINATION_TYPE_DIFFICULT_PARKING_NAME = "Parking is difficult";
+    protected const string EXAMINATION_TYPE_DIFFICULT_PARKING_DESCRIPTION =
+      "Parking is difficult at the location";      
     protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female";
     protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male";
     protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
@@ -107,10 +114,15 @@ namespace Mep.Business.Migrations.Seeds
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
     protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
-
+#endregion
+   
     protected DateTimeOffset _now = DateTimeOffset.Now;
     protected readonly ApplicationContext _context;
 
+    public SeederBase(ApplicationContext context)
+    {
+      _context = context;
+    }
     protected int GetCcgIdByName(string CcgName)
     {
       try
@@ -456,9 +468,21 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    public SeederBase(ApplicationContext context)
+    protected void PopulateActiveAndModifiedWithSystemUser(BaseEntity entity)
     {
-      _context = context;
+      entity.IsActive = true;
+      entity.ModifiedAt = _now;
+      entity.ModifiedByUser = GetSystemAdminUser();
     }
+
+    protected void PopulateNameDescriptionActiveAndModifiedWithSystemUser(
+      NameDescription entity,
+      string name,
+      string description)
+      {
+        entity.Name = name;
+        entity.Description = description;
+        PopulateActiveAndModifiedWithSystemUser(entity);
+      }
   }
 }
