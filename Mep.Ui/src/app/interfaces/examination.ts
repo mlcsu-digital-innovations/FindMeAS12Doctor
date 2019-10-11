@@ -4,6 +4,8 @@ export interface Examination {
   address3?: string;
   address4?: string;
   amhpId: number;
+  examinationDetails: number[];
+  id: number;
   isPlanned: boolean;
   meetingArrangementComment?: string;
   mustBeCompletedBy?: Date;

@@ -380,6 +380,8 @@
     </div>
   </div>
 
+  <app-delay-spinner *ngIf="isCreatingExamination" [delayMessage]="'Creating Examination'"></app-delay-spinner>
+
   <ng-template #loading>
     <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
   </ng-template>

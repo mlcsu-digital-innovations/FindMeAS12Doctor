@@ -5,13 +5,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { Examination } from 'src/app/interfaces/examination';
+import { ExaminationService } from 'src/app/services/examination/examination.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
+import { Observable, of, empty, throwError } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
@@ -35,16 +37,19 @@ export class ExaminationCreateComponent implements OnInit {
   dropdownSettings: IDropdownSettings;
   examinationDetails: NameIdList[] = [];
   examinationForm: FormGroup;
+  examinationId: number;
   examinationPostcodeValidationMessage: string;
   examinationShouldBeCompletedByDate: NgbDateStruct;
   examinationShouldBeCompletedByTime: NgbTimeStruct;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
+  isCreatingExamination: boolean;
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
+  referralId: number;
   selectedDetails: NameIdList[] = [];
   specialities: NameIdList[];
 
@@ -52,6 +57,7 @@ export class ExaminationCreateComponent implements OnInit {
 
   constructor(
     private amhpListService: AmhpListService,
+    private examinationService: ExaminationService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
@@ -87,6 +93,7 @@ export class ExaminationCreateComponent implements OnInit {
                   this.CreateDateFromPickerObjects(referral.referralCreatedAtAsDatePicker, referral.referralCreatedAtAsTimePicker);
                 this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
                 this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
+                this.referralId = +params.get('referralId');
 
                 this.defaultCompletionDate = referral.defaultToBeCompletedByDate;
                 this.defaultCompletionTime = referral.defaultToBeCompletedByTime;
@@ -242,6 +249,24 @@ export class ExaminationCreateComponent implements OnInit {
     );
   }
 
+  FormatAddress(): string[] {
+
+    const addressLines: string[] = [];
+    const addressSplitByCommas = this.examinationAddressField.value.split(',');
+
+    // can only store 4 lines of the address
+    for (let i = 0; i < 4; i++) {
+      if (addressSplitByCommas.length >= i &&
+          addressSplitByCommas[i].trim() !== this.examinationPostcodeField.value) {
+            addressLines.push(addressSplitByCommas[i].trim());
+      } else {
+        addressLines.push(null);
+      }
+    }
+
+    return addressLines;
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
   }
@@ -274,6 +299,10 @@ export class ExaminationCreateComponent implements OnInit {
     return this.examinationForm.controls.plannedExamination;
   }
 
+  get preferredDoctorGenderField() {
+    return this.examinationForm.controls.preferredGender;
+  }
+
   get toBeCompletedByDateField() {
     return this.examinationForm.controls.toBeCompletedByDate;
   }
@@ -288,6 +317,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   get scheduledTimeField() {
     return this.examinationForm.controls.scheduledTime;
+  }
+
+  get specialityField() {
+    return this.examinationForm.controls.speciality;
   }
 
   HasValidAddress(): boolean {
@@ -349,6 +382,28 @@ export class ExaminationCreateComponent implements OnInit {
     this.selectedDetails.push(item);
   }
 
+  PostExamination(examination: Examination) {
+    this.isCreatingExamination = true;
+    this.examinationService.createExamination(examination).subscribe(
+      (result: Examination) => {
+        this.toastService.displaySuccess({
+          message: 'Examination Created'
+        });
+        this.isCreatingExamination = false;
+        // navigate to the create examination page
+        this.router.navigate([`/examination/new/${result.id}`]);
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to create new examination ! Please try again in a few moments'
+        });
+        this.isCreatingExamination = false;
+        return throwError(error);
+      }
+    );
+  }
+
   RoundToNearestFiveMinutes(minute: number): number {
     return Math.ceil(minute / 5) * 5;
   }
@@ -374,7 +429,6 @@ export class ExaminationCreateComponent implements OnInit {
       canContinue = false;
     }
 
-
     if (this.plannedExaminationField.value === true ) {
       // check the scheduled examination date
       canContinue =
@@ -392,7 +446,44 @@ export class ExaminationCreateComponent implements OnInit {
         ) ? false : canContinue;
     }
 
-    console.log('can continue = ' + canContinue);
+    if (!canContinue) {
+      return;
+    }
+
+    // create an examination object
+    const examination = {} as Examination;
+
+    examination.amhpId = this.amhpUser.id;
+    examination.postcode = this.examinationPostcodeField.value;
+    examination.isPlanned = this.plannedExaminationField.value;
+    examination.meetingArrangementComment = this.additionalDetailsField.value;
+    examination.referralId = this.referralId;
+    examination.preferredDoctorGenderTypeId = this.preferredDoctorGenderField.value;
+    examination.specialityId = this.specialityField.value;
+
+    examination.mustBeCompletedBy =
+      this.plannedExaminationField.value ?
+        null :
+        this.CreateDateFromPickerObjects(this.toBeCompletedByDateField.value, this.toBeCompletedByTimeField.value);
+
+    examination.scheduledTime =
+      this.plannedExaminationField.value ?
+        this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value) :
+        null;
+
+    const addressLines: string[] = this.FormatAddress();
+    examination.address1 = addressLines[0];
+    examination.address2 = addressLines[1];
+    examination.address3 = addressLines[2];
+    examination.address4 = addressLines[3];
+
+    examination.examinationDetails = [];
+
+    this.selectedDetails.forEach(detail => {
+      examination.examinationDetails.push(detail.id);
+    });
+
+    this.PostExamination(examination);
   }
 
   SetAmhpField(id: number | null, text: string | null) {
