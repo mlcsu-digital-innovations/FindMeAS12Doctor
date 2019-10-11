@@ -141,20 +141,15 @@ namespace Mep.Business.Migrations.Seeds
 
     protected int GetContactDetailTypeIdByContactDetailTypeName(string ContactDetailTypeName)
     {
-      return GetGpPracticeByName(GpPracticeName).Id;
-    }
-
-    protected GpPractice GetGpPracticeByName(string GpPracticeName)
-    {
       try
       {
-
-        return _context.GpPractices.Single(gpPractice => gpPractice.Name == GpPracticeName);
+        return _context
+          .ContactDetailTypes
+            .Single(contactDetailType => contactDetailType.Name == ContactDetailTypeName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
-          $"Cannot find a Contact Detail Type with the name of {ContactDetailTypeName} in ContactDetailTypes", ex);
+        throw new Exception($"Cannot find a Contact Detail Type with the name of {ContactDetailTypeName} in ContactDetailTypes", ex);
       }
     }
 
@@ -200,20 +195,22 @@ namespace Mep.Business.Migrations.Seeds
         throw new Exception("Cannot find CCG", ex);
       }
     }
-
-    protected int GetGpPracticeIdByName(string GpPracticeName)
+    protected GpPractice GetGpPracticeByName(string gpPracticeName)
     {
       try
       {
-        return _context
-          .GpPractices
-            .Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+
+        return _context.GpPractices.Single(gpPractice => gpPractice.Name == gpPracticeName);
       }
       catch (Exception ex)
       {
         throw new Exception(
-          $"Cannot find a GP Practice with the name {GpPracticeName} in GpPractices", ex);
+          $"Cannot find a GP Practice with the name {gpPracticeName} in GpPractices", ex);
       }
+    }
+    protected int GetGpPracticeIdByName(string gpPracticeName)
+    {
+      return GetGpPracticeByName(gpPracticeName).Id;
     }
 
     protected int GetMaleGenderTypeId()
@@ -298,7 +295,7 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception(
-          $"Cannot find a Patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
+          $"Cannot find a Patient with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
       }
     }
 
@@ -313,7 +310,7 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception(
-          $"Cannot find a Patinet with an NHS Number of {nhsNumber} in Patients", ex);
+          $"Cannot find a Patient with an NHS Number of {nhsNumber} in Patients", ex);
       }
     }
 
@@ -403,7 +400,7 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception(
-          $"Cannot find a Referral Status with the name {REFERRAL_STATUS_NEW_REFERRAL} in ReferralStatuses", ex);
+          $"Cannot find a Referral Status with the name {REFERRAL_STATUS_NAME_NEW_REFERRAL} in ReferralStatuses", ex);
       }
     }
 
