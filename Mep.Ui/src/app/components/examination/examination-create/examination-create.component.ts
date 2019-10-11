@@ -135,23 +135,17 @@ export class ExaminationCreateComponent implements OnInit {
           });
         });
 
-    // dummy data - replace with service call once api updated
-    this.examinationDetails.push({ id: 1, name: 'Big dog in garden' });
-    this.examinationDetails.push({ id: 2, name: 'Parking is difficult' });
-    this.examinationDetails.push({ id: 3, name: 'Aggressive neighbour' });
-
     // get the list of risks for the dropdown
-    // this.nameIdListService.GetListData('examinationDetail')
-    //   .subscribe(details => {
-    //     this.examinationDetails = details;
-    //     console.log(this.examinationDetails);
-    //   },
-    //   (err) => {
-    //     this.toastService.displayError({
-    //       title: 'Error',
-    //       message: 'Error Retrieving Examination Risks'
-    //   });
-    // });
+    this.nameIdListService.GetListData('examinationdetailtype')
+      .subscribe(details => {
+        this.examinationDetails = details;
+      },
+      (err) => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error Retrieving Examination Risks'
+      });
+    });
 
     this.examinationForm = this.formBuilder.group({
       plannedExamination: false,
