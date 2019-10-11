@@ -132,6 +132,12 @@ namespace Mep.Business
           contextDetail.UserId
       });
 
+      modelBuilder.Entity<ExaminationDetail>()
+        .HasAlternateKey(examinationDetail => new {
+          examinationDetail.ExaminationDetailTypeId,
+          examinationDetail.ExaminationId,
+        });
+
       modelBuilder.Entity<PaymentMethod>()
         .HasAlternateKey(paymentMethod => new {
           paymentMethod.CcgId,
@@ -144,32 +150,7 @@ namespace Mep.Business
           userExaminationNotification.ExaminationId,
           userExaminationNotification.UserId
         });
-
-      modelBuilder.Entity<BankDetailAudit>()
-        .HasAlternateKey(bankDetailAudit => new { 
-          bankDetailAudit.CcgId, 
-          bankDetailAudit.UserId 
-      });
-
-      modelBuilder.Entity<ContactDetailAudit>()
-        .HasAlternateKey(contextDetailAudit => new {
-          contextDetailAudit.CcgId, 
-          contextDetailAudit.ContactDetailTypeId, 
-          contextDetailAudit.UserId
-      });
-
-      modelBuilder.Entity<PaymentMethodAudit>()
-        .HasAlternateKey(paymentMethodAudit => new {
-          paymentMethodAudit.CcgId,
-          paymentMethodAudit.PaymentMethodTypeId,
-          paymentMethodAudit.UserId
-      });
-
-      modelBuilder.Entity<UserExaminationNotificationAudit>()
-        .HasAlternateKey(userExaminationNotificationAudit => new {
-          userExaminationNotificationAudit.ExaminationId,
-          userExaminationNotificationAudit.UserId
-        });        
+     
     }
   }
 }
