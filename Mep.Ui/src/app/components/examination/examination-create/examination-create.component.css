@@ -20,3 +20,8 @@ form {
 .additional-details {
   resize: none;
 }
+
+.checkmark-content {
+  bottom: 8px;
+}
+
