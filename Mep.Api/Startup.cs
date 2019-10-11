@@ -70,6 +70,7 @@ namespace Mep.Api
       services.AddScoped<IModelService<Ccg>, CcgService>();
       services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
       services.AddScoped<IModelService<Examination>, ExaminationService>();
+      services.AddScoped<IModelService<ExaminationDetailType>, ExaminationDetailTypeService>();
       services.AddScoped<IModelService<GenderType>, GenderTypeService>();
       services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
       services.AddScoped<IModelSearchService<Patient, Business.Models.SearchModels.PatientSearch>, PatientService>();
@@ -77,6 +78,7 @@ namespace Mep.Api
       services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
       services.AddScoped<IModelService<User>, UserService>();
+
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
       services.AddScoped<IModelGeneralSearchService<User>, AmhpUserSearchService>();
@@ -106,10 +108,9 @@ namespace Mep.Api
       else
       {
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();
-        app.UseExceptionHandler("/Error");
+        app.UseHsts();        
       }      
-
+      app.UseExceptionHandler("/Error");
       app.UseSerilogRequestLogging();
       app.UseHttpsRedirection();
       app.UseRouting();

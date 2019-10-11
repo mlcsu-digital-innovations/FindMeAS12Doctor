@@ -12,6 +12,10 @@ namespace Mep.Business.Migrations.Seeds
       new SystemAdminUserSeeder(_context).SeedData();
       _context.SaveChanges();
 
+      // create all CCGs
+      new CcgSeeder(_context).SeedData();
+      _context.SaveChanges();
+
       // create all GP Practices
       new GpPracticeSeeder(_context).SeedData();
       _context.SaveChanges();
@@ -27,6 +31,9 @@ namespace Mep.Business.Migrations.Seeds
     {
       new SystemAdminUserSeeder(_context).SeedData();
       _context.SaveChanges();
+
+      new ExaminationDetailTypeSeeder(_context).SeedData();
+      _context.SaveChanges();      
 
       // create all CCGs
       new CcgSeeder(_context).SeedData();
@@ -62,6 +69,9 @@ namespace Mep.Business.Migrations.Seeds
     // run test seeders
     public void TestSeedAll()
     {
+      new ExaminationDetailTypeSeeder(_context).SeedData();
+      _context.SaveChanges();    
+    
       new OrganisationSeeder(_context).SeedData();
       _context.SaveChanges();
 

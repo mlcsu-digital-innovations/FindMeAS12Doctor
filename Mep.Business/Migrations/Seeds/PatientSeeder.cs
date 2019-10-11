@@ -25,9 +25,8 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = null;
-      patient.GpPracticeId =
-        GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
+      patient.CcgId = GetGpPracticeByName(GP_PRACTICE_NAME_1).CcgId;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
@@ -45,9 +44,8 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = null;
-      patient.GpPracticeId =
-        GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
+      patient.CcgId = GetGpPracticeByName(GP_PRACTICE_NAME_2).CcgId;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_2);
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
@@ -65,7 +63,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = null;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_STOKE_ON_TRENT);
       patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
@@ -84,7 +82,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = null;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_STOKE_ON_TRENT);
       patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
@@ -102,9 +100,8 @@ namespace Mep.Business.Migrations.Seeds
         patient = new Patient();
         _context.Add(patient);
       }
-      patient.AlternativeIdentifier =
-        PATIENT_ALTERNATIVE_IDENTIFIER_5;
-      patient.CcgId = GetCcgIdByName(CCG_NAME_1);
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_5;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_STOKE_ON_TRENT);
       patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
@@ -122,9 +119,9 @@ namespace Mep.Business.Migrations.Seeds
         patient = new Patient();
         _context.Add(patient);
       }
-      patient.AlternativeIdentifier =
-        PATIENT_ALTERNATIVE_IDENTIFIER_6;
-      patient.CcgId = GetCcgIdByName(CCG_NAME_2);
+
+      patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_6;
+      patient.CcgId = GetCcgIdByName(CCG_NAME_NORTH_STAFFORDSHIRE);
       patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
