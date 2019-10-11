@@ -67,12 +67,20 @@
                     </div>
               </div>
             </div>
+            **{{amhp.errors}}
             <!-- AMHP User Errors-->
             <div class="form-row" *ngIf="hasAmhpSearchFailed">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isAmhpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
                   Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="amhpField.errors">
+              <div class="col-md-8 mb-2">
+                <div class="invalid-field" *ngIf="amhp.errors.InvalidAmhp">
+                  * AMHP is missing
                 </div>
               </div>
             </div>
@@ -314,19 +322,19 @@
                   Select Doctor
                 </button>
               </div>
-              <div class="col-md-1 offset-md-7">
+              <div class="col-md-2 offset-md-6 text-center">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-primary btn-standard"
                   (click)="CancelExamination()"
                 >
                   Cancel
                 </button>
               </div>
-              <div class="col-md-1">
+              <div class="col-md-2 text-center">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-primary btn-standard"
                   (click)="SaveExamination()"
                 >
                   Save

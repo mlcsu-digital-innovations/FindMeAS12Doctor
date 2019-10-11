@@ -210,7 +210,29 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   SaveExamination() {
-    console.log("saving examination ...")
+    console.log('saving examination ...');
+
+    let canContinue = true;
+
+    // check AMHP
+    if (!this.HasValidAmhp()) {
+      this.amhpField.setErrors({InvalidAmhp: true});
+      canContinue = false;
+    }
+
+    // check postcode
+
+    // check address
+
+    // check date time(s)
+
+    console.log('can continue = ' + canContinue);
+    console.log(this.amhpField.errors);
+
+  }
+
+  HasValidAmhp(): boolean {
+      return this.amhpUser.id !== undefined;
   }
 
   CancelExamination() {
@@ -256,10 +278,6 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   get toBeCompletedByDateField() {
-
-    // console.log(this.examinationForm.controls.toBeCompletedByDate.errors);
-
-
     return this.examinationForm.controls.toBeCompletedByDate;
   }
 
@@ -269,6 +287,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   get additionalDetailsField() {
     return this.examinationForm.controls.additionalDetails;
+  }
+
+  get amhpUser(): TypeAheadResult {
+    return this.examinationForm.controls.amhp.value;
   }
 
   get amhpField() {

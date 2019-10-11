@@ -25,3 +25,7 @@ form {
   bottom: 8px;
 }
 
+.btn-standard {
+  min-width: 100px;
+}
+
