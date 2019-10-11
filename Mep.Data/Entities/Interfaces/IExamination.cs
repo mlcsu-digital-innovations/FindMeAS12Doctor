@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Mep.Data.Entities
 {
@@ -19,6 +18,7 @@ namespace Mep.Data.Entities
     DateTimeOffset? MustBeCompletedBy { get; set; }
     int? NonPaymentLocationId { get; set; }
     string Postcode { get; set; }
+    int? PreferredDoctorGenderTypeId { get; set; }    
     int ReferralId { get; set; }
     DateTimeOffset? ScheduledTime { get; set; }
     int SpecialityId { get; set; }
