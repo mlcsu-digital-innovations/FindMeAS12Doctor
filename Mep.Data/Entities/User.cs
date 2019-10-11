@@ -21,6 +21,7 @@ namespace Mep.Data.Entities
     public virtual IList<Examination> CreatedExaminations { get; set; }
     [MaxLength(256)]
     public string DisplayName { get; set; }    
+    [InverseProperty("User")]
     public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }    
