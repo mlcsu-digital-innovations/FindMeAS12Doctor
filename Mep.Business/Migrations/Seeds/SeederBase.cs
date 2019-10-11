@@ -11,8 +11,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string BANK_DETAILS_NAME_ON_ACCOUNT = "Name on Account 1";
     protected const int BANK_DETAILS_SORT_CODE = 100000;
     protected const int BANK_DETAILS_VRS_NUMBER = 1000000000;
-    protected const string CCG_NAME_1 = "NHS Stoke on Trent CCG";
-    protected const string CCG_NAME_2 = "NHS North Staffordshire CCG";
+    protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
+    protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
     protected const string CCG_NAME_UNKNOWN = "Unknown";
     protected const string CLAIM_STATUS_ACCEPTED_NAME = "Accepted";
     protected const string CLAIM_STATUS_ACCEPTED_DESCRIPTION = "Accepted";
@@ -27,6 +27,9 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
+    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME = "Dangerous Animal";
+    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_DESCRIPTION =
+      "A dangerous animal has been reported to be present on the premises";
     protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female";
     protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male";
     protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
@@ -34,7 +37,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_NAME_MALE = "Male";
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
-    protected const string GP_PRACTICE_NAME_2 = "STAFFORDSHIRE DOCTORS URGENT CARE OOH";
+    protected const string GP_PRACTICE_NAME_2 = "STAFFORD MEDICAL CENTRE";
     protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const decimal LATITUDE = 0.000000m;
     protected const decimal LONGITUDE = 0.000000m;
@@ -160,9 +163,10 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
+        throw new Exception(
+          $"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
       }
-    }
+    }    
 
     protected int GetFemaleGenderTypeId()
     {
@@ -191,19 +195,22 @@ namespace Mep.Business.Migrations.Seeds
         throw new Exception("Cannot find CCG", ex);
       }
     }
-
-    protected int GetGpPracticeIdByName(string GpPracticeName)
+    protected GpPractice GetGpPracticeByName(string gpPracticeName)
     {
       try
       {
-        return _context
-          .GpPractices
-            .Single(gpPractice => gpPractice.Name == GpPracticeName).Id;
+
+        return _context.GpPractices.Single(gpPractice => gpPractice.Name == gpPracticeName);
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a GP Practice with the name {GpPracticeName} in GpPractices", ex);
+        throw new Exception(
+          $"Cannot find a GP Practice with the name {gpPracticeName} in GpPractices", ex);
       }
+    }
+    protected int GetGpPracticeIdByName(string gpPracticeName)
+    {
+      return GetGpPracticeByName(gpPracticeName).Id;
     }
 
     protected int GetMaleGenderTypeId()
@@ -230,7 +237,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find Non Payment Location Type with the name of {nonPaymentLocationTypeName} in NonPaymentLocationTypes", ex);
+        throw new Exception(
+          $"Cannot find Non Payment Location Type with the name of {nonPaymentLocationTypeName} in NonPaymentLocationTypes", ex);
       }
     }
 
@@ -286,7 +294,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a Patinet with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
+        throw new Exception(
+          $"Cannot find a Patient with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
       }
     }
 
@@ -300,7 +309,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a Patinet with an NHS Number of {nhsNumber} in Patients", ex);
+        throw new Exception(
+          $"Cannot find a Patient with an NHS Number of {nhsNumber} in Patients", ex);
       }
     }
 
@@ -314,7 +324,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find Payment Method Type with the name of {paymentMethodTypeName} in PaymentMethodTypes", ex);
+        throw new Exception(
+          $"Cannot find Payment Method Type with the name of {paymentMethodTypeName} in PaymentMethodTypes", ex);
       }
     }
 
@@ -328,7 +339,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find Payment Rule Set with the name of {paymentRuleSetName} in PaymentRuleSets", ex);
+        throw new Exception(
+          $"Cannot find Payment Rule Set with the name of {paymentRuleSetName} in PaymentRuleSets", ex);
       }
     }
 
@@ -342,7 +354,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find a Profile Type with the name {profileTypeName} in ProfileTypes", ex);
+        throw new Exception(
+          $"Cannot find a Profile Type with the name {profileTypeName} in ProfileTypes", ex);
       }
     }
 
@@ -356,7 +369,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a referral that has a Patient with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
+        throw new Exception(
+          $"Cannot find a referral that has a Patient with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
       }
     }
 
@@ -370,7 +384,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a Referral that has a Patient with an NHS Number of {nhsNumber} in Referrals", ex);
+        throw new Exception(
+          $"Cannot find a Referral that has a Patient with an NHS Number of {nhsNumber} in Referrals", ex);
       }
     }
 
@@ -384,7 +399,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find a Referral Status with the name {REFERRAL_STATUS_NEW_REFERRAL} in ReferralStatuses", ex);
+        throw new Exception(
+          $"Cannot find a Referral Status with the name {REFERRAL_STATUS_NAME_NEW_REFERRAL} in ReferralStatuses", ex);
       }
     }
 
@@ -398,7 +414,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find Section 12 Approval Status with the name of {section12ApprovalStatusName} in Section12ApprovalStatuses", ex);
+        throw new Exception(
+          $"Cannot find Section 12 Approval Status with the name of {section12ApprovalStatusName} in Section12ApprovalStatuses", ex);
       }
     }
 
@@ -412,7 +429,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find a Speciality with the name {SPECIALITY_SECTION_12} in Speciality", ex);
+        throw new Exception(
+          $"Cannot find a Speciality with the name {SPECIALITY_SECTION_12} in Speciality", ex);
       }
     }
 
@@ -433,7 +451,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a user with the Display Name {displayName} in Users", ex);
+        throw new Exception(
+          $"Cannot find a user with the Display Name {displayName} in Users", ex);
       }
     }
 
