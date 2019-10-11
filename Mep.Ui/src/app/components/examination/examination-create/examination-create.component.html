@@ -44,7 +44,7 @@
                   #amhp
                   [class.is-invalid]="hasAmhpSearchFailed"
                   formControlName="amhp"
-                  [ngbTypeahead]="amhpSearch"
+                  [ngbTypeahead]="AmhpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults" />
               </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="form-row" *ngIf="amhpField.errors">
               <div class="col-md-8 mb-2">
-                <div class="invalid-field" *ngIf="amhp.errors.InvalidAmhp">
+                <div class="invalid-field" *ngIf="amhpField.errors.InvalidAmhp">
                   * AMHP is missing
                 </div>
               </div>
@@ -227,8 +227,8 @@
                       formControlName="examinationDetails"
                       [settings]="dropdownSettings"
                       [data]="examinationDetails"
-                      (onSelect)="onItemSelect($event)"
-                      (onDeSelect)="onItemDeselect($event)"
+                      (onSelect)="OnItemSelect($event)"
+                      (onDeSelect)="OnItemDeselect($event)"
                     >
                     </ng-multiselect-dropdown>
                   </div>
@@ -238,10 +238,10 @@
               <div class="col-md-4 mb-2">
                 <label for="speciality">Speciality</label>
                 <select
-                class="custom-select custom-select-lg mb-2 form-control"
-                formControlName="speciality"
-                #speciality
-                id="speciality"
+                  class="custom-select custom-select-lg mb-2 form-control"
+                  formControlName="speciality"
+                  #speciality
+                  id="speciality"
                 >
                 <option [selected]=true></option>
                 <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
@@ -253,10 +253,10 @@
               <div class="col-md-4 mb-2">
                 <label for="preferredGender">Preferred Doctor Gender</label>
                 <select
-                class="custom-select custom-select-lg mb-2 form-control"
-                formControlName="preferredGender"
-                #preferredGender
-                id="preferredGender"
+                  class="custom-select custom-select-lg mb-2 form-control"
+                  formControlName="preferredGender"
+                  #preferredGender
+                  id="preferredGender"
                 >
                 <option [selected]=true></option>
                 <option *ngFor="let gender of genderTypes; let i=index" [value]="genderTypes[i].id">
@@ -357,7 +357,7 @@
     <app-cancel-action-modal
       [modalTitle]="'Cancel Examination'"
       [modalBody]="'Do you wish to cancel this examination ? All changes will be lost.'"
-      (actioned)="onCancelModalAction($event)"
+      (actioned)="OnCancelModalAction($event)"
     >
     </app-cancel-action-modal>
   </ng-template>

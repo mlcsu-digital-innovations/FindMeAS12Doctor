@@ -57,7 +57,7 @@ export class ExaminationCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {
 
@@ -76,16 +76,16 @@ export class ExaminationCreateComponent implements OnInit {
       switchMap(
         (params: ParamMap) => {
           return this.referralService.getReferral(+params.get('referralId'))
-          .pipe(
-            map(referral => {
-              this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
-              this.minDate = referral.referralCreatedAtAsDatePicker;
-              this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
-              this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
+            .pipe(
+              map(referral => {
+                this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
+                this.minDate = referral.referralCreatedAtAsDatePicker;
+                this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
+                this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
 
-              return referral;
-            })
-          );
+                return referral;
+              })
+            );
         }
       ),
       catchError((err) => {
@@ -108,29 +108,29 @@ export class ExaminationCreateComponent implements OnInit {
       .subscribe(specialities => {
         this.specialities = specialities;
       },
-      (err) => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Error Retrieving Speciality Data'
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving Speciality Data'
+          });
         });
-      });
 
     // get the list of genders for the dropdown
     this.nameIdListService.GetListData('gendertype')
       .subscribe(genders => {
         this.genderTypes = genders;
       },
-      (err) => {
-      this.toastService.displayError({
-        title: 'Error',
-        message: 'Error Retrieving Gender Data'
-      });
-    });
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving Gender Data'
+          });
+        });
 
     // dummy data - replace with service call once api updated
-    this.examinationDetails.push({id: 1, name: 'Big dog in garden'});
-    this.examinationDetails.push({id: 2, name: 'Parking is difficult'});
-    this.examinationDetails.push({id: 3, name: 'Aggressive neighbour'});
+    this.examinationDetails.push({ id: 1, name: 'Big dog in garden' });
+    this.examinationDetails.push({ id: 2, name: 'Parking is difficult' });
+    this.examinationDetails.push({ id: 3, name: 'Aggressive neighbour' });
 
     // get the list of risks for the dropdown
     // this.nameIdListService.GetListData('examinationDetail')
@@ -177,63 +177,45 @@ export class ExaminationCreateComponent implements OnInit {
     });
   }
 
-  TogglePlannedExamination(event: any) {
+  AddressSearch(): void {
+    this.addressList = [];
+    this.examinationAddressField.setValue('');
+    this.isSearchingForPostcode = true;
 
-    if (this.examinationForm.controls.plannedExamination.value === true) {
-      // planned examination
-      const now = new Date();
-      const scheduledDate = {
-        year: now.getFullYear(),
-        month: now.getMonth() + 1,
-        day: now.getDate() + 1
-      };
-
-      const scheduledTime = {
-        hour: 12,
-        minute: 0,
-        second: 0
-      };
-
-      this.examinationForm.controls.scheduledDate.setValue(scheduledDate);
-      this.examinationForm.controls.scheduledTime.setValue(scheduledTime);
-    }
-
+    this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
+      .subscribe(address => {
+        this.addressList.push(address);
+      }, (err) => {
+        this.isSearchingForPostcode = false;
+        this.toastService.displayError({
+          title: 'Search Error',
+          message: 'Error Retrieving Address Information'
+        });
+      }, () => {
+        this.isSearchingForPostcode = false;
+        // show an error if no matching addresses are returned
+        if (this.addressList.length === 0) {
+          this.examinationPostcodeField.setErrors({ NoResultsReturned: true });
+        }
+      });
   }
 
-  onItemSelect(item: NameIdList) {
-    this.selectedDetails.push(item);
-  }
-
-  onItemDeselect(item: any) {
-    this.selectedDetails =
-      this.selectedDetails.filter(obj => obj.id !== item.id);
-  }
-
-  SaveExamination() {
-    console.log('saving examination ...');
-
-    let canContinue = true;
-
-    // check AMHP
-    if (!this.HasValidAmhp()) {
-      this.amhpField.setErrors({InvalidAmhp: true});
-      canContinue = false;
-    }
-
-    // check postcode
-
-    // check address
-
-    // check date time(s)
-
-    console.log('can continue = ' + canContinue);
-    console.log(this.amhpField.errors);
-
-  }
-
-  HasValidAmhp(): boolean {
-      return this.amhpUser.id !== undefined;
-  }
+  AmhpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isAmhpSearching = true)),
+      switchMap(term =>
+        this.amhpListService.GetAmhpList(term).pipe(
+          tap(() => (this.hasAmhpSearchFailed = false)),
+          catchError(() => {
+            this.hasAmhpSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isAmhpSearching = false))
+    )
 
   CancelExamination() {
 
@@ -246,17 +228,44 @@ export class ExaminationCreateComponent implements OnInit {
     }
   }
 
-  onCancelModalAction(action: boolean) {
-
-    this.cancelModal.close();
-
-    if (action) {
-      this.router.navigate(['/referral']);
-    }
+  FormatTypeAheadResults(value: any): string {
+    return value.resultText || '';
   }
 
-  RoundToNearestFiveMinutes(minute: number): number {
-    return Math.ceil(minute / 5) * 5;
+  get additionalDetailsField() {
+    return this.examinationForm.controls.additionalDetails;
+  }
+
+  get amhpField() {
+    return this.examinationForm.controls.amhp;
+  }
+
+  get amhpUser(): TypeAheadResult {
+    return this.examinationForm.controls.amhp.value;
+  }
+
+  get examination() {
+    return this.examinationForm.controls;
+  }
+
+  get examinationAddressField() {
+    return this.examinationForm.controls.examinationAddress;
+  }
+
+  get examinationPostcodeField() {
+    return this.examinationForm.controls.examinationPostcode;
+  }
+
+  get toBeCompletedByDateField() {
+    return this.examinationForm.controls.toBeCompletedByDate;
+  }
+
+  get toBeCompletedByTimeField() {
+    return this.examinationForm.controls.toBeCompletedByTime;
+  }
+
+  HasValidAmhp(): boolean {
+    return this.amhpUser.id !== undefined;
   }
 
   HasValidPostcode(): boolean {
@@ -277,36 +286,48 @@ export class ExaminationCreateComponent implements OnInit {
     return this.isSearchingForPostcode;
   }
 
-  get toBeCompletedByDateField() {
-    return this.examinationForm.controls.toBeCompletedByDate;
+  OnCancelModalAction(action: boolean) {
+
+    this.cancelModal.close();
+
+    if (action) {
+      this.router.navigate(['/referral']);
+    }
   }
 
-  get toBeCompletedByTimeField() {
-    return this.examinationForm.controls.toBeCompletedByTime;
+  OnItemDeselect(item: any) {
+    this.selectedDetails =
+      this.selectedDetails.filter(obj => obj.id !== item.id);
   }
 
-  get additionalDetailsField() {
-    return this.examinationForm.controls.additionalDetails;
+  OnItemSelect(item: NameIdList) {
+    this.selectedDetails.push(item);
   }
 
-  get amhpUser(): TypeAheadResult {
-    return this.examinationForm.controls.amhp.value;
+  RoundToNearestFiveMinutes(minute: number): number {
+    return Math.ceil(minute / 5) * 5;
   }
 
-  get amhpField() {
-    return this.examinationForm.controls.amhp;
-  }
+  SaveExamination() {
+    console.log('saving examination ...');
 
-  get examination() {
-    return this.examinationForm.controls;
-  }
+    let canContinue = true;
 
-  get examinationPostcodeField() {
-    return this.examinationForm.controls.examinationPostcode;
-  }
+    // check AMHP
+    if (!this.HasValidAmhp()) {
+      this.amhpField.setErrors({ InvalidAmhp: true });
+      canContinue = false;
+    }
 
-  get examinationAddressField() {
-    return this.examinationForm.controls.examinationAddress;
+    // check postcode
+
+    // check address
+
+    // check date time(s)
+
+    console.log('can continue = ' + canContinue);
+    console.log(this.amhpField.errors);
+
   }
 
   SetAmhpField(id: number | null, text: string | null) {
@@ -318,51 +339,29 @@ export class ExaminationCreateComponent implements OnInit {
     this.amhpField.setValue(amhp);
   }
 
-  FormatTypeAheadResults(value: any): string {
-    return value.resultText || '';
+  TogglePlannedExamination(event: any) {
+
+    if (this.examinationForm.controls.plannedExamination.value === true) {
+      // planned examination
+      const now = new Date();
+      const scheduledDate = {
+        year: now.getFullYear(),
+        month: now.getMonth() + 1,
+        day: now.getDate() + 1
+      };
+
+      const scheduledTime = {
+        hour: 12,
+        minute: 0,
+        second: 0
+      };
+
+      this.examinationForm.controls.scheduledDate.setValue(scheduledDate);
+      this.examinationForm.controls.scheduledTime.setValue(scheduledTime);
+    }
   }
 
-  amhpSearch = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => (this.isAmhpSearching = true)),
-      switchMap(term =>
-        this.amhpListService.GetAmhpList(term).pipe(
-          tap(() => (this.hasAmhpSearchFailed = false)),
-          catchError(() => {
-            this.hasAmhpSearchFailed = true;
-            return of([]);
-          })
-        )
-      ),
-      tap(() => (this.isAmhpSearching = false))
-    )
-
-  AddressSearch(): void {
-    this.addressList = [];
-    this.examinationAddressField.setValue('');
-    this.isSearchingForPostcode = true;
-
-    this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
-      .subscribe(address => {
-        this.addressList.push(address);
-      }, (err) => {
-        this.isSearchingForPostcode = false;
-        this.toastService.displayError({
-          title: 'Search Error',
-          message: 'Error Retrieving Address Information'
-        });
-      }, () => {
-        this.isSearchingForPostcode = false;
-        // show an error if no matching addresses are returned
-        if (this.addressList.length === 0) {
-          this.examinationPostcodeField.setErrors({NoResultsReturned: true});
-        }
-      });
-   }
-
-   OpenLocationTab(): void {
-      window.open(environment.locationEndpoint, '_blank');
-   }
+  OpenLocationTab(): void {
+    window.open(environment.locationEndpoint, '_blank');
+  }
 }
