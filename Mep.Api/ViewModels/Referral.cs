@@ -10,6 +10,7 @@ namespace Mep.Api.ViewModels
     public IDatePicker DefaultToBeCompletedByDate { get; set; }
     public IDatePicker ReferralCreatedAtAsDatePicker { get; set; }
     public ITimePicker DefaultToBeCompletedByTime { get; set; }
+    public ITimePicker ReferralCreatedAtAsTimePicker { get; set; }
     public bool IsPlannedExamination { get; set; }
     public int CreatedByUserId { get; set; }
     public int LeadAmhpUserId { get; set; }

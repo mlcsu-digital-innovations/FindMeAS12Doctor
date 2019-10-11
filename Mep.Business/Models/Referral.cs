@@ -136,6 +136,23 @@ namespace Mep.Business.Models
       }
     }
 
+    public TimePicker ReferralCreatedAtAsTimePicker
+    {
+      get
+      {
+        DateTime workingDate = CreatedAt.UtcDateTime;
+
+        TimePicker referralCreatedAtAsTimePicker = new TimePicker()
+        {
+          hour = workingDate.Hour,
+          minute = workingDate.Minute,
+          second = workingDate.Second
+        };
+
+        return referralCreatedAtAsTimePicker;
+      }
+    }
+
     public DatePicker DefaultToBeCompletedByDate
     {
       get

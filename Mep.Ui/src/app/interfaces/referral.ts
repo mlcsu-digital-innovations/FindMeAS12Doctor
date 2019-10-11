@@ -15,5 +15,6 @@ export interface Referral {
   patient: Patient;
   patientId: number;
   referralCreatedAtAsDatePicker: NgbDateStruct;
+  referralCreatedAtAsTimePicker: NgbTimeStruct;
   referralStatusId: number;
 }
