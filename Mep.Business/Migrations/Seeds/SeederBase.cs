@@ -1,6 +1,8 @@
 using Mep.Data.Entities;
 using System.Linq;
 using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -116,13 +118,14 @@ namespace Mep.Business.Migrations.Seeds
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
 #endregion
    
-    protected DateTimeOffset _now = DateTimeOffset.Now;
-    protected readonly ApplicationContext _context;
+    protected static IConfiguration _config;
+    protected static ApplicationContext _context;    
+    protected DateTimeOffset _now = DateTimeOffset.Now;    
+    private User _systemAdminUser = null;
 
-    public SeederBase(ApplicationContext context)
-    {
-      _context = context;
-    }
+    public SeederBase(){}
+    public SeederBase(ApplicationContext context){}
+
     protected int GetCcgIdByName(string CcgName)
     {
       try
@@ -135,7 +138,7 @@ namespace Mep.Business.Migrations.Seeds
       {
         throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
       }
-    }
+    }  
 
     protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
     {
@@ -207,6 +210,7 @@ namespace Mep.Business.Migrations.Seeds
         throw new Exception("Cannot find CCG", ex);
       }
     }
+
     protected GpPractice GetGpPracticeByName(string gpPracticeName)
     {
       try
@@ -448,9 +452,14 @@ namespace Mep.Business.Migrations.Seeds
 
     protected User GetSystemAdminUser()
     {
-      return _context
-        .Users
-          .SingleOrDefault(u => u.IdentityServerIdentifier == SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
+      if (_systemAdminUser == null)
+      {
+        _systemAdminUser = _context
+          .Users
+          .SingleOrDefault(u => u.IdentityServerIdentifier == 
+                                SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
+      }
+      return _systemAdminUser;
     }
 
     protected int GetUserIdByDisplayname(string displayName)

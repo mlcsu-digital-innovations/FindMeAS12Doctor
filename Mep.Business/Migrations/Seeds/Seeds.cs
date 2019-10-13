@@ -1,77 +1,58 @@
+using System;
+using Microsoft.Extensions.Configuration;
+
 namespace Mep.Business.Migrations.Seeds
 {
   public class Seeds : SeederBase
   {
-    public Seeds(ApplicationContext context)
-        : base(context)
+    public Seeds(ApplicationContext context, IConfiguration config)
     {
+      _config = config;
+      _context = context;
     }
 
-    public void SeedAll()
+    public void SeedAll(bool noGp)
     {
-      new SystemAdminUserSeeder(_context).SeedData();
+      new CcgSeeder().SeedData();
       _context.SaveChanges();
 
-      // create all CCGs
-      new CcgSeeder(_context).SeedData();
-      _context.SaveChanges();
+      if (!noGp)
+      {
+        new GpPracticeSeeder().SeedData();
+        _context.SaveChanges();
+      }
 
-      // create all GP Practices
-      new GpPracticeSeeder(_context).SeedData();
-      _context.SaveChanges();
+      // new ClaimStatusesSeeder(_context).SeedData();
 
-      // run all other seeders from SeedAllNoGp
-      SeedAllNoGp();
+      // new ContactDetailTypesSeeder(_context).SeedData();
 
-      _context.SaveChanges();
+      // new DoctorStatusesSeeder(_context).SeedData();
+
+      // new ExaminationDetailTypeSeeder(_context).SeedData();
+
+      // new GenderTypeSeeder(_context).SeedData();
+
+      // new NonPaymentLocationTypesSeeder(_context).SeedData();
+
+      // new PaymentMethodTypesSeeder(_context).SeedData();
+
+      // new PaymentRuleSetsSeeder(_context).SeedData();
+
+      // new ProfileTypeSeeder(_context).SeedData();
+
+      // new ReferralStatusSeeder(_context).SeedData();
+
+      // new Section12ApprovalStatusesSeeder(_context).SeedData();
+
+      // new SpecialitySeeder(_context).SeedData();
+
+      // new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
+
+      // _context.SaveChanges();
     }
 
-    // all seeders apart from GpPracticeSeeder
-    public void SeedAllNoGp()
+    public void SeedTestAll()
     {
-      new SystemAdminUserSeeder(_context).SeedData();
-      _context.SaveChanges();
-
-      new ExaminationDetailTypeSeeder(_context).SeedData();
-      _context.SaveChanges();      
-
-      // create all CCGs
-      new CcgSeeder(_context).SeedData();
-      _context.SaveChanges();
-
-      new ClaimStatusesSeeder(_context).SeedData();
-
-      new ContactDetailTypesSeeder(_context).SeedData();
-
-      new DoctorStatusesSeeder(_context).SeedData();
-
-      new GenderTypeSeeder(_context).SeedData();
-
-      new NonPaymentLocationTypesSeeder(_context).SeedData();
-
-      new PaymentMethodTypesSeeder(_context).SeedData();
-
-      new PaymentRuleSetsSeeder(_context).SeedData();
-
-      new ProfileTypeSeeder(_context).SeedData();
-
-      new ReferralStatusSeeder(_context).SeedData();
-
-      new Section12ApprovalStatusesSeeder(_context).SeedData();
-
-      new SpecialitySeeder(_context).SeedData();
-
-      new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
-
-      _context.SaveChanges();
-    }
-
-    // run test seeders
-    public void TestSeedAll()
-    {
-      new ExaminationDetailTypeSeeder(_context).SeedData();
-      _context.SaveChanges();    
-    
       new OrganisationSeeder(_context).SeedData();
       _context.SaveChanges();
 
@@ -117,5 +98,6 @@ namespace Mep.Business.Migrations.Seeds
       new UserSpecialitiesSeeder(_context).SeedData();
       _context.SaveChanges();
     }
+
   }
 }

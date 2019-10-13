@@ -18,18 +18,18 @@ namespace Mep.Api
 
         if (args.Length > 0 && args[0] == "/seed")
         {
-          Log.Information("Seeding database");
-          host.SeedData("seed");
+          Log.Information("Seeding database without test data");
+          host.SeedData(WebHostExtenstions.SeedType.All);
         }
         else if (args.Length > 0 && args[0] == "/seednogp")
         {
           Log.Information("Seeding database without GP Data");
-          host.SeedData("seednogp");
+          host.SeedData(WebHostExtenstions.SeedType.AllNoGp);
         }
         else if (args.Length > 0 && args[0] == "/seedtest")
         {
           Log.Information("Seeding database with test data");
-          host.SeedData("seedtest");
+          host.SeedData(WebHostExtenstions.SeedType.Test);
         }
         else
         {

@@ -4,12 +4,14 @@ using Audit.EntityFramework;
 using Mep.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
+// Add this to the initial migration to create the inital system records: InitialSystemUserSeed.Seed(migrationBuilder);
+
 // dotnet ef migrations add <migration-name> --project Mep.Business --startup-project Mep.Api
 // dotnet ef database update --project Mep.Api
 
 namespace Mep.Business
 {
-    public partial class ApplicationContext : AuditDbContext
+  public partial class ApplicationContext : AuditDbContext
   {
     public ApplicationContext()
     {
@@ -18,36 +20,36 @@ namespace Mep.Business
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
       : base(options)
     {
-            //Audit.NET https://github.com/thepirat000/Audit.NET/tree/master/src/Audit.EntityFramework
-            Audit.EntityFramework.Configuration.Setup()
-                .ForContext<ApplicationContext>(config => config
-                    .IncludeEntityObjects()
-                    .AuditEventType("{context}:{database}"))
-                    .UseOptOut();
+      //Audit.NET https://github.com/thepirat000/Audit.NET/tree/master/src/Audit.EntityFramework
+      Audit.EntityFramework.Configuration.Setup()
+          .ForContext<ApplicationContext>(config => config
+              .IncludeEntityObjects()
+              .AuditEventType("{context}:{database}"))
+              .UseOptOut();
 
-            Audit.Core.Configuration.Setup()
-                .UseEntityFramework(x => x
-                    .AuditTypeNameMapper(typeName => typeName + "Audit")
-                    .AuditEntityAction<IBaseAudit>((auditEvent, eventEntry, auditEntity) =>
-                    {
-                        EntityFrameworkEvent efEvent = auditEvent.GetEntityFrameworkEvent();
+      Audit.Core.Configuration.Setup()
+          .UseEntityFramework(x => x
+              .AuditTypeNameMapper(typeName => typeName + "Audit")
+              .AuditEntityAction<IBaseAudit>((auditEvent, eventEntry, auditEntity) =>
+              {
+                EntityFrameworkEvent efEvent = auditEvent.GetEntityFrameworkEvent();
 
-                        auditEntity.AuditAction = eventEntry.Action;
-                        auditEntity.AuditDuration = auditEvent.Duration;
-                        auditEntity.AuditErrorMessage = efEvent.ErrorMessage;
-                        auditEntity.AuditResult = efEvent.Result;
-                        auditEntity.AuditSuccess = efEvent.Success;
+                auditEntity.AuditAction = eventEntry.Action;
+                auditEntity.AuditDuration = auditEvent.Duration;
+                auditEntity.AuditErrorMessage = efEvent.ErrorMessage;
+                auditEntity.AuditResult = efEvent.Result;
+                auditEntity.AuditSuccess = efEvent.Success;
 
-                        return true;
-                    }));         
+                return true;
+              }));
     }
 
     public virtual DbSet<BankDetail> BankDetails { get; set; }
     public virtual DbSet<BankDetailAudit> BankDetailsAudit { get; set; }
     public virtual DbSet<Ccg> Ccgs { get; set; }
     public virtual DbSet<CcgAudit> CcgAudits { get; set; }
-    public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }    
-    public virtual DbSet<ClaimStatusAudit> ClaimStatusAudits { get; set; }    
+    public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }
+    public virtual DbSet<ClaimStatusAudit> ClaimStatusAudits { get; set; }
     public virtual DbSet<ContactDetail> ContactDetails { get; set; }
     public virtual DbSet<ContactDetailAudit> ContactDetailAudits { get; set; }
     public virtual DbSet<ContactDetailType> ContactDetailTypes { get; set; }
@@ -60,7 +62,7 @@ namespace Mep.Business
     public virtual DbSet<ExaminationDetailAudit> ExaminationDetailAudits { get; set; }
     public virtual DbSet<ExaminationDetailType> ExaminationDetailTypes { get; set; }
     public virtual DbSet<ExaminationDetailTypeAudit> ExaminationDetailTypeAudits { get; set; }
-    public virtual DbSet<GenderType> GenderTypes {get; set; }
+    public virtual DbSet<GenderType> GenderTypes { get; set; }
     public virtual DbSet<GpPractice> GpPractices { get; set; }
     public virtual DbSet<GpPracticeAudit> GpPracticeAudits { get; set; }
     public virtual DbSet<Log> Logs { get; set; }
@@ -78,8 +80,8 @@ namespace Mep.Business
     public virtual DbSet<PatientAudit> PatientAudits { get; set; }
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
     public virtual DbSet<PaymentMethodAudit> PaymentMethodAudits { get; set; }
-    public virtual DbSet<PaymentMethodType> PaymentMethodTypes { get; set; }    
-    public virtual DbSet<PaymentMethodTypeAudit> PaymentMethodTypeAudits { get; set; }    
+    public virtual DbSet<PaymentMethodType> PaymentMethodTypes { get; set; }
+    public virtual DbSet<PaymentMethodTypeAudit> PaymentMethodTypeAudits { get; set; }
     public virtual DbSet<PaymentRule> PaymentRules { get; set; }
     public virtual DbSet<PaymentRuleAudit> PaymentRuleAudits { get; set; }
     public virtual DbSet<PaymentRuleSet> PaymentRuleSets { get; set; }
@@ -88,8 +90,8 @@ namespace Mep.Business
     public virtual DbSet<ProfileTypeAudit> ProfileTypeAudits { get; set; }
     public virtual DbSet<Referral> Referrals { get; set; }
     public virtual DbSet<ReferralAudit> ReferralAudits { get; set; }
-    public virtual DbSet<ReferralStatus> ReferralStatuses { get; set; }    
-    public virtual DbSet<ReferralStatusAudit> ReferralStatusAudits { get; set; }    
+    public virtual DbSet<ReferralStatus> ReferralStatuses { get; set; }
+    public virtual DbSet<ReferralStatusAudit> ReferralStatusAudits { get; set; }
     public virtual DbSet<Section12ApprovalStatus> Section12ApprovalStatuses { get; set; }
     public virtual DbSet<Section12ApprovalStatusAudit> Section12ApprovalStatusAudits { get; set; }
     public virtual DbSet<Speciality> Specialities { get; set; }
@@ -103,7 +105,7 @@ namespace Mep.Business
     public virtual DbSet<UserExaminationNotification> UserExaminationNotifications { get; set; }
     public virtual DbSet<UserExaminationNotificationAudit> UserExaminationNotificationAudits { get; set; }
     public virtual DbSet<UserSpeciality> UserSpecialities { get; set; }
-    public virtual DbSet<UserSpecialityAudit> UserSpecialitieAudits { get; set; }        
+    public virtual DbSet<UserSpecialityAudit> UserSpecialitieAudits { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -113,44 +115,61 @@ namespace Mep.Business
 
       foreach (var entityType in modelBuilder.Model.GetEntityTypes())
       {
-          entityType.GetForeignKeys()
-              .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
-              .ToList()
-              .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
-      }      
+        entityType.GetForeignKeys()
+            .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
+            .ToList()
+            .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
+      }
 
+      // Configure Many-to-Many Relationships
       modelBuilder.Entity<BankDetail>()
-        .HasAlternateKey(bankDetail => new { 
-          bankDetail.CcgId, 
-          bankDetail.UserId 
-      });
+        .HasAlternateKey(bankDetail => new
+        {
+          bankDetail.CcgId,
+          bankDetail.UserId
+        });
 
       modelBuilder.Entity<ContactDetail>()
-        .HasAlternateKey(contextDetail => new {
-          contextDetail.CcgId, 
-          contextDetail.ContactDetailTypeId, 
+        .HasAlternateKey(contextDetail => new
+        {
+          contextDetail.CcgId,
+          contextDetail.ContactDetailTypeId,
           contextDetail.UserId
-      });
+        });
 
       modelBuilder.Entity<ExaminationDetail>()
-        .HasAlternateKey(examinationDetail => new {
+        .HasAlternateKey(examinationDetail => new
+        {
           examinationDetail.ExaminationDetailTypeId,
           examinationDetail.ExaminationId,
         });
 
       modelBuilder.Entity<PaymentMethod>()
-        .HasAlternateKey(paymentMethod => new {
+        .HasAlternateKey(paymentMethod => new
+        {
           paymentMethod.CcgId,
           paymentMethod.PaymentMethodTypeId,
           paymentMethod.UserId
-      });
+        });
 
       modelBuilder.Entity<UserExaminationNotification>()
-        .HasAlternateKey(userExaminationNotification => new {
+        .HasAlternateKey(userExaminationNotification => new
+        {
           userExaminationNotification.ExaminationId,
           userExaminationNotification.UserId
         });
-     
+
+      // Unique Indexes
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.ShortCode)
+        .IsUnique();
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.LongCode)
+        .IsUnique();
+
+      modelBuilder.Entity<GpPractice>()
+        .HasIndex(c => c.Code)
+        .IsUnique();
     }
   }
 }
