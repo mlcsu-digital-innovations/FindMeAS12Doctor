@@ -386,9 +386,13 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   CancelReferral(): void {
-    this.cancelModal = this.modalService.open(this.cancelReferralTemplate, {
-      size: 'lg'
-    });
+    if (this.patientForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelReferralTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.router.navigate(['/referral']);
+    }
   }
 
   CreatePatient() {
@@ -459,8 +463,6 @@ export class ReferralCreateComponent implements OnInit {
       this.gpPracticeField.enable();
       this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
       canContinue = false;
-
-      console.log(this.gpPracticeField.errors);
     }
 
     if (!this.HasValidLeadAmhp()) {
