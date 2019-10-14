@@ -136,9 +136,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       patient.AlternativeIdentifier =
         PATIENT_ALTERNATIVE_IDENTIFIER_7;
-      patient.CcgId = GetCcgIdByName(CCG_NAME_UNKNOWN);
-      patient.GpPracticeId =
-        GetGpPracticeIdByName(GP_PRACTICE_NAME_UNKNOWN);
+      patient.CcgId = null;
+      patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();
@@ -157,9 +156,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       patient.AlternativeIdentifier =
         PATIENT_ALTERNATIVE_IDENTIFIER_8;
-      patient.CcgId = GetCcgIdByName(CCG_NAME_UNKNOWN);
-      patient.GpPracticeId =
-        GetGpPracticeIdByName(GP_PRACTICE_NAME_UNKNOWN);
+      patient.CcgId = null;
+      patient.GpPracticeId = null;
       patient.IsActive = true;
       patient.ModifiedAt = _now;
       patient.ModifiedByUser = GetSystemAdminUser();

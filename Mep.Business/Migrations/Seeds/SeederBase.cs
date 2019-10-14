@@ -15,7 +15,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const int BANK_DETAILS_VRS_NUMBER = 1000000000;
     protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
-    protected const string CCG_NAME_UNKNOWN = "Unknown";
     protected const string CLAIM_STATUS_ACCEPTED_NAME = "Accepted";
     protected const string CLAIM_STATUS_ACCEPTED_DESCRIPTION = "Accepted";
     protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
@@ -46,7 +45,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
     protected const string GP_PRACTICE_NAME_2 = "STAFFORD MEDICAL CENTRE";
-    protected const string GP_PRACTICE_NAME_UNKNOWN = "Unknown";
     protected const decimal LATITUDE = 0.000000m;
     protected const decimal LONGITUDE = 0.000000m;
     protected const string NON_PAYMENT_LOCATION_TYPE_NAME = "Non Payment Location Type Name";
