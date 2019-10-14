@@ -207,6 +207,12 @@ label {
   border-color: #0c9da7;
 }
 
+.calendar:disabled {
+  background-color: #497679;
+  border-color: #497679;
+  color: #ccc;
+}
+
 .btn.btn-link {
   color: #0db3bf;
 }
@@ -261,7 +267,7 @@ label {
 }
 
 /* Hide the browser's default checkbox */
-.container input {
+.container input, .container input:disabled {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -283,6 +289,7 @@ label {
   position: absolute;
   display: none;
 }
+
 
 /* Show the checkmark when checked */
 .container input:checked ~ .checkmark:after {

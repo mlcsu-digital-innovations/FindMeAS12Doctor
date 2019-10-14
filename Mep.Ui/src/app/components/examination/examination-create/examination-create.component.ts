@@ -45,6 +45,7 @@ export class ExaminationCreateComponent implements OnInit {
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isCreatingExamination: boolean;
+  isFormInCreatingState: boolean = true;
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
   referral$: Observable<Referral | any>;
@@ -249,6 +250,29 @@ export class ExaminationCreateComponent implements OnInit {
     );
   }
 
+  DisableForm() {
+    this.amhpField.disable();
+    this.examinationPostcodeField.disable();
+    this.examinationAddressField.disable();
+    this.additionalDetailsField.disable();
+    this.specialityField.disable();
+    this.preferredDoctorGenderField.disable();
+    this.examinationDetailsField.disable();
+    this.plannedExaminationField.disable();
+
+    if (this.plannedExaminationField.value === true) {
+      this.scheduledDateField.disable();
+      this.scheduledTimeField.disable();
+    } else {
+      this.toBeCompletedByDateField.disable();
+      this.toBeCompletedByTimeField.disable();
+    }
+  }
+
+  EditExamination() {
+    this.router.navigate([`/examination/edit/${this.examinationId}`]);
+  }
+
   FormatAddress(): string[] {
 
     const addressLines: string[] = [];
@@ -289,6 +313,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   get examinationAddressField() {
     return this.examinationForm.controls.examinationAddress;
+  }
+
+  get examinationDetailsField() {
+    return this.examinationForm.controls.examinationDetails;
   }
 
   get examinationPostcodeField() {
@@ -353,6 +381,10 @@ export class ExaminationCreateComponent implements OnInit {
     return examinationDateIsBeforeReferralCreatedAt;
   }
 
+  IsFormInCreatingState(): boolean {
+    return this.isFormInCreatingState;
+  }
+
   HasInvalidPostcode(): boolean {
     return (
       this.examinationPostcodeField.value !== '' &&
@@ -390,8 +422,10 @@ export class ExaminationCreateComponent implements OnInit {
           message: 'Examination Created'
         });
         this.isCreatingExamination = false;
-        // navigate to the create examination page
-        this.router.navigate([`/examination/new/${result.id}`]);
+        // update the page - edit mode
+        this.isFormInCreatingState = false;
+        this.examinationId = result.id;
+        this.DisableForm();
       },
       error => {
         this.toastService.displayError({
@@ -402,6 +436,10 @@ export class ExaminationCreateComponent implements OnInit {
         return throwError(error);
       }
     );
+  }
+
+  ReferralListNavigation() {
+    this.router.navigate(['/referral/list']);
   }
 
   RoundToNearestFiveMinutes(minute: number): number {

@@ -102,6 +102,7 @@
                     <button
                       class="btn btn-outline-secondary calendar"
                       (click)="s.toggle()"
+                      [disabled]="!IsFormInCreatingState()"
                       type="button">
                       <i class="far fa-calendar-alt"></i>
                     </button>
@@ -158,6 +159,7 @@
                       [openDelay]="1000"
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
+                      [disabled]="!IsFormInCreatingState()"
                       (click)="AddressSearch()"
                       [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
                     >
@@ -175,6 +177,7 @@
                     type="button"
                     class="btn btn-primary btn-exam btn-spaced"
                     placement="top"
+                    [disabled]="!IsFormInCreatingState()"
                     ngbTooltip="Locate an address using an external web site"
                     [openDelay]="1000"
                     [closeDelay]="500"
@@ -250,6 +253,7 @@
                       [data]="examinationDetails"
                       (onSelect)="OnItemSelect($event)"
                       (onDeSelect)="OnItemDeselect($event)"
+                      [disabled]="!IsFormInCreatingState()"
                     >
                     </ng-multiselect-dropdown>
                   </div>
@@ -305,6 +309,7 @@
                   <div class="col-md-1" style="padding-left: 1px;">
                       <button
                         id="calendarBtn"
+                        [disabled]="!IsFormInCreatingState()"
                         class="btn btn-outline-secondary calendar"
                         (click)="d.toggle()"
                         type="button">
@@ -358,9 +363,19 @@
                   type="button"
                   class="btn btn-standard btn-cancel"
                   (click)="CancelExamination()"
+                  *ngIf="IsFormInCreatingState()"
                 >
                   <i class="far fa-times-circle"></i>
                   Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-standard btn-primary"
+                  (click)="ReferralListNavigation()"
+                  *ngIf="!IsFormInCreatingState()"
+                >
+                  <i class="fas fa-list"></i>
+                  Referral List
                 </button>
               </div>
               <div class="col-md-2 text-left">
@@ -368,9 +383,19 @@
                   type="button"
                   class="btn btn-primary btn-standard"
                   (click)="SaveExamination()"
+                  *ngIf="IsFormInCreatingState()"
                 >
                   <i class="far fa-check-circle"></i>
                   Save
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-standard"
+                  (click)="EditExamination()"
+                  *ngIf="!IsFormInCreatingState()"
+                >
+                  <i class="far fa-edit"></i>
+                  Edit
                 </button>
               </div>
             </div>
