@@ -6,11 +6,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class UserSeeder : SeederBase
   {
-    internal UserSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       User user;

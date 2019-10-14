@@ -2,8 +2,8 @@ namespace Mep.Business.Models.Interfaces
 {
   public interface IDatePicker
   {
-    int year { get; set; }
-    int month { get; set; }
-    int day { get; set; }
+    int Day { get; set; }
+    int Month { get; set; }
+    int Year { get; set; }
   }
 }

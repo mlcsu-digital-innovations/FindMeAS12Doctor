@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ProfileTypeSeeder : SeederBase
   {
-    internal ProfileTypeSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       ProfileType profileType;

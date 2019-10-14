@@ -1,9 +1,9 @@
 namespace Mep.Business.Models.Interfaces
 {
-  public class ITimePicker
+  public interface ITimePicker
   {
-    int hour { get; set; }
-    int minute { get; set; }
-    int second { get; set; }
+    int Hour { get; set; }
+    int Minute { get; set; }
+    int Second { get; set; }
   }
 }

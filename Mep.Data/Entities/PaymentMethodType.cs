@@ -2,7 +2,8 @@
 
 namespace Mep.Data.Entities
 {
-  public partial class PaymentMethodType : NameDescription, IPaymentMethodType
+  public partial class PaymentMethodType : 
+    NameDescription, IPaymentMethodType
   {
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
   }
