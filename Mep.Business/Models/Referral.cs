@@ -144,9 +144,9 @@ namespace Mep.Business.Models
 
         TimePicker referralCreatedAtAsTimePicker = new TimePicker()
         {
-          hour = workingDate.Hour,
-          minute = workingDate.Minute,
-          second = workingDate.Second
+          Hour = workingDate.Hour,
+          Minute = workingDate.Minute,
+          Second = workingDate.Second
         };
 
         return referralCreatedAtAsTimePicker;
