@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20191013082733_ReInitiliseForEFCore3")]
+    [Migration("20191013111342_ReInitiliseForEFCore3")]
     partial class ReInitiliseForEFCore3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -2803,7 +2803,8 @@ namespace mep.business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<int?>("GenderTypeId")
                         .HasColumnType("int");

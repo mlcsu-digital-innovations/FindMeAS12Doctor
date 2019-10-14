@@ -79,8 +79,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -135,8 +135,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -219,8 +219,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -348,8 +348,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -371,8 +371,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             MessageTemplate = table.Column<string>(maxLength: 2000, nullable: false)
           },
           constraints: table =>
@@ -419,8 +419,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -492,8 +492,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -515,8 +515,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             Criteria = table.Column<string>(maxLength: 2000, nullable: false),
             PaymentRuleSetId = table.Column<int>(nullable: false)
           },
@@ -540,8 +540,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             CcgId = table.Column<int>(nullable: false),
             DateTimeFrom = table.Column<DateTimeOffset>(nullable: false),
             DateTimeTo = table.Column<DateTimeOffset>(nullable: false)
@@ -566,8 +566,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -591,10 +591,10 @@ namespace mep.business.Migrations
             ModifiedByUserId = table.Column<int>(nullable: false),
             CreatedAt = table.Column<DateTimeOffset>(nullable: false),
             CreatedByUserId = table.Column<int>(nullable: false),
+            IsPlannedExamination = table.Column<bool>(nullable: false),
             PatientId = table.Column<int>(nullable: false),
             ReferralStatusId = table.Column<int>(nullable: false),
-            LeadAmhpUserId = table.Column<int>(nullable: false),
-            IsPlannedExamination = table.Column<bool>(nullable: false)
+            LeadAmhpUserId = table.Column<int>(nullable: false)
           },
           constraints: table =>
           {
@@ -616,8 +616,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -639,8 +639,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -662,8 +662,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             FinanceMileageSubjectiveCode = table.Column<int>(nullable: true),
             FinanceSubjectiveCode = table.Column<int>(nullable: true),
             LevelOfUrgencyTimescaleMinutes = table.Column<int>(nullable: false),
@@ -690,8 +690,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -774,7 +774,7 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            DisplayName = table.Column<string>(nullable: true),
+            DisplayName = table.Column<string>(maxLength: 256, nullable: true),
             GenderTypeId = table.Column<int>(nullable: true),
             GmcNumber = table.Column<int>(nullable: true),
             HasReadTermsAndConditions = table.Column<bool>(nullable: false),
@@ -942,8 +942,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             CcgId = table.Column<int>(nullable: true)
           },
           constraints: table =>
@@ -1005,8 +1005,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             CcgId = table.Column<int>(nullable: false),
             DateTimeFrom = table.Column<DateTimeOffset>(nullable: false),
             DateTimeTo = table.Column<DateTimeOffset>(nullable: false)
@@ -1170,8 +1170,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1193,8 +1193,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1260,8 +1260,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1283,8 +1283,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1306,8 +1306,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             MessageTemplate = table.Column<string>(maxLength: 2000, nullable: false)
           },
           constraints: table =>
@@ -1360,8 +1360,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1383,8 +1383,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1406,8 +1406,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             Criteria = table.Column<string>(maxLength: 2000, nullable: false),
             PaymentRuleSetId = table.Column<int>(nullable: false)
           },
@@ -1437,8 +1437,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1460,8 +1460,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1483,8 +1483,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1506,8 +1506,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
             Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false),
             FinanceMileageSubjectiveCode = table.Column<int>(nullable: true),
             FinanceSubjectiveCode = table.Column<int>(nullable: true),
             LevelOfUrgencyTimescaleMinutes = table.Column<int>(nullable: false),
@@ -1534,8 +1534,8 @@ namespace mep.business.Migrations
             IsActive = table.Column<bool>(nullable: false),
             ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
             ModifiedByUserId = table.Column<int>(nullable: false),
-            Name = table.Column<string>(maxLength: 200, nullable: false),
-            Description = table.Column<string>(maxLength: 2000, nullable: false)
+            Description = table.Column<string>(maxLength: 2000, nullable: false),
+            Name = table.Column<string>(maxLength: 200, nullable: false)
           },
           constraints: table =>
           {
@@ -1559,10 +1559,10 @@ namespace mep.business.Migrations
             ModifiedByUserId = table.Column<int>(nullable: false),
             CreatedAt = table.Column<DateTimeOffset>(nullable: false),
             CreatedByUserId = table.Column<int>(nullable: false),
+            IsPlannedExamination = table.Column<bool>(nullable: false),
             PatientId = table.Column<int>(nullable: false),
             ReferralStatusId = table.Column<int>(nullable: false),
-            LeadAmhpUserId = table.Column<int>(nullable: false),
-            IsPlannedExamination = table.Column<bool>(nullable: false)
+            LeadAmhpUserId = table.Column<int>(nullable: false)
           },
           constraints: table =>
           {

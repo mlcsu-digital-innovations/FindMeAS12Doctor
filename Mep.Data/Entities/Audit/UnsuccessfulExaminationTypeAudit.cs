@@ -3,7 +3,8 @@
 namespace Mep.Data.Entities
 {
   [Table("UnsuccessfulExaminationTypesAudit")]
-  public partial class UnsuccessfulExaminationTypeAudit : NameDescriptionAudit, IUnsuccessfulExaminationType
+  public partial class UnsuccessfulExaminationTypeAudit : 
+    NameDescriptionAudit, IUnsuccessfulExaminationType
   {
   }
 }

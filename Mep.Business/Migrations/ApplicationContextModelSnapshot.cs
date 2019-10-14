@@ -2801,7 +2801,8 @@ namespace mep.business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<int?>("GenderTypeId")
                         .HasColumnType("int");
