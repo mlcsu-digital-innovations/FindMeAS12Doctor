@@ -1,7 +1,7 @@
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
@@ -10,7 +10,7 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
-import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Patient } from 'src/app/interfaces/patient';
 import { PostcodeRegex } from '../../../constants/Constants';
@@ -29,6 +29,7 @@ export class ExaminationCreateComponent implements OnInit {
 
   addresses$: Observable<any>;
   addressList: AddressResult[];
+  cancelModal: NgbModalRef;
   dropdownSettings: IDropdownSettings;
   examinationDetails: NameIdList[] = [];
   examinationForm: FormGroup;
@@ -44,13 +45,17 @@ export class ExaminationCreateComponent implements OnInit {
   selectedDetails: NameIdList[] = [];
   specialities: NameIdList[];
 
+  @ViewChild('cancelExamination', null) cancelExaminationTemplate;
+
   constructor(
     private amhpListService: AmhpListService,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private nameIdListService: NameIdListService,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
+    private router: Router,
     private toastService: ToastService
   ) {}
 
@@ -202,6 +207,26 @@ export class ExaminationCreateComponent implements OnInit {
   onItemDeselect(item: any) {
     this.selectedDetails =
       this.selectedDetails.filter(obj => obj.id !== item.id);
+  }
+
+  CancelExamination() {
+
+    if (this.examinationForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelExaminationTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.router.navigate(['/referral']);
+    }
+  }
+
+  onCancelModalAction(action: boolean) {
+
+    this.cancelModal.close();
+
+    if (action) {
+      this.router.navigate(['/referral']);
+    }
   }
 
   RoundToNearestFiveMinutes(minute: number): number {

@@ -314,6 +314,15 @@
                   Select Doctor
                 </button>
               </div>
+              <div class="col-md-2 offset-md-7">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="CancelExamination()"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -326,5 +335,14 @@
   </ng-template>
 
   <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+  <ng-template #cancelExamination>
+    <app-cancel-action-modal
+      [modalTitle]="'Cancel Examination'"
+      [modalBody]="'Do you wish to cancel this examination? All changes will be lost.'"
+      (actioned)="onCancelModalAction($event)"
+    >
+    </app-cancel-action-modal>
+  </ng-template>
 
 </div>
