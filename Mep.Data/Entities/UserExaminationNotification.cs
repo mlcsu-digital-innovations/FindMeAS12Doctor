@@ -2,7 +2,8 @@
 
 namespace Mep.Data.Entities
 {
-  public partial class UserExaminationNotification : BaseEntity, IUserExaminationNotification
+  public partial class UserExaminationNotification : 
+    BaseEntity, IUserExaminationNotification
   {
     public virtual Examination Examination { get; set; }
     public int ExaminationId { get; set; }

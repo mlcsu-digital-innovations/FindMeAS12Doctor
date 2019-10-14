@@ -5,12 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ContactDetailTypesSeeder : SeederBase
   {
-
-    internal ContactDetailTypesSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       ContactDetailType contactDetailType;

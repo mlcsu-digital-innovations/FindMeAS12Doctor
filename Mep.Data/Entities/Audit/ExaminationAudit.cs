@@ -10,8 +10,11 @@ namespace Mep.Data.Entities
     [Required]
     [MaxLength(200)]
     public string Address1 { get; set; }
+    [MaxLength(500)]
     public string Address2 { get; set; }
+    [MaxLength(500)]
     public string Address3 { get; set; }
+    [MaxLength(500)]
     public string Address4 { get; set; }
     public int CcgId { get; set; }
     public int? CompletedByUserId { get; set; }
@@ -26,10 +29,10 @@ namespace Mep.Data.Entities
     [Required]
     [MaxLength(10)]
     public string Postcode { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
-    public int GenderTypeId { get; set; }
   }
 }

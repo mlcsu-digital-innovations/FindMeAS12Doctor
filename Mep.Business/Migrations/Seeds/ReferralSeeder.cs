@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ReferralSeeder : SeederBase
   {
-    internal ReferralSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       Referral referral;
