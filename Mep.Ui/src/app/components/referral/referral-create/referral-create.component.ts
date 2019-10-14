@@ -117,7 +117,187 @@ export class ReferralCreateComponent implements OnInit {
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
-    this.onChanges();
+    this.OnChanges();
+  }
+
+  AmhpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isAmhpSearching = true)),
+      switchMap(term =>
+        this.amhpListService.GetAmhpList(term).pipe(
+          tap(() => (this.hasAmhpSearchFailed = false)),
+          catchError(() => {
+            this.hasAmhpSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isAmhpSearching = false))
+    )
+
+  CancelCancellation(): void {
+    // close the modal
+    this.cancelModal.close();
+  }
+
+  async CancelPatientResultsModal() {
+    this.alternativeIdentifierField.setValue('');
+    this.nhsNumberField.setValue('');
+    this.patientModal.close();
+    this.SetFieldFocus('#nhsNumber');
+  }
+
+  CancelReferral(): void {
+    if (this.patientForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelReferralTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.router.navigate(['/referral']);
+    }
+  }
+
+  CcgSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isCcgSearching = true)),
+      switchMap(term =>
+        this.ccgListService.GetCcgList(term).pipe(
+          tap(() => (this.hasCcgSearchFailed = false)),
+          catchError(() => {
+            this.hasCcgSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isCcgSearching = false))
+    )
+
+  ConfirmCancellation(): void {
+    // close the modal
+    this.cancelModal.close();
+    this.router.navigate(['/referral']);
+  }
+
+  CreatePatient() {
+
+    this.patientDetails.nhsNumber =
+      +this.nhsNumber === 0 ? null : +this.nhsNumber;
+    this.patientDetails.alternativeIdentifier =
+      this.alternativeIdentifier === '' ? null : this.alternativeIdentifier;
+    this.patientDetails.gpPracticeId =
+      this.gpPractice.id === 0 ? null : this.gpPractice.id;
+    this.patientDetails.residentialPostcode =
+      this.residentialPostcode === '' ? null : this.residentialPostcode;
+    this.patientDetails.ccgId = this.ccg.id === 0 ? null : this.ccg.id;
+
+    return this.patientService.createPatient(this.patientDetails).pipe(
+      map((result: any) => {
+        this.patientDetails.id = result.id;
+        this.SaveReferralDetails();
+      }),
+      catchError((err, caught) => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to create patient for referral'
+        });
+        this.isCreatingReferral = false;
+        return empty();
+      })
+    );
+  }
+
+  CreateReferral() {
+
+    let canContinue = true;
+
+    // only continue if the referral is valid
+    if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
+      this.nhsNumberField.setErrors({InvalidPatientIdentifier: true});
+      canContinue = false;
+    }
+
+    if (!this.HasValidGpOrPostcodeOrCcg()) {
+      this.isGpFieldsShown = true;
+      this.gpPracticeField.enable();
+      this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
+      canContinue = false;
+    }
+
+    if (!this.HasValidLeadAmhp()) {
+      this.amhpField.setErrors({InvalidAmhp: true});
+      canContinue = false;
+    }
+
+    if (canContinue) {
+      this.isCreatingReferral = true;
+      // create a new patient ?
+      if (this.patientDetails.isExistingPatient) {
+        this.SaveReferralDetails();
+      } else {
+        this.CreatePatient().subscribe();
+      }
+    } else {
+      return;
+    }
+  }
+
+  async Delay(milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
+  DisableIfFieldHasValue(fieldName: string): boolean {
+    if (fieldName in this.patientForm.controls) {
+      return this.patientForm.controls[fieldName].value !== '';
+    } else {
+      throw new Error(
+        `DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`
+      );
+    }
+  }
+
+  DisablePatientValidationButtonIfFieldsAreInvalid(): boolean {
+    // field is only valid if it has a value and there aren't any errors
+    const nhsNumberFieldInValid =
+      this.nhsNumberField.value === '' ||
+      this.nhsNumberField.errors !== null;
+    const alternativeIdentifierFieldInValid =
+      this.alternativeIdentifierField.value === '' ||
+      this.alternativeIdentifierField.errors !== null;
+
+    return nhsNumberFieldInValid &&
+      alternativeIdentifierFieldInValid;
+  }
+
+  DisablePostcodeValidationButtonIfFieldIsInvalid(): boolean {
+    return (
+      this.residentialPostcodeField.value === '' ||
+      this.residentialPostcodeField.errors !== null
+    );
+  }
+
+  FormatTypeAheadResults(value: any): string {
+    return value.resultText || '';
+  }
+
+  FormReset(): void {
+    this.nhsNumberField.setValue(null);
+    this.alternativeIdentifierField.setValue(null);
+    this.alternativeIdentifierField.markAsUntouched();
+
+    this.SetGpPracticeField(null, '');
+    this.SetResidentialPostcodeField(null);
+    this.SetCcgField(null, '');
+    this.amhpField.setValue(null);
+
+    this.isGpFieldsShown = false;
+    this.isResidentialPostcodeFieldShown = false;
+    this.isCcgFieldsShown = false;
+
+    this.SetFieldFocus('#nhsNumber');
   }
 
   get nhsNumber(): string {
@@ -172,80 +352,48 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.amhp;
   }
 
-  onChanges(): void {
+  GpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isGpSearching = true)),
+      switchMap(term =>
+        this.gpPracticeListService.GetGpPracticeList(term).pipe(
+          tap(() => (this.hasGpSearchFailed = false)),
+          catchError(() => {
+            this.hasGpSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isGpSearching = false))
+    )
 
-    // fields are NOT validated if they are changed after initial validation
-    this.nhsNumberField.valueChanges.subscribe(val => {
-      this.isPatientIdValidated = val === this.patientDetails.nhsNumber;
-    });
-
-    this.alternativeIdentifierField.valueChanges.subscribe((val: string) => {
-      if (this.patientDetails.alternativeIdentifier && this.patientDetails.alternativeIdentifier !== '') {
-        this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
-      }
-    });
-
-    this.residentialPostcodeField.valueChanges.subscribe((val: string) => {
-      if (this.patientDetails.residentialPostcode && this.patientDetails.residentialPostcode !== '') {
-        this.isPatientPostcodeValidated =
-          this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
-      }
-    });
-  }
-
-  onCancelModalAction(action: boolean) {
-    if (action) {
-      this.ConfirmCancellation();
-    } else {
-      this.CancelCancellation();
-    }
-  }
-
-  onPatientModalAction(action: number) {
-    switch (action) {
-      case PatientAction.Cancel:
-        this.CancelPatientResultsModal();
-        break;
-      case PatientAction.ExistingPatient:
-        this.UseExistingPatient();
-        break;
-      case PatientAction.ExistingReferral:
-        this.UseExistingReferral();
-        break;
-    }
-  }
-
-  RemoveWhiteSpace(postcode: string): string {
-    return postcode.replace(/ /g, '');
-  }
-
-  IsUnknownFieldChecked(fieldName: string): boolean {
-    return this.patientForm.get(fieldName).value;
-  }
-
-  IsSearchingForPatient(): boolean {
-    return this.isSearchingForPatient;
-  }
-
-  IsSearchingForPostcode(): boolean {
-    return this.isSearchingForPostcode;
-  }
-
-  IsPatientIdValidated(): boolean {
-    return this.isPatientIdValidated;
-  }
-
-  HasNoPatientIdErrors(): boolean {
+  HasInvalidAlternativeIdentifier(): boolean {
     return (
-      this.nhsNumberField.errors == null &&
-      this.alternativeIdentifierField.errors == null
+      this.alternativeIdentifierField.value !== '' &&
+      this.alternativeIdentifierField.errors !== null
     );
   }
 
-  HasValidNhsNumberOrAlternativeIdentifier(): boolean {
+  HasInvalidNHSNumber(): boolean {
     return (
-      (this.HasValidNHSNumber() || this.HasValidAlternativeIdentifier()) &&
-      this.HasNoPatientIdErrors()
+      this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null
+    );
+  }
+
+  HasInvalidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' &&
+      this.residentialPostcodeField.errors !== null
+    );
+  }
+
+  HasValidAlternativeIdentifier(): boolean {
+    return (
+      this.alternativeIdentifierField.value !== '' &&
+      this.alternativeIdentifierField.value !== null &&
+      this.alternativeIdentifierField.errors == null
     );
   }
 
@@ -267,13 +415,134 @@ export class ReferralCreateComponent implements OnInit {
     return this.amhpUser.id !== undefined;
   }
 
-  SetGpPracticeField(id: number | null, text: string | null) {
-    const gpPractice = {} as TypeAheadResult;
+  HasValidNHSNumber(): boolean {
+    return (
+      this.nhsNumberField.value !== '' &&
+      this.nhsNumberField.value !== null &&
+      this.nhsNumberField.errors == null
+    );
+  }
 
-    gpPractice.id = id;
-    gpPractice.resultText = text;
+  HasValidNhsNumberOrAlternativeIdentifier(): boolean {
+    return (
+      (this.HasValidNHSNumber() || this.HasValidAlternativeIdentifier()) &&
+      this.HasNoPatientIdErrors()
+    );
+  }
 
-    this.gpPracticeField.setValue(gpPractice);
+  HasNoPatientIdErrors(): boolean {
+    return (
+      this.nhsNumberField.errors == null &&
+      this.alternativeIdentifierField.errors == null
+    );
+  }
+
+  HasValidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' &&
+      this.residentialPostcodeField.errors == null
+    );
+  }
+
+  HasValidReferral(): boolean {
+    // referral needs the following to be valid:
+    // NHS number OR Alternative Identifier
+    // GP Practice Or Postcode OR CCG
+    // Lead AMHP details
+
+    return (
+      this.HasValidNhsNumberOrAlternativeIdentifier() &&
+      this.HasValidGpOrPostcodeOrCcg() &&
+      this.HasValidLeadAmhp()
+    );
+  }
+
+  IsPatientIdValidated(): boolean {
+    return this.isPatientIdValidated;
+  }
+
+  IsSearchingForPatient(): boolean {
+    return this.isSearchingForPatient;
+  }
+
+  IsSearchingForPostcode(): boolean {
+    return this.isSearchingForPostcode;
+  }
+
+  IsUnknownFieldChecked(fieldName: string): boolean {
+    return this.patientForm.get(fieldName).value;
+  }
+
+  OnCancelModalAction(action: boolean) {
+    if (action) {
+      this.ConfirmCancellation();
+    } else {
+      this.CancelCancellation();
+    }
+  }
+
+  OnChanges(): void {
+
+    // fields are NOT validated if they are changed after initial validation
+    this.nhsNumberField.valueChanges.subscribe(val => {
+      this.isPatientIdValidated = val === this.patientDetails.nhsNumber;
+    });
+
+    this.alternativeIdentifierField.valueChanges.subscribe((val: string) => {
+      if (this.patientDetails.alternativeIdentifier && this.patientDetails.alternativeIdentifier !== '') {
+        this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
+      }
+    });
+
+    this.residentialPostcodeField.valueChanges.subscribe((val: string) => {
+      if (this.patientDetails.residentialPostcode && this.patientDetails.residentialPostcode !== '') {
+        this.isPatientPostcodeValidated =
+          this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
+      }
+    });
+  }
+
+  OnPatientModalAction(action: number) {
+    switch (action) {
+      case PatientAction.Cancel:
+        this.CancelPatientResultsModal();
+        break;
+      case PatientAction.ExistingPatient:
+        this.UseExistingPatient();
+        break;
+      case PatientAction.ExistingReferral:
+        this.UseExistingReferral();
+        break;
+    }
+  }
+
+  RemoveWhiteSpace(postcode: string): string {
+    return postcode.replace(/ /g, '');
+  }
+
+  SaveReferralDetails(): void {
+    const referral = {} as Referral;
+    referral.leadAmhpUserId = this.amhpUser.id;
+    referral.patientId = this.patientDetails.id;
+
+    this.referralService.createReferral(referral).subscribe(
+      (result: Referral) => {
+        this.toastService.displaySuccess({
+          message: 'Referral Created'
+        });
+        this.isCreatingReferral = false;
+        // navigate to the create examination page
+        this.router.navigate([`/examination/new/${result.id}`]);
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to create new referral ! Please try again in a few moments'
+        });
+        this.isCreatingReferral = false;
+        return throwError(error);
+      }
+    );
   }
 
   SetCcgField(id: number | null, text: string | null) {
@@ -284,8 +553,34 @@ export class ReferralCreateComponent implements OnInit {
     this.ccgField.setValue(ccg);
   }
 
+  async SetFieldFocus(fieldName: string) {
+    // ToDo: Find a better way to do this !
+    await this.Delay(100);
+    this.renderer.selectRootElement(fieldName).focus();
+  }
+
+  SetGpPracticeField(id: number | null, text: string | null) {
+    const gpPractice = {} as TypeAheadResult;
+
+    gpPractice.id = id;
+    gpPractice.resultText = text;
+
+    this.gpPracticeField.setValue(gpPractice);
+  }
+
   SetResidentialPostcodeField(text: string | null) {
     this.residentialPostcodeField.setValue(text);
+  }
+
+  ToggleCcgUnknown(event: any) {
+    if (event.target.checked) {
+      // set the field to unknown, show the CCG field and set focus
+      this.SetCcgField(this.unknownCcgId, 'Unknown');
+      this.SetFieldFocus('#amhp');
+    } else {
+      this.SetCcgField(null, '');
+      this.SetFieldFocus('#ccg');
+    }
   }
 
   ToggleGpPracticeUnknown(event: any) {
@@ -316,300 +611,6 @@ export class ReferralCreateComponent implements OnInit {
       this.SetFieldFocus('#residentialPostcode');
       this.isPatientPostcodeValidated = false;
     }
-  }
-
-  ToggleCcgUnknown(event: any) {
-    if (event.target.checked) {
-      // set the field to unknown, show the CCG field and set focus
-      this.SetCcgField(this.unknownCcgId, 'Unknown');
-      this.SetFieldFocus('#amhp');
-    } else {
-      this.SetCcgField(null, '');
-      this.SetFieldFocus('#ccg');
-    }
-  }
-
-  HasInvalidNHSNumber(): boolean {
-    return (
-      this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null
-    );
-  }
-
-  HasValidPostcode(): boolean {
-    return (
-      this.residentialPostcodeField.value !== '' &&
-      this.residentialPostcodeField.errors == null
-    );
-  }
-
-  HasInvalidPostcode(): boolean {
-    return (
-      this.residentialPostcodeField.value !== '' &&
-      this.residentialPostcodeField.errors !== null
-    );
-  }
-
-  HasValidNHSNumber(): boolean {
-    return (
-      this.nhsNumberField.value !== '' &&
-      this.nhsNumberField.value !== null &&
-      this.nhsNumberField.errors == null
-    );
-  }
-
-  HasInvalidAlternativeIdentifier(): boolean {
-    return (
-      this.alternativeIdentifierField.value !== '' &&
-      this.alternativeIdentifierField.errors !== null
-    );
-  }
-
-  HasValidAlternativeIdentifier(): boolean {
-    return (
-      this.alternativeIdentifierField.value !== '' &&
-      this.alternativeIdentifierField.value !== null &&
-      this.alternativeIdentifierField.errors == null
-    );
-  }
-
-  HasValidReferral(): boolean {
-    // referral needs the following to be valid:
-    // NHS number OR Alternative Identifier
-    // GP Practice Or Postcode OR CCG
-    // Lead AMHP details
-
-    return (
-      this.HasValidNhsNumberOrAlternativeIdentifier() &&
-      this.HasValidGpOrPostcodeOrCcg() &&
-      this.HasValidLeadAmhp()
-    );
-  }
-
-  CancelReferral(): void {
-    this.cancelModal = this.modalService.open(this.cancelReferralTemplate, {
-      size: 'lg'
-    });
-  }
-
-  CreatePatient() {
-
-    this.patientDetails.nhsNumber =
-      +this.nhsNumber === 0 ? null : +this.nhsNumber;
-    this.patientDetails.alternativeIdentifier =
-      this.alternativeIdentifier === '' ? null : this.alternativeIdentifier;
-    this.patientDetails.gpPracticeId =
-      this.gpPractice.id === 0 ? null : this.gpPractice.id;
-    this.patientDetails.residentialPostcode =
-      this.residentialPostcode === '' ? null : this.residentialPostcode;
-    this.patientDetails.ccgId = this.ccg.id === 0 ? null : this.ccg.id;
-
-    return this.patientService.createPatient(this.patientDetails).pipe(
-      map((result: any) => {
-        this.patientDetails.id = result.id;
-        this.SaveReferralDetails();
-      }),
-      catchError((err, caught) => {
-        this.toastService.displayError({
-          title: 'Server Error',
-          message: 'Unable to create patient for referral'
-        });
-        this.isCreatingReferral = false;
-        return empty();
-      })
-    );
-  }
-
-  SaveReferralDetails(): void {
-    const referral = {} as Referral;
-    referral.leadAmhpUserId = this.amhpUser.id;
-    referral.patientId = this.patientDetails.id;
-
-    this.referralService.createReferral(referral).subscribe(
-      (result: Referral) => {
-        this.toastService.displaySuccess({
-          message: 'Referral Created'
-        });
-        this.isCreatingReferral = false;
-        // navigate to the create examination page
-        this.router.navigate([`/examination/new/${result.id}`]);
-      },
-      error => {
-        this.toastService.displayError({
-          title: 'Server Error',
-          message: 'Unable to create new referral ! Please try again in a few moments'
-        });
-        this.isCreatingReferral = false;
-        return throwError(error);
-      }
-    );
-  }
-
-  CreateReferral() {
-
-    let canContinue = true;
-
-    // only continue if the referral is valid
-    if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
-      this.nhsNumberField.setErrors({InvalidPatientIdentifier: true});
-      canContinue = false;
-    }
-
-    if (!this.HasValidGpOrPostcodeOrCcg()) {
-      this.isGpFieldsShown = true;
-      this.gpPracticeField.enable();
-      this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
-      canContinue = false;
-
-      console.log(this.gpPracticeField.errors);
-    }
-
-    if (!this.HasValidLeadAmhp()) {
-      this.amhpField.setErrors({InvalidAmhp: true});
-      canContinue = false;
-    }
-
-    if (canContinue) {
-      this.isCreatingReferral = true;
-      // create a new patient ?
-      if (this.patientDetails.isExistingPatient) {
-        this.SaveReferralDetails();
-      } else {
-        this.CreatePatient().subscribe();
-      }
-    } else {
-      return;
-    }
-
-  }
-
-  CancelCancellation(): void {
-    // close the modal
-    this.cancelModal.close();
-  }
-
-  ConfirmCancellation(): void {
-    // close the modal
-    this.cancelModal.close();
-    this.router.navigate(['/referral']);
-  }
-
-  FormReset(): void {
-    this.nhsNumberField.setValue(null);
-    this.alternativeIdentifierField.setValue(null);
-    this.alternativeIdentifierField.markAsUntouched();
-
-    this.SetGpPracticeField(null, '');
-    this.SetResidentialPostcodeField(null);
-    this.SetCcgField(null, '');
-    this.amhpField.setValue(null);
-
-    this.isGpFieldsShown = false;
-    this.isResidentialPostcodeFieldShown = false;
-    this.isCcgFieldsShown = false;
-
-    this.SetFieldFocus('#nhsNumber');
-  }
-
-  FormatTypeAheadResults(value: any): string {
-    return value.resultText || '';
-  }
-
-  amhpSearch = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => (this.isAmhpSearching = true)),
-      switchMap(term =>
-        this.amhpListService.GetAmhpList(term).pipe(
-          tap(() => (this.hasAmhpSearchFailed = false)),
-          catchError(() => {
-            this.hasAmhpSearchFailed = true;
-            return of([]);
-          })
-        )
-      ),
-      tap(() => (this.isAmhpSearching = false))
-    )
-
-  ccgSearch = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => (this.isCcgSearching = true)),
-      switchMap(term =>
-        this.ccgListService.GetCcgList(term).pipe(
-          tap(() => (this.hasCcgSearchFailed = false)),
-          catchError(() => {
-            this.hasCcgSearchFailed = true;
-            return of([]);
-          })
-        )
-      ),
-      tap(() => (this.isCcgSearching = false))
-    )
-
-  gpSearch = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => (this.isGpSearching = true)),
-      switchMap(term =>
-        this.gpPracticeListService.GetGpPracticeList(term).pipe(
-          tap(() => (this.hasGpSearchFailed = false)),
-          catchError(() => {
-            this.hasGpSearchFailed = true;
-            return of([]);
-          })
-        )
-      ),
-      tap(() => (this.isGpSearching = false))
-    )
-
-  DisableIfFieldHasValue(fieldName: string): boolean {
-    if (fieldName in this.patientForm.controls) {
-      return this.patientForm.controls[fieldName].value !== '';
-    } else {
-      throw new Error(
-        `DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`
-      );
-    }
-  }
-
-  DisablePatientValidationButtonIfFieldsAreInvalid(): boolean {
-    // field is only valid if it has a value and there aren't any errors
-    const nhsNumberFieldInValid =
-      this.nhsNumberField.value === '' ||
-      this.nhsNumberField.errors !== null;
-    const alternativeIdentifierFieldInValid =
-      this.alternativeIdentifierField.value === '' ||
-      this.alternativeIdentifierField.errors !== null;
-
-    return nhsNumberFieldInValid &&
-      alternativeIdentifierFieldInValid;
-  }
-
-  DisablePostcodeValidationButtonIfFieldIsInvalid(): boolean {
-    return (
-      this.residentialPostcodeField.value === '' ||
-      this.residentialPostcodeField.errors !== null
-    );
-  }
-
-  async Delay(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-  }
-
-  async SetFieldFocus(fieldName: string) {
-    // ToDo: Find a better way to do this !
-    await this.Delay(100);
-    this.renderer.selectRootElement(fieldName).focus();
-  }
-
-  async CancelPatientResultsModal() {
-    this.alternativeIdentifierField.setValue('');
-    this.nhsNumberField.setValue('');
-    this.patientModal.close();
-    this.SetFieldFocus('#nhsNumber');
   }
 
   async UseExistingPatient() {
@@ -656,43 +657,6 @@ export class ReferralCreateComponent implements OnInit {
   UseExistingReferral(): void {
     // ToDo: navigate to the existing referral page
     this.patientModal.close();
-  }
-
-  ValidatePostcode(): void {
-    if (this.isSearchingForPostcode || this.HasInvalidPostcode()) {
-      return;
-    }
-
-    this.isSearchingForPostcode = true;
-
-    this.postcodeValidationService
-      .validatePostcode(this.residentialPostcodeField.value)
-      .subscribe(
-        (result: PostcodeSearchResult) => {
-          this.isSearchingForPostcode = false;
-
-          if (result.code == null) {
-            this.residentialPostcodeField.setErrors(null);
-            this.residentialPostcodeValidationMessage =
-              'Unable to validate postcode';
-            this.residentialPostcodeField.setErrors({
-              UnableToValidatePostcode: true
-            });
-            this.SetFieldFocus('#residentialPostcode');
-          } else {
-            this.patientDetails.residentialPostcode = result.code;
-            this.isPatientPostcodeValidated = true;
-          }
-        },
-        error => {
-          this.isSearchingForPostcode = false;
-          this.toastService.displayError({
-            title: 'Server Error',
-            message: 'Unable to validate residential postcode ! Please try again in a few moments'
-          });
-          return throwError(error);
-        }
-      );
   }
 
   ValidatePatient(): void {
@@ -758,5 +722,42 @@ export class ReferralCreateComponent implements OnInit {
         return throwError(error);
       }
     );
+  }
+
+  ValidatePostcode(): void {
+    if (this.isSearchingForPostcode || this.HasInvalidPostcode()) {
+      return;
+    }
+
+    this.isSearchingForPostcode = true;
+
+    this.postcodeValidationService
+      .validatePostcode(this.residentialPostcodeField.value)
+      .subscribe(
+        (result: PostcodeSearchResult) => {
+          this.isSearchingForPostcode = false;
+
+          if (result.code == null) {
+            this.residentialPostcodeField.setErrors(null);
+            this.residentialPostcodeValidationMessage =
+              'Unable to validate postcode';
+            this.residentialPostcodeField.setErrors({
+              UnableToValidatePostcode: true
+            });
+            this.SetFieldFocus('#residentialPostcode');
+          } else {
+            this.patientDetails.residentialPostcode = result.code;
+            this.isPatientPostcodeValidated = true;
+          }
+        },
+        error => {
+          this.isSearchingForPostcode = false;
+          this.toastService.displayError({
+            title: 'Server Error',
+            message: 'Unable to validate residential postcode ! Please try again in a few moments'
+          });
+          return throwError(error);
+        }
+      );
   }
 }

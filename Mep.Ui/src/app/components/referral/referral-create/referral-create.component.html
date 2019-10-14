@@ -106,7 +106,7 @@
                   "
                   [class.is-invalid]="hasGpSearchFailed"
                   formControlName="gpPractice"
-                  [ngbTypeahead]="gpSearch"
+                  [ngbTypeahead]="GpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
                 />
@@ -230,7 +230,7 @@
                   "
                   [class.is-invalid]="hasCcgSearchFailed"
                   formControlName="ccg"
-                  [ngbTypeahead]="ccgSearch"
+                  [ngbTypeahead]="CcgSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
                 />
@@ -274,7 +274,7 @@
                   [appDisableControl]="!IsPatientIdValidated()"
                   [class.is-invalid]="hasAmhpSearchFailed"
                   formControlName="amhp"
-                  [ngbTypeahead]="amhpSearch"
+                  [ngbTypeahead]="AmhpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
                 />
@@ -302,13 +302,15 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="col-md-1 mb-2">
-                <button class="btn btn-primary standard-button" type="button" (click)="CancelReferral()">
+              <div class="col-md-2 mb-2 text-right">
+                <button class="btn btn-primary btn-cancel" type="button" (click)="CancelReferral()">
+                  <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
               </div>
-              <div class="col-md-2 mb-2 centered">
+              <div class="col-md-2 mb-2 text-left">
                 <button class="btn btn-primary standard-button" type="button" (click)="CreateReferral()">
+                  <i class="fas fa-check"></i>
                   Save
                 </button>
               </div>
@@ -321,7 +323,7 @@
           <ng-template #patientResults let-patientResult>
             <app-patient-results-modal
               [patientResult]="modalResult"
-              (actioned)="onPatientModalAction($event)"
+              (actioned)="OnPatientModalAction($event)"
             >
             </app-patient-results-modal>
           </ng-template>
@@ -329,8 +331,8 @@
           <ng-template #cancelReferral>
             <app-cancel-action-modal
               [modalTitle]="'Cancel Referral'"
-              [modalBody]="'Do you wish to cancel this referral creation ? All changes will be lost.'"
-              (actioned)="onCancelModalAction($event)"
+              [modalBody]="'Do you wish to cancel this referral creation? All changes will be lost.'"
+              (actioned)="OnCancelModalAction($event)"
             >
             </app-cancel-action-modal>
           </ng-template>
