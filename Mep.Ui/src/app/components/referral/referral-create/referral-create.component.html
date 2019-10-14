@@ -106,7 +106,7 @@
                   "
                   [class.is-invalid]="hasGpSearchFailed"
                   formControlName="gpPractice"
-                  [ngbTypeahead]="gpSearch"
+                  [ngbTypeahead]="GpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
                 />
@@ -230,7 +230,7 @@
                   "
                   [class.is-invalid]="hasCcgSearchFailed"
                   formControlName="ccg"
-                  [ngbTypeahead]="ccgSearch"
+                  [ngbTypeahead]="CcgSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
                 />
@@ -274,7 +274,7 @@
                   [appDisableControl]="!IsPatientIdValidated()"
                   [class.is-invalid]="hasAmhpSearchFailed"
                   formControlName="amhp"
-                  [ngbTypeahead]="amhpSearch"
+                  [ngbTypeahead]="AmhpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
                 />
@@ -321,7 +321,7 @@
           <ng-template #patientResults let-patientResult>
             <app-patient-results-modal
               [patientResult]="modalResult"
-              (actioned)="onPatientModalAction($event)"
+              (actioned)="OnPatientModalAction($event)"
             >
             </app-patient-results-modal>
           </ng-template>
@@ -330,7 +330,7 @@
             <app-cancel-action-modal
               [modalTitle]="'Cancel Referral'"
               [modalBody]="'Do you wish to cancel this referral creation? All changes will be lost.'"
-              (actioned)="onCancelModalAction($event)"
+              (actioned)="OnCancelModalAction($event)"
             >
             </app-cancel-action-modal>
           </ng-template>
