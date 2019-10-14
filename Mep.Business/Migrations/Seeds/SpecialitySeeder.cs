@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class SpecialitySeeder : SeederBase
   {
-    internal SpecialitySeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       Speciality speciality;

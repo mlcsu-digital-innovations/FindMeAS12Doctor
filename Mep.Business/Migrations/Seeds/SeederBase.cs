@@ -1,7 +1,6 @@
 using Mep.Data.Entities;
 using System.Linq;
 using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
@@ -124,7 +123,6 @@ namespace Mep.Business.Migrations.Seeds
     private User _systemAdminUser = null;
 
     public SeederBase(){}
-    public SeederBase(ApplicationContext context){}
 
     protected int GetCcgIdByName(string CcgName)
     {

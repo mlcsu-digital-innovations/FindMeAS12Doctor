@@ -6,11 +6,6 @@ namespace Mep.Business.Migrations.Seeds
   internal class PaymentRulesSeeder : SeederBase
   {
 
-    internal PaymentRulesSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       PaymentRule paymentRule;

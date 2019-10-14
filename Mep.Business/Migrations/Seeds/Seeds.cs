@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
@@ -11,91 +10,91 @@ namespace Mep.Business.Migrations.Seeds
       _context = context;
     }
 
-    public void SeedAll(bool noGp)
+    public void SeedAll(bool noGpPractices)
     {
       new CcgSeeder().SeedData();
       _context.SaveChanges();
 
-      if (!noGp)
+      if (!noGpPractices)
       {
         new GpPracticeSeeder().SeedData();
         _context.SaveChanges();
       }
 
-      // new ClaimStatusesSeeder(_context).SeedData();
+      new ClaimStatusesSeeder().SeedData();
 
-      // new ContactDetailTypesSeeder(_context).SeedData();
+      new ContactDetailTypesSeeder().SeedData();
 
-      // new DoctorStatusesSeeder(_context).SeedData();
+      new DoctorStatusesSeeder().SeedData();
 
-      // new ExaminationDetailTypeSeeder(_context).SeedData();
+      new ExaminationDetailTypeSeeder().SeedData();
 
-      // new GenderTypeSeeder(_context).SeedData();
+      new GenderTypeSeeder().SeedData();
 
-      // new NonPaymentLocationTypesSeeder(_context).SeedData();
+      new NonPaymentLocationTypesSeeder().SeedData();
 
-      // new PaymentMethodTypesSeeder(_context).SeedData();
+      new PaymentMethodTypesSeeder().SeedData();
 
-      // new PaymentRuleSetsSeeder(_context).SeedData();
+      new PaymentRuleSetsSeeder().SeedData();
 
-      // new ProfileTypeSeeder(_context).SeedData();
+      new ProfileTypeSeeder().SeedData();
 
-      // new ReferralStatusSeeder(_context).SeedData();
+      new ReferralStatusSeeder().SeedData();
 
-      // new Section12ApprovalStatusesSeeder(_context).SeedData();
+      new Section12ApprovalStatusesSeeder().SeedData();
 
-      // new SpecialitySeeder(_context).SeedData();
+      new SpecialitySeeder().SeedData();
 
-      // new UnsuccessfulExaminationTypesSeeder(_context).SeedData();
+      new UnsuccessfulExaminationTypesSeeder().SeedData();
 
-      // _context.SaveChanges();
+      _context.SaveChanges();
     }
 
     public void SeedTestAll()
     {
-      new OrganisationSeeder(_context).SeedData();
+      new OrganisationSeeder().SeedData();
       _context.SaveChanges();
 
-      new UserSeeder(_context).SeedData();
+      new UserSeeder().SeedData();
       _context.SaveChanges();
 
-      new PatientSeeder(_context).SeedData();
+      new PatientSeeder().SeedData();
       _context.SaveChanges();
 
-      new NotificationTextsSeeder(_context).SeedData();
+      new NotificationTextsSeeder().SeedData();
       _context.SaveChanges();
 
-      new ReferralSeeder(_context).SeedData();
+      new ReferralSeeder().SeedData();
       _context.SaveChanges();
 
-      new ExaminationSeeder(_context).SeedData();
+      new ExaminationSeeder().SeedData();
       _context.SaveChanges();
 
-      new UserExaminationNotificationSeeder(_context).SeedData();
+      new UserExaminationNotificationSeeder().SeedData();
       _context.SaveChanges();
 
-      new UserExaminationClaimsSeeder(_context).SeedData();
+      new UserExaminationClaimsSeeder().SeedData();
       _context.SaveChanges();
 
-      new BankDetailsSeeder(_context).SeedData();
+      new BankDetailsSeeder().SeedData();
       _context.SaveChanges();
 
-      new ContactDetailsSeeder(_context).SeedData();
+      new ContactDetailsSeeder().SeedData();
       _context.SaveChanges();
 
-      new NonPaymentLocationsSeeder(_context).SeedData();
+      new NonPaymentLocationsSeeder().SeedData();
       _context.SaveChanges();
 
-      new OnCallUsersSeeder(_context).SeedData();
+      new OnCallUsersSeeder().SeedData();
       _context.SaveChanges();
 
-      new PaymentMethodsSeeder(_context).SeedData();
+      new PaymentMethodsSeeder().SeedData();
       _context.SaveChanges();
 
-      new PaymentRulesSeeder(_context).SeedData();
+      new PaymentRulesSeeder().SeedData();
       _context.SaveChanges();
 
-      new UserSpecialitiesSeeder(_context).SeedData();
+      new UserSpecialitiesSeeder().SeedData();
       _context.SaveChanges();
     }
 

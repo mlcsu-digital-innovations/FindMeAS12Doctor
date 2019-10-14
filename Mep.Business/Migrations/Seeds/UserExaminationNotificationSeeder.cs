@@ -6,11 +6,6 @@ namespace Mep.Business.Migrations.Seeds
   internal class UserExaminationNotificationSeeder : SeederBase
   {
 
-    internal UserExaminationNotificationSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       UserExaminationNotification userExaminationNotification;

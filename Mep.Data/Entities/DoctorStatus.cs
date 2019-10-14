@@ -4,6 +4,8 @@ namespace Mep.Data.Entities
 {
   public partial class DoctorStatus : BaseEntity, IDoctorStatus
   {
+    public const int AVAILABLE = 1;
+
     public DateTimeOffset AvailabilityEnd { get; set; }
     public DateTimeOffset AvailabilityStart { get; set; }    
     public DateTimeOffset? ExtendedAvailabilityEnd1 { get; set; }

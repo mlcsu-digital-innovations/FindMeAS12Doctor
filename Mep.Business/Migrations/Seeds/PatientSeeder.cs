@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class PatientSeeder : SeederBase
   {
-    internal PatientSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       Patient patient;

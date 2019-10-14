@@ -21,15 +21,26 @@ namespace Mep.Api
           Log.Information("Seeding database without test data");
           host.SeedData(WebHostExtenstions.SeedType.All);
         }
-        else if (args.Length > 0 && args[0] == "/seednogp")
+        else if (args.Length > 0 && args[0] == "/seednogppractice")
         {
-          Log.Information("Seeding database without GP Data");
-          host.SeedData(WebHostExtenstions.SeedType.AllNoGp);
+          Log.Information("Seeding database without GP practice data or test data");
+          host.SeedData(WebHostExtenstions.SeedType.AllNoGpPractice);
         }
         else if (args.Length > 0 && args[0] == "/seedtest")
         {
           Log.Information("Seeding database with test data");
           host.SeedData(WebHostExtenstions.SeedType.Test);
+        }
+        else if (args.Length > 0)
+        {
+          Log.Warning(
+            "Unknown argument {CommandLineArgument}",
+            args[0]);
+          Console.WriteLine(
+            "Available arguments:" + Environment.NewLine +
+            "/seed: Seed database without test data" + Environment.NewLine +
+            "/seednogppractice: Seed database without GP practice data or test data" + Environment.NewLine +
+            "/seedtest: Seed database with test data");
         }
         else
         {

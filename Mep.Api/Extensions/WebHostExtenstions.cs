@@ -14,7 +14,7 @@ namespace Mep.Api.Extensions
     public enum SeedType
     {
       All = 1,
-      AllNoGp = 2,
+      AllNoGpPractice = 2,
       Test = 3
     }
 
@@ -31,8 +31,8 @@ namespace Mep.Api.Extensions
       // now that the database is up to date. Let's seed
       switch (seedType)
       {
-        case SeedType.AllNoGp:
-          new Seeds(context, config).SeedAll(noGp: true);
+        case SeedType.AllNoGpPractice:
+          new Seeds(context, config).SeedAll(noGpPractices: true);
           break;
 
         case SeedType.Test:
@@ -40,7 +40,7 @@ namespace Mep.Api.Extensions
           break;
 
         default:
-          new Seeds(context, config).SeedAll(noGp: false);
+          new Seeds(context, config).SeedAll(noGpPractices: false);
           break;
       }
 

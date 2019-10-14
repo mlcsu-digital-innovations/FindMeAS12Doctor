@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ExaminationDetailTypeSeeder : SeederBase
   {
-    internal ExaminationDetailTypeSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       ExaminationDetailType examinationDetailType;
