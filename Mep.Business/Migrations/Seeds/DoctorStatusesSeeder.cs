@@ -1,40 +1,30 @@
 using Mep.Data.Entities;
 using System.Linq;
-using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class DoctorStatusesSeeder : SeederBase
   {
-
-    internal DoctorStatusesSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       DoctorStatus doctorStatus;
 
       if ((doctorStatus = _context
        .DoctorStatuses
-        .SingleOrDefault(g => g.Id == 1)) 
+        .SingleOrDefault(g => g.Id == DoctorStatus.AVAILABLE)) 
          == null)
       {
         doctorStatus = new DoctorStatus();
         _context.Add(doctorStatus);
       }
-      doctorStatus.IsActive = true;
-      doctorStatus.ModifiedAt = _now;
-      doctorStatus.ModifiedByUser = GetSystemAdminUser();
+
+      doctorStatus.AvailabilityEnd = _now.AddHours(8);
       doctorStatus.AvailabilityStart = _now;
-      doctorStatus.AvailabilityEnd = _now;
-      doctorStatus.ExtendedAvailabilityEnd1 = _now;
-      doctorStatus.ExtendedAvailabilityStart1 = _now;
       doctorStatus.Latitude = LATITUDE;
       doctorStatus.Longitude = LONGITUDE;
-      doctorStatus.ExtendedAvailabilityLatitude1 = LATITUDE;
-      doctorStatus.ExtendedAvailabilityLongitude1 = LONGITUDE;
+      doctorStatus.UserId = GetSystemAdminUser().Id;
+
+      PopulateActiveAndModifiedWithSystemUser(doctorStatus);
     }
   }
 }

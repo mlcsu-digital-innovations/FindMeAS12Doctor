@@ -11,7 +11,7 @@ namespace Mep.Data.Entities
     public bool IsActive { get; set; }
     public DateTimeOffset ModifiedAt { get; set; }
     [ForeignKey("ModifiedByUser")]
-    public int? ModifiedByUserId { get; set; }
+    public int ModifiedByUserId { get; set; }
     public virtual User ModifiedByUser { get; set; }
   }
 }

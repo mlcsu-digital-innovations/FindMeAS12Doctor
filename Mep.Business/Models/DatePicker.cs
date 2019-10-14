@@ -4,8 +4,8 @@ namespace Mep.Business.Models
 {
   public class DatePicker : IDatePicker
   {
-    public int year { get; set; }
-    public int month { get; set; }
-    public int day { get; set; }
+    public int Day { get; set; }
+    public int Month { get; set; }
+    public int Year { get; set; }
   }
 }

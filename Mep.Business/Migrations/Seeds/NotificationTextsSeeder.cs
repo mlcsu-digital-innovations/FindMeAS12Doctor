@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class NotificationTextsSeeder : SeederBase
   {
-    internal NotificationTextsSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       NotificationText notificationText;

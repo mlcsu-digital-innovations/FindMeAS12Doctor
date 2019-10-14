@@ -127,9 +127,9 @@ namespace Mep.Business.Models
 
         DatePicker referralCreatedAtAsDatePicker = new DatePicker()
         {
-          day = workingDate.Day,
-          month = workingDate.Month,
-          year = workingDate.Year
+          Day = workingDate.Day,
+          Month = workingDate.Month,
+          Year = workingDate.Year
         };
 
         return referralCreatedAtAsDatePicker;
@@ -161,9 +161,9 @@ namespace Mep.Business.Models
 
         DatePicker defaultToBeCompletedByDate = new DatePicker()
         {
-          day = workingDate.Day,
-          month = workingDate.Month,
-          year = workingDate.Year
+          Day = workingDate.Day,
+          Month = workingDate.Month,
+          Year = workingDate.Year
         };
 
         return defaultToBeCompletedByDate;
@@ -178,9 +178,9 @@ namespace Mep.Business.Models
 
         TimePicker defaultToBeCompletedByTime = new TimePicker()
         {
-          hour = workingDate.Hour,
-          minute = workingDate.Minute,
-          second = workingDate.Second
+          Hour = workingDate.Hour,
+          Minute = workingDate.Minute,
+          Second = workingDate.Second
         };
 
         return defaultToBeCompletedByTime;

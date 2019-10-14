@@ -9,7 +9,7 @@ namespace Mep.Data.Entities
     public int CcgId { get; set; }
     [MaxLength(10)]
     [Required]
-    public string GpPracticeCode { get; set; }
+    public string Code { get; set; }
     [MaxLength(200)]
     [Required]
     public string Name { get; set; }
