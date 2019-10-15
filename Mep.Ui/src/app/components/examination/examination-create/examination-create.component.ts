@@ -21,6 +21,7 @@ import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-examination-create',
@@ -53,6 +54,8 @@ export class ExaminationCreateComponent implements OnInit {
   referralId: number;
   selectedDetails: NameIdList[] = [];
   specialities: NameIdList[];
+
+  selectedDate: Date;
 
   @ViewChild('cancelExamination', null) cancelExaminationTemplate;
 
@@ -89,15 +92,12 @@ export class ExaminationCreateComponent implements OnInit {
             .pipe(
               map(referral => {
                 this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);
-                this.minDate = referral.referralCreatedAtAsDatePicker;
-                this.referralCreated =
-                  this.CreateDateFromPickerObjects(referral.referralCreatedAtAsDatePicker, referral.referralCreatedAtAsTimePicker);
-                this.toBeCompletedByDateField.setValue(referral.defaultToBeCompletedByDate);
-                this.toBeCompletedByTimeField.setValue(referral.defaultToBeCompletedByTime);
+
+                this.referralCreated = referral.createdAt;
                 this.referralId = +params.get('referralId');
 
-                this.defaultCompletionDate = referral.defaultToBeCompletedByDate;
-                this.defaultCompletionTime = referral.defaultToBeCompletedByTime;
+                this.minDate = this.ConvertToDateStruct(referral.createdAt);
+                this.SetDefaultDateTimeFields(referral.defaultToBeCompletedBy);
 
                 return referral;
               })
@@ -238,6 +238,32 @@ export class ExaminationCreateComponent implements OnInit {
     }
   }
 
+  ConvertToDateStruct(dateValue: Date): NgbDateStruct {
+
+    const momentDate = moment(dateValue);
+    const dateStruct = {} as NgbDateStruct;
+    dateStruct.day = momentDate.date();
+    dateStruct.month = momentDate.month() + 1;
+    dateStruct.year = momentDate.year();
+
+    return dateStruct;
+  }
+
+  ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
+
+    // round up to the next 5 minute interval
+    const start = moment(dateValue);
+    const remainder = 5 - (start.minute() % 5);
+    const momentDate = moment(start).add(remainder, 'minutes');
+    const timeStruct = {} as NgbTimeStruct;
+    timeStruct.hour = momentDate.hour();
+    timeStruct.minute = momentDate.minutes();
+    timeStruct.second = momentDate.seconds();
+
+    return timeStruct;
+  }
+
+
   CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
     return new Date(
       datePart.year,
@@ -368,9 +394,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   IsExaminationBeforeReferralCreationDate(dateField: AbstractControl, timeField: AbstractControl ): boolean {
 
-    const examinationDateIsBeforeReferralCreatedAt =
-      (this.CreateDateFromPickerObjects(dateField.value, timeField.value)) < this.referralCreated;
+    const compareDate = this.CreateDateFromPickerObjects(dateField.value, timeField.value);
 
+    const examinationDateIsBeforeReferralCreatedAt =
+      moment(compareDate).isBefore(moment(this.referralCreated));
 
     if (examinationDateIsBeforeReferralCreatedAt) {
       dateField.setErrors({InvalidExaminationDate: true});
@@ -430,7 +457,7 @@ export class ExaminationCreateComponent implements OnInit {
       error => {
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to create new examination ! Please try again in a few moments'
+          message: 'Unable to create new examination! Please try again in a few moments'
         });
         this.isCreatingExamination = false;
         return throwError(error);
@@ -531,6 +558,13 @@ export class ExaminationCreateComponent implements OnInit {
     amhp.resultText = text;
 
     this.amhpField.setValue(amhp);
+  }
+
+  SetDefaultDateTimeFields(defaultDatetIme: Date) {
+    this.toBeCompletedByDateField.setValue(this.ConvertToDateStruct(defaultDatetIme));
+    this.toBeCompletedByTimeField.setValue(this.ConvertToTimeStruct(defaultDatetIme));
+    this.defaultCompletionDate = this.ConvertToDateStruct(defaultDatetIme);
+    this.defaultCompletionTime = this.ConvertToTimeStruct(defaultDatetIme);
   }
 
   TogglePlannedExamination(event: any) {
