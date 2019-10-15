@@ -104,86 +104,26 @@ namespace Mep.Business.Models
       }
     }
 
-    public DateTime? Timescale
+    public DateTimeOffset? Timescale
     {
       get
       {
-        DateTime? timescale = Examinations
+        DateTimeOffset? timescale = Examinations
                             ?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
-                            ?.MustBeCompletedBy.UtcDateTime;
+                            ?.MustBeCompletedBy;
 
-        return timescale == default(DateTime)
+        return timescale == default(DateTimeOffset)
                ? null
                : timescale;
       }
     }
 
-    public DatePicker ReferralCreatedAtAsDatePicker
+    public DateTimeOffset DefaultToBeCompletedBy
     {
       get
       {
-        DateTime workingDate = CreatedAt.UtcDateTime;
-
-        DatePicker referralCreatedAtAsDatePicker = new DatePicker()
-        {
-          Day = workingDate.Day,
-          Month = workingDate.Month,
-          Year = workingDate.Year
-        };
-
-        return referralCreatedAtAsDatePicker;
-      }
-    }
-
-    public TimePicker ReferralCreatedAtAsTimePicker
-    {
-      get
-      {
-        DateTime workingDate = CreatedAt.UtcDateTime;
-
-        TimePicker referralCreatedAtAsTimePicker = new TimePicker()
-        {
-          Hour = workingDate.Hour,
-          Minute = workingDate.Minute,
-          Second = workingDate.Second
-        };
-
-        return referralCreatedAtAsTimePicker;
-      }
-    }
-
-    public DatePicker DefaultToBeCompletedByDate
-    {
-      get
-      {
-        DateTime workingDate = Examinations.Count > 0 ? DateTime.Now.AddHours(3) : CreatedAt.UtcDateTime.AddHours(3);
-
-        DatePicker defaultToBeCompletedByDate = new DatePicker()
-        {
-          Day = workingDate.Day,
-          Month = workingDate.Month,
-          Year = workingDate.Year
-        };
-
-        return defaultToBeCompletedByDate;
-      }
-    }
-
-    public TimePicker DefaultToBeCompletedByTime
-    {
-      get
-      {
-        DateTime workingDate = Examinations.Count > 0 ? DateTime.Now.AddHours(3) : CreatedAt.UtcDateTime.AddHours(3);
-
-        TimePicker defaultToBeCompletedByTime = new TimePicker()
-        {
-          Hour = workingDate.Hour,
-          Minute = workingDate.Minute,
-          Second = workingDate.Second
-        };
-
-        return defaultToBeCompletedByTime;
+        return Examinations.Count > 0 ? DateTimeOffset.Now.AddHours(3) : CreatedAt.AddHours(3);
       }
     }
   }
