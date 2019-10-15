@@ -21,6 +21,7 @@ namespace Mep.Api.ViewModels
     public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
+    public virtual IList<ExaminationDetailType> DetailTypes { get; set; }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }

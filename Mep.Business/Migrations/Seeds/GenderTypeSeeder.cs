@@ -5,11 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class GenderTypeSeeder : SeederBase
   {
-    internal GenderTypeSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       GenderType genderType;

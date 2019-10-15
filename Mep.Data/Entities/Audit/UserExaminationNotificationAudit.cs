@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mep.Data.Entities
 {
   [Table("UserExaminationNotificationsAudit")]
-  public partial class UserExaminationNotificationAudit : BaseAudit, IUserExaminationNotification
+  public partial class UserExaminationNotificationAudit : 
+    BaseAudit, IUserExaminationNotification
   {
     public int ExaminationId { get; set; }
     public bool? HasAccepted { get; set; }

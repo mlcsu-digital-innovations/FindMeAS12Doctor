@@ -1,21 +1,24 @@
 
+
 import { CommonModule } from '@angular/common';
 import { DelaySpinnerComponent } from '../components/delay-spinner/delay-spinner.component';
 import { DisableControlDirective } from '../directives/disable-control/disable-control.directive';
-import { FormsModule } from '@angular/forms';
 import { FocusOnShowDirective } from '../directives/focus-on-show/focus-on-show.directive';
+import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateCustomParserFormatter } from '../components/datePicker-format/datePicker-format';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
 import { TemplateModule } from '../templates/template.module';
 import { ToastsComponent } from './toasts/toasts.component';
-import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
 
 @NgModule({
   declarations: [
     DelaySpinnerComponent,
-    DisableControlDirective,    
+    DisableControlDirective,
     FocusOnShowDirective,
     NavbarComponent,
     TableHeaderSortable,
@@ -24,6 +27,7 @@ import { TableHeaderSortable } from '../directives/table-header-sortable/table-h
   imports: [
     CommonModule,
     FormsModule,
+    NgMultiSelectDropDownModule,
     NgbModule,
     ReactiveFormsModule,
     TemplateModule
@@ -35,12 +39,17 @@ import { TableHeaderSortable } from '../directives/table-header-sortable/table-h
     FocusOnShowDirective,
     FormsModule,
     NavbarComponent,
+    NgMultiSelectDropDownModule,
     NgbModule,
     ReactiveFormsModule,
     TableHeaderSortable,
     TemplateModule,
     ToastsComponent
   ],
-  providers: []
+  providers: [
+    {
+      provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter
+    }
+  ]
 })
 export class SharedComponentsModule {}

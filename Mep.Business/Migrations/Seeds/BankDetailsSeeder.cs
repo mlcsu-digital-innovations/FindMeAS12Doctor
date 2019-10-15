@@ -5,12 +5,6 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class BankDetailsSeeder : SeederBase
   {
-
-    internal BankDetailsSeeder(ApplicationContext context)
-      : base(context)
-    {
-    }
-
     internal void SeedData()
     {
       BankDetail bankDetail;
