@@ -121,6 +121,7 @@ namespace Mep.Business.Models
 
     public DateTimeOffset DefaultToBeCompletedBy
     {
+      //ToDo: Get the examination offset hours from the application config
       get
       {
         return Examinations.Count > 0 ? DateTimeOffset.Now.AddHours(3) : CreatedAt.AddHours(3);
