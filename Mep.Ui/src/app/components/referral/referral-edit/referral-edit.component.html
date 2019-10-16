@@ -1,8 +1,36 @@
 <app-navbar></app-navbar>
-<div class="error-container">
-    <h1 style="font-size:3em;"><i class="fas fa-exclamation-triangle"></i><span class="error-header">Page Not Ready</span></h1>
-    <h2 style="font-size:1.6em;">Referral information will be shown here.</h2>
-    <div class="button-container">
-      <a href="/referral" class="btn btn-secondary btn-home active">Home</a>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12 ">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="far fa-edit fa-4x" style="color:#fff;"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Edit Referral</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-header-details" *ngIf="referral$ | async as referral; else loading">
+          <div class="row">
+            <div class="col-md-2">
+              Referral Id: <strong>{{referral.id}}</strong>
+            </div>
+            <div class="col-md-4">
+                Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
