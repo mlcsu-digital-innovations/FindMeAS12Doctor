@@ -9,13 +9,10 @@ import { version } from '../../../../package.json';
 export class NavbarComponent implements OnInit {
 
   // Add standard navbar options here !
-
   public version: string = version;
 
   constructor() { }
 
   ngOnInit() {
-    console.log(version);
   }
-
 }
