@@ -16,19 +16,17 @@
           </div>
         </div>
         <div class="card-header-details" *ngIf="referral$ | async as referral; else loading">
-          <div class="row">
-            <div class="col-md-2">
-              Referral Id: <strong>{{referral.id}}</strong>
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
+          </div>
+          <div class="flex-item">
+              Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
             </div>
-            <div class="col-md-4">
-                Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
-              </div>
-            <div class="col-md-2">
-              Patient Id: <strong>{{referral.patient.patientIdentifier | uppercase | slice: 0:10}}</strong>
-            </div>
-            <div class="col-md-4">
-              Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
-            </div>
+          <div class="flex-item">
+            Patient Id: <strong>{{referral.patient.patientIdentifier | uppercase | slice: 0:20}}</strong>
+          </div>
+          <div class="flex-item">
+            Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
           </div>
         </div>
         <div class="card-body">
