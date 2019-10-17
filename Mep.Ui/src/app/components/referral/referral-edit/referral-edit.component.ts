@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { switchMap, map, catchError } from 'rxjs/operators';
-import { ParamMap, ActivatedRoute, Router } from '@angular/router';
-import { ReferralService } from 'src/app/services/referral/referral.service';
-import { ToastService } from 'src/app/services/toast/toast.service';
 import { Observable, of } from 'rxjs';
+import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { Referral } from 'src/app/interfaces/referral';
+import { ReferralService } from 'src/app/services/referral/referral.service';
+import { switchMap, map, catchError } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-referral-edit',
@@ -34,7 +34,7 @@ export class ReferralEditComponent implements OnInit {
               map(referral => {
 
                 this.referralCreated = referral.createdAt;
-                this.referralId = +params.get('referralId');
+                this.referralId = referral.id;
 
                 return referral;
               })
