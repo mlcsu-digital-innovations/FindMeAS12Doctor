@@ -3,8 +3,8 @@ form {
 }
 
 .btn-exam {
-  min-width: 100px;
   margin-top: 10px;
+  min-width: 100px;
 }
 
 .btn-spaced {
@@ -12,8 +12,8 @@ form {
 }
 
 .button-container {
-  display:flex;
   align-items: center;
+  display:flex;
   height: 100%;
 }
 
@@ -23,5 +23,12 @@ form {
 
 .checkmark-content {
   bottom: 8px;
+  margin-left: 0;
+  padding-left: 0;
+  z-index: 100;
+}
+
+.btn-standard {
+  min-width: 100px;
 }
 

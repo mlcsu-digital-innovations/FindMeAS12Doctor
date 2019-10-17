@@ -44,12 +44,12 @@
                   #amhp
                   [class.is-invalid]="hasAmhpSearchFailed"
                   formControlName="amhp"
-                  [ngbTypeahead]="amhpSearch"
+                  [ngbTypeahead]="AmhpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults" />
               </div>
               <!-- Planned examination -->
-              <div class="col-md-4">
+              <div class="col-md-3 offset-md-1 text-left">
                   <div class="checkmark-content">
                       <label class="container">
                         <input
@@ -76,6 +76,13 @@
                 </div>
               </div>
             </div>
+            <div class="form-row" *ngIf="amhpField.errors">
+              <div class="col-md-8 mb-2">
+                <div class="invalid-field" *ngIf="amhpField.errors.InvalidAmhp">
+                  * AMHP must be provided
+                </div>
+              </div>
+            </div>
             <!-- Planned examination date / time -->
             <div class="form-row" *ngIf="plannedExamination.checked">
               <div class="col-md-6">
@@ -95,6 +102,7 @@
                     <button
                       class="btn btn-outline-secondary calendar"
                       (click)="s.toggle()"
+                      [disabled]="!IsFormInCreatingState()"
                       type="button">
                       <i class="far fa-calendar-alt"></i>
                     </button>
@@ -107,10 +115,19 @@
               </div>
             </div>
             <!-- Date Format Errors-->
-            <div class="form-row" *ngIf="toBeCompletedByDateField.errors">
+            <div class="form-row" *ngIf="plannedExamination.checked">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
+                <div
+                  class="invalid-field"
+                  *ngIf="scheduledDateField.errors && scheduledDateField.errors.DatePickerFormat"
+                >
                   <span>Invalid Date Format</span>
+                </div>
+                <div
+                  class="invalid-field"
+                  *ngIf="scheduledDateField.errors && scheduledDateField.errors.InvalidExaminationDate"
+                >
+                  <span>* Date is earlier than the referral creation date</span>
                 </div>
               </div>
             </div>
@@ -142,9 +159,11 @@
                       [openDelay]="1000"
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
+                      [disabled]="!IsFormInCreatingState()"
                       (click)="AddressSearch()"
                       [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
                     >
+                    <i class="fas fa-search-location"></i>
                     {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
                     <span
                         class="spinner-border spinner-border-sm"
@@ -158,12 +177,14 @@
                     type="button"
                     class="btn btn-primary btn-exam btn-spaced"
                     placement="top"
+                    [disabled]="!IsFormInCreatingState()"
                     ngbTooltip="Locate an address using an external web site"
                     [openDelay]="1000"
                     [closeDelay]="500"
                     tooltipClass="subtle-tooltip"
                     (click)="OpenLocationTab()"
                     >
+                    <i class="far fa-map"></i>
                     Locate
                   </button>
                 </div>
@@ -177,7 +198,10 @@
                 </div>
                 <div class="invalid-field" *ngIf="examinationPostcodeField.errors.NoResultsReturned">
                     <span>No Matches Found</span>
-                  </div>
+                </div>
+                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.MissingPostcode">
+                  <span>* Postcode must be provided</span>
+                </div>
               </div>
             </div>
             <!-- Examination Address -->
@@ -196,6 +220,14 @@
                     {{addressList[i].address}}
                   </option>
                 </select>
+              </div>
+            </div>
+            <!-- Examination Address Errors-->
+            <div class="form-row" *ngIf="examinationAddressField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div class="invalid-field" *ngIf="examinationAddressField.errors.InvalidAddress">
+                  <span>* Address must be provided</span>
+                </div>
               </div>
             </div>
             <!-- Additional location details -->
@@ -219,8 +251,9 @@
                       formControlName="examinationDetails"
                       [settings]="dropdownSettings"
                       [data]="examinationDetails"
-                      (onSelect)="onItemSelect($event)"
-                      (onDeSelect)="onItemDeselect($event)"
+                      (onSelect)="OnItemSelect($event)"
+                      (onDeSelect)="OnItemDeselect($event)"
+                      [disabled]="!IsFormInCreatingState()"
                     >
                     </ng-multiselect-dropdown>
                   </div>
@@ -230,10 +263,10 @@
               <div class="col-md-4 mb-2">
                 <label for="speciality">Speciality</label>
                 <select
-                class="custom-select custom-select-lg mb-2 form-control"
-                formControlName="speciality"
-                #speciality
-                id="speciality"
+                  class="custom-select custom-select-lg mb-2 form-control"
+                  formControlName="speciality"
+                  #speciality
+                  id="speciality"
                 >
                 <option [selected]=true></option>
                 <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
@@ -245,10 +278,10 @@
               <div class="col-md-4 mb-2">
                 <label for="preferredGender">Preferred Doctor Gender</label>
                 <select
-                class="custom-select custom-select-lg mb-2 form-control"
-                formControlName="preferredGender"
-                #preferredGender
-                id="preferredGender"
+                  class="custom-select custom-select-lg mb-2 form-control"
+                  formControlName="preferredGender"
+                  #preferredGender
+                  id="preferredGender"
                 >
                 <option [selected]=true></option>
                 <option *ngFor="let gender of genderTypes; let i=index" [value]="genderTypes[i].id">
@@ -276,6 +309,7 @@
                   <div class="col-md-1" style="padding-left: 1px;">
                       <button
                         id="calendarBtn"
+                        [disabled]="!IsFormInCreatingState()"
                         class="btn btn-outline-secondary calendar"
                         (click)="d.toggle()"
                         type="button">
@@ -290,15 +324,25 @@
               </div>
             </div>
             <!-- Date Format Errors-->
-            <div class="form-row" *ngIf="toBeCompletedByDateField.errors">
+            <div class="form-row" *ngIf="!plannedExamination.checked">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div class="invalid-field" *ngIf="toBeCompletedByDateField.errors.DatePickerFormat">
+                <div
+                  class="invalid-field"
+                  *ngIf="toBeCompletedByDateField.errors && toBeCompletedByDateField.errors.DatePickerFormat"
+                >
                   <span>Invalid Date Format</span>
+                </div>
+                <div
+                  class="invalid-field"
+                  *ngIf="toBeCompletedByDateField.errors && toBeCompletedByDateField.errors.InvalidExaminationDate"
+                >
+                  <span>* Date is earlier than the referral creation date</span>
                 </div>
               </div>
             </div>
+
             <div class="form-row">
-              <div class="col-md-2">
+              <div class="col-md-4">
                 <button
                   type="button"
                   class="btn btn-primary"
@@ -311,16 +355,48 @@
                    class="btn btn-primary"
                     *ngIf="!plannedExamination.checked"
                 >
+                  <i class="fas fa-user-plus"></i>
                   Select Doctor
                 </button>
               </div>
-              <div class="col-md-2 offset-md-7">
+              <div class="col-md-2 offset-md-4 text-right">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-standard btn-cancel"
                   (click)="CancelExamination()"
+                  *ngIf="IsFormInCreatingState()"
                 >
+                  <i class="far fa-times-circle"></i>
                   Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-standard btn-primary"
+                  (click)="ReferralListNavigation()"
+                  *ngIf="!IsFormInCreatingState()"
+                >
+                  <i class="fas fa-list"></i>
+                  Referral List
+                </button>
+              </div>
+              <div class="col-md-2 text-left">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-standard"
+                  (click)="SaveExamination()"
+                  *ngIf="IsFormInCreatingState()"
+                >
+                  <i class="far fa-check-circle"></i>
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-standard"
+                  (click)="EditExamination()"
+                  *ngIf="!IsFormInCreatingState()"
+                >
+                  <i class="far fa-edit"></i>
+                  Edit
                 </button>
               </div>
             </div>
@@ -329,6 +405,8 @@
       </div>
     </div>
   </div>
+
+  <app-delay-spinner *ngIf="isCreatingExamination" [delayMessage]="'Creating Examination'"></app-delay-spinner>
 
   <ng-template #loading>
     <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
