@@ -1,28 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { PatientEditComponent } from './patient-edit.component';
-import { HttpClientModule } from '@angular/common/http';
+import { ExaminationEditComponent } from './examination-edit.component';
 import { SharedComponentsModule } from '../../shared-components.module';
 
-describe('PatientEditComponent', () => {
-  let component: PatientEditComponent;
-  let fixture: ComponentFixture<PatientEditComponent>;
+describe('ExaminationEditComponent', () => {
+  let component: ExaminationEditComponent;
+  let fixture: ComponentFixture<ExaminationEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        PatientEditComponent
+        ExaminationEditComponent
       ],
       imports: [
-        HttpClientModule,
         SharedComponentsModule
-       ]
+      ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PatientEditComponent);
+    fixture = TestBed.createComponent(ExaminationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
