@@ -400,13 +400,14 @@ export class ReferralCreateComponent implements OnInit {
   HasValidGpOrPostcodeOrCcg(): boolean {
 
     // All 3 fields can be 'unknown' OR at least 1 field must be populated
-    if (this.gpPractice.id === this.unknownGpPracticeId && this.residentialPostcode === 'Unknown' && this.ccg.id === this.unknownCcgId) {
+    if (this.gpPractice.id === this.unknownGpPracticeId &&
+          this.residentialPostcode === 'Unknown Postcode' && this.ccg.id === this.unknownCcgId) {
       return true;
     }
 
     return (
       (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
-      (this.residentialPostcode !== '' && this.residentialPostcode !== 'Unknown') ||
+      (this.residentialPostcode !== '' && this.residentialPostcode !== 'Unknown Postcode') ||
       (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
     );
   }
@@ -575,7 +576,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleCcgUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
-      this.SetCcgField(this.unknownCcgId, 'Unknown');
+      this.SetCcgField(this.unknownCcgId, 'Unknown CCG');
       this.SetFieldFocus('#amhp');
     } else {
       this.SetCcgField(null, '');
@@ -586,7 +587,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleGpPracticeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the postcode field and set focus
-      this.SetGpPracticeField(this.unknownGpPracticeId, 'Unknown');
+      this.SetGpPracticeField(this.unknownGpPracticeId, 'Unknown GP Practice');
       this.isResidentialPostcodeFieldShown = true;
       this.SetFieldFocus('#residentialPostcode');
     } else {
@@ -600,7 +601,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleResidentialPostcodeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
-      this.SetResidentialPostcodeField('Unknown');
+      this.SetResidentialPostcodeField('Unknown Postcode');
       this.isCcgFieldsShown = true;
       this.SetFieldFocus('#ccg');
       this.isPatientPostcodeValidated = true;
