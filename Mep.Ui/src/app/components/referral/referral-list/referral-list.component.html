@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="page-content">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 offset-md-0">
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
@@ -18,8 +18,8 @@
           <form novalidate>
             <div class="form-row">
               <div class="col-md-4">
-                <label for="searchTerm">Full text search: </label>
                 <input class="form-control" id="searchTerm" type="text" name="searchTerm"
+                placeholder="Full text search:"
                   [(ngModel)]="referralListService.searchTerm" />
               </div>
               <div class="col-md-4" style="margin-top: 38px;">
