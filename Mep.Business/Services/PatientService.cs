@@ -111,6 +111,56 @@ namespace Mep.Business.Services
     protected override async Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
     {
       // TODO: Residential Postcode => CCG Id
+      await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
+      await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
+      return true;
+    }
+
+    protected override async Task<bool> InternalUpdateAsync(Patient model, Entities.Patient entity)
+    {
+      // TODO: Residential Postcode => CCG Id
+      await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
+      await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
+      return true;
+    }
+
+    private async Task<bool> CheckForDuplicateNhsNumberAndAlternativeIdentifier(Patient model)
+    {
+      if (model.NhsNumber.HasValue)
+      {
+        Entities.Patient patient = await _context
+          .Patients
+          .Where(p => p.Id != model.Id)
+          .FirstOrDefaultAsync(p => p.NhsNumber == model.NhsNumber);
+
+        if (patient != null)
+        {
+          throw new ModelStateException("NhsNumber",
+            $"An {(patient.IsActive ? "active" : "inactive")} " +
+            $"patient with an NhsNumber of {model.NhsNumber} already exists.");
+        }
+      }
+      else
+      {
+        Entities.Patient patient = await _context
+          .Patients
+          .Where(p => p.Id != model.Id)
+          .FirstOrDefaultAsync(p => p.AlternativeIdentifier == model.AlternativeIdentifier);
+
+        if (patient != null)
+        {
+          throw new ModelStateException("AlternativeIdentifier",
+            $"An {(patient.IsActive ? "active" : "inactive")} " +
+            $"patient with an AlternativeIdentifier of {model.AlternativeIdentifier} already exists");
+        }
+      }
+      return true;     
+    }
+
+    private async Task<bool> PopulateCcgIdFromGpPracticeIdIfPresent(
+      Patient model, 
+      Entities.Patient entity)
+    {
 
       if (model.CcgId == null &&
           model.GpPracticeId != null)
@@ -121,43 +171,13 @@ namespace Mep.Business.Services
           throw new ModelStateException("GpPracticeId",
             $"An active GP Practice with an Id of {model.GpPracticeId} does not exist.");
         }
-        else
-        {
-          entity.CcgId = gpPractice.CcgId;
-        }
-      }      
-
-      if (model.NhsNumber.HasValue)
-      {
-        Entities.Patient patient = await _context.Patients
-          .FirstOrDefaultAsync(p => p.NhsNumber == model.NhsNumber);
-
-        if (patient != null)
-        {
-          throw new ModelStateException("NhsNumber",
-            $"An {(patient.IsActive ? "active" : "inactive")} " + 
-            $"patient with an NhsNumber of {model.NhsNumber} already exists.");
-        }
+        entity.CcgId = gpPractice.CcgId;
+        return true;
       }
       else
       {
-        Entities.Patient patient = await _context.Patients
-          .FirstOrDefaultAsync(p => p.AlternativeIdentifier == model.AlternativeIdentifier);
-
-        if (patient != null)
-        {
-          throw new ModelStateException("AlternativeIdentifier",
-            $"An {(patient.IsActive ? "active" : "inactive")} " + 
-            $"patient with an AlternativeIdentifier of {model.AlternativeIdentifier} already exists");
-        }
-      }
-
-      return true;
-    }
-
-    protected override Task<bool> InternalUpdateAsync(Patient model, Entities.Patient entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
+        return false;
+      }      
+    }    
   }
 }
