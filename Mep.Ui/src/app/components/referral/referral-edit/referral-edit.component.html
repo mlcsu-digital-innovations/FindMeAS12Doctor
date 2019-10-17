@@ -2,7 +2,7 @@
 <div class="page-content">
   <div class="row">
     <div class="col-md-12 ">
-      <div class="card">
+      <div class="card" *ngIf="referral$ | async as referral; else loading">
         <div class="card-header">
           <div class="card-icon">
             <i class="far fa-edit fa-4x" style="color:#fff;"></i>
@@ -14,7 +14,7 @@
             </h6>
           </div>
         </div>
-        <div class="card-header-details" *ngIf="referral$ | async as referral; else loading">
+        <div class="card-header-details">
           <div class="row">
             <div class="col-md-2">
               Referral Id: <strong>{{referral.id}}</strong>
@@ -23,6 +23,42 @@
                 Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
               </div>
           </div>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="referralForm" novalidate>
+              <div class="form-row">
+                <div class="col-md-3">
+                  <label for="nhsNumber">NHS Number</label>
+                  <input
+                    type="text"
+                    digitOnly
+                    maxlength="10"
+                    formControlName="nhsNumber"
+                    id="nhsNumber"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': HasInvalidNHSNumber(),
+                      'is-valid': HasValidNHSNumber()
+                    }"
+                  />
+                </div>
+              </div>
+
+              <!-- Row for divs showing patient number validation errors -->
+              <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
+                <div class="col-md-3 mb-2">
+                  <div *ngIf="nhsNumberField.errors != null">
+                    <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
+                      <span>Invalid NHS Number</span>
+                    </div>
+                    <div *ngIf="nhsNumberField.errors.InvalidPatientIdentifier" class="invalid-field">
+                      <span>* Invalid Patient Identifier</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </form>
         </div>
       </div>
     </div>
