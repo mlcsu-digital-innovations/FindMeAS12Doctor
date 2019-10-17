@@ -5,19 +5,24 @@ using Mep.Business.Extensions;
 using Mep.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Mep.Business.Services
 {
   public class ExaminationService
     : ServiceBase<Examination, Entities.Examination>, IModelService<Examination>
   {
-    readonly IModelService<User> _userService;
-    public ExaminationService(ApplicationContext context, IMapper mapper, IModelService<User> userService)
+    private readonly IModelService<Referral> _referralService;
+    private readonly IModelService<User> _userService;    
+    
+    public ExaminationService(
+      ApplicationContext context, 
+      IMapper mapper, 
+      IModelService<Referral> referralService,
+      IModelService<User> userService)
       : base("Examination", context, mapper)
     {
+      _referralService = referralService;
       _userService = userService;
     }
 
@@ -136,8 +141,7 @@ namespace Mep.Business.Services
 
     private async Task<int?> GetCcgIdFromReferralPatient(Examination model)
     {
-      Referral referral = await new ReferralService(_context, _mapper)
-          .GetByIdAsync(model.ReferralId, true);
+      Referral referral = await _referralService.GetByIdAsync(model.ReferralId, true);
 
       if (referral == null)
       {
