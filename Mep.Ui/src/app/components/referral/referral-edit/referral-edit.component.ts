@@ -121,8 +121,8 @@ export class ReferralEditComponent implements OnInit {
 
   HasNoPatientIdErrors(): boolean {
     return (
-      this.nhsNumberField.errors == null &&
-      this.alternativeIdentifierField.errors == null
+      this.nhsNumberField.errors === null &&
+      this.alternativeIdentifierField.errors === null
     );
   }
 
@@ -130,7 +130,7 @@ export class ReferralEditComponent implements OnInit {
     return (
       this.alternativeIdentifierField.value !== '' &&
       this.alternativeIdentifierField.value !== null &&
-      this.alternativeIdentifierField.errors == null
+      this.alternativeIdentifierField.errors === null
     );
   }
 
@@ -138,7 +138,7 @@ export class ReferralEditComponent implements OnInit {
     return (
       this.nhsNumberField.value !== '' &&
       this.nhsNumberField.value !== null &&
-      this.nhsNumberField.errors == null
+      this.nhsNumberField.errors === null
     );
   }
 

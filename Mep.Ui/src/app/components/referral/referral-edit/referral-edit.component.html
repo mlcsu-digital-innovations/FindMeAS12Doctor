@@ -5,7 +5,7 @@
       <div class="card" *ngIf="referral$ | async as referral; else loading">
         <div class="card-header">
           <div class="card-icon">
-            <i class="far fa-edit fa-4x" style="color:#fff;"></i>
+            <i class="far fa-edit fa-4x"></i>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">Edit Referral</h4>
@@ -62,7 +62,7 @@
                 </div>
               </div>
               <!-- Row for divs showing patient number validation errors -->
-              <div class="form-row" *ngIf="!HasNoPatientIdErrors()" style="margin-top: -20px;">
+              <div class="form-row mt-2" *ngIf="!HasNoPatientIdErrors()">
                 <div class="col-md-3 mb-2">
                   <div *ngIf="nhsNumberField.errors != null">
                     <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">

@@ -48,7 +48,6 @@ label {
 .card {
   border: 1px solid #ddd;
   background-color: #fff;
-  xborder: none;
 }
 
 .card-body {
@@ -72,6 +71,7 @@ label {
 .card-icon {
   float:left;
   margin-right: 20px;
+  color: #fff;
 }
 
 .card-header-text {
@@ -354,4 +354,25 @@ label {
 .or {
   font-weight:600;
   color: #666;
+}
+
+/** margin classes in half rems**/
+.mt-less-1 {
+  margin-top: -0.5rem !important;
+}
+
+.mt-less-2 {
+  margin-top: -1rem !important;
+}
+
+.mt-less-5 {
+  margin-top: -2.5rem !important;
+}
+
+.ml-less-2 {
+  margin-left: -1rem !important;
+}
+
+.mt-more-2 {
+  margin-left: 1rem !important;
 }
