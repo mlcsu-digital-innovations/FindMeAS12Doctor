@@ -15,14 +15,12 @@
           </div>
         </div>
         <div class="card-header-details">
-          <div class="row">
-            <div class="col-md-2">
-              Referral Id: <strong>{{referral.id}}</strong>
-            </div>
-            <div class="col-md-4">
-                Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
-              </div>
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
           </div>
+          <div class="flex-item">
+              Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
+            </div>
         </div>
 
         <div class="card-body">
@@ -43,10 +41,28 @@
                     }"
                   />
                 </div>
+                <div class="col-md-1 centered-div">
+                  <div class="or">
+                    Or
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="alternativeIdentifier">Alternative Identifier</label>
+                  <input
+                    type="text"
+                    maxlength="200"
+                    formControlName="alternativeIdentifier"
+                    class="form-control"
+                    [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
+                    [ngClass]="{
+                      'is-invalid': HasInvalidAlternativeIdentifier(),
+                      'is-valid': HasValidAlternativeIdentifier()
+                    }"
+                  />
+                </div>
               </div>
-
               <!-- Row for divs showing patient number validation errors -->
-              <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
+              <div class="form-row" *ngIf="!HasNoPatientIdErrors()" style="margin-top: -20px;">
                 <div class="col-md-3 mb-2">
                   <div *ngIf="nhsNumberField.errors != null">
                     <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
@@ -55,6 +71,11 @@
                     <div *ngIf="nhsNumberField.errors.InvalidPatientIdentifier" class="invalid-field">
                       <span>* Invalid Patient Identifier</span>
                     </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-2 offset-md-1">
+                  <div *ngIf="alternativeIdentifierField.errors" class="invalid-field">
+                    <span>Invalid Alternative Identifier</span>
                   </div>
                 </div>
               </div>
