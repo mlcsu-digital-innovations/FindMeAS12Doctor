@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'app-navbar',
@@ -8,10 +9,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class NavbarComponent implements OnInit {
 
   // Add standard navbar options here !
+  public version: string = version;
 
   constructor() { }
 
   ngOnInit() {
   }
-
 }
