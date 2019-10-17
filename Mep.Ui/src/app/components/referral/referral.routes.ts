@@ -18,7 +18,7 @@ export const ReferralRoutes: Routes = [
     component: ReferralCreateComponent
   },
   {
-    path: 'referral/edit/:id',
+    path: 'referral/edit/:referralId',
     component: ReferralEditComponent
   }
 ];
