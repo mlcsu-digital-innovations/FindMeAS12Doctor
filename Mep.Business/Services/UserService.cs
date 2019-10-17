@@ -48,20 +48,5 @@ namespace Mep.Business.Services
 
       return entity;
     }
-
-    protected override Task<Entities.User> GetEntityLinkedObjectsAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
   }
 }

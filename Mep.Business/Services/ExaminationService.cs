@@ -6,6 +6,8 @@ using Mep.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace Mep.Business.Services
 {
@@ -13,11 +15,11 @@ namespace Mep.Business.Services
     : ServiceBase<Examination, Entities.Examination>, IModelService<Examination>
   {
     private readonly IModelService<Referral> _referralService;
-    private readonly IModelService<User> _userService;    
-    
+    private readonly IModelService<User> _userService;
+
     public ExaminationService(
-      ApplicationContext context, 
-      IMapper mapper, 
+      ApplicationContext context,
+      IMapper mapper,
       IModelService<Referral> referralService,
       IModelService<User> userService)
       : base("Examination", context, mapper)
@@ -43,12 +45,6 @@ namespace Mep.Business.Services
         _mapper.Map<IEnumerable<Models.Examination>>(entities);
 
       return models;
-    }
-
-    protected override async Task<Entities.Examination> GetEntityLinkedObjectsAsync(Examination model, Entities.Examination entity)
-    {
-      entity.CreatedByUser = await GetLinkedObjectAsync<Entities.User>(_context.Users, model.CreatedByUserId);
-      return entity;
     }
 
     protected override async Task<Entities.Examination> GetEntityByIdAsync(
@@ -88,8 +84,37 @@ namespace Mep.Business.Services
       entity.IsSuccessful = null;
       entity.NonPaymentLocationId = null;
       entity.UnsuccessfulExaminationTypeId = null;
-      AddEntityDetails(model, entity);
+      AddExaminationDetails(model, entity);
       await AddAmhpToUserExaminationNotifications(model, entity);
+
+      return true;
+    }
+
+    protected override async Task<bool> InternalUpdateAsync(Examination model, Entities.Examination entity)
+    {
+      Serilog.Log.Verbose("Examination Update model: {@model}", model);
+      Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
+
+      entity.Address1 = model.Address1;
+      entity.Address2 = model.Address2;
+      entity.Address3 = model.Address3;
+      entity.Address4 = model.Address4;
+      entity.CcgId = await GetCcgIdFromReferralPatient(model);
+      entity.CompletedByUserId = model.CompletedByUserId;
+      entity.CompletedTime = model.CompletedTime;
+      entity.CompletionConfirmationByUserId = model.CompletionConfirmationByUserId;
+      entity.IsSuccessful = model.IsSuccessful;
+      entity.MeetingArrangementComment = model.MeetingArrangementComment;
+      entity.MustBeCompletedBy = model.MustBeCompletedBy;
+      entity.NonPaymentLocationId = model.NonPaymentLocationId;
+      entity.Postcode = model.Postcode;
+      entity.PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
+      entity.ReferralId = model.ReferralId;
+      entity.ScheduledTime = model.ScheduledTime;
+      entity.SpecialityId = model.SpecialityId;
+      entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
+      UpdateExaminationDetails(model, entity);
+      //await UpdateAmhpToUserExaminationNotifications(model, entity);
 
       return true;
     }
@@ -121,22 +146,27 @@ namespace Mep.Business.Services
       return true;
     }
 
-    private void AddEntityDetails(Examination model, Entities.Examination entity)
+    private void AddExaminationDetails(Examination model, Entities.Examination entity)
     {
-      if (model.DetailTypeIds != null && model.DetailTypeIds.Count > 0)
+      if (model.HasDetailTypeIds)
       {
         entity.Details = new List<Entities.ExaminationDetail>(model.DetailTypeIds.Count);
         foreach (int examinationDetailTypeId in model.DetailTypeIds)
         {
-          Entities.ExaminationDetail examinationDetail = new Entities.ExaminationDetail()
-          {
-            ExaminationDetailTypeId = examinationDetailTypeId,
-            IsActive = true
-          };
-          UpdateModified(examinationDetail);
-          entity.Details.Add(examinationDetail);
+          AddExaminationDetail(examinationDetailTypeId, entity);
         }
       }
+    }
+
+    private void AddExaminationDetail(int examinationDetailTypeId, Entities.Examination entity)
+    {
+      Entities.ExaminationDetail examinationDetail = new Entities.ExaminationDetail()
+      {
+        ExaminationDetailTypeId = examinationDetailTypeId,
+        IsActive = true
+      };
+      UpdateModified(examinationDetail);
+      entity.Details.Add(examinationDetail);
     }
 
     private async Task<int?> GetCcgIdFromReferralPatient(Examination model)
@@ -158,9 +188,46 @@ namespace Mep.Business.Services
       return referral.Patient.CcgId;
     }
 
-    protected override Task<bool> InternalUpdateAsync(Examination model, Entities.Examination entity)
+    private void UpdateExaminationDetails(Examination model, Entities.Examination entity)
     {
-      return Task.FromResult<bool>(true);
+      if (entity.HasDetails)
+      {
+        foreach (Entities.ExaminationDetail examinationDetail in entity.Details)
+        {
+          UpdateModified(examinationDetail);
+          examinationDetail.IsActive = false;
+        }
+      }
+
+      if (model.HasDetailTypeIds)
+      {
+        if (entity.HasDetails)
+        {
+          foreach (int detailTypeId in model.DetailTypeIds)
+          {
+            Entities.ExaminationDetail examinationDetail =
+              entity.Details.SingleOrDefault(d => d.ExaminationDetailTypeId == detailTypeId);
+            if (examinationDetail == null)
+            {
+              AddExaminationDetail(detailTypeId, entity);
+            }
+            else
+            {
+              examinationDetail.IsActive = true;
+            }
+          }
+        }
+        else
+        {
+          AddExaminationDetails(model, entity);
+        }
+      }
     }
+
+    private Task UpdateAmhpToUserExaminationNotifications(Examination model, Entities.Examination entity)
+    {
+      throw new NotImplementedException();
+    }
+
   }
 }

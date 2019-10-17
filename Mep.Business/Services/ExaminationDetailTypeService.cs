@@ -44,20 +44,5 @@ namespace Mep.Business.Services
 
       return entity;
     }
-
-    protected override Task<Entities.ExaminationDetailType> GetEntityLinkedObjectsAsync(ExaminationDetailType model, Entities.ExaminationDetailType entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(ExaminationDetailType model, Entities.ExaminationDetailType entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(ExaminationDetailType model, Entities.ExaminationDetailType entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
   }
 }

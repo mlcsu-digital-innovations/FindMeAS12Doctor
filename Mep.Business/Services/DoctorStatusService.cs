@@ -5,10 +5,6 @@ using System.Collections.Generic;
 using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
-using Mep.Business.Models.SearchModels;
-using System.Linq.Expressions;
-using System;
-using System.Linq;
 
 namespace Mep.Business.Services
 {
@@ -47,21 +43,6 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(doctorStatus => doctorStatus.Id == entityId);
 
       return entity;
-    }
-
-    protected override Task<Entities.DoctorStatus> GetEntityLinkedObjectsAsync(DoctorStatus model, Entities.DoctorStatus entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(DoctorStatus model, Entities.DoctorStatus entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(DoctorStatus model, Entities.DoctorStatus entity)
-    {
-      return Task.FromResult<bool>(true);
     }
   }
 }

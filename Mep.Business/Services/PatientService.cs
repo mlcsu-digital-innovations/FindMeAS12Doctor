@@ -93,21 +93,6 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    protected override async Task<Entities.Patient> GetEntityLinkedObjectsAsync(Patient model, Entities.Patient entity)
-    {
-      if (model.CcgId.HasValue)
-      {
-        entity.Ccg = await GetLinkedObjectAsync<Entities.Ccg>(_context.Ccgs, model.CcgId.Value);
-      }
-
-      if (model.GpPracticeId.HasValue)
-      {
-        entity.GpPractice = await GetLinkedObjectAsync<Entities.GpPractice>(_context.GpPractices, model.GpPracticeId.Value);
-      }
-
-      return entity;
-    }
-
     protected override async Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
     {
       // TODO: Residential Postcode => CCG Id
@@ -118,9 +103,15 @@ namespace Mep.Business.Services
 
     protected override async Task<bool> InternalUpdateAsync(Patient model, Entities.Patient entity)
     {
-      // TODO: Residential Postcode => CCG Id
-      await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
       await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
+
+      entity.AlternativeIdentifier = model.AlternativeIdentifier;
+      entity.CcgId = model.CcgId;
+      await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
+      entity.GpPracticeId = model.GpPracticeId;
+      entity.NhsNumber = model.NhsNumber;
+      entity.ResidentialPostcode = model.ResidentialPostcode;
+      // TODO: Residential Postcode => CCG Id
       return true;
     }
 

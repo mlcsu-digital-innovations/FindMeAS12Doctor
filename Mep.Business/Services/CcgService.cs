@@ -1,10 +1,10 @@
 using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
+using Mep.Business.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mep.Business.Services
 {
@@ -43,21 +43,6 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
 
       return entity;  
-    }
-
-    protected override Task<Entities.Ccg> GetEntityLinkedObjectsAsync(Ccg model, Entities.Ccg entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(Ccg model, Entities.Ccg entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(Ccg model, Entities.Ccg entity)
-    {
-      return Task.FromResult<bool>(true);
     }
   }
 }

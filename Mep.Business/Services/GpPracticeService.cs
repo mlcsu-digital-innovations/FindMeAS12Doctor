@@ -44,20 +44,5 @@ namespace Mep.Business.Services
 
       return entity;
     }
-
-    protected override Task<Entities.GpPractice> GetEntityLinkedObjectsAsync(GpPractice model, Entities.GpPractice entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(GpPractice model, Entities.GpPractice entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(GpPractice model, Entities.GpPractice entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
   }
 }

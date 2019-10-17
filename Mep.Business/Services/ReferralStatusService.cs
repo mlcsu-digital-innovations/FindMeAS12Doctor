@@ -44,20 +44,5 @@ namespace Mep.Business.Services
 
       return entity;
     }
-
-    protected override Task<Entities.ReferralStatus> GetEntityLinkedObjectsAsync(ReferralStatus model, Entities.ReferralStatus entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(ReferralStatus model, Entities.ReferralStatus entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(ReferralStatus model, Entities.ReferralStatus entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
   }
 }

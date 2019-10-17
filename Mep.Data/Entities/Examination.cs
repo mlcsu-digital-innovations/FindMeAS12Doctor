@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mep.Data.Entities
 {
@@ -18,10 +19,10 @@ namespace Mep.Data.Entities
     public virtual Ccg Ccg { get; set; }
     public int? CcgId { get; set; }
     public virtual User CompletedByUser { get; set; }
-    public int? CompletedByUserId { get; set; }    
+    public int? CompletedByUserId { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
     public virtual User CompletionConfirmationByUser { get; set; }
-    public int? CompletionConfirmationByUserId { get; set; }    
+    public int? CompletionConfirmationByUserId { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
     public virtual IList<ExaminationDetail> Details { get; set; }
@@ -35,15 +36,18 @@ namespace Mep.Data.Entities
     [MaxLength(10)]
     public string Postcode { get; set; }
     public virtual GenderType PreferredDoctorGenderType { get; set; }
-    public int? PreferredDoctorGenderTypeId { get; set; }    
+    public int? PreferredDoctorGenderTypeId { get; set; }
     public virtual Referral Referral { get; set; }
-    public int ReferralId { get; set; }    
+    public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public Speciality Speciality { get; set; }
-    public int SpecialityId { get; set; }    
+    public int SpecialityId { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+
+    [NotMapped]
+    public bool HasDetails { get { return Details != null && Details.Count > 0; } }
   }
 }

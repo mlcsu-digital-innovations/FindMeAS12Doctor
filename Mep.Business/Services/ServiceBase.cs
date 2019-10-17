@@ -68,8 +68,12 @@ namespace Mep.Business.Services
     public async Task<TBusinessModel> UpdateAsync(
       TBusinessModel model)
     {
+      Serilog.Log.Verbose("Entry Model: {@model}", model);
+
       TEntity entity =
         await GetEntityByIdAsync(model.Id, false, false);
+
+      Serilog.Log.Verbose("Get Entity: {@entity}", entity);
 
       if (entity == null)
       {
@@ -77,36 +81,18 @@ namespace Mep.Business.Services
       }
       else
       {
-        _mapper.Map<TBusinessModel, TEntity>(model, entity);
+        entity.IsActive = model.IsActive;
+        Serilog.Log.Verbose("Map Entity: {@entity}", entity);
         UpdateModified(entity);
-
-        await GetEntityLinkedObjectsAsync(model, entity);
+        Serilog.Log.Verbose("Update Mod Entity: {@entity}", entity);
 
         await InternalUpdateAsync(model, entity);
+        Serilog.Log.Debug("Internal Update Entity: {@entity}", entity);
 
         await _context.SaveChangesAsync();
 
         model = await GetByIdAsync(model.Id, model.IsActive);
-        return model;
-      }
-    }
-
-    public async Task<TBusinessModel> UpdateEntityAsync(TBusinessModel model)
-    {
-      TEntity entity =
-        await GetEntityByIdAsync(model.Id, false, false);
-
-      if (entity == null)
-      {
-        throw new EntityNotFoundException(typeof(TEntity).Name, model.Id);
-      }
-      else
-      {
-        _mapper.Map<TBusinessModel, TEntity>(model, entity);
-        UpdateModified(entity);
-        await _context.SaveChangesAsync();
-
-        model = await GetByIdAsync(model.Id, model.IsActive);
+        Serilog.Log.Debug("After Save Model: {@model}", model);
         return model;
       }
     }
@@ -115,37 +101,17 @@ namespace Mep.Business.Services
       int entityId,
       bool asNoTracking,
       bool activeOnly);
-    
-    protected abstract Task<TEntity> GetEntityLinkedObjectsAsync(
-      TBusinessModel model,
-      TEntity entity
-    );
 
-    protected abstract Task<bool> InternalCreateAsync(
-      TBusinessModel model,
-      TEntity entity
-    );
-
-    protected abstract Task<bool> InternalUpdateAsync(
-      TBusinessModel model,
-      TEntity entity
-    );
-    
-    protected async Task<T> GetLinkedObjectAsync<T>(DbSet<T> appContext, int propertyId) where T : BaseEntity
+    protected virtual Task<bool> InternalCreateAsync(
+      TBusinessModel model, TEntity entity)
     {
-      try
-      {
-        return await appContext.SingleAsync(x => x.Id == propertyId);
-      }
-      catch
-      {
-        var model = _context.Model;
-        var entityTypes = model.GetEntityTypes();
-        var entityType = entityTypes.First(t => t.ClrType == typeof(T));
-        var tableNameAnnotation = entityType.GetAnnotations().First(a => a.Name == "Relational:TableName");
-        var tableName = tableNameAnnotation.Value.ToString();
-        throw new EntityNotFoundInTableException(tableName, propertyId);
-      }
+      return Task.FromResult<bool>(true);
+    }
+
+    protected virtual Task<bool> InternalUpdateAsync(
+      TBusinessModel model, TEntity entity)
+    {
+      return Task.FromResult<bool>(true);
     }
 
     protected void UpdateModified(BaseEntity entity)

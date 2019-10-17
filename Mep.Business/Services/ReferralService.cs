@@ -39,17 +39,6 @@ namespace Mep.Business.Services
       return models;
     }
 
-    protected override async Task<Entities.Referral> GetEntityLinkedObjectsAsync(Referral model, Entities.Referral entity)
-    {
-
-      entity.Patient = await GetLinkedObjectAsync<Entities.Patient>(_context.Patients, model.PatientId);
-      entity.CreatedByUser = await GetLinkedObjectAsync<Entities.User>(_context.Users, model.CreatedByUserId);
-      entity.ReferralStatus = await GetLinkedObjectAsync<Entities.ReferralStatus>(_context.ReferralStatuses, model.ReferralStatusId);
-
-      return entity;
-    }
-
-
     protected override async Task<Entities.Referral> GetEntityByIdAsync(
       int entityId,
       bool asNoTracking,
@@ -67,16 +56,6 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(referral => referral.Id == entityId);
 
       return entity;
-    }
-
-    protected override Task<bool> InternalCreateAsync(Referral model, Entities.Referral entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(Referral model, Entities.Referral entity)
-    {
-      return Task.FromResult<bool>(true);
     }
   }
 }

@@ -44,20 +44,5 @@ namespace Mep.Business.Services
 
       return entity;  
     }
-
-    protected override Task<Entities.GenderType> GetEntityLinkedObjectsAsync(GenderType model, Entities.GenderType entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(GenderType model, Entities.GenderType entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(GenderType model, Entities.GenderType entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
   }
 }
