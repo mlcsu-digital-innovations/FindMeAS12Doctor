@@ -24,12 +24,12 @@ namespace Mep.Api.RequestModels
     [MaxLength(10)]
     public string Postcode { get; set; }
     [Range(1, int.MaxValue)]
-    public int PreferredDoctorGenderTypeId { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
     [Range(1, int.MaxValue)]
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     [Range(1, int.MaxValue)]
-    public int SpecialityId { get; set; }
+    public int? SpecialityId { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

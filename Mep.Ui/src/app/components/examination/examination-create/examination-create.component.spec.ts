@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExaminationCreateComponent } from './examination-create.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,7 +24,13 @@ describe('ExaminationCreateComponent', () => {
            useValue: {
              paramMap: of({referralId: 1})
            }
-         }
+         },
+         {
+          provide: Router,
+          useValue: {
+            paramMap: of({referralId: 1})
+          }
+        }
        ]
     })
     .compileComponents();
