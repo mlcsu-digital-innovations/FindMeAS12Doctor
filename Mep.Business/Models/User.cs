@@ -38,5 +38,13 @@ namespace Mep.Business.Models
     public int? GenderTypeId { get; set; }
 
     public virtual IList<Referral> AmhpReferrals { get; set; }
+
+    public bool IsAmhp
+    {
+      get
+      {
+        return ProfileType.IsAmhp;
+      }
+    }
   }
 }

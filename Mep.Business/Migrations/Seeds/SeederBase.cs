@@ -49,11 +49,11 @@ namespace Mep.Business.Migrations.Seeds
     protected const decimal LONGITUDE = 0.000000m;
     protected const string NON_PAYMENT_LOCATION_TYPE_NAME = "Non Payment Location Type Name";
     protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION = "Non Payment Location Type Description";
-    protected const string NOTIFICATION_TEXT_DESCRIPTION_1 = "Notification Text Description 1";
+    protected const string NOTIFICATION_TEXT_DESCRIPTION_ASSIGNED_TO_EXAMINATION = "Assigned to examination description";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_2 = "Notification Text Description 2";
-    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_1 = "Notification Text Message Template 1";
+    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_ASSIGNED_TO_EXAMINATION = "Assigned to examination Template";
     protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_2 = "Notification Text Message Template 2";
-    protected const string NOTIFICATION_TEXT_NAME_1 = "Notification Text 1";
+    protected const string NOTIFICATION_TEXT_NAME_ASSIGNED_TO_EXAMINATION = "Assigned to examination";
     protected const string NOTIFICATION_TEXT_NAME_2 = "Notification Text 2";
     protected const string ORGANISATION_1_USER = "Org 1 User";
     protected const string ORGANISATION_2_USER = "Org 2 User";

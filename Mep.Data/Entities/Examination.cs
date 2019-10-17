@@ -16,7 +16,7 @@ namespace Mep.Data.Entities
     [MaxLength(500)]
     public string Address4 { get; set; }
     public virtual Ccg Ccg { get; set; }
-    public int CcgId { get; set; }
+    public int? CcgId { get; set; }
     public virtual User CompletedByUser { get; set; }
     public int? CompletedByUserId { get; set; }    
     public DateTimeOffset? CompletedTime { get; set; }
