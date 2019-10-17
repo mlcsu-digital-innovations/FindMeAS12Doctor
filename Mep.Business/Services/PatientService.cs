@@ -16,9 +16,15 @@ namespace Mep.Business.Services
   public class PatientService
     : SearchServiceBase<Patient, Entities.Patient, PatientSearch>, IModelSearchService<Patient, PatientSearch>
   {
-    public PatientService(ApplicationContext context, IMapper mapper)
+    private readonly IModelService<GpPractice> _gpPracticeService;
+
+    public PatientService(
+      ApplicationContext context,
+      IMapper mapper,
+      IModelService<GpPractice> gpPracticeService)
       : base("Patient", context, mapper)
     {
+      _gpPracticeService = gpPracticeService;
     }
 
     public override async Task<IEnumerable<Patient>> SearchAsync(PatientSearch searchModel)
@@ -28,12 +34,16 @@ namespace Mep.Business.Services
 
       Expression searchExpression = GetSearchExpression(searchModel, param);
 
-      if (searchExpression != null)
+      if (searchExpression == null)
+      {
+        throw new MissingSearchParameterException();
+      }
+      else
       {
         var whereExpression = Expression.Lambda<Func<Entities.Patient, bool>>(
           searchExpression, param
         );
-      
+
         IEnumerable<Entities.Patient> entities =
           await _context.Patients
           .Include(p => p.Ccg)
@@ -47,8 +57,6 @@ namespace Mep.Business.Services
           _mapper.Map<IEnumerable<Models.Patient>>(entities);
 
         return models;
-      } else {
-        throw new MissingSearchParameterException();
       }
     }
 
@@ -100,9 +108,51 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    protected override Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
+    protected override async Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
     {
-      return Task.FromResult<bool>(true);
+      // TODO: Residential Postcode => CCG Id
+
+      if (model.CcgId == null &&
+          model.GpPracticeId != null)
+      {
+        GpPractice gpPractice = await _gpPracticeService.GetByIdAsync((int)model.GpPracticeId, true);
+        if (gpPractice == null)
+        {
+          throw new ModelStateException("GpPracticeId",
+            $"An active GP Practice with an Id of {model.GpPracticeId} does not exist.");
+        }
+        else
+        {
+          entity.CcgId = gpPractice.CcgId;
+        }
+      }      
+
+      if (model.NhsNumber.HasValue)
+      {
+        Entities.Patient patient = await _context.Patients
+          .FirstOrDefaultAsync(p => p.NhsNumber == model.NhsNumber);
+
+        if (patient != null)
+        {
+          throw new ModelStateException("NhsNumber",
+            $"An {(patient.IsActive ? "active" : "inactive")} " + 
+            $"patient with an NhsNumber of {model.NhsNumber} already exists.");
+        }
+      }
+      else
+      {
+        Entities.Patient patient = await _context.Patients
+          .FirstOrDefaultAsync(p => p.AlternativeIdentifier == model.AlternativeIdentifier);
+
+        if (patient != null)
+        {
+          throw new ModelStateException("AlternativeIdentifier",
+            $"An {(patient.IsActive ? "active" : "inactive")} " + 
+            $"patient with an AlternativeIdentifier of {model.AlternativeIdentifier} already exists");
+        }
+      }
+
+      return true;
     }
 
     protected override Task<bool> InternalUpdateAsync(Patient model, Entities.Patient entity)
