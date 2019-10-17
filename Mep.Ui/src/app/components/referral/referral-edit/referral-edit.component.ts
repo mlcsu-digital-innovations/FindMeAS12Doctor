@@ -66,13 +66,36 @@ export class ReferralEditComponent implements OnInit {
           Validators.pattern('^[1-9]\\d{9}$'),
           NhsNumberValidFormat
         ]
-      ]
+      ],
+      alternativeIdentifier: [
+        '',
+        [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]
+      ],
     });
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
     this.OnChanges();
 
+  }
+
+  DisableIfFieldHasValue(fieldName: string): boolean {
+    if (fieldName in this.referralForm.controls) {
+      return this.referralForm.controls[fieldName].value !== null &&
+        this.referralForm.controls[fieldName].value !== '';
+    } else {
+      throw new Error(
+        `DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`
+      );
+    }
+  }
+
+  get alternativeIdentifier() {
+    return this.referralForm.controls.alternativeIdentifier.value;
+  }
+
+  get alternativeIdentifierField() {
+    return this.referralForm.controls.alternativeIdentifier;
   }
 
   get nhsNumber(): string {
@@ -83,6 +106,13 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.nhsNumber;
   }
 
+  HasInvalidAlternativeIdentifier(): boolean {
+    return (
+      this.alternativeIdentifierField.value !== '' &&
+      this.alternativeIdentifierField.errors !== null
+    );
+  }
+
   HasInvalidNHSNumber(): boolean {
     return (
       this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null
@@ -91,8 +121,16 @@ export class ReferralEditComponent implements OnInit {
 
   HasNoPatientIdErrors(): boolean {
     return (
-      this.nhsNumberField.errors == null
-      // this.alternativeIdentifierField.errors == null
+      this.nhsNumberField.errors === null &&
+      this.alternativeIdentifierField.errors === null
+    );
+  }
+
+  HasValidAlternativeIdentifier(): boolean {
+    return (
+      this.alternativeIdentifierField.value !== '' &&
+      this.alternativeIdentifierField.value !== null &&
+      this.alternativeIdentifierField.errors === null
     );
   }
 
@@ -100,13 +138,14 @@ export class ReferralEditComponent implements OnInit {
     return (
       this.nhsNumberField.value !== '' &&
       this.nhsNumberField.value !== null &&
-      this.nhsNumberField.errors == null
+      this.nhsNumberField.errors === null
     );
   }
 
   InitialiseForm(referral: Referral) {
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
+    this.alternativeIdentifierField.setValue(referral.patient.alternativeIdentifier);
     this.nhsNumberField.setValue(referral.patient.nhsNumber);
   }
 
@@ -117,11 +156,11 @@ export class ReferralEditComponent implements OnInit {
       this.isPatientIdValidated = val === this.patientDetails.nhsNumber;
     });
 
-    // this.alternativeIdentifierField.valueChanges.subscribe((val: string) => {
-    //   if (this.patientDetails.alternativeIdentifier && this.patientDetails.alternativeIdentifier !== '') {
-    //     this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
-    //   }
-    // });
+    this.alternativeIdentifierField.valueChanges.subscribe((val: string) => {
+      if (this.patientDetails.alternativeIdentifier && this.patientDetails.alternativeIdentifier !== '') {
+        this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
+      }
+    });
 
     // this.residentialPostcodeField.valueChanges.subscribe((val: string) => {
     //   if (this.patientDetails.residentialPostcode && this.patientDetails.residentialPostcode !== '') {
