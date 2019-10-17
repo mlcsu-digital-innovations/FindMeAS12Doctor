@@ -16,7 +16,7 @@ namespace Mep.Data.Entities
     public string Address3 { get; set; }
     [MaxLength(500)]
     public string Address4 { get; set; }
-    public int CcgId { get; set; }
+    public int? CcgId { get; set; }
     public int? CompletedByUserId { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
     public int? CompletionConfirmationByUserId { get; set; }

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Mep.Business.Exceptions;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Mep.Api.Controllers
 {
@@ -63,21 +66,37 @@ namespace Mep.Api.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<ViewModel>> Post([FromBody] PostRequestModel postModel)
+    public virtual async Task<ActionResult<ViewModel>> Post([FromBody] PostRequestModel postModel)
     {
-      if (ModelState.IsValid)
-      {        
+      try
+      {
         BusinessModel businessModel = _mapper.Map<BusinessModel>(postModel);
         businessModel = await _service.CreateAsync(businessModel);
         ViewModel viewModel = _mapper.Map<ViewModel>(businessModel);
 
-        string modelUri = $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/{businessModel.Id}";
-        return Created(modelUri, viewModel);
+        return Created(GetCreatedModelUri(businessModel.Id), viewModel);
       }
-      else
+      catch (ModelStateException ex)
       {
-        return BadRequest(ModelState);
+        return ProcessModelStateException(ex);
       }
+    }
+
+    protected string GetCreatedModelUri(int id)
+    {
+        return $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}" +
+               $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/{id}";
+    }
+
+    protected ActionResult ProcessModelStateException(
+      ModelStateException modelStateException)
+    {
+        ModelState.AddModelError(modelStateException.Key, modelStateException.Message);
+        Serilog.Log.Warning(
+                    "Bad Request {ActionName}: {ModelStateErrors}",
+                    ControllerContext.ActionDescriptor.ActionName,
+                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
+        return ValidationProblem(ModelState);
     }
 
     // PUT api/speciality/5

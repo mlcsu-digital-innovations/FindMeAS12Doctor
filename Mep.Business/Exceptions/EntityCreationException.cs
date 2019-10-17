@@ -11,6 +11,11 @@ namespace Mep.Business.Exceptions
     {
     }
 
+    public EntityCreationException(string typeName, string message)
+      : base($"Failed to create entity of type {typeName}. {message}")
+    {
+    }
+
     protected EntityCreationException(SerializationInfo info,
                                       StreamingContext context)
       : base(info, context)

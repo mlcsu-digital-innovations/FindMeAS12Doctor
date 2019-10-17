@@ -13,8 +13,9 @@ namespace Mep.Business.Models
     public string Address2 { get; set; }
     public string Address3 { get; set; }
     public string Address4 { get; set; }
+    public int AmhpUserId { get; set; }
     public virtual Ccg Ccg { get; set; }
-    public int CcgId { get; set; }
+    public int? CcgId { get; set; }
     public int? CompletedByUserId { get; set; }
     public virtual User CompletedByUser { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
@@ -22,6 +23,7 @@ namespace Mep.Business.Models
     public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
+    public virtual IList<int> DetailTypeIds { get; set; }
     public virtual IList<ExaminationDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]

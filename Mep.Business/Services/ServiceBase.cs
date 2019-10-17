@@ -43,16 +43,13 @@ namespace Mep.Business.Services
       int id,
       bool activeOnly)
     {
+      TBusinessModel userModel = null;
       TEntity userEntity = await GetEntityByIdAsync(id, true, activeOnly);
-      if (userEntity == null)
+      if (userEntity != null)
       {
-        throw new EntityNotFoundException(_typeName, id);
+        userModel = _mapper.Map<TBusinessModel>(userEntity);
       }
-      else
-      {
-        TBusinessModel userModel = _mapper.Map<TBusinessModel>(userEntity);
-        return userModel;
-      }
+      return userModel;
     }
 
     protected ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
@@ -65,34 +62,19 @@ namespace Mep.Business.Services
     public async Task<TBusinessModel> CreateAsync(
       TBusinessModel model)
     {
-      TEntity entity = await GetEntityByIdAsync(model.Id, true, false);
+      TEntity entity = _mapper.Map<TEntity>(model);
+      entity.Id = 0;
+      entity.IsActive = true;
 
-      if (entity == null)
-      {
-        try
-        {
-          entity = _mapper.Map<TEntity>(model);
-          entity.IsActive = true;
+      UpdateModified(entity);
+      _context.Add(entity);
 
-          UpdateModified(entity);
-          _context.Add(entity);
+      await InternalCreateAsync(model, entity);
 
-          await InternalCreateAsync(model, entity);
+      await _context.SaveChangesAsync();
 
-          await _context.SaveChangesAsync();
-
-          model = await GetByIdAsync(entity.Id, true);
-          return model;
-        }
-        catch (Exception ex)
-        {
-          throw new EntityCreationException(_typeName, ex);
-        }
-      }
-      else
-      {
-        throw new EntityExistsException(entity.IsActive, _typeName, model.Id);
-      }
+      model = await GetByIdAsync(entity.Id, true);
+      return model;
     }
 
     public async Task<int> ActivateAsync(int id)
@@ -148,7 +130,7 @@ namespace Mep.Business.Services
       }
     }
 
-    protected void UpdateModified(TEntity entity)
+    protected void UpdateModified(BaseEntity entity)
     {
       //TODO: Get the current users sub claim
       entity.ModifiedByUserId = 1;
