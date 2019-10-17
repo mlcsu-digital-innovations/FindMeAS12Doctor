@@ -518,7 +518,7 @@ export class ExaminationCreateComponent implements OnInit {
     // create an examination object
     const examination = {} as Examination;
 
-    examination.amhpId = this.amhpUser.id;
+    examination.amhpUserId = this.amhpUser.id;
     examination.postcode = this.examinationPostcodeField.value;
     examination.isPlanned = this.plannedExaminationField.value;
     examination.meetingArrangementComment = this.additionalDetailsField.value;
