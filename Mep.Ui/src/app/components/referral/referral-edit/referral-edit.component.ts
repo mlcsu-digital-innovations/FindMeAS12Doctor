@@ -4,6 +4,9 @@ import { NhsNumberValidFormat } from 'src/app/helpers/nhs-number.validator';
 import { Observable, of } from 'rxjs';
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { Patient } from 'src/app/interfaces/patient';
+import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
+import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
+import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
@@ -17,6 +20,8 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 export class ReferralEditComponent implements OnInit {
 
   isPatientIdValidated: boolean;
+  isSearchingForPatient: boolean;
+  modalResult: PatientSearchResult;
   patientDetails: Patient;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
@@ -25,6 +30,7 @@ export class ReferralEditComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private patientSearchService: PatientSearchService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
     private router: Router,
@@ -90,6 +96,19 @@ export class ReferralEditComponent implements OnInit {
     }
   }
 
+  DisablePatientValidationButtonIfFieldsAreInvalid(): boolean {
+    // field is only valid if it has a value and there aren't any errors
+    const nhsNumberFieldInValid =
+      this.nhsNumberField.value === '' ||
+      this.nhsNumberField.errors !== null;
+    const alternativeIdentifierFieldInValid =
+      this.alternativeIdentifierField.value === '' ||
+      this.alternativeIdentifierField.errors !== null;
+
+    return nhsNumberFieldInValid &&
+      alternativeIdentifierFieldInValid;
+  }
+
   get alternativeIdentifier() {
     return this.referralForm.controls.alternativeIdentifier.value;
   }
@@ -149,6 +168,10 @@ export class ReferralEditComponent implements OnInit {
     this.nhsNumberField.setValue(referral.patient.nhsNumber);
   }
 
+  IsSearchingForPatient(): boolean {
+    return this.isSearchingForPatient;
+  }
+
   OnChanges(): void {
 
     // fields are NOT validated if they are changed after initial validation
@@ -168,6 +191,85 @@ export class ReferralEditComponent implements OnInit {
     //       this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
     //   }
     // });
+  }
+
+  OnPatientModalAction(action: number) {
+    switch (action) {
+      case PatientAction.Cancel:
+        this.CancelPatientResultsModal();
+        break;
+      case PatientAction.ExistingPatient:
+        this.UseExistingPatient();
+        break;
+      case PatientAction.ExistingReferral:
+        this.UseExistingReferral();
+        break;
+    }
+  }
+
+  ValidatePatient(): void {
+    if (
+      this.IsSearchingForPatient() ||
+      this.HasInvalidNHSNumber() ||
+      this.HasInvalidAlternativeIdentifier()
+    ) {
+      return;
+    }
+
+    // prevent further buttons clicks and update the page
+    this.isSearchingForPatient = true;
+    const params = {} as PatientSearchParams;
+
+    if (this.HasValidNHSNumber()) {
+      params.nhsNumber = this.nhsNumberField.value;
+    } else {
+      params.alternativeIdentifier = this.alternativeIdentifierField.value;
+    }
+
+    this.patientSearchService.patientSearch(params).subscribe(
+      (results: PatientSearchResult[]) => {
+        this.isSearchingForPatient = false;
+        // if there are any matching results then display them in a modal
+        switch (results.length) {
+          case 0:
+            // no matching patients found, inform user with toast ?
+            this.toastService.displayInfo({
+              message: 'No existing patients found'
+            });
+            this.isPatientIdValidated = true;
+            this.patientDetails.nhsNumber = +this.nhsNumber;
+            this.patientDetails.alternativeIdentifier = this.alternativeIdentifier;
+            this.isGpFieldsShown = true;
+            this.nhsNumberField.setErrors(null);
+            this.SetFieldFocus('#gpPractice');
+            break;
+          case 1:
+            this.nhsNumberField.setErrors(null);
+            this.patientResult = results[0];
+            this.modalResult = results[0];
+            this.patientModal = this.modalService.open(
+              this.patientResultTemplate,
+              { size: 'lg' }
+            );
+            break;
+          default:
+            this.toastService.displayError({
+              title: 'Validation Error',
+              message: 'Multiple patients found ! Please inform a system administrator'
+            });
+            this.isPatientIdValidated = false;
+            break;
+        }
+      },
+      error => {
+        this.isSearchingForPatient = false;
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to validate patient details ! Please try again in a few moments'
+        });
+        return throwError(error);
+      }
+    );
   }
 
 }

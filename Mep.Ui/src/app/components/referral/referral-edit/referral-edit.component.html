@@ -60,6 +60,28 @@
                     }"
                   />
                 </div>
+                <div class="col-md-2">
+                    <button
+                      type="button"
+                      class="btn btn-primary vcenter"
+                      style="margin-left:20px !important"
+                      placement="right"
+                      ngbTooltip="Search for existing patients using these identifiers"
+                      [openDelay]="1000"
+                      [closeDelay]="500"
+                      tooltipClass="subtle-tooltip"
+                      [disabled]="
+                        DisablePatientValidationButtonIfFieldsAreInvalid() ||
+                        IsSearchingForPatient()
+                      "
+                      (click)="ValidatePatient()"
+                      [ngClass]="{ validating: IsSearchingForPatient() }"
+                      >
+                      {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                        *ngIf="IsSearchingForPatient()"></span>
+                    </button>
+                  </div>
               </div>
               <!-- Row for divs showing patient number validation errors -->
               <div class="form-row" *ngIf="!HasNoPatientIdErrors()" style="margin-top: -20px;">
@@ -88,6 +110,12 @@
 
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<!-- patient results -->
+<ng-template #patientResults let-patientResult>
+  <app-patient-results-modal [patientResult]="modalResult" (actioned)="OnPatientModalAction($event)">
+  </app-patient-results-modal>
 </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
