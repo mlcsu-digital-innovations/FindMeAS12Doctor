@@ -1,5 +1,5 @@
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -15,13 +15,10 @@ export class AmhpListService {
     if (searchTerm === '' || searchTerm.length < 3) {
       return of([]);
     }
-    const searchString = `searchString=${searchTerm}`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const options = { params: new HttpParams().set('search', searchTerm) };
 
-    return this.httpClient.post(
-      environment.apiEndpoint + '/amhpsearch',
-      searchString,
-      { headers }
+    return this.httpClient.get(
+      environment.apiEndpoint + '/amhpsearch', options
     ).pipe(
       map(response => response)
     );

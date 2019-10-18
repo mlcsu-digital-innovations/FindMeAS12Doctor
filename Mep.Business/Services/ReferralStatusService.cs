@@ -44,20 +44,18 @@ namespace Mep.Business.Services
 
       return entity;
     }
-
-    protected override Task<Entities.ReferralStatus> GetEntityLinkedObjectsAsync(ReferralStatus model, Entities.ReferralStatus entity)
+    protected override async Task<Entities.ReferralStatus> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
     {
-      return Task.FromResult(entity);
-    }
+      Entities.ReferralStatus entity = await
+        _context.ReferralStatuses
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(referralStatus => referralStatus.Id == entityId);
 
-    protected override Task<bool> InternalCreateAsync(ReferralStatus model, Entities.ReferralStatus entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(ReferralStatus model, Entities.ReferralStatus entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
+      return entity;
+    }    
   }
 }

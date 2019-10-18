@@ -168,8 +168,15 @@ namespace Mep.Business
         .IsUnique();
 
       modelBuilder.Entity<GpPractice>()
-        .HasIndex(c => c.Code)
+        .HasIndex(g => g.Code)
         .IsUnique();
+
+      modelBuilder.Entity<Patient>()
+        .HasIndex(p => p.AlternativeIdentifier)
+        .IsUnique();
+      modelBuilder.Entity<Patient>()
+        .HasIndex(p => p.NhsNumber)
+        .IsUnique();        
     }
   }
 }

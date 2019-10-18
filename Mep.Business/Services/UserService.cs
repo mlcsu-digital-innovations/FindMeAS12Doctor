@@ -49,19 +49,18 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    protected override Task<Entities.User> GetEntityLinkedObjectsAsync(User model, Entities.User entity)
+    protected override async Task<Entities.User> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
     {
-      return Task.FromResult(entity);
-    }
+      Entities.User entity = await
+        _context.Users
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(user => user.Id == entityId);
 
-    protected override Task<bool> InternalCreateAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
+      return entity;
+    }    
   }
 }

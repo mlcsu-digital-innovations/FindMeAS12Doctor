@@ -1,10 +1,10 @@
 using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
+using Mep.Business.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mep.Business.Services
 {
@@ -12,7 +12,7 @@ namespace Mep.Business.Services
     : ServiceBase<Ccg, Entities.Ccg>, IModelService<Ccg>
   {
     public CcgService(ApplicationContext context, IMapper mapper)
-      :base("Ccg", context, mapper)
+      : base("Ccg", context, mapper)
     {
     }
 
@@ -20,44 +20,43 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Entities.Ccg> entities = 
+      IEnumerable<Entities.Ccg> entities =
         await _context.Ccgs
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .ToListAsync();
 
-      IEnumerable<Models.Ccg> models = 
+      IEnumerable<Models.Ccg> models =
         _mapper.Map<IEnumerable<Models.Ccg>>(entities);
 
       return models;
     }
 
     protected override async Task<Entities.Ccg> GetEntityByIdAsync(
-      int entityId, 
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.Ccg entity = await 
+      Entities.Ccg entity = await
         _context.Ccgs
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
 
-      return entity;  
+      return entity;
     }
 
-    protected override Task<Entities.Ccg> GetEntityLinkedObjectsAsync(Ccg model, Entities.Ccg entity)
+    protected override async Task<Entities.Ccg> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
     {
-      return Task.FromResult(entity);
-    }
+      Entities.Ccg entity = await
+        _context.Ccgs
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
 
-    protected override Task<bool> InternalCreateAsync(Ccg model, Entities.Ccg entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(Ccg model, Entities.Ccg entity)
-    {
-      return Task.FromResult<bool>(true);
+      return entity;
     }
   }
 }
