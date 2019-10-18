@@ -46,6 +46,18 @@ namespace Mep.Business.Models
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
 
+    public virtual IList<ExaminationDetailType> DetailTypes
+    {
+      get
+      {
+        return Details.Where(d => d.IsActive)
+                      .Select(d => d.ExaminationDetailType).ToList();
+      }
+    }
+
+    public bool HasDetailTypeIds
+    { get { return DetailTypeIds != null && DetailTypeIds.Count > 0; } }
+
     public bool IsCurrent
     {
       get
@@ -53,14 +65,6 @@ namespace Mep.Business.Models
         return IsActive &&
                UnsuccessfulExaminationTypeId == null &&
                CompletionConfirmationByUserId == null;
-      }
-    }
-
-    public virtual IList<ExaminationDetailType> DetailTypes
-    {
-      get
-      {
-        return Details.Select(d => d.ExaminationDetailType).ToList();
       }
     }
   }

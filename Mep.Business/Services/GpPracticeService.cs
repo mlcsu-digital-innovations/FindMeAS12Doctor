@@ -45,19 +45,18 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    protected override Task<Entities.GpPractice> GetEntityLinkedObjectsAsync(GpPractice model, Entities.GpPractice entity)
+    protected override async Task<Entities.GpPractice> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
     {
-      return Task.FromResult(entity);
-    }
+      Entities.GpPractice entity = await
+        _context.GpPractices
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(gpPractice => gpPractice.Id == entityId);
 
-    protected override Task<bool> InternalCreateAsync(GpPractice model, Entities.GpPractice entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(GpPractice model, Entities.GpPractice entity)
-    {
-      return Task.FromResult<bool>(true);
+      return entity;
     }
   }
 }

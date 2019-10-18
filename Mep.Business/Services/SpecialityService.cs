@@ -45,19 +45,18 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    protected override Task<Entities.Speciality> GetEntityLinkedObjectsAsync(Speciality model, Entities.Speciality entity)
+    protected override async Task<Entities.Speciality> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
     {
-      return Task.FromResult(entity);
-    }
+      Entities.Speciality entity = await
+        _context.Specialities
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(speciality => speciality.Id == entityId);
 
-    protected override Task<bool> InternalCreateAsync(Speciality model, Entities.Speciality entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(Speciality model, Entities.Speciality entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
+      return entity;
+    }    
   }
 }
