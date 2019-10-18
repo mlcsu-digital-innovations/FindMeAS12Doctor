@@ -58,7 +58,7 @@ export class ReferralCreateComponent implements OnInit {
   unknownGpPracticeId: number;
   value = false;
 
-  @ViewChild('patientResults', {static: true}) patientResultTemplate;
+  @ViewChild('patientResults', { static: true }) patientResultTemplate;
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
   constructor(
@@ -74,7 +74,7 @@ export class ReferralCreateComponent implements OnInit {
     private renderer: Renderer2,
     private router: Router,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {
 
@@ -216,19 +216,19 @@ export class ReferralCreateComponent implements OnInit {
 
     // only continue if the referral is valid
     if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
-      this.nhsNumberField.setErrors({InvalidPatientIdentifier: true});
+      this.nhsNumberField.setErrors({ InvalidPatientIdentifier: true });
       canContinue = false;
     }
 
     if (!this.HasValidGpOrPostcodeOrCcg()) {
       this.isGpFieldsShown = true;
       this.gpPracticeField.enable();
-      this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
+      this.gpPracticeField.setErrors({ InvalidGpPostcodeCcg: true });
       canContinue = false;
     }
 
     if (!this.HasValidLeadAmhp()) {
-      this.amhpField.setErrors({InvalidAmhp: true});
+      this.amhpField.setErrors({ InvalidAmhp: true });
       canContinue = false;
     }
 
@@ -401,7 +401,8 @@ export class ReferralCreateComponent implements OnInit {
 
     // All 3 fields can be 'unknown' OR at least 1 field must be populated
     if (this.gpPractice.id === this.unknownGpPracticeId &&
-          this.residentialPostcode === 'Unknown Postcode' && this.ccg.id === this.unknownCcgId) {
+      this.residentialPostcode === 'Unknown Postcode' &&
+      this.ccg.id === this.unknownCcgId) {
       return true;
     }
 
