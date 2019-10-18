@@ -3,8 +3,8 @@ form {
 }
 
 .table-referral-list {
-  font-size: smaller;
   background-color:#6AB0ED;
+  font-size: smaller;
 }
 
 .table-referral-list td:nth-child(n+5) {
