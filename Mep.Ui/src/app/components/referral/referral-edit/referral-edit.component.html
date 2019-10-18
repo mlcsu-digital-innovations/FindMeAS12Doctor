@@ -19,8 +19,11 @@
             Referral Id: <strong>{{referral.id}}</strong>
           </div>
           <div class="flex-item">
-              Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
-            </div>
+            Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
+          </div>
+          <div class="flex-item">
+            Referral Status: <strong>{{referral.referralStatusName}}</strong>
+          </div>
         </div>
 
         <div class="card-body">
