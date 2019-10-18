@@ -11,5 +11,11 @@ namespace Mep.Business.Models
     public DateTimeOffset? RespondedAt { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
+
+    public bool IsAmhp { get { return User.IsAmhp; } }
+    public bool IsDoctor { get { return User.IsDoctor; } }
+    public string UserName { get { return User?.DisplayName; } }
+
+
   }
 }

@@ -47,6 +47,19 @@ namespace Mep.Api.Controllers
 
       return Ok(viewModels);
     }
+
+    [HttpGet]
+    [Route("view/{id:int}")]
+    public async Task<ActionResult<ViewModels.ReferralView>> GetView(int id)
+    {
+      BusinessModels.Referral businessModels =
+          await _service.GetByIdAsync(id, true);
+
+      ViewModels.ReferralView viewModel =
+          _mapper.Map<ViewModels.ReferralView>(businessModels);
+
+      return Ok(viewModel);
+    }    
     
   }
 }
