@@ -12,7 +12,7 @@ namespace Mep.Business.Services
     : ServiceBase<User, Entities.User>, IModelService<User>
   {
     public UserService(ApplicationContext context, IMapper mapper)
-      :base("User", context, mapper)
+      : base("User", context, mapper)
     {
     }
 
@@ -20,45 +20,47 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Entities.User> entities = 
+      IEnumerable<Entities.User> entities =
         await _context.Users
                       .Include(u => u.GenderType)
+                      .Include(u => u.ProfileType)
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .ToListAsync();
 
-      IEnumerable<Models.User> models = 
+      IEnumerable<Models.User> models =
         _mapper.Map<IEnumerable<Models.User>>(entities);
 
       return models;
     }
 
     protected override async Task<Entities.User> GetEntityByIdAsync(
-      int entityId, 
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.User entity = await 
+      Entities.User entity = await
+        _context.Users
+                .Include(u => u.GenderType)
+                .Include(u => u.ProfileType)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(user => user.Id == entityId);
+
+      return entity;
+    }
+
+    protected override async Task<Entities.User> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.User entity = await
         _context.Users
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(user => user.Id == entityId);
 
-      return entity;  
-    }
-
-    protected override Task<Entities.User> GetEntityLinkedObjectsAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult(entity);
-    }
-
-    protected override Task<bool> InternalCreateAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(User model, Entities.User entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
+      return entity;
+    }    
   }
 }

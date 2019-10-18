@@ -8,7 +8,7 @@ namespace Mep.Data.Entities
     string Address2 { get; set; }
     string Address3 { get; set; }
     string Address4 { get; set; }
-    int CcgId { get; set; }
+    int? CcgId { get; set; }
     int? CompletedByUserId { get; set; }
     DateTimeOffset? CompletedTime { get; set; }
     int? CompletionConfirmationByUserId { get; set; }

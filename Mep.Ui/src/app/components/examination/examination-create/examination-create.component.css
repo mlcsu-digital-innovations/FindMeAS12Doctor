@@ -32,3 +32,13 @@ form {
   min-width: 100px;
 }
 
+.at {
+  color: #666;
+  font-size:1.3em;
+  font-weight: 600;
+}
+
+.padding-left-1 {
+  padding-left: 1px;
+}
+

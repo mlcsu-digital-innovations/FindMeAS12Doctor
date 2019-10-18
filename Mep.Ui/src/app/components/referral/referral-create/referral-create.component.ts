@@ -81,9 +81,8 @@ export class ReferralCreateComponent implements OnInit {
 
   ngOnInit() {
 
-    // ToDo: Get the correct values for these ?
-    this.unknownCcgId = 1;
-    this.unknownGpPracticeId = 1;
+    this.unknownCcgId = 0;
+    this.unknownGpPracticeId = 0;
 
     this.modalResult = {} as PatientSearchResult;
 
@@ -194,7 +193,7 @@ export class ReferralCreateComponent implements OnInit {
     this.patientDetails.gpPracticeId =
       this.gpPractice.id === 0 ? null : this.gpPractice.id;
     this.patientDetails.residentialPostcode =
-      this.residentialPostcode === '' ? null : this.residentialPostcode;
+      this.residentialPostcode === '' || this.residentialPostcode === 'Unknown' ? null : this.residentialPostcode;
     this.patientDetails.ccgId = this.ccg.id === 0 ? null : this.ccg.id;
 
     return this.patientService.createPatient(this.patientDetails).pipe(

@@ -45,19 +45,18 @@ namespace Mep.Business.Services
       return entity;  
     }
 
-    protected override Task<Entities.GenderType> GetEntityLinkedObjectsAsync(GenderType model, Entities.GenderType entity)
+    protected override async Task<Entities.GenderType> GetEntityWithNoIncludesByIdAsync(
+      int entityId, 
+      bool asNoTracking,
+      bool activeOnly)
     {
-      return Task.FromResult(entity);
-    }
+      Entities.GenderType entity = await 
+        _context.GenderTypes
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(genderType => genderType.Id == entityId);
 
-    protected override Task<bool> InternalCreateAsync(GenderType model, Entities.GenderType entity)
-    {
-      return Task.FromResult<bool>(true);
-    }
-
-    protected override Task<bool> InternalUpdateAsync(GenderType model, Entities.GenderType entity)
-    {
-      return Task.FromResult<bool>(true);
+      return entity;  
     }
   }
 }

@@ -1,13 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Mep.Business.Exceptions;
 using Mep.Business.Models;
 using Mep.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Mep.Business.Models.SearchModels;
-using System.Collections.Generic;
-using Mep.Business.Exceptions;
 
 namespace Mep.Business.Services
 {
@@ -19,42 +17,6 @@ namespace Mep.Business.Services
     protected readonly IMapper _mapper;
     protected readonly string _typeName;
 
-    protected abstract Task<TEntity> GetEntityByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly);
-
-    protected abstract Task<bool> InternalCreateAsync(
-      TBusinessModel model,
-      TEntity entity
-    );
-
-    protected abstract Task<bool> InternalUpdateAsync(
-      TBusinessModel model,
-      TEntity entity
-    );
-
-    protected abstract Task<TEntity> GetEntityLinkedObjectsAsync(
-      TBusinessModel model,
-      TEntity entity
-    );
-
-    public async Task<TBusinessModel> GetByIdAsync(
-      int id,
-      bool activeOnly)
-    {
-      TEntity userEntity = await GetEntityByIdAsync(id, true, activeOnly);
-      if (userEntity == null)
-      {
-        throw new EntityNotFoundException(_typeName, id);
-      }
-      else
-      {
-        TBusinessModel userModel = _mapper.Map<TBusinessModel>(userEntity);
-        return userModel;
-      }
-    }
-
     protected ServiceBase(string typeName, ApplicationContext context, IMapper mapper)
     {
       _typeName = typeName;
@@ -62,47 +24,45 @@ namespace Mep.Business.Services
       _mapper = mapper;
     }
 
-    public async Task<TBusinessModel> CreateAsync(
-      TBusinessModel model)
-    {
-      TEntity entity = await GetEntityByIdAsync(model.Id, true, false);
-
-      if (entity == null)
-      {
-        try
-        {
-          entity = _mapper.Map<TEntity>(model);
-          entity.IsActive = true;
-
-          UpdateModified(entity);
-          _context.Add(entity);
-
-          await InternalCreateAsync(model, entity);
-
-          await _context.SaveChangesAsync();
-
-          model = await GetByIdAsync(entity.Id, true);
-          return model;
-        }
-        catch (Exception ex)
-        {
-          throw new EntityCreationException(_typeName, ex);
-        }
-      }
-      else
-      {
-        throw new EntityExistsException(entity.IsActive, _typeName, model.Id);
-      }
-    }
-
     public async Task<int> ActivateAsync(int id)
     {
       return await SetActiveStatus(id, true);
     }
 
+    public async Task<TBusinessModel> CreateAsync(
+      TBusinessModel model)
+    {
+      TEntity entity = _mapper.Map<TEntity>(model);
+      entity.Id = 0;
+      entity.IsActive = true;
+
+      UpdateModified(entity);
+      _context.Add(entity);
+
+      await InternalCreateAsync(model, entity);
+
+      await _context.SaveChangesAsync();
+
+      model = await GetByIdAsync(entity.Id, true);
+      return model;
+    }
+
     public async Task<int> DeactivateAsync(int id)
     {
       return await SetActiveStatus(id, false);
+    }
+
+    public async Task<TBusinessModel> GetByIdAsync(
+      int id,
+      bool activeOnly)
+    {
+      TBusinessModel model = null;
+      TEntity entity = await GetEntityByIdAsync(id, true, activeOnly);
+      if (entity != null)
+      {
+        model = _mapper.Map<TBusinessModel>(entity);
+      }
+      return model;
     }
 
     public async Task<TBusinessModel> UpdateAsync(
@@ -117,62 +77,46 @@ namespace Mep.Business.Services
       }
       else
       {
-        _mapper.Map<TBusinessModel, TEntity>(model, entity);
+        entity.IsActive = model.IsActive;
         UpdateModified(entity);
-
-        await GetEntityLinkedObjectsAsync(model, entity);
 
         await InternalUpdateAsync(model, entity);
 
         await _context.SaveChangesAsync();
 
         model = await GetByIdAsync(model.Id, model.IsActive);
+
         return model;
       }
     }
 
-    protected async Task<T> GetLinkedObjectAsync<T>(DbSet<T> appContext, int propertyId) where T : BaseEntity
+    protected abstract Task<TEntity> GetEntityByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly);
+
+    protected abstract Task<TEntity> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly);
+
+    protected virtual Task<bool> InternalCreateAsync(
+      TBusinessModel model, TEntity entity)
     {
-      try
-      {
-        return await appContext.SingleAsync(x => x.Id == propertyId);
-      }
-      catch
-      {
-        var model = _context.Model;
-        var entityTypes = model.GetEntityTypes();
-        var entityType = entityTypes.First(t => t.ClrType == typeof(T));
-        var tableNameAnnotation = entityType.GetAnnotations().First(a => a.Name == "Relational:TableName");
-        var tableName = tableNameAnnotation.Value.ToString();
-        throw new EntityNotFoundInTableException(tableName, propertyId);
-      }
+      return Task.FromResult<bool>(true);
     }
 
-    protected void UpdateModified(TEntity entity)
+    protected virtual Task<bool> InternalUpdateAsync(
+      TBusinessModel model, TEntity entity)
+    {
+      return Task.FromResult<bool>(true);
+    }
+
+    protected void UpdateModified(BaseEntity entity)
     {
       //TODO: Get the current users sub claim
       entity.ModifiedByUserId = 1;
       entity.ModifiedAt = DateTimeOffset.Now;
-    }
-
-    public async Task<TBusinessModel> UpdateEntityAsync(TBusinessModel model)
-    {
-      TEntity entity =
-        await GetEntityByIdAsync(model.Id, false, false);
-
-      if (entity == null)
-      {
-        throw new EntityNotFoundException(typeof(TEntity).Name, model.Id);
-      }
-      else
-      {
-        _mapper.Map<TBusinessModel, TEntity>(model, entity);
-        UpdateModified(entity);
-        await _context.SaveChangesAsync();
-
-        model = await GetByIdAsync(model.Id, model.IsActive);
-        return model;
-      }
     }
 
     private async Task<int> SetActiveStatus(int id, bool isActivating)

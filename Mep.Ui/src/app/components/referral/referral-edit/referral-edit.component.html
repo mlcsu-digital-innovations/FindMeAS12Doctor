@@ -2,10 +2,10 @@
 <div class="page-content">
   <div class="row">
     <div class="col-md-12 ">
-      <div class="card">
+      <div class="card" *ngIf="referral$ | async as referral; else loading">
         <div class="card-header">
           <div class="card-icon">
-            <i class="far fa-edit fa-4x" style="color:#fff;"></i>
+            <i class="far fa-edit fa-4x"></i>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">Edit Referral</h4>
@@ -14,15 +14,72 @@
             </h6>
           </div>
         </div>
-        <div class="card-header-details" *ngIf="referral$ | async as referral; else loading">
-          <div class="row">
-            <div class="col-md-2">
-              Referral Id: <strong>{{referral.id}}</strong>
-            </div>
-            <div class="col-md-4">
-                Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
-              </div>
+        <div class="card-header-details">
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
           </div>
+          <div class="flex-item">
+              Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
+            </div>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="referralForm" novalidate>
+              <div class="form-row">
+                <div class="col-md-3">
+                  <label for="nhsNumber">NHS Number</label>
+                  <input
+                    type="text"
+                    digitOnly
+                    maxlength="10"
+                    formControlName="nhsNumber"
+                    id="nhsNumber"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': HasInvalidNHSNumber(),
+                      'is-valid': HasValidNHSNumber()
+                    }"
+                  />
+                </div>
+                <div class="col-md-1 centered-div">
+                  <div class="or">
+                    Or
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="alternativeIdentifier">Alternative Identifier</label>
+                  <input
+                    type="text"
+                    maxlength="200"
+                    formControlName="alternativeIdentifier"
+                    class="form-control"
+                    [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
+                    [ngClass]="{
+                      'is-invalid': HasInvalidAlternativeIdentifier(),
+                      'is-valid': HasValidAlternativeIdentifier()
+                    }"
+                  />
+                </div>
+              </div>
+              <!-- Row for divs showing patient number validation errors -->
+              <div class="form-row mt-2" *ngIf="!HasNoPatientIdErrors()">
+                <div class="col-md-3 mb-2">
+                  <div *ngIf="nhsNumberField.errors != null">
+                    <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
+                      <span>Invalid NHS Number</span>
+                    </div>
+                    <div *ngIf="nhsNumberField.errors.InvalidPatientIdentifier" class="invalid-field">
+                      <span>* Invalid Patient Identifier</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-2 offset-md-1">
+                  <div *ngIf="alternativeIdentifierField.errors" class="invalid-field">
+                    <span>Invalid Alternative Identifier</span>
+                  </div>
+                </div>
+              </div>
+          </form>
         </div>
       </div>
     </div>

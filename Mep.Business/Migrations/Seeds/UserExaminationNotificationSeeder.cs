@@ -28,7 +28,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId =
-        GetNotificationTextId(NOTIFICATION_TEXT_NAME_1);
+        GetNotificationTextId(NOTIFICATION_TEXT_NAME_ASSIGNED_TO_EXAMINATION);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId =
         GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);

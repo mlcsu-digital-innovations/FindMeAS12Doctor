@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mep.Api.RequestModels
 {
-  public class Examination
+  public class Examination : IValidatableObject
   {
     [Required]
     [MaxLength(200)]
@@ -12,9 +12,9 @@ namespace Mep.Api.RequestModels
     public string Address2 { get; set; }
     public string Address3 { get; set; }
     public string Address4 { get; set; }
-    [Range(1,int.MaxValue)]
-    public int AmhpId { get; set; }
-    public List<int> DetailIds { get; set; }
+    [Range(1, int.MaxValue)]
+    public int AmhpUserId { get; set; }
+    public List<int> DetailTypeIds { get; set; }
     [Required]
     public bool? IsPlanned { get; set; }
     [MaxLength(2000)]
@@ -23,12 +23,40 @@ namespace Mep.Api.RequestModels
     [Required]
     [MaxLength(10)]
     public string Postcode { get; set; }
-    [Range(1,int.MaxValue)]
+    [Range(1, int.MaxValue)]
     public int? PreferredDoctorGenderTypeId { get; set; }
-    [Range(1,int.MaxValue)]
+    [Range(1, int.MaxValue)]
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
-    [Range(1,int.MaxValue)]
+    [Range(1, int.MaxValue)]
     public int? SpecialityId { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+      if ((bool)IsPlanned && MustBeCompletedBy.HasValue)
+      {
+        yield return new ValidationResult(
+            "The MustBeCompletedBy field should not be provided when the examination is planned.",
+            new[] { "MustBeCompletedBy" });
+      }   
+      if ((bool)IsPlanned && !ScheduledTime.HasValue)
+      {
+        yield return new ValidationResult(
+            "The ScheduledTime field is required when the examination is planned.",
+            new[] { "ScheduledTime" });
+      }
+      if (!(bool)IsPlanned && ScheduledTime.HasValue)
+      {
+        yield return new ValidationResult(
+            "The ScheduledTime field should not be provided when the examination is unplanned.",
+            new[] { "ScheduledTime" });
+      }      
+      if (!(bool)IsPlanned && !MustBeCompletedBy.HasValue)
+      {
+        yield return new ValidationResult(
+            "The MustBeCompletedBy field is required when the examination is unplanned.",
+            new[] { "MustBeCompletedBy" });
+      }
+    }
   }
 }
