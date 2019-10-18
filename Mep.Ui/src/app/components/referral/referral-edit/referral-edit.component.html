@@ -71,6 +71,7 @@
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
                       [disabled]="
+                        IsPatientIdUnchanged() ||
                         DisablePatientValidationButtonIfFieldsAreInvalid() ||
                         IsSearchingForPatient()
                       "
@@ -84,7 +85,7 @@
                   </div>
               </div>
               <!-- Row for divs showing patient number validation errors -->
-              <div class="form-row mt-2" *ngIf="!HasNoPatientIdErrors()">
+              <div class="form-row mt-less-2" *ngIf="!HasNoPatientIdErrors()">
                 <div class="col-md-3 mb-2">
                   <div *ngIf="nhsNumberField.errors != null">
                     <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">

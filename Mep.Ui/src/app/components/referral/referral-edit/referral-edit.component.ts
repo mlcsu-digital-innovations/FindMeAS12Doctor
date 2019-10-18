@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from 'src/app/helpers/nhs-number.validator';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { Patient } from 'src/app/interfaces/patient';
+import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
@@ -19,10 +21,13 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class ReferralEditComponent implements OnInit {
 
+  isGpFieldsShown: boolean;
   isPatientIdValidated: boolean;
   isSearchingForPatient: boolean;
   modalResult: PatientSearchResult;
   patientDetails: Patient;
+  patientModal: NgbModalRef;
+  patientResult: PatientSearchResult;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralForm: FormGroup;
@@ -30,12 +35,17 @@ export class ReferralEditComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private patientSearchService: PatientSearchService,
     private referralService: ReferralService,
+    private renderer: Renderer2,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService
   ) { }
+
+  @ViewChild('patientResults', {static: true}) patientResultTemplate;
+  @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
   ngOnInit() {
 
@@ -83,6 +93,17 @@ export class ReferralEditComponent implements OnInit {
     this.isPatientIdValidated = false;
     this.OnChanges();
 
+  }
+
+  async CancelPatientResultsModal() {
+    // this.alternativeIdentifierField.setValue('');
+    // this.nhsNumberField.setValue('');
+    this.patientModal.close();
+    this.SetFieldFocus('#nhsNumber');
+  }
+
+  async Delay(milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
 
   DisableIfFieldHasValue(fieldName: string): boolean {
@@ -166,6 +187,15 @@ export class ReferralEditComponent implements OnInit {
     this.referralId = referral.id;
     this.alternativeIdentifierField.setValue(referral.patient.alternativeIdentifier);
     this.nhsNumberField.setValue(referral.patient.nhsNumber);
+
+    this.patientDetails = referral.patient;
+  }
+
+  IsPatientIdUnchanged(): boolean {
+    return (
+      this.patientDetails.nhsNumber === (+this.nhsNumber === 0 ? null : +this.nhsNumber) &&
+      this.patientDetails.alternativeIdentifier === this.alternativeIdentifier
+    );
   }
 
   IsSearchingForPatient(): boolean {
@@ -207,6 +237,58 @@ export class ReferralEditComponent implements OnInit {
     }
   }
 
+  async SetFieldFocus(fieldName: string) {
+    // ToDo: Find a better way to do this !
+    await this.Delay(100);
+    this.renderer.selectRootElement(fieldName).focus();
+  }
+
+  async UseExistingPatient() {
+    // ToDo: copy the existing patient details
+
+    this.patientDetails.id = this.patientResult.patientId;
+    this.patientDetails.alternativeIdentifier = this.patientResult.alternativeIdentifier;
+    this.patientDetails.nhsNumber = this.patientResult.nhsNumber;
+    this.patientDetails.gpPracticeId = this.patientResult.gpPracticeId;
+    this.patientDetails.residentialPostcode = this.patientResult.residentialPostcode;
+    this.patientDetails.ccgId = this.patientResult.ccgId;
+    this.patientDetails.isExistingPatient = true;
+
+    this.isGpFieldsShown = true;
+    // this.SetGpPracticeField(
+    //   this.patientResult.gpPracticeId,
+    //   this.patientResult.gpPracticeNameAndPostcode
+    // );
+    // this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
+    this.patientModal.close();
+    // this.SetFieldFocus('#amhp');
+
+    this.nhsNumberField.markAsPristine();
+    this.nhsNumberField.setValue(this.patientResult.nhsNumber);
+
+    // only show the postcode field if the gpPractice field is null
+    if (
+      this.patientResult.residentialPostcode !== '' &&
+      this.patientResult.gpPracticeId == null
+    ) {
+      // this.isResidentialPostcodeFieldShown = true;
+    }
+
+    // only show the ccg field if the postcode field is null
+    if (
+      this.patientResult.residentialPostcode !== '' &&
+      this.patientResult.gpPracticeId == null
+    ) {
+      // this.isResidentialPostcodeFieldShown = true;
+    }
+    this.isPatientIdValidated = true;
+  }
+
+  UseExistingReferral(): void {
+    // ToDo: navigate to the existing referral page
+    this.patientModal.close();
+  }
+
   ValidatePatient(): void {
     if (
       this.IsSearchingForPatient() ||
@@ -237,7 +319,7 @@ export class ReferralEditComponent implements OnInit {
               message: 'No existing patients found'
             });
             this.isPatientIdValidated = true;
-            this.patientDetails.nhsNumber = +this.nhsNumber;
+            this.patientDetails.nhsNumber = (+this.nhsNumber === 0 ? null : +this.nhsNumber);
             this.patientDetails.alternativeIdentifier = this.alternativeIdentifier;
             this.isGpFieldsShown = true;
             this.nhsNumberField.setErrors(null);
@@ -255,7 +337,7 @@ export class ReferralEditComponent implements OnInit {
           default:
             this.toastService.displayError({
               title: 'Validation Error',
-              message: 'Multiple patients found ! Please inform a system administrator'
+              message: 'Multiple patients found! Please inform a system administrator'
             });
             this.isPatientIdValidated = false;
             break;
@@ -265,11 +347,10 @@ export class ReferralEditComponent implements OnInit {
         this.isSearchingForPatient = false;
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to validate patient details ! Please try again in a few moments'
+          message: 'Unable to validate patient details! Please try again in a few moments'
         });
         return throwError(error);
       }
     );
   }
-
 }
