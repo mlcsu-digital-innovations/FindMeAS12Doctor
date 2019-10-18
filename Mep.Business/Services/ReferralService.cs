@@ -47,7 +47,8 @@ namespace Mep.Business.Services
       Entities.Referral entity = await
         _context.Referrals
                 .Include(r => r.CreatedByUser)
-                .Include(r => r.Examinations)
+                .Include(r => r.Examinations)                  
+                  .ThenInclude(e => e.UserExaminationNotifications)
                 .Include(r => r.Patient)
                 .Include(r => r.ReferralStatus)
                 .Include(r => r.LeadAmhpUser)

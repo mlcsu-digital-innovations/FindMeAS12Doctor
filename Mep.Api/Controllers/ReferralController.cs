@@ -23,6 +23,19 @@ namespace Mep.Api.Controllers
     }
 
     [HttpGet]
+    [Route("edit/{id:int}")]
+    public async Task<ActionResult<ViewModels.ReferralEdit>> GetEdit(int id)
+    {
+      BusinessModels.Referral businessModels =
+          await _service.GetByIdAsync(id, true);
+
+      ViewModels.ReferralEdit viewModel =
+          _mapper.Map<ViewModels.ReferralEdit>(businessModels);
+
+      return Ok(viewModel);
+    }
+
+    [HttpGet]
     [Route("list")]
     public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetList()
     {
@@ -33,6 +46,7 @@ namespace Mep.Api.Controllers
           _mapper.Map<IEnumerable<ViewModels.ReferralList>>(businessModels);
 
       return Ok(viewModels);
-    }      
+    }
+    
   }
 }
