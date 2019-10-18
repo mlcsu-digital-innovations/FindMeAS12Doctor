@@ -6,7 +6,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
-            <i class="fas fa-folder-plus fa-4x" style="color:#fff;"></i>
+            <i class="fas fa-folder-plus fa-4x"></i>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">Create New Examination</h4>
@@ -96,7 +96,7 @@
                       ngbDatepicker
                       #s="ngbDatepicker"/>
                   </div>
-                  <div class="col-md-1" style="padding-left: 1px;">
+                  <div class="col-md-1 padding-left-1">
                     <button
                       class="btn btn-outline-secondary calendar"
                       (click)="s.toggle()"
@@ -105,8 +105,8 @@
                       <i class="far fa-calendar-alt"></i>
                     </button>
                   </div>
-                  <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666;">@</div>
-                  <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -1rem;">
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mt-less-5 ml-less-2">
                     <ngb-timepicker formControlName="scheduledTime" [minuteStep]="5"></ngb-timepicker>
                   </div>
                 </div>
@@ -304,7 +304,7 @@
                         #d="ngbDatepicker"
                       />
                   </div>
-                  <div class="col-md-1" style="padding-left: 1px;">
+                  <div class="col-md-1 padding-left-1">
                       <button
                         id="calendarBtn"
                         [disabled]="!IsFormInCreatingState()"
@@ -314,8 +314,8 @@
                         <i class="far fa-calendar-alt"></i>
                       </button>
                   </div>
-                  <div class="col-md-1" style="font-size:1.3em; font-weight: 600; color: #666;">@</div>
-                  <div class="col-md-4" style="margin-top: -2.5rem; margin-left: -1rem;">
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mlt-less-1 mt-less-5">
                       <ngb-timepicker formControlName="toBeCompletedByTime" [minuteStep]="5"></ngb-timepicker>
                   </div>
                 </div>
