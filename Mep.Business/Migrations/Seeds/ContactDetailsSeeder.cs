@@ -22,15 +22,13 @@ namespace Mep.Business.Migrations.Seeds
       contactDetail.ContactDetailTypeId =
         GetContactDetailTypeIdByContactDetailTypeName(CONTACT_DETAIL_TYPE_NAME);
       contactDetail.EmailAddress = EMAIL_ADDRESS;
-      contactDetail.IsActive = true;
       contactDetail.Latitude = LATITUDE;
       contactDetail.Longitude = LONGITUDE;
-      contactDetail.ModifiedAt = _now;
-      contactDetail.ModifiedByUser = GetSystemAdminUser();
       contactDetail.Postcode = POSTCODE;
       contactDetail.TelephoneNumber = TELEPHONE_NUMBER;
       contactDetail.Town = TOWN;
       contactDetail.User = GetSystemAdminUser();
+      PopulateActiveAndModifiedWithSystemUser(contactDetail);
     }
   }
 }

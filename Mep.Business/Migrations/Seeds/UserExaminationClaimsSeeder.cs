@@ -34,7 +34,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.ModifiedByUser = GetSystemAdminUser();
       userExaminationClaim.PaymentDate = _now;
       userExaminationClaim.SelectedByUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_MALE);
       userExaminationClaim.StartPostcode = POSTCODE;
       userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
@@ -65,7 +65,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.ModifiedByUser = GetSystemAdminUser();
       userExaminationClaim.PaymentDate = _now;
       userExaminationClaim.SelectedByUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP);
+        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_FEMALE);
       userExaminationClaim.StartPostcode = POSTCODE;
       userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =

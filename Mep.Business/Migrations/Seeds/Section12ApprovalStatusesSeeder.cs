@@ -1,5 +1,4 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -10,19 +9,17 @@ namespace Mep.Business.Migrations.Seeds
       Section12ApprovalStatus section12ApprovalStatus;
 
       if ((section12ApprovalStatus = _context
-        .Section12ApprovalStatuses
-          .SingleOrDefault(g => g.Name ==
-            SECTION_12_APPROVAL_STATUS_NAME)) == null)
+        .Section12ApprovalStatuses.Find(Models.Section12ApprovalStatus.APPROVED)) == null)
       {
         section12ApprovalStatus = new Section12ApprovalStatus();
         _context.Add(section12ApprovalStatus);
       }
-      section12ApprovalStatus.Description =
-        SECTION_12_APPROVAL_STATUS_DESCRIPTION;
-      section12ApprovalStatus.IsActive = true;
-      section12ApprovalStatus.ModifiedAt = _now;
-      section12ApprovalStatus.ModifiedByUser = GetSystemAdminUser();
-      section12ApprovalStatus.Name = SECTION_12_APPROVAL_STATUS_NAME;
+
+      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
+        section12ApprovalStatus,
+        SECTION_12_APPROVAL_STATUS_APPROVED_NAME,
+        SECTION_12_APPROVAL_STATUS_APPROVED_DESCRIPTION
+      );
     }
   }
 }

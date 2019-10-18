@@ -8,167 +8,98 @@ namespace Mep.Business.Migrations.Seeds
   {
     internal void SeedData()
     {
-      User user;
+      AddUpdateUserDoctorWithDefaults(
+        displayName: USER_DISPLAY_NAME_DOCTOR_FEMALE, 
+        genderTypeId: GetGenderTypeFemale().Id);
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            USER_DISPLAY_NAME_DOCTOR_FEMALE)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = USER_DISPLAY_NAME_DOCTOR_FEMALE;
-      user.GenderTypeId = GetFemaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_1);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserDoctorWithDefaults(
+        displayName: USER_DISPLAY_NAME_DOCTOR_MALE,
+        genderTypeId: GetGenderTypeMale().Id);
+    
+      AddUpdateUserDoctorWithDefaults(
+        displayName: USER_DISPLAY_NAME_DOCTOR_ON_CALL, 
+        genderTypeId: GetGenderTypeFemale().Id);
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            USER_DISPLAY_NAME_DOCTOR_MALE)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = USER_DISPLAY_NAME_DOCTOR_MALE;
-      user.GenderTypeId = GetMaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_2);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserDoctorWithDefaults(
+        displayName: USER_DISPLAY_NAME_DOCTOR_S12_APPROVED,
+        genderTypeId: GetGenderTypeMale().Id,
+        section12ApprovalStatusId: GetSection12ApprovalStatusApproved().Id,
+        section12ExpiryDate: DateTimeOffset.Now.AddYears(10));
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            ORGANISATION_1_USER)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = ORGANISATION_1_USER;
-      user.GenderTypeId = GetMaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_1);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserDoctorWithDefaults(
+        displayName: USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP,
+        genderTypeId: GetGenderTypeMale().Id);
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            ORGANISATION_2_USER)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = ORGANISATION_2_USER;
-      user.GenderTypeId = GetFemaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_2);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMHP);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserWithDefaults(
+        displayName: USER_DISPLAY_NAME_FINANCE_FEMALE,
+        genderTypeId: GetGenderTypeFemale().Id,
+        profileTypeId: GetProfileTypeFinance().Id);     
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            ORGANISATION_3_USER)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = ORGANISATION_3_USER;
-      user.GenderTypeId = GetMaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_3);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserWithDefaults(
+        displayName: USER_DISPLAY_NAME_FINANCE_MALE,
+        genderTypeId: GetGenderTypeMale().Id,
+        profileTypeId: GetProfileTypeFinance().Id);
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            ORGANISATION_4_USER)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = ORGANISATION_4_USER;
-      user.GenderTypeId = GetFemaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_FINANCE);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserWithDefaults(
+        displayName: USER_DISPLAY_NAME_AMHP_FEMALE, 
+        genderTypeId: GetGenderTypeFemale().Id, 
+        profileTypeId: GetProfileTypeAmhp().Id);      
 
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            USER_DISPLAY_NAME_AMHP)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = USER_DISPLAY_NAME_AMHP;
-      user.GenderTypeId = GetFemaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_AMHP);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
-
-      if ((user = _context
-        .Users
-          .SingleOrDefault(g => g.DisplayName ==
-            USER_DISPLAY_NAME_FINANCE)) == null)
-      {
-        user = new User();
-        _context.Add(user);
-      }
-      user.DisplayName = USER_DISPLAY_NAME_FINANCE;
-      user.GenderTypeId = GetMaleGenderTypeId();
-      user.GmcNumber = null;
-      user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();
-      user.IsActive = true;
-      user.ModifiedByUser = GetSystemAdminUser();
-      user.OrganisationId = GetOrganisationIdByName(ORGANISATION_NAME_4);
-      user.ProfileTypeId = GetProfileTypeId(PROFILE_TYPE_NAME_DOCTOR);
-      user.Section12ApprovalStatusId = null;
-      user.Section12ExpiryDate = null;
+      AddUpdateUserWithDefaults(
+        displayName: USER_DISPLAY_NAME_AMHP_MALE, 
+        genderTypeId: GetGenderTypeMale().Id, 
+        profileTypeId: GetProfileTypeAmhp().Id);
     }
+
+    private User AddUpdateUserWithDefaults(
+      string displayName,
+      int genderTypeId,
+      int profileTypeId,
+      int? organisationId = null)
+    {
+      User user;
+      if ((user = _context.Users
+                          .SingleOrDefault(g => g.DisplayName == displayName)) == null)
+      {
+        user = new User();
+        _context.Add(user);
+      }
+      
+      user.DisplayName = displayName;
+      user.GenderTypeId = genderTypeId;                  
+      user.GmcNumber = null;
+      user.HasReadTermsAndConditions = true;
+      user.IdentityServerIdentifier = Guid.NewGuid().ToString();  
+      user.OrganisationId = organisationId.HasValue ? 
+                            (int)organisationId : 
+                            GetOrganisationIdByName(ORGANISATION_NAME_1);
+      user.ProfileTypeId = profileTypeId;
+      user.Section12ApprovalStatusId = null;
+      user.Section12ExpiryDate = null;
+
+      PopulateActiveAndModifiedWithSystemUser(user);
+
+      return user;
+    }
+
+    private User AddUpdateUserDoctorWithDefaults(
+      string displayName,
+      int genderTypeId,
+      int? gmcNumber = null,
+      int? section12ApprovalStatusId = null,
+      DateTimeOffset? section12ExpiryDate = null
+      )
+    {
+      User user = AddUpdateUserWithDefaults(
+        displayName, 
+        genderTypeId,
+        GetProfileTypeDoctor().Id);
+
+      user.GmcNumber = gmcNumber;
+      user.Section12ApprovalStatusId = section12ApprovalStatusId;
+      user.Section12ExpiryDate = section12ExpiryDate;
+
+      return user;
+    }      
   }
 }

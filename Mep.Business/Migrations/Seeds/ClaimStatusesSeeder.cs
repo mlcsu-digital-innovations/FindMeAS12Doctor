@@ -17,11 +17,10 @@ namespace Mep.Business.Migrations.Seeds
         claimStatus = new ClaimStatus();
         _context.Add(claimStatus);
       }
-      claimStatus.Description = CLAIM_STATUS_ACCEPTED_DESCRIPTION;
-      claimStatus.IsActive = true;
-      claimStatus.ModifiedAt = _now;
-      claimStatus.ModifiedByUser = GetSystemAdminUser();
-      claimStatus.Name = CLAIM_STATUS_ACCEPTED_NAME;
+      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
+        claimStatus, 
+        CLAIM_STATUS_ACCEPTED_NAME, 
+        CLAIM_STATUS_ACCEPTED_DESCRIPTION);
     }
   }
 }

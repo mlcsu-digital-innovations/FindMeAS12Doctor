@@ -10,9 +10,8 @@ namespace Mep.Business.Migrations.Seeds
       DoctorStatus doctorStatus;
 
       if ((doctorStatus = _context
-       .DoctorStatuses
-        .SingleOrDefault(g => g.Id == DoctorStatus.AVAILABLE)) 
-         == null)
+        .DoctorStatuses
+        .SingleOrDefault(g => g.UserId == 1))== null)
       {
         doctorStatus = new DoctorStatus();
         _context.Add(doctorStatus);

@@ -55,10 +55,10 @@ namespace Mep.Business.Migrations.Seeds
     protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_2 = "Notification Text Message Template 2";
     protected const string NOTIFICATION_TEXT_NAME_ASSIGNED_TO_EXAMINATION = "Assigned to examination";
     protected const string NOTIFICATION_TEXT_NAME_2 = "Notification Text 2";
-    protected const string ORGANISATION_1_USER = "Org 1 User";
-    protected const string ORGANISATION_2_USER = "Org 2 User";
-    protected const string ORGANISATION_3_USER = "Org 3 User";
-    protected const string ORGANISATION_4_USER = "Org 4 User";
+    protected const string USER_DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
+    protected const string USER_DISPLAY_NAME_FINANCE_MALE = "Finance Male";
+    protected const string USER_DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
+    protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";
     protected const string ORGANISATION_DESCRIPTION_1 = "Organisation 1 Description";
     protected const string ORGANISATION_DESCRIPTION_2 = "Organisation 2 Description";
     protected const string ORGANISATION_DESCRIPTION_3 = "Organisation 3 Description";
@@ -99,8 +99,8 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PROFILE_TYPE_NAME_SYSTEM = "ProfileType Name System";
     protected const string REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL = "New Referral Description";
     protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
-    protected const string SECTION_12_APPROVAL_STATUS_DESCRIPTION = "Section 12 Approval Status Description";
-    protected const string SECTION_12_APPROVAL_STATUS_NAME = "Section 12 Approval Status Name";
+    protected const string SECTION_12_APPROVAL_STATUS_APPROVED_DESCRIPTION = "Section 12 Status Is Approved";
+    protected const string SECTION_12_APPROVAL_STATUS_APPROVED_NAME = "Approved";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
     protected const int TELEPHONE_NUMBER = 01000100000;
@@ -108,9 +108,11 @@ namespace Mep.Business.Migrations.Seeds
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
     protected const string USER_COMMENTS = "Test Comments";
-    protected const string USER_DISPLAY_NAME_AMHP = "AMHP";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
+    protected const string USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
+    protected const string USER_DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
+    protected const string USER_DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";
     protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
 #endregion
@@ -191,6 +193,30 @@ namespace Mep.Business.Migrations.Seeds
       {
         throw new Exception("Cannot find Gender Type female in GenderTypes", ex);
       }
+    }
+
+    protected GenderType GetGenderTypeById(int id)
+    {
+      try
+      {
+        return _context.GenderTypes.Single(gt => gt.Id == id);
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Cannot find Gender Type with and id of {id} in GenderTypes", ex);
+      }
+    }
+    protected GenderType GetGenderTypeFemale()
+    {
+      return GetGenderTypeById(Models.GenderType.FEMALE);
+    }    
+    protected GenderType GetGenderTypeMale()
+    {
+      return GetGenderTypeById(Models.GenderType.MALE);
+    }
+    protected GenderType GetGenderTypeOther()
+    {
+      return GetGenderTypeById(Models.GenderType.OTHER);
     }
 
     protected int GetFirstCcg()
@@ -371,6 +397,38 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected ProfileType GetProfileTypeById(int id)
+    {
+      try
+      {
+        return _context.ProfileTypes
+          .Single(profileType => profileType.Id == id);
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(
+          $"Cannot find a Profile Type with an id of {id} in ProfileTypes", ex);
+      }
+    }
+    protected ProfileType GetProfileTypeAmhp()
+    {
+      return GetProfileTypeById(Models.ProfileType.AMHP);
+    }
+
+    protected ProfileType GetProfileTypeDoctor()
+    {
+      return GetProfileTypeById(Models.ProfileType.DOCTOR);
+    }
+
+    protected ProfileType GetProfileTypeFinance()
+    {
+      return GetProfileTypeById(Models.ProfileType.FINANCE);
+    }
+    protected ProfileType GetProfileTypeSystem()
+    {
+      return GetProfileTypeById(Models.ProfileType.SYSTEM);
+    }
+
     protected int GetReferralIdByAlternativeIdentifier(string alternativeIdentifier)
     {
       try
@@ -430,6 +488,26 @@ namespace Mep.Business.Migrations.Seeds
           $"Cannot find Section 12 Approval Status with the name of {section12ApprovalStatusName} in Section12ApprovalStatuses", ex);
       }
     }
+
+    protected Section12ApprovalStatus GetSection12ApprovalStatusById(int id)
+    {
+      try
+      {
+        return _context.Section12ApprovalStatuses
+                       .Single(s => s.Id == id);
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(
+          $"Cannot find Section 12 Approval Status with an id of {id} in Section12ApprovalStatuses", ex);
+      }
+    }
+    
+    protected Section12ApprovalStatus GetSection12ApprovalStatusApproved()
+    {
+      return GetSection12ApprovalStatusById(Models.Section12ApprovalStatus.APPROVED);
+    }
+    
 
     protected int GetSpecialityId()
     {
