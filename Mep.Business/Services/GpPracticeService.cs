@@ -44,5 +44,19 @@ namespace Mep.Business.Services
 
       return entity;
     }
+
+    protected override async Task<Entities.GpPractice> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.GpPractice entity = await
+        _context.GpPractices
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(gpPractice => gpPractice.Id == entityId);
+
+      return entity;
+    }
   }
 }

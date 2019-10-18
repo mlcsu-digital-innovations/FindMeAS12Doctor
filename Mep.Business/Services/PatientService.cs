@@ -93,6 +93,20 @@ namespace Mep.Business.Services
       return entity;
     }
 
+    protected override async Task<Entities.Patient> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.Patient entity = await
+        _context.Patients
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(patient => patient.Id == entityId);
+
+      return entity;
+    }  
+
     protected override async Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
     {
       // TODO: Residential Postcode => CCG Id
@@ -169,6 +183,6 @@ namespace Mep.Business.Services
       {
         return false;
       }      
-    }    
+    }
   }
 }

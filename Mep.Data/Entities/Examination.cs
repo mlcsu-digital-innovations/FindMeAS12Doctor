@@ -49,5 +49,15 @@ namespace Mep.Data.Entities
 
     [NotMapped]
     public bool HasDetails { get { return Details != null && Details.Count > 0; } }
+
+    [NotMapped]
+    public bool HasUserExaminationNotifications
+    {
+      get
+      {
+        return UserExaminationNotifications != null &&
+               UserExaminationNotifications.Count > 0;
+      }
+    }
   }
 }

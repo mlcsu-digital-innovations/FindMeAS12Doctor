@@ -22,7 +22,7 @@ namespace Mep.Business.Services
       _typeName = typeName;
       _context = context;
       _mapper = mapper;
-    }    
+    }
 
     public async Task<int> ActivateAsync(int id)
     {
@@ -68,12 +68,8 @@ namespace Mep.Business.Services
     public async Task<TBusinessModel> UpdateAsync(
       TBusinessModel model)
     {
-      Serilog.Log.Verbose("Entry Model: {@model}", model);
-
       TEntity entity =
         await GetEntityByIdAsync(model.Id, false, false);
-
-      Serilog.Log.Verbose("Get Entity: {@entity}", entity);
 
       if (entity == null)
       {
@@ -82,22 +78,24 @@ namespace Mep.Business.Services
       else
       {
         entity.IsActive = model.IsActive;
-        Serilog.Log.Verbose("Map Entity: {@entity}", entity);
         UpdateModified(entity);
-        Serilog.Log.Verbose("Update Mod Entity: {@entity}", entity);
 
         await InternalUpdateAsync(model, entity);
-        Serilog.Log.Debug("Internal Update Entity: {@entity}", entity);
 
         await _context.SaveChangesAsync();
 
         model = await GetByIdAsync(model.Id, model.IsActive);
-        Serilog.Log.Debug("After Save Model: {@model}", model);
+
         return model;
       }
     }
 
     protected abstract Task<TEntity> GetEntityByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly);
+
+    protected abstract Task<TEntity> GetEntityWithNoIncludesByIdAsync(
       int entityId,
       bool asNoTracking,
       bool activeOnly);
@@ -119,7 +117,7 @@ namespace Mep.Business.Services
       //TODO: Get the current users sub claim
       entity.ModifiedByUserId = 1;
       entity.ModifiedAt = DateTimeOffset.Now;
-    }    
+    }
 
     private async Task<int> SetActiveStatus(int id, bool isActivating)
     {
@@ -140,7 +138,7 @@ namespace Mep.Business.Services
         UpdateModified(entity);
         return await _context.SaveChangesAsync();
       }
-    }    
+    }
 
   }
 }

@@ -44,5 +44,18 @@ namespace Mep.Business.Services
 
       return entity;
     }
+    protected override async Task<Entities.ReferralStatus> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.ReferralStatus entity = await
+        _context.ReferralStatuses
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(referralStatus => referralStatus.Id == entityId);
+
+      return entity;
+    }    
   }
 }

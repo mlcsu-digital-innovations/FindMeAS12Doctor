@@ -12,7 +12,7 @@ namespace Mep.Business.Services
     : ServiceBase<Ccg, Entities.Ccg>, IModelService<Ccg>
   {
     public CcgService(ApplicationContext context, IMapper mapper)
-      :base("Ccg", context, mapper)
+      : base("Ccg", context, mapper)
     {
     }
 
@@ -20,29 +20,43 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Entities.Ccg> entities = 
+      IEnumerable<Entities.Ccg> entities =
         await _context.Ccgs
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .ToListAsync();
 
-      IEnumerable<Models.Ccg> models = 
+      IEnumerable<Models.Ccg> models =
         _mapper.Map<IEnumerable<Models.Ccg>>(entities);
 
       return models;
     }
 
     protected override async Task<Entities.Ccg> GetEntityByIdAsync(
-      int entityId, 
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.Ccg entity = await 
+      Entities.Ccg entity = await
         _context.Ccgs
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
 
-      return entity;  
+      return entity;
+    }
+
+    protected override async Task<Entities.Ccg> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.Ccg entity = await
+        _context.Ccgs
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
+
+      return entity;
     }
   }
 }

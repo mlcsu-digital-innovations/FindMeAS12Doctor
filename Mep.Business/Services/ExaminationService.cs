@@ -58,6 +58,21 @@ namespace Mep.Business.Services
                 .Include(e => e.Details)
                   .ThenInclude(d => d.ExaminationDetailType)
                 .Include(e => e.UserExaminationNotifications)
+                  .ThenInclude(u => u.User)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(u => u.Id == entityId);
+
+      return entity;
+    }
+
+    protected override async Task<Entities.Examination> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.Examination entity = await
+        _context.Examinations
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == entityId);
@@ -114,36 +129,37 @@ namespace Mep.Business.Services
       entity.SpecialityId = model.SpecialityId;
       entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
       UpdateExaminationDetails(model, entity);
-      //await UpdateAmhpToUserExaminationNotifications(model, entity);
+      await UpdateAmhpToUserExaminationNotifications(model, entity);
 
       return true;
     }
 
     private async Task<bool> AddAmhpToUserExaminationNotifications(Examination model, Entities.Examination entity)
     {
-      User user = await _userService.GetByIdAsync(model.AmhpUserId, true);
-      if (user == null)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", $"An active UserId of {model.AmhpUserId} does not exist.");
-      }
-      if (!user.IsAmhp)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", $"UserId {model.AmhpUserId} must be an AMHP but is a {user.ProfileType.Name}.");
-      }
+      await CheckUserIdIsAnAmhp(model.AmhpUserId);
 
       entity.UserExaminationNotifications = new List<Entities.UserExaminationNotification>(1);
       Entities.UserExaminationNotification userExaminationNotification =
         new Entities.UserExaminationNotification
         {
           NotificationTextId = NotificationText.ASSIGNED_TO_EXAMINATION,
-          UserId = user.Id
+          UserId = model.AmhpUserId
         };
       UpdateModified(userExaminationNotification);
       entity.UserExaminationNotifications.Add(userExaminationNotification);
 
       return true;
+    }
+
+    private void AddExaminationDetail(int examinationDetailTypeId, Entities.Examination entity)
+    {
+      Entities.ExaminationDetail examinationDetail = new Entities.ExaminationDetail()
+      {
+        ExaminationDetailTypeId = examinationDetailTypeId,
+        IsActive = true
+      };
+      UpdateModified(examinationDetail);
+      entity.Details.Add(examinationDetail);
     }
 
     private void AddExaminationDetails(Examination model, Entities.Examination entity)
@@ -156,17 +172,6 @@ namespace Mep.Business.Services
           AddExaminationDetail(examinationDetailTypeId, entity);
         }
       }
-    }
-
-    private void AddExaminationDetail(int examinationDetailTypeId, Entities.Examination entity)
-    {
-      Entities.ExaminationDetail examinationDetail = new Entities.ExaminationDetail()
-      {
-        ExaminationDetailTypeId = examinationDetailTypeId,
-        IsActive = true
-      };
-      UpdateModified(examinationDetail);
-      entity.Details.Add(examinationDetail);
     }
 
     private async Task<int?> GetCcgIdFromReferralPatient(Examination model)
@@ -186,6 +191,22 @@ namespace Mep.Business.Services
       }
 
       return referral.Patient.CcgId;
+    }
+
+    private async Task<bool> CheckUserIdIsAnAmhp(int amhpUserId)
+    {
+      User user = await _userService.GetByIdAsync(amhpUserId, true);
+      if (user == null)
+      {
+        throw new ModelStateException(
+          "AmhpUserId", $"An active UserId of {amhpUserId} does not exist.");
+      }
+      if (!user.IsAmhp)
+      {
+        throw new ModelStateException(
+          "AmhpUserId", $"UserId {amhpUserId} must be an AMHP but is a {user.ProfileType.Name}.");
+      }
+      return true;
     }
 
     private void UpdateExaminationDetails(Examination model, Entities.Examination entity)
@@ -224,10 +245,32 @@ namespace Mep.Business.Services
       }
     }
 
-    private Task UpdateAmhpToUserExaminationNotifications(Examination model, Entities.Examination entity)
+    private async Task<bool> UpdateAmhpToUserExaminationNotifications(Examination model, Entities.Examination entity)
     {
-      throw new NotImplementedException();
-    }
+      await CheckUserIdIsAnAmhp(model.AmhpUserId);
 
+      if (entity.HasUserExaminationNotifications)
+      {
+        Entities.UserExaminationNotification amhpUserExaminationNotification =
+          entity.UserExaminationNotifications.SingleOrDefault(u => u.User.ProfileTypeId == ProfileType.AMHP);
+
+        if (amhpUserExaminationNotification == null)
+        {
+          throw new EntityNotLoadedException(
+            "Examination", model.Id, "UserExaminationNotification.User.ProfileType of AMHP", ProfileType.AMHP);
+        }
+        else
+        {
+          UpdateModified(amhpUserExaminationNotification);
+          amhpUserExaminationNotification.IsActive = true;
+        }
+      }
+      else
+      {
+          throw new EntityNotLoadedException(
+            "Examination", model.Id, "UserExaminationNotification.User.ProfileType of AMHP", ProfileType.AMHP);
+      }
+      return true;
+    }
   }
 }

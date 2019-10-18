@@ -44,5 +44,19 @@ namespace Mep.Business.Services
 
       return entity;
     }
+
+    protected override async Task<Entities.DoctorStatus> GetEntityWithNoIncludesByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.DoctorStatus entity = await
+        _context.DoctorStatuses
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(doctorStatus => doctorStatus.Id == entityId);
+
+      return entity;
+    }
   }
 }
