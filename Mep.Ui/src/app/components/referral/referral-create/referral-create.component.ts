@@ -23,9 +23,7 @@ import { tap, switchMap, catchError } from 'rxjs/operators';
 import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from '../../../interfaces/typeahead-result';
-import { UNKNOWN_CCG } from '../../../constants/Constants';
-import { UNKNOWN_GP_PRACTICE } from '../../../constants/Constants';
-import { UNKNOWN_POSTCODE } from '../../../constants/Constants';
+import { UNKNOWN_CCG, UNKNOWN_GP_PRACTICE, UNKNOWN_POSTCODE } from '../../../constants/Constants';
 
 @Component({
   selector: 'app-referral-create',
