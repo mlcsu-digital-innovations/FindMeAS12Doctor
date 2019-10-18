@@ -290,7 +290,8 @@ export class ReferralEditComponent implements OnInit {
   }
 
   UseExistingReferral(): void {
-    // ToDo: navigate to the existing referral page
+    // ToDo: Query what to do in this instance !!
+    // can't have multiple active referrals for a patient
     this.patientModal.close();
   }
 
