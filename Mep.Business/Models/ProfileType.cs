@@ -10,5 +10,6 @@ namespace Mep.Business.Models
 
     public virtual IList<User> Users { get; set; }
     public bool IsAmhp { get { return Id == AMHP; } }
+    public bool IsDoctor { get { return Id == DOCTOR; } }
   }
 }

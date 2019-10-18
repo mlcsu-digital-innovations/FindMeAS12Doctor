@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 
 namespace Mep.Business.Models
 {
@@ -28,7 +30,7 @@ namespace Mep.Business.Models
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
-    public DateTimeOffset MustBeCompletedBy { get; set; }
+    public DateTimeOffset? MustBeCompletedBy { get; set; }
     public int? NonPaymentLocationId { get; set; }
     public virtual NonPaymentLocation NonPaymentLocation { get; set; }
     [Required]
@@ -38,7 +40,7 @@ namespace Mep.Business.Models
     public int? PreferredDoctorGenderTypeId { get; set; }
     public int ReferralId { get; set; }
     public virtual Referral Referral { get; set; }
-    public DateTimeOffset ScheduledTime { get; set; }
+    public DateTimeOffset? ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
     public Speciality Speciality { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
@@ -46,12 +48,62 @@ namespace Mep.Business.Models
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
 
+    public string AmhpUserName
+    {
+      get
+      {
+        return UserExaminationNotifications
+          .Where(u => u.IsActive)
+          .SingleOrDefault(u => u.IsAmhp)
+          .UserName;
+      }
+    }
+
     public virtual IList<ExaminationDetailType> DetailTypes
     {
       get
       {
         return Details.Where(d => d.IsActive)
                       .Select(d => d.ExaminationDetailType).ToList();
+      }
+    }
+    
+    public IList<string> DoctorNamesAccepted
+    {
+      get
+      {
+        return UserExaminationNotifications
+          .Where(u => u.IsActive)
+          .Where(u => u.HasAccepted ?? false)
+          .Where(u => u.IsDoctor)
+          .Select(u => u.UserName)
+          .ToList();
+      }
+    }
+
+    public IList<string> DoctorNamesAllocated
+    {
+      get
+      {
+        return UserExaminationNotifications
+          .Where(u => u.IsActive)
+          .Where(u => !u.HasAccepted ?? true)
+          .Where(u => u.IsDoctor)
+          .Select(u => u.UserName)
+          .ToList();
+      }
+    }
+
+    public string FullAddress
+    {
+      get
+      {
+        StringBuilder fullAddress = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(Address1)) { fullAddress.Append(Address1); }
+        if (!string.IsNullOrWhiteSpace(Address2)) { fullAddress.Append(", " + Address2); }
+        if (!string.IsNullOrWhiteSpace(Address3)) { fullAddress.Append(", " + Address3); }
+        if (!string.IsNullOrWhiteSpace(Address4)) { fullAddress.Append(", " + Address4); }
+        return fullAddress.ToString();
       }
     }
 
@@ -67,5 +119,17 @@ namespace Mep.Business.Models
                CompletionConfirmationByUserId == null;
       }
     }
+
+    public bool IsPlanned
+    { get { return ScheduledTime != null; } }
+
+    public string PreferredDoctorGenderTypeName
+    { get { return PreferredDoctorGenderType.Name; } }
+
+    public string SpecialityName
+    { get { return Speciality.Name; } }
+
+    public string UnsuccessfulExaminationTypeName
+    { get { return UnsuccessfulExaminationType.Name; } }
   }
 }

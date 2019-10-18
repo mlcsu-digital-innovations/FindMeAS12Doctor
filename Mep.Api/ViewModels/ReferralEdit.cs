@@ -12,6 +12,6 @@ namespace Mep.Api.ViewModels
     public int? PatientGpPracticeId { get; set; }
     public long? PatientNhsNumber { get; set; }
     public string PatientResidentialPostcode { get; set; }
-    public string ReferralStatusName { get; set; }
+    public string Status { get; set; }
   }
 }
