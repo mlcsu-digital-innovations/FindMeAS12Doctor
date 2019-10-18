@@ -13,6 +13,7 @@ import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 
 @Component({
   selector: 'app-referral-edit',
@@ -21,6 +22,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class ReferralEditComponent implements OnInit {
 
+  initialReferralDetails: ReferralEdit;
   isGpFieldsShown: boolean;
   isPatientIdValidated: boolean;
   isSearchingForPatient: boolean;
@@ -28,10 +30,11 @@ export class ReferralEditComponent implements OnInit {
   patientDetails: Patient;
   patientModal: NgbModalRef;
   patientResult: PatientSearchResult;
-  referral$: Observable<Referral | any>;
+  referral$: Observable<ReferralEdit | any>;
   referralCreated: Date;
   referralForm: FormGroup;
   referralId: number;
+  updatedReferral: ReferralEdit;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,7 +55,7 @@ export class ReferralEditComponent implements OnInit {
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.referralService.getReferral(+params.get('referralId'))
+          return this.referralService.getReferralEdit(+params.get('referralId'))
             .pipe(
               map(referral => {
                 this.InitialiseForm(referral);
@@ -182,19 +185,21 @@ export class ReferralEditComponent implements OnInit {
     );
   }
 
-  InitialiseForm(referral: Referral) {
+  InitialiseForm(referral: ReferralEdit) {
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
-    this.alternativeIdentifierField.setValue(referral.patient.alternativeIdentifier);
-    this.nhsNumberField.setValue(referral.patient.nhsNumber);
+    this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
+    this.nhsNumberField.setValue(referral.patientNhsNumber);
 
-    this.patientDetails = referral.patient;
+    this.initialReferralDetails = referral;
   }
 
   IsPatientIdUnchanged(): boolean {
     return (
-      this.patientDetails.nhsNumber === (+this.nhsNumber === 0 ? null : +this.nhsNumber) &&
-      this.patientDetails.alternativeIdentifier === this.alternativeIdentifier
+      this.initialReferralDetails.patientNhsNumber ===
+        (+this.nhsNumber === 0 ? null : +this.nhsNumber) &&
+      this.initialReferralDetails.patientAlternativeIdentifier ===
+        this.alternativeIdentifier
     );
   }
 
