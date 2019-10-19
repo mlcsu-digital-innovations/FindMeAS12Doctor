@@ -7,41 +7,8 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase<TEntity> : SeederDoubleBase where TEntity : BaseEntity, new()
   {
-
-    protected void AddOrUpdateNameDescriptionEntity(int id, string name, string description)
-    {
-      TEntity entity;
-
-      if ((entity = _context.Set<TEntity>().Find(id)) == null)
-      {
-        entity = new TEntity();
-        _context.Add(entity);
-      }
-      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-        entity as NameDescription,
-        name,
-        description
-      );
-    }
-
     #region CONSTANTS
-    protected const int BANK_DETAILS_ACCOUNT_NUMBER_DOCTOR_FEMALE = 10000000;
-    protected const int BANK_DETAILS_ACCOUNT_NUMBER_DOCTOR_MALE = 20000000;
-    protected const string BANK_DETAILS_BANK_NAME_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE = "Doctor Female Bank Noth Staffs";
-    protected const string BANK_DETAILS_BANK_NAME_DOCTOR_FEMALE_STOKE_ON_TRENT = "Doctor Female Bank Stoke";
-    protected const string BANK_DETAILS_BANK_NAME_DOCTOR_MALE_NORTH_STAFFORDSHIRE = "Doctor Male Bank Noth Staffs";
-    protected const string BANK_DETAILS_NAME_ON_ACCOUNT_DOCTOR_FEMALE = "Doctor Female";
-    protected const string BANK_DETAILS_NAME_ON_ACCOUNT_DOCTOR_MALE = "Doctor Male";
-    protected const int BANK_DETAILS_SORT_CODE_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE = 100000;    
-    protected const int BANK_DETAILS_SORT_CODE_DOCTOR_FEMALE_STOKE_ON_TRENT = 200000;
-    protected const int BANK_DETAILS_SORT_CODE_DOCTOR_MALE_NORTH_STAFFORDSHIRE = 30000;
-    protected const int BANK_DETAILS_VRS_NUMBER_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE = 100000000;
-    protected const int BANK_DETAILS_VRS_NUMBER_DOCTOR_FEMALE_STOKE_ON_TRENT = 200000000;
-    protected const int BANK_DETAILS_VRS_NUMBER_DOCTOR_MALE_NORTH_STAFFORDSHIRE = 300000000;
-    protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
-    protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
-    protected const string CLAIM_STATUS_NAME_ACCEPTED = "Accepted";
-    protected const string CLAIM_STATUS_DESCRIPTION_ACCEPTED = "Accepted Description";
+
     protected const string CONTACT_DETAIL_ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
     protected const string CONTACT_DETAIL_ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
     protected const string CONTACT_DETAIL_ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
@@ -155,6 +122,23 @@ namespace Mep.Business.Migrations.Seeds
     private User _systemAdminUser = null;
 
     public SeederBase() { }
+
+    protected TEntity AddOrUpdateNameDescriptionEntity(int id, string name, string description)
+    {
+      TEntity entity;
+
+      if ((entity = _context.Set<TEntity>().Find(id)) == null)
+      {
+        entity = new TEntity();
+        _context.Add(entity);
+      }
+
+      (entity as NameDescription).Name = name;
+      (entity as NameDescription).Description = description;
+      PopulateActiveAndModifiedWithSystemUser(entity);
+
+      return entity;
+    }
 
     protected Ccg GetCcgByName(string CcgName)
     {
@@ -595,21 +579,12 @@ namespace Mep.Business.Migrations.Seeds
           $"Cannot find a user with the Identity Server Identifier {identifier} in Users", ex);
       }
     }
-    protected void PopulateActiveAndModifiedWithSystemUser(BaseEntity entity)
+    protected void PopulateActiveAndModifiedWithSystemUser(TEntity entity)
     {
       entity.IsActive = true;
       entity.ModifiedAt = _now;
       entity.ModifiedByUser = GetSystemAdminUser();
     }
 
-    protected void PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-      NameDescription entity,
-      string name,
-      string description)
-    {
-      entity.Name = name;
-      entity.Description = description;
-      PopulateActiveAndModifiedWithSystemUser(entity);
-    }
   }
 }

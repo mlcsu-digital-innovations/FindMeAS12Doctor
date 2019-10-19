@@ -15,22 +15,5 @@ namespace Mep.Business.Migrations.Seeds
       AddOrUpdateNameDescriptionEntity(
         Models.GenderType.OTHER, GENDER_TYPE_NAME_OTHER, GENDER_TYPE_DESCRIPTION_OTHER);
     }
-
-
-    // private void AddOrUpdate(int id, string name, string description)
-    // {
-    //   GenderType genderType;
-
-    //   if ((genderType = _context.GenderTypes.Find(id)) == null)
-    //   {
-    //     genderType = new GenderType();
-    //     _context.Add(genderType);
-    //   }
-    //   PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-    //     genderType,
-    //     name,
-    //     description
-    //   );
-    // }
   }
 }

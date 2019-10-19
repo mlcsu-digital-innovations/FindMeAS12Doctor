@@ -20,7 +20,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_1;
-      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       examination.CreatedByUserId = GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       examination.Postcode = "ST14 5PP";
       examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_1);
@@ -38,7 +38,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_2;
-      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -61,7 +61,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_3;
-      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -82,7 +82,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_4;
-      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -103,7 +103,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_5;
-      examination.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -124,7 +124,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_6;
-      examination.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -145,7 +145,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_7;
-      examination.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      examination.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;

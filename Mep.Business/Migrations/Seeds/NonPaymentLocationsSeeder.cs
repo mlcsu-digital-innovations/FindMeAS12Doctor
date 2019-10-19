@@ -18,7 +18,7 @@ namespace Mep.Business.Migrations.Seeds
         nonPaymentLocation = new NonPaymentLocation();
         _context.Add(nonPaymentLocation);
       }
-      nonPaymentLocation.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      nonPaymentLocation.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       nonPaymentLocation.NonPaymentLocationTypeId =
         GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE);
       PopulateActiveAndModifiedWithSystemUser(nonPaymentLocation);

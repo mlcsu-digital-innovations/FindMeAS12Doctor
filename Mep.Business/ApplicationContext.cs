@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Audit.Core;
 using Audit.EntityFramework;
 using Mep.Data.Entities;
@@ -121,7 +122,46 @@ namespace Mep.Business
             .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
       }
 
-      // Configure Many-to-Many Relationships
+      ConfigureManyToManyRelationships(modelBuilder);
+
+      ConfigureUniqueIndexes(modelBuilder);
+    }
+
+    private void ConfigureUniqueIndexes(ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.ShortCode)
+        .IsUnique();
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.LongCode)
+        .IsUnique();
+
+      modelBuilder.Entity<ClaimStatus>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<ContactDetailType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<GpPractice>()
+        .HasIndex(g => g.Code)
+        .IsUnique();
+
+      modelBuilder.Entity<NonPaymentLocationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<Patient>()
+        .HasIndex(p => p.AlternativeIdentifier)
+        .IsUnique();
+      modelBuilder.Entity<Patient>()
+        .HasIndex(p => p.NhsNumber)
+        .IsUnique();
+    }
+
+    private void ConfigureManyToManyRelationships(ModelBuilder modelBuilder)
+    {
       modelBuilder.Entity<BankDetail>()
         .HasAlternateKey(bankDetail => new
         {
@@ -144,6 +184,13 @@ namespace Mep.Business
           examinationDetail.ExaminationId,
         });
 
+      modelBuilder.Entity<NonPaymentLocation>()
+        .HasAlternateKey(nonPaymentLocation => new
+        {
+          nonPaymentLocation.CcgId,
+          nonPaymentLocation.NonPaymentLocationTypeId
+        });        
+
       modelBuilder.Entity<PaymentMethod>()
         .HasAlternateKey(paymentMethod => new
         {
@@ -159,24 +206,6 @@ namespace Mep.Business
           userExaminationNotification.UserId
         });
 
-      // Unique Indexes
-      modelBuilder.Entity<Ccg>()
-        .HasIndex(c => c.ShortCode)
-        .IsUnique();
-      modelBuilder.Entity<Ccg>()
-        .HasIndex(c => c.LongCode)
-        .IsUnique();
-
-      modelBuilder.Entity<GpPractice>()
-        .HasIndex(g => g.Code)
-        .IsUnique();
-
-      modelBuilder.Entity<Patient>()
-        .HasIndex(p => p.AlternativeIdentifier)
-        .IsUnique();
-      modelBuilder.Entity<Patient>()
-        .HasIndex(p => p.NhsNumber)
-        .IsUnique();        
     }
   }
 }

@@ -18,7 +18,7 @@ namespace Mep.Business.Migrations.Seeds
         paymentMethod = new PaymentMethod();
         _context.Add(paymentMethod);
       }
-      paymentMethod.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      paymentMethod.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       paymentMethod.IsActive = true;
       paymentMethod.ModifiedAt = _now;
       paymentMethod.ModifiedByUser = GetSystemAdminUser();
@@ -35,7 +35,7 @@ namespace Mep.Business.Migrations.Seeds
         paymentMethod = new PaymentMethod();
         _context.Add(paymentMethod);
       }
-      paymentMethod.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      paymentMethod.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       paymentMethod.IsActive = true;
       paymentMethod.ModifiedAt = _now;
       paymentMethod.ModifiedByUser = GetSystemAdminUser();

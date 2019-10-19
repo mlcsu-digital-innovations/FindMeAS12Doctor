@@ -54,7 +54,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      patient.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       patient.GpPracticeId = null;
       patient.NhsNumber = PATIENT_NHS_NUMBER_3;
       patient.ResidentialPostcode = "ST5 1NE";
@@ -71,7 +71,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      patient.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       patient.GpPracticeId = null;
       patient.NhsNumber = PATIENT_NHS_NUMBER_4;
       patient.ResidentialPostcode = "ST4 4LX";
@@ -88,7 +88,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_5;
-      patient.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      patient.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       patient.GpPracticeId = null;
       patient.NhsNumber = null;
       patient.ResidentialPostcode = null;
@@ -106,7 +106,7 @@ namespace Mep.Business.Migrations.Seeds
       }
 
       patient.AlternativeIdentifier = PATIENT_ALTERNATIVE_IDENTIFIER_6;
-      patient.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
+      patient.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       patient.GpPracticeId = null;
       patient.NhsNumber = null;
       patient.ResidentialPostcode = null;

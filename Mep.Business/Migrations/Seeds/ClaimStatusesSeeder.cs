@@ -4,19 +4,18 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ClaimStatusesSeeder : SeederBase<ClaimStatus>
   {
+    #region Constants
+    internal const string DESCRIPTION_ACCEPTED = "Accepted Description";
+    internal const string NAME_ACCEPTED = "Accepted";    
+    #endregion
+
     internal void SeedData()
     {
-      ClaimStatus claimStatus;
-
-      if ((claimStatus = _context.ClaimStatuses.Find(Models.ClaimStatus.ACCEPTED)) == null)
-      {
-        claimStatus = new ClaimStatus();
-        _context.Add(claimStatus);
-      }
-      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-        claimStatus, 
-        CLAIM_STATUS_NAME_ACCEPTED, 
-        CLAIM_STATUS_DESCRIPTION_ACCEPTED);
+      AddOrUpdateNameDescriptionEntity(
+        Models.ClaimStatus.ACCEPTED,
+        NAME_ACCEPTED,
+        DESCRIPTION_ACCEPTED
+      );
     }
   }
 }

@@ -10,6 +10,11 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class CcgSeeder : SeederBase<Ccg>
   {
+    #region Constants
+    internal const string NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
+    internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";    
+    #endregion
+
     int _numberOfExistingCcgs = 0;
 
     internal void SeedData()

@@ -20,7 +20,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       userExaminationClaim.ClaimReference = 1;
       userExaminationClaim.ClaimStatusId =
-        GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED);
+        GetClaimStatusIdByClaimStatusName(ClaimStatusesSeeder.NAME_ACCEPTED);
       userExaminationClaim.ExaminationId =
         GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_1);
       userExaminationClaim.ExaminationPayment = 1;
@@ -51,7 +51,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       userExaminationClaim.ClaimReference = 1;
       userExaminationClaim.ClaimStatusId =
-        GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED);
+        GetClaimStatusIdByClaimStatusName(ClaimStatusesSeeder.NAME_ACCEPTED);
       userExaminationClaim.ExaminationId =
         GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_2);
       userExaminationClaim.ExaminationPayment = 2;
