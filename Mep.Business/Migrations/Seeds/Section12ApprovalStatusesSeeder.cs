@@ -6,7 +6,7 @@ namespace Mep.Business.Migrations.Seeds
   {
     internal void SeedData()
     {
-      AddOrUpdateNameDescriptionEntity(
+      AddOrUpdateNameDescriptionEntityById(
         Models.Section12ApprovalStatus.APPROVED,
         SECTION_12_APPROVAL_STATUS_APPROVED_NAME,
         SECTION_12_APPROVAL_STATUS_APPROVED_DESCRIPTION

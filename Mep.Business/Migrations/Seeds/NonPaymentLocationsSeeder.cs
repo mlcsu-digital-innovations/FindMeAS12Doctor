@@ -9,19 +9,29 @@ namespace Mep.Business.Migrations.Seeds
     {
       NonPaymentLocation nonPaymentLocation;
 
-      if ((nonPaymentLocation = _context
-        .NonPaymentLocations
+      if ((nonPaymentLocation = _context.NonPaymentLocations
+          .Where(n => n.CcgId == GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id)
           .SingleOrDefault(g => g.NonPaymentLocationTypeId ==
-            GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE)))
-              == null)
+            Models.NonPaymentLocationType.GP_PRACTICE)) == null)
+      {
+        nonPaymentLocation = new NonPaymentLocation();
+        _context.Add(nonPaymentLocation);
+      }
+      nonPaymentLocation.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
+      nonPaymentLocation.NonPaymentLocationTypeId = Models.NonPaymentLocationType.GP_PRACTICE;       
+      PopulateActiveAndModifiedWithSystemUser(nonPaymentLocation);
+
+      if ((nonPaymentLocation = _context.NonPaymentLocations
+          .Where(n => n.CcgId == GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id)
+          .SingleOrDefault(g => g.NonPaymentLocationTypeId ==
+            Models.NonPaymentLocationType.HOSPITAL)) == null)
       {
         nonPaymentLocation = new NonPaymentLocation();
         _context.Add(nonPaymentLocation);
       }
       nonPaymentLocation.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
-      nonPaymentLocation.NonPaymentLocationTypeId =
-        GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE);
-      PopulateActiveAndModifiedWithSystemUser(nonPaymentLocation);
+      nonPaymentLocation.NonPaymentLocationTypeId = Models.NonPaymentLocationType.HOSPITAL;       
+      PopulateActiveAndModifiedWithSystemUser(nonPaymentLocation);      
     }
   }
 }

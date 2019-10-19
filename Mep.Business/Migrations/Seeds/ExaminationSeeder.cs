@@ -23,7 +23,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       examination.CreatedByUserId = GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       examination.Postcode = "ST14 5PP";
-      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_1);
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PatientSeeder.NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE);
       examination.SpecialityId = GetSpecialityId();
       PopulateActiveAndModifiedWithSystemUser(examination);
 
@@ -47,7 +47,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST2 9QL";
       examination.ReferralId =
-        GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_2);
+        GetReferralIdByPatientNhsNumber(PatientSeeder.NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE);
       examination.SpecialityId = GetSpecialityId();
 
       // examinations for referral with both current and previous examinations
@@ -70,7 +70,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST4 8ZH";
       examination.ReferralId =
-        GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
+        GetReferralIdByPatientNhsNumber(PatientSeeder.NHS_NUMBER_POTTERIES_MEDICAL_CENTRE);
       examination.SpecialityId = GetSpecialityId();
 
       if ((examination = _context
@@ -89,7 +89,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 7UE";
       examination.ReferralId =
-        GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
+        GetReferralIdByPatientNhsNumber(PatientSeeder.NHS_NUMBER_POTTERIES_MEDICAL_CENTRE);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and allocated doctors
@@ -110,7 +110,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST10 3JH";
       examination.ReferralId =
-        GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5);
+        GetReferralIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_POSTCODE_STOKE_ON_TRENT);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and notification responses
@@ -131,7 +131,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 3DX";
       examination.ReferralId =
-        GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6);
+        GetReferralIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_STAFFORD_MEDICAL_CENTRE);
       examination.SpecialityId = GetSpecialityId();
 
       // examination for referral with current examination and notification responses and allocated doctors
@@ -152,7 +152,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST6 7HG";
       examination.ReferralId =
-        GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7);
+        GetReferralIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_CCG_STOKE_ON_TRENT);
       examination.SpecialityId = GetSpecialityId();
     }
   }

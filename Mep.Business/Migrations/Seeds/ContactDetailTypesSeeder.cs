@@ -6,7 +6,7 @@ namespace Mep.Business.Migrations.Seeds
   {
     internal void SeedData()
     {
-      AddOrUpdateNameDescriptionEntity(
+      AddOrUpdateNameDescriptionEntityById(
         Models.ContactDetailType.WORK,
         CONTACT_DETAIL_TYPE_NAME_WORK,
         CONTACT_DETAIL_TYPE_DESCRIPTION_WORK

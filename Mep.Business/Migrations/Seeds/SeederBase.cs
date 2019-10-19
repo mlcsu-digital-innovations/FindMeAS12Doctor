@@ -1,13 +1,15 @@
 using Mep.Data.Entities;
 using System.Linq;
 using System;
-using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase<TEntity> : SeederDoubleBase where TEntity : BaseEntity, new()
   {
     #region CONSTANTS
+
+    internal const string POSTCODE_NORTH_STAFFORDSHIRE = "ST13 5ET";
+    internal const string POSTCODE_STOKE_ON_TRENT = "ST4 1NF";
 
     protected const string CONTACT_DETAIL_ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
     protected const string CONTACT_DETAIL_ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
@@ -19,7 +21,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const int CONTACT_DETAIL_TELEPHONE_NUMBER_DOCTOR_FEMALE = 101;
     protected const string CONTACT_DETAIL_TOWN_DOCTOR_FEMALE = "Doctor Female Town";
     protected const string CONTACT_DETAIL_TYPE_NAME_WORK = "Work";
-    protected const string CONTACT_DETAIL_TYPE_DESCRIPTION_WORK = "Work Description";    
+    protected const string CONTACT_DETAIL_TYPE_DESCRIPTION_WORK = "Work Description";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
@@ -32,7 +34,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_TYPE_DESCRIPTION_DANGEROUS_ANIMAL =
       "A dangerous animal has been reported to be present on the premises";
     protected const string EXAMINATION_TYPE_DESCRIPTION_DIFFICULT_PARKING =
-      "Parking is difficult at the location";      
+      "Parking is difficult at the location";
     protected const string EXAMINATION_TYPE_NAME_AGRESSIVE_NEIGHBOUR = "Agressive neighbour";
     protected const string EXAMINATION_TYPE_NAME_DANGEROUS_ANIMAL = "Dangerous animal";
     protected const string EXAMINATION_TYPE_NAME_DIFFICULT_PARKING = "Parking is difficult";
@@ -42,49 +44,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_NAME_FEMALE = "Female";
     protected const string GENDER_TYPE_NAME_MALE = "Male";
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
-    protected const string GP_PRACTICE_NAME_POTTERIES_MEDICAL_CENTRE = 
-      "POTTERIES MEDICAL CENTRE";
-    protected const string GP_PRACTICE_NAME_STAFFORD_MEDICAL_CENTRE = 
-      "STAFFORD MEDICAL CENTRE";
-    protected const string NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE = "GP Practice";
-    protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION_GP_PRACTICE = 
-      "GP Practice Description";
-    protected const string NOTIFICATION_TEXT_DESCRIPTION_ALLOCATED_TO_EXAMINATION = 
-      "Allocated to examination description";
-    protected const string NOTIFICATION_TEXT_DESCRIPTION_EXAMINATION_CANCELLED = 
-      "Examination cancelled description";
-    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_ALLOCATED_TO_EXAMINATION = 
-      "Allocated to examination {0} at {1} template";
-    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_EXAMINATION_CANCELLED = 
-      "Examination {0} at {1} cancelled template";
-    protected const string NOTIFICATION_TEXT_NAME_ALLOCATED_TO_EXAMINATION = 
-      "Allocated to examination";
-    protected const string NOTIFICATION_TEXT_NAME_EXAMINATION_CANCELLED = "Examination Cancelled";
-    protected const string ORGANISATION_DESCRIPTION_1 = "Organisation 1 Description";
-    protected const string ORGANISATION_DESCRIPTION_2 = "Organisation 2 Description";
-    protected const string ORGANISATION_DESCRIPTION_3 = "Organisation 3 Description";
-    protected const string ORGANISATION_DESCRIPTION_4 = "Organisation 4 Description";
-    protected const string ORGANISATION_DESCRIPTION_SYSTEM_ADMIN = 
-      "System Organisation Description";
-    protected const string ORGANISATION_NAME_1 = "Organisation 1";
-    protected const string ORGANISATION_NAME_2 = "Organisation 2";
-    protected const string ORGANISATION_NAME_3 = "Organisation 3";
-    protected const string ORGANISATION_NAME_4 = "Organisation 4";
-    protected const string ORGANISATION_NAME_SYSTEM_ADMIN = "System Organisation";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_1 = "Test Patient #1";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_2 = "Test Patient #2";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_3 = "Test Patient #3";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_4 = "Test Patient #4";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_5 = "Test Patient #5";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_6 = "Test Patient #6";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_7 = "Test Patient #7";
-    protected const string PATIENT_ALTERNATIVE_IDENTIFIER_8 = "Test Patient #8";
-    protected const long PATIENT_NHS_NUMBER_1 = 9486844275;
-    protected const long PATIENT_NHS_NUMBER_2 = 9657966272;
-    protected const long PATIENT_NHS_NUMBER_3 = 9070304333;
-    protected const long PATIENT_NHS_NUMBER_4 = 9813607416;
-    protected const string PAYMENT_METHOD_TYPE_DESCRIPTION = "Payment Method Type Description";
-    protected const string PAYMENT_METHOD_TYPE_NAME = "Payment Method Type Name";
     protected const string PAYMENT_RULE_CRITERIA_1 = "Payment Rule Criteria 1";
     protected const string PAYMENT_RULE_DESCRIPTION_1 = "Payment Rule Description 1";
     protected const string PAYMENT_RULE_NAME_1 = "Payment Rule 1";
@@ -103,19 +62,19 @@ namespace Mep.Business.Migrations.Seeds
     protected const string SECTION_12_APPROVAL_STATUS_APPROVED_DESCRIPTION = "Section 12 Status Is Approved";
     protected const string SECTION_12_APPROVAL_STATUS_APPROVED_NAME = "Approved";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
-    protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";        
+    protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
     protected const string USER_COMMENTS = "Test Comments";
     protected const string USER_DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
-    protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";    
+    protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
     protected const string USER_DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
     protected const string USER_DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";
     protected const string USER_DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
-    protected const string USER_DISPLAY_NAME_FINANCE_MALE = "Finance Male";    
+    protected const string USER_DISPLAY_NAME_FINANCE_MALE = "Finance Male";
     #endregion
 
     protected DateTimeOffset _now = DateTimeOffset.Now;
@@ -123,19 +82,16 @@ namespace Mep.Business.Migrations.Seeds
 
     public SeederBase() { }
 
-    protected TEntity AddOrUpdateNameDescriptionEntity(int id, string name, string description)
+    protected TEntity AddOrUpdateNameDescriptionEntityById(int id, string name, string description)
     {
       TEntity entity;
 
-      if ((entity = _context.Set<TEntity>().Find(id)) == null)
+      if ((entity = _context.Set<TEntity>().SingleOrDefault(e => e.Id == id)) == null)
       {
         entity = new TEntity();
         _context.Add(entity);
       }
-
-      (entity as NameDescription).Name = name;
-      (entity as NameDescription).Description = description;
-      PopulateActiveAndModifiedWithSystemUser(entity);
+      PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(entity, name, description);
 
       return entity;
     }
@@ -150,7 +106,7 @@ namespace Mep.Business.Migrations.Seeds
       {
         throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
       }
-    } 
+    }
 
     protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
     {
@@ -264,10 +220,6 @@ namespace Mep.Business.Migrations.Seeds
         throw new Exception(
           $"Cannot find a GP Practice with the name {gpPracticeName} in GpPractices", ex);
       }
-    }
-    protected int GetGpPracticeIdByName(string gpPracticeName)
-    {
-      return GetGpPracticeByName(gpPracticeName).Id;
     }
 
     protected int GetMaleGenderTypeId()
@@ -584,6 +536,21 @@ namespace Mep.Business.Migrations.Seeds
       entity.IsActive = true;
       entity.ModifiedAt = _now;
       entity.ModifiedByUser = GetSystemAdminUser();
+    }
+
+    protected void PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(
+      TEntity entity, string name, string description)
+    {
+      (entity as NameDescription).Name = name;
+      (entity as NameDescription).Description = description;
+      PopulateActiveAndModifiedWithSystemUser(entity);
+    }
+
+    internal void DeleteSeeds()
+    {
+      _context.Set<TEntity>().RemoveRange(
+        _context.Set<TEntity>().ToList()
+      );
     }
 
   }

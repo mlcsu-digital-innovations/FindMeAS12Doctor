@@ -130,10 +130,13 @@ namespace Mep.Business
     private void ConfigureUniqueIndexes(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<Ccg>()
-        .HasIndex(c => c.ShortCode)
+        .HasIndex(c => c.Name)
         .IsUnique();
       modelBuilder.Entity<Ccg>()
         .HasIndex(c => c.LongCode)
+        .IsUnique();
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.ShortCode)
         .IsUnique();
 
       modelBuilder.Entity<ClaimStatus>()
@@ -144,11 +147,30 @@ namespace Mep.Business
         .HasIndex(c => c.Name)
         .IsUnique();
 
+      modelBuilder.Entity<ExaminationDetailType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<GenderType>()
+        .HasIndex(g => g.Name)
+        .IsUnique();
+
       modelBuilder.Entity<GpPractice>()
         .HasIndex(g => g.Code)
         .IsUnique();
+      modelBuilder.Entity<GpPractice>()
+        .HasIndex(g => g.Name)
+        .IsUnique();        
 
       modelBuilder.Entity<NonPaymentLocationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<NotificationText>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<Organisation>()
         .HasIndex(c => c.Name)
         .IsUnique();
 

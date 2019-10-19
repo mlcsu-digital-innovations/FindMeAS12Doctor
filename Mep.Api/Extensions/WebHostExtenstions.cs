@@ -15,7 +15,8 @@ namespace Mep.Api.Extensions
     {
       All = 1,
       AllNoGpPractice = 2,
-      Test = 3
+      Test = 3,
+      RemoveTest = 4
     }
 
     public static IWebHost SeedData(this IWebHost host, SeedType seedType)
@@ -37,6 +38,10 @@ namespace Mep.Api.Extensions
 
         case SeedType.Test:
           new Seeds(context, config).SeedTestAll();
+          break;
+
+        case SeedType.RemoveTest:
+          new Seeds(context, config).RemoveSeedTestAll();
           break;
 
         default:

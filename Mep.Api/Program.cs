@@ -31,6 +31,11 @@ namespace Mep.Api
           Log.Information("Seeding database with test data");
           host.SeedData(WebHostExtenstions.SeedType.Test);
         }
+        else if (args.Length > 0 && args[0] == "/removeseedtest")
+        {
+          Log.Information("Removing test data from database");
+          host.SeedData(WebHostExtenstions.SeedType.RemoveTest);
+        }        
         else if (args.Length > 0)
         {
           Log.Warning(
@@ -40,7 +45,9 @@ namespace Mep.Api
             "Available arguments:" + Environment.NewLine +
             "/seed: Seed database without test data" + Environment.NewLine +
             "/seednogppractice: Seed database without GP practice data or test data" + Environment.NewLine +
-            "/seedtest: Seed database with test data");
+            "/seedtest: Seed database with test data" + Environment.NewLine +
+            "/removeseedtest: Removing test data from database"
+        );
         }
         else
         {

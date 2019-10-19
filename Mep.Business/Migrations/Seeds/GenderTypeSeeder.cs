@@ -6,13 +6,13 @@ namespace Mep.Business.Migrations.Seeds
   {
     internal void SeedData()
     {
-      AddOrUpdateNameDescriptionEntity(
+      AddOrUpdateNameDescriptionEntityById(
         Models.GenderType.FEMALE, GENDER_TYPE_NAME_FEMALE, GENDER_TYPE_DESCRIPTION_FEMALE);
 
-      AddOrUpdateNameDescriptionEntity(
+      AddOrUpdateNameDescriptionEntityById(
         Models.GenderType.MALE, GENDER_TYPE_NAME_MALE, GENDER_TYPE_DESCRIPTION_MALE);
 
-      AddOrUpdateNameDescriptionEntity(
+      AddOrUpdateNameDescriptionEntityById(
         Models.GenderType.OTHER, GENDER_TYPE_NAME_OTHER, GENDER_TYPE_DESCRIPTION_OTHER);
     }
   }

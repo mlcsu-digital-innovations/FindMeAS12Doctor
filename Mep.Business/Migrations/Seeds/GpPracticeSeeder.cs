@@ -12,9 +12,12 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class GpPracticeSeeder : SeederBase<GpPractice>
   {
-    const string STATUS_INACTIVE = "Inactive";
-    const string PRIMARY_ROLE_ID_CCG = "RO98";
-    readonly Dictionary<string, int?> _shortCodeCcgIds = new Dictionary<string, int?>();
+    internal const string NAME_POTTERIES_MEDICAL_CENTRE = "POTTERIES MEDICAL CENTRE";
+    internal const string NAME_STAFFORD_MEDICAL_CENTRE = "STAFFORD MEDICAL CENTRE"; 
+    private const string STATUS_INACTIVE = "Inactive";
+
+    private const string PRIMARY_ROLE_ID_CCG = "RO98";
+    private readonly Dictionary<string, int?> _shortCodeCcgIds = new Dictionary<string, int?>();
 
     internal void SeedData()
     {
@@ -197,7 +200,7 @@ namespace Mep.Business.Migrations.Seeds
     }
 
     private string UpdateFoundCcgIfPreviouslyMerged(
-      SpineServiceOrganisation gpResult, 
+      SpineServiceOrganisation gpResult,
       string shortCode)
     {
       // 01M => 14L
@@ -209,7 +212,7 @@ namespace Mep.Business.Migrations.Seeds
           gpResult.Name,
           gpResult.OrgId);
 
-        return "14L";        
+        return "14L";
       }
       // 03C => 15F
       else if (string.Compare(shortCode, "03C", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -220,7 +223,7 @@ namespace Mep.Business.Migrations.Seeds
           gpResult.Name,
           gpResult.OrgId);
 
-        return "15F";        
+        return "15F";
       }
       // 10H => 14Y
       else if (string.Compare(shortCode, "10H", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -231,7 +234,7 @@ namespace Mep.Business.Migrations.Seeds
           gpResult.Name,
           gpResult.OrgId);
 
-        return "14Y";        
+        return "14Y";
       }
       // 10Y => 14Y
       else if (string.Compare(shortCode, "10Y", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -242,8 +245,8 @@ namespace Mep.Business.Migrations.Seeds
           gpResult.Name,
           gpResult.OrgId);
 
-        return "14Y";        
-      }                  
+        return "14Y";
+      }
 
       return shortCode;
     }

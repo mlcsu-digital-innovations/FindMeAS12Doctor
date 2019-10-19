@@ -11,7 +11,7 @@ namespace Mep.Business.Migrations.Seeds
 
     internal void SeedData()
     {
-      AddOrUpdateNameDescriptionEntity(
+      AddOrUpdateNameDescriptionEntityById(
         Models.ClaimStatus.ACCEPTED,
         NAME_ACCEPTED,
         DESCRIPTION_ACCEPTED

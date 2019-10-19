@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using Mep.Data.Entities;
 using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
@@ -24,8 +27,6 @@ namespace Mep.Business.Migrations.Seeds
       new ClaimStatusesSeeder().SeedData();
 
       new ContactDetailTypesSeeder().SeedData();
-
-      new DoctorStatusesSeeder().SeedData();
 
       new ExaminationDetailTypeSeeder().SeedData();
 
@@ -56,6 +57,9 @@ namespace Mep.Business.Migrations.Seeds
       _context.SaveChanges();
 
       new UserSeeder().SeedData();
+      _context.SaveChanges();
+
+      new DoctorStatusesSeeder().SeedData();
       _context.SaveChanges();
 
       new PatientSeeder().SeedData();
@@ -98,5 +102,59 @@ namespace Mep.Business.Migrations.Seeds
       _context.SaveChanges();
     }
 
+    public void RemoveSeedTestAll()
+    {
+      new UserSpecialitiesSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new PaymentRulesSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new PaymentMethodsSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new OnCallUsersSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new NonPaymentLocationsSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new ContactDetailsSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new BankDetailsSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new UserExaminationClaimsSeeder().DeleteSeeds();
+      _context.SaveChanges();
+      
+      new UserExaminationNotificationSeeder().DeleteSeeds();
+      _context.SaveChanges();
+      
+      new ExaminationSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new ReferralSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new NotificationTextsSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new PatientSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new DoctorStatusesSeeder().DeleteSeeds();
+      _context.SaveChanges();
+      
+      _context.Set<User>().RemoveRange(
+        _context.Set<User>().Where(u => u.Id != 1).ToList()
+      );
+      _context.SaveChanges();      
+
+      _context.Set<Organisation>().RemoveRange(
+        _context.Set<Organisation>().Where(u => u.Id != 1).ToList()
+      );
+      _context.SaveChanges();
+    }
   }
 }

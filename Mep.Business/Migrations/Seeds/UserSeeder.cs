@@ -9,45 +9,45 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddUpdateUserDoctorWithDefaults(
-        displayName: USER_DISPLAY_NAME_DOCTOR_FEMALE, 
-        genderTypeId: GetGenderTypeFemale().Id);
+        USER_DISPLAY_NAME_DOCTOR_FEMALE, 
+        GetGenderTypeFemale().Id);
 
       AddUpdateUserDoctorWithDefaults(
-        displayName: USER_DISPLAY_NAME_DOCTOR_MALE,
-        genderTypeId: GetGenderTypeMale().Id);
+        USER_DISPLAY_NAME_DOCTOR_MALE,
+        GetGenderTypeMale().Id);
     
       AddUpdateUserDoctorWithDefaults(
-        displayName: USER_DISPLAY_NAME_DOCTOR_ON_CALL, 
-        genderTypeId: GetGenderTypeFemale().Id);
+        USER_DISPLAY_NAME_DOCTOR_ON_CALL, 
+        GetGenderTypeFemale().Id);
 
       AddUpdateUserDoctorWithDefaults(
-        displayName: USER_DISPLAY_NAME_DOCTOR_S12_APPROVED,
-        genderTypeId: GetGenderTypeMale().Id,
+        USER_DISPLAY_NAME_DOCTOR_S12_APPROVED,
+        GetGenderTypeMale().Id,
         section12ApprovalStatusId: GetSection12ApprovalStatusApproved().Id,
         section12ExpiryDate: DateTimeOffset.Now.AddYears(10));
 
       AddUpdateUserDoctorWithDefaults(
-        displayName: USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP,
-        genderTypeId: GetGenderTypeMale().Id);
+        USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP,
+        GetGenderTypeMale().Id);
 
       AddUpdateUserWithDefaults(
-        displayName: USER_DISPLAY_NAME_FINANCE_FEMALE,
-        genderTypeId: GetGenderTypeFemale().Id,
+        USER_DISPLAY_NAME_FINANCE_FEMALE,
+        GetGenderTypeFemale().Id,
         profileTypeId: GetProfileTypeFinance().Id);     
 
       AddUpdateUserWithDefaults(
-        displayName: USER_DISPLAY_NAME_FINANCE_MALE,
-        genderTypeId: GetGenderTypeMale().Id,
+        USER_DISPLAY_NAME_FINANCE_MALE,
+        GetGenderTypeMale().Id,
         profileTypeId: GetProfileTypeFinance().Id);
 
       AddUpdateUserWithDefaults(
-        displayName: USER_DISPLAY_NAME_AMHP_FEMALE, 
-        genderTypeId: GetGenderTypeFemale().Id, 
+        USER_DISPLAY_NAME_AMHP_FEMALE, 
+        GetGenderTypeFemale().Id, 
         profileTypeId: GetProfileTypeAmhp().Id);      
 
       AddUpdateUserWithDefaults(
-        displayName: USER_DISPLAY_NAME_AMHP_MALE, 
-        genderTypeId: GetGenderTypeMale().Id, 
+        USER_DISPLAY_NAME_AMHP_MALE, 
+        GetGenderTypeMale().Id, 
         profileTypeId: GetProfileTypeAmhp().Id);
     }
 
@@ -72,7 +72,7 @@ namespace Mep.Business.Migrations.Seeds
       user.IdentityServerIdentifier = Guid.NewGuid().ToString();  
       user.OrganisationId = organisationId.HasValue ? 
                             (int)organisationId : 
-                            GetOrganisationIdByName(ORGANISATION_NAME_1);
+                            GetOrganisationIdByName(OrganisationSeeder.NAME_1);
       user.ProfileTypeId = profileTypeId;
       user.Section12ApprovalStatusId = null;
       user.Section12ExpiryDate = null;
