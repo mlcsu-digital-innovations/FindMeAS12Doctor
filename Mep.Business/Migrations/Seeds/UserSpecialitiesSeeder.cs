@@ -9,10 +9,8 @@ namespace Mep.Business.Migrations.Seeds
     {
       UserSpeciality userSpeciality;
 
-      if ((userSpeciality = _context
-        .UserSpecialities
-          .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE))) == null)
+      if ((userSpeciality = _context.UserSpecialities
+        .SingleOrDefault(g => g.UserId == GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id)) == null)
       {
         userSpeciality = new UserSpeciality();
         _context.Add(userSpeciality);
@@ -21,13 +19,12 @@ namespace Mep.Business.Migrations.Seeds
       userSpeciality.ModifiedAt = _now;
       userSpeciality.ModifiedByUser = GetSystemAdminUser();
       userSpeciality.SpecialityId = GetSpecialityId();
-      userSpeciality.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+      userSpeciality.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;
 
       if ((userSpeciality = _context
         .UserSpecialities
           .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
+            GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
       {
         userSpeciality = new UserSpeciality();
         _context.Add(userSpeciality);
@@ -37,7 +34,7 @@ namespace Mep.Business.Migrations.Seeds
       userSpeciality.ModifiedByUser = GetSystemAdminUser();
       userSpeciality.SpecialityId = GetSpecialityId();
       userSpeciality.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
     }
   }
 }

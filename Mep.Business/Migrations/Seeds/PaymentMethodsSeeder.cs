@@ -13,36 +13,36 @@ namespace Mep.Business.Migrations.Seeds
       if ((paymentMethod = _context
         .PaymentMethods
           .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
+            GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
       {
         paymentMethod = new PaymentMethod();
         _context.Add(paymentMethod);
       }
-      paymentMethod.CcgId = GetFirstCcg();
+      paymentMethod.CcgId = GetFirstCcg().Id;
       paymentMethod.IsActive = true;
       paymentMethod.ModifiedAt = _now;
       paymentMethod.ModifiedByUser = GetSystemAdminUser();
       paymentMethod.PaymentMethodTypeId =
         GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME);
       paymentMethod.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
 
       if ((paymentMethod = _context
         .PaymentMethods
           .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE))) == null)
+            GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id)) == null)
       {
         paymentMethod = new PaymentMethod();
         _context.Add(paymentMethod);
       }
-      paymentMethod.CcgId = GetFirstCcg();
+      paymentMethod.CcgId = GetFirstCcg().Id;
       paymentMethod.IsActive = true;
       paymentMethod.ModifiedAt = _now;
       paymentMethod.ModifiedByUser = GetSystemAdminUser();
       paymentMethod.PaymentMethodTypeId =
         GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME);
       paymentMethod.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;
     }
   }
 }

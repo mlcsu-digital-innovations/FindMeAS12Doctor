@@ -16,11 +16,18 @@ namespace Mep.Business.Migrations.Seeds
     protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
     protected const string CLAIM_STATUS_ACCEPTED_NAME = "Accepted";
-    protected const string CLAIM_STATUS_ACCEPTED_DESCRIPTION = "Accepted";
-    protected const string CONTACT_DETAIL_ADDRESS_1 = "Contact Detail Address 1";
+    protected const string CLAIM_STATUS_ACCEPTED_DESCRIPTION = "Accepted Description";
+    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_1 = "Doctor Female Address 1";
+    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_2 = "Doctor Female Address 2";
+    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_3 = "Doctor Female Address 3";
+    protected const decimal CONTACT_DETAIL_DOCTOR_FEMALE_LATITUDE = 52.991581m;
+    protected const decimal CONTACT_DETAIL_DOCTOR_FEMALE_LONGITUDE = -2.167857m;
+    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE = "ST4 1NF";
+    protected const int CONTACT_DETAIL_DOCTOR_FEMALE_TELEPHONE_NUMBER = 101;
     protected const string CONTACT_DETAIL_TYPE_NAME = "Contact Detail Type";
     protected const string CONTACT_DETAIL_TYPE_DESCRIPTION = "Contact Detail Type Description";
-    protected const string EMAIL_ADDRESS = "mlcsu.digitalinnovations@nhs.net";
+    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_EMAIL_ADDRESS = "doctor.female@mep.local";
+    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_TOWN = "Doctor Female Town";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
@@ -36,7 +43,7 @@ namespace Mep.Business.Migrations.Seeds
       "A dangerous animal has been reported to be present on the premises";
     protected const string EXAMINATION_TYPE_DIFFICULT_PARKING_NAME = "Parking is difficult";
     protected const string EXAMINATION_TYPE_DIFFICULT_PARKING_DESCRIPTION =
-      "Parking is difficult at the location";      
+      "Parking is difficult at the location";
     protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female";
     protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male";
     protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
@@ -45,8 +52,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
     protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
     protected const string GP_PRACTICE_NAME_2 = "STAFFORD MEDICAL CENTRE";
-    protected const decimal LATITUDE = 0.000000m;
-    protected const decimal LONGITUDE = 0.000000m;
     protected const string NON_PAYMENT_LOCATION_TYPE_NAME = "Non Payment Location Type Name";
     protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION = "Non Payment Location Type Description";
     protected const string NOTIFICATION_TEXT_DESCRIPTION_ASSIGNED_TO_EXAMINATION = "Assigned to examination description";
@@ -88,7 +93,6 @@ namespace Mep.Business.Migrations.Seeds
     protected const string PAYMENT_RULE_NAME_1 = "Payment Rule 1";
     protected const string PAYMENT_RULE_SET_DESCRIPTION = "Payment Rule Set Description";
     protected const string PAYMENT_RULE_SET_NAME = "Payment Rule Set Name";
-    protected const string POSTCODE = "AB12CD";
     protected const string PROFILE_TYPE_DESCRIPTION_AMHP = "Profile Type Description AMHP";
     protected const string PROFILE_TYPE_DESCRIPTION_DOCTOR = "ProfileType Description Doctor";
     protected const string PROFILE_TYPE_DESCRIPTION_FINANCE = "ProfileType Description Finance";
@@ -102,9 +106,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string SECTION_12_APPROVAL_STATUS_APPROVED_DESCRIPTION = "Section 12 Status Is Approved";
     protected const string SECTION_12_APPROVAL_STATUS_APPROVED_NAME = "Approved";
     protected const string SPECIALITY_SECTION_12 = "Section 12";
-    protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
-    protected const int TELEPHONE_NUMBER = 01000100000;
-    protected const string TOWN = "Test Town";
+    protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";        
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
     protected const string USER_COMMENTS = "Test Comments";
@@ -115,14 +117,14 @@ namespace Mep.Business.Migrations.Seeds
     protected const string USER_DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";
     protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
     protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
-#endregion
-   
+    #endregion
+
     protected static IConfiguration _config;
-    protected static ApplicationContext _context;    
-    protected DateTimeOffset _now = DateTimeOffset.Now;    
+    protected static ApplicationContext _context;
+    protected DateTimeOffset _now = DateTimeOffset.Now;
     private User _systemAdminUser = null;
 
-    public SeederBase(){}
+    public SeederBase() { }
 
     protected int GetCcgIdByName(string CcgName)
     {
@@ -136,7 +138,7 @@ namespace Mep.Business.Migrations.Seeds
       {
         throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
       }
-    }  
+    }
 
     protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
     {
@@ -166,6 +168,26 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+
+    protected ContactDetailType GetContactDetailTypeById(int id)
+    {
+      try
+      {
+        return _context.ContactDetailTypes.Single(c => c.Id == id);
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(
+          $"Cannot find a Contact Detail Type with an id of {id} in ContactDetailTypes",
+          ex);
+      }
+    }
+
+    protected ContactDetailType GetContactDetailTypeWork()
+    {
+      return GetContactDetailTypeById(Models.ContactDetailType.WORK);
+    }
+
     protected int GetExaminationIdByExaminationAddress(string examinationAddress)
     {
       try
@@ -179,7 +201,7 @@ namespace Mep.Business.Migrations.Seeds
         throw new Exception(
           $"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
       }
-    }    
+    }
 
     protected int GetFemaleGenderTypeId()
     {
@@ -209,7 +231,7 @@ namespace Mep.Business.Migrations.Seeds
     protected GenderType GetGenderTypeFemale()
     {
       return GetGenderTypeById(Models.GenderType.FEMALE);
-    }    
+    }
     protected GenderType GetGenderTypeMale()
     {
       return GetGenderTypeById(Models.GenderType.MALE);
@@ -219,17 +241,15 @@ namespace Mep.Business.Migrations.Seeds
       return GetGenderTypeById(Models.GenderType.OTHER);
     }
 
-    protected int GetFirstCcg()
+    protected Ccg GetFirstCcg()
     {
       try
       {
-        return _context
-          .Ccgs
-            .First().Id;
+        return _context.Ccgs.First();
       }
       catch (Exception ex)
       {
-        throw new Exception("Cannot find CCG", ex);
+        throw new Exception("Cannot find the first CCG", ex);
       }
     }
 
@@ -502,12 +522,12 @@ namespace Mep.Business.Migrations.Seeds
           $"Cannot find Section 12 Approval Status with an id of {id} in Section12ApprovalStatuses", ex);
       }
     }
-    
+
     protected Section12ApprovalStatus GetSection12ApprovalStatusApproved()
     {
       return GetSection12ApprovalStatusById(Models.Section12ApprovalStatus.APPROVED);
     }
-    
+
 
     protected int GetSpecialityId()
     {
@@ -528,21 +548,17 @@ namespace Mep.Business.Migrations.Seeds
     {
       if (_systemAdminUser == null)
       {
-        _systemAdminUser = _context
-          .Users
-          .SingleOrDefault(u => u.IdentityServerIdentifier == 
-                                SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
+        _systemAdminUser = GetUserByIdentifier(SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
       }
       return _systemAdminUser;
     }
 
-    protected int GetUserIdByDisplayname(string displayName)
+    protected User GetUserByDisplayName(string displayName)
     {
       try
       {
-        return _context
-          .Users
-            .Single(user => user.DisplayName == displayName).Id;
+        return _context.Users
+                       .Single(user => user.DisplayName == displayName);
       }
       catch (Exception ex)
       {
@@ -551,6 +567,19 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
+    protected User GetUserByIdentifier(string identifier)
+    {
+      try
+      {
+        return _context.Users
+                       .Single(user => user.IdentityServerIdentifier == identifier);
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(
+          $"Cannot find a user with the Identity Server Identifier {identifier} in Users", ex);
+      }
+    }
     protected void PopulateActiveAndModifiedWithSystemUser(BaseEntity entity)
     {
       entity.IsActive = true;
@@ -562,10 +591,10 @@ namespace Mep.Business.Migrations.Seeds
       NameDescription entity,
       string name,
       string description)
-      {
-        entity.Name = name;
-        entity.Description = description;
-        PopulateActiveAndModifiedWithSystemUser(entity);
-      }
+    {
+      entity.Name = name;
+      entity.Description = description;
+      PopulateActiveAndModifiedWithSystemUser(entity);
+    }
   }
 }

@@ -20,7 +20,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_1;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -41,7 +41,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_2;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -64,7 +64,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_3;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -85,7 +85,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_4;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -106,7 +106,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_5;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -127,7 +127,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_6;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
@@ -148,7 +148,7 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_7;
-      examination.CcgId = GetFirstCcg();
+      examination.CcgId = GetFirstCcg().Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;

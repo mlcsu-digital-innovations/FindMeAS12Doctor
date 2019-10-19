@@ -31,7 +31,7 @@ namespace Mep.Business.Migrations.Seeds
         GetNotificationTextId(NOTIFICATION_TEXT_NAME_ASSIGNED_TO_EXAMINATION);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
 
       // notification for referral with current examination and notification responses and allocated doctors
 
@@ -54,7 +54,7 @@ namespace Mep.Business.Migrations.Seeds
         GetNotificationTextId(NOTIFICATION_TEXT_NAME_2);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;
     }
   }
 }

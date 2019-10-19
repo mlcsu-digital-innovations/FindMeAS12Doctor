@@ -18,7 +18,7 @@ namespace Mep.Business.Migrations.Seeds
         nonPaymentLocation = new NonPaymentLocation();
         _context.Add(nonPaymentLocation);
       }
-      nonPaymentLocation.CcgId = GetFirstCcg();
+      nonPaymentLocation.CcgId = GetFirstCcg().Id;
       nonPaymentLocation.IsActive = true;
       nonPaymentLocation.ModifiedAt = _now;
       nonPaymentLocation.ModifiedByUser = GetSystemAdminUser();

@@ -19,8 +19,8 @@ namespace Mep.Business.Migrations.Seeds
 
       doctorStatus.AvailabilityEnd = _now.AddHours(8);
       doctorStatus.AvailabilityStart = _now;
-      doctorStatus.Latitude = LATITUDE;
-      doctorStatus.Longitude = LONGITUDE;
+      doctorStatus.Latitude = CONTACT_DETAIL_DOCTOR_FEMALE_LATITUDE;
+      doctorStatus.Longitude = CONTACT_DETAIL_DOCTOR_FEMALE_LONGITUDE;
       doctorStatus.UserId = GetSystemAdminUser().Id;
 
       PopulateActiveAndModifiedWithSystemUser(doctorStatus);

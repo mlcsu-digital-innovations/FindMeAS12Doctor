@@ -24,7 +24,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId = GetPatientIdByNhsNumber(PATIENT_NHS_NUMBER_1);
@@ -45,7 +45,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_MALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId =
@@ -67,7 +67,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId =
@@ -89,7 +89,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_MALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId =
@@ -112,7 +112,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId =
@@ -135,7 +135,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_MALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId =
@@ -158,7 +158,7 @@ namespace Mep.Business.Migrations.Seeds
       referral.IsActive = true;
       referral.IsPlannedExamination = true;
       referral.LeadAmhpUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       referral.ModifiedAt = _now;
       referral.ModifiedByUser = GetSystemAdminUser();
       referral.PatientId =

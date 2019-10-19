@@ -19,7 +19,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       bankDetail.AccountNumber = BANK_DETAILS_ACCOUNT_NUMBER;
       bankDetail.BankName = BANK_DETAILS_BANK_NAME;
-      bankDetail.CcgId = GetFirstCcg();
+      bankDetail.CcgId = GetFirstCcg().Id;
       bankDetail.NameOnAccount = BANK_DETAILS_NAME_ON_ACCOUNT;
       bankDetail.SortCode = BANK_DETAILS_SORT_CODE;
       bankDetail.User = GetSystemAdminUser();

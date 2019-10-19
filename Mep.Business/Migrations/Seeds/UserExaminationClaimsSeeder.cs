@@ -12,7 +12,7 @@ namespace Mep.Business.Migrations.Seeds
       if ((userExaminationClaim = _context
         .UserExaminationClaims
           .SingleOrDefault(u => u.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE)))
+            GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id))
               == null)
       {
         userExaminationClaim = new UserExaminationClaim();
@@ -34,16 +34,16 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.ModifiedByUser = GetSystemAdminUser();
       userExaminationClaim.PaymentDate = _now;
       userExaminationClaim.SelectedByUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_MALE);
-      userExaminationClaim.StartPostcode = POSTCODE;
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
+      userExaminationClaim.StartPostcode = CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE;
       userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;
 
       if ((userExaminationClaim = _context
         .UserExaminationClaims
           .SingleOrDefault(u => u.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE)))
+            GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id))
               == null)
       {
         userExaminationClaim = new UserExaminationClaim();
@@ -65,11 +65,11 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.ModifiedByUser = GetSystemAdminUser();
       userExaminationClaim.PaymentDate = _now;
       userExaminationClaim.SelectedByUserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_AMHP_FEMALE);
-      userExaminationClaim.StartPostcode = POSTCODE;
+        GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
+      userExaminationClaim.StartPostcode = CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE;
       userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
     }
   }
 }
