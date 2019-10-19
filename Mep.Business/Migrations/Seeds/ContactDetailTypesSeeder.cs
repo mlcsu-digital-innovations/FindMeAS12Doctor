@@ -1,18 +1,14 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ContactDetailTypesSeeder : SeederBase
+  internal class ContactDetailTypesSeeder : SeederBase<ContactDetailType>
   {
     internal void SeedData()
     {
       ContactDetailType contactDetailType;
 
-      if ((contactDetailType = _context
-        .ContactDetailTypes
-          .SingleOrDefault(g => g.Name ==
-            CONTACT_DETAIL_TYPE_NAME)) == null)
+      if ((contactDetailType = _context.ContactDetailTypes.Find(Models.ContactDetailType.WORK)) == null)
       {
         contactDetailType = new ContactDetailType();
         _context.Add(contactDetailType);
@@ -20,8 +16,8 @@ namespace Mep.Business.Migrations.Seeds
 
       PopulateNameDescriptionActiveAndModifiedWithSystemUser(
         contactDetailType,
-        CONTACT_DETAIL_TYPE_NAME,
-        CONTACT_DETAIL_TYPE_DESCRIPTION);
+        CONTACT_DETAIL_TYPE_NAME_WORK,
+        CONTACT_DETAIL_TYPE_DESCRIPTION_WORK);
     }
   }
 }

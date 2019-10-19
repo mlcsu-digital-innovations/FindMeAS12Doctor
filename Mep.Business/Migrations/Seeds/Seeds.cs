@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  public class Seeds : SeederBase
+  public class Seeds : SeederDoubleBase
   {
     public Seeds(ApplicationContext context, IConfiguration config)
     {

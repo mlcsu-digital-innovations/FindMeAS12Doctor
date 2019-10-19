@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class PaymentMethodTypesSeeder : SeederBase
+  internal class PaymentMethodTypesSeeder : SeederBase<PaymentMethodType>
   {
     internal void SeedData()
     {

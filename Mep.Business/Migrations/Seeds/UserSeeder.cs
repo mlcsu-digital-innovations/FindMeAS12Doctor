@@ -4,7 +4,7 @@ using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class UserSeeder : SeederBase
+  internal class UserSeeder : SeederBase<User>
   {
     internal void SeedData()
     {

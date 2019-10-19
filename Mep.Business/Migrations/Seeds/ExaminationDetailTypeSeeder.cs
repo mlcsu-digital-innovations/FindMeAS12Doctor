@@ -3,15 +3,14 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ExaminationDetailTypeSeeder : SeederBase
+  internal class ExaminationDetailTypeSeeder : SeederBase<ExaminationDetailType>
   {
     internal void SeedData()
     {
       ExaminationDetailType examinationDetailType;
 
       if ((examinationDetailType =
-        _context.ExaminationDetailTypes.SingleOrDefault(
-          edt => edt.Id == ExaminationDetailType.AGRESSIVE_NEIGHBOUR)) == null)
+        _context.ExaminationDetailTypes.Find(ExaminationDetailType.AGRESSIVE_NEIGHBOUR)) == null)
       {
         examinationDetailType = new ExaminationDetailType();
         _context.Add(examinationDetailType);
@@ -19,13 +18,12 @@ namespace Mep.Business.Migrations.Seeds
 
       PopulateNameDescriptionActiveAndModifiedWithSystemUser(
         examinationDetailType,
-        EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_NAME,
-        EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_DESCRIPTION
+        EXAMINATION_TYPE_NAME_AGRESSIVE_NEIGHBOUR,
+        EXAMINATION_TYPE_DESCRIPTION_AGRESSIVE_NEIGHBOUR
       );
 
       if ((examinationDetailType =
-        _context.ExaminationDetailTypes.SingleOrDefault(
-          edt => edt.Id == ExaminationDetailType.DANGEROUS_ANIMAL)) == null)
+        _context.ExaminationDetailTypes.Find(ExaminationDetailType.DANGEROUS_ANIMAL)) == null)
       {
         examinationDetailType = new ExaminationDetailType();
         _context.Add(examinationDetailType);
@@ -33,13 +31,12 @@ namespace Mep.Business.Migrations.Seeds
       
       PopulateNameDescriptionActiveAndModifiedWithSystemUser(
         examinationDetailType,
-        EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME,
-        EXAMINATION_TYPE_DANGEROUS_ANIMAL_DESCRIPTION
+        EXAMINATION_TYPE_NAME_DANGEROUS_ANIMAL,
+        EXAMINATION_TYPE_DESCRIPTION_DANGEROUS_ANIMAL
       );
 
       if ((examinationDetailType =
-        _context.ExaminationDetailTypes.SingleOrDefault(
-          edt => edt.Id == ExaminationDetailType.DIFFICULT_PARKING)) == null)
+        _context.ExaminationDetailTypes.Find(ExaminationDetailType.DIFFICULT_PARKING)) == null)
       {
         examinationDetailType = new ExaminationDetailType();
         _context.Add(examinationDetailType);
@@ -47,8 +44,8 @@ namespace Mep.Business.Migrations.Seeds
       
       PopulateNameDescriptionActiveAndModifiedWithSystemUser(
         examinationDetailType,
-        EXAMINATION_TYPE_DIFFICULT_PARKING_NAME,
-        EXAMINATION_TYPE_DIFFICULT_PARKING_DESCRIPTION
+        EXAMINATION_TYPE_NAME_DIFFICULT_PARKING,
+        EXAMINATION_TYPE_DESCRIPTION_DIFFICULT_PARKING
       );            
     }
   }

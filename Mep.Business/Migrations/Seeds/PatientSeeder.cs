@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class PatientSeeder : SeederBase
+  internal class PatientSeeder : SeederBase<Patient>
   {
     internal void SeedData()
     {
@@ -20,8 +20,8 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = GetGpPracticeByName(GP_PRACTICE_NAME_1).CcgId;
-      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_1);
+      patient.CcgId = GetGpPracticeByName(GP_PRACTICE_NAME_POTTERIES_MEDICAL_CENTRE).CcgId;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_POTTERIES_MEDICAL_CENTRE);
       patient.NhsNumber = PATIENT_NHS_NUMBER_1;
       patient.ResidentialPostcode = null;
       PopulateActiveAndModifiedWithSystemUser(patient);
@@ -37,8 +37,8 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(patient);
       }
       patient.AlternativeIdentifier = null;
-      patient.CcgId = GetGpPracticeByName(GP_PRACTICE_NAME_2).CcgId;
-      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_2);
+      patient.CcgId = GetGpPracticeByName(GP_PRACTICE_NAME_STAFFORD_MEDICAL_CENTRE).CcgId;
+      patient.GpPracticeId = GetGpPracticeIdByName(GP_PRACTICE_NAME_STAFFORD_MEDICAL_CENTRE);
       patient.NhsNumber = PATIENT_NHS_NUMBER_2;
       patient.ResidentialPostcode = null;
       PopulateActiveAndModifiedWithSystemUser(patient);

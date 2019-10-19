@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class NonPaymentLocationsSeeder : SeederBase
+  internal class NonPaymentLocationsSeeder : SeederBase<NonPaymentLocation>
   {
     internal void SeedData()
     {
@@ -12,7 +12,7 @@ namespace Mep.Business.Migrations.Seeds
       if ((nonPaymentLocation = _context
         .NonPaymentLocations
           .SingleOrDefault(g => g.NonPaymentLocationTypeId ==
-            GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME)))
+            GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE)))
               == null)
       {
         nonPaymentLocation = new NonPaymentLocation();
@@ -20,7 +20,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       nonPaymentLocation.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
       nonPaymentLocation.NonPaymentLocationTypeId =
-        GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME);
+        GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE);
       PopulateActiveAndModifiedWithSystemUser(nonPaymentLocation);
     }
   }

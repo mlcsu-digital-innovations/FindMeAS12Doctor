@@ -1,9 +1,10 @@
 using Mep.Data.Entities;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class OrganisationSeeder : SeederBase
+  internal class OrganisationSeeder : SeederBase<Organisation>
   {
     internal void SeedData()
     {

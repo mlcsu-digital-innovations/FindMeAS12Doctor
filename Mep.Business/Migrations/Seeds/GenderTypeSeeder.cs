@@ -1,54 +1,36 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class GenderTypeSeeder : SeederBase
+  internal class GenderTypeSeeder : SeederBase<GenderType>
   {
     internal void SeedData()
     {
-      GenderType genderType;
+      AddOrUpdateNameDescriptionEntity(
+        Models.GenderType.FEMALE, GENDER_TYPE_NAME_FEMALE, GENDER_TYPE_DESCRIPTION_FEMALE);
 
-      if ((genderType = _context
-        .GenderTypes
-          .SingleOrDefault(g => g.Name ==
-            GENDER_TYPE_NAME_MALE)) == null)
-      {
-        genderType = new GenderType();
-        _context.Add(genderType);
-      }
-      genderType.Description = GENDER_TYPE_DESCRIPTION_MALE;
-      genderType.IsActive = true;
-      genderType.ModifiedAt = _now;
-      genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = GENDER_TYPE_NAME_MALE;
+      AddOrUpdateNameDescriptionEntity(
+        Models.GenderType.MALE, GENDER_TYPE_NAME_MALE, GENDER_TYPE_DESCRIPTION_MALE);
 
-      if ((genderType = _context
-        .GenderTypes
-          .SingleOrDefault(g => g.Name ==
-            GENDER_TYPE_NAME_FEMALE)) == null)
-      {
-        genderType = new GenderType();
-        _context.Add(genderType);
-      }
-      genderType.Description = GENDER_TYPE_DESCRIPTION_FEMALE;
-      genderType.IsActive = true;
-      genderType.ModifiedAt = _now;
-      genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = GENDER_TYPE_NAME_FEMALE;
-
-      if ((genderType = _context.GenderTypes
-        .SingleOrDefault(g => g.Name ==
-          GENDER_TYPE_NAME_OTHER)) == null)
-      {
-        genderType = new GenderType();
-        _context.Add(genderType);
-      }
-      genderType.Description = GENDER_TYPE_DESCRIPTION_OTHER;
-      genderType.IsActive = true;
-      genderType.ModifiedAt = _now;
-      genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = GENDER_TYPE_NAME_OTHER;
+      AddOrUpdateNameDescriptionEntity(
+        Models.GenderType.OTHER, GENDER_TYPE_NAME_OTHER, GENDER_TYPE_DESCRIPTION_OTHER);
     }
+
+
+    // private void AddOrUpdate(int id, string name, string description)
+    // {
+    //   GenderType genderType;
+
+    //   if ((genderType = _context.GenderTypes.Find(id)) == null)
+    //   {
+    //     genderType = new GenderType();
+    //     _context.Add(genderType);
+    //   }
+    //   PopulateNameDescriptionActiveAndModifiedWithSystemUser(
+    //     genderType,
+    //     name,
+    //     description
+    //   );
+    // }
   }
 }

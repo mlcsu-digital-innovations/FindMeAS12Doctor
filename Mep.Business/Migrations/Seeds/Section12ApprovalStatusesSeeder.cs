@@ -2,7 +2,7 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class Section12ApprovalStatusesSeeder : SeederBase
+  internal class Section12ApprovalStatusesSeeder : SeederBase<Section12ApprovalStatus>
   {
     internal void SeedData()
     {

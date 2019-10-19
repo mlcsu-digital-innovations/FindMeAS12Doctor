@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class UserExaminationClaimsSeeder : SeederBase
+  internal class UserExaminationClaimsSeeder : SeederBase<UserExaminationClaim>
   {
     internal void SeedData()
     {
@@ -20,7 +20,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       userExaminationClaim.ClaimReference = 1;
       userExaminationClaim.ClaimStatusId =
-        GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_ACCEPTED_NAME);
+        GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED);
       userExaminationClaim.ExaminationId =
         GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_1);
       userExaminationClaim.ExaminationPayment = 1;
@@ -35,7 +35,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.PaymentDate = _now;
       userExaminationClaim.SelectedByUserId =
         GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
-      userExaminationClaim.StartPostcode = CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE;
+      userExaminationClaim.StartPostcode = CONTACT_DETAIL_POSTCODE_DOCTOR_FEMALE;
       userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
         GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;
@@ -51,7 +51,7 @@ namespace Mep.Business.Migrations.Seeds
       }
       userExaminationClaim.ClaimReference = 1;
       userExaminationClaim.ClaimStatusId =
-        GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_ACCEPTED_NAME);
+        GetClaimStatusIdByClaimStatusName(CLAIM_STATUS_NAME_ACCEPTED);
       userExaminationClaim.ExaminationId =
         GetExaminationIdByExaminationAddress(EXAMINATION_ADDRESS_2);
       userExaminationClaim.ExaminationPayment = 2;
@@ -66,7 +66,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationClaim.PaymentDate = _now;
       userExaminationClaim.SelectedByUserId =
         GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
-      userExaminationClaim.StartPostcode = CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE;
+      userExaminationClaim.StartPostcode = CONTACT_DETAIL_POSTCODE_DOCTOR_FEMALE;
       userExaminationClaim.TravelComments = USER_COMMENTS;
       userExaminationClaim.UserId =
         GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;

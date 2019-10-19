@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class GpPracticeSeeder : SeederBase
+  internal class GpPracticeSeeder : SeederBase<GpPractice>
   {
     const string STATUS_INACTIVE = "Inactive";
     const string PRIMARY_ROLE_ID_CCG = "RO98";

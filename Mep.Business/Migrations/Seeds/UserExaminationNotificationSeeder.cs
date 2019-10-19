@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class UserExaminationNotificationSeeder : SeederBase
+  internal class UserExaminationNotificationSeeder : SeederBase<UserExaminationNotification>
   {
 
     internal void SeedData()
@@ -28,7 +28,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId =
-        GetNotificationTextId(NOTIFICATION_TEXT_NAME_ASSIGNED_TO_EXAMINATION);
+        GetNotificationTextId(NOTIFICATION_TEXT_NAME_ALLOCATED_TO_EXAMINATION);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId =
         GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
@@ -51,7 +51,7 @@ namespace Mep.Business.Migrations.Seeds
       userExaminationNotification.ModifiedAt = _now;
       userExaminationNotification.ModifiedByUser = GetSystemAdminUser();
       userExaminationNotification.NotificationTextId =
-        GetNotificationTextId(NOTIFICATION_TEXT_NAME_2);
+        GetNotificationTextId(NOTIFICATION_TEXT_NAME_EXAMINATION_CANCELLED);
       userExaminationNotification.RespondedAt = _now;
       userExaminationNotification.UserId =
         GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;

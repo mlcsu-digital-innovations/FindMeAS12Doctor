@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ExaminationSeeder : SeederBase
+  internal class ExaminationSeeder : SeederBase<Examination>
   {
     internal void SeedData()
     {
@@ -21,14 +21,11 @@ namespace Mep.Business.Migrations.Seeds
       }
       examination.Address1 = EXAMINATION_ADDRESS_1;
       examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
-      examination.CreatedByUser = GetSystemAdminUser();
-      examination.IsActive = true;
-      examination.ModifiedAt = _now;
-      examination.ModifiedByUser = GetSystemAdminUser();
+      examination.CreatedByUserId = GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
       examination.Postcode = "ST14 5PP";
-      examination.ReferralId =
-        GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_1);
+      examination.ReferralId = GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_1);
       examination.SpecialityId = GetSpecialityId();
+      PopulateActiveAndModifiedWithSystemUser(examination);
 
       // examination for referral with a previous examination
 

@@ -5,37 +5,54 @@ using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  public class SeederBase
+  public class SeederBase<TEntity> : SeederDoubleBase where TEntity : BaseEntity, new()
   {
+
+    protected void AddOrUpdateNameDescriptionEntity(int id, string name, string description)
+    {
+      TEntity entity;
+
+      if ((entity = _context.Set<TEntity>().Find(id)) == null)
+      {
+        entity = new TEntity();
+        _context.Add(entity);
+      }
+      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
+        entity as NameDescription,
+        name,
+        description
+      );
+    }
+
     #region CONSTANTS
-    protected const int BANK_DETAILS_DOCTOR_FEMALE_ACCOUNT_NUMBER = 10000000;
-    protected const int BANK_DETAILS_DOCTOR_MALE_ACCOUNT_NUMBER = 20000000;
-    protected const string BANK_DETAILS_DOCTOR_FEMALE_BANK_NAME_NORTH_STAFFORDSHIRE = "Doctor Female Bank Noth Staffs";
-    protected const string BANK_DETAILS_DOCTOR_FEMALE_BANK_NAME_STOKE_ON_TRENT = "Doctor Female Bank Stoke";
-    protected const string BANK_DETAILS_DOCTOR_MALE_BANK_NAME_NORTH_STAFFORDSHIRE = "Doctor Male Bank Noth Staffs";
-    protected const string BANK_DETAILS_DOCTOR_FEMALE_NAME_ON_ACCOUNT = "Doctor Female";
-    protected const string BANK_DETAILS_DOCTOR_MALE_NAME_ON_ACCOUNT = "Doctor Male";
-    protected const int BANK_DETAILS_DOCTOR_FEMALE_SORT_CODE_NORTH_STAFFORDSHIRE = 100000;    
-    protected const int BANK_DETAILS_DOCTOR_FEMALE_SORT_CODE_STOKE_ON_TRENT = 200000;
-    protected const int BANK_DETAILS_DOCTOR_MALE_SORT_CODE_NORTH_STAFFORDSHIRE = 30000;
-    protected const int BANK_DETAILS_DOCTOR_FEMALE_VRS_NUMBER_NORTH_STAFFORDSHIRE = 100000000;
-    protected const int BANK_DETAILS_DOCTOR_FEMALE_VRS_NUMBER_STOKE_ON_TRENT = 200000000;
-    protected const int BANK_DETAILS_DOCTOR_MALE_VRS_NUMBER_NORTH_STAFFORDSHIRE = 300000000;
+    protected const int BANK_DETAILS_ACCOUNT_NUMBER_DOCTOR_FEMALE = 10000000;
+    protected const int BANK_DETAILS_ACCOUNT_NUMBER_DOCTOR_MALE = 20000000;
+    protected const string BANK_DETAILS_BANK_NAME_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE = "Doctor Female Bank Noth Staffs";
+    protected const string BANK_DETAILS_BANK_NAME_DOCTOR_FEMALE_STOKE_ON_TRENT = "Doctor Female Bank Stoke";
+    protected const string BANK_DETAILS_BANK_NAME_DOCTOR_MALE_NORTH_STAFFORDSHIRE = "Doctor Male Bank Noth Staffs";
+    protected const string BANK_DETAILS_NAME_ON_ACCOUNT_DOCTOR_FEMALE = "Doctor Female";
+    protected const string BANK_DETAILS_NAME_ON_ACCOUNT_DOCTOR_MALE = "Doctor Male";
+    protected const int BANK_DETAILS_SORT_CODE_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE = 100000;    
+    protected const int BANK_DETAILS_SORT_CODE_DOCTOR_FEMALE_STOKE_ON_TRENT = 200000;
+    protected const int BANK_DETAILS_SORT_CODE_DOCTOR_MALE_NORTH_STAFFORDSHIRE = 30000;
+    protected const int BANK_DETAILS_VRS_NUMBER_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE = 100000000;
+    protected const int BANK_DETAILS_VRS_NUMBER_DOCTOR_FEMALE_STOKE_ON_TRENT = 200000000;
+    protected const int BANK_DETAILS_VRS_NUMBER_DOCTOR_MALE_NORTH_STAFFORDSHIRE = 300000000;
     protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
-    protected const string CLAIM_STATUS_ACCEPTED_NAME = "Accepted";
-    protected const string CLAIM_STATUS_ACCEPTED_DESCRIPTION = "Accepted Description";
-    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_1 = "Doctor Female Address 1";
-    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_2 = "Doctor Female Address 2";
-    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_3 = "Doctor Female Address 3";
-    protected const decimal CONTACT_DETAIL_DOCTOR_FEMALE_LATITUDE = 52.991581m;
-    protected const decimal CONTACT_DETAIL_DOCTOR_FEMALE_LONGITUDE = -2.167857m;
-    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE = "ST4 1NF";
-    protected const int CONTACT_DETAIL_DOCTOR_FEMALE_TELEPHONE_NUMBER = 101;
-    protected const string CONTACT_DETAIL_TYPE_NAME = "Contact Detail Type";
-    protected const string CONTACT_DETAIL_TYPE_DESCRIPTION = "Contact Detail Type Description";
-    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_EMAIL_ADDRESS = "doctor.female@mep.local";
-    protected const string CONTACT_DETAIL_DOCTOR_FEMALE_TOWN = "Doctor Female Town";
+    protected const string CLAIM_STATUS_NAME_ACCEPTED = "Accepted";
+    protected const string CLAIM_STATUS_DESCRIPTION_ACCEPTED = "Accepted Description";
+    protected const string CONTACT_DETAIL_ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
+    protected const string CONTACT_DETAIL_ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
+    protected const string CONTACT_DETAIL_ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
+    protected const string CONTACT_DETAIL_EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@mep.local";
+    protected const decimal CONTACT_DETAIL_LATITUDE_DOCTOR_FEMALE = 52.991581m;
+    protected const decimal CONTACT_DETAIL_LONGITUDE_DOCTOR_FEMALE = -2.167857m;
+    protected const string CONTACT_DETAIL_POSTCODE_DOCTOR_FEMALE = "ST4 1NF";
+    protected const int CONTACT_DETAIL_TELEPHONE_NUMBER_DOCTOR_FEMALE = 101;
+    protected const string CONTACT_DETAIL_TOWN_DOCTOR_FEMALE = "Doctor Female Town";
+    protected const string CONTACT_DETAIL_TYPE_NAME_WORK = "Work";
+    protected const string CONTACT_DETAIL_TYPE_DESCRIPTION_WORK = "Work Description";    
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
@@ -43,40 +60,45 @@ namespace Mep.Business.Migrations.Seeds
     protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
     protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
     protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
-    protected const string EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_NAME = "Agressive neighbour";
-    protected const string EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_DESCRIPTION =
+    protected const string EXAMINATION_TYPE_DESCRIPTION_AGRESSIVE_NEIGHBOUR =
       "There is an agressive neighbour at the location";
-    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME = "Dangerous animal";
-    protected const string EXAMINATION_TYPE_DANGEROUS_ANIMAL_DESCRIPTION =
+    protected const string EXAMINATION_TYPE_DESCRIPTION_DANGEROUS_ANIMAL =
       "A dangerous animal has been reported to be present on the premises";
-    protected const string EXAMINATION_TYPE_DIFFICULT_PARKING_NAME = "Parking is difficult";
-    protected const string EXAMINATION_TYPE_DIFFICULT_PARKING_DESCRIPTION =
-      "Parking is difficult at the location";
-    protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female";
-    protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male";
-    protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other";
+    protected const string EXAMINATION_TYPE_DESCRIPTION_DIFFICULT_PARKING =
+      "Parking is difficult at the location";      
+    protected const string EXAMINATION_TYPE_NAME_AGRESSIVE_NEIGHBOUR = "Agressive neighbour";
+    protected const string EXAMINATION_TYPE_NAME_DANGEROUS_ANIMAL = "Dangerous animal";
+    protected const string EXAMINATION_TYPE_NAME_DIFFICULT_PARKING = "Parking is difficult";
+    protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female Description";
+    protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male Description";
+    protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other Description";
     protected const string GENDER_TYPE_NAME_FEMALE = "Female";
     protected const string GENDER_TYPE_NAME_MALE = "Male";
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
-    protected const string GP_PRACTICE_NAME_1 = "POTTERIES MEDICAL CENTRE";
-    protected const string GP_PRACTICE_NAME_2 = "STAFFORD MEDICAL CENTRE";
-    protected const string NON_PAYMENT_LOCATION_TYPE_NAME = "Non Payment Location Type Name";
-    protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION = "Non Payment Location Type Description";
-    protected const string NOTIFICATION_TEXT_DESCRIPTION_ASSIGNED_TO_EXAMINATION = "Assigned to examination description";
-    protected const string NOTIFICATION_TEXT_DESCRIPTION_2 = "Notification Text Description 2";
-    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_ASSIGNED_TO_EXAMINATION = "Assigned to examination Template";
-    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_2 = "Notification Text Message Template 2";
-    protected const string NOTIFICATION_TEXT_NAME_ASSIGNED_TO_EXAMINATION = "Assigned to examination";
-    protected const string NOTIFICATION_TEXT_NAME_2 = "Notification Text 2";
-    protected const string USER_DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
-    protected const string USER_DISPLAY_NAME_FINANCE_MALE = "Finance Male";
-    protected const string USER_DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
-    protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";
+    protected const string GP_PRACTICE_NAME_POTTERIES_MEDICAL_CENTRE = 
+      "POTTERIES MEDICAL CENTRE";
+    protected const string GP_PRACTICE_NAME_STAFFORD_MEDICAL_CENTRE = 
+      "STAFFORD MEDICAL CENTRE";
+    protected const string NON_PAYMENT_LOCATION_TYPE_NAME_GP_PRACTICE = "GP Practice";
+    protected const string NON_PAYMENT_LOCATION_TYPE_DESCRIPTION_GP_PRACTICE = 
+      "GP Practice Description";
+    protected const string NOTIFICATION_TEXT_DESCRIPTION_ALLOCATED_TO_EXAMINATION = 
+      "Allocated to examination description";
+    protected const string NOTIFICATION_TEXT_DESCRIPTION_EXAMINATION_CANCELLED = 
+      "Examination cancelled description";
+    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_ALLOCATED_TO_EXAMINATION = 
+      "Allocated to examination {0} at {1} template";
+    protected const string NOTIFICATION_TEXT_MESSAGE_TEMPLATE_EXAMINATION_CANCELLED = 
+      "Examination {0} at {1} cancelled template";
+    protected const string NOTIFICATION_TEXT_NAME_ALLOCATED_TO_EXAMINATION = 
+      "Allocated to examination";
+    protected const string NOTIFICATION_TEXT_NAME_EXAMINATION_CANCELLED = "Examination Cancelled";
     protected const string ORGANISATION_DESCRIPTION_1 = "Organisation 1 Description";
     protected const string ORGANISATION_DESCRIPTION_2 = "Organisation 2 Description";
     protected const string ORGANISATION_DESCRIPTION_3 = "Organisation 3 Description";
     protected const string ORGANISATION_DESCRIPTION_4 = "Organisation 4 Description";
-    protected const string ORGANISATION_DESCRIPTION_SYSTEM_ADMIN = "System Organisation Description";
+    protected const string ORGANISATION_DESCRIPTION_SYSTEM_ADMIN = 
+      "System Organisation Description";
     protected const string ORGANISATION_NAME_1 = "Organisation 1";
     protected const string ORGANISATION_NAME_2 = "Organisation 2";
     protected const string ORGANISATION_NAME_3 = "Organisation 3";
@@ -118,17 +140,17 @@ namespace Mep.Business.Migrations.Seeds
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
     protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
     protected const string USER_COMMENTS = "Test Comments";
+    protected const string USER_DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
+    protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";    
     protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     protected const string USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
     protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
     protected const string USER_DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
     protected const string USER_DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";
-    protected const string USER_DISPLAY_NAME_FINANCE = "Finance";
-    protected const string USER_DISPLAY_NAME_SYSTEM_ADMIN = "System Admin User";
+    protected const string USER_DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
+    protected const string USER_DISPLAY_NAME_FINANCE_MALE = "Finance Male";    
     #endregion
 
-    protected static IConfiguration _config;
-    protected static ApplicationContext _context;
     protected DateTimeOffset _now = DateTimeOffset.Now;
     private User _systemAdminUser = null;
 

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class UserSpecialitiesSeeder : SeederBase
+  internal class UserSpecialitiesSeeder : SeederBase<UserSpeciality>
   {
     internal void SeedData()
     {

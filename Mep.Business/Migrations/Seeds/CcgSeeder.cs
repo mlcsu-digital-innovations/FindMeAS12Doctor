@@ -8,7 +8,7 @@ using System.Net.Http;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class CcgSeeder : SeederBase
+  internal class CcgSeeder : SeederBase<Ccg>
   {
     int _numberOfExistingCcgs = 0;
 

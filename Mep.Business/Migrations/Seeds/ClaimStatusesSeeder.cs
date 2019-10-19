@@ -2,7 +2,7 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ClaimStatusesSeeder : SeederBase
+  internal class ClaimStatusesSeeder : SeederBase<ClaimStatus>
   {
     internal void SeedData()
     {
@@ -15,8 +15,8 @@ namespace Mep.Business.Migrations.Seeds
       }
       PopulateNameDescriptionActiveAndModifiedWithSystemUser(
         claimStatus, 
-        CLAIM_STATUS_ACCEPTED_NAME, 
-        CLAIM_STATUS_ACCEPTED_DESCRIPTION);
+        CLAIM_STATUS_NAME_ACCEPTED, 
+        CLAIM_STATUS_DESCRIPTION_ACCEPTED);
     }
   }
 }
