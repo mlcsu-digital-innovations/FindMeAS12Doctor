@@ -13,20 +13,20 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_1)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_1;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST14 5PP";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_1);
       examination.SpecialityId = GetSpecialityId();
 
@@ -34,14 +34,14 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_2)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_2;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -49,7 +49,7 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST2 9QL";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_2);
       examination.SpecialityId = GetSpecialityId();
 
@@ -57,14 +57,14 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_3)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_3;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
       examination.CompletedByUser = GetSystemAdminUser();
       examination.CompletedTime = _now;
       examination.CreatedByUser = GetSystemAdminUser();
@@ -72,26 +72,26 @@ namespace Mep.Business.Migrations.Seeds
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST4 8ZH";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
       examination.SpecialityId = GetSpecialityId();
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_4)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_4;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 7UE";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByPatientNhsNumber(PATIENT_NHS_NUMBER_4);
       examination.SpecialityId = GetSpecialityId();
 
@@ -99,20 +99,20 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_5)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_5;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST10 3JH";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_5);
       examination.SpecialityId = GetSpecialityId();
 
@@ -120,20 +120,20 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_6)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_6;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST5 3DX";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_6);
       examination.SpecialityId = GetSpecialityId();
 
@@ -141,20 +141,20 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((examination = _context
         .Examinations
-          .SingleOrDefault(g => g.Address1 == 
+          .SingleOrDefault(g => g.Address1 ==
             EXAMINATION_ADDRESS_7)) == null)
       {
         examination = new Examination();
         _context.Add(examination);
       }
       examination.Address1 = EXAMINATION_ADDRESS_7;
-      examination.CcgId = GetFirstCcg().Id;
+      examination.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
       examination.CreatedByUser = GetSystemAdminUser();
       examination.IsActive = true;
       examination.ModifiedAt = _now;
       examination.ModifiedByUser = GetSystemAdminUser();
       examination.Postcode = "ST6 7HG";
-      examination.ReferralId = 
+      examination.ReferralId =
         GetReferralIdByAlternativeIdentifier(PATIENT_ALTERNATIVE_IDENTIFIER_7);
       examination.SpecialityId = GetSpecialityId();
     }

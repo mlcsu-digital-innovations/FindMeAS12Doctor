@@ -21,7 +21,7 @@ namespace Mep.Business.Migrations.Seeds
       contactDetail.Address1 = CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_1;
       contactDetail.Address2 = CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_2;
       contactDetail.Address3 = CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_3;
-      contactDetail.CcgId = GetFirstCcg().Id;
+      contactDetail.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
       contactDetail.ContactDetailTypeId = GetContactDetailTypeWork().Id;
       contactDetail.EmailAddress = CONTACT_DETAIL_DOCTOR_FEMALE_EMAIL_ADDRESS;
       contactDetail.Latitude = CONTACT_DETAIL_DOCTOR_FEMALE_LATITUDE;
@@ -31,6 +31,28 @@ namespace Mep.Business.Migrations.Seeds
       contactDetail.Town = CONTACT_DETAIL_DOCTOR_FEMALE_TOWN;
       contactDetail.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
       PopulateActiveAndModifiedWithSystemUser(contactDetail);
+
+      if ((contactDetail = _context.ContactDetails
+            .Include(c => c.User)
+            .SingleOrDefault(g => g.User.DisplayName == USER_DISPLAY_NAME_DOCTOR_MALE)) == null)
+      {
+        contactDetail = new ContactDetail();
+        _context.Add(contactDetail);
+      }
+
+      contactDetail.Address1 = CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_1;
+      contactDetail.Address2 = CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_2;
+      contactDetail.Address3 = CONTACT_DETAIL_DOCTOR_FEMALE_ADDRESS_3;
+      contactDetail.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
+      contactDetail.ContactDetailTypeId = GetContactDetailTypeWork().Id;
+      contactDetail.EmailAddress = CONTACT_DETAIL_DOCTOR_FEMALE_EMAIL_ADDRESS;
+      contactDetail.Latitude = CONTACT_DETAIL_DOCTOR_FEMALE_LATITUDE;
+      contactDetail.Longitude = CONTACT_DETAIL_DOCTOR_FEMALE_LONGITUDE;
+      contactDetail.Postcode = CONTACT_DETAIL_DOCTOR_FEMALE_POSTCODE;
+      contactDetail.TelephoneNumber = CONTACT_DETAIL_DOCTOR_FEMALE_TELEPHONE_NUMBER;
+      contactDetail.Town = CONTACT_DETAIL_DOCTOR_FEMALE_TOWN;
+      contactDetail.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
+      PopulateActiveAndModifiedWithSystemUser(contactDetail);      
     }
   }
 }

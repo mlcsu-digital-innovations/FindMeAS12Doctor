@@ -18,12 +18,10 @@ namespace Mep.Business.Migrations.Seeds
         nonPaymentLocation = new NonPaymentLocation();
         _context.Add(nonPaymentLocation);
       }
-      nonPaymentLocation.CcgId = GetFirstCcg().Id;
-      nonPaymentLocation.IsActive = true;
-      nonPaymentLocation.ModifiedAt = _now;
-      nonPaymentLocation.ModifiedByUser = GetSystemAdminUser();
+      nonPaymentLocation.CcgId = GetCcgByName(CCG_NAME_STOKE_ON_TRENT).Id;
       nonPaymentLocation.NonPaymentLocationTypeId =
         GetNonPaymentLocationTypeIdByNonPaymentLocationTypeName(NON_PAYMENT_LOCATION_TYPE_NAME);
+      PopulateActiveAndModifiedWithSystemUser(nonPaymentLocation);
     }
   }
 }

@@ -17,7 +17,7 @@ namespace Mep.Business.Migrations.Seeds
         paymentRuleSet = new PaymentRuleSet();
         _context.Add(paymentRuleSet);
       }
-      paymentRuleSet.CcgId = GetFirstCcg().Id;
+      paymentRuleSet.CcgId = GetCcgByName(CCG_NAME_NORTH_STAFFORDSHIRE).Id;
       paymentRuleSet.DateTimeFrom = _now;
       paymentRuleSet.DateTimeTo = _now.AddYears(1);
       paymentRuleSet.Description = PAYMENT_RULE_SET_DESCRIPTION;

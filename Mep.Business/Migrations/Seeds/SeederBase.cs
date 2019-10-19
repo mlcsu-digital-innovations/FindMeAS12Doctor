@@ -8,11 +8,19 @@ namespace Mep.Business.Migrations.Seeds
   public class SeederBase
   {
     #region CONSTANTS
-    protected const int BANK_DETAILS_ACCOUNT_NUMBER = 10000000;
-    protected const string BANK_DETAILS_BANK_NAME = "Bank Name 1";
-    protected const string BANK_DETAILS_NAME_ON_ACCOUNT = "Name on Account 1";
-    protected const int BANK_DETAILS_SORT_CODE = 100000;
-    protected const int BANK_DETAILS_VRS_NUMBER = 1000000000;
+    protected const int BANK_DETAILS_DOCTOR_FEMALE_ACCOUNT_NUMBER = 10000000;
+    protected const int BANK_DETAILS_DOCTOR_MALE_ACCOUNT_NUMBER = 20000000;
+    protected const string BANK_DETAILS_DOCTOR_FEMALE_BANK_NAME_NORTH_STAFFORDSHIRE = "Doctor Female Bank Noth Staffs";
+    protected const string BANK_DETAILS_DOCTOR_FEMALE_BANK_NAME_STOKE_ON_TRENT = "Doctor Female Bank Stoke";
+    protected const string BANK_DETAILS_DOCTOR_MALE_BANK_NAME_NORTH_STAFFORDSHIRE = "Doctor Male Bank Noth Staffs";
+    protected const string BANK_DETAILS_DOCTOR_FEMALE_NAME_ON_ACCOUNT = "Doctor Female";
+    protected const string BANK_DETAILS_DOCTOR_MALE_NAME_ON_ACCOUNT = "Doctor Male";
+    protected const int BANK_DETAILS_DOCTOR_FEMALE_SORT_CODE_NORTH_STAFFORDSHIRE = 100000;    
+    protected const int BANK_DETAILS_DOCTOR_FEMALE_SORT_CODE_STOKE_ON_TRENT = 200000;
+    protected const int BANK_DETAILS_DOCTOR_MALE_SORT_CODE_NORTH_STAFFORDSHIRE = 30000;
+    protected const int BANK_DETAILS_DOCTOR_FEMALE_VRS_NUMBER_NORTH_STAFFORDSHIRE = 100000000;
+    protected const int BANK_DETAILS_DOCTOR_FEMALE_VRS_NUMBER_STOKE_ON_TRENT = 200000000;
+    protected const int BANK_DETAILS_DOCTOR_MALE_VRS_NUMBER_NORTH_STAFFORDSHIRE = 300000000;
     protected const string CCG_NAME_STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
     protected const string CCG_NAME_NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
     protected const string CLAIM_STATUS_ACCEPTED_NAME = "Accepted";
@@ -126,19 +134,17 @@ namespace Mep.Business.Migrations.Seeds
 
     public SeederBase() { }
 
-    protected int GetCcgIdByName(string CcgName)
+    protected Ccg GetCcgByName(string CcgName)
     {
       try
       {
-        return _context
-          .Ccgs
-            .Single(ccg => ccg.Name == CcgName).Id;
+        return _context.Ccgs.Single(ccg => ccg.Name == CcgName);
       }
       catch (Exception ex)
       {
         throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
       }
-    }
+    } 
 
     protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
     {
@@ -240,19 +246,6 @@ namespace Mep.Business.Migrations.Seeds
     {
       return GetGenderTypeById(Models.GenderType.OTHER);
     }
-
-    protected Ccg GetFirstCcg()
-    {
-      try
-      {
-        return _context.Ccgs.First();
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find the first CCG", ex);
-      }
-    }
-
     protected GpPractice GetGpPracticeByName(string gpPracticeName)
     {
       try
