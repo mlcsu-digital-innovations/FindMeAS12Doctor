@@ -4,12 +4,17 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ContactDetailTypesSeeder : SeederBase<ContactDetailType>
   {
+    #region Constants      
+    protected const string NAME_WORK = "Work";
+    protected const string DESCRIPTION_WORK = "Work Description";
+    #endregion
+
     internal void SeedData()
     {
       AddOrUpdateNameDescriptionEntityById(
         Models.ContactDetailType.WORK,
-        CONTACT_DETAIL_TYPE_NAME_WORK,
-        CONTACT_DETAIL_TYPE_DESCRIPTION_WORK
+        NAME_WORK,
+        DESCRIPTION_WORK
       );
     }
   }

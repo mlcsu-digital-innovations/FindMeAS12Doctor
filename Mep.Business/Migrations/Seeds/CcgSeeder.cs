@@ -50,8 +50,8 @@ namespace Mep.Business.Migrations.Seeds
       // Add missing CCG Hubs
       PopulateCcgNameShortCodeLongCodeDefaults("Cheshire, Warrington and Wirral Commissioning Hub", "12G", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Durham, Darlington and Tees Commissioning Hub", "12H", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub", "12J", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub", "12K", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub 1", "12J", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub 1", "12K", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Merseyside Commissioning Hub", "12L", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Cumbria, Northumberland, Tyne and Wear Commissioning Hub", "12M", null);
       PopulateCcgNameShortCodeLongCodeDefaults("North Yorkshire and Humber Commissioning Hub", "12N", null);
@@ -89,8 +89,8 @@ namespace Mep.Business.Migrations.Seeds
       PopulateCcgNameShortCodeLongCodeDefaults("South West Commissioning Hub", "14F", null);
       PopulateCcgNameShortCodeLongCodeDefaults("South East Commissioning Hub", "14G", null);
       PopulateCcgNameShortCodeLongCodeDefaults("South Central Commissioning Hub", "14H", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub", "14J", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub", "14K", null);      
+      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub 2", "14J", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub 2", "14K", null);      
       PopulateCcgNameShortCodeLongCodeDefaults("London - H&J Commissioning Hub", "14M", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Yorkshire and Humber - H&J Commissioning Hub", "14N", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Cumbria and North East - H&J Commissioning Hub", "14P", null);

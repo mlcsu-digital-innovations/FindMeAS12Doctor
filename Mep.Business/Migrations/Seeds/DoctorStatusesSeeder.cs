@@ -11,29 +11,36 @@ namespace Mep.Business.Migrations.Seeds
   internal class DoctorStatusesSeeder : SeederBase<DoctorStatus>
   {
     #region Constants
-
-    internal readonly DateTimeOffset AVAILABILITY_END_DOCTOR_FEMALE = 
-      new DateTimeOffset(2019, 10, 10, 8, 00, 00, 00, DateTimeOffset.Now.Offset);
+    internal readonly DateTimeOffset AVAILABILITY_END_DOCTOR_FEMALE =
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
+                         8, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal readonly DateTimeOffset AVAILABILITY_START_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 6, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
+                         6, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal readonly DateTimeOffset EXTENDED_AVAILABILITY_END1_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 11, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
+                         11, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal readonly DateTimeOffset EXTENDED_AVAILABILITY_END2_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 14, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
+                         14, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal readonly DateTimeOffset EXTENDED_AVAILABILITY_END3_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 18, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day, 
+                         18, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal const decimal EXTENDED_AVAILABILITY_LATITUDE1_DOCTOR_FEMALE = 52.921459m;
     internal const decimal EXTENDED_AVAILABILITY_LATITUDE2_DOCTOR_FEMALE = 53.107297m;
     internal const decimal EXTENDED_AVAILABILITY_LATITUDE3_DOCTOR_FEMALE = 52.991581m;
     internal const decimal EXTENDED_AVAILABILITY_LONGITUDE1_DOCTOR_FEMALE = -1.476385m;
-    internal const decimal EXTENDED_AVAILABILITY_LONGITUDE2_DOCTOR_FEMALE =  -1.562336m;
+    internal const decimal EXTENDED_AVAILABILITY_LONGITUDE2_DOCTOR_FEMALE = -1.562336m;
     internal const decimal EXTENDED_AVAILABILITY_LONGITUDE3_DOCTOR_FEMALE = -2.167857m;
     internal readonly DateTimeOffset EXTENDED_AVAILABILITY_START1_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 9, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day, 
+                         9, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal readonly DateTimeOffset EXTENDED_AVAILABILITY_START2_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 13, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day, 
+                         13, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal readonly DateTimeOffset EXTENDED_AVAILABILITY_START3_DOCTOR_FEMALE =
-      new DateTimeOffset(2019, 10, 10, 15, 00, 00, 00, DateTimeOffset.Now.Offset);
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day, 
+                         15, 00, 00, 00, DateTimeOffset.Now.Offset);
     internal const decimal LATITUDE_DOCTOR_FEMALE = 52.991581m;
     internal const decimal LONGITUDE_DOCTOR_FEMALE = -2.167857m;
     #endregion

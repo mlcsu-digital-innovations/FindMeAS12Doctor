@@ -8,34 +8,26 @@ namespace Mep.Business.Migrations.Seeds
   {
     internal void SeedData()
     {
+      AddOrUpdate(
+        Models.Speciality.SECTION_12,
+        USER_DISPLAY_NAME_DOCTOR_S12_APPROVED
+      );
+    }
+
+    private void AddOrUpdate(int specialityId, string userName)
+    {
       UserSpeciality userSpeciality;
 
       if ((userSpeciality = _context.UserSpecialities
-        .SingleOrDefault(g => g.UserId == GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id)) == null)
+        .Where(u => u.SpecialityId == specialityId)
+        .SingleOrDefault(g => g.UserId == GetUserByDisplayName(userName).Id)) == null)
       {
         userSpeciality = new UserSpeciality();
         _context.Add(userSpeciality);
       }
-      userSpeciality.IsActive = true;
-      userSpeciality.ModifiedAt = _now;
-      userSpeciality.ModifiedByUser = GetSystemAdminUser();
-      userSpeciality.SpecialityId = GetSpecialityId();
-      userSpeciality.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE).Id;
-
-      if ((userSpeciality = _context
-        .UserSpecialities
-          .SingleOrDefault(g => g.UserId ==
-            GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
-      {
-        userSpeciality = new UserSpeciality();
-        _context.Add(userSpeciality);
-      }
-      userSpeciality.IsActive = true;
-      userSpeciality.ModifiedAt = _now;
-      userSpeciality.ModifiedByUser = GetSystemAdminUser();
-      userSpeciality.SpecialityId = GetSpecialityId();
-      userSpeciality.UserId =
-        GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
+      userSpeciality.SpecialityId = specialityId;
+      userSpeciality.UserId = GetUserByDisplayName(userName).Id;      
+      PopulateActiveAndModifiedWithSystemUser(userSpeciality);
     }
   }
 }

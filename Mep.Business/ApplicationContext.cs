@@ -64,6 +64,7 @@ namespace Mep.Business
     public virtual DbSet<ExaminationDetailType> ExaminationDetailTypes { get; set; }
     public virtual DbSet<ExaminationDetailTypeAudit> ExaminationDetailTypeAudits { get; set; }
     public virtual DbSet<GenderType> GenderTypes { get; set; }
+    public virtual DbSet<GenderTypeAudit> GenderTypeAudits { get; set; }
     public virtual DbSet<GpPractice> GpPractices { get; set; }
     public virtual DbSet<GpPracticeAudit> GpPracticeAudits { get; set; }
     public virtual DbSet<Log> Logs { get; set; }
@@ -157,10 +158,7 @@ namespace Mep.Business
 
       modelBuilder.Entity<GpPractice>()
         .HasIndex(g => g.Code)
-        .IsUnique();
-      modelBuilder.Entity<GpPractice>()
-        .HasIndex(g => g.Name)
-        .IsUnique();        
+        .IsUnique();      
 
       modelBuilder.Entity<NonPaymentLocationType>()
         .HasIndex(c => c.Name)
@@ -180,6 +178,33 @@ namespace Mep.Business
       modelBuilder.Entity<Patient>()
         .HasIndex(p => p.NhsNumber)
         .IsUnique();
+
+      modelBuilder.Entity<PaymentMethodType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();   
+
+      modelBuilder.Entity<ProfileType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();             
+
+      modelBuilder.Entity<ReferralStatus>()
+        .HasIndex(c => c.Name)
+        .IsUnique();  
+
+      modelBuilder.Entity<Section12ApprovalStatus>()
+        .HasIndex(c => c.Name)
+        .IsUnique();    
+
+      modelBuilder.Entity<UnsuccessfulExaminationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();    
+
+      modelBuilder.Entity<User>()
+        .HasIndex(c => c.GmcNumber)
+        .IsUnique();   
+      modelBuilder.Entity<User>()
+        .HasIndex(c => c.IdentityServerIdentifier)
+        .IsUnique();                                          
     }
 
     private void ConfigureManyToManyRelationships(ModelBuilder modelBuilder)
@@ -221,11 +246,26 @@ namespace Mep.Business
           paymentMethod.UserId
         });
 
+      modelBuilder.Entity<UserExaminationClaim>()
+        .HasAlternateKey(userExaminationClaim => new
+        {
+          userExaminationClaim.ExaminationId,
+          userExaminationClaim.UserId
+        });
+
       modelBuilder.Entity<UserExaminationNotification>()
         .HasAlternateKey(userExaminationNotification => new
         {
           userExaminationNotification.ExaminationId,
+          userExaminationNotification.NotificationTextId,
           userExaminationNotification.UserId
+        });
+
+      modelBuilder.Entity<UserSpeciality>()
+        .HasAlternateKey(userSpeciality => new
+        {
+          userSpeciality.SpecialityId,
+          userSpeciality.UserId
         });
 
     }

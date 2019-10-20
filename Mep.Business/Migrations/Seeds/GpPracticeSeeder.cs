@@ -15,6 +15,10 @@ namespace Mep.Business.Migrations.Seeds
     internal const string NAME_POTTERIES_MEDICAL_CENTRE = "POTTERIES MEDICAL CENTRE";
     internal const string NAME_STAFFORD_MEDICAL_CENTRE = "STAFFORD MEDICAL CENTRE"; 
     private const string STATUS_INACTIVE = "Inactive";
+    private const string ORAGANISATION_ALDERNEY = "ALD";
+    private const string ORAGANISATION_GUERNSEY = "GUE";
+    private const string ORAGANISATION_JERSEY = "JER";
+    private const string ORAGANISATION_WELSH = "W";    
 
     private const string PRIMARY_ROLE_ID_CCG = "RO98";
     private readonly Dictionary<string, int?> _shortCodeCcgIds = new Dictionary<string, int?>();
@@ -54,6 +58,10 @@ namespace Mep.Business.Migrations.Seeds
 
       // IGNORE THE INACTIVE GP PRACTICES
       foreach (SpineServiceOrganisation gpResult in json.Organisations
+                                                        .Where(o => !o.OrgId.StartsWith(ORAGANISATION_ALDERNEY))
+                                                        .Where(o => !o.OrgId.StartsWith(ORAGANISATION_GUERNSEY))
+                                                        .Where(o => !o.OrgId.StartsWith(ORAGANISATION_JERSEY))
+                                                        .Where(o => !o.OrgId.StartsWith(ORAGANISATION_WELSH))
                                                         .Where(o => o.Status != STATUS_INACTIVE))
       {
         int? associatedCcgId = FindAssociatedCcg(client, gpResult);

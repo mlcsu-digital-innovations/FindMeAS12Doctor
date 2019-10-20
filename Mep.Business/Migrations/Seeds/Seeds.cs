@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  public class Seeds : SeederDoubleBase
+  public class Seeds : SeederBaseBase
   {
     public Seeds(ApplicationContext context, IConfiguration config)
     {
@@ -68,17 +68,17 @@ namespace Mep.Business.Migrations.Seeds
       new NotificationTextsSeeder().SeedData();
       _context.SaveChanges();
 
-      new ReferralSeeder().SeedData();
-      _context.SaveChanges();
+      // new ReferralSeeder().SeedData();
+      // _context.SaveChanges();
 
-      new ExaminationSeeder().SeedData();
-      _context.SaveChanges();
+      // new ExaminationSeeder().SeedData();
+      // _context.SaveChanges();
 
-      new UserExaminationNotificationSeeder().SeedData();
-      _context.SaveChanges();
+      // new UserExaminationNotificationSeeder().SeedData();
+      // _context.SaveChanges();
 
-      new UserExaminationClaimsSeeder().SeedData();
-      _context.SaveChanges();
+      // new UserExaminationClaimsSeeder().SeedData();
+      // _context.SaveChanges();
 
       new BankDetailsSeeder().SeedData();
       _context.SaveChanges();

@@ -4,24 +4,12 @@ using System;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  public class SeederBase<TEntity> : SeederDoubleBase where TEntity : BaseEntity, new()
+  public class SeederBase<TEntity> : SeederBaseBase where TEntity : BaseEntity, new()
   {
     #region CONSTANTS
 
     internal const string POSTCODE_NORTH_STAFFORDSHIRE = "ST13 5ET";
     internal const string POSTCODE_STOKE_ON_TRENT = "ST4 1NF";
-
-    protected const string CONTACT_DETAIL_ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
-    protected const string CONTACT_DETAIL_ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
-    protected const string CONTACT_DETAIL_ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
-    protected const string CONTACT_DETAIL_EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@mep.local";
-    protected const decimal CONTACT_DETAIL_LATITUDE_DOCTOR_FEMALE = 52.991581m;
-    protected const decimal CONTACT_DETAIL_LONGITUDE_DOCTOR_FEMALE = -2.167857m;
-    protected const string CONTACT_DETAIL_POSTCODE_DOCTOR_FEMALE = "ST4 1NF";
-    protected const int CONTACT_DETAIL_TELEPHONE_NUMBER_DOCTOR_FEMALE = 101;
-    protected const string CONTACT_DETAIL_TOWN_DOCTOR_FEMALE = "Doctor Female Town";
-    protected const string CONTACT_DETAIL_TYPE_NAME_WORK = "Work";
-    protected const string CONTACT_DETAIL_TYPE_DESCRIPTION_WORK = "Work Description";
     protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
     protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
     protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
@@ -44,27 +32,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string GENDER_TYPE_NAME_FEMALE = "Female";
     protected const string GENDER_TYPE_NAME_MALE = "Male";
     protected const string GENDER_TYPE_NAME_OTHER = "Other";
-    protected const string PAYMENT_RULE_CRITERIA_1 = "Payment Rule Criteria 1";
-    protected const string PAYMENT_RULE_DESCRIPTION_1 = "Payment Rule Description 1";
-    protected const string PAYMENT_RULE_NAME_1 = "Payment Rule 1";
-    protected const string PAYMENT_RULE_SET_DESCRIPTION = "Payment Rule Set Description";
-    protected const string PAYMENT_RULE_SET_NAME = "Payment Rule Set Name";
-    protected const string PROFILE_TYPE_DESCRIPTION_AMHP = "Profile Type Description AMHP";
-    protected const string PROFILE_TYPE_DESCRIPTION_DOCTOR = "ProfileType Description Doctor";
-    protected const string PROFILE_TYPE_DESCRIPTION_FINANCE = "ProfileType Description Finance";
-    protected const string PROFILE_TYPE_DESCRIPTION_SYSTEM = "ProfileType Description System";
-    protected const string PROFILE_TYPE_NAME_AMHP = "ProfileType Name AMHP";
-    protected const string PROFILE_TYPE_NAME_DOCTOR = "ProfileType Name Doctor";
-    protected const string PROFILE_TYPE_NAME_FINANCE = "ProfileType Name Finance";
-    protected const string PROFILE_TYPE_NAME_SYSTEM = "ProfileType Name System";
-    protected const string REFERRAL_STATUS_DESCRIPTION_NEW_REFERRAL = "New Referral Description";
-    protected const string REFERRAL_STATUS_NAME_NEW_REFERRAL = "New Referral";
-    protected const string SECTION_12_APPROVAL_STATUS_APPROVED_DESCRIPTION = "Section 12 Status Is Approved";
-    protected const string SECTION_12_APPROVAL_STATUS_APPROVED_NAME = "Approved";
-    protected const string SPECIALITY_SECTION_12 = "Section 12";
     protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
-    protected const string UNSUCCESSFUL_EXAMINATION_TYPE_DESCRIPTION = "Unsuccessful Examination Type Description";
-    protected const string UNSUCCESSFUL_EXAMINATION_TYPE_NAME = "Unsuccessful Examination Type Name";
     protected const string USER_COMMENTS = "Test Comments";
     protected const string USER_DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
     protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";
@@ -430,18 +398,16 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetReferralStatusId()
+    protected ReferralStatus GetReferralStatus(int id)
     {
       try
       {
-        return _context
-          .ReferralStatuses
-            .Single(referralStatus => referralStatus.Name == REFERRAL_STATUS_NAME_NEW_REFERRAL).Id;
+        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Id == id);
       }
       catch (Exception ex)
       {
         throw new Exception(
-          $"Cannot find a Referral Status with the name {REFERRAL_STATUS_NAME_NEW_REFERRAL} in ReferralStatuses", ex);
+          $"Cannot find a Referral Status with an id of {id} in ReferralStatuses", ex);
       }
     }
 
@@ -480,18 +446,17 @@ namespace Mep.Business.Migrations.Seeds
     }
 
 
-    protected int GetSpecialityId()
+    protected Speciality GetSpeciality(int id)
     {
       try
       {
-        return _context
-          .Specialities
-            .Single(speciality => speciality.Name == SPECIALITY_SECTION_12).Id;
+        return _context.Specialities
+            .Single(speciality => speciality.Id == id);
       }
       catch (Exception ex)
       {
         throw new Exception(
-          $"Cannot find a Speciality with the name {SPECIALITY_SECTION_12} in Speciality", ex);
+          $"Cannot find a Speciality with and Id of {id} in Speciality", ex);
       }
     }
 

@@ -1,55 +1,39 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class ProfileTypeSeeder : SeederBase<ProfileType>
   {
+    #region
+    internal const string DESCRIPTION_AMHP = "AMHP Description";
+    internal const string DESCRIPTION_DOCTOR = "Doctor Description";
+    internal const string DESCRIPTION_FINANCE = "Finance Description";
+    internal const string DESCRIPTION_SYSTEM = "System Description";
+    internal const string NAME_AMHP = "AMHP";
+    internal const string NAME_DOCTOR = "Doctor";
+    internal const string NAME_FINANCE = "Finance";
+    internal const string NAME_SYSTEM = "System";      
+    #endregion
+
     internal void SeedData()
     {
-      ProfileType profileType;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ProfileType.AMHP,
+        NAME_AMHP,
+        DESCRIPTION_AMHP
+      );
 
-      if ((profileType = _context
-        .ProfileTypes
-          .SingleOrDefault(u => u.Name ==
-            PROFILE_TYPE_NAME_AMHP)) == null)
-      {
-        profileType = new ProfileType();
-        _context.Add(profileType);
-      }
-      profileType.Description = PROFILE_TYPE_DESCRIPTION_AMHP;
-      profileType.IsActive = true;
-      profileType.ModifiedAt = _now;
-      profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILE_TYPE_NAME_AMHP;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ProfileType.DOCTOR,
+        NAME_DOCTOR,
+        DESCRIPTION_DOCTOR
+      );
 
-      if ((profileType = _context
-        .ProfileTypes
-          .SingleOrDefault(u => u.Name ==
-            PROFILE_TYPE_NAME_DOCTOR)) == null)
-      {
-        profileType = new ProfileType();
-        _context.Add(profileType);
-      }
-      profileType.Description = PROFILE_TYPE_DESCRIPTION_DOCTOR;
-      profileType.IsActive = true;
-      profileType.ModifiedAt = _now;
-      profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILE_TYPE_NAME_DOCTOR;
-
-      if ((profileType = _context
-        .ProfileTypes
-          .SingleOrDefault(u => u.Name ==
-            PROFILE_TYPE_NAME_FINANCE)) == null)
-      {
-        profileType = new ProfileType();
-        _context.Add(profileType);
-      }
-      profileType.Description = PROFILE_TYPE_DESCRIPTION_FINANCE;
-      profileType.IsActive = true;
-      profileType.ModifiedAt = _now;
-      profileType.ModifiedByUser = GetSystemAdminUser();
-      profileType.Name = PROFILE_TYPE_NAME_FINANCE;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ProfileType.FINANCE,
+        NAME_FINANCE,
+        DESCRIPTION_FINANCE
+      );
     }
   }
 }

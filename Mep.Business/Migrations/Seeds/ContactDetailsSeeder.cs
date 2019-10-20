@@ -5,6 +5,18 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class ContactDetailsSeeder : SeederBase<ContactDetail>
   {
+    #region Constants      
+    protected const string ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
+    protected const string ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
+    protected const string ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
+    protected const string EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@mep.local";
+    protected const decimal LATITUDE_DOCTOR_FEMALE = 52.991581m;
+    protected const decimal LONGITUDE_DOCTOR_FEMALE = -2.167857m;
+    protected const string POSTCODE_DOCTOR_FEMALE = "ST4 1NF";
+    protected const int TELEPHONE_NUMBER_DOCTOR_FEMALE = 101;
+    protected const string TOWN_DOCTOR_FEMALE = "Doctor Female Town";
+    #endregion
+
     internal void SeedData()
     {
       ContactDetail contactDetail;
@@ -19,17 +31,17 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(contactDetail);
       }
 
-      contactDetail.Address1 = CONTACT_DETAIL_ADDRESS1_DOCTOR_FEMALE;
-      contactDetail.Address2 = CONTACT_DETAIL_ADDRESS2_DOCTOR_FEMALE;
-      contactDetail.Address3 = CONTACT_DETAIL_ADDRESS3_DOCTOR_FEMALE;
+      contactDetail.Address1 = ADDRESS1_DOCTOR_FEMALE;
+      contactDetail.Address2 = ADDRESS2_DOCTOR_FEMALE;
+      contactDetail.Address3 = ADDRESS3_DOCTOR_FEMALE;
       contactDetail.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       contactDetail.ContactDetailTypeId = GetContactDetailTypeWork().Id;
-      contactDetail.EmailAddress = CONTACT_DETAIL_EMAIL_ADDRESS_DOCTOR_FEMALE;
-      contactDetail.Latitude = CONTACT_DETAIL_LATITUDE_DOCTOR_FEMALE;
-      contactDetail.Longitude = CONTACT_DETAIL_LONGITUDE_DOCTOR_FEMALE;
-      contactDetail.Postcode = CONTACT_DETAIL_POSTCODE_DOCTOR_FEMALE;
-      contactDetail.TelephoneNumber = CONTACT_DETAIL_TELEPHONE_NUMBER_DOCTOR_FEMALE;
-      contactDetail.Town = CONTACT_DETAIL_TOWN_DOCTOR_FEMALE;
+      contactDetail.EmailAddress = EMAIL_ADDRESS_DOCTOR_FEMALE;
+      contactDetail.Latitude = LATITUDE_DOCTOR_FEMALE;
+      contactDetail.Longitude = LONGITUDE_DOCTOR_FEMALE;
+      contactDetail.Postcode = POSTCODE_DOCTOR_FEMALE;
+      contactDetail.TelephoneNumber = TELEPHONE_NUMBER_DOCTOR_FEMALE;
+      contactDetail.Town = TOWN_DOCTOR_FEMALE;
       contactDetail.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
       PopulateActiveAndModifiedWithSystemUser(contactDetail);
 
@@ -43,17 +55,17 @@ namespace Mep.Business.Migrations.Seeds
         _context.Add(contactDetail);
       }
 
-      contactDetail.Address1 = CONTACT_DETAIL_ADDRESS1_DOCTOR_FEMALE;
-      contactDetail.Address2 = CONTACT_DETAIL_ADDRESS2_DOCTOR_FEMALE;
-      contactDetail.Address3 = CONTACT_DETAIL_ADDRESS3_DOCTOR_FEMALE;
+      contactDetail.Address1 = ADDRESS1_DOCTOR_FEMALE;
+      contactDetail.Address2 = ADDRESS2_DOCTOR_FEMALE;
+      contactDetail.Address3 = ADDRESS3_DOCTOR_FEMALE;
       contactDetail.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       contactDetail.ContactDetailTypeId = GetContactDetailTypeWork().Id;
-      contactDetail.EmailAddress = CONTACT_DETAIL_EMAIL_ADDRESS_DOCTOR_FEMALE;
-      contactDetail.Latitude = CONTACT_DETAIL_LATITUDE_DOCTOR_FEMALE;
-      contactDetail.Longitude = CONTACT_DETAIL_LONGITUDE_DOCTOR_FEMALE;
-      contactDetail.Postcode = CONTACT_DETAIL_POSTCODE_DOCTOR_FEMALE;
-      contactDetail.TelephoneNumber = CONTACT_DETAIL_TELEPHONE_NUMBER_DOCTOR_FEMALE;
-      contactDetail.Town = CONTACT_DETAIL_TOWN_DOCTOR_FEMALE;
+      contactDetail.EmailAddress = EMAIL_ADDRESS_DOCTOR_FEMALE;
+      contactDetail.Latitude = LATITUDE_DOCTOR_FEMALE;
+      contactDetail.Longitude = LONGITUDE_DOCTOR_FEMALE;
+      contactDetail.Postcode = POSTCODE_DOCTOR_FEMALE;
+      contactDetail.TelephoneNumber = TELEPHONE_NUMBER_DOCTOR_FEMALE;
+      contactDetail.Town = TOWN_DOCTOR_FEMALE;
       contactDetail.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
       PopulateActiveAndModifiedWithSystemUser(contactDetail);      
     }

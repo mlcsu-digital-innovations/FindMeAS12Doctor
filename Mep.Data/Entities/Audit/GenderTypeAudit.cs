@@ -1,6 +1,9 @@
-namespace Mep.Data.Entities.Audit
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Mep.Data.Entities
 {
-  public class GenderTypeAudit : BaseAudit, IGenderType
+  [Table("GenderTypesAudit")]
+  public class GenderTypeAudit : NameDescriptionAudit, IGenderType
   {
   }
 }
