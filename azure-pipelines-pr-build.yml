@@ -1,0 +1,30 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Mep.Api - Check build completes successfully'
+  inputs:
+    projects: '**/*.csproj'
+    arguments: '-c AzureDevelopment'
+
+- task: Npm@1
+  displayName: 'Mep.Ui - Install npm packages'
+  inputs:
+    command: 'install'
+    workingDir: './Mep.Ui'
+
+- task: Npm@1
+  displayName: "Mep.Ui - Check build completes successfully"
+  inputs:
+    command: 'custom'
+    workingDir: './Mep.Ui'
+    customCommand: 'run build:azure-development'
+    
