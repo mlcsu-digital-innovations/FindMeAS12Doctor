@@ -1,54 +1,39 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ExaminationDetailTypeSeeder : SeederBase
+  internal class ExaminationDetailTypeSeeder : SeederBase<ExaminationDetailType>
   {
+    #region Constants
+    internal const string DESCRIPTION_AGRESSIVE_NEIGHBOUR =
+      "There is an agressive neighbour at the location";
+    internal const string DESCRIPTION_DANGEROUS_ANIMAL =
+      "A dangerous animal has been reported to be present on the premises";
+    internal const string DESCRIPTION_DIFFICULT_PARKING =
+      "Parking is difficult at the location";
+    internal const string NAME_AGRESSIVE_NEIGHBOUR = "Agressive neighbour";
+    internal const string NAME_DANGEROUS_ANIMAL = "Dangerous animal";
+    internal const string NAME_DIFFICULT_PARKING = "Parking is difficult";    
+    #endregion
+
     internal void SeedData()
     {
-      ExaminationDetailType examinationDetailType;
+      AddOrUpdateNameDescriptionEntityById(
+        ExaminationDetailType.AGRESSIVE_NEIGHBOUR,
+        NAME_AGRESSIVE_NEIGHBOUR,
+        DESCRIPTION_AGRESSIVE_NEIGHBOUR
+      ); 
 
-      if ((examinationDetailType =
-        _context.ExaminationDetailTypes.SingleOrDefault(
-          edt => edt.Id == ExaminationDetailType.AGRESSIVE_NEIGHBOUR)) == null)
-      {
-        examinationDetailType = new ExaminationDetailType();
-        _context.Add(examinationDetailType);
-      }
-
-      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-        examinationDetailType,
-        EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_NAME,
-        EXAMINATION_TYPE_AGRESSIVE_NEIGHBOUR_DESCRIPTION
+      AddOrUpdateNameDescriptionEntityById(
+        ExaminationDetailType.DANGEROUS_ANIMAL,
+        NAME_DANGEROUS_ANIMAL,
+        DESCRIPTION_DANGEROUS_ANIMAL
       );
 
-      if ((examinationDetailType =
-        _context.ExaminationDetailTypes.SingleOrDefault(
-          edt => edt.Id == ExaminationDetailType.DANGEROUS_ANIMAL)) == null)
-      {
-        examinationDetailType = new ExaminationDetailType();
-        _context.Add(examinationDetailType);
-      }
-      
-      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-        examinationDetailType,
-        EXAMINATION_TYPE_DANGEROUS_ANIMAL_NAME,
-        EXAMINATION_TYPE_DANGEROUS_ANIMAL_DESCRIPTION
-      );
-
-      if ((examinationDetailType =
-        _context.ExaminationDetailTypes.SingleOrDefault(
-          edt => edt.Id == ExaminationDetailType.DIFFICULT_PARKING)) == null)
-      {
-        examinationDetailType = new ExaminationDetailType();
-        _context.Add(examinationDetailType);
-      }
-      
-      PopulateNameDescriptionActiveAndModifiedWithSystemUser(
-        examinationDetailType,
-        EXAMINATION_TYPE_DIFFICULT_PARKING_NAME,
-        EXAMINATION_TYPE_DIFFICULT_PARKING_DESCRIPTION
+      AddOrUpdateNameDescriptionEntityById(
+        ExaminationDetailType.DIFFICULT_PARKING,
+        NAME_DIFFICULT_PARKING,
+        DESCRIPTION_DIFFICULT_PARKING
       );            
     }
   }

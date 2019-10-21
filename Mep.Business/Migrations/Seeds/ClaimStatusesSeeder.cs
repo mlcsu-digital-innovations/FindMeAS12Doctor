@@ -1,27 +1,21 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ClaimStatusesSeeder : SeederBase
+  internal class ClaimStatusesSeeder : SeederBase<ClaimStatus>
   {
+    #region Constants
+    internal const string DESCRIPTION_ACCEPTED = "Accepted Description";
+    internal const string NAME_ACCEPTED = "Accepted";    
+    #endregion
+
     internal void SeedData()
     {
-      ClaimStatus claimStatus;
-
-      if ((claimStatus = _context
-        .ClaimStatuses
-          .SingleOrDefault(g => g.Name ==
-            CLAIM_STATUS_ACCEPTED_NAME)) == null)
-      {
-        claimStatus = new ClaimStatus();
-        _context.Add(claimStatus);
-      }
-      claimStatus.Description = CLAIM_STATUS_ACCEPTED_DESCRIPTION;
-      claimStatus.IsActive = true;
-      claimStatus.ModifiedAt = _now;
-      claimStatus.ModifiedByUser = GetSystemAdminUser();
-      claimStatus.Name = CLAIM_STATUS_ACCEPTED_NAME;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ClaimStatus.ACCEPTED,
+        NAME_ACCEPTED,
+        DESCRIPTION_ACCEPTED
+      );
     }
   }
 }

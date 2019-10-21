@@ -4,14 +4,16 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191020094524_AddGenderTypeAuditsMany2ManyIndexes")]
+    partial class AddGenderTypeAuditsMany2ManyIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -827,7 +829,7 @@ namespace mep.business.Migrations
                     b.Property<DateTimeOffset?>("ScheduledTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("SpecialityId")
+                    b.Property<int>("SpecialityId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UnsuccessfulExaminationTypeId")
@@ -951,7 +953,7 @@ namespace mep.business.Migrations
                     b.Property<DateTimeOffset?>("ScheduledTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("SpecialityId")
+                    b.Property<int>("SpecialityId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UnsuccessfulExaminationTypeId")
@@ -3415,7 +3417,9 @@ namespace mep.business.Migrations
 
                     b.HasOne("Mep.Data.Entities.Speciality", "Speciality")
                         .WithMany("Examinations")
-                        .HasForeignKey("SpecialityId");
+                        .HasForeignKey("SpecialityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Mep.Data.Entities.UnsuccessfulExaminationType", "UnsuccessfulExaminationType")
                         .WithMany("Examinations")

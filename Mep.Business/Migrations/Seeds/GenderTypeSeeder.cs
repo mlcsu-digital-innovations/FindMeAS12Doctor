@@ -1,54 +1,28 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class GenderTypeSeeder : SeederBase
+  internal class GenderTypeSeeder : SeederBase<GenderType>
   {
+    #region Constants
+    internal const string DESCRIPTION_FEMALE = "Female Description";
+    internal const string DESCRIPTION_MALE = "Male Description";
+    internal const string DESCRIPTION_OTHER = "Other Description";
+    internal const string NAME_FEMALE = "Female";
+    internal const string NAME_MALE = "Male";
+    internal const string NAME_OTHER = "Other";    
+    #endregion
+
     internal void SeedData()
     {
-      GenderType genderType;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.GenderType.FEMALE, NAME_FEMALE, DESCRIPTION_FEMALE);
 
-      if ((genderType = _context
-        .GenderTypes
-          .SingleOrDefault(g => g.Name ==
-            GENDER_TYPE_NAME_MALE)) == null)
-      {
-        genderType = new GenderType();
-        _context.Add(genderType);
-      }
-      genderType.Description = GENDER_TYPE_DESCRIPTION_MALE;
-      genderType.IsActive = true;
-      genderType.ModifiedAt = _now;
-      genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = GENDER_TYPE_NAME_MALE;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.GenderType.MALE, NAME_MALE, DESCRIPTION_MALE);
 
-      if ((genderType = _context
-        .GenderTypes
-          .SingleOrDefault(g => g.Name ==
-            GENDER_TYPE_NAME_FEMALE)) == null)
-      {
-        genderType = new GenderType();
-        _context.Add(genderType);
-      }
-      genderType.Description = GENDER_TYPE_DESCRIPTION_FEMALE;
-      genderType.IsActive = true;
-      genderType.ModifiedAt = _now;
-      genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = GENDER_TYPE_NAME_FEMALE;
-
-      if ((genderType = _context.GenderTypes
-        .SingleOrDefault(g => g.Name ==
-          GENDER_TYPE_NAME_OTHER)) == null)
-      {
-        genderType = new GenderType();
-        _context.Add(genderType);
-      }
-      genderType.Description = GENDER_TYPE_DESCRIPTION_OTHER;
-      genderType.IsActive = true;
-      genderType.ModifiedAt = _now;
-      genderType.ModifiedByUser = GetSystemAdminUser();
-      genderType.Name = GENDER_TYPE_NAME_OTHER;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.GenderType.OTHER, NAME_OTHER, DESCRIPTION_OTHER);
     }
   }
 }

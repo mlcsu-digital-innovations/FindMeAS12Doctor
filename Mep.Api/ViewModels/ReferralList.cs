@@ -14,6 +14,6 @@ namespace Mep.Api.ViewModels
     public int ResponsesReceived { get; set; }
     public string Speciality { get; set; }
     public string Status { get; set; }
-    public DateTime? Timescale { get; set; }
+    public DateTimeOffset? Timescale { get; set; }
   }
 } 
