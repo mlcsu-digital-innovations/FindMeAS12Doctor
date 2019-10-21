@@ -19,7 +19,7 @@ steps:
     projects: './Mep.Api/mep.api.csproj'
     zipAfterPublish: false
     modifyOutputPath: false
-    arguments: '-c AzureDevelopment -r win-x86 --output ./Deployment/AzureDevelopment/Mep.Api --self-contained true'
+    arguments: '-c AzureDevelopment -r win-x86 --output ./Deployment/AzureDevelopment/Mep.Api --self-contained true -p:Version=$(build.buildNumber)'
 
 - task: Npm@1
   displayName: 'Mep.Ui - Install npm packages'

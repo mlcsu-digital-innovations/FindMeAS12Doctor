@@ -5,7 +5,6 @@ using AutoMapper;
 using Mep.Business.Exceptions;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Mep.Api.Controllers
 {
