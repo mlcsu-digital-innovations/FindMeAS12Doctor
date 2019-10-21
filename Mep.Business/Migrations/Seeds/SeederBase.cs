@@ -1,50 +1,12 @@
 using Mep.Data.Entities;
 using System.Linq;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBase<TEntity> : SeederBaseBase where TEntity : BaseEntity, new()
   {
-    #region CONSTANTS
-
-    internal const string POSTCODE_NORTH_STAFFORDSHIRE = "ST13 5ET";
-    internal const string POSTCODE_STOKE_ON_TRENT = "ST4 1NF";
-    protected const string EXAMINATION_ADDRESS_1 = "Examination Address 1";
-    protected const string EXAMINATION_ADDRESS_2 = "Examination Address 2";
-    protected const string EXAMINATION_ADDRESS_3 = "Examination Address 3";
-    protected const string EXAMINATION_ADDRESS_4 = "Examination Address 4";
-    protected const string EXAMINATION_ADDRESS_5 = "Examination Address 5";
-    protected const string EXAMINATION_ADDRESS_6 = "Examination Address 6";
-    protected const string EXAMINATION_ADDRESS_7 = "Examination Address 7";
-    protected const string EXAMINATION_TYPE_DESCRIPTION_AGRESSIVE_NEIGHBOUR =
-      "There is an agressive neighbour at the location";
-    protected const string EXAMINATION_TYPE_DESCRIPTION_DANGEROUS_ANIMAL =
-      "A dangerous animal has been reported to be present on the premises";
-    protected const string EXAMINATION_TYPE_DESCRIPTION_DIFFICULT_PARKING =
-      "Parking is difficult at the location";
-    protected const string EXAMINATION_TYPE_NAME_AGRESSIVE_NEIGHBOUR = "Agressive neighbour";
-    protected const string EXAMINATION_TYPE_NAME_DANGEROUS_ANIMAL = "Dangerous animal";
-    protected const string EXAMINATION_TYPE_NAME_DIFFICULT_PARKING = "Parking is difficult";
-    protected const string GENDER_TYPE_DESCRIPTION_FEMALE = "Female Description";
-    protected const string GENDER_TYPE_DESCRIPTION_MALE = "Male Description";
-    protected const string GENDER_TYPE_DESCRIPTION_OTHER = "Other Description";
-    protected const string GENDER_TYPE_NAME_FEMALE = "Female";
-    protected const string GENDER_TYPE_NAME_MALE = "Male";
-    protected const string GENDER_TYPE_NAME_OTHER = "Other";
-    protected const string SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER = "bf673270-2538-4e59-9d26-5b4808fd9ef6";
-    protected const string USER_COMMENTS = "Test Comments";
-    protected const string USER_DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
-    protected const string USER_DISPLAY_NAME_AMHP_MALE = "Amhp Male";
-    protected const string USER_DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
-    protected const string USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
-    protected const string USER_DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
-    protected const string USER_DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
-    protected const string USER_DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";
-    protected const string USER_DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
-    protected const string USER_DISPLAY_NAME_FINANCE_MALE = "Finance Male";
-    #endregion
-
     protected DateTimeOffset _now = DateTimeOffset.Now;
     private User _systemAdminUser = null;
 
@@ -62,6 +24,24 @@ namespace Mep.Business.Migrations.Seeds
       PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(entity, name, description);
 
       return entity;
+    }
+
+    internal virtual void DeleteSeeds()
+    {
+      _context.Set<TEntity>().RemoveRange(
+        _context.Set<TEntity>().ToList()
+      );
+      ResetIdentity();
+    }   
+
+    internal virtual void ResetIdentity(int newReseedValue = 0)
+    {
+      string tableName = _context.Model.GetEntityTypes()
+        .First(t => t.ClrType == typeof(TEntity)).GetAnnotations()
+        .First(a => a.Name == "Relational:TableName").Value.ToString();
+        
+      _context.Database.ExecuteSqlRaw(
+        $"DBCC CHECKIDENT('{tableName}', RESEED, {newReseedValue})");
     }
 
     protected Ccg GetCcgByName(string CcgName)
@@ -139,20 +119,6 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetFemaleGenderTypeId()
-    {
-      try
-      {
-        return _context
-          .GenderTypes
-            .Single(gender => gender.Name == GENDER_TYPE_NAME_FEMALE).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find Gender Type female in GenderTypes", ex);
-      }
-    }
-
     protected GenderType GetGenderTypeById(int id)
     {
       try
@@ -187,20 +153,6 @@ namespace Mep.Business.Migrations.Seeds
       {
         throw new Exception(
           $"Cannot find a GP Practice with the name {gpPracticeName} in GpPractices", ex);
-      }
-    }
-
-    protected int GetMaleGenderTypeId()
-    {
-      try
-      {
-        return _context
-          .GenderTypes
-            .Single(gender => gender.Name == GENDER_TYPE_NAME_MALE).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find Gender Type male in GenderTypes", ex);
       }
     }
 
@@ -244,20 +196,6 @@ namespace Mep.Business.Migrations.Seeds
       catch (Exception ex)
       {
         throw new Exception($"Cannot find an organisation with the Name {name} in Organisations", ex);
-      }
-    }
-
-    protected int GetOtherGenderTypeId()
-    {
-      try
-      {
-        return _context
-          .GenderTypes
-            .Single(gender => gender.Name == GENDER_TYPE_NAME_OTHER).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new Exception("Cannot find Gender Type other in GenderTypes", ex);
       }
     }
 
@@ -464,7 +402,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       if (_systemAdminUser == null)
       {
-        _systemAdminUser = GetUserByIdentifier(SYSTEM_ADMIN_IDENTITY_SERVER_IDENTIFIER);
+        _systemAdminUser = GetUserByIdentifier(UserSeeder.IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN);
       }
       return _systemAdminUser;
     }
@@ -496,7 +434,7 @@ namespace Mep.Business.Migrations.Seeds
           $"Cannot find a user with the Identity Server Identifier {identifier} in Users", ex);
       }
     }
-    protected void PopulateActiveAndModifiedWithSystemUser(TEntity entity)
+    protected void PopulateActiveAndModifiedWithSystemUser(BaseEntity entity)
     {
       entity.IsActive = true;
       entity.ModifiedAt = _now;
@@ -509,13 +447,6 @@ namespace Mep.Business.Migrations.Seeds
       (entity as NameDescription).Name = name;
       (entity as NameDescription).Description = description;
       PopulateActiveAndModifiedWithSystemUser(entity);
-    }
-
-    internal void DeleteSeeds()
-    {
-      _context.Set<TEntity>().RemoveRange(
-        _context.Set<TEntity>().ToList()
-      );
     }
 
   }

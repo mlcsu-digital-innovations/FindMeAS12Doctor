@@ -50,7 +50,7 @@ namespace Mep.Business.Migrations.Seeds
       DoctorStatus doctorStatus;
 
       if ((doctorStatus = _context.DoctorStatuses
-        .SingleOrDefault(g => g.UserId == GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
+        .SingleOrDefault(g => g.UserId == GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
       {
         doctorStatus = new DoctorStatus();
         _context.Add(doctorStatus);
@@ -89,7 +89,7 @@ namespace Mep.Business.Migrations.Seeds
 
       doctorStatus.Latitude = LATITUDE_DOCTOR_FEMALE;
       doctorStatus.Longitude = LONGITUDE_DOCTOR_FEMALE;
-      doctorStatus.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
+      doctorStatus.UserId = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id;
 
       PopulateActiveAndModifiedWithSystemUser(doctorStatus);
     }

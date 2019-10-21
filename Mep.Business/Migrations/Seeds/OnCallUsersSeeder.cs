@@ -20,13 +20,13 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddOrUpdate(
-        USER_DISPLAY_NAME_DOCTOR_FEMALE,
+        UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
         START_DOCTOR_FEMALE,
         END_DOCTOR_FEMALE
       );
 
       AddOrUpdate(
-        USER_DISPLAY_NAME_DOCTOR_MALE,
+        UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
         START_DOCTOR_MALE,
         END_DOCTOR_MALE
       );

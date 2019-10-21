@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Audit.Core;
 using Audit.EntityFramework;
 using Mep.Data.Entities;

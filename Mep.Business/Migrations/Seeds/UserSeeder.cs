@@ -6,49 +6,74 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class UserSeeder : SeederBase<User>
   {
+    #region Constants
+    internal const string DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
+    internal const string DISPLAY_NAME_AMHP_MALE = "Amhp Male";
+    internal const string DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
+    internal const string DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
+    internal const string DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
+    internal const string DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
+    internal const string DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";    
+    internal const string DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
+    internal const string DISPLAY_NAME_FINANCE_MALE = "Finance Male";
+    internal readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_12 =
+      new DateTimeOffset(2025, 1, 1,
+                         0, 00, 00, 00, DateTimeOffset.Now.Offset);   
+    internal const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = "bf673270-2538-4e59-9d26-5b4808fd9ef6";                          
+
+    #endregion
     internal void SeedData()
     {
       AddUpdateUserDoctorWithDefaults(
-        USER_DISPLAY_NAME_DOCTOR_FEMALE, 
-        GetGenderTypeFemale().Id);
+        DISPLAY_NAME_DOCTOR_FEMALE, 
+        GetGenderTypeFemale().Id
+      );
 
       AddUpdateUserDoctorWithDefaults(
-        USER_DISPLAY_NAME_DOCTOR_MALE,
-        GetGenderTypeMale().Id);
+        DISPLAY_NAME_DOCTOR_MALE,
+        GetGenderTypeMale().Id
+      );
     
       AddUpdateUserDoctorWithDefaults(
-        USER_DISPLAY_NAME_DOCTOR_ON_CALL, 
-        GetGenderTypeFemale().Id);
+        DISPLAY_NAME_DOCTOR_ON_CALL, 
+        GetGenderTypeFemale().Id
+      );
 
       AddUpdateUserDoctorWithDefaults(
-        USER_DISPLAY_NAME_DOCTOR_S12_APPROVED,
+        DISPLAY_NAME_DOCTOR_S12_APPROVED,
         GetGenderTypeMale().Id,
         section12ApprovalStatusId: GetSection12ApprovalStatusApproved().Id,
-        section12ExpiryDate: DateTimeOffset.Now.AddYears(10));
+        section12ExpiryDate: SECTION_12_EXPIRY_DATE_DOCTOR_12
+      );
 
       AddUpdateUserDoctorWithDefaults(
-        USER_DISPLAY_NAME_DOCTOR_PATIENTS_GP,
-        GetGenderTypeMale().Id);
+        DISPLAY_NAME_DOCTOR_PATIENTS_GP,
+        GetGenderTypeMale().Id
+      );
 
       AddUpdateUserWithDefaults(
-        USER_DISPLAY_NAME_FINANCE_FEMALE,
+        DISPLAY_NAME_FINANCE_FEMALE,
         GetGenderTypeFemale().Id,
-        profileTypeId: GetProfileTypeFinance().Id);     
+        profileTypeId: GetProfileTypeFinance().Id
+      );     
 
       AddUpdateUserWithDefaults(
-        USER_DISPLAY_NAME_FINANCE_MALE,
+        DISPLAY_NAME_FINANCE_MALE,
         GetGenderTypeMale().Id,
-        profileTypeId: GetProfileTypeFinance().Id);
+        profileTypeId: GetProfileTypeFinance().Id
+      );
 
       AddUpdateUserWithDefaults(
-        USER_DISPLAY_NAME_AMHP_FEMALE, 
+        DISPLAY_NAME_AMHP_FEMALE, 
         GetGenderTypeFemale().Id, 
-        profileTypeId: GetProfileTypeAmhp().Id);      
+        profileTypeId: GetProfileTypeAmhp().Id
+      );      
 
       AddUpdateUserWithDefaults(
-        USER_DISPLAY_NAME_AMHP_MALE, 
+        DISPLAY_NAME_AMHP_MALE, 
         GetGenderTypeMale().Id, 
-        profileTypeId: GetProfileTypeAmhp().Id);
+        profileTypeId: GetProfileTypeAmhp().Id
+      );
     }
 
     private User AddUpdateUserWithDefaults(
@@ -101,5 +126,18 @@ namespace Mep.Business.Migrations.Seeds
 
       return user;
     }      
+     
+    /// <summary>
+    /// Deletes all seeds except for Id = 1 which is required for the system account
+    /// </summary>
+    internal override void DeleteSeeds()
+    {
+      _context.Users.RemoveRange(
+        _context.Users.Where(u => u.Id != 1).ToList()
+      );
+
+      ResetIdentity(1);
+    }
   }
+  
 }

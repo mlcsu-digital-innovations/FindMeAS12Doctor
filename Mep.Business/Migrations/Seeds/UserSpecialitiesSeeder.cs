@@ -10,7 +10,7 @@ namespace Mep.Business.Migrations.Seeds
     {
       AddOrUpdate(
         Models.Speciality.SECTION_12,
-        USER_DISPLAY_NAME_DOCTOR_S12_APPROVED
+        UserSeeder.DISPLAY_NAME_DOCTOR_S12_APPROVED
       );
     }
 

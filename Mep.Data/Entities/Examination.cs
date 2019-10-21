@@ -41,7 +41,7 @@ namespace Mep.Data.Entities
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public Speciality Speciality { get; set; }
-    public int SpecialityId { get; set; }
+    public int? SpecialityId { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
     public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }

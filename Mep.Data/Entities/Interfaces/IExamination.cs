@@ -21,7 +21,7 @@ namespace Mep.Data.Entities
     int? PreferredDoctorGenderTypeId { get; set; }    
     int ReferralId { get; set; }
     DateTimeOffset? ScheduledTime { get; set; }
-    int SpecialityId { get; set; }
+    int? SpecialityId { get; set; }
     int? UnsuccessfulExaminationTypeId { get; set; }
   }
 }

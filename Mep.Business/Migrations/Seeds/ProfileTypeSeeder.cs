@@ -1,3 +1,4 @@
+using System.Linq;
 using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
@@ -34,6 +35,18 @@ namespace Mep.Business.Migrations.Seeds
         NAME_FINANCE,
         DESCRIPTION_FINANCE
       );
+    }
+
+    /// <summary>
+    /// Deletes all seeds except for Id = 1 which is required for the system account
+    /// </summary>
+    internal override void DeleteSeeds()
+    {
+      _context.ProfileTypes.RemoveRange(
+        _context.ProfileTypes.Where(u => u.Id != 1).ToList()
+      );
+
+      ResetIdentity(1);
     }
   }
 }

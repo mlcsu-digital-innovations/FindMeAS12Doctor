@@ -16,7 +16,11 @@ namespace Mep.Api.Extensions
       All = 1,
       AllNoGpPractice = 2,
       Test = 3,
-      RemoveTest = 4
+      RemoveTest = 4,
+      AllNoGpPracticeOrCcgs = 5,
+      RemoveAll = 6,
+      RemoveAllNoGpPractice = 7,
+      RemoveAllNoGpPracticeOrCcgs = 8
     }
 
     public static IWebHost SeedData(this IWebHost host, SeedType seedType)
@@ -32,20 +36,36 @@ namespace Mep.Api.Extensions
       // now that the database is up to date. Let's seed
       switch (seedType)
       {
-        case SeedType.AllNoGpPractice:
-          new Seeds(context, config).SeedAll(noGpPractices: true);
+        case SeedType.All:
+          new Seeds(context, config).SeedAll(noGpPractices: false, noCcgs: false);
           break;
+
+        case SeedType.AllNoGpPractice:
+          new Seeds(context, config).SeedAll(noGpPractices: true, noCcgs: false);
+          break;
+
+        case SeedType.AllNoGpPracticeOrCcgs:
+          new Seeds(context, config).SeedAll(noGpPractices: true, noCcgs: true);
+          break;          
 
         case SeedType.Test:
           new Seeds(context, config).SeedTestAll();
           break;
 
-        case SeedType.RemoveTest:
-          new Seeds(context, config).RemoveSeedTestAll();
+        case SeedType.RemoveAll:
+          new Seeds(context, config).RemoveSeedAll(noGpPractices: false, noCcgs: false);
           break;
 
-        default:
-          new Seeds(context, config).SeedAll(noGpPractices: false);
+        case SeedType.RemoveAllNoGpPractice:
+          new Seeds(context, config).RemoveSeedAll(noGpPractices: true, noCcgs: false);
+          break;
+
+        case SeedType.RemoveAllNoGpPracticeOrCcgs:
+          new Seeds(context, config).RemoveSeedAll(noGpPractices: true, noCcgs: true);
+          break;             
+
+        case SeedType.RemoveTest:
+          new Seeds(context, config).RemoveSeedTestAll();
           break;
       }
 

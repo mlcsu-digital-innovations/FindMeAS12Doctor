@@ -1,150 +1,118 @@
 using Mep.Data.Entities;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Mep.Business.Migrations.Seeds
 {
   internal class ReferralSeeder : SeederBase<Referral>
   {
-  //   internal void SeedData()
-  //   {
-  //     Referral referral;
+    #region Constants
+    internal const string ALLOCATING_ADDRESS1 = "Baldwins Gate Filling Station";
+    internal const string ALLOCATING_ADDRESS2 = "Newcastle Road";
+    internal const string ALLOCATING_ADDRESS3 = "Baldwin's Gate";
+    internal const string ALLOCATING_ADDRESS4 = "Newcastle";
+    internal const string ALLOCATING_MEETING_ARRGANEMENT_COMMENT = "Allocating Meeting Arangement Comment";
+    internal readonly DateTimeOffset ALLOCATING_MUST_BE_COMPLETED_BY =
+      new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
+                         15, 00, 00, 00, DateTimeOffset.Now.Offset);
+    internal const string ALLOCATING_POSTCODE = "ST5 5DA";
+    #endregion
 
-  //     // referral with a current examination with no allocated doctors or notification responses
+    private readonly ExaminationSeeder _examinationSeeder = new ExaminationSeeder();
+    private readonly UserExaminationNotificationSeeder _userExaminationNotificationSeeder = 
+      new UserExaminationNotificationSeeder();
 
-  //     // referral with a previous examination
+    /// <summary>
+    /// Deletes all the following seeds because updating is too difficult:
+    /// UserExaminationNotification
+    /// Examination
+    /// Referral
+    /// </summary>
+    internal void SeedData()
+    {
 
-  //     if ((referral = _context
-  //       .Referrals
-  //         .SingleOrDefault(g => g.PatientId ==
-  //           GetPatientIdByNhsNumber(PatientSeeder.NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE))) == null)
-  //     {
-  //       referral = new Referral();
-  //       _context.Add(referral);
-  //     }
-  //     referral.CreatedAt = _now;
-  //     referral.CreatedByUser = GetSystemAdminUser();
-  //     referral.IsActive = true;
-  //     referral.IsPlannedExamination = true;
-  //     referral.LeadAmhpUserId =
-  //       GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
-  //     referral.ModifiedAt = _now;
-  //     referral.ModifiedByUser = GetSystemAdminUser();
-  //     referral.PatientId =
-  //       GetPatientIdByNhsNumber(PatientSeeder.NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE);
-  //     referral.ReferralStatusId = GetReferralStatus(Models.ReferralStatus.NEW_REFERRAL).Id;
+      _userExaminationNotificationSeeder.DeleteSeeds();
+      _examinationSeeder.DeleteSeeds();
+      DeleteSeeds();
 
-  //     // referral with no examinations
+      AddNewReferral();
 
-  //     if ((referral = _context
-  //       .Referrals
-  //         .SingleOrDefault(g => g.PatientId ==
-  //           GetPatientIdByNhsNumber(PatientSeeder.NHS_NUMBER_POSTCODE_NORTH_STAFFORDSHIRE))) == null)
-  //     {
-  //       referral = new Referral();
-  //       _context.Add(referral);
-  //     }
-  //     referral.CreatedAt = _now;
-  //     referral.CreatedByUser = GetSystemAdminUser();
-  //     referral.IsActive = true;
-  //     referral.IsPlannedExamination = true;
-  //     referral.LeadAmhpUserId =
-  //       GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
-  //     referral.ModifiedAt = _now;
-  //     referral.ModifiedByUser = GetSystemAdminUser();
-  //     referral.PatientId =
-  //       GetPatientIdByNhsNumber(PatientSeeder.NHS_NUMBER_POSTCODE_NORTH_STAFFORDSHIRE);
-  //     referral.ReferralStatusId = GetReferralStatus(Models.ReferralStatus.NEW_REFERRAL).Id;
+      AddAllocatingReferral();
 
-  //     // referral with both current and previous examinations
+    }
 
-  //     if ((referral = _context
-  //       .Referrals
-  //         .SingleOrDefault(g => g.PatientId ==
-  //           GetPatientIdByNhsNumber(PatientSeeder.NHS_NUMBER_POTTERIES_MEDICAL_CENTRE))) == null)
-  //     {
-  //       referral = new Referral();
-  //       _context.Add(referral);
-  //     }
-  //     referral.CreatedAt = _now;
-  //     referral.CreatedByUser = GetSystemAdminUser();
-  //     referral.IsActive = true;
-  //     referral.IsPlannedExamination = true;
-  //     referral.LeadAmhpUserId =
-  //       GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
-  //     referral.ModifiedAt = _now;
-  //     referral.ModifiedByUser = GetSystemAdminUser();
-  //     referral.PatientId =
-  //       GetPatientIdByNhsNumber(PatientSeeder.NHS_NUMBER_POTTERIES_MEDICAL_CENTRE);
-  //     referral.ReferralStatusId = GetReferralStatus(Models.ReferralStatus.NEW_REFERRAL).Id;
+    private void AddAllocatingReferral()
+    {
+      Referral refAllocating = Add(
+        alternativeIdentifier: PatientSeeder.ALTERNATIVE_IDENTIFIER_CCG_STOKE_ON_TRENT,
+        createdAt: _now,
+        leadAmhpName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
+        referralStatusId: Models.ReferralStatus.ALLOCATING
+      );
+      Examination refAllocatingExam = _examinationSeeder.Create(
+        address1: ALLOCATING_ADDRESS1,
+        address2: ALLOCATING_ADDRESS2,
+        address3: ALLOCATING_ADDRESS3,
+        address4: ALLOCATING_ADDRESS4,
+        ccgName: CcgSeeder.STOKE_ON_TRENT,
+        createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
+        meetingArrangementComment: ALLOCATING_MEETING_ARRGANEMENT_COMMENT,
+        mustBeCompletedBy: ALLOCATING_MUST_BE_COMPLETED_BY,
+        postcode: ALLOCATING_POSTCODE
+      );
+      UserExaminationNotification refAllocatingExamUenAmhp = _userExaminationNotificationSeeder.Create(
+          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          userName: UserSeeder.DISPLAY_NAME_AMHP_MALE
+      );
+      refAllocatingExam.UserExaminationNotifications = 
+        new List<UserExaminationNotification> {
+          refAllocatingExamUenAmhp
+      };
+      refAllocating.Examinations = new List<Examination>
+      {
+        refAllocatingExam
+      };
+    }
 
-  //     // referral with current examination and allocated doctors
+    private void AddNewReferral()
+    {
+      Add(
+        createdAt: _now,
+        leadAmhpName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
+        nhsNumber: PatientSeeder.NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE,
+        referralStatusId: Models.ReferralStatus.NEW
+      );
+    }
 
-  //     if ((referral = _context
-  //       .Referrals
-  //         .SingleOrDefault(g => g.PatientId ==
-  //           GetPatientIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_POSTCODE_STOKE_ON_TRENT)))
-  //             == null)
-  //     {
-  //       referral = new Referral();
-  //       _context.Add(referral);
-  //     }
-  //     referral.CreatedAt = _now;
-  //     referral.CreatedByUser = GetSystemAdminUser();
-  //     referral.IsActive = true;
-  //     referral.IsPlannedExamination = true;
-  //     referral.LeadAmhpUserId =
-  //       GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
-  //     referral.ModifiedAt = _now;
-  //     referral.ModifiedByUser = GetSystemAdminUser();
-  //     referral.PatientId =
-  //       GetPatientIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_POSTCODE_STOKE_ON_TRENT);
-  //     referral.ReferralStatusId = GetReferralStatus(Models.ReferralStatus.NEW_REFERRAL).Id;
+    private Referral Add(
+        DateTimeOffset createdAt,
+        string leadAmhpName,
+        int referralStatusId,
+        bool isPlannedExamination = false,
+        long? nhsNumber = null,
+        string alternativeIdentifier = null)
+    {
 
-  //     // referral with current examination and notification responses
+      Referral referral = new Referral();
+      _context.Add(referral);
 
-  //     if ((referral = _context
-  //       .Referrals
-  //         .SingleOrDefault(g => g.PatientId ==
-  //           GetPatientIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_STAFFORD_MEDICAL_CENTRE)))
-  //             == null)
-  //     {
-  //       referral = new Referral();
-  //       _context.Add(referral);
-  //     }
-  //     referral.CreatedAt = _now;
-  //     referral.CreatedByUser = GetSystemAdminUser();
-  //     referral.IsActive = true;
-  //     referral.IsPlannedExamination = true;
-  //     referral.LeadAmhpUserId =
-  //       GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_MALE).Id;
-  //     referral.ModifiedAt = _now;
-  //     referral.ModifiedByUser = GetSystemAdminUser();
-  //     referral.PatientId =
-  //       GetPatientIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_STAFFORD_MEDICAL_CENTRE);
-  //     referral.ReferralStatusId = GetReferralStatus(Models.ReferralStatus.NEW_REFERRAL).Id;
+      if (nhsNumber.HasValue)
+      {
+        referral.PatientId = GetPatientIdByNhsNumber((long)nhsNumber);
+      }
+      else
+      {
+        referral.PatientId = GetPatientIdByAlternativeIdentifier(alternativeIdentifier);
+      }
 
-  //     // referral with current examination and notification responses and allocated doctors
+      referral.CreatedAt = createdAt;
+      referral.CreatedByUser = GetSystemAdminUser();
+      referral.IsPlannedExamination = isPlannedExamination;
+      referral.LeadAmhpUserId = GetUserByDisplayName(leadAmhpName).Id;
+      referral.ReferralStatusId = GetReferralStatus(referralStatusId).Id;
+      PopulateActiveAndModifiedWithSystemUser(referral);
 
-  //     if ((referral = _context
-  //       .Referrals
-  //         .SingleOrDefault(g => g.PatientId ==
-  //           GetPatientIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_CCG_STOKE_ON_TRENT)))
-  //             == null)
-  //     {
-  //       referral = new Referral();
-  //       _context.Add(referral);
-  //     }
-  //     referral.CreatedAt = _now;
-  //     referral.CreatedByUser = GetSystemAdminUser();
-  //     referral.IsActive = true;
-  //     referral.IsPlannedExamination = true;
-  //     referral.LeadAmhpUserId =
-  //       GetUserByDisplayName(USER_DISPLAY_NAME_AMHP_FEMALE).Id;
-  //     referral.ModifiedAt = _now;
-  //     referral.ModifiedByUser = GetSystemAdminUser();
-  //     referral.PatientId =
-  //       GetPatientIdByAlternativeIdentifier(PatientSeeder.ALTERNATIVE_IDENTIFIER_CCG_STOKE_ON_TRENT);
-  //     referral.ReferralStatusId = GetReferralStatus(Models.ReferralStatus.NEW_REFERRAL).Id;
-  //   }
+      return referral;
+    }
   }
 }

@@ -26,11 +26,31 @@ namespace Mep.Api
           Log.Information("Seeding database without GP practice data or test data");
           host.SeedData(WebHostExtenstions.SeedType.AllNoGpPractice);
         }
+        else if (args.Length > 0 && args[0] == "/seednogppracticeorccg")
+        {
+          Log.Information("Seeding database without GP practice or CCG data or test data");
+          host.SeedData(WebHostExtenstions.SeedType.AllNoGpPracticeOrCcgs);
+        }        
         else if (args.Length > 0 && args[0] == "/seedtest")
         {
           Log.Information("Seeding database with test data");
           host.SeedData(WebHostExtenstions.SeedType.Test);
         }
+        else if (args.Length > 0 && args[0] == "/removeseed")
+        {
+          Log.Information("Removing all seed data from database");
+          host.SeedData(WebHostExtenstions.SeedType.RemoveAll);
+        }
+        else if (args.Length > 0 && args[0] == "/removeseedexceptgppractice")
+        {
+          Log.Information("Removing all seed data except GP practices from database");
+          host.SeedData(WebHostExtenstions.SeedType.RemoveAllNoGpPractice);
+        }
+        else if (args.Length > 0 && args[0] == "/removeseedexceptgppracticeandccg")
+        {
+          Log.Information("Removing all seed data except GP practices and CCGs from database");
+          host.SeedData(WebHostExtenstions.SeedType.RemoveAllNoGpPracticeOrCcgs);
+        }           
         else if (args.Length > 0 && args[0] == "/removeseedtest")
         {
           Log.Information("Removing test data from database");
@@ -43,10 +63,16 @@ namespace Mep.Api
             args[0]);
           Console.WriteLine(
             "Available arguments:" + Environment.NewLine +
-            "/seed: Seed database without test data" + Environment.NewLine +
-            "/seednogppractice: Seed database without GP practice data or test data" + Environment.NewLine +
-            "/seedtest: Seed database with test data" + Environment.NewLine +
-            "/removeseedtest: Removing test data from database"
+            "  Adding Seeds:" + Environment.NewLine +
+            "    /seed: Seed database without Test data" + Environment.NewLine +
+            "    /seednogppractice: Seed database without GP practice data or Test data" + Environment.NewLine +
+            "    /seednogppracticeorccg Seed database without GP practice or CCG data or Test data" + Environment.NewLine +
+            "    /seedtest: Seed database with Test data" + Environment.NewLine +
+            "  Removing Seeds:" + Environment.NewLine +
+            "    /removeseed: Remove all seed data from database" + Environment.NewLine +
+            "    /removeseedexceptgppractice: Remove all seed data except GP practices from database" + Environment.NewLine +
+            "    /removeseedexceptgppracticeandccg: Remove all seed data except GP practices and CCGs from database" + Environment.NewLine +
+            "    /removeseedtest: Remove Test data from database"
         );
         }
         else

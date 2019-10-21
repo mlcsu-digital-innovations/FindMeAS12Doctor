@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using Mep.Data.Entities;
 using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
@@ -13,10 +10,13 @@ namespace Mep.Business.Migrations.Seeds
       _context = context;
     }
 
-    public void SeedAll(bool noGpPractices)
+    public void SeedAll(bool noGpPractices, bool noCcgs)
     {
-      new CcgSeeder().SeedData();
-      _context.SaveChanges();
+      if (!noCcgs)
+      {
+        new CcgSeeder().SeedData();
+        _context.SaveChanges();
+      }
 
       if (!noGpPractices)
       {
@@ -33,6 +33,8 @@ namespace Mep.Business.Migrations.Seeds
       new GenderTypeSeeder().SeedData();
 
       new NonPaymentLocationTypesSeeder().SeedData();
+
+      new NotificationTextsSeeder().SeedData();      
 
       new PaymentMethodTypesSeeder().SeedData();
 
@@ -51,6 +53,51 @@ namespace Mep.Business.Migrations.Seeds
       _context.SaveChanges();
     }
 
+    public void RemoveSeedAll(bool noGpPractices, bool noCcgs)
+    {
+      RemoveSeedTestAll();
+
+      if (!noCcgs)
+      {
+        new CcgSeeder().DeleteSeeds();
+        _context.SaveChanges();
+      }
+
+      if (!noGpPractices)
+      {
+        new GpPracticeSeeder().DeleteSeeds();
+        _context.SaveChanges();
+      }
+
+      new ClaimStatusesSeeder().DeleteSeeds();
+
+      new ContactDetailTypesSeeder().DeleteSeeds();
+
+      new ExaminationDetailTypeSeeder().DeleteSeeds();
+
+      new GenderTypeSeeder().DeleteSeeds();
+
+      new NonPaymentLocationTypesSeeder().DeleteSeeds();
+
+      new NotificationTextsSeeder().DeleteSeeds();      
+
+      new PaymentMethodTypesSeeder().DeleteSeeds();
+
+      new PaymentRuleSetsSeeder().DeleteSeeds();
+
+      new ProfileTypeSeeder().DeleteSeeds();
+
+      new ReferralStatusSeeder().DeleteSeeds();
+
+      new Section12ApprovalStatusesSeeder().DeleteSeeds();
+
+      new SpecialitySeeder().DeleteSeeds();
+
+      new UnsuccessfulExaminationTypesSeeder().DeleteSeeds();
+
+      _context.SaveChanges();
+    }    
+
     public void SeedTestAll()
     {
       new OrganisationSeeder().SeedData();
@@ -65,20 +112,8 @@ namespace Mep.Business.Migrations.Seeds
       new PatientSeeder().SeedData();
       _context.SaveChanges();
 
-      new NotificationTextsSeeder().SeedData();
+      new ReferralSeeder().SeedData();
       _context.SaveChanges();
-
-      // new ReferralSeeder().SeedData();
-      // _context.SaveChanges();
-
-      // new ExaminationSeeder().SeedData();
-      // _context.SaveChanges();
-
-      // new UserExaminationNotificationSeeder().SeedData();
-      // _context.SaveChanges();
-
-      // new UserExaminationClaimsSeeder().SeedData();
-      // _context.SaveChanges();
 
       new BankDetailsSeeder().SeedData();
       _context.SaveChanges();
@@ -127,17 +162,14 @@ namespace Mep.Business.Migrations.Seeds
 
       new UserExaminationClaimsSeeder().DeleteSeeds();
       _context.SaveChanges();
-      
+
       new UserExaminationNotificationSeeder().DeleteSeeds();
       _context.SaveChanges();
-      
+
       new ExaminationSeeder().DeleteSeeds();
       _context.SaveChanges();
 
       new ReferralSeeder().DeleteSeeds();
-      _context.SaveChanges();
-
-      new NotificationTextsSeeder().DeleteSeeds();
       _context.SaveChanges();
 
       new PatientSeeder().DeleteSeeds();
@@ -145,15 +177,11 @@ namespace Mep.Business.Migrations.Seeds
 
       new DoctorStatusesSeeder().DeleteSeeds();
       _context.SaveChanges();
-      
-      _context.Set<User>().RemoveRange(
-        _context.Set<User>().Where(u => u.Id != 1).ToList()
-      );
-      _context.SaveChanges();      
 
-      _context.Set<Organisation>().RemoveRange(
-        _context.Set<Organisation>().Where(u => u.Id != 1).ToList()
-      );
+      new UserSeeder().DeleteSeeds();
+      _context.SaveChanges();
+
+      new OrganisationSeeder().DeleteSeeds();
       _context.SaveChanges();
     }
   }

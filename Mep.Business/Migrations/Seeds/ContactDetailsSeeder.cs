@@ -25,7 +25,7 @@ namespace Mep.Business.Migrations.Seeds
             .Where(c => c.CcgId == GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id)
             .Where(c => c.ContactDetailTypeId == GetContactDetailTypeWork().Id)
             .SingleOrDefault(c => c.UserId == 
-              GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
+              GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
       {
         contactDetail = new ContactDetail();
         _context.Add(contactDetail);
@@ -42,14 +42,14 @@ namespace Mep.Business.Migrations.Seeds
       contactDetail.Postcode = POSTCODE_DOCTOR_FEMALE;
       contactDetail.TelephoneNumber = TELEPHONE_NUMBER_DOCTOR_FEMALE;
       contactDetail.Town = TOWN_DOCTOR_FEMALE;
-      contactDetail.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
+      contactDetail.UserId = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id;
       PopulateActiveAndModifiedWithSystemUser(contactDetail);
 
       if ((contactDetail = _context.ContactDetails
             .Where(c => c.ContactDetailTypeId == GetContactDetailTypeWork().Id)
             .Where(c => c.CcgId == GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id)
             .SingleOrDefault(c => c.UserId == 
-              GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
+              GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
       {
         contactDetail = new ContactDetail();
         _context.Add(contactDetail);
@@ -66,7 +66,7 @@ namespace Mep.Business.Migrations.Seeds
       contactDetail.Postcode = POSTCODE_DOCTOR_FEMALE;
       contactDetail.TelephoneNumber = TELEPHONE_NUMBER_DOCTOR_FEMALE;
       contactDetail.Town = TOWN_DOCTOR_FEMALE;
-      contactDetail.UserId = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE).Id;
+      contactDetail.UserId = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id;
       PopulateActiveAndModifiedWithSystemUser(contactDetail);      
     }
   }

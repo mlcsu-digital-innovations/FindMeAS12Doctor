@@ -36,7 +36,7 @@ namespace Mep.Business.Migrations.Seeds
       bankDetail.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       bankDetail.NameOnAccount = NAME_ON_ACCOUNT_DOCTOR_FEMALE;
       bankDetail.SortCode = SORT_CODE_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE;
-      bankDetail.User = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+      bankDetail.User = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE);
       bankDetail.VsrNumber = VRS_NUMBER_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE;
       PopulateActiveAndModifiedWithSystemUser(bankDetail);
 
@@ -51,7 +51,7 @@ namespace Mep.Business.Migrations.Seeds
       bankDetail.CcgId = GetCcgByName(CcgSeeder.STOKE_ON_TRENT).Id;
       bankDetail.NameOnAccount = NAME_ON_ACCOUNT_DOCTOR_FEMALE;
       bankDetail.SortCode = SORT_CODE_DOCTOR_FEMALE_STOKE_ON_TRENT;
-      bankDetail.User = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+      bankDetail.User = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE);
       bankDetail.VsrNumber = VRS_NUMBER_DOCTOR_FEMALE_STOKE_ON_TRENT;
       PopulateActiveAndModifiedWithSystemUser(bankDetail);
       
@@ -66,7 +66,7 @@ namespace Mep.Business.Migrations.Seeds
       bankDetail.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       bankDetail.NameOnAccount = NAME_ON_ACCOUNT_DOCTOR_MALE;
       bankDetail.SortCode = SORT_CODE_DOCTOR_MALE_NORTH_STAFFORDSHIRE;
-      bankDetail.User = GetUserByDisplayName(USER_DISPLAY_NAME_DOCTOR_MALE);
+      bankDetail.User = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_MALE);
       bankDetail.VsrNumber = VRS_NUMBER_DOCTOR_MALE_NORTH_STAFFORDSHIRE;
       PopulateActiveAndModifiedWithSystemUser(bankDetail);            
     }

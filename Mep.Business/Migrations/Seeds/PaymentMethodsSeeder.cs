@@ -10,13 +10,13 @@ namespace Mep.Business.Migrations.Seeds
       AddOrUpdate(
         CcgSeeder.NORTH_STAFFORDSHIRE,
         Models.PaymentMethodType.BACS,
-        USER_DISPLAY_NAME_DOCTOR_FEMALE
+        UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
       );
 
       AddOrUpdate(
         CcgSeeder.STOKE_ON_TRENT,
         Models.PaymentMethodType.CHEQUE,
-        USER_DISPLAY_NAME_DOCTOR_MALE
+        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
       );      
 
     }

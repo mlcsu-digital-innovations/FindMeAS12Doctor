@@ -39,5 +39,17 @@ namespace Mep.Business.Migrations.Seeds
         organisation, name, description
       );
     }
+
+    /// <summary>
+    /// Deletes all seeds except for Id = 1 which is required for the system account
+    /// </summary>
+    internal override void DeleteSeeds()
+    {
+      _context.Organisations.RemoveRange(
+        _context.Organisations.Where(u => u.Id != 1).ToList()
+      );
+
+      ResetIdentity(1);
+    }
   }
 }
