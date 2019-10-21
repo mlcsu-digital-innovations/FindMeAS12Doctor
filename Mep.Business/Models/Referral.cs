@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mep.Business.Models.Interfaces;
 
 namespace Mep.Business.Models
 {
