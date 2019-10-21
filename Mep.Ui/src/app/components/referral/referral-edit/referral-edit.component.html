@@ -105,6 +105,53 @@
                   </div>
                 </div>
               </div>
+              <!-- GP Practice -->
+              <div class="form-row">
+                <div class="col-md-8 mb-2">
+                  <label for="gpPractice">GP Practice</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="gpPractice"
+                    #gpPractice
+                    [class.is-invalid]="hasGpSearchFailed"
+                    formControlName="gpPractice"
+                    [ngbTypeahead]="GpSearch"
+                    [resultFormatter]="FormatTypeAheadResults"
+                    [inputFormatter]="FormatTypeAheadResults"
+                  />
+                </div>
+                <div class="col-md-2 centered-div">
+                  <div class="checkmark-content vcenter">
+                    <label class="container">
+                      <input
+                        class="form-control"
+                        type="checkbox"
+                        value=""
+                        id="unknownGpPractice"
+                        formControlName="unknownGpPractice"
+                        (change)="ToggleGpPracticeUnknown($event)"
+                      />
+                      <span class="checkmark"></span>
+                      Unknown
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- GP Practice Errors-->
+              <div class="form-row" *ngIf="isGpFieldsShown">
+                <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
+                  <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
+                    <span>* GP practice, Postcode or CCG Required </span>
+                  </div>
+                </div>
+                <div class="col-md-8 mb-2">
+                  <span *ngIf="isGpSearching">searching...</span>
+                  <div class="invalid-field" *ngIf="hasGpSearchFailed">
+                    Sorry, suggestions could not be loaded.
+                  </div>
+                </div>
+              </div>
           </form>
         </div>
       </div>

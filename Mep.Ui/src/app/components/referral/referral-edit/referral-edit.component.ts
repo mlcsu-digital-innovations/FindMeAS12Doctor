@@ -1,5 +1,6 @@
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GpPracticeListService } from 'src/app/services/gp-practice-list/gp-practice-list.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from 'src/app/helpers/nhs-number.validator';
 import { Observable, of, throwError } from 'rxjs';
@@ -10,10 +11,10 @@ import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
 import { Referral } from 'src/app/interfaces/referral';
-import { ReferralService } from 'src/app/services/referral/referral.service';
-import { switchMap, map, catchError } from 'rxjs/operators';
-import { ToastService } from 'src/app/services/toast/toast.service';
 import { ReferralEdit } from 'src/app/interfaces/referralEdit';
+import { ReferralService } from 'src/app/services/referral/referral.service';
+import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-referral-edit',
@@ -22,8 +23,10 @@ import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 })
 export class ReferralEditComponent implements OnInit {
 
+  hasGpSearchFailed: boolean;
   initialReferralDetails: ReferralEdit;
   isGpFieldsShown: boolean;
+  isGpSearching: boolean;
   isPatientIdValidated: boolean;
   isSearchingForPatient: boolean;
   modalResult: PatientSearchResult;
@@ -38,6 +41,7 @@ export class ReferralEditComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private gpPracticeListService: GpPracticeListService,
     private modalService: NgbModal,
     private patientSearchService: PatientSearchService,
     private referralService: ReferralService,
@@ -90,6 +94,8 @@ export class ReferralEditComponent implements OnInit {
         '',
         [Validators.maxLength(200), Validators.pattern('.*[0-9].*')]
       ],
+      gpPractice: [''],
+      unknownGpPractice: false,
     });
 
     this.patientDetails = {} as Patient;
@@ -133,12 +139,20 @@ export class ReferralEditComponent implements OnInit {
       alternativeIdentifierFieldInValid;
   }
 
+  FormatTypeAheadResults(value: any): string {
+    return value.resultText || '';
+  }
+
   get alternativeIdentifier() {
     return this.referralForm.controls.alternativeIdentifier.value;
   }
 
   get alternativeIdentifierField() {
     return this.referralForm.controls.alternativeIdentifier;
+  }
+
+  get gpPracticeField() {
+    return this.referralForm.controls.gpPractice;
   }
 
   get nhsNumber(): string {
@@ -148,6 +162,23 @@ export class ReferralEditComponent implements OnInit {
   get nhsNumberField() {
     return this.referralForm.controls.nhsNumber;
   }
+
+  GpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isGpSearching = true)),
+      switchMap(term =>
+        this.gpPracticeListService.GetGpPracticeList(term).pipe(
+          tap(() => (this.hasGpSearchFailed = false)),
+          catchError(() => {
+            this.hasGpSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isGpSearching = false))
+    )
 
   HasInvalidAlternativeIdentifier(): boolean {
     return (
@@ -192,9 +223,24 @@ export class ReferralEditComponent implements OnInit {
     this.nhsNumberField.setValue(referral.patientNhsNumber);
 
     this.initialReferralDetails = referral;
+
+    console.log(referral);
+    this.gpPracticeField.setValue(
+      {
+        id: referral.patientGpPracticeId,
+        resultText: referral.patientGpNameAndPostcode
+      }
+    );
+
+    console.log(this.gpPracticeField.value);
   }
 
   IsPatientIdUnchanged(): boolean {
+
+    if (this.initialReferralDetails === undefined) {
+      return true;
+    }
+
     return (
       this.initialReferralDetails.patientNhsNumber ===
         (+this.nhsNumber === 0 ? null : +this.nhsNumber) &&
