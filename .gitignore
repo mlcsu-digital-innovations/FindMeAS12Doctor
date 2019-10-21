@@ -1,8 +1,9 @@
-**/obj/**
+**/.vs/**
 **/bin/**
-Mep.Api/MedicalExaminationsPortal.db
+**/obj/**
 .scannerwork/**
 .sonarqube/**
-node_modules
+Deployment/**
+Mep.Api/MedicalExaminationsPortal.db
 Mep.Ui/dist/*
-**/.vs/**
+node_modules
