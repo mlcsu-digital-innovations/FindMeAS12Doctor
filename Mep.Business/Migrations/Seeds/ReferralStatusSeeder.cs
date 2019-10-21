@@ -1,5 +1,4 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {

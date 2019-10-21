@@ -16,10 +16,10 @@ namespace Mep.Business.Migrations.Seeds
     {
       TEntity entity;
 
-      if ((entity = _context.Set<TEntity>().SingleOrDefault(e => e.Id == id)) == null)
+      if ((entity = Context.Set<TEntity>().SingleOrDefault(e => e.Id == id)) == null)
       {
         entity = new TEntity();
-        _context.Add(entity);
+        Context.Add(entity);
       }
       PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(entity, name, description);
 
@@ -28,19 +28,19 @@ namespace Mep.Business.Migrations.Seeds
 
     internal virtual void DeleteSeeds()
     {
-      _context.Set<TEntity>().RemoveRange(
-        _context.Set<TEntity>().ToList()
+      Context.Set<TEntity>().RemoveRange(
+        Context.Set<TEntity>().ToList()
       );
       ResetIdentity();
     }   
 
     internal virtual void ResetIdentity(int newReseedValue = 0)
     {
-      string tableName = _context.Model.GetEntityTypes()
+      string tableName = Context.Model.GetEntityTypes()
         .First(t => t.ClrType == typeof(TEntity)).GetAnnotations()
         .First(a => a.Name == "Relational:TableName").Value.ToString();
         
-      _context.Database.ExecuteSqlRaw(
+      Context.Database.ExecuteSqlRaw(
         $"DBCC CHECKIDENT('{tableName}', RESEED, {newReseedValue})");
     }
 
@@ -48,11 +48,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Ccgs.Single(ccg => ccg.Name == CcgName);
+        return Context.Ccgs.Single(ccg => ccg.Name == CcgName);
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
+        throw new ArgumentException($"Cannot find a CCG with the name {CcgName} in Ccgs", ex);
       }
     }
 
@@ -60,13 +60,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .ClaimStatuses
             .Single(claimStatus => claimStatus.Name == ClaimStatusName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a Claim Status with the name {ClaimStatusName} in ClaimStatuses", ex);
+        throw new ArgumentException($"Cannot find a Claim Status with the name {ClaimStatusName} in ClaimStatuses", ex);
       }
     }
 
@@ -74,13 +74,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .ContactDetailTypes
             .Single(contactDetailType => contactDetailType.Name == ContactDetailTypeName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find a Contact Detail Type with the name of {ContactDetailTypeName} in ContactDetailTypes", ex);
+        throw new ArgumentException($"Cannot find a Contact Detail Type with the name of {ContactDetailTypeName} in ContactDetailTypes", ex);
       }
     }
 
@@ -89,11 +89,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ContactDetailTypes.Single(c => c.Id == id);
+        return Context.ContactDetailTypes.Single(c => c.Id == id);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Contact Detail Type with an id of {id} in ContactDetailTypes",
           ex);
       }
@@ -108,13 +108,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Examinations
             .Single(examination => examination.Address1 == examinationAddress).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
       }
     }
@@ -123,11 +123,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.GenderTypes.Single(gt => gt.Id == id);
+        return Context.GenderTypes.Single(gt => gt.Id == id);
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find Gender Type with and id of {id} in GenderTypes", ex);
+        throw new ArgumentException($"Cannot find Gender Type with and id of {id} in GenderTypes", ex);
       }
     }
     protected GenderType GetGenderTypeFemale()
@@ -147,11 +147,11 @@ namespace Mep.Business.Migrations.Seeds
       try
       {
 
-        return _context.GpPractices.Single(gpPractice => gpPractice.Name == gpPracticeName);
+        return Context.GpPractices.Single(gpPractice => gpPractice.Name == gpPracticeName);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a GP Practice with the name {gpPracticeName} in GpPractices", ex);
       }
     }
@@ -160,13 +160,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .NonPaymentLocationTypes
             .Single(nonPaymentLocationType => nonPaymentLocationType.Name == nonPaymentLocationTypeName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find Non Payment Location Type with the name of {nonPaymentLocationTypeName} in NonPaymentLocationTypes", ex);
       }
     }
@@ -175,13 +175,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .NotificationTexts
             .Single(notificationText => notificationText.Name == notificationTextName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find {notificationTextName} in NotificationTexts", ex);
+        throw new ArgumentException($"Cannot find {notificationTextName} in NotificationTexts", ex);
       }
     }
 
@@ -189,13 +189,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Organisations
             .Single(organisation => organisation.Name == name).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception($"Cannot find an organisation with the Name {name} in Organisations", ex);
+        throw new ArgumentException($"Cannot find an organisation with the Name {name} in Organisations", ex);
       }
     }
 
@@ -203,13 +203,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Patients
             .Single(patient => patient.AlternativeIdentifier == alternativeIdentifier).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Patient with an Alternative Identifier of {alternativeIdentifier} in Patients", ex);
       }
     }
@@ -218,13 +218,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Patients
             .Single(patient => patient.NhsNumber == nhsNumber).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Patient with an NHS Number of {nhsNumber} in Patients", ex);
       }
     }
@@ -233,13 +233,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .PaymentMethodTypes
             .Single(paymentMethodType => paymentMethodType.Name == paymentMethodTypeName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find Payment Method Type with the name of {paymentMethodTypeName} in PaymentMethodTypes", ex);
       }
     }
@@ -248,13 +248,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .PaymentRuleSets
             .Single(paymentRuleSet => paymentRuleSet.Name == paymentRuleSetName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find Payment Rule Set with the name of {paymentRuleSetName} in PaymentRuleSets", ex);
       }
     }
@@ -263,13 +263,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .ProfileTypes
             .Single(profileType => profileType.Name == profileTypeName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Profile Type with the name {profileTypeName} in ProfileTypes", ex);
       }
     }
@@ -278,12 +278,12 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ProfileTypes
+        return Context.ProfileTypes
           .Single(profileType => profileType.Id == id);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Profile Type with an id of {id} in ProfileTypes", ex);
       }
     }
@@ -310,13 +310,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Referrals
             .Single(referral => referral.PatientId == GetPatientIdByAlternativeIdentifier(alternativeIdentifier)).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a referral that has a Patient with an Alternative Identifier of {alternativeIdentifier} in Referrals", ex);
       }
     }
@@ -325,13 +325,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Referrals
             .Single(referral => referral.PatientId == GetPatientIdByNhsNumber(nhsNumber)).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Referral that has a Patient with an NHS Number of {nhsNumber} in Referrals", ex);
       }
     }
@@ -340,11 +340,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.ReferralStatuses.Single(referralStatus => referralStatus.Id == id);
+        return Context.ReferralStatuses.Single(referralStatus => referralStatus.Id == id);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Referral Status with an id of {id} in ReferralStatuses", ex);
       }
     }
@@ -353,13 +353,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context
+        return Context
           .Section12ApprovalStatuses
             .Single(section12ApprovalStatus => section12ApprovalStatus.Name == section12ApprovalStatusName).Id;
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find Section 12 Approval Status with the name of {section12ApprovalStatusName} in Section12ApprovalStatuses", ex);
       }
     }
@@ -368,12 +368,12 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Section12ApprovalStatuses
+        return Context.Section12ApprovalStatuses
                        .Single(s => s.Id == id);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find Section 12 Approval Status with an id of {id} in Section12ApprovalStatuses", ex);
       }
     }
@@ -388,12 +388,12 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Specialities
+        return Context.Specialities
             .Single(speciality => speciality.Id == id);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a Speciality with and Id of {id} in Speciality", ex);
       }
     }
@@ -411,12 +411,12 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Users
+        return Context.Users
                        .Single(user => user.DisplayName == displayName);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a user with the Display Name {displayName} in Users", ex);
       }
     }
@@ -425,12 +425,12 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-        return _context.Users
+        return Context.Users
                        .Single(user => user.IdentityServerIdentifier == identifier);
       }
       catch (Exception ex)
       {
-        throw new Exception(
+        throw new ArgumentException(
           $"Cannot find a user with the Identity Server Identifier {identifier} in Users", ex);
       }
     }

@@ -107,14 +107,19 @@ namespace Mep.Business.Services
       return entity;
     }  
 
+    /// <summary>
+    /// TODO: Residential Postcode => CCG Id
+    /// </summary>
     protected override async Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
-    {
-      // TODO: Residential Postcode => CCG Id
+    {      
       await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
       await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
       return true;
     }
 
+    /// <summary>
+    /// TODO: Residential Postcode => CCG Id
+    /// </summary>
     protected override async Task<bool> InternalUpdateAsync(Patient model, Entities.Patient entity)
     {
       await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
@@ -125,7 +130,7 @@ namespace Mep.Business.Services
       entity.GpPracticeId = model.GpPracticeId;
       entity.NhsNumber = model.NhsNumber;
       entity.ResidentialPostcode = model.ResidentialPostcode;
-      // TODO: Residential Postcode => CCG Id
+
       return true;
     }
 

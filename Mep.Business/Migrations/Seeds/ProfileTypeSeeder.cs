@@ -42,8 +42,8 @@ namespace Mep.Business.Migrations.Seeds
     /// </summary>
     internal override void DeleteSeeds()
     {
-      _context.ProfileTypes.RemoveRange(
-        _context.ProfileTypes.Where(u => u.Id != 1).ToList()
+      Context.ProfileTypes.RemoveRange(
+        Context.ProfileTypes.Where(u => u.Id != 1).ToList()
       );
 
       ResetIdentity(1);

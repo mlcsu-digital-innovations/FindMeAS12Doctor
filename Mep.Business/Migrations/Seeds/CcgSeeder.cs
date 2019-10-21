@@ -15,7 +15,7 @@ namespace Mep.Business.Migrations.Seeds
     internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";    
     #endregion
 
-    int _numberOfExistingCcgs = 0;
+    bool _hasExistingCcgs = false;
 
     internal void SeedData()
     {
@@ -25,12 +25,10 @@ namespace Mep.Business.Migrations.Seeds
       client.DefaultRequestHeaders.Accept
         .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-      // Get the count of existing CCGs to bypass the SELECT query if there are no existing CCGs
-      _numberOfExistingCcgs = _context.Ccgs.Count();
+      _hasExistingCcgs = Context.Ccgs.Any();
 
-      // TODO: Fetch this URI from a config file as it will change
       using HttpResponseMessage result = client
-        .GetAsync(_config.GetValue(
+        .GetAsync(Config.GetValue(
           "CcgApiEndpoint",
           "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/CCG_APR_2019_EN_NC/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json"))
         .Result;
@@ -113,12 +111,12 @@ namespace Mep.Business.Migrations.Seeds
       Ccg ccg = null;
 
       if (
-        _numberOfExistingCcgs == 0 ||
-        (ccg = _context.Ccgs
+        !_hasExistingCcgs ||
+        (ccg = Context.Ccgs
                        .SingleOrDefault(c => c.ShortCode == shortCode)) == null)
       {
         ccg = new Ccg();
-        _context.Add(ccg);
+        Context.Add(ccg);
       }
 
       ccg.Name = name;

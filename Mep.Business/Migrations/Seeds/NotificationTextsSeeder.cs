@@ -40,11 +40,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       NotificationText notificationText;
 
-      if ((notificationText = _context.NotificationTexts
+      if ((notificationText = Context.NotificationTexts
           .SingleOrDefault(g => g.Name == name)) == null)
       {
         notificationText = new NotificationText();
-        _context.Add(notificationText);
+        Context.Add(notificationText);
       }
       notificationText.MessageTemplate = template;
       PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(

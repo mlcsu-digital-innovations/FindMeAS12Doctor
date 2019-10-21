@@ -6,8 +6,8 @@ namespace Mep.Business.Migrations.Seeds
   {
     public Seeds(ApplicationContext context, IConfiguration config)
     {
-      _config = config;
-      _context = context;
+      Config = config;
+      Context = context;
     }
 
     public void SeedAll(bool noGpPractices, bool noCcgs)
@@ -15,13 +15,13 @@ namespace Mep.Business.Migrations.Seeds
       if (!noCcgs)
       {
         new CcgSeeder().SeedData();
-        _context.SaveChanges();
+        Context.SaveChanges();
       }
 
       if (!noGpPractices)
       {
         new GpPracticeSeeder().SeedData();
-        _context.SaveChanges();
+        Context.SaveChanges();
       }
 
       new ClaimStatusesSeeder().SeedData();
@@ -50,7 +50,7 @@ namespace Mep.Business.Migrations.Seeds
 
       new UnsuccessfulExaminationTypesSeeder().SeedData();
 
-      _context.SaveChanges();
+      Context.SaveChanges();
     }
 
     public void RemoveSeedAll(bool noGpPractices, bool noCcgs)
@@ -60,13 +60,13 @@ namespace Mep.Business.Migrations.Seeds
       if (!noCcgs)
       {
         new CcgSeeder().DeleteSeeds();
-        _context.SaveChanges();
+        Context.SaveChanges();
       }
 
       if (!noGpPractices)
       {
         new GpPracticeSeeder().DeleteSeeds();
-        _context.SaveChanges();
+        Context.SaveChanges();
       }
 
       new ClaimStatusesSeeder().DeleteSeeds();
@@ -95,94 +95,94 @@ namespace Mep.Business.Migrations.Seeds
 
       new UnsuccessfulExaminationTypesSeeder().DeleteSeeds();
 
-      _context.SaveChanges();
+      Context.SaveChanges();
     }    
 
     public void SeedTestAll()
     {
       new OrganisationSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new DoctorStatusesSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PatientSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ReferralSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new BankDetailsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ContactDetailsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new NonPaymentLocationsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new OnCallUsersSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PaymentMethodsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PaymentRulesSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserSpecialitiesSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
     }
 
     public void RemoveSeedTestAll()
     {
       new UserSpecialitiesSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PaymentRulesSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PaymentMethodsSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new OnCallUsersSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new NonPaymentLocationsSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ContactDetailsSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new BankDetailsSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserExaminationClaimsSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserExaminationNotificationSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ExaminationSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ReferralSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PatientSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new DoctorStatusesSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new OrganisationSeeder().DeleteSeeds();
-      _context.SaveChanges();
+      Context.SaveChanges();
     }
   }
 }

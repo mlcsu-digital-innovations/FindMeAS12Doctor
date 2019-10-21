@@ -34,6 +34,7 @@ namespace Mep.Business.Migrations.Seeds
       _userExaminationNotificationSeeder.DeleteSeeds();
       _examinationSeeder.DeleteSeeds();
       DeleteSeeds();
+      Context.SaveChanges();
 
       AddNewReferral();
 
@@ -94,7 +95,7 @@ namespace Mep.Business.Migrations.Seeds
     {
 
       Referral referral = new Referral();
-      _context.Add(referral);
+      Context.Add(referral);
 
       if (nhsNumber.HasValue)
       {

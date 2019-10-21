@@ -36,13 +36,7 @@ namespace Mep.Business.Services
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.Speciality entity = await
-        _context.Specialities
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(speciality => speciality.Id == entityId);
-
-      return entity;
+      return await GetEntityWithNoIncludesByIdAsync(entityId, asNoTracking, activeOnly);
     }
 
     protected override async Task<Entities.Speciality> GetEntityWithNoIncludesByIdAsync(
@@ -57,6 +51,6 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(speciality => speciality.Id == entityId);
 
       return entity;
-    }    
+    }
   }
 }

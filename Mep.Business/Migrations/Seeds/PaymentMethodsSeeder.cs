@@ -25,13 +25,13 @@ namespace Mep.Business.Migrations.Seeds
     {
       PaymentMethod paymentMethod;
 
-      if ((paymentMethod = _context.PaymentMethods
+      if ((paymentMethod = Context.PaymentMethods
           .Where(p => p.CcgId == GetCcgByName(ccgName).Id)
           .Where(p => p.PaymentMethodTypeId == paymentMethodTypeId)
           .SingleOrDefault(g => g.UserId == GetUserByDisplayName(userDisplayName).Id)) == null)
       {
         paymentMethod = new PaymentMethod();
-        _context.Add(paymentMethod);
+        Context.Add(paymentMethod);
       }
       paymentMethod.CcgId = GetCcgByName(ccgName).Id;
       paymentMethod.PaymentMethodTypeId = paymentMethodTypeId;

@@ -29,11 +29,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       PaymentRule paymentRule;
 
-      if ((paymentRule = _context.PaymentRules
+      if ((paymentRule = Context.PaymentRules
         .SingleOrDefault(g => g.Name == name)) == null)
       {
         paymentRule = new PaymentRule();
-        _context.Add(paymentRule);
+        Context.Add(paymentRule);
       }
       paymentRule.Criteria = criteria;
       paymentRule.Description = description;

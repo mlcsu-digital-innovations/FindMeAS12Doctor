@@ -4,7 +4,7 @@ namespace Mep.Business.Migrations.Seeds
 {
   public class SeederBaseBase
   {
-    public static IConfiguration _config;
-    public static ApplicationContext _context;    
+    public static IConfiguration Config { get; set; }
+    public static ApplicationContext Context { get; set; }
   }
 }

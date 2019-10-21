@@ -1,5 +1,4 @@
 using Mep.Data.Entities;
-using System;
 using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
@@ -18,12 +17,12 @@ namespace Mep.Business.Migrations.Seeds
     {
       UserSpeciality userSpeciality;
 
-      if ((userSpeciality = _context.UserSpecialities
+      if ((userSpeciality = Context.UserSpecialities
         .Where(u => u.SpecialityId == specialityId)
         .SingleOrDefault(g => g.UserId == GetUserByDisplayName(userName).Id)) == null)
       {
         userSpeciality = new UserSpeciality();
-        _context.Add(userSpeciality);
+        Context.Add(userSpeciality);
       }
       userSpeciality.SpecialityId = specialityId;
       userSpeciality.UserId = GetUserByDisplayName(userName).Id;      

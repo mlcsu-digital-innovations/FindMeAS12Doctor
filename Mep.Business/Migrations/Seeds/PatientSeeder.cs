@@ -65,25 +65,26 @@ namespace Mep.Business.Migrations.Seeds
           string.IsNullOrWhiteSpace(gpPracticeName) &&
           string.IsNullOrWhiteSpace(residentialPostcode))
       {
-        throw new Exception("Must have a CCG or GP Practice Name or a Residential Postcode");
+        throw new ArgumentException(
+          "Must have a CCG or GP Practice Name or a Residential Postcode");
       }
 
       Patient patient;
       if (nhsNumber.HasValue)
       {
-        patient = _context.Patients
+        patient = Context.Patients
           .SingleOrDefault(p => p.NhsNumber == nhsNumber);
       }
       else
       {
-        patient = _context.Patients
+        patient = Context.Patients
           .SingleOrDefault(p => p.AlternativeIdentifier == alternativeIdentifier);
       }
 
       if (patient == null)
       {
         patient = new Patient();
-        _context.Add(patient);
+        Context.Add(patient);
       }
       patient.AlternativeIdentifier = alternativeIdentifier;
 

@@ -36,11 +36,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       OnCallUser onCallUser;
 
-      if ((onCallUser = _context.OnCallUsers
+      if ((onCallUser = Context.OnCallUsers
           .SingleOrDefault(g => g.UserId == GetUserByDisplayName(name).Id)) == null)
       {
         onCallUser = new OnCallUser();
-        _context.Add(onCallUser);
+        Context.Add(onCallUser);
       }
       onCallUser.DateTimeEnd = end;
       onCallUser.DateTimeStart = start;

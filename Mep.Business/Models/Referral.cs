@@ -27,12 +27,14 @@ namespace Mep.Business.Models
       }
     }
 
+    /// <summary>
+    /// TODO: Get the examination offset hours from the application config
+    /// </summary>
     public DateTimeOffset DefaultToBeCompletedBy
-    {
-      // TODO: Get the examination offset hours from the application config
+    {      
       get
       {
-        return Examinations.Count(e => e.IsActive) > 0 ?
+        return Examinations.Any(e => e.IsActive) ?
                DateTimeOffset.Now.AddHours(3) :
                CreatedAt.AddHours(3);
       }
@@ -44,8 +46,7 @@ namespace Mep.Business.Models
         return Examinations?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.UserExaminationClaims
-                            .Where(uec => uec.IsActive)
-                            .Count() ?? 0;
+                            .Count(uec => uec.IsActive) ?? 0;
       }
     }
 
