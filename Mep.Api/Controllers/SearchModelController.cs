@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using Mep.Api.SearchModels;
-using Mep.Business.Models.SearchModels;
 
 
 namespace Mep.Api.Controllers

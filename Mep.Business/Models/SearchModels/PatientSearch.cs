@@ -1,4 +1,3 @@
-using System;
 namespace Mep.Business.Models.SearchModels
 {
   public class PatientSearch : BaseSearchModel

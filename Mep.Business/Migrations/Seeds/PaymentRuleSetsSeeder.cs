@@ -37,11 +37,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       PaymentRuleSet paymentRuleSet;
 
-      if ((paymentRuleSet = _context.PaymentRuleSets
+      if ((paymentRuleSet = Context.PaymentRuleSets
         .SingleOrDefault(g => g.Name == name)) == null)
       {
         paymentRuleSet = new PaymentRuleSet();
-        _context.Add(paymentRuleSet);
+        Context.Add(paymentRuleSet);
       }
       paymentRuleSet.CcgId = GetCcgByName(ccgName).Id;
       paymentRuleSet.DateTimeFrom = from;

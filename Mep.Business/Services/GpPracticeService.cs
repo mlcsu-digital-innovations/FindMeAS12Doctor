@@ -36,13 +36,7 @@ namespace Mep.Business.Services
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.GpPractice entity = await
-        _context.GpPractices
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(gpPractice => gpPractice.Id == entityId);
-
-      return entity;
+      return await GetEntityWithNoIncludesByIdAsync(entityId, asNoTracking, activeOnly);
     }
 
     protected override async Task<Entities.GpPractice> GetEntityWithNoIncludesByIdAsync(

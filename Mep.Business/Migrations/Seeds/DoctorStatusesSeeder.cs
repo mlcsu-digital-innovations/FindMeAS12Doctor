@@ -49,11 +49,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       DoctorStatus doctorStatus;
 
-      if ((doctorStatus = _context.DoctorStatuses
+      if ((doctorStatus = Context.DoctorStatuses
         .SingleOrDefault(g => g.UserId == GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE).Id)) == null)
       {
         doctorStatus = new DoctorStatus();
-        _context.Add(doctorStatus);
+        Context.Add(doctorStatus);
       }
 
       doctorStatus.AvailabilityEnd = AVAILABILITY_END_DOCTOR_FEMALE;

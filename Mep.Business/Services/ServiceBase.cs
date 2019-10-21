@@ -4,8 +4,6 @@ using AutoMapper;
 using Mep.Business.Exceptions;
 using Mep.Business.Models;
 using Mep.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Mep.Business.Services
 {
@@ -112,9 +110,11 @@ namespace Mep.Business.Services
       return Task.FromResult<bool>(true);
     }
 
+    /// <summary>
+    /// //TODO: Get the current users sub claim
+    /// </summary>
     protected void UpdateModified(BaseEntity entity)
-    {
-      //TODO: Get the current users sub claim
+    {      
       entity.ModifiedByUserId = 1;
       entity.ModifiedAt = DateTimeOffset.Now;
     }

@@ -28,11 +28,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       Organisation organisation;
 
-      if ((organisation = _context.Organisations
+      if ((organisation = Context.Organisations
           .SingleOrDefault(u => u.Name == name)) == null)
       {
         organisation = new Organisation();
-        _context.Add(organisation);
+        Context.Add(organisation);
       }
 
       PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(
@@ -45,8 +45,8 @@ namespace Mep.Business.Migrations.Seeds
     /// </summary>
     internal override void DeleteSeeds()
     {
-      _context.Organisations.RemoveRange(
-        _context.Organisations.Where(u => u.Id != 1).ToList()
+      Context.Organisations.RemoveRange(
+        Context.Organisations.Where(u => u.Id != 1).ToList()
       );
 
       ResetIdentity(1);

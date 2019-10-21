@@ -40,7 +40,7 @@ namespace Mep.Business.Migrations.Seeds
       client.DefaultRequestHeaders.Accept
         .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-      string uri = _config.GetValue(
+      string uri = Config.GetValue(
         "GpPracticeApiEndpoint"
         , "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PrimaryRoleId=RO177&Limit=1000");
 
@@ -54,7 +54,7 @@ namespace Mep.Business.Migrations.Seeds
       SpineServiceResult json = JsonConvert.DeserializeObject<SpineServiceResult>(content);
 
       // used to bypass the existing GP Practice check if there are no existing GP practices
-      int numberOfGPPracticesInDatabase = _context.GpPractices.Count();
+      int numberOfGPPracticesInDatabase = Context.GpPractices.Count();
 
       // IGNORE THE INACTIVE GP PRACTICES
       foreach (SpineServiceOrganisation gpResult in json.Organisations
@@ -69,11 +69,11 @@ namespace Mep.Business.Migrations.Seeds
         if (associatedCcgId.HasValue)
         {
           if (numberOfGPPracticesInDatabase == 0 ||
-              (gpPractice = _context.GpPractices
+              (gpPractice = Context.GpPractices
                .SingleOrDefault(gp => gp.Code == gpResult.OrgId)) == null)
           {
             gpPractice = new GpPractice();
-            _context.Add(gpPractice);
+            Context.Add(gpPractice);
           }
 
           PopulateActiveAndModifiedWithSystemUser(gpPractice);
@@ -92,7 +92,7 @@ namespace Mep.Business.Migrations.Seeds
       {
         _shortCodeCcgIds.Add(
           shortCode,
-          _context.Ccgs
+          Context.Ccgs
                   .SingleOrDefault(ccg => ccg.ShortCode == shortCode)?.Id);
       }
       return _shortCodeCcgIds.GetValueOrDefault(shortCode);

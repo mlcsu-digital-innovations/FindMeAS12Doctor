@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Mep.Api.ViewModels
 {
+  /// <summary>
+  /// TODO : Type of Examination
+  /// </summary>
   public class ReferralViewCurrentExamination
   {
     public string AmhpUserName { get; set; }
@@ -17,6 +20,5 @@ namespace Mep.Api.ViewModels
     public string PreferredDoctorGenderTypeName { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public string SpecialityName { get; set; }
-
-    //TODO : Type of Examination
-  }}
+  }
+}

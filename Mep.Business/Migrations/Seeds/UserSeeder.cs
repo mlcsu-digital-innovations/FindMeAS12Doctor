@@ -83,11 +83,11 @@ namespace Mep.Business.Migrations.Seeds
       int? organisationId = null)
     {
       User user;
-      if ((user = _context.Users
+      if ((user = Context.Users
                           .SingleOrDefault(g => g.DisplayName == displayName)) == null)
       {
         user = new User();
-        _context.Add(user);
+        Context.Add(user);
       }
       
       user.DisplayName = displayName;
@@ -132,8 +132,8 @@ namespace Mep.Business.Migrations.Seeds
     /// </summary>
     internal override void DeleteSeeds()
     {
-      _context.Users.RemoveRange(
-        _context.Users.Where(u => u.Id != 1).ToList()
+      Context.Users.RemoveRange(
+        Context.Users.Where(u => u.Id != 1).ToList()
       );
 
       ResetIdentity(1);

@@ -25,11 +25,11 @@ namespace Mep.Business.Migrations.Seeds
     {
       BankDetail bankDetail;
 
-      if ((bankDetail = _context.BankDetails.SingleOrDefault(g =>
+      if ((bankDetail = Context.BankDetails.SingleOrDefault(g =>
         g.VsrNumber == VRS_NUMBER_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE)) == null)
       {
         bankDetail = new BankDetail();
-        _context.Add(bankDetail);
+        Context.Add(bankDetail);
       }
       bankDetail.AccountNumber = ACCOUNT_NUMBER_DOCTOR_FEMALE;
       bankDetail.BankName = BANK_NAME_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE;
@@ -40,11 +40,11 @@ namespace Mep.Business.Migrations.Seeds
       bankDetail.VsrNumber = VRS_NUMBER_DOCTOR_FEMALE_NORTH_STAFFORDSHIRE;
       PopulateActiveAndModifiedWithSystemUser(bankDetail);
 
-      if ((bankDetail = _context.BankDetails.SingleOrDefault(g =>
+      if ((bankDetail = Context.BankDetails.SingleOrDefault(g =>
         g.VsrNumber == VRS_NUMBER_DOCTOR_FEMALE_STOKE_ON_TRENT)) == null)
       {
         bankDetail = new BankDetail();
-        _context.Add(bankDetail);
+        Context.Add(bankDetail);
       }
       bankDetail.AccountNumber = ACCOUNT_NUMBER_DOCTOR_FEMALE;
       bankDetail.BankName = BANK_NAME_DOCTOR_FEMALE_STOKE_ON_TRENT;
@@ -55,11 +55,11 @@ namespace Mep.Business.Migrations.Seeds
       bankDetail.VsrNumber = VRS_NUMBER_DOCTOR_FEMALE_STOKE_ON_TRENT;
       PopulateActiveAndModifiedWithSystemUser(bankDetail);
       
-      if ((bankDetail = _context.BankDetails.SingleOrDefault(g =>
+      if ((bankDetail = Context.BankDetails.SingleOrDefault(g =>
         g.VsrNumber == VRS_NUMBER_DOCTOR_MALE_NORTH_STAFFORDSHIRE)) == null)
       {
         bankDetail = new BankDetail();
-        _context.Add(bankDetail);
+        Context.Add(bankDetail);
       }
       bankDetail.AccountNumber = ACCOUNT_NUMBER_DOCTOR_MALE;
       bankDetail.BankName = BANK_NAME_DOCTOR_MALE_NORTH_STAFFORDSHIRE;
