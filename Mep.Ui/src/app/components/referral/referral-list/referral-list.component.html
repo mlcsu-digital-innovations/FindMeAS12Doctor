@@ -22,14 +22,6 @@
                 placeholder="Full text search:"
                   [(ngModel)]="referralListService.searchTerm" />
               </div>
-              <div class="col-md-4" style="margin-top: 38px;">
-                <div *ngIf="referralListService.loading$ | async">
-                  Loading...
-                  <div class="spinner-border spinner-border-sm" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
-              </div>
               <div class="col-md-2 offset-md-2">
                 <a routerLink="/referral/new" routerLinkActive="active" class="btn btn-primary vcenter" role="button"
                   aria-disabled="true" placement="right" ngbTooltip="Create a new referral" [openDelay]="1000"
@@ -122,5 +114,7 @@
     </div>
   </div>
 </div>
+
+<app-delay-spinner *ngIf="referralListService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
