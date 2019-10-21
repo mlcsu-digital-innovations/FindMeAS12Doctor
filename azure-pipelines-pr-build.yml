@@ -9,11 +9,22 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'Sonar Cloud'
+    organization: 'mlcsu-digital-innovations'
+    scannerMode: 'MSBuild'
+    projectKey: 'mlcsu-digital-innovations_MedicalExaminationsPortal'
+    projectName: 'MedicalExaminationsPortal'
+    projectVersion: '0.0.1'
+
 - task: DotNetCoreCLI@2
   displayName: 'Mep.Api - Check build completes successfully'
   inputs:
     projects: '**/*.csproj'
     arguments: '-c AzureDevelopment'
+
+- task: SonarCloudAnalyze@1
 
 - task: Npm@1
   displayName: 'Mep.Ui - Install npm packages'
