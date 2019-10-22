@@ -4,11 +4,12 @@ using Audit.EntityFramework;
 using Mep.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-// Add this to the initial migration to create the inital system records: InitialSystemUserSeed.Seed(migrationBuilder);
-
-// dotnet ef migrations add <migration-name> --project Mep.Business --startup-project Mep.Api
-// dotnet ef database update --project Mep.Api
-
+/// <summary>
+/// Add this to the initial migration to create the inital system records: InitialSystemUserSeed.Seed(migrationBuilder); 
+/// 
+/// dotnet ef migrations add <migration-name> --project Mep.Business --startup-project Mep.Api
+/// dotnet ef database update --project Mep.Api
+/// </summary>
 namespace Mep.Business
 {
   public partial class ApplicationContext : AuditDbContext
@@ -63,6 +64,7 @@ namespace Mep.Business
     public virtual DbSet<ExaminationDetailType> ExaminationDetailTypes { get; set; }
     public virtual DbSet<ExaminationDetailTypeAudit> ExaminationDetailTypeAudits { get; set; }
     public virtual DbSet<GenderType> GenderTypes { get; set; }
+    public virtual DbSet<GenderTypeAudit> GenderTypeAudits { get; set; }
     public virtual DbSet<GpPractice> GpPractices { get; set; }
     public virtual DbSet<GpPracticeAudit> GpPracticeAudits { get; set; }
     public virtual DbSet<Log> Logs { get; set; }
@@ -121,7 +123,92 @@ namespace Mep.Business
             .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
       }
 
-      // Configure Many-to-Many Relationships
+      ConfigureManyToManyRelationships(modelBuilder);
+
+      ConfigureUniqueIndexes(modelBuilder);
+    }
+
+    private void ConfigureUniqueIndexes(ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.LongCode)
+        .IsUnique();
+      modelBuilder.Entity<Ccg>()
+        .HasIndex(c => c.ShortCode)
+        .IsUnique();
+
+      modelBuilder.Entity<ClaimStatus>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<ContactDetailType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<ExaminationDetailType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<GenderType>()
+        .HasIndex(g => g.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<GpPractice>()
+        .HasIndex(g => g.Code)
+        .IsUnique();      
+
+      modelBuilder.Entity<NonPaymentLocationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<NotificationText>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<Organisation>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<Patient>()
+        .HasIndex(p => p.AlternativeIdentifier)
+        .IsUnique();
+      modelBuilder.Entity<Patient>()
+        .HasIndex(p => p.NhsNumber)
+        .IsUnique();
+
+      modelBuilder.Entity<PaymentMethodType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();   
+
+      modelBuilder.Entity<ProfileType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();             
+
+      modelBuilder.Entity<ReferralStatus>()
+        .HasIndex(c => c.Name)
+        .IsUnique();  
+
+      modelBuilder.Entity<Section12ApprovalStatus>()
+        .HasIndex(c => c.Name)
+        .IsUnique();    
+
+      modelBuilder.Entity<UnsuccessfulExaminationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();    
+
+      modelBuilder.Entity<User>()
+        .HasIndex(c => c.GmcNumber)
+        .IsUnique();   
+      modelBuilder.Entity<User>()
+        .HasIndex(c => c.IdentityServerIdentifier)
+        .IsUnique();                                          
+    }
+
+    private void ConfigureManyToManyRelationships(ModelBuilder modelBuilder)
+    {
       modelBuilder.Entity<BankDetail>()
         .HasAlternateKey(bankDetail => new
         {
@@ -144,6 +231,13 @@ namespace Mep.Business
           examinationDetail.ExaminationId,
         });
 
+      modelBuilder.Entity<NonPaymentLocation>()
+        .HasAlternateKey(nonPaymentLocation => new
+        {
+          nonPaymentLocation.CcgId,
+          nonPaymentLocation.NonPaymentLocationTypeId
+        });        
+
       modelBuilder.Entity<PaymentMethod>()
         .HasAlternateKey(paymentMethod => new
         {
@@ -152,31 +246,28 @@ namespace Mep.Business
           paymentMethod.UserId
         });
 
+      modelBuilder.Entity<UserExaminationClaim>()
+        .HasAlternateKey(userExaminationClaim => new
+        {
+          userExaminationClaim.ExaminationId,
+          userExaminationClaim.UserId
+        });
+
       modelBuilder.Entity<UserExaminationNotification>()
         .HasAlternateKey(userExaminationNotification => new
         {
           userExaminationNotification.ExaminationId,
+          userExaminationNotification.NotificationTextId,
           userExaminationNotification.UserId
         });
 
-      // Unique Indexes
-      modelBuilder.Entity<Ccg>()
-        .HasIndex(c => c.ShortCode)
-        .IsUnique();
-      modelBuilder.Entity<Ccg>()
-        .HasIndex(c => c.LongCode)
-        .IsUnique();
+      modelBuilder.Entity<UserSpeciality>()
+        .HasAlternateKey(userSpeciality => new
+        {
+          userSpeciality.SpecialityId,
+          userSpeciality.UserId
+        });
 
-      modelBuilder.Entity<GpPractice>()
-        .HasIndex(g => g.Code)
-        .IsUnique();
-
-      modelBuilder.Entity<Patient>()
-        .HasIndex(p => p.AlternativeIdentifier)
-        .IsUnique();
-      modelBuilder.Entity<Patient>()
-        .HasIndex(p => p.NhsNumber)
-        .IsUnique();        
     }
   }
 }

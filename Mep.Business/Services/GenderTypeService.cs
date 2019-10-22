@@ -12,7 +12,7 @@ namespace Mep.Business.Services
     : ServiceBase<GenderType, Entities.GenderType>, IModelService<GenderType>
   {
     public GenderTypeService(ApplicationContext context, IMapper mapper)
-      :base("GenderType", context, mapper)
+      : base("GenderType", context, mapper)
     {
     }
 
@@ -20,43 +20,37 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Entities.GenderType> entities = 
+      IEnumerable<Entities.GenderType> entities =
         await _context.GenderTypes
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .ToListAsync();
 
-      IEnumerable<Models.GenderType> models = 
+      IEnumerable<Models.GenderType> models =
         _mapper.Map<IEnumerable<Models.GenderType>>(entities);
 
       return models;
     }
 
     protected override async Task<Entities.GenderType> GetEntityByIdAsync(
-      int entityId, 
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.GenderType entity = await 
-        _context.GenderTypes
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(genderType => genderType.Id == entityId);
-
-      return entity;  
+      return await GetEntityWithNoIncludesByIdAsync(entityId, asNoTracking, activeOnly);
     }
 
     protected override async Task<Entities.GenderType> GetEntityWithNoIncludesByIdAsync(
-      int entityId, 
+      int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.GenderType entity = await 
+      Entities.GenderType entity = await
         _context.GenderTypes
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(genderType => genderType.Id == entityId);
 
-      return entity;  
+      return entity;
     }
   }
 }

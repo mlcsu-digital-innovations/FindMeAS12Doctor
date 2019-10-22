@@ -3,6 +3,8 @@ namespace Mep.Business.Models
 {
   public class Speciality : NameDescription
   {
+    public const int SECTION_12 = 1;
+    
     public virtual IList<Examination> Examinations { get; set; }
     public int? FinanceMileageSubjectiveCode { get; set; }
     public int? FinanceSubjectiveCode { get; set; }

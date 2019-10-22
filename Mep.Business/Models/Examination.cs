@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -41,7 +40,7 @@ namespace Mep.Business.Models
     public int ReferralId { get; set; }
     public virtual Referral Referral { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
-    public int SpecialityId { get; set; }
+    public int? SpecialityId { get; set; }
     public Speciality Speciality { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
     public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
@@ -124,12 +123,12 @@ namespace Mep.Business.Models
     { get { return ScheduledTime != null; } }
 
     public string PreferredDoctorGenderTypeName
-    { get { return PreferredDoctorGenderType.Name; } }
+    { get { return PreferredDoctorGenderType?.Name; } }
 
     public string SpecialityName
-    { get { return Speciality.Name; } }
+    { get { return Speciality?.Name; } }
 
     public string UnsuccessfulExaminationTypeName
-    { get { return UnsuccessfulExaminationType.Name; } }
+    { get { return UnsuccessfulExaminationType?.Name; } }
   }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mep.Business.Models.Interfaces;
 
 namespace Mep.Business.Models
 {
@@ -25,16 +24,18 @@ namespace Mep.Business.Models
       {
         return Examinations.Where(e => e.IsActive)
                            .SingleOrDefault(e => e.IsCurrent);
-      }      
+      }
     }
 
+    /// <summary>
+    /// TODO: Get the examination offset hours from the application config
+    /// </summary>
     public DateTimeOffset DefaultToBeCompletedBy
-    {
-      // TODO: Get the examination offset hours from the application config
+    {      
       get
       {
-        return Examinations.Count(e => e.IsActive) > 0 ? 
-               DateTimeOffset.Now.AddHours(3) : 
+        return Examinations.Any(e => e.IsActive) ?
+               DateTimeOffset.Now.AddHours(3) :
                CreatedAt.AddHours(3);
       }
     }
@@ -45,8 +46,7 @@ namespace Mep.Business.Models
         return Examinations?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.UserExaminationClaims
-                            .Where(uec => uec.IsActive)
-                            .Count() ?? 0;
+                            .Count(uec => uec.IsActive) ?? 0;
       }
     }
 
@@ -91,7 +91,7 @@ namespace Mep.Business.Models
                            .OrderByDescending(e => e.CompletedTime)
                            .ToList();
       }
-    }    
+    }
 
     public int ReferralId
     { get { return Id; } }
@@ -108,13 +108,8 @@ namespace Mep.Business.Models
       }
     }
     public string Speciality
-    {
-      get
-      {
-        return CurrentExamination?.Speciality
-                                  .Name;
-      }
-    }
+    { get { return CurrentExamination?.SpecialityName; } }
+    
     public string Status
     { get { return ReferralStatus?.Name; } }
 
@@ -122,7 +117,7 @@ namespace Mep.Business.Models
     {
       get
       {
-        DateTimeOffset? timescale = 
+        DateTimeOffset? timescale =
           Examinations?.Where(e => e.IsActive)
                        .FirstOrDefault(e => e.IsCurrent)
                        ?.MustBeCompletedBy;

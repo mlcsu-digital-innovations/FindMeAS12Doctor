@@ -32,7 +32,7 @@ namespace Mep.Data.Entities
     public int? PreferredDoctorGenderTypeId { get; set; }
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
-    public int SpecialityId { get; set; }
+    public int? SpecialityId { get; set; }
     public int? UnsuccessfulExaminationTypeId { get; set; }
   }
 }

@@ -1,27 +1,21 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ContactDetailTypesSeeder : SeederBase
+  internal class ContactDetailTypesSeeder : SeederBase<ContactDetailType>
   {
+    #region Constants      
+    protected const string NAME_WORK = "Work";
+    protected const string DESCRIPTION_WORK = "Work Description";
+    #endregion
+
     internal void SeedData()
     {
-      ContactDetailType contactDetailType;
-
-      if ((contactDetailType = _context
-        .ContactDetailTypes
-          .SingleOrDefault(g => g.Name ==
-            CONTACT_DETAIL_TYPE_NAME)) == null)
-      {
-        contactDetailType = new ContactDetailType();
-        _context.Add(contactDetailType);
-      }
-      contactDetailType.Description = CONTACT_DETAIL_TYPE_DESCRIPTION;
-      contactDetailType.IsActive = true;
-      contactDetailType.ModifiedAt = _now;
-      contactDetailType.ModifiedByUser = GetSystemAdminUser();
-      contactDetailType.Name = CONTACT_DETAIL_TYPE_NAME;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ContactDetailType.WORK,
+        NAME_WORK,
+        DESCRIPTION_WORK
+      );
     }
   }
 }

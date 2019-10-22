@@ -2,36 +2,39 @@ using Microsoft.Extensions.Configuration;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  public class Seeds : SeederBase
+  public class Seeds : SeederBaseBase
   {
     public Seeds(ApplicationContext context, IConfiguration config)
     {
-      _config = config;
-      _context = context;
+      Config = config;
+      Context = context;
     }
 
-    public void SeedAll(bool noGpPractices)
+    public void SeedAll(bool noGpPractices, bool noCcgs)
     {
-      new CcgSeeder().SeedData();
-      _context.SaveChanges();
+      if (!noCcgs)
+      {
+        new CcgSeeder().SeedData();
+        Context.SaveChanges();
+      }
 
       if (!noGpPractices)
       {
         new GpPracticeSeeder().SeedData();
-        _context.SaveChanges();
+        Context.SaveChanges();
       }
 
       new ClaimStatusesSeeder().SeedData();
 
       new ContactDetailTypesSeeder().SeedData();
 
-      new DoctorStatusesSeeder().SeedData();
-
       new ExaminationDetailTypeSeeder().SeedData();
 
       new GenderTypeSeeder().SeedData();
 
       new NonPaymentLocationTypesSeeder().SeedData();
+
+      new NotificationTextsSeeder().SeedData();      
 
       new PaymentMethodTypesSeeder().SeedData();
 
@@ -47,56 +50,139 @@ namespace Mep.Business.Migrations.Seeds
 
       new UnsuccessfulExaminationTypesSeeder().SeedData();
 
-      _context.SaveChanges();
+      Context.SaveChanges();
     }
+
+    public void RemoveSeedAll(bool noGpPractices, bool noCcgs)
+    {
+      RemoveSeedTestAll();
+
+      if (!noCcgs)
+      {
+        new CcgSeeder().DeleteSeeds();
+        Context.SaveChanges();
+      }
+
+      if (!noGpPractices)
+      {
+        new GpPracticeSeeder().DeleteSeeds();
+        Context.SaveChanges();
+      }
+
+      new ClaimStatusesSeeder().DeleteSeeds();
+
+      new ContactDetailTypesSeeder().DeleteSeeds();
+
+      new ExaminationDetailTypeSeeder().DeleteSeeds();
+
+      new GenderTypeSeeder().DeleteSeeds();
+
+      new NonPaymentLocationTypesSeeder().DeleteSeeds();
+
+      new NotificationTextsSeeder().DeleteSeeds();      
+
+      new PaymentMethodTypesSeeder().DeleteSeeds();
+
+      new PaymentRuleSetsSeeder().DeleteSeeds();
+
+      new ProfileTypeSeeder().DeleteSeeds();
+
+      new ReferralStatusSeeder().DeleteSeeds();
+
+      new Section12ApprovalStatusesSeeder().DeleteSeeds();
+
+      new SpecialitySeeder().DeleteSeeds();
+
+      new UnsuccessfulExaminationTypesSeeder().DeleteSeeds();
+
+      Context.SaveChanges();
+    }    
 
     public void SeedTestAll()
     {
       new OrganisationSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
+
+      new DoctorStatusesSeeder().SeedData();
+      Context.SaveChanges();
 
       new PatientSeeder().SeedData();
-      _context.SaveChanges();
-
-      new NotificationTextsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ReferralSeeder().SeedData();
-      _context.SaveChanges();
-
-      new ExaminationSeeder().SeedData();
-      _context.SaveChanges();
-
-      new UserExaminationNotificationSeeder().SeedData();
-      _context.SaveChanges();
-
-      new UserExaminationClaimsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new BankDetailsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new ContactDetailsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new NonPaymentLocationsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new OnCallUsersSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PaymentMethodsSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new PaymentRulesSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
 
       new UserSpecialitiesSeeder().SeedData();
-      _context.SaveChanges();
+      Context.SaveChanges();
     }
 
+    public void RemoveSeedTestAll()
+    {
+      new UserSpecialitiesSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new PaymentRulesSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new PaymentMethodsSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new OnCallUsersSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new NonPaymentLocationsSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new ContactDetailsSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new BankDetailsSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new UserExaminationClaimsSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new UserExaminationNotificationSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new ExaminationSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new ReferralSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new PatientSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new DoctorStatusesSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new UserSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new OrganisationSeeder().DeleteSeeds();
+      Context.SaveChanges();
+    }
   }
 }

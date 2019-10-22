@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Mep.Api.ViewModels
 {
+  /// <summary>
+  /// TODO : Type of Examination
+  /// </summary>
   public class ReferralViewPreviousExamination
   {
     public string AmhpUserName { get; set; }
@@ -10,7 +13,6 @@ namespace Mep.Api.ViewModels
     public IList<string> DoctorNamesAllocated { get; set; }
     public int Id { get; set; }
     public string Postcode { get; set; }
-    //TODO : Type of Examination
     public string UnsuccessfulExaminationTypeName { get; set; }
   }
 }

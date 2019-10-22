@@ -1,28 +1,28 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class NonPaymentLocationTypesSeeder : SeederBase
+  internal class NonPaymentLocationTypesSeeder : SeederBase<NonPaymentLocationType>
   {
+    #region 
+    internal const string DESCRIPTION_GP_PRACTICE = "GP Practice Description";
+    internal const string DESCRIPTION_HOSPITAL = "Hospital Description";
+    internal const string NAME_GP_PRACTICE = "GP Practice";
+    internal const string NAME_HOSPITAL = "Hospital";
+    #endregion    
     internal void SeedData()
     {
-      NonPaymentLocationType nonPaymentLocationType;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.NonPaymentLocationType.GP_PRACTICE,
+        NAME_GP_PRACTICE,
+        DESCRIPTION_GP_PRACTICE
+      );
 
-      if ((nonPaymentLocationType = _context
-        .NonPaymentLocationTypes
-          .SingleOrDefault(g => g.Name ==
-            NON_PAYMENT_LOCATION_TYPE_NAME)) == null)
-      {
-        nonPaymentLocationType = new NonPaymentLocationType();
-        _context.Add(nonPaymentLocationType);
-      }
-      nonPaymentLocationType.Description =
-        NON_PAYMENT_LOCATION_TYPE_DESCRIPTION;
-      nonPaymentLocationType.IsActive = true;
-      nonPaymentLocationType.ModifiedAt = _now;
-      nonPaymentLocationType.ModifiedByUser = GetSystemAdminUser();
-      nonPaymentLocationType.Name = NON_PAYMENT_LOCATION_TYPE_NAME;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.NonPaymentLocationType.HOSPITAL,
+        NAME_HOSPITAL,
+        DESCRIPTION_HOSPITAL
+      );      
     }
   }
 }

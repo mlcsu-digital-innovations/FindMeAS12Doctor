@@ -3,46 +3,40 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class PaymentMethodsSeeder : SeederBase
+  internal class PaymentMethodsSeeder : SeederBase<PaymentMethod>
   {
-
     internal void SeedData()
+    {
+      AddOrUpdate(
+        CcgSeeder.NORTH_STAFFORDSHIRE,
+        Models.PaymentMethodType.BACS,
+        UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
+      );
+
+      AddOrUpdate(
+        CcgSeeder.STOKE_ON_TRENT,
+        Models.PaymentMethodType.CHEQUE,
+        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+      );      
+
+    }
+
+    private void AddOrUpdate(string ccgName, int paymentMethodTypeId, string userDisplayName)
     {
       PaymentMethod paymentMethod;
 
-      if ((paymentMethod = _context
-        .PaymentMethods
-          .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
+      if ((paymentMethod = Context.PaymentMethods
+          .Where(p => p.CcgId == GetCcgByName(ccgName).Id)
+          .Where(p => p.PaymentMethodTypeId == paymentMethodTypeId)
+          .SingleOrDefault(g => g.UserId == GetUserByDisplayName(userDisplayName).Id)) == null)
       {
         paymentMethod = new PaymentMethod();
-        _context.Add(paymentMethod);
+        Context.Add(paymentMethod);
       }
-      paymentMethod.CcgId = GetFirstCcg();
-      paymentMethod.IsActive = true;
-      paymentMethod.ModifiedAt = _now;
-      paymentMethod.ModifiedByUser = GetSystemAdminUser();
-      paymentMethod.PaymentMethodTypeId =
-        GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME);
-      paymentMethod.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
-
-      if ((paymentMethod = _context
-        .PaymentMethods
-          .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE))) == null)
-      {
-        paymentMethod = new PaymentMethod();
-        _context.Add(paymentMethod);
-      }
-      paymentMethod.CcgId = GetFirstCcg();
-      paymentMethod.IsActive = true;
-      paymentMethod.ModifiedAt = _now;
-      paymentMethod.ModifiedByUser = GetSystemAdminUser();
-      paymentMethod.PaymentMethodTypeId =
-        GetPaymentMethodTypeIdByPaymentMethodTypeName(PAYMENT_METHOD_TYPE_NAME);
-      paymentMethod.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
+      paymentMethod.CcgId = GetCcgByName(ccgName).Id;
+      paymentMethod.PaymentMethodTypeId = paymentMethodTypeId;
+      paymentMethod.UserId = GetUserByDisplayName(userDisplayName).Id;
+      PopulateActiveAndModifiedWithSystemUser(paymentMethod);      
     }
   }
 }

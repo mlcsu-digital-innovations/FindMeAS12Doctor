@@ -36,13 +36,7 @@ namespace Mep.Business.Services
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.Ccg entity = await
-        _context.Ccgs
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(ccg => ccg.Id == entityId);
-
-      return entity;
+      return await GetEntityWithNoIncludesByIdAsync(entityId, asNoTracking, activeOnly);
     }
 
     protected override async Task<Entities.Ccg> GetEntityWithNoIncludesByIdAsync(

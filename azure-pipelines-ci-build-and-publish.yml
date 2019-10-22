@@ -1,0 +1,56 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+name: $(version.major).$(version.minor).$(Rev:r)
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Mep.Api - Create Deployment'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: './Mep.Api/mep.api.csproj'
+    zipAfterPublish: false
+    modifyOutputPath: false
+    arguments: '-c AzureDevelopment -r win-x86 --output ./Deployment/AzureDevelopment/Mep.Api --self-contained true -p:Version=$(build.buildNumber)'
+
+- task: Npm@1
+  displayName: 'Mep.Ui - Install npm packages'
+  inputs:
+    command: 'install'
+    workingDir: './Mep.Ui'
+
+- task: Npm@1
+  displayName: "Mep.Ui - Set the version number"
+  inputs:
+    command: 'custom'
+    workingDir: './Mep.Ui'
+    customCommand: 'version $(build.buildNumber) --force'
+
+- task: Npm@1
+  displayName: "Mep.Ui - Create deployment"
+  inputs:
+    command: 'custom'
+    workingDir: './Mep.Ui'
+    customCommand: 'run build:azure-development'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Mep.Api - Publish build artifacts'
+  inputs:
+    PathtoPublish: './Deployment/AzureDevelopment/Mep.Api'
+    ArtifactName: 'api'
+    publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Mep.Ui - Publish build artifacts'
+  inputs:
+    PathtoPublish: './Deployment/AzureDevelopment/Mep.Ui'
+    ArtifactName: 'ui'
+    publishLocation: 'Container'

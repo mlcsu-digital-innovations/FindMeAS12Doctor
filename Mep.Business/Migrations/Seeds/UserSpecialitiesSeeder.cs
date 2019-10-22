@@ -3,41 +3,30 @@ using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class UserSpecialitiesSeeder : SeederBase
+  internal class UserSpecialitiesSeeder : SeederBase<UserSpeciality>
   {
     internal void SeedData()
     {
+      AddOrUpdate(
+        Models.Speciality.SECTION_12,
+        UserSeeder.DISPLAY_NAME_DOCTOR_S12_APPROVED
+      );
+    }
+
+    private void AddOrUpdate(int specialityId, string userName)
+    {
       UserSpeciality userSpeciality;
 
-      if ((userSpeciality = _context
-        .UserSpecialities
-          .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE))) == null)
+      if ((userSpeciality = Context.UserSpecialities
+        .Where(u => u.SpecialityId == specialityId)
+        .SingleOrDefault(g => g.UserId == GetUserByDisplayName(userName).Id)) == null)
       {
         userSpeciality = new UserSpeciality();
-        _context.Add(userSpeciality);
+        Context.Add(userSpeciality);
       }
-      userSpeciality.IsActive = true;
-      userSpeciality.ModifiedAt = _now;
-      userSpeciality.ModifiedByUser = GetSystemAdminUser();
-      userSpeciality.SpecialityId = GetSpecialityId();
-      userSpeciality.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_MALE);
-
-      if ((userSpeciality = _context
-        .UserSpecialities
-          .SingleOrDefault(g => g.UserId ==
-            GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE))) == null)
-      {
-        userSpeciality = new UserSpeciality();
-        _context.Add(userSpeciality);
-      }
-      userSpeciality.IsActive = true;
-      userSpeciality.ModifiedAt = _now;
-      userSpeciality.ModifiedByUser = GetSystemAdminUser();
-      userSpeciality.SpecialityId = GetSpecialityId();
-      userSpeciality.UserId =
-        GetUserIdByDisplayname(USER_DISPLAY_NAME_DOCTOR_FEMALE);
+      userSpeciality.SpecialityId = specialityId;
+      userSpeciality.UserId = GetUserByDisplayName(userName).Id;      
+      PopulateActiveAndModifiedWithSystemUser(userSpeciality);
     }
   }
 }
