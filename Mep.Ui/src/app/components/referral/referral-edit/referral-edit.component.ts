@@ -76,7 +76,6 @@ export class ReferralEditComponent implements OnInit {
         });
 
         const emptyReferral = {} as Referral;
-
         return of(emptyReferral);
       })
     );
@@ -105,8 +104,6 @@ export class ReferralEditComponent implements OnInit {
   }
 
   async CancelPatientResultsModal() {
-    // this.alternativeIdentifierField.setValue('');
-    // this.nhsNumberField.setValue('');
     this.patientModal.close();
     this.SetFieldFocus('#nhsNumber');
   }
@@ -163,6 +160,10 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.nhsNumber;
   }
 
+  get unknownGpPractice() {
+    return this.referralForm.controls.unknownGpPractice;
+  }
+
   GpSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -173,6 +174,7 @@ export class ReferralEditComponent implements OnInit {
           tap(() => (this.hasGpSearchFailed = false)),
           catchError(() => {
             this.hasGpSearchFailed = true;
+            this.gpPracticeField.setErrors({ServiceUnavailable: true});
             return of([]);
           })
         )
@@ -224,15 +226,19 @@ export class ReferralEditComponent implements OnInit {
 
     this.initialReferralDetails = referral;
 
-    console.log(referral);
-    this.gpPracticeField.setValue(
-      {
+    const gpPracticeValue = referral.patientGpPracticeId === null
+      ? {
+        id: 0,
+        resultText: 'Unknown'
+      }
+      : {
         id: referral.patientGpPracticeId,
         resultText: referral.patientGpNameAndPostcode
-      }
-    );
+      };
 
-    console.log(this.gpPracticeField.value);
+    this.gpPracticeField.setValue(gpPracticeValue);
+    this.unknownGpPractice.setValue(gpPracticeValue.id === 0);
+
   }
 
   IsPatientIdUnchanged(): boolean {
@@ -265,13 +271,6 @@ export class ReferralEditComponent implements OnInit {
         this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
       }
     });
-
-    // this.residentialPostcodeField.valueChanges.subscribe((val: string) => {
-    //   if (this.patientDetails.residentialPostcode && this.patientDetails.residentialPostcode !== '') {
-    //     this.isPatientPostcodeValidated =
-    //       this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
-    //   }
-    // });
   }
 
   OnPatientModalAction(action: number) {
@@ -306,32 +305,15 @@ export class ReferralEditComponent implements OnInit {
     this.patientDetails.isExistingPatient = true;
 
     this.isGpFieldsShown = true;
-    // this.SetGpPracticeField(
-    //   this.patientResult.gpPracticeId,
-    //   this.patientResult.gpPracticeNameAndPostcode
-    // );
-    // this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
+    this.gpPracticeField.setValue(
+      {
+        id: this.patientResult.gpPracticeId,
+        resultText: this.patientResult.gpPracticeNameAndPostcode
+      }
+    );
     this.patientModal.close();
-    // this.SetFieldFocus('#amhp');
-
     this.nhsNumberField.markAsPristine();
     this.nhsNumberField.setValue(this.patientResult.nhsNumber);
-
-    // only show the postcode field if the gpPractice field is null
-    if (
-      this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
-    ) {
-      // this.isResidentialPostcodeFieldShown = true;
-    }
-
-    // only show the ccg field if the postcode field is null
-    if (
-      this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
-    ) {
-      // this.isResidentialPostcodeFieldShown = true;
-    }
     this.isPatientIdValidated = true;
   }
 
