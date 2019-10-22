@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://mep-dev-api.azurewebsites.net/api',
-  locationEndpoint: 'https://www.google.com/maps/@52.9856552,-2.8707448,7z'
+  locationEndpoint: 'https://www.google.com/maps/@52.9856552,-2.8707448,7z',
+  defaultExaminationCompletedInHours: 3
 };
 
 /*
