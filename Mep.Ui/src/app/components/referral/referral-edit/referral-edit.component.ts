@@ -10,10 +10,10 @@ import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
 import { Referral } from 'src/app/interfaces/referral';
+import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 
 @Component({
   selector: 'app-referral-edit',
@@ -72,7 +72,6 @@ export class ReferralEditComponent implements OnInit {
         });
 
         const emptyReferral = {} as Referral;
-
         return of(emptyReferral);
       })
     );
@@ -99,8 +98,6 @@ export class ReferralEditComponent implements OnInit {
   }
 
   async CancelPatientResultsModal() {
-    // this.alternativeIdentifierField.setValue('');
-    // this.nhsNumberField.setValue('');
     this.patientModal.close();
     this.SetFieldFocus('#nhsNumber');
   }
@@ -219,13 +216,6 @@ export class ReferralEditComponent implements OnInit {
         this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
       }
     });
-
-    // this.residentialPostcodeField.valueChanges.subscribe((val: string) => {
-    //   if (this.patientDetails.residentialPostcode && this.patientDetails.residentialPostcode !== '') {
-    //     this.isPatientPostcodeValidated =
-    //       this.RemoveWhiteSpace(val).toUpperCase() === this.RemoveWhiteSpace(this.patientDetails.residentialPostcode).toUpperCase();
-    //   }
-    // });
   }
 
   OnPatientModalAction(action: number) {
@@ -260,33 +250,10 @@ export class ReferralEditComponent implements OnInit {
     this.patientDetails.isExistingPatient = true;
 
     this.isGpFieldsShown = true;
-    // this.SetGpPracticeField(
-    //   this.patientResult.gpPracticeId,
-    //   this.patientResult.gpPracticeNameAndPostcode
-    // );
-    // this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
     this.patientModal.close();
-    // this.SetFieldFocus('#amhp');
 
     this.nhsNumberField.markAsPristine();
     this.nhsNumberField.setValue(this.patientResult.nhsNumber);
-
-    // only show the postcode field if the gpPractice field is null
-    if (
-      this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
-    ) {
-      // this.isResidentialPostcodeFieldShown = true;
-    }
-
-    // only show the ccg field if the postcode field is null
-    if (
-      this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
-    ) {
-      // this.isResidentialPostcodeFieldShown = true;
-    }
-    this.isPatientIdValidated = true;
   }
 
   UseExistingReferral(): void {
