@@ -11,7 +11,7 @@ namespace Mep.Api.ViewModels
     public string PatientAlternativeIdentifier { get; set; }
     public int? PatientCcgId { get; set; }
     public string PatientCcgName {get; set;}
-    public string PatientGpNameAndPostcode {get; set;}
+    public string PatientGpPracticeNameAndPostcode {get; set;}
     public int? PatientGpPracticeId { get; set; }
     public long? PatientNhsNumber { get; set; }
     public string PatientResidentialPostcode { get; set; }

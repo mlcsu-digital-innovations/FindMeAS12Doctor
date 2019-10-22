@@ -80,7 +80,7 @@ namespace Mep.Business.Models
       }
     }
 
-    public string PatientGpNameAndPostcode
+    public string PatientGpPracticeNameAndPostcode
     {
       get
       {
