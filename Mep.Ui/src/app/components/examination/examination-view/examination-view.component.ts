@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { ParamMap, ActivatedRoute, Router } from '@angular/router';
-import { Patient } from 'src/app/interfaces/patient';
+import { ParamMap, ActivatedRoute } from '@angular/router';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { Examination } from 'src/app/interfaces/examination';
 import { ReferralView } from 'src/app/interfaces/referral-view';
 
 @Component({
@@ -27,8 +25,7 @@ export class ExaminationViewComponent implements OnInit {
     private formBuilder: FormBuilder,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) { }
 
   ngOnInit() {
@@ -57,23 +54,57 @@ export class ExaminationViewComponent implements OnInit {
       })
     );
 
-
-
     this.currentExaminationForm = this.formBuilder.group({
-      AmhpUser: [
-        {
-          value: '',
-          disabled: true
-        }
-      ]
+      amhpUserName: [
+        ''
+      ],
+      currentExamination: [
+        ''
+      ],
+      doctorNamesAccepted: [
+        ''
+      ],
+      doctorNamesAllocated: [
+        ''
+      ],
+      examinationDetails: [
+        ''
+      ],
+      fullAddress: [
+        ''
+      ],
+      meetingArrangementComment: [
+        ''
+      ],
+      mustBeCompletedBy: [
+        ''
+      ],
+      postCode: [
+        ''
+      ],
+      preferredDoctorGenderTypeName: [
+        ''
+      ],
+      specialityName: [
+        ''
+      ],
     });
   }
 
-
   InitialiseForm(referral: ReferralView) {
+    this.currentExaminationForm.controls.amhpUserName.setValue(referral.currentExamination.amhpUserName);
+    this.currentExaminationForm.controls.doctorNamesAccepted.setValue(referral.currentExamination.doctorNamesAccepted);
+    this.currentExaminationForm.controls.doctorNamesAllocated.setValue(referral.currentExamination.doctorNamesAllocated);
+    // this.currentExaminationForm.controls.examinationDetails.setValue(referral.currentExamination.examinationDetails);
+    this.currentExaminationForm.controls.fullAddress.setValue(referral.currentExamination.fullAddress);
+    this.currentExaminationForm.controls.meetingArrangementComment.setValue(referral.currentExamination.meetingArrangementComment);
+    this.currentExaminationForm.controls.mustBeCompletedBy.setValue(referral.currentExamination.mustBeCompletedBy);
+    this.currentExaminationForm.controls.postCode.setValue(referral.currentExamination.postcode);
+    this.currentExaminationForm.controls.preferredDoctorGenderTypeName.setValue(referral.currentExamination.preferredDoctorGenderTypeName);
+    this.currentExaminationForm.controls.specialityName.setValue(referral.currentExamination.specialityName);
+    this.currentExaminationForm.disable();
     this.referralId = referral.id;
-    this.currentExaminationForm.controls.AmhpUser.setValue(referral.currentExamination.amhpUserName);
+
     console.log(referral);
   }
-
 }

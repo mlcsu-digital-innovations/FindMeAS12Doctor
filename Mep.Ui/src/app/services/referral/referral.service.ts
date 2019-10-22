@@ -24,6 +24,16 @@ export class ReferralService {
     );
   }
 
+  public getReferralEdit(referralId: number): Observable<ReferralEdit> {
+    return this.httpClient.get(
+      environment.apiEndpoint + `/referral/edit/${referralId}`
+    )
+    .pipe(delay(1000))
+    .pipe
+      (map(r => r as ReferralEdit)
+    );
+  }
+
   public getReferralView(referralId: number): Observable<ReferralView> {
     return this.httpClient.get(
       environment.apiEndpoint + `/referral/view/${referralId}`

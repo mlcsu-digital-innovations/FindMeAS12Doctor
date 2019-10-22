@@ -1,11 +1,11 @@
 <app-navbar></app-navbar>
 <div class="page-content">
   <div class="row">
-    <div class="col-md-12 ">
+    <div class="col-md-12">
       <div class="card" *ngIf="referral$ | async as referral; else loading">
         <div class="card-header">
           <div class="card-icon">
-              <i class="fas fa-file-alt fa-4x"></i>
+            <i class="fas fa-file-alt fa-4x"></i>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">View Examination</h4>
@@ -31,14 +31,104 @@
         <div class="card-body">
           <form [formGroup]="currentExaminationForm" novalidate>
             <div class="form-row">
-              <div class="">
-                <input 
+              <div class="col-md-12">
+                <label for="amhpUserName">AMHP User Name</label>
+                <input
+                  class="form-control"
+                  formControlName="amhpUserName"
+                  id="amhpUserName"
                   type="text"
-                  formControlName="AmhpUser"/>
-
+                />
               </div>
-
-
+            </div>
+            <div class="form-row">
+              <div class="col-md-9">
+                  <label for="fullAddress">Examination Address</label>
+                  <input
+                    class="form-control"
+                    formControlName="fullAddress"
+                    id="fullAddress"
+                    type="text"
+                  />
+                </div>
+              <div class="col-md-3">
+                <label for="postCode">Post Code</label>
+                <input
+                  class="form-control"
+                  formControlName="postCode"
+                  id="postCode"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label for="meetingArrangementComment">Meeting Arrangement Comment</label>
+                <input
+                  class="form-control"
+                  formControlName="meetingArrangementComment"
+                  id="meetingArrangementComment"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="mustBeCompletedBy">Must be Completed by</label>
+                <input
+                  class="form-control"
+                  formControlName="mustBeCompletedBy"
+                  id="mustBeCompletedBy"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="preferredDoctorGenderTypeName">Preferred Doctor Gender</label>
+                <input
+                  class="form-control"
+                  formControlName="preferredDoctorGenderTypeName"
+                  id="preferredDoctorGenderTypeName"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="specialityName">Speciality</label>
+                <input
+                  class="form-control"
+                  formControlName="specialityName"
+                  id="specialityName"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-12">
+                <label for="examinationDetails">Examination Details</label>
+                <input
+                  class="form-control"
+                  formControlName="examinationDetails"
+                  id="examinationDetails"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="doctorNamesAccepted">Doctors Accepted</label>
+                <input
+                  class="form-control"
+                  formControlName="doctorNamesAccepted"
+                  id="doctorNamesAccepted"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="doctorNamesAllocated">Doctors Allocated</label>
+                <input
+                  class="form-control"
+                  formControlName="doctorNamesAllocated"
+                  id="doctorNamesAllocated"
+                  type="text"
+                />
+              </div>
             </div>
           </form>
         </div>
@@ -47,9 +137,8 @@
   </div>
 </div>
 
-
 <ng-template #loading>
-    <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
-  </ng-template>
-  
-  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
