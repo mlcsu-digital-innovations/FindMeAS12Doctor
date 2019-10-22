@@ -22,7 +22,7 @@ namespace Mep.Business.Models
     {
       get
       {
-        return Patient.Ccg?.Name;
+        return Patient?.Ccg?.Name;
       }
     }
 
