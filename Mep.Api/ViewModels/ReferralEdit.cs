@@ -15,7 +15,6 @@ namespace Mep.Api.ViewModels
     public string PatientCcgName {get; set;}
     public string PatientGpNameAndPostcode {get; set;}
     public string PatientResidentialPostcode { get; set; }
-    public string ReferralStatusName { get; set; }
-
+    public string Status { get; set; }
   }
 }

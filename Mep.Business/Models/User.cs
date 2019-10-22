@@ -39,12 +39,8 @@ namespace Mep.Business.Models
 
     public virtual IList<Referral> AmhpReferrals { get; set; }
 
-    public bool IsAmhp
-    {
-      get
-      {
-        return ProfileType.IsAmhp;
-      }
-    }
+    public bool IsAmhp { get { return ProfileType.IsAmhp; } }
+    
+    public bool IsDoctor { get { return ProfileType.IsDoctor; } }
   }
 }

@@ -5,6 +5,7 @@ namespace Mep.Business.Models
 {
   public class DoctorStatus : BaseModel
   {
+    public const int AVAILABLE = 1;
     public DateTimeOffset AvailabilityStart { get; set; }
     public DateTimeOffset AvailabilityEnd { get; set; }
     public DateTimeOffset? ExtendedAvailabilityEnd1 { get; set; }

@@ -8,9 +8,14 @@ using System.Net.Http;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class CcgSeeder : SeederBase
+  internal class CcgSeeder : SeederBase<Ccg>
   {
-    int _numberOfExistingCcgs = 0;
+    #region Constants
+    internal const string NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
+    internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";    
+    #endregion
+
+    bool _hasExistingCcgs = false;
 
     internal void SeedData()
     {
@@ -20,12 +25,10 @@ namespace Mep.Business.Migrations.Seeds
       client.DefaultRequestHeaders.Accept
         .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-      // Get the count of existing CCGs to bypass the SELECT query if there are no existing CCGs
-      _numberOfExistingCcgs = _context.Ccgs.Count();
+      _hasExistingCcgs = Context.Ccgs.Any();
 
-      // TODO: Fetch this URI from a config file as it will change
       using HttpResponseMessage result = client
-        .GetAsync(_config.GetValue(
+        .GetAsync(Config.GetValue(
           "CcgApiEndpoint",
           "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/CCG_APR_2019_EN_NC/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json"))
         .Result;
@@ -45,8 +48,8 @@ namespace Mep.Business.Migrations.Seeds
       // Add missing CCG Hubs
       PopulateCcgNameShortCodeLongCodeDefaults("Cheshire, Warrington and Wirral Commissioning Hub", "12G", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Durham, Darlington and Tees Commissioning Hub", "12H", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub", "12J", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub", "12K", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub 1", "12J", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub 1", "12K", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Merseyside Commissioning Hub", "12L", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Cumbria, Northumberland, Tyne and Wear Commissioning Hub", "12M", null);
       PopulateCcgNameShortCodeLongCodeDefaults("North Yorkshire and Humber Commissioning Hub", "12N", null);
@@ -84,8 +87,8 @@ namespace Mep.Business.Migrations.Seeds
       PopulateCcgNameShortCodeLongCodeDefaults("South West Commissioning Hub", "14F", null);
       PopulateCcgNameShortCodeLongCodeDefaults("South East Commissioning Hub", "14G", null);
       PopulateCcgNameShortCodeLongCodeDefaults("South Central Commissioning Hub", "14H", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub", "14J", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub", "14K", null);      
+      PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub 2", "14J", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub 2", "14K", null);      
       PopulateCcgNameShortCodeLongCodeDefaults("London - H&J Commissioning Hub", "14M", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Yorkshire and Humber - H&J Commissioning Hub", "14N", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Cumbria and North East - H&J Commissioning Hub", "14P", null);
@@ -108,12 +111,12 @@ namespace Mep.Business.Migrations.Seeds
       Ccg ccg = null;
 
       if (
-        _numberOfExistingCcgs == 0 ||
-        (ccg = _context.Ccgs
+        !_hasExistingCcgs ||
+        (ccg = Context.Ccgs
                        .SingleOrDefault(c => c.ShortCode == shortCode)) == null)
       {
         ccg = new Ccg();
-        _context.Add(ccg);
+        Context.Add(ccg);
       }
 
       ccg.Name = name;

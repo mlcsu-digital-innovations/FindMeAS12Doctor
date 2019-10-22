@@ -6,7 +6,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
-            <i class="fas fa-folder-plus fa-4x"></i>
+            <em class="fas fa-folder-plus fa-4x"></em>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">Create New Referral</h4>
@@ -19,14 +19,14 @@
           <form [formGroup]="patientForm" novalidate>
             <div class="form-row">
               <div class="col-md-3">
-                <label for="nhsNumber">NHS Number</label>
                 <input
-                  type="text"
+                  class="form-control vcenter"
                   digitOnly
-                  maxlength="10"
                   formControlName="nhsNumber"
                   id="nhsNumber"
-                  class="form-control"
+                  maxlength="10"
+                  placeholder="NHS Number"
+                  type="text"
                   [ngClass]="{
                     'is-invalid': HasInvalidNHSNumber(),
                     'is-valid': HasValidNHSNumber()
@@ -39,13 +39,13 @@
                 </div>
               </div>
               <div class="col-md-4">
-                <label for="alternativeIdentifier">Alternative Identifier</label>
                 <input
-                  type="text"
-                  maxlength="200"
+                  class="form-control vcenter"
                   formControlName="alternativeIdentifier"
-                  [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
-                  class="form-control"
+                  maxlength="200"
+                  placeholder="Alternative Identifier"
+                  type="text"
+                  [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"                  
                   [ngClass]="{
                     'is-invalid': HasInvalidAlternativeIdentifier(),
                     'is-valid': HasValidAlternativeIdentifier()
@@ -95,10 +95,10 @@
             <!-- GP Practice -->
             <div class="form-row" *ngIf="isGpFieldsShown">
               <div class="col-md-8 mb-2">
-                <label for="gpPractice">GP Practice</label>
                 <input
+                  placeholder="GP Practice"
                   type="text"
-                  class="form-control"
+                  class="form-control vcenter"
                   id="gpPractice"
                   #gpPractice
                   [appDisableControl]="
@@ -146,9 +146,9 @@
             <!-- Residential Postcode -->
             <div class="form-row" *ngIf="isResidentialPostcodeFieldShown">
               <div class="col-md-3">
-                <label for="residentialPostcode">Residential Postcode</label>
                 <input
                   type="text"
+                  placeholder="Residential Postcode"
                   maxlength="8"
                   minlength="6"
                   formControlName="residentialPostcode"
@@ -159,7 +159,7 @@
                   "
                   id="residentialPostcode"
                   oninput="this.value = this.value.toUpperCase()"
-                  class="form-control"
+                  class="form-control vcenter"
                   [ngClass]="{
                     'is-invalid': HasInvalidPostcode(),
                     'is-valid': HasValidPostcode()
@@ -219,10 +219,10 @@
             <!-- CCG -->
             <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-8 mb-2">
-                <label for="ccg">Clinical Commissioning Group</label>
                 <input
                   type="text"
-                  class="form-control"
+                  placeholder="Clinical Commissioning Group"
+                  class="form-control vcenter"
                   id="ccg"
                   #ccg
                   [appDisableControl]="
@@ -240,7 +240,7 @@
                 <div class="checkmark-content vcenter">
                   <label class="container">
                     <input
-                      class="form-control"
+                      class="form-control vcenter"
                       type="checkbox"
                       [appDisableControl]="!IsPatientIdValidated()"
                       value=""
@@ -266,10 +266,10 @@
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
-                <label for="amhp">Lead AMHP</label>
                 <input
                   type="text"
-                  class="form-control"
+                  placeholder="Lead AMHP"
+                  class="form-control vcenter"
                   id="amhp"
                   #amhp
                   [appDisableControl]="!IsPatientIdValidated()"

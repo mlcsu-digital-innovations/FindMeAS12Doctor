@@ -19,7 +19,7 @@ namespace Mep.Data.Entities
     [MaxLength(200)]
     [Required]
     public string Name { get; set; }
-    public virtual IList<NonPaymentLocationType> NonPaymentLocationTypes { get; set; }
+    public virtual IList<NonPaymentLocation> NonPaymentLocations { get; set; }
     public virtual IList<Patient> Patients { get; set; }
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
     public virtual IList<PaymentRuleSet> PaymentRuleSets { get; set; }

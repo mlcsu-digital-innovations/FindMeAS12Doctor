@@ -23,6 +23,7 @@ import { tap, switchMap, catchError } from 'rxjs/operators';
 import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from '../../../interfaces/typeahead-result';
+import { UNKNOWN_CCG, UNKNOWN_GP_PRACTICE, UNKNOWN_POSTCODE } from '../../../constants/Constants';
 
 @Component({
   selector: 'app-referral-create',
@@ -58,7 +59,7 @@ export class ReferralCreateComponent implements OnInit {
   unknownGpPracticeId: number;
   value = false;
 
-  @ViewChild('patientResults', {static: true}) patientResultTemplate;
+  @ViewChild('patientResults', { static: true }) patientResultTemplate;
   @ViewChild('cancelReferral', null) cancelReferralTemplate;
 
   constructor(
@@ -74,7 +75,7 @@ export class ReferralCreateComponent implements OnInit {
     private renderer: Renderer2,
     private router: Router,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {
 
@@ -215,19 +216,19 @@ export class ReferralCreateComponent implements OnInit {
 
     // only continue if the referral is valid
     if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
-      this.nhsNumberField.setErrors({InvalidPatientIdentifier: true});
+      this.nhsNumberField.setErrors({ InvalidPatientIdentifier: true });
       canContinue = false;
     }
 
     if (!this.HasValidGpOrPostcodeOrCcg()) {
       this.isGpFieldsShown = true;
       this.gpPracticeField.enable();
-      this.gpPracticeField.setErrors({InvalidGpPostcodeCcg: true});
+      this.gpPracticeField.setErrors({ InvalidGpPostcodeCcg: true });
       canContinue = false;
     }
 
     if (!this.HasValidLeadAmhp()) {
-      this.amhpField.setErrors({InvalidAmhp: true});
+      this.amhpField.setErrors({ InvalidAmhp: true });
       canContinue = false;
     }
 
@@ -399,13 +400,15 @@ export class ReferralCreateComponent implements OnInit {
   HasValidGpOrPostcodeOrCcg(): boolean {
 
     // All 3 fields can be 'unknown' OR at least 1 field must be populated
-    if (this.gpPractice.id === this.unknownGpPracticeId && this.residentialPostcode === 'Unknown' && this.ccg.id === this.unknownCcgId) {
+    if (this.gpPractice.id === this.unknownGpPracticeId &&
+      this.residentialPostcode === UNKNOWN_POSTCODE &&
+      this.ccg.id === this.unknownCcgId) {
       return true;
     }
 
     return (
       (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
-      (this.residentialPostcode !== '' && this.residentialPostcode !== 'Unknown') ||
+      (this.residentialPostcode !== '' && this.residentialPostcode !== UNKNOWN_POSTCODE) ||
       (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
     );
   }
@@ -574,7 +577,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleCcgUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
-      this.SetCcgField(this.unknownCcgId, 'Unknown');
+      this.SetCcgField(this.unknownCcgId, UNKNOWN_CCG);
       this.SetFieldFocus('#amhp');
     } else {
       this.SetCcgField(null, '');
@@ -585,7 +588,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleGpPracticeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the postcode field and set focus
-      this.SetGpPracticeField(this.unknownGpPracticeId, 'Unknown');
+      this.SetGpPracticeField(this.unknownGpPracticeId, UNKNOWN_GP_PRACTICE);
       this.isResidentialPostcodeFieldShown = true;
       this.SetFieldFocus('#residentialPostcode');
     } else {
@@ -599,7 +602,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleResidentialPostcodeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
-      this.SetResidentialPostcodeField('Unknown');
+      this.SetResidentialPostcodeField(UNKNOWN_POSTCODE);
       this.isCcgFieldsShown = true;
       this.SetFieldFocus('#ccg');
       this.isPatientPostcodeValidated = true;

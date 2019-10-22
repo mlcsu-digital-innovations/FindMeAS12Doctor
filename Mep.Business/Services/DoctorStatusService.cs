@@ -36,13 +36,7 @@ namespace Mep.Business.Services
       bool asNoTracking,
       bool activeOnly)
     {
-      Entities.DoctorStatus entity = await
-        _context.DoctorStatuses
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(doctorStatus => doctorStatus.Id == entityId);
-
-      return entity;
+      return await GetEntityWithNoIncludesByIdAsync(entityId, asNoTracking, activeOnly);
     }
 
     protected override async Task<Entities.DoctorStatus> GetEntityWithNoIncludesByIdAsync(

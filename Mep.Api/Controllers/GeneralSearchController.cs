@@ -31,7 +31,7 @@ namespace Mep.Api.Controllers
 
       IEnumerable<GeneralSearchResult> searchResults = _mapper.Map<IEnumerable<GeneralSearchResult>>(businessSearchResult);
 
-      if (searchResults.Count() > 0)
+      if (searchResults.Any())
       {
         return Ok(searchResults);
       }

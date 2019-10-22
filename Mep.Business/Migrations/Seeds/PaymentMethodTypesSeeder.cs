@@ -1,27 +1,29 @@
 using Mep.Data.Entities;
-using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class PaymentMethodTypesSeeder : SeederBase
+  internal class PaymentMethodTypesSeeder : SeederBase<PaymentMethodType>
   {
+    #region Constants
+    internal const string DESCRIPTION_BACS = "Bankers Automated Clearing Services";
+    internal const string DESCRIPTION_CHEQUE = "Cheque";
+    internal const string NAME_BACS = "BACS";    
+    internal const string NAME_CHEQUE = "Cheque";    
+    #endregion
+
     internal void SeedData()
     {
-      PaymentMethodType paymentMethodType;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.PaymentMethodType.BACS,
+        NAME_BACS,
+        DESCRIPTION_BACS
+      );
 
-      if ((paymentMethodType = _context
-        .PaymentMethodTypes
-          .SingleOrDefault(g => g.Name ==
-            PAYMENT_METHOD_TYPE_NAME)) == null)
-      {
-        paymentMethodType = new PaymentMethodType();
-        _context.Add(paymentMethodType);
-      }
-      paymentMethodType.Description = PAYMENT_METHOD_TYPE_DESCRIPTION;
-      paymentMethodType.IsActive = true;
-      paymentMethodType.ModifiedAt = _now;
-      paymentMethodType.ModifiedByUser = GetSystemAdminUser();
-      paymentMethodType.Name = PAYMENT_METHOD_TYPE_NAME;
+      AddOrUpdateNameDescriptionEntityById(
+        Models.PaymentMethodType.CHEQUE,
+        NAME_CHEQUE,
+        DESCRIPTION_CHEQUE
+      );      
     }
   }
 }

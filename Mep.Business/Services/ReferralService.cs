@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
-using System;
 
 namespace Mep.Business.Services
 {
@@ -23,13 +22,20 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.Referral> entities =
         await _context.Referrals
-                .Include(r => r.CreatedByUser)                  
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.UserExaminationClaims)
+                .Include(r => r.CreatedByUser)
                 .Include(r => r.Examinations)                  
                   .ThenInclude(e => e.UserExaminationNotifications)
+                    .ThenInclude(u => u.User)
+                      .ThenInclude(u => u.ProfileType)
+                .Include(r => r.Examinations)
+                  .ThenInclude(e => e.PreferredDoctorGenderType)
+                .Include(r => r.Examinations)
+                  .ThenInclude(e => e.Speciality)                  
+                .Include(r => r.Examinations)
+                  .ThenInclude(e => e.UnsuccessfulExaminationType)
                 .Include(r => r.Patient)
                 .Include(r => r.ReferralStatus)
+                .Include(r => r.LeadAmhpUser)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .ToListAsync();
 
@@ -49,6 +55,14 @@ namespace Mep.Business.Services
                 .Include(r => r.CreatedByUser)
                 .Include(r => r.Examinations)                  
                   .ThenInclude(e => e.UserExaminationNotifications)
+                    .ThenInclude(u => u.User)
+                      .ThenInclude(u => u.ProfileType)
+                .Include(r => r.Examinations)
+                  .ThenInclude(e => e.PreferredDoctorGenderType)
+                .Include(r => r.Examinations)
+                  .ThenInclude(e => e.Speciality)                  
+                .Include(r => r.Examinations)
+                  .ThenInclude(e => e.UnsuccessfulExaminationType)
                 .Include(r => r.Patient)
                   .ThenInclude(p => p.Ccg)
                 .Include(r => r.Patient)

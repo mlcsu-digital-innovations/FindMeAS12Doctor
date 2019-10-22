@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mep.Business.Models.Interfaces;
 
 namespace Mep.Business.Models
 {
@@ -27,6 +26,27 @@ namespace Mep.Business.Models
       }
     }
 
+    public Examination CurrentExamination
+    {
+      get
+      {
+        return Examinations.Where(e => e.IsActive)
+                           .SingleOrDefault(e => e.IsCurrent);
+      }
+    }
+
+    /// <summary>
+    /// TODO: Get the examination offset hours from the application config
+    /// </summary>
+    public DateTimeOffset DefaultToBeCompletedBy
+    {      
+      get
+      {
+        return Examinations.Any(e => e.IsActive) ?
+               DateTimeOffset.Now.AddHours(3) :
+               CreatedAt.AddHours(3);
+      }
+    }
     public int DoctorsAllocated
     {
       get
@@ -34,8 +54,7 @@ namespace Mep.Business.Models
         return Examinations?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.UserExaminationClaims
-                            .Where(uec => uec.IsActive)
-                            .Count() ?? 0;
+                            .Count(uec => uec.IsActive) ?? 0;
       }
     }
 
@@ -50,12 +69,7 @@ namespace Mep.Business.Models
     }
 
     public string LeadAmhp
-    {
-      get
-      {
-        return LeadAmhpUser?.DisplayName;
-      }
-    }
+    { get { return LeadAmhpUser.DisplayName; } }
 
     public int NumberOfExaminationAttempts
     {
@@ -80,19 +94,26 @@ namespace Mep.Business.Models
     {
       get
       {
-        return string.IsNullOrWhiteSpace(Patient?.NhsNumber.ToString())
-               ? Patient?.AlternativeIdentifier
+        return string.IsNullOrWhiteSpace(Patient.NhsNumber.ToString())
+               ? Patient.AlternativeIdentifier
                : Patient.NhsNumber.ToString();
       }
     }
 
-    public int ReferralId
+    public IList<Examination> PreviousExaminations
     {
       get
       {
-        return Id;
+        return Examinations.Where(e => e.IsActive)
+                           .Where(e => !e.IsCurrent)
+                           .OrderByDescending(e => e.CompletedTime)
+                           .ToList();
       }
     }
+
+    public int ReferralId
+    { get { return Id; } }
+
     public int ResponsesReceived
     {
       get
@@ -105,31 +126,19 @@ namespace Mep.Business.Models
       }
     }
     public string Speciality
-    {
-      get
-      {
-        return Examinations?.Where(e => e.IsActive)
-                            .FirstOrDefault(e => e.IsCurrent)
-                            ?.Speciality
-                            ?.Name;
-      }
-    }
+    { get { return CurrentExamination?.SpecialityName; } }
+    
     public string Status
-    {
-      get
-      {
-        return ReferralStatus?.Name;
-      }
-    }
+    { get { return ReferralStatus?.Name; } }
 
     public DateTimeOffset? Timescale
     {
       get
       {
-        DateTimeOffset? timescale = Examinations
-                            ?.Where(e => e.IsActive)
-                            .FirstOrDefault(e => e.IsCurrent)
-                            ?.MustBeCompletedBy;
+        DateTimeOffset? timescale =
+          Examinations?.Where(e => e.IsActive)
+                       .FirstOrDefault(e => e.IsCurrent)
+                       ?.MustBeCompletedBy;
 
         return timescale == default(DateTimeOffset)
                ? null
@@ -137,13 +146,5 @@ namespace Mep.Business.Models
       }
     }
 
-    public DateTimeOffset DefaultToBeCompletedBy
-    {
-      //ToDo: Get the examination offset hours from the application config
-      get
-      {
-        return Examinations.Count > 0 ? DateTimeOffset.Now.AddHours(3) : CreatedAt.AddHours(3);
-      }
-    }
   }
 }
