@@ -84,9 +84,9 @@ namespace Mep.Business.Models
     {
       get
       {
-        return Patient.GpPracticeId != null ?
-                $"{Patient.GpPractice.Name}, {Patient.GpPractice.Postcode}" :
-                null;
+        return Patient?.GpPractice == null
+            ? null
+            : $"{Patient.GpPractice.Name}, {Patient.GpPractice.Postcode}";
       }
     }
 
