@@ -28,32 +28,24 @@ namespace Mep.Api.Controllers
     public async Task<ActionResult<IEnumerable<ViewModels.ExaminationList>>> GetList([FromQuery]
       RequestModels.ExaminationListSearch examinationListSearch)
     {
-      if (examinationListSearch.HasCriteria)
+
+      IEnumerable<BusinessModels.Examination> businessModels = null;
+      if (examinationListSearch.AmhpUserId.HasValue)
       {
-        
-        IEnumerable<BusinessModels.Examination> businessModels = null;
-        if (examinationListSearch.AmhpUserId.HasValue)
-        {
-          businessModels =await (_service as ExaminationService)
-            .GetListByAmhpUserIdAsync((int)examinationListSearch.AmhpUserId, true, false);
-        }
+        businessModels = await (_service as ExaminationService)
+          .GetAllFilterByAmhpUserIdAsync((int)examinationListSearch.AmhpUserId, true, false);
+      }
 
-        IEnumerable<ViewModels.ExaminationList> viewModels =
-            _mapper.Map<IEnumerable<ViewModels.ExaminationList>>(businessModels);
+      IEnumerable<ViewModels.ExaminationList> viewModels =
+          _mapper.Map<IEnumerable<ViewModels.ExaminationList>>(businessModels);
 
-        if (viewModels.Any())
-        {
-          return Ok(viewModels);
-        }
-        else
-        {
-          return NoContent();
-        }
+      if (viewModels.Any())
+      {
+        return Ok(viewModels);
       }
       else
       {
-        ModelState.AddModelError("AmhpUserId", "The AmhpUserId field is required");
-        return BadRequest(ModelState);
+        return NoContent();
       }
     }
   }

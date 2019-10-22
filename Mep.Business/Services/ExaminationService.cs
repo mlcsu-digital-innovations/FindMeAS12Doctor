@@ -47,7 +47,7 @@ namespace Mep.Business.Services
       return models;
     }
 
-    public async Task<IEnumerable<Models.Examination>> GetListByAmhpUserIdAsync(
+    public async Task<IEnumerable<Models.Examination>> GetAllFilterByAmhpUserIdAsync(
       int amhpUserId,
       bool asNoTracking,
       bool activeOnly)
@@ -74,7 +74,8 @@ namespace Mep.Business.Services
         if (amhpProfileType.Id != Models.ProfileType.AMHP)
         {
           throw new ModelStateException("AmhpUserId",
-            $"UserId {amhpUserId} must be an AMHP but is a {amhpProfileType.Name}.");
+            $"UserId {amhpUserId} must have a ProfileType " +
+            $"of AMHP but is a {amhpProfileType.Name}.");
         }
 
       }
