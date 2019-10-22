@@ -19,8 +19,11 @@
             Referral Id: <strong>{{referral.id}}</strong>
           </div>
           <div class="flex-item">
-              Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
-            </div>
+            Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
+          </div>
+          <div class="flex-item">
+            Referral Status: <strong>{{referral.referralStatusName}}</strong>
+          </div>
         </div>
 
         <div class="card-body">
@@ -60,9 +63,32 @@
                     }"
                   />
                 </div>
+                <div class="col-md-2">
+                    <button
+                      type="button"
+                      class="btn btn-primary vcenter"
+                      style="margin-left:20px !important"
+                      placement="right"
+                      ngbTooltip="Search for existing patients using these identifiers"
+                      [openDelay]="1000"
+                      [closeDelay]="500"
+                      tooltipClass="subtle-tooltip"
+                      [disabled]="
+                        IsPatientIdUnchanged() ||
+                        DisablePatientValidationButtonIfFieldsAreInvalid() ||
+                        IsSearchingForPatient()
+                      "
+                      (click)="ValidatePatient()"
+                      [ngClass]="{ validating: IsSearchingForPatient() }"
+                      >
+                      {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                        *ngIf="IsSearchingForPatient()"></span>
+                    </button>
+                  </div>
               </div>
               <!-- Row for divs showing patient number validation errors -->
-              <div class="form-row mt-2" *ngIf="!HasNoPatientIdErrors()">
+              <div class="form-row mt-less-2" *ngIf="!HasNoPatientIdErrors()">
                 <div class="col-md-3 mb-2">
                   <div *ngIf="nhsNumberField.errors != null">
                     <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
@@ -88,6 +114,12 @@
 
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<!-- patient results -->
+<ng-template #patientResults let-patientResult>
+  <app-patient-results-modal [patientResult]="modalResult" (actioned)="OnPatientModalAction($event)">
+  </app-patient-results-modal>
 </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
