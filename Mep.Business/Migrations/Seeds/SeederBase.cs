@@ -39,8 +39,10 @@ namespace Mep.Business.Migrations.Seeds
       string tableName = Context.Model.GetEntityTypes()
         .First(t => t.ClrType == typeof(TEntity)).GetAnnotations()
         .First(a => a.Name == "Relational:TableName").Value.ToString();
-        
+
       Context.Database.ExecuteSqlRaw(
+        "IF EXISTS (SELECT * FROM sys.identity_columns WHERE " +
+        $"object_id = OBJECT_ID('dbo.{tableName}') AND last_value IS NOT NULL) " +
         $"DBCC CHECKIDENT('{tableName}', RESEED, {newReseedValue})");
     }
 
