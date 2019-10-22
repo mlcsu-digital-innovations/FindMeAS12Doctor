@@ -22,7 +22,7 @@
             Referral Created: <strong>{{referral.createdAt | date:'medium'}}</strong>
           </div>
           <div class="flex-item">
-            Referral Status: <strong>{{referral.referralStatusName}}</strong>
+            Referral Status: <strong>{{referral.status}}</strong>
           </div>
         </div>
 
@@ -52,34 +52,34 @@
                 <div class="col-md-4">
                   <label for="alternativeIdentifier">Alternative Identifier</label>
                   <input
-                    type="text"
-                    maxlength="200"
-                    formControlName="alternativeIdentifier"
-                    class="form-control"
                     [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
                     [ngClass]="{
                       'is-invalid': HasInvalidAlternativeIdentifier(),
                       'is-valid': HasValidAlternativeIdentifier()
                     }"
+                    class="form-control"
+                    formControlName="alternativeIdentifier"
+                    maxlength="200"
+                    type="text"
                   />
                 </div>
                 <div class="col-md-2">
                     <button
-                      type="button"
-                      class="btn btn-primary vcenter"
-                      style="margin-left:20px !important"
-                      placement="right"
-                      ngbTooltip="Search for existing patients using these identifiers"
-                      [openDelay]="1000"
-                      [closeDelay]="500"
-                      tooltipClass="subtle-tooltip"
-                      [disabled]="
-                        IsPatientIdUnchanged() ||
-                        DisablePatientValidationButtonIfFieldsAreInvalid() ||
-                        IsSearchingForPatient()
-                      "
                       (click)="ValidatePatient()"
+                      [closeDelay]="500"
+                      [disabled]="
+                      IsPatientIdUnchanged() ||
+                      DisablePatientValidationButtonIfFieldsAreInvalid() ||
+                      IsSearchingForPatient()
+                      "
+                      [openDelay]="1000"
                       [ngClass]="{ validating: IsSearchingForPatient() }"
+                      class="btn btn-primary vcenter"
+                      ngbTooltip="Search for existing patients using these identifiers"
+                      placement="right"
+                      style="margin-left:20px !important"
+                      tooltipClass="subtle-tooltip"
+                      type="button"
                       >
                       {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
@@ -102,6 +102,53 @@
                 <div class="col-md-3 mb-2 offset-md-1">
                   <div *ngIf="alternativeIdentifierField.errors" class="invalid-field">
                     <span>Invalid Alternative Identifier</span>
+                  </div>
+                </div>
+              </div>
+              <!-- GP Practice -->
+              <div class="form-row">
+                <div class="col-md-8 mb-2 flex-container">
+                  <div class="flex-item flex-grow">
+                    <label for="gpPractice">GP Practice</label>
+                    <input
+                      #gpPractice
+                      [class.is-invalid]="hasGpSearchFailed"
+                      [inputFormatter]="FormatTypeAheadResults"
+                      [ngbTypeahead]="GpSearch"
+                      [resultFormatter]="FormatTypeAheadResults"
+                      class="form-control"
+                      formControlName="gpPractice"
+                      id="gpPractice"
+                      type="text"
+                    />
+                  </div>
+                  <div class="flex-item flex-bottom mb-more-1">
+                    <label class="container">
+                      <input
+                        (change)="ToggleGpPracticeUnknown($event)"
+                        class="form-control"
+                        formControlName="unknownGpPractice"
+                        id="unknownGpPractice"
+                        type="checkbox"
+                        value=""
+                      />
+                      <span class="checkmark"></span>
+                      Unknown
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- GP Practice Errors-->
+              <div class="form-row mt-less-2" *ngIf="gpPracticeField.errors">
+                <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
+                  <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
+                    <span>* GP practice, Postcode or CCG Required </span>
+                  </div>
+                </div>
+                <div class="col-md-8 mb-2">
+                  <span *ngIf="isGpSearching">searching...</span>
+                  <div class="invalid-field" *ngIf="hasGpSearchFailed">
+                    Sorry, suggestions could not be loaded.
                   </div>
                 </div>
               </div>
