@@ -37,8 +37,47 @@ namespace Mep.Business.Services
                 .Include(e => e.Details)
                   .ThenInclude(d => d.ExaminationDetailType)
                 .Include(e => e.UserExaminationNotifications)
+                  .ThenInclude(u => u.User)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .ToListAsync();
+
+      IEnumerable<Models.Examination> models =
+        _mapper.Map<IEnumerable<Models.Examination>>(entities);
+
+      return models;
+    }
+
+    public async Task<IEnumerable<Models.Examination>> GetListByAmhpUserIdAsync(
+      int amhpUserId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+
+      IEnumerable<Entities.Examination> entities =
+        await _context.Examinations
+                .Include(e => e.UserExaminationNotifications)
+                  .ThenInclude(u => u.User)
+                    .ThenInclude(u => u.ProfileType)
+                .Where(e => e.UserExaminationNotifications.Any(u => u.UserId == amhpUserId))
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .ToListAsync();
+
+      if (entities.Any())
+      {
+        Entities.ProfileType amhpProfileType =
+          entities.SelectMany(e => e.UserExaminationNotifications)
+                  .First(u => u.UserId == amhpUserId)
+                  .User
+                  .ProfileType;
+
+        if (amhpProfileType.Id != Models.ProfileType.AMHP)
+        {
+          throw new ModelStateException("AmhpUserId",
+            $"UserId {amhpUserId} must be an AMHP but is a {amhpProfileType.Name}.");
+        }
+
+      }
 
       IEnumerable<Models.Examination> models =
         _mapper.Map<IEnumerable<Models.Examination>>(entities);
@@ -266,8 +305,8 @@ namespace Mep.Business.Services
       }
       else
       {
-          throw new EntityNotLoadedException(
-            "Examination", model.Id, "UserExaminationNotification.User.ProfileType of AMHP", ProfileType.AMHP);
+        throw new EntityNotLoadedException(
+          "Examination", model.Id, "UserExaminationNotification.User.ProfileType of AMHP", ProfileType.AMHP);
       }
       return true;
     }
