@@ -1,10 +1,11 @@
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Referral } from '../../interfaces/referral';
-import { ReferralStatus } from '../../enums/ReferralStatus.enum';
-import { Observable } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Referral } from '../../interfaces/referral';
+import { ReferralEdit } from 'src/app/interfaces/referralEdit';
+import { ReferralStatus } from '../../enums/ReferralStatus.enum';
 import { ReferralView } from 'src/app/interfaces/referral-view';
 
 @Injectable({
