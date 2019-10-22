@@ -18,6 +18,14 @@ namespace Mep.Business.Models
     public int LeadAmhpUserId { get; set; }
     public bool IsPlannedExamination { get; set; }
 
+    public string PatientCcgName 
+    {
+      get
+      {
+        return Patient?.Ccg?.Name;
+      }
+    }
+
     public Examination CurrentExamination
     {
       get
@@ -69,6 +77,16 @@ namespace Mep.Business.Models
       {
         return Examinations?.Where(e => e.IsActive)
                             .Count(e => !e.IsSuccessful ?? false) ?? 0;
+      }
+    }
+
+    public string PatientGpPracticeNameAndPostcode
+    {
+      get
+      {
+        return Patient?.GpPractice == null
+            ? null
+            : $"{Patient.GpPractice.Name}, {Patient.GpPractice.Postcode}";
       }
     }
 

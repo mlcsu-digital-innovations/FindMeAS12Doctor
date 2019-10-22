@@ -95,8 +95,19 @@ label {
   align-items: center;
 }
 
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .flex-item {
  margin-right: 20px;
+}
+
+.flex-bottom {
+  align-self: flex-end;
 }
 
 .flex-grow {
@@ -373,6 +384,14 @@ label {
   margin-left: -1rem !important;
 }
 
-.mt-more-2 {
+.ml-more-2 {
   margin-left: 1rem !important;
+}
+
+.mb-more-1 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-more-2 {
+  margin-bottom: 1rem;
 }

@@ -6,9 +6,12 @@ namespace Mep.Api.ViewModels
   {
     public DateTimeOffset CreatedAt { get; set; }
     public int Id { get; set; }
-    public int LeadAmhpUserId { get; set; }
-    public int? PatientCcgId { get; set; }
+    public string LeadAmhpUserDisplayName {get; set;}
+    public int LeadAmhpUserId { get; set; }    
     public string PatientAlternativeIdentifier { get; set; }
+    public int? PatientCcgId { get; set; }
+    public string PatientCcgName {get; set;}
+    public string PatientGpPracticeNameAndPostcode {get; set;}
     public int? PatientGpPracticeId { get; set; }
     public long? PatientNhsNumber { get; set; }
     public string PatientResidentialPostcode { get; set; }
