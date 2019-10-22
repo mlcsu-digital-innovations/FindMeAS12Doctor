@@ -19,19 +19,29 @@
             Referral Id: <strong>{{referral.id}}</strong>
           </div>
           <div class="flex-item">
-            Patient Identifier: <strong>{{referral.patient.patientIdentifier}}</strong>
+            Patient Identifier: <strong>{{referral.patientIdentifier}}</strong>
           </div>
           <div class="flex-item">
-            Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
+            Lead AMHP: <strong>{{referral.leadAmhp}}</strong>
           </div>
           <div class="flex-item">
-            Referral Status: <strong>{{referral.referralStatus.description}}</strong>
+            Referral Status: <strong>{{referral.status}}</strong>
           </div>
         </div>
+        <div class="card-body">
+          <form [formGroup]="currentExaminationForm" novalidate>
+            <div class="form-row">
+              <div class="">
+                <input 
+                  type="text"
+                  formControlName="AmhpUser"/>
+
+              </div>
 
 
-
-
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
