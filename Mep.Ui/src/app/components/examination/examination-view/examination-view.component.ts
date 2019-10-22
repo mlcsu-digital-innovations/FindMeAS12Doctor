@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NhsNumberValidFormat } from 'src/app/helpers/nhs-number.validator';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
-import { Patient } from 'src/app/interfaces/patient';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
@@ -23,10 +21,8 @@ export class ExaminationViewComponent implements OnInit {
   referralId: number;
 
   constructor(
-    private formBuilder: FormBuilder,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private router: Router,
     private toastService: ToastService
   ) { }
 
