@@ -1,1 +1,45 @@
-<p>examination-view works!</p>
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12 ">
+      <div class="card" *ngIf="referral$ | async as referral; else loading">
+        <div class="card-header">
+          <div class="card-icon">
+              <i class="fas fa-file-alt fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">View Examination</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-header-details">
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
+          </div>
+          <div class="flex-item">
+            Patient Identifier: <strong>{{referral.patient.patientIdentifier}}</strong>
+          </div>
+          <div class="flex-item">
+            Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
+          </div>
+          <div class="flex-item">
+            Referral Status: <strong>{{referral.referralStatus.description}}</strong>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #loading>
+    <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+  </ng-template>
+  
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
