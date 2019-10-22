@@ -293,6 +293,16 @@ export class ReferralEditComponent implements OnInit {
     this.renderer.selectRootElement(fieldName).focus();
   }
 
+  ToggleGpPracticeUnknown(event: any) {
+    if (event.target.checked) {
+      // set the field to unknown, show the postcode field and set focus
+      this.gpPracticeField.setValue({id: 0, resultText: 'Unknown'});
+    } else {
+      this.gpPracticeField.setValue(null, '');
+      this.SetFieldFocus('#gpPractice');
+    }
+  }
+
   async UseExistingPatient() {
     // ToDo: copy the existing patient details
 
