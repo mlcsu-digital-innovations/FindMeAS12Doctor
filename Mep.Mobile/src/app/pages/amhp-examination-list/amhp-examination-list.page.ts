@@ -16,9 +16,18 @@ export class AmhpExaminationListPage implements OnInit {
   ngOnInit() {
     this.examinationListLastUpdated = new Date();
     this.examinationService.getList(10)
-      .subscribe((result: AmhpExaminationList[]) =>
-        this.examinationList = result
-      );
+      .subscribe((result: AmhpExaminationList[]) => {
+        this.examinationList = result.sort(
+          (examination1: AmhpExaminationList, examination2: AmhpExaminationList) => {
+          if (examination1.dateTime > examination2.dateTime) {
+            return 1;
+          }
+          else if (examination1.dateTime < examination2.dateTime) {
+            return -1;
+          }
+          return 0;
+        });
+      });
   }
 
 }
