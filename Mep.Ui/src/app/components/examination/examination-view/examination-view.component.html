@@ -130,6 +130,58 @@
                 />
               </div>
             </div>
+            <div class="form-row" style="padding-top:10px; overflow: auto;">
+              <table class="table table-bordered table-sm table-referral-list">
+                <thead>
+                  <tr>
+                    <th scope="col" sortable="examinationId" (sort)="onSort($event)">Examination Id</th>
+                    <th scope="col" sortable="examinationPostcode" (sort)="onSort($event)">Examination Postcode</th>
+                    <th scope="col" sortable="examinationType" (sort)="onSort($event)">Examination Type</th>
+                    <th scope="col" sortable="dateTime" (sort)="onSort($event)">Date/Time</th>
+                    <th scope="col" sortable="examinationStatus" (sort)="onSort($event)">Status</th>
+                    <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
+                    <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
+                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Allocated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="">
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-between p-2">
+              <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
+              <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="referralListService.pageSize">
+                <option [ngValue]="5">5 items per page</option>
+                <option [ngValue]="10">10 items per page</option>
+                <option [ngValue]="9999999">All items</option>
+              </select>
+            </div>
           </form>
         </div>
       </div>
