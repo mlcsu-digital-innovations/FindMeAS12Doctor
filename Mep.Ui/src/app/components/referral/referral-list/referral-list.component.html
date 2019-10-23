@@ -18,8 +18,12 @@
           <form novalidate>
             <div class="form-row">
               <div class="col-md-4">
-                <input class="form-control" id="searchTerm" type="text" name="searchTerm"
-                placeholder="Full text search:"
+                <label for="searchTerm">Full text search:</label>
+                <input 
+                  class="form-control" 
+                  id="searchTerm" 
+                  type="text" 
+                  name="searchTerm"
                   [(ngModel)]="referralListService.searchTerm" />
               </div>
               <div class="col-md-2 offset-md-2">
