@@ -16,11 +16,11 @@ import * as moment from 'moment';
 })
 export class ExaminationViewComponent implements OnInit {
 
+  currentExaminationForm: FormGroup;
   isPatientIdValidated: boolean;
+  pageSize: number;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
-  currentExaminationForm: FormGroup;
-  pageSize: number;
   referralId: number;
 
   constructor(
