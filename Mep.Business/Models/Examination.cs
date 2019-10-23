@@ -58,6 +58,9 @@ namespace Mep.Business.Models
       }
     }
 
+    public DateTimeOffset DateTime
+    { get { return (DateTimeOffset)(MustBeCompletedBy ?? ScheduledTime); }}
+
     public virtual IList<ExaminationDetailType> DetailTypes
     {
       get
