@@ -9,6 +9,7 @@ namespace Mep.Api.ViewModels
   public class ReferralViewCurrentExamination
   {
     public string AmhpUserName { get; set; }
+    public virtual IList<ExaminationDetailType> DetailTypes { get; set; }
     public IList<string> DoctorNamesAccepted { get; set; }
     public IList<string> DoctorNamesAllocated { get; set; }
     public string FullAddress { get; set; }
