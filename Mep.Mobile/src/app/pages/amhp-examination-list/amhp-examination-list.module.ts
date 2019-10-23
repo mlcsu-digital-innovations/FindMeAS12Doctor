@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   declarations: [AmhpExaminationListPage]
 })
-export class AmhpExaminationListPageModule {}
+export class AmhpExaminationListPageModule { }
