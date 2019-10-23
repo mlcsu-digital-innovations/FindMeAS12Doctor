@@ -106,6 +106,19 @@ namespace Mep.Business.Migrations.Seeds
       return GetContactDetailTypeById(Models.ContactDetailType.WORK);
     }
 
+    protected ExaminationDetailType GetExaminationDetailTypeByName(string name)
+    {
+      try
+      {
+        return Context.ExaminationDetailTypes.Single(e => e.Name == name);
+      }
+      catch (Exception ex)
+      {
+        throw new ArgumentException(
+          $"Cannot find an ExaminationDetailType with the name of {name}", ex);
+      }
+    }
+
     protected int GetExaminationIdByExaminationAddress(string examinationAddress)
     {
       try
@@ -148,7 +161,6 @@ namespace Mep.Business.Migrations.Seeds
     {
       try
       {
-
         return Context.GpPractices.Single(gpPractice => gpPractice.Name == gpPracticeName);
       }
       catch (Exception ex)

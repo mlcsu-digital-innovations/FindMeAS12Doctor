@@ -12,6 +12,7 @@
     "git.ignoreLimitWarning": true,
     "team.remoteUrl": " https://einnovationteam-mlcsu.visualstudio.com",
     "team.teamProject": "Medical Examinations Portal",
-    "team.buildDefinitionId": 92
+    "team.buildDefinitionId": 92,
+    "editor.wrappingIndent": "indent"
 	}
 }
