@@ -4,9 +4,10 @@ import { Observable, of } from 'rxjs';
 import { ParamMap, ActivatedRoute } from '@angular/router';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
+import { ReferralView } from 'src/app/interfaces/referral-view';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { ReferralView } from 'src/app/interfaces/referral-view';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-examination-view',
@@ -15,10 +16,11 @@ import { ReferralView } from 'src/app/interfaces/referral-view';
 })
 export class ExaminationViewComponent implements OnInit {
 
+  currentExaminationForm: FormGroup;
   isPatientIdValidated: boolean;
+  pageSize: number;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
-  currentExaminationForm: FormGroup;
   referralId: number;
 
   constructor(
@@ -98,7 +100,10 @@ export class ExaminationViewComponent implements OnInit {
     // this.currentExaminationForm.controls.examinationDetails.setValue(referral.currentExamination.examinationDetails);
     this.currentExaminationForm.controls.fullAddress.setValue(referral.currentExamination.fullAddress);
     this.currentExaminationForm.controls.meetingArrangementComment.setValue(referral.currentExamination.meetingArrangementComment);
-    this.currentExaminationForm.controls.mustBeCompletedBy.setValue(referral.currentExamination.mustBeCompletedBy);
+
+    const mustBeCompletedBy = moment(referral.currentExamination.mustBeCompletedBy).format('DD/MM/YYYY HH:mm');
+
+    this.currentExaminationForm.controls.mustBeCompletedBy.setValue(mustBeCompletedBy);
     this.currentExaminationForm.controls.postCode.setValue(referral.currentExamination.postcode);
     this.currentExaminationForm.controls.preferredDoctorGenderTypeName.setValue(referral.currentExamination.preferredDoctorGenderTypeName);
     this.currentExaminationForm.controls.specialityName.setValue(referral.currentExamination.specialityName);
