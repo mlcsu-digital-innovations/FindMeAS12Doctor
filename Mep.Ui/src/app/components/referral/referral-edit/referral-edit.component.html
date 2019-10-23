@@ -78,6 +78,7 @@
                       tooltipClass="subtle-tooltip"
                       type="button"
                       >
+                      <i class="fas fa-bolt"></i>
                       {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                         *ngIf="IsSearchingForPatient()"></span>
@@ -149,7 +150,7 @@
               </div>
               <!-- Residential Postcode -->
               <div class="form-row">
-                <div class="col-md-3">
+                <div class="col-lg-2 col-md-3 col-sm-6">
                   <label for="residentialPostcode">Residential Postcode</label>
                   <input
                     type="text"
@@ -166,48 +167,51 @@
                     }"
                   />
                 </div>
-                <div class="col-md-2">
-                  <div class="checkmark-content">
-                    <label class="container">
-                      <input
-                        class="form-control"
-                        type="checkbox"
-                        [appDisableControl]="!IsPatientIdValidated()"
-                        value=""
-                        id="unknownResidentialPostcode"
-                        formControlName="unknownResidentialPostcode"
-                        (change)="ToggleResidentialPostcodeUnknown($event)"
-                      />
-                      <span class="checkmark"></span>
-                      Unknown
-                    </label>
-                  </div>
+                <div class="col-md-2 mb-more">
+                  <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      value=""
+                      id="unknownResidentialPostcode"
+                      formControlName="unknownResidentialPostcode"
+                      (change)="ToggleResidentialPostcodeUnknown($event)"
+                    />
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
                 </div>
-                <div class="col-md-2">
-                  <div class="column-div">
-                    <button
-                      type="button"
-                      class="btn btn-primary vcenter"
-                      placement="right"
-                      ngbTooltip="Check that postcode is valid"
-                      [openDelay]="1000"
-                      [closeDelay]="500"
-                      tooltipClass="subtle-tooltip"
-                      [disabled]="
-                        DisablePostcodeValidationButtonIfFieldIsInvalid() ||
-                        IsSearchingForPostcode() ||
-                        !IsPatientIdValidated()
-                      "
-                      (click)="ValidatePostcode()"
-                      [ngClass]="{ validating: IsSearchingForPostcode() }"
-                    >
-                      {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
-                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                        *ngIf="IsSearchingForPostcode()"></span>
-                    </button>
-                  </div>
+                <div class="col-md-2 mb-more">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    placement="right"
+                    ngbTooltip="Check that postcode is valid"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    [disabled]="
+                      DisablePostcodeValidationButtonIfFieldIsInvalid() ||
+                      IsSearchingForPostcode()
+                    "
+                    (click)="ValidatePostcode()"
+                    [ngClass]="{ validating: IsSearchingForPostcode() }"
+                  >
+                    <i class="fas fa-bolt"></i>
+                    {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="IsSearchingForPostcode()"></span>
+                  </button>
                 </div>
               </div>
+              <!-- Residential Postcode Errors-->
+              <div class="form-row" *ngIf="residentialPostcodeField.errors">
+                <div class="col-md-4 mb-2">
+                  <div class="invalid-field">
+                    <span>{{ residentialPostcodeValidationMessage }}</span>
+                  </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
