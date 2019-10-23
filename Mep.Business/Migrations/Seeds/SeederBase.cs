@@ -185,20 +185,6 @@ namespace Mep.Business.Migrations.Seeds
       }
     }
 
-    protected int GetNotificationTextId(string notificationTextName)
-    {
-      try
-      {
-        return Context
-          .NotificationTexts
-            .Single(notificationText => notificationText.Name == notificationTextName).Id;
-      }
-      catch (Exception ex)
-      {
-        throw new ArgumentException($"Cannot find {notificationTextName} in NotificationTexts", ex);
-      }
-    }
-
     protected int GetOrganisationIdByName(string name)
     {
       try

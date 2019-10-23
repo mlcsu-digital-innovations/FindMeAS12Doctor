@@ -26,14 +26,14 @@ namespace Mep.Business.Migrations.Seeds
 
       AddOrUpdateNameDescriptionEntityById(
         Models.ReferralStatus.ASSIGNING_DOCTORS,
-        NAME_ALLOCATING_DOCTORS,
-        DESCRIPTION_ALLOCATING_DOCTORS
+        NAME_ASSIGNING_DOCTORS,
+        DESCRIPTION_ASSIGNING_DOCTORS        
       );
 
       AddOrUpdateNameDescriptionEntityById(
         Models.ReferralStatus.ALLOCATING_DOCTORS,
-        NAME_ASSIGNING_DOCTORS,
-        DESCRIPTION_ASSIGNING_DOCTORS
+        NAME_ALLOCATING_DOCTORS,
+        DESCRIPTION_ALLOCATING_DOCTORS
       );
 
       AddOrUpdateNameDescriptionEntityById(

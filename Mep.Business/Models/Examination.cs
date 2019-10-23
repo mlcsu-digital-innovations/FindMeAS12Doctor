@@ -53,8 +53,8 @@ namespace Mep.Business.Models
       {
         return UserExaminationNotifications
           .Where(u => u.IsActive)
-          .SingleOrDefault(u => u.IsAmhp)
-          .UserName;
+          .FirstOrDefault(u => u.IsAmhp)
+          ?.UserName;
       }
     }
 
