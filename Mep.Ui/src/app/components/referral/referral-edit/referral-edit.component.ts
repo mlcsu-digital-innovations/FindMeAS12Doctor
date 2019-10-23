@@ -1,3 +1,4 @@
+import { CcgListService } from 'src/app/services/ccg-list/ccg-list.service';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GpPracticeListService } from 'src/app/services/gp-practice-list/gp-practice-list.service';
@@ -26,8 +27,10 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class ReferralEditComponent implements OnInit {
 
+  hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
   initialReferralDetails: ReferralEdit;
+  isCcgSearching: boolean;
   isGpFieldsShown: boolean;
   isGpSearching: boolean;
   isPatientIdValidated: boolean;
@@ -46,6 +49,7 @@ export class ReferralEditComponent implements OnInit {
   updatedReferral: ReferralEdit;
 
   constructor(
+    private ccgListService: CcgListService,
     private formBuilder: FormBuilder,
     private gpPracticeListService: GpPracticeListService,
     private modalService: NgbModal,
@@ -111,6 +115,8 @@ export class ReferralEditComponent implements OnInit {
         ]
       ],
       unknownResidentialPostcode: false,
+      ccg: [''],
+      unknownCcg: false,
     });
 
     this.patientDetails = {} as Patient;
@@ -123,6 +129,23 @@ export class ReferralEditComponent implements OnInit {
     this.patientModal.close();
     this.SetFieldFocus('#nhsNumber');
   }
+
+  CcgSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isCcgSearching = true)),
+      switchMap(term =>
+        this.ccgListService.GetCcgList(term).pipe(
+          tap(() => (this.hasCcgSearchFailed = false)),
+          catchError(() => {
+            this.hasCcgSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isCcgSearching = false))
+    )
 
   async Delay(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -172,6 +195,10 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.alternativeIdentifier;
   }
 
+  get ccgField() {
+    return this.referralForm.controls.ccg;
+  }
+
   get gpPracticeField() {
     return this.referralForm.controls.gpPractice;
   }
@@ -186,6 +213,10 @@ export class ReferralEditComponent implements OnInit {
 
   get residentialPostcodeField() {
     return this.referralForm.controls.residentialPostcode;
+  }
+
+  get unknownCcg() {
+    return this.referralForm.controls.unknownCcg;
   }
 
   get unknownGpPractice() {
@@ -293,6 +324,22 @@ export class ReferralEditComponent implements OnInit {
     );
 
     this.unknownResidentialPostcode.setValue(referral.patientResidentialPostcode === null);
+    if (this.unknownResidentialPostcode.value === true) {
+      this.residentialPostcodeField.disable();
+    }
+
+    const ccgValue = referral.patientCcgId === null
+      ? {
+        id: 0,
+        resultText: 'Unknown'
+      }
+      : {
+        id: referral.patientCcgId,
+        resultText: referral.patientCcgName
+      };
+
+    this.ccgField.setValue(ccgValue);
+    this.unknownCcg.setValue(ccgValue.id === 0);
 
   }
 
@@ -320,6 +367,10 @@ export class ReferralEditComponent implements OnInit {
 
   IsSearchingForPostcode(): boolean {
     return this.isSearchingForPostcode;
+  }
+
+  IsUnknownFieldChecked(fieldName: string): boolean {
+    return this.referralForm.get(fieldName).value;
   }
 
   OnChanges(): void {
@@ -368,6 +419,16 @@ export class ReferralEditComponent implements OnInit {
     this.renderer.selectRootElement(fieldName).focus();
   }
 
+  ToggleCcgUnknown(event: any) {
+    if (event.target.checked) {
+      // set the field to unknown, show the CCG field and set focus
+      this.ccgField.setValue({id: 0, resultText: 'Unknown'});
+    } else {
+      this.ccgField.setValue(null, '');
+      this.SetFieldFocus('#ccg');
+    }
+  }
+
   ToggleGpPracticeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the postcode field and set focus
@@ -381,7 +442,9 @@ export class ReferralEditComponent implements OnInit {
   ToggleResidentialPostcodeUnknown(event: any) {
     if (event.target.checked) {
       this.residentialPostcodeField.setValue('Unknown');
+      this.residentialPostcodeField.disable();
     } else {
+      this.residentialPostcodeField.enable();
       this.residentialPostcodeField.setValue('');
       this.residentialPostcodeField.updateValueAndValidity();
 
