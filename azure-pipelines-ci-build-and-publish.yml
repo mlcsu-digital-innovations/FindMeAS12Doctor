@@ -41,6 +41,26 @@ steps:
     workingDir: './Mep.Ui'
     customCommand: 'run build:azure-development'
 
+- task: Npm@1
+  displayName: 'Mep.Mobile - Install npm packages'
+  inputs:
+    command: 'install'
+    workingDir: './Mep.Mobile'
+
+- task: Npm@1
+  displayName: "Mep.Mobile - Set the version number"
+  inputs:
+    command: 'custom'
+    workingDir: './Mep.Mobile'
+    customCommand: 'version $(build.buildNumber) --force'    
+
+- task: Npm@1
+  displayName: "Mep.Mobile - Check build completes successfully"
+  inputs:
+    command: 'custom'
+    workingDir: './Mep.Mobile'
+    customCommand: 'run build:azure-development'
+
 - task: PublishBuildArtifacts@1
   displayName: 'Mep.Api - Publish build artifacts'
   inputs:
@@ -54,3 +74,10 @@ steps:
     PathtoPublish: './Deployment/AzureDevelopment/Mep.Ui'
     ArtifactName: 'ui'
     publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Mep.Mobile - Publish build artifacts'
+  inputs:
+    PathtoPublish: './Deployment/AzureDevelopment/Mep.Mobile'
+    ArtifactName: 'mobile'
+    publishLocation: 'Container'    
