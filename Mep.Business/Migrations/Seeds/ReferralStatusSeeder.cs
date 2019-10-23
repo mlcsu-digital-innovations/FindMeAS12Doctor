@@ -5,14 +5,14 @@ namespace Mep.Business.Migrations.Seeds
   internal class ReferralStatusSeeder : SeederBase<ReferralStatus>
   {
     #region Constants
-    internal const string DESCRIPTION_ACCEPTED = "Accepted Description";
-    internal const string DESCRIPTION_ACCEPTING = "Accepting Description";
-    internal const string DESCRIPTION_ALLOCATING = "Allocating Description";    
+    internal const string DESCRIPTION_ALLOCATED_DOCTORS = "Allocated Doctors Description";    
+    internal const string DESCRIPTION_ALLOCATING_DOCTORS = "Allocating Doctors Description";    
+    internal const string DESCRIPTION_ASSIGNING_DOCTORS = "Assigning Doctors Description";
     internal const string DESCRIPTION_NEW = "New Description";
     
-    internal const string NAME_ACCEPTED = "Accepted";
-    internal const string NAME_ACCEPTING = "Accepting";
-    internal const string NAME_ALLOCATING = "Allocating";
+    internal const string NAME_ALLOCATED_DOCTORS = "Allocated Doctors";
+    internal const string NAME_ALLOCATING_DOCTORS = "Allocating Doctors";
+    internal const string NAME_ASSIGNING_DOCTORS = "Assigning Doctors";
     internal const string NAME_NEW = "New";
     #endregion
 
@@ -25,21 +25,21 @@ namespace Mep.Business.Migrations.Seeds
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ReferralStatus.ALLOCATING,
-        NAME_ALLOCATING,
-        DESCRIPTION_ALLOCATING
+        Models.ReferralStatus.ASSIGNING_DOCTORS,
+        NAME_ALLOCATING_DOCTORS,
+        DESCRIPTION_ALLOCATING_DOCTORS
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ReferralStatus.ACCEPTING,
-        NAME_ACCEPTING,
-        DESCRIPTION_ACCEPTING
+        Models.ReferralStatus.ALLOCATING_DOCTORS,
+        NAME_ASSIGNING_DOCTORS,
+        DESCRIPTION_ASSIGNING_DOCTORS
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ReferralStatus.ACCEPTED,
-        NAME_ACCEPTED,
-        DESCRIPTION_ACCEPTED
+        Models.ReferralStatus.ALLOCATED_DOCTORS,
+        NAME_ALLOCATED_DOCTORS,
+        DESCRIPTION_ALLOCATED_DOCTORS
       );      
     }
   }
