@@ -59,7 +59,7 @@ namespace Mep.Business.Models
     }
 
     public DateTimeOffset DateTime
-    { get { return (DateTimeOffset)(MustBeCompletedBy ?? ScheduledTime); }}
+    { get { return (DateTimeOffset)(MustBeCompletedBy ?? ScheduledTime); } }
 
     public virtual IList<ExaminationDetailType> DetailTypes
     {
@@ -69,15 +69,16 @@ namespace Mep.Business.Models
                       .Select(d => d.ExaminationDetailType).ToList();
       }
     }
-    
+
     public IList<string> DoctorNamesAccepted
     {
       get
       {
         return UserExaminationNotifications
           .Where(u => u.IsActive)
-          .Where(u => u.HasAccepted ?? false)
           .Where(u => u.IsDoctor)
+          .Where(u => u.HasAccepted ?? false)
+          .Where(u => u.NotificationTextId == NotificationText.ASSIGNED_TO_EXAMINATION)
           .Select(u => u.UserName)
           .ToList();
       }
@@ -87,14 +88,23 @@ namespace Mep.Business.Models
     {
       get
       {
-        return UserExaminationNotifications
-          .Where(u => u.IsActive)
-          .Where(u => !u.HasAccepted ?? true)
-          .Where(u => u.IsDoctor)
-          .Select(u => u.UserName)
-          .ToList();
+        return DoctorsAllocated.Select(d => d.DisplayName)
+                               .ToList();
       }
     }
+
+    public IList<User> DoctorsAllocated
+    {
+      get
+      {
+        return UserExaminationNotifications
+          .Where(u => u.IsActive)
+          .Where(u => u.NotificationTextId == NotificationText.ALLOCATED_TO_EXAMINATION)
+          .Where(u => u.IsDoctor)
+          .Select(u => u.User)
+          .ToList();
+      }
+    }    
 
     public string FullAddress
     {
@@ -124,6 +134,9 @@ namespace Mep.Business.Models
 
     public bool IsPlanned
     { get { return ScheduledTime != null; } }
+
+    public string PatientIdentifier
+    { get { return Referral?.PatientIdentifier; } }
 
     public string PreferredDoctorGenderTypeName
     { get { return PreferredDoctorGenderType?.Name; } }

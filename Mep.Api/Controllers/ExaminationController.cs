@@ -48,5 +48,25 @@ namespace Mep.Api.Controllers
         return NoContent();
       }
     }
+
+    [HttpGet]
+    [Route("view/{id:int}")]
+    public async Task<ActionResult<ViewModels.ExaminationView>> GetView(int id)
+    {
+      BusinessModels.Examination businessModel =
+          await _service.GetByIdAsync(id, true);
+
+      if (businessModel == null)
+      {
+        return NoContent();
+      }
+      else
+      {
+        ViewModels.ExaminationView viewModel =
+            _mapper.Map<ViewModels.ExaminationView>(businessModel);
+
+        return Ok(viewModel);
+      }
+    }
   }
 }
