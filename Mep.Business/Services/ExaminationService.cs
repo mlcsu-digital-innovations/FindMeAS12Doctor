@@ -96,8 +96,11 @@ namespace Mep.Business.Services
                 .Include(e => e.CreatedByUser)
                 .Include(e => e.Details)
                   .ThenInclude(d => d.ExaminationDetailType)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.Patient)
                 .Include(e => e.UserExaminationNotifications)
                   .ThenInclude(u => u.User)
+                    .ThenInclude(u => u.ProfileType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == entityId);
