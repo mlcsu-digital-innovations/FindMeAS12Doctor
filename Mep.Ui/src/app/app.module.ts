@@ -2,6 +2,7 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
+import { DoctorModule } from './components/doctor/doctor.module';
 import { ExaminationModule } from './components/examination/examination.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     BrowserModule,
     DigitOnlyModule,
+    DoctorModule,
     ExaminationModule,
     HttpClientModule,
     PatientModule,
