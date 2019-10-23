@@ -160,6 +160,10 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.nhsNumber;
   }
 
+  get residentialPostcodeField() {
+    return this.referralForm.controls.residentialPostcode;
+  }
+
   get unknownGpPractice() {
     return this.referralForm.controls.unknownGpPractice;
   }
@@ -192,6 +196,13 @@ export class ReferralEditComponent implements OnInit {
   HasInvalidNHSNumber(): boolean {
     return (
       this.nhsNumberField.value !== '' && this.nhsNumberField.errors !== null
+    );
+  }
+
+  HasInvalidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' &&
+      this.residentialPostcodeField.errors !== null
     );
   }
 

@@ -93,17 +93,20 @@ label {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  align-content: space-around;
+  flex-wrap: nowrap;
 }
 
 .flex-container {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  width:100%;
+  align-items: flex-end;
 }
 
 .flex-item {
- margin-right: 20px;
+  margin: 0 10px 0 10px;
 }
 
 .flex-bottom {
@@ -365,6 +368,7 @@ label {
 .or {
   font-weight:600;
   color: #666;
+  text-align: center;
 }
 
 /** margin classes in half rems**/
@@ -386,6 +390,10 @@ label {
 
 .ml-more-2 {
   margin-left: 1rem !important;
+}
+
+.mb-more {
+  margin-bottom: 0.25rem;
 }
 
 .mb-more-1 {
