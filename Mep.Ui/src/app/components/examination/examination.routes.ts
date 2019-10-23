@@ -19,7 +19,7 @@ export const ExaminationRoutes: Routes = [
     component: ExaminationListComponent
   },
   {
-    path: 'examination/view/:examinationId',
+    path: 'examination/view/:referralId',
     component: ExaminationViewComponent
   },
   {

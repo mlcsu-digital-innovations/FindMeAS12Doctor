@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Referral } from '../../interfaces/referral';
 import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 import { ReferralStatus } from '../../enums/ReferralStatus.enum';
+import { ReferralView } from 'src/app/interfaces/referral-view';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,16 @@ export class ReferralService {
     .pipe(delay(1000))
     .pipe
       (map(r => r as ReferralEdit)
+    );
+  }
+
+  public getReferralView(referralId: number): Observable<ReferralView> {
+    return this.httpClient.get(
+      environment.apiEndpoint + `/referral/view/${referralId}`
+    )
+    .pipe(delay(1000))
+    .pipe
+      (map(r => r as ReferralView)
     );
   }
 

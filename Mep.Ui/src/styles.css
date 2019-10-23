@@ -85,10 +85,10 @@ label {
 }
 
 .card-header-details {
+  align-content: space-between;
+  align-items: center;
   background-color: #0dadb7;
-  padding:10px;
   color: #fff;
-
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -98,6 +98,8 @@ label {
 }
 
 .flex-container {
+  align-content: space-between;
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
