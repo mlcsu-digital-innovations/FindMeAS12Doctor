@@ -1,5 +1,7 @@
 using Mep.Data.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -16,6 +18,7 @@ namespace Mep.Business.Migrations.Seeds
       string completedByUserName = null,
       string completionConfirmationByUserName = null,
       DateTimeOffset? completedTime = null,
+      List<ExaminationDetail> details = null,
       bool? isSuccessful = null,
       string meetingArrangementComment = null,
       DateTimeOffset? mustBeCompletedBy = null,
@@ -23,7 +26,8 @@ namespace Mep.Business.Migrations.Seeds
       int? preferredDoctorGenderTypeId = null,
       DateTimeOffset? scheduledTime = null,
       int? specialityId = null,
-      int? unsuccessfulExaminationTypeId = null
+      int? unsuccessfulExaminationTypeId = null,
+      List<UserExaminationNotification> userExaminationNotifications = null
     )
     {
       Examination examination = new Examination
@@ -41,6 +45,7 @@ namespace Mep.Business.Migrations.Seeds
             ? (int?)null
             : GetUserByDisplayName(completionConfirmationByUserName).Id,
         CreatedByUserId = GetUserByDisplayName(createdByUserName).Id,
+        Details = details,
         IsSuccessful = isSuccessful == null ? null : isSuccessful,
         MeetingArrangementComment = meetingArrangementComment,
         MustBeCompletedBy = mustBeCompletedBy == null ? null : mustBeCompletedBy,
@@ -52,12 +57,24 @@ namespace Mep.Business.Migrations.Seeds
         ScheduledTime = scheduledTime == null ? null : scheduledTime,
         SpecialityId = specialityId == null ? (int?)null : specialityId,
         UnsuccessfulExaminationTypeId =
-          unsuccessfulExaminationTypeId == null ? null : unsuccessfulExaminationTypeId
+          unsuccessfulExaminationTypeId == null ? null : unsuccessfulExaminationTypeId,
+        UserExaminationNotifications = userExaminationNotifications
       };
 
       PopulateActiveAndModifiedWithSystemUser(examination);
 
       return examination;
+    }
+
+    /// <summary>
+    /// Also deletes all ExaminationDetails
+    /// </summary>
+    internal override void DeleteSeeds()
+    {
+      Context.ExaminationDetails.RemoveRange(
+        Context.ExaminationDetails.ToList()
+      );      
+      base.DeleteSeeds();
     }
   }
 }

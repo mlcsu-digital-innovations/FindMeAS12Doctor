@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
+using BusinessModels = Mep.Business.Models;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using BusinessModels = Mep.Business.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mep.Api.Controllers
 {
