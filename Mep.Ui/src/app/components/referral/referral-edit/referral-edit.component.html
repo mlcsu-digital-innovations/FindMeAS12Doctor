@@ -29,7 +29,7 @@
         <div class="card-body">
           <form [formGroup]="referralForm" novalidate>
               <div class="form-row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                   <label for="nhsNumber">NHS Number</label>
                   <input
                     type="text"
@@ -44,10 +44,8 @@
                     }"
                   />
                 </div>
-                <div class="col-md-1 centered-div">
-                  <div class="or">
-                    Or
-                  </div>
+                <div class="col-md-1 mb-more-2 centered">
+                  <span class="or">Or</span>
                 </div>
                 <div class="col-md-4">
                   <label for="alternativeIdentifier">Alternative Identifier</label>
@@ -63,7 +61,7 @@
                     type="text"
                   />
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 mb-more">
                     <button
                       (click)="ValidatePatient()"
                       [closeDelay]="500"
@@ -74,13 +72,13 @@
                       "
                       [openDelay]="1000"
                       [ngClass]="{ validating: IsSearchingForPatient() }"
-                      class="btn btn-primary vcenter"
+                      class="btn btn-primary"
                       ngbTooltip="Search for existing patients using these identifiers"
                       placement="right"
-                      style="margin-left:20px !important"
                       tooltipClass="subtle-tooltip"
                       type="button"
                       >
+                      <i class="fas fa-bolt"></i>
                       {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                         *ngIf="IsSearchingForPatient()"></span>
@@ -88,8 +86,8 @@
                   </div>
               </div>
               <!-- Row for divs showing patient number validation errors -->
-              <div class="form-row mt-less-2" *ngIf="!HasNoPatientIdErrors()">
-                <div class="col-md-3 mb-2">
+              <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
+                <div class="col-md-4 mb-2">
                   <div *ngIf="nhsNumberField.errors != null">
                     <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
                       <span>Invalid NHS Number</span>
@@ -107,39 +105,37 @@
               </div>
               <!-- GP Practice -->
               <div class="form-row">
-                <div class="col-md-8 mb-2 flex-container">
-                  <div class="flex-item flex-grow">
-                    <label for="gpPractice">GP Practice</label>
+                <div class="col-md-6">
+                  <label for="gpPractice">GP Practice</label>
+                  <input
+                    #gpPractice
+                    [class.is-invalid]="hasGpSearchFailed"
+                    [inputFormatter]="FormatTypeAheadResults"
+                    [ngbTypeahead]="GpSearch"
+                    [resultFormatter]="FormatTypeAheadResults"
+                    class="form-control"
+                    formControlName="gpPractice"
+                    id="gpPractice"
+                    type="text"
+                  />
+                </div>
+                <div class="col-md-2 mb-more">
+                  <label class="container">
                     <input
-                      #gpPractice
-                      [class.is-invalid]="hasGpSearchFailed"
-                      [inputFormatter]="FormatTypeAheadResults"
-                      [ngbTypeahead]="GpSearch"
-                      [resultFormatter]="FormatTypeAheadResults"
-                      class="form-control"
-                      formControlName="gpPractice"
-                      id="gpPractice"
-                      type="text"
+                      (change)="ToggleGpPracticeUnknown($event)"
+                      class="form-control bottom"
+                      formControlName="unknownGpPractice"
+                      id="unknownGpPractice"
+                      type="checkbox"
+                      value=""
                     />
-                  </div>
-                  <div class="flex-item flex-bottom mb-more-1">
-                    <label class="container">
-                      <input
-                        (change)="ToggleGpPracticeUnknown($event)"
-                        class="form-control"
-                        formControlName="unknownGpPractice"
-                        id="unknownGpPractice"
-                        type="checkbox"
-                        value=""
-                      />
-                      <span class="checkmark"></span>
-                      Unknown
-                    </label>
-                  </div>
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
                 </div>
               </div>
               <!-- GP Practice Errors-->
-              <div class="form-row mt-less-2" *ngIf="gpPracticeField.errors">
+              <div class="form-row" *ngIf="gpPracticeField.errors">
                 <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
                   <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
                     <span>* GP practice, Postcode or CCG Required </span>
@@ -152,6 +148,70 @@
                   </div>
                 </div>
               </div>
+              <!-- Residential Postcode -->
+              <div class="form-row">
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                  <label for="residentialPostcode">Residential Postcode</label>
+                  <input
+                    type="text"
+                    maxlength="8"
+                    minlength="6"
+                    formControlName="residentialPostcode"
+                    #residentialPostcode
+                    id="residentialPostcode"
+                    oninput="this.value = this.value.toUpperCase()"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': HasInvalidPostcode(),
+                      'is-valid': HasValidPostcode()
+                    }"
+                  />
+                </div>
+                <div class="col-md-2 mb-more">
+                  <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      value=""
+                      id="unknownResidentialPostcode"
+                      formControlName="unknownResidentialPostcode"
+                      (change)="ToggleResidentialPostcodeUnknown($event)"
+                    />
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
+                </div>
+                <div class="col-md-2 mb-more">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    placement="right"
+                    ngbTooltip="Check that postcode is valid"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    [disabled]="
+                      DisablePostcodeValidationButtonIfFieldIsInvalid() ||
+                      IsSearchingForPostcode()
+                    "
+                    (click)="ValidatePostcode()"
+                    [ngClass]="{ validating: IsSearchingForPostcode() }"
+                  >
+                    <i class="fas fa-bolt"></i>
+                    {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="IsSearchingForPostcode()"></span>
+                  </button>
+                </div>
+              </div>
+              <!-- Residential Postcode Errors-->
+              <div class="form-row" *ngIf="residentialPostcodeField.errors">
+                <div class="col-md-4 mb-2">
+                  <div class="invalid-field">
+                    <span>{{ residentialPostcodeValidationMessage }}</span>
+                  </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>

@@ -9,3 +9,7 @@ form {
 .validating {
   min-width: 150px;
 }
+
+.form-row {
+  align-items: flex-end;
+}

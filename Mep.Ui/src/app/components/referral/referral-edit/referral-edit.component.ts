@@ -10,6 +10,9 @@ import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
+import { PostcodeRegex } from 'src/app/constants/Constants';
+import { PostcodeSearchResult } from 'src/app/interfaces/postcode-search-result';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 import { ReferralService } from 'src/app/services/referral/referral.service';
@@ -28,7 +31,9 @@ export class ReferralEditComponent implements OnInit {
   isGpFieldsShown: boolean;
   isGpSearching: boolean;
   isPatientIdValidated: boolean;
+  isPatientPostcodeValidated: boolean;
   isSearchingForPatient: boolean;
+  isSearchingForPostcode: boolean;
   modalResult: PatientSearchResult;
   patientDetails: Patient;
   patientModal: NgbModalRef;
@@ -37,6 +42,7 @@ export class ReferralEditComponent implements OnInit {
   referralCreated: Date;
   referralForm: FormGroup;
   referralId: number;
+  residentialPostcodeValidationMessage: string;
   updatedReferral: ReferralEdit;
 
   constructor(
@@ -44,6 +50,7 @@ export class ReferralEditComponent implements OnInit {
     private gpPracticeListService: GpPracticeListService,
     private modalService: NgbModal,
     private patientSearchService: PatientSearchService,
+    private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
@@ -95,6 +102,15 @@ export class ReferralEditComponent implements OnInit {
       ],
       gpPractice: [''],
       unknownGpPractice: false,
+      residentialPostcode: [
+        '',
+        [
+          Validators.minLength(6),
+          Validators.maxLength(8),
+          Validators.pattern(`${PostcodeRegex}|(Unknown)$`)
+        ]
+      ],
+      unknownResidentialPostcode: false,
     });
 
     this.patientDetails = {} as Patient;
@@ -136,6 +152,14 @@ export class ReferralEditComponent implements OnInit {
       alternativeIdentifierFieldInValid;
   }
 
+  DisablePostcodeValidationButtonIfFieldIsInvalid(): boolean {
+    return (
+      this.residentialPostcodeField.value === '' ||
+      this.residentialPostcodeField.errors !== null ||
+      this.unknownResidentialPostcode.value === true
+    );
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
   }
@@ -160,8 +184,16 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.nhsNumber;
   }
 
+  get residentialPostcodeField() {
+    return this.referralForm.controls.residentialPostcode;
+  }
+
   get unknownGpPractice() {
     return this.referralForm.controls.unknownGpPractice;
+  }
+
+  get unknownResidentialPostcode() {
+    return this.referralForm.controls.unknownResidentialPostcode;
   }
 
   GpSearch = (text$: Observable<string>) =>
@@ -195,6 +227,13 @@ export class ReferralEditComponent implements OnInit {
     );
   }
 
+  HasInvalidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' &&
+      this.residentialPostcodeField.errors !== null
+    );
+  }
+
   HasNoPatientIdErrors(): boolean {
     return (
       this.nhsNumberField.errors === null &&
@@ -218,7 +257,15 @@ export class ReferralEditComponent implements OnInit {
     );
   }
 
+  HasValidPostcode(): boolean {
+    return (
+      this.residentialPostcodeField.value !== '' &&
+      this.residentialPostcodeField.errors == null
+    );
+  }
+
   InitialiseForm(referral: ReferralEdit) {
+    console.log(referral);
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
@@ -239,6 +286,14 @@ export class ReferralEditComponent implements OnInit {
     this.gpPracticeField.setValue(gpPracticeValue);
     this.unknownGpPractice.setValue(gpPracticeValue.id === 0);
 
+    this.residentialPostcodeField.setValue(
+      referral.patientResidentialPostcode === null
+        ? 'Unknown'
+        : referral.patientResidentialPostcode
+    );
+
+    this.unknownResidentialPostcode.setValue(referral.patientResidentialPostcode === null);
+
   }
 
   IsPatientIdUnchanged(): boolean {
@@ -255,8 +310,16 @@ export class ReferralEditComponent implements OnInit {
     );
   }
 
+  IsPatientIdValidated(): boolean {
+    return this.isPatientIdValidated;
+  }
+
   IsSearchingForPatient(): boolean {
     return this.isSearchingForPatient;
+  }
+
+  IsSearchingForPostcode(): boolean {
+    return this.isSearchingForPostcode;
   }
 
   OnChanges(): void {
@@ -269,6 +332,18 @@ export class ReferralEditComponent implements OnInit {
     this.alternativeIdentifierField.valueChanges.subscribe((val: string) => {
       if (this.patientDetails.alternativeIdentifier && this.patientDetails.alternativeIdentifier !== '') {
         this.isPatientIdValidated = val.toUpperCase() === this.patientDetails.alternativeIdentifier.toUpperCase();
+      }
+    });
+
+    this.gpPracticeField.valueChanges.subscribe(val => {
+      if (val === '' || val === null) {
+        this.unknownGpPractice.setValue(false);
+      }
+    });
+
+    this.residentialPostcodeField.valueChanges.subscribe(val => {
+      if (val !== 'Unknown' && val !== null) {
+        this.unknownResidentialPostcode.setValue(false);
       }
     });
   }
@@ -300,6 +375,17 @@ export class ReferralEditComponent implements OnInit {
     } else {
       this.gpPracticeField.setValue(null, '');
       this.SetFieldFocus('#gpPractice');
+    }
+  }
+
+  ToggleResidentialPostcodeUnknown(event: any) {
+    if (event.target.checked) {
+      this.residentialPostcodeField.setValue('Unknown');
+    } else {
+      this.residentialPostcodeField.setValue('');
+      this.residentialPostcodeField.updateValueAndValidity();
+
+      this.SetFieldFocus('#residentialPostcode');
     }
   }
 
@@ -396,5 +482,46 @@ export class ReferralEditComponent implements OnInit {
         return throwError(error);
       }
     );
+  }
+
+  ValidatePostcode(): void {
+    if (this.isSearchingForPostcode || this.HasInvalidPostcode()) {
+      return;
+    }
+
+    this.isSearchingForPostcode = true;
+
+    this.postcodeValidationService
+      .validatePostcode(this.residentialPostcodeField.value)
+      .subscribe(
+        (result: PostcodeSearchResult) => {
+          this.isSearchingForPostcode = false;
+          if (result.code === null) {
+            this.residentialPostcodeValidationMessage =
+              'Unable to validate postcode';
+            this.residentialPostcodeField.setErrors({
+              UnableToValidatePostcode: true
+            });
+            this.SetFieldFocus('#residentialPostcode');
+          } else {
+            this.residentialPostcodeField.setErrors(null);
+            this.patientDetails.residentialPostcode = result.code;
+            this.isPatientPostcodeValidated = true;
+            this.residentialPostcodeField.updateValueAndValidity();
+            this.toastService.displaySuccess({
+              title: 'Postcode Validation',
+              message: `${result.code} is a valid postcode`
+            });
+          }
+        },
+        error => {
+          this.isSearchingForPostcode = false;
+          this.toastService.displayError({
+            title: 'Server Error',
+            message: 'Unable to validate residential postcode ! Please try again in a few moments'
+          });
+          return throwError(error);
+        }
+      );
   }
 }
