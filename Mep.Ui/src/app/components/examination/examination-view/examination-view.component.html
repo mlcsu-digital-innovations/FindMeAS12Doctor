@@ -130,6 +130,8 @@
                 />
               </div>
             </div>
+            <hr>
+            <label>Exam History</label>
             <div class="form-row" style="padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
@@ -176,7 +178,7 @@
             </div>
             <div class="d-flex justify-content-between p-2">
               <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
-              <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="referralListService.pageSize">
+              <select class="custom-select" style="width: auto" name="pageSize">
                 <option [ngValue]="5">5 items per page</option>
                 <option [ngValue]="10">10 items per page</option>
                 <option [ngValue]="9999999">All items</option>
