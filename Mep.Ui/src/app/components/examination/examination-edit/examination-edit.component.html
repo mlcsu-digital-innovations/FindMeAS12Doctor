@@ -1,8 +1,187 @@
 <app-navbar></app-navbar>
-<div class="error-container">
-    <h1 style="font-size:3em;"><i class="fas fa-exclamation-triangle"></i><span class="error-header">Page Not Ready</span></h1>
-    <h2 style="font-size:1.6em;">Examination information will be shown here.</h2>
-    <div class="button-container">
-      <a href="/referral" class="btn btn-secondary btn-home active">Home</a>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card" *ngIf="referral$ | async as referral; else loading">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="far fa-edit fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Edit Examination</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-header-details">
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
+          </div>
+          <div class="flex-item">
+            Patient Identifier: <strong>{{referral.patientIdentifier}}</strong>
+          </div>
+          <div class="flex-item">
+            Lead AMHP: <strong>{{referral.leadAmhp}}</strong>
+          </div>
+          <div class="flex-item">
+            Referral Status: <strong>{{referral.status}}</strong>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="examinationForm" novalidate>
+            <div class="form-row">
+              <div class="col-md-8">
+                <label for="amhp">AMHP</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button
+                      [disabled]="DisableIfParentIsDisabled('amhp')"
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearField('amhp')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="amhp"
+                    #amhp
+                    [class.is-invalid]="hasAmhpSearchFailed"
+                    formControlName="amhp"
+                    [ngbTypeahead]="AmhpSearch"
+                    [resultFormatter]="FormatTypeAheadResults"
+                    [inputFormatter]="FormatTypeAheadResults" />
+                </div>
+              </div>
+            </div>
+            <!-- AMHP User Errors-->
+            <div class="form-row" *ngIf="hasAmhpSearchFailed">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isAmhpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label for="postCode">Post Code</label>
+                <input
+                  class="form-control"
+                  formControlName="postCode"
+                  id="postCode"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-2">
+
+              </div>
+              <div class="col-md-7">
+                  <label for="fullAddress">Examination Address</label>
+                  <input
+                    class="form-control"
+                    formControlName="fullAddress"
+                    id="fullAddress"
+                    type="text"
+                  />
+                </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-8">
+                <label for="meetingArrangementComment">Meeting Arrangement Comment</label>
+                <textarea
+                  class="form-control"
+                  formControlName="meetingArrangementComment"
+                  id="meetingArrangementComment"
+                >
+                </textarea>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="mustBeCompletedBy">Must be Completed by</label>
+                <input
+                  class="form-control"
+                  formControlName="mustBeCompletedBy"
+                  id="mustBeCompletedBy"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="preferredDoctorGenderTypeName">Preferred Doctor Gender</label>
+                <input
+                  class="form-control"
+                  formControlName="preferredDoctorGenderTypeName"
+                  id="preferredDoctorGenderTypeName"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="specialityName">Speciality</label>
+                <input
+                  class="form-control"
+                  formControlName="specialityName"
+                  id="specialityName"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-12">
+                <label for="examinationDetails">Examination Details</label>
+                <input
+                  class="form-control"
+                  formControlName="examinationDetails"
+                  id="examinationDetails"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="doctorNamesAccepted">Doctors Accepted</label>
+                <input
+                  class="form-control"
+                  formControlName="doctorNamesAccepted"
+                  id="doctorNamesAccepted"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="doctorNamesAllocated">Doctors Allocated</label>
+                <input
+                  class="form-control"
+                  formControlName="doctorNamesAllocated"
+                  id="doctorNamesAllocated"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row mt-more-2">
+              <div class="col-md-2 mb-2 offset-md-8 text-right">
+                <button class="btn btn-standard btn-cancel" type="button" (click)="CancelEdit()">
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+              </div>
+              <div class="col-md-2 mb-2 text-left">
+                <button class="btn btn-primary btn-standard" type="button" (click)="UpdateReferral()">
+                  <i class="fas fa-check"></i>
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+

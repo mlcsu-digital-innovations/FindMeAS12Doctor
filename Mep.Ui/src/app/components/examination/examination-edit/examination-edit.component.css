@@ -1,21 +1,7 @@
-.error-container {
-  width:50%;
-  margin: 60px auto;
-  padding:20px;
-  background-color: #0db3bf;
-  color: #eee;
-  text-align: center;
+form {
+  margin:20px;
 }
 
-.error-header {
-  padding-left: 20px;
-}
-
-.button-container {
-  width: 100%;
-  text-align: center;
-}
-
-.btn-home {
-  margin: 20px auto;
+.form-row {
+  margin-top: 10px;
 }

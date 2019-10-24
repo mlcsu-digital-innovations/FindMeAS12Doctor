@@ -11,7 +11,7 @@ export const ExaminationRoutes: Routes = [
     redirectTo: 'examination/list'
   },
   {
-    path: 'examination/edit/:examinationId',
+    path: 'examination/edit/:referralId',
     component: ExaminationEditComponent
   },
   {
