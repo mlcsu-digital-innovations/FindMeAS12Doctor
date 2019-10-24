@@ -8,7 +8,7 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddOrUpdate(
-        Models.Speciality.SECTION_12,
+        Models.Speciality.CHILD,
         UserSeeder.DISPLAY_NAME_DOCTOR_S12_APPROVED
       );
     }

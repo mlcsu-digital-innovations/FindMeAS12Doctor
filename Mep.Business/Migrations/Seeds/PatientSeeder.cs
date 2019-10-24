@@ -7,9 +7,10 @@ namespace Mep.Business.Migrations.Seeds
   internal class PatientSeeder : SeederBase<Patient>
   {
     #region Constants
-    internal const string ALTERNATIVE_IDENTIFIER_POSTCODE_STOKE_ON_TRENT = "Test Patient #5";
-    internal const string ALTERNATIVE_IDENTIFIER_STAFFORD_MEDICAL_CENTRE = "Test Patient #6";
-    internal const string ALTERNATIVE_IDENTIFIER_CCG_STOKE_ON_TRENT = "Test Patient #7";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_ALLOCATED_DOCTORS_REFERRAL = "Jo Allocated";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_ASSIGNING_DOCTORS_REFERRAL = "Jim Assigning";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_ALLOCATING_DOCTORS_REFERRAL = 
+      "John Allocating";
     internal const long NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE = 9486844275;
     internal const long NHS_NUMBER_POSTCODE_NORTH_STAFFORDSHIRE = 9070304333;
     internal const long NHS_NUMBER_POTTERIES_MEDICAL_CENTRE = 9813607416;
@@ -25,7 +26,7 @@ namespace Mep.Business.Migrations.Seeds
       );
 
       AddOrUpdate(
-        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_STAFFORD_MEDICAL_CENTRE,
+        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_ASSIGNING_DOCTORS_REFERRAL,
         gpPracticeName: GpPracticeSeeder.NAME_STAFFORD_MEDICAL_CENTRE
       );
       
@@ -36,7 +37,7 @@ namespace Mep.Business.Migrations.Seeds
       );
 
       AddOrUpdate(
-        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_POSTCODE_STOKE_ON_TRENT,
+        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_ALLOCATED_DOCTORS_REFERRAL,
         ccgName: CcgSeeder.STOKE_ON_TRENT,
         residentialPostcode: RESIDENTIAL_POSTCODE_STOKE_ON_TRENT
       );       
@@ -47,7 +48,7 @@ namespace Mep.Business.Migrations.Seeds
       );
 
       AddOrUpdate(
-        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_CCG_STOKE_ON_TRENT,
+        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_ALLOCATING_DOCTORS_REFERRAL,
         ccgName: CcgSeeder.STOKE_ON_TRENT
       );
 

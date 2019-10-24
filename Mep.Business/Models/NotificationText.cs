@@ -5,6 +5,8 @@ namespace Mep.Business.Models
   public class NotificationText : NameDescription
   {
     public const int ASSIGNED_TO_EXAMINATION = 1;
+    public const int ALLOCATED_TO_EXAMINATION = 2;
+    public const int EXAMINATION_CANCELLED = 3;
     
     [MaxLength(2000)]
     [Required]
