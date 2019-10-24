@@ -427,3 +427,7 @@ label {
   background-color: #497679;
   color: #ccc;
 }
+
+a:hover {
+  text-decoration: none;
+}

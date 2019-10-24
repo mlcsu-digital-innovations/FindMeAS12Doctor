@@ -344,6 +344,8 @@
                 <button
                   type="button"
                   class="btn btn-primary"
+                  (click)="SelectDoctor()"
+                  [disabled]="IsFormInCreatingState()"
                   *ngIf="plannedExamination.checked"
                 >
                   Enter / Search Doctor
@@ -351,6 +353,8 @@
                 <button
                   type="button"
                    class="btn btn-primary"
+                   (click)="SelectDoctor()"
+                   [disabled]="IsFormInCreatingState()"
                     *ngIf="!plannedExamination.checked"
                 >
                   <i class="fas fa-user-plus"></i>

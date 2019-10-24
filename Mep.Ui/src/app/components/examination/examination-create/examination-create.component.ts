@@ -551,6 +551,10 @@ export class ExaminationCreateComponent implements OnInit {
     this.PostExamination(examination);
   }
 
+  SelectDoctor() {
+    this.router.navigate([`/examination/${this.examinationId}/select-doctors`]);
+  }
+
   SetAmhpField(id: number | null, text: string | null) {
     const amhp = {} as TypeAheadResult;
 
