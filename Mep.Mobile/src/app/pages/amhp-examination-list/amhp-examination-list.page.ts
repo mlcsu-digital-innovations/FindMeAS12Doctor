@@ -9,7 +9,7 @@ import { AmhpExaminationService } from '../../services/amhp-examination.service/
 })
 export class AmhpExaminationListPage implements OnInit {
   public examinationListLastUpdated: Date;
-  public examinationList: AmhpExaminationList[];
+  public examinationList: AmhpExaminationList[] = [];
 
   constructor(private examinationService: AmhpExaminationService) { }
 
