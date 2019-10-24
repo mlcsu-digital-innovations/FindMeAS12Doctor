@@ -66,20 +66,68 @@
                 </div>
               </div>
             </div>
+            <!-- residential postcode -->
             <div class="form-row">
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <label for="postCode">Post Code</label>
-                <input
-                  class="form-control"
-                  formControlName="postCode"
-                  id="postCode"
-                  type="text"
-                />
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button
+                      [disabled]="DisableIfParentIsDisabled('postCode')"
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearField('postCode')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <input
+                    class="form-control"
+                    formControlName="postCode"
+                    id="postCode"
+                    type="text"
+                  />
+                </div>
               </div>
               <div class="col-md-2">
-
+                <div class="button-container">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-exam mb-more-1"
+                    placement="top"
+                    ngbTooltip="Search for addresses"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    (click)="AddressSearch()"
+                    [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
+                  >
+                    <i class="fas fa-search-location"></i>
+                    {{ isSearchingForPostcode ? "Searching" : "Find" }}
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                      *ngIf="isSearchingForPostcode"
+                    >
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-exam btn-spaced mb-more-1"
+                    placement="top"
+                    ngbTooltip="Locate an address using an external web site"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    (click)="OpenLocationTab()"
+                  >
+                    <i class="far fa-map"></i>
+                    Locate
+                  </button>
+                </div>
               </div>
-              <div class="col-md-7">
+              <div class="col-md-8">
                   <label for="fullAddress">Examination Address</label>
                   <input
                     class="form-control"

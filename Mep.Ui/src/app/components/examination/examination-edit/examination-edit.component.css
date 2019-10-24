@@ -5,3 +5,17 @@ form {
 .form-row {
   margin-top: 10px;
 }
+
+.button-container {
+  align-items: flex-end;
+  display:flex;
+  height: 100%;
+}
+
+.btn-exam {
+  min-width: 100px;
+}
+
+.btn-spaced {
+  margin-left: 10px;
+}

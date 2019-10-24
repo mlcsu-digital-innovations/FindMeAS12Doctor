@@ -23,8 +23,9 @@ export class ExaminationEditComponent implements OnInit {
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralId: number;
-    hasAmhpSearchFailed: boolean;
+  hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
+  isSearchingForPostcode: boolean;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -79,7 +80,10 @@ export class ExaminationEditComponent implements OnInit {
         ''
       ],
       fullAddress: [
-        ''
+        {
+          value: '',
+          disabled: true
+        }
       ],
       meetingArrangementComment: [
         ''
@@ -135,6 +139,10 @@ export class ExaminationEditComponent implements OnInit {
     return value.resultText || '';
   }
 
+  get examinationPostcode() {
+    return this.examinationForm.controls.postCode;
+  }
+
   InitialiseForm(referral: ReferralView) {
 
     const examination = referral.currentExamination;
@@ -145,6 +153,7 @@ export class ExaminationEditComponent implements OnInit {
 
     this.examinationForm.controls.meetingArrangementComment.setValue(referral.currentExamination.meetingArrangementComment);
     this.examinationForm.controls.fullAddress.setValue(referral.currentExamination.fullAddress);
+    this.examinationForm.controls.postCode.setValue(referral.currentExamination.postcode);
   }
 
   async SetFieldFocus(fieldName: string) {
