@@ -266,10 +266,10 @@
                   #speciality
                   id="speciality"
                 >
-                <option [selected]=true></option>
-                <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
-                  {{specialities[i].name}}
-                </option>
+                  <option [selected]=true></option>
+                  <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
+                    {{specialities[i].name}}
+                  </option>
                 </select>
               </div>
               <!-- gender dropdown -->

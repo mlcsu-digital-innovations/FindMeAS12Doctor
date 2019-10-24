@@ -409,6 +409,9 @@ label {
 .mb-more-2 {
   margin-bottom: 1rem;
 }
+.mb-more-4 {
+  margin-bottom: 2rem;
+}
 
 .btn-trash {
   background-color: #0dadb7;

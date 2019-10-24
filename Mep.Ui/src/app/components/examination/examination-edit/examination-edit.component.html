@@ -127,19 +127,21 @@
                   </button>
                 </div>
               </div>
-              <div class="col-md-8">
-                  <label for="fullAddress">Examination Address</label>
-                  <input
-                    class="form-control"
-                    formControlName="fullAddress"
-                    id="fullAddress"
-                    type="text"
-                  />
-                </div>
             </div>
             <div class="form-row">
               <div class="col-md-8">
-                <label for="meetingArrangementComment">Meeting Arrangement Comment</label>
+                <label for="fullAddress">Examination Address</label>
+                <input
+                  class="form-control"
+                  formControlName="fullAddress"
+                  id="fullAddress"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-8">
+                <label for="meetingArrangementComment">Additional Location Details</label>
                 <textarea
                   class="form-control"
                   formControlName="meetingArrangementComment"
@@ -148,73 +150,170 @@
                 </textarea>
               </div>
             </div>
+            <!-- Further information / risks -->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <label for="examinationDetails">Further Information / Risks</label>
+                <ng-multiselect-dropdown
+                  formControlName="examinationDetails"
+                  [settings]="dropdownSettings"
+                  [data]="examinationDetails"
+                  (onSelect)="OnItemSelect($event)"
+                  (onDeSelect)="OnItemDeselect($event)"
+                >
+                </ng-multiselect-dropdown>
+              </div>
+            </div>
+            <!-- speciality -->
             <div class="form-row">
               <div class="col-md-4">
-                <label for="mustBeCompletedBy">Must be Completed by</label>
-                <input
-                  class="form-control"
-                  formControlName="mustBeCompletedBy"
-                  id="mustBeCompletedBy"
-                  type="text"
-                />
+                <label for="specialityName">Speciality</label>
+                <div class="input-group">
+                  <div class="input-group-prepend select-trash">
+                    <button
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearField('speciality')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <select
+                    class="custom-select custom-select-lg mb-2 form-control"
+                    formControlName="speciality"
+                    #speciality
+                    id="speciality"
+                  >
+                    <option [selected]=true></option>
+                    <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
+                      {{specialities[i].name}}
+                    </option>
+                  </select>
+                </div>
               </div>
               <div class="col-md-4">
                 <label for="preferredDoctorGenderTypeName">Preferred Doctor Gender</label>
-                <input
-                  class="form-control"
-                  formControlName="preferredDoctorGenderTypeName"
-                  id="preferredDoctorGenderTypeName"
-                  type="text"
-                />
-              </div>
-              <div class="col-md-4">
-                <label for="specialityName">Speciality</label>
-                <input
-                  class="form-control"
-                  formControlName="specialityName"
-                  id="specialityName"
-                  type="text"
-                />
-              </div>
-              <div class="col-md-12">
-                <label for="examinationDetails">Examination Details</label>
-                <input
-                  class="form-control"
-                  formControlName="examinationDetails"
-                  id="examinationDetails"
-                  type="text"
-                />
+                <div class="input-group">
+                  <div class="input-group-prepend select-trash">
+                    <button
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearSelect('preferredGender')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <select
+                    class="custom-select custom-select-lg mb-2 form-control"
+                    formControlName="preferredGender"
+                    #preferredGender
+                    id="preferredGender"
+                  >
+                    <!-- <option [selected]=true></option> -->
+                    <option *ngFor="let gender of genderTypes; let i=index;" [value]="genderTypes[i].id">
+                      {{genderTypes[i].name}}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
+            <!-- To Be Completed By -->
             <div class="form-row">
               <div class="col-md-6">
-                <label for="doctorNamesAccepted">Doctors Accepted</label>
-                <input
-                  class="form-control"
-                  formControlName="doctorNamesAccepted"
-                  id="doctorNamesAccepted"
-                  type="text"
-                />
+                <label for="picker">To Be Completed By</label>
+                <div class="row" name="picker">
+                  <div class="col-md-4">
+                    <input
+                      class="form-control"
+                      formControlName='toBeCompletedByDate'
+                      placeholder="dd/mm/yyyy"
+                      name="toBeCompletedByDate"
+                      [minDate]='minDate'
+                      ngbDatepicker
+                      #d="ngbDatepicker"
+                    />
+                  </div>
+                  <div class="col-md-1 padding-left-1">
+                    <button
+                      id="calendarBtn"
+                      class="btn btn-outline-secondary calendar"
+                      (click)="d.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mlt-less-1 mt-less-5">
+                    <ngb-timepicker formControlName="toBeCompletedByTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="doctorsSelected">Doctors Selected</label>
+                <div class="doctor-list">
+                  <div *ngFor="let doctor of selectedDoctors; let i=index" class="doctor-row">
+
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor}}
+                      </div>
+                      <div class="col-md-4">
+                        <label class="container mb-more-2">
+                          <input
+                            class="form-control"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span class="checkmark"></span>
+                          Send Update
+                        </label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
               </div>
               <div class="col-md-6">
-                <label for="doctorNamesAllocated">Doctors Allocated</label>
-                <input
-                  class="form-control"
-                  formControlName="doctorNamesAllocated"
-                  id="doctorNamesAllocated"
-                  type="text"
-                />
+                <label for="doctorsSelected">Doctors Allocated</label>
+                <div class="doctor-list">
+                  <div *ngFor="let doctor of allocatedDoctors; let i=index" class="doctor-row">
+
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor}}
+                      </div>
+                      <div class="col-md-4">
+                        <label class="container mb-more-2">
+                          <input
+                            class="form-control"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span class="checkmark"></span>
+                          Send Update
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-row mt-more-2">
+              <div class="col-md-2 mb-2">
+                <button class="btn btn-primary btn-standard" type="button" (click)="UpdateReferral()">
+                  <i class="fas fa-redo"></i>
+                    Reselect Doctors
+                </button>
+              </div>
               <div class="col-md-2 mb-2 offset-md-8 text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="CancelEdit()">
                   <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
-              </div>
-              <div class="col-md-2 mb-2 text-left">
-                <button class="btn btn-primary btn-standard" type="button" (click)="UpdateReferral()">
+                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="UpdateReferral()">
                   <i class="fas fa-check"></i>
                   Save
                 </button>
