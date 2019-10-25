@@ -22,14 +22,16 @@
       </ion-label>
     </ion-row>
 
-    <ion-row *ngFor="let examination of examinationList">
-      <ion-col>
-        <ion-button 
-          [routerLink]="['/amhp-examination-view/', examination.id]" 
-          routerDirection="forward" 
-          expand="block">
-          {{examination.dateTime | date: "d MMM yy H:mm"}} {{examination.postcode}}
-        </ion-button>
+    <ion-row>
+      <ion-col>    
+        <ion-list>
+          <ion-item *ngFor="let examination of examinationList$ | async"
+            detail="false" 
+            [routerLink]="['/amhp-examination-view/', examination.id]"  
+            routerDirection="forward">
+            {{examination.dateTime | date: "d MMM yy H:mm"}} {{examination.postcode}}
+          </ion-item>
+        </ion-list>        
       </ion-col>
     </ion-row>
 

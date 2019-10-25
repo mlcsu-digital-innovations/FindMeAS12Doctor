@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
+import { Observable } from 'rxjs';
 import { AmhpExaminationView } from '../../models/amhp-examination-view.model';
-import { AmhpExaminationService } from '../../services/amhp-examination.service/amhp-examination.service'
+import { AmhpExaminationService } from 
+  '../../services/amhp-examination.service/amhp-examination.service'
 
 @Component({
   selector: 'app-amhp-examination-view',
@@ -10,7 +12,7 @@ import { AmhpExaminationService } from '../../services/amhp-examination.service/
 })
 export class AmhpExaminationViewPage implements OnInit {
   public examinationLastUpdated: Date;
-  public examinationView: AmhpExaminationView;
+  public examinationView$: Observable<AmhpExaminationView>;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,10 +24,7 @@ export class AmhpExaminationViewPage implements OnInit {
     let examinationId = this.route.snapshot.paramMap.get('id');
 
     if (examinationId) {
-      this.examinationService.getView(examinationId)
-        .subscribe((result: AmhpExaminationView) =>
-          this.examinationView = result
-        );
+      this.examinationView$ = this.examinationService.getView(examinationId);
     }
 
   }

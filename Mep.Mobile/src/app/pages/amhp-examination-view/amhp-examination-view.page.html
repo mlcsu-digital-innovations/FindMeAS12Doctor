@@ -10,45 +10,53 @@
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView">
-          <ion-label>Referral Id: {{examinationView.referralId}}</ion-label>
+        <ion-item>
+          <ion-label>Referral Id: {{(examinationView$ | async)?.referralId}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView">
-          <ion-label>Patient Id: {{examinationView.patientIdentifier}}</ion-label>
+        <ion-item>
+          <ion-label>Patient Id: {{(examinationView$ | async)?.patientIdentifier}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView">
-          <ion-label>{{examinationView.dateTime | date: "d MMMM yyyy H:mm"}}</ion-label>
+          <ion-item>
+          <ion-label>{{(examinationView$ | async)?.dateTime | date: "d MMMM yyyy H:mm"}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView">
-          <ion-label>Exam Speciality: {{examinationView.specialityName}}</ion-label>
+        <ion-item>
+          <ion-label>Exam Speciality: {{(examinationView$ | async)?.specialityName}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView" class="item item-text-wrap">
+        <ion-item class="item item-text-wrap">
           <ion-label>
-            {{examinationView.address1}}<br />
-            {{examinationView.address2}}<br />
-            {{examinationView.address3}}<br />
-            {{examinationView.address4}}<br />
-            {{examinationView.postcode}}
+            {{(examinationView$ | async)?.address1}}
+            <br *ngIf="(examinationView$ | async)?.address1 && 
+              (examinationView$ | async)?.address1.length > 0" />
+            {{(examinationView$ | async)?.address2}}
+            <br *ngIf="(examinationView$ | async)?.address2 && 
+              (examinationView$ | async)?.address2.length > 0" />
+            {{(examinationView$ | async)?.address3}}
+            <br *ngIf="(examinationView$ | async)?.address3 && 
+              (examinationView$ | async)?.address3.length > 0" />
+            {{(examinationView$ | async)?.address4}}
+            <br *ngIf="(examinationView$ | async)?.address4 && 
+              (examinationView$ | async)?.address4.length > 0" />
+            {{(examinationView$ | async)?.postcode}}
           </ion-label>
         </ion-item>
       </ion-col>
@@ -56,9 +64,9 @@
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView">
+        <ion-item>
           <ion-label>
-            <ion-text *ngFor="let doctor of examinationView.doctorsAllocated">
+            <ion-text *ngFor="let doctor of (examinationView$ | async)?.doctorsAllocated">
               {{doctor.displayName}}<br />
             </ion-text>
           </ion-label>
@@ -68,15 +76,15 @@
 
     <ion-row>
       <ion-col>
-        <ion-item *ngIf="examinationView" class="item item-text-wrap">
-          {{examinationView.meetingArrangementComment}}
+        <ion-item class="item item-text-wrap">
+          {{(examinationView$ | async)?.meetingArrangementComment}}
         </ion-item>
       </ion-col>
     </ion-row>    
 
     <ion-row>
       <ion-col>
-        <ion-button *ngIf="examinationView" expand="block" color="warning">
+        <ion-button *ngIf="examinationView$ | async" expand="block" color="warning">
           Update status
         </ion-button>
       </ion-col>

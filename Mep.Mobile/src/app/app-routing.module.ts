@@ -18,7 +18,8 @@ const routes: Routes = [
   },
   {
     path: 'amhp-examination-view/:id',
-    loadChildren: './pages/amhp-examination-view/amhp-examination-view.module#AmhpExaminationViewPageModule'
+    loadChildren: 
+      './pages/amhp-examination-view/amhp-examination-view.module#AmhpExaminationViewPageModule'
   },
 
 
