@@ -2,7 +2,7 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ExaminationDetailTypeSeeder : SeederBase<ExaminationDetailType>
+  internal class ExaminationDetailTypesSeeder : SeederBase<ExaminationDetailType>
   {
     #region Constants
     internal const string DESCRIPTION_AGRESSIVE_NEIGHBOUR =
@@ -34,7 +34,9 @@ namespace Mep.Business.Migrations.Seeds
         ExaminationDetailType.DIFFICULT_PARKING,
         NAME_DIFFICULT_PARKING,
         DESCRIPTION_DIFFICULT_PARKING
-      );            
+      );
+
+      SaveChangesWithIdentity();          
     }
   }
 }

@@ -34,10 +34,13 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
+          .Include(e => e.AmhpUser)
           .Include(e => e.CompletedByUser)
           .Include(e => e.CreatedByUser)
           .Include(e => e.Details)
             .ThenInclude(d => d.ExaminationDetailType)
+          .Include(e => e.Doctors)
+            .ThenInclude(d => d.DoctorUser)
           .Include(e => e.UserExaminationNotifications)
             .ThenInclude(u => u.User)
           .WhereIsActiveOrActiveOnly(activeOnly)
@@ -57,21 +60,15 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
-          .Include(e => e.UserExaminationNotifications)
-            .ThenInclude(u => u.User)
-              .ThenInclude(u => u.ProfileType)
-          .Where(e => e.UserExaminationNotifications.Any(u => u.UserId == amhpUserId))
+          .Include(e => e.AmhpUser)
+            .ThenInclude(u => u.ProfileType)
           .WhereIsActiveOrActiveOnly(activeOnly)
           .AsNoTracking(asNoTracking)
           .ToListAsync();
 
       if (entities.Any())
       {
-        Entities.ProfileType amhpProfileType =
-          entities.SelectMany(e => e.UserExaminationNotifications)
-                  .First(u => u.UserId == amhpUserId)
-                  .User
-                  .ProfileType;
+        Entities.ProfileType amhpProfileType = entities.Select(e => e.AmhpUser.ProfileType).First();
 
         if (amhpProfileType.Id != Models.ProfileType.AMHP)
         {
@@ -106,7 +103,7 @@ namespace Mep.Business.Services
       else
       {
 
-        CheckExaminationDoesNotAlreadyHaveAnOutcome(entity);        
+        CheckExaminationDoesNotAlreadyHaveAnOutcome(entity);
 
         Serilog.Log.Verbose("Examination Update model: {@model}", model);
         Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
@@ -116,14 +113,13 @@ namespace Mep.Business.Services
         entity.CompletedTime = model.CompletedTime;
         entity.IsSuccessful = model.IsSuccessful;
         entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
-        // TODO: Save the attending doctors
+        
 
         await _context.SaveChangesAsync();
 
         entity = await GetEntityByIdAsync(model.Id, false, false);
 
         // TODO: Get the attending doctors
-        // model.AttendingDoctors = 
         model.CompletedTime = entity.CompletedTime ?? default;
         model.IsSuccessful = entity.IsSuccessful ?? default;
         model.UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId ?? default;
@@ -135,17 +131,20 @@ namespace Mep.Business.Services
       }
     }
 
-   protected override async Task<Entities.Examination> GetEntityByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
+    protected override async Task<Entities.Examination> GetEntityByIdAsync(
+       int entityId,
+       bool asNoTracking,
+       bool activeOnly)
     {
       Entities.Examination entity = await
         _context.Examinations
+                .Include(e => e.AmhpUser)
                 .Include(e => e.CompletedByUser)
-                .Include(e => e.CreatedByUser)                
+                .Include(e => e.CreatedByUser)
                 .Include(e => e.Details)
                   .ThenInclude(d => d.ExaminationDetailType)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.UserExaminationNotifications)
@@ -237,7 +236,7 @@ namespace Mep.Business.Services
       Entities.UserExaminationNotification userExaminationNotification =
         new Entities.UserExaminationNotification
         {
-          NotificationTextId = NotificationText.ASSIGNED_TO_EXAMINATION,
+          NotificationTextId = NotificationText.SELECTED_FOR_EXAMINATION,
           UserId = model.AmhpUserId
         };
       UpdateModified(userExaminationNotification);
@@ -368,9 +367,9 @@ namespace Mep.Business.Services
         if (amhpUserExaminationNotification == null)
         {
           throw new EntityNotLoadedException(
-            "Examination", 
-            model.Id, 
-            "UserExaminationNotification.User.ProfileType of AMHP", 
+            "Examination",
+            model.Id,
+            "UserExaminationNotification.User.ProfileType of AMHP",
             ProfileType.AMHP);
         }
         else
@@ -382,9 +381,9 @@ namespace Mep.Business.Services
       else
       {
         throw new EntityNotLoadedException(
-          "Examination", 
-          model.Id, 
-          "UserExaminationNotification.User.ProfileType of AMHP", 
+          "Examination",
+          model.Id,
+          "UserExaminationNotification.User.ProfileType of AMHP",
           ProfileType.AMHP);
       }
       return true;

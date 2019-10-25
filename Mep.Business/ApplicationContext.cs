@@ -60,6 +60,10 @@ namespace Mep.Business
     public virtual DbSet<Examination> Examinations { get; set; }
     public virtual DbSet<ExaminationAudit> ExaminationAudits { get; set; }
     public virtual DbSet<ExaminationDetail> ExaminationDetails { get; set; }
+    public virtual DbSet<ExaminationDoctor> ExaminationDoctors { get; set; }
+    public virtual DbSet<ExaminationDoctorAudit> ExaminationDoctorAudits { get; set; }
+    public virtual DbSet<ExaminationDoctorStatus> ExaminationDoctorStatuses { get; set; }
+    public virtual DbSet<ExaminationDoctorStatusAudit> ExaminationDoctorStatusAudits { get; set; }
     public virtual DbSet<ExaminationDetailAudit> ExaminationDetailAudits { get; set; }
     public virtual DbSet<ExaminationDetailType> ExaminationDetailTypes { get; set; }
     public virtual DbSet<ExaminationDetailTypeAudit> ExaminationDetailTypeAudits { get; set; }
@@ -99,13 +103,15 @@ namespace Mep.Business
     public virtual DbSet<Speciality> Specialities { get; set; }
     public virtual DbSet<SpecialityAudit> SpecialityAudits { get; set; }
     public virtual DbSet<UnsuccessfulExaminationType> UnsuccessfulExaminationTypes { get; set; }
-    public virtual DbSet<UnsuccessfulExaminationTypeAudit> UnsuccessfulExaminationTypeAudits { get; set; }
+    public virtual DbSet<UnsuccessfulExaminationTypeAudit> UnsuccessfulExaminationTypeAudits 
+      { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<UserAudit> UserAudits { get; set; }
     public virtual DbSet<UserExaminationClaim> UserExaminationClaims { get; set; }
     public virtual DbSet<UserExaminationClaimAudit> UserExaminationClaimAudits { get; set; }
     public virtual DbSet<UserExaminationNotification> UserExaminationNotifications { get; set; }
-    public virtual DbSet<UserExaminationNotificationAudit> UserExaminationNotificationAudits { get; set; }
+    public virtual DbSet<UserExaminationNotificationAudit> UserExaminationNotificationAudits 
+      { get; set; }
     public virtual DbSet<UserSpeciality> UserSpecialities { get; set; }
     public virtual DbSet<UserSpecialityAudit> UserSpecialitieAudits { get; set; }
 
@@ -145,6 +151,10 @@ namespace Mep.Business
         .IsUnique();
 
       modelBuilder.Entity<ContactDetailType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<ExaminationDoctorStatus>()
         .HasIndex(c => c.Name)
         .IsUnique();
 
@@ -229,6 +239,13 @@ namespace Mep.Business
         {
           examinationDetail.ExaminationDetailTypeId,
           examinationDetail.ExaminationId,
+        });
+
+      modelBuilder.Entity<ExaminationDoctor>()
+        .HasAlternateKey(examinationDoctor => new
+        {
+          examinationDoctor.ExaminationId,
+          examinationDoctor.DoctorUserId
         });
 
       modelBuilder.Entity<NonPaymentLocation>()

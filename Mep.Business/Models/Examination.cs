@@ -78,7 +78,7 @@ namespace Mep.Business.Models
           .Where(u => u.IsActive)
           .Where(u => u.IsDoctor)
           .Where(u => u.HasAccepted ?? false)
-          .Where(u => u.NotificationTextId == NotificationText.ASSIGNED_TO_EXAMINATION)
+          .Where(u => u.NotificationTextId == NotificationText.SELECTED_FOR_EXAMINATION)
           .Select(u => u.UserName)
           .ToList();
       }

@@ -3,7 +3,7 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class ProfileTypeSeeder : SeederBase<ProfileType>
+  internal class ProfileTypesSeeder : SeederBase<ProfileType>
   {
     #region
     internal const string DESCRIPTION_AMHP = "AMHP Description";
@@ -35,6 +35,8 @@ namespace Mep.Business.Migrations.Seeds
         NAME_FINANCE,
         DESCRIPTION_FINANCE
       );
+
+      SaveChangesWithIdentity();
     }
 
     /// <summary>
