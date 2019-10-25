@@ -1,20 +1,22 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
+import { environment } from 'src/environments/environment';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { map, switchMap, catchError, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
-import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NameIdList } from 'src/app/interfaces/name-id-list';
+import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
+import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
+import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
-import { NameIdList } from 'src/app/interfaces/name-id-list';
-import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-examination-edit',
@@ -24,6 +26,7 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 export class ExaminationEditComponent implements OnInit {
 
   allocatedDoctors: string[] = [];
+  cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
   dropdownSettings: IDropdownSettings;
@@ -46,13 +49,17 @@ export class ExaminationEditComponent implements OnInit {
   selectedDoctors: string[] = [];
   specialities: NameIdList[];
 
+  @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
+
   constructor(
     private amhpListService: AmhpListService,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private nameIdListService: NameIdListService,
     private referralService: ReferralService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
+    private routerService: RouterService,
     private toastService: ToastService,
   ) { }
 
@@ -193,10 +200,21 @@ export class ExaminationEditComponent implements OnInit {
       tap(() => (this.isAmhpSearching = false))
     )
 
+  CancelEdit() {
+    if (this.examinationForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelUpdateTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigate(['/referral']);
+    }
+  }
+
   ClearField(fieldName: string) {
     if (this.examinationForm.contains(fieldName)) {
       this.examinationForm.controls[fieldName].setValue('');
       this.SetFieldFocus(`#${fieldName}`);
+      this.examinationForm.markAsDirty();
     }
   }
 
@@ -286,8 +304,15 @@ export class ExaminationEditComponent implements OnInit {
     this.SetDefaultDateTimeFields(referral.currentExamination.mustBeCompletedBy);
 
     this.selectedDoctors = ['Doctor Smith', 'Doctor Jones'];
-    this.allocatedDoctors= ['Doctor Livingstone'];
+    this.allocatedDoctors = ['Doctor Livingstone'];
 
+  }
+
+  OnCancelModalAction(action: boolean) {
+    this.cancelModal.close();
+    if (action) {
+      this.routerService.navigate(['/referral']);
+    }
   }
 
   OnItemDeselect(item: any) {
@@ -297,6 +322,10 @@ export class ExaminationEditComponent implements OnInit {
 
   OnItemSelect(item: NameIdList) {
     this.selectedDetails.push(item);
+  }
+
+  OpenLocationTab(): void {
+    window.open(environment.locationEndpoint, '_blank');
   }
 
   SetDefaultDateTimeFields(defaultDatetIme: Date) {
@@ -310,6 +339,10 @@ export class ExaminationEditComponent implements OnInit {
     // ToDo: Find a better way to do this !
     await this.Delay(100);
     this.renderer.selectRootElement(fieldName).focus();
+  }
+
+  UpdateReferral() {
+
   }
 
 }

@@ -330,5 +330,14 @@
   <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
 </ng-template>
 
+<ng-template #cancelUpdate>
+  <app-cancel-action-modal
+    [modalTitle]="'Cancel Update'"
+    [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
+    (actioned)="OnCancelModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
