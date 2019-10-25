@@ -22,15 +22,18 @@
             <div class="form-row">
               <div class="col-md-4 mb-2">
                 <label for="searchDoctor">Search Doctor</label>
-                <input type="text" class="form-control" id="searchDoctor" #searchDoctor
+                <input 
+                  type="text" class="form-control" id="searchDoctor" #searchDoctor
                   [class.is-invalid]="hasDoctorSearchFailed" formControlName="searchDoctor"
                   [ngbTypeahead]="DoctorSearch" [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults" />
+                  [inputFormatter]="FormatTypeAheadResults"
+                />
               </div>
               <div class="col-md-2 centered-div" style="justify-content: left;">
                 <div class="col-md-2 mb-2 text-right" style="margin-top: 10px">
-                  <a aria-disabled="true" class="btn btn-primary vcenter" ngbTooltip="Confirm search" placement="right"
-                    role="button" routerLink="" routerLinkActive="active" tooltipClass="subtle-tooltip"
+                  <a aria-disabled="true" class="btn btn-primary vcenter" 
+                    ngbTooltip="Confirm search" placement="right" role="button" routerLink="" 
+                    routerLinkActive="active" tooltipClass="subtle-tooltip"
                     [closeDelay]="500" [openDelay]="1000">
                     Confirm
                   </a>
@@ -66,37 +69,65 @@
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th scope="col" sortable="referralId" (sort)="onSort($event)">Referral Id</th>
-                    <th scope="col" sortable="patientDetails" (sort)="onSort($event)">Patient Details</th>
-                    <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
-                    <th scope="col" sortable="locationPostcode" (sort)="onSort($event)">Location Postcode</th>
-                    <th scope="col" sortable="speciality" (sort)="onSort($event)">Speciality</th>
-                    <th scope="col" sortable="urgencyLevel" (sort)="onSort($event)">UrgencyLevel</th>
-                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Allocated</th>
+                    <th scope="col" sortable="referralId" (sort)="onSort($event)">
+                      Referral Id
+                    </th>
+                    <th scope="col" sortable="patientDetails" (sort)="onSort($event)">
+                      Patient Details
+                    </th>
+                    <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">
+                      Lead AMHP
+                    </th>
+                    <th scope="col" sortable="locationPostcode" (sort)="onSort($event)">
+                      Location Postcode
+                    </th>
+                    <th scope="col" sortable="speciality" (sort)="onSort($event)">
+                      Speciality
+                    </th>
+                    <th scope="col" sortable="urgencyLevel" (sort)="onSort($event)">
+                      UrgencyLevel
+                    </th>
+                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">
+                      Doctors Allocated
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="">
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                   </tr>
                 </tbody>
@@ -106,41 +137,73 @@
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th scope="col" sortable="referralId" (sort)="onSort($event)">Doctor</th>
-                    <th scope="col" sortable="gender" (sort)="onSort($event)">Gender</th>
-                    <th scope="col" sortable="doctorType" (sort)="onSort($event)">Doctor Type</th>
-                    <th scope="col" sortable="speciality" (sort)="onSort($event)">Speciality</th>
-                    <th scope="col" sortable="scheduledExamination" (sort)="onSort($event)">Scheduled Exam</th>
-                    <th scope="col" sortable="availability" (sort)="onSort($event)">Availability</th>
-                    <th scope="col" sortable="distance" (sort)="onSort($event)">Distance</th>
-                    <th scope="col" sortable="select" (sort)="onSort($event)">Select</th>
+                    <th scope="col" sortable="referralId" (sort)="onSort($event)">
+                      Doctor
+                    </th>
+                    <th scope="col" sortable="gender" (sort)="onSort($event)">
+                      Gender
+                    </th>
+                    <th scope="col" sortable="doctorType" (sort)="onSort($event)">
+                      Doctor Type
+                    </th>
+                    <th scope="col" sortable="speciality" (sort)="onSort($event)">
+                      Speciality
+                    </th>
+                    <th scope="col" sortable="scheduledExamination" (sort)="onSort($event)">
+                      Scheduled Exam
+                    </th>
+                    <th scope="col" sortable="availability" (sort)="onSort($event)">
+                      Availability
+                    </th>
+                    <th scope="col" sortable="distance" (sort)="onSort($event)">
+                      Distance
+                    </th>
+                    <th scope="col" sortable="select" (sort)="onSort($event)">
+                      Select
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="">
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+
+                      </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm">
+                        
+                      </ngb-highlight>
                     </td>
                   </tr>
                 </tbody>
