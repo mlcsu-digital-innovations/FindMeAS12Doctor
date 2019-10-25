@@ -13,7 +13,7 @@ import { PatientSearchParams } from '../../../interfaces/patient-search-params';
 import { PatientSearchResult } from '../../../interfaces/patient-search-result';
 import { PatientSearchService } from '../../../services/patient-search/patient-search.service';
 import { PatientService } from '../../../services/patient/patient.service';
-import { PostcodeRegex } from '../../../constants/Constants';
+import { PostcodeRegex, UNKNOWN } from '../../../constants/Constants';
 import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result';
 import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
 import { Referral } from '../../../interfaces/referral';
@@ -191,7 +191,9 @@ export class ReferralCreateComponent implements OnInit {
     this.patientDetails.gpPracticeId =
       this.gpPractice.id === 0 ? null : this.gpPractice.id;
     this.patientDetails.residentialPostcode =
-      this.residentialPostcode === '' || this.residentialPostcode === 'Unknown' ? null : this.residentialPostcode;
+      this.residentialPostcode === '' || this.residentialPostcode === 'Unknown'
+        ? 'Unknown'
+        : this.residentialPostcode;
     this.patientDetails.ccgId = this.ccg.id === 0 ? null : this.ccg.id;
 
     return this.patientService.createPatient(this.patientDetails).pipe(
@@ -352,6 +354,10 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.amhp;
   }
 
+  get unknownPostcodeField() {
+    return this.patientForm.controls.unknownResidentialPostcode;
+  }
+
   GpSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -504,6 +510,10 @@ export class ReferralCreateComponent implements OnInit {
     });
   }
 
+  PostcodeIsUnknown(): boolean {
+    return this.unknownPostcodeField.value;
+  }
+
   OnPatientModalAction(action: number) {
     switch (action) {
       case PatientAction.Cancel:
@@ -537,6 +547,7 @@ export class ReferralCreateComponent implements OnInit {
         this.routerService.navigate([`/examination/new/${result.id}`]);
       },
       error => {
+        console.log(error);
         this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to create new referral ! Please try again in a few moments'
@@ -602,7 +613,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleResidentialPostcodeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
-      this.SetResidentialPostcodeField(UNKNOWN_POSTCODE);
+      this.SetResidentialPostcodeField(UNKNOWN);
       this.isCcgFieldsShown = true;
       this.SetFieldFocus('#ccg');
       this.isPatientPostcodeValidated = true;

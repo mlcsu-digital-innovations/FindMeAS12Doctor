@@ -435,9 +435,7 @@ export class ReferralEditComponent implements OnInit {
   }
 
   OnCancelModalAction(action: boolean) {
-
     this.cancelModal.close();
-
     if (action) {
       this.routerService.navigate(['/referral']);
     }

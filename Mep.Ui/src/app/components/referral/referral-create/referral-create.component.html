@@ -111,7 +111,7 @@
                   [inputFormatter]="FormatTypeAheadResults"
                 />
               </div>
-              <div class="col-md-2 centered-div">
+              <div class="col-md-2 mb-more-2">
                 <div class="checkmark-content">
                   <label class="container">
                     <input
@@ -165,7 +165,7 @@
                   }"
                 />
               </div>
-              <div class="col-md-2 centered-div">
+              <div class="col-md-2 mb-more-2">
                 <div class="checkmark-content">
                   <label class="container">
                     <input
@@ -195,11 +195,13 @@
                     [disabled]="
                       DisablePostcodeValidationButtonIfFieldIsInvalid() ||
                       IsSearchingForPostcode() ||
+                      PostcodeIsUnknown() ||
                       !IsPatientIdValidated()
                     "
                     (click)="ValidatePostcode()"
                     [ngClass]="{ validating: IsSearchingForPostcode() }"
                   >
+                    <i class="fas fa-bolt"></i>
                     {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                       *ngIf="IsSearchingForPostcode()"></span>
@@ -235,7 +237,7 @@
                   [inputFormatter]="FormatTypeAheadResults"
                 />
               </div>
-              <div class="col-md-2 centered-div">
+              <div class="col-md-2 mb-more-2">
                 <div class="checkmark-content">
                   <label class="container">
                     <input
