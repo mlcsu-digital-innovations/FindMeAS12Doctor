@@ -20,37 +20,30 @@
           <form [formGroup]="doctorForm" novalidate>
             <!-- Search Doctor -->
             <div class="form-row">
-              <div class="col-md-8 mb-2">
+              <div class="col-md-4 mb-2">
                 <label for="searchDoctor">Search Doctor</label>
-                <input
-                type="text"
-                class="form-control"
-                id="searchDoctor"
-                #searchDoctor
-                [class.is-invalid]="hasDoctorSearchFailed"
-                formControlName="searchDoctor"
-                [ngbTypeahead]="DoctorSearch"
-                [resultFormatter]="FormatTypeAheadResults"
-                [inputFormatter]="FormatTypeAheadResults"
-                />
+                <input type="text" class="form-control" id="searchDoctor" #searchDoctor
+                  [class.is-invalid]="hasDoctorSearchFailed" formControlName="searchDoctor"
+                  [ngbTypeahead]="DoctorSearch" [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults" />
               </div>
-              <div class="col-md-2 centered-div">
+              <div class="col-md-2 centered-div" style="justify-content: left;">
                 <div class="col-md-2 mb-2 text-right" style="margin-top: 10px">
-                  <a
-                    aria-disabled="true"
-                    class="btn btn-primary vcenter"
-                    ngbTooltip="Confirm search"
-                    placement="right"
-                    role="button"
-                    routerLink=""
-                    routerLinkActive="active"
-                    tooltipClass="subtle-tooltip"
-                    [closeDelay]="500"
-                    [openDelay]="1000"
-                  >
+                  <a aria-disabled="true" class="btn btn-primary vcenter" ngbTooltip="Confirm search" placement="right"
+                    role="button" routerLink="" routerLinkActive="active" tooltipClass="subtle-tooltip"
+                    [closeDelay]="500" [openDelay]="1000">
                     Confirm
                   </a>
                 </div>
+              </div>
+              <div class="col-md-6 mb-2">
+              <label for="selectDistance">Doctors within:</label>
+                <select class="browser-default custom-select">
+                  <option selected id="selectDistance">select distance from patient</option>
+                  <option value="1">1 Mile</option>
+                  <option value="2">5 Miles</option>
+                  <option value="3">10 Miles</option>
+                </select>
               </div>
             </div>
             <!-- Search Doctor Errors -->
@@ -68,16 +61,6 @@
                   <span>* Invalid Doctor </span>
                 </div>
               </div>
-            </div>
-            <div class="form-row">
-              <div class="col-md-8 mb-2">
-              <select class="browser-default custom-select">
-                <option selected>Doctors within a (select distance from patient)</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
             </div>
             <div class="form-row" style="padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
@@ -119,16 +102,6 @@
                 </tbody>
               </table>
             </div>
-            <!-- <div class="d-flex justify-content-between p-2">
-              <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
-              <select class="custom-select" style="width: auto" name="pageSize"
-                [(ngModel)]="referralListService.pageSize">
-                <option [ngValue]="5">5 items per page</option>
-                <option [ngValue]="10">10 items per page</option>
-                <option [ngValue]="9999999">All items</option>
-              </select>
-            </div> -->
-
             <div class="form-row" style="padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
@@ -173,16 +146,6 @@
                 </tbody>
               </table>
             </div>
-            <!-- <div class="d-flex justify-content-between p-2">
-              <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
-              <select class="custom-select" style="width: auto" name="pageSize"
-                [(ngModel)]="referralListService.pageSize">
-                <option [ngValue]="5">5 items per page</option>
-                <option [ngValue]="10">10 items per page</option>
-                <option [ngValue]="9999999">All items</option>
-              </select>
-            </div> -->
-
           </form>
         </div>
       </div>
