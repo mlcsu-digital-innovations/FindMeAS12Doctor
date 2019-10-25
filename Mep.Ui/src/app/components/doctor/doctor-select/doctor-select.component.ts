@@ -17,6 +17,7 @@ export class DoctorSelectComponent implements OnInit {
   isDoctorFieldsShown: boolean;
   isDoctorSearching: boolean;
   unknownDoctorId: number;
+  selectDoctor: FormGroup;
 
   constructor(
     private doctorListService: DoctorListService,
