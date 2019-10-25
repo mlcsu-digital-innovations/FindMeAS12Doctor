@@ -441,6 +441,10 @@ export class ExaminationCreateComponent implements OnInit {
     this.selectedDetails.push(item);
   }
 
+  OpenLocationTab(): void {
+    window.open(environment.locationEndpoint, '_blank');
+  }
+
   PostExamination(examination: Examination) {
     this.isCreatingExamination = true;
     this.examinationService.createExamination(examination).subscribe(
@@ -597,9 +601,5 @@ export class ExaminationCreateComponent implements OnInit {
       this.toBeCompletedByTimeField.setValue(this.defaultCompletionTime);
       this.toBeCompletedByDateField.setErrors(null);
     }
-  }
-
-  OpenLocationTab(): void {
-    window.open(environment.locationEndpoint, '_blank');
   }
 }

@@ -2,12 +2,13 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
+import { environment } from 'src/environments/environment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { map, switchMap, catchError, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
-import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
@@ -25,6 +26,7 @@ import * as moment from 'moment';
 export class ExaminationEditComponent implements OnInit {
 
   allocatedDoctors: string[] = [];
+  cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
   dropdownSettings: IDropdownSettings;
@@ -52,6 +54,7 @@ export class ExaminationEditComponent implements OnInit {
   constructor(
     private amhpListService: AmhpListService,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private nameIdListService: NameIdListService,
     private referralService: ReferralService,
     private renderer: Renderer2,
@@ -198,13 +201,20 @@ export class ExaminationEditComponent implements OnInit {
     )
 
   CancelEdit() {
-
+    if (this.examinationForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelUpdateTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigate(['/referral']);
+    }
   }
 
   ClearField(fieldName: string) {
     if (this.examinationForm.contains(fieldName)) {
       this.examinationForm.controls[fieldName].setValue('');
       this.SetFieldFocus(`#${fieldName}`);
+      this.examinationForm.markAsDirty();
     }
   }
 
@@ -298,6 +308,13 @@ export class ExaminationEditComponent implements OnInit {
 
   }
 
+  OnCancelModalAction(action: boolean) {
+    this.cancelModal.close();
+    if (action) {
+      this.routerService.navigate(['/referral']);
+    }
+  }
+
   OnItemDeselect(item: any) {
     this.selectedDetails =
       this.selectedDetails.filter(obj => obj.id !== item.id);
@@ -305,6 +322,10 @@ export class ExaminationEditComponent implements OnInit {
 
   OnItemSelect(item: NameIdList) {
     this.selectedDetails.push(item);
+  }
+
+  OpenLocationTab(): void {
+    window.open(environment.locationEndpoint, '_blank');
   }
 
   SetDefaultDateTimeFields(defaultDatetIme: Date) {
