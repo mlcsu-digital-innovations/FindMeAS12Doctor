@@ -3,18 +3,19 @@ import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { map, switchMap, catchError, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { NameIdList } from 'src/app/interfaces/name-id-list';
+import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
+import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
-import { NameIdList } from 'src/app/interfaces/name-id-list';
-import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-examination-edit',
@@ -53,6 +54,7 @@ export class ExaminationEditComponent implements OnInit {
     private referralService: ReferralService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
+    private routerService: RouterService,
     private toastService: ToastService,
   ) { }
 

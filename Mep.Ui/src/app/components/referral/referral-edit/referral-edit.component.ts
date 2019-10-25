@@ -18,6 +18,7 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 import { ReferralService } from 'src/app/services/referral/referral.service';
+import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
@@ -62,7 +63,7 @@ export class ReferralEditComponent implements OnInit {
     private referralService: ReferralService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
-    private router: Router,
+    private routerService: RouterService,
     private toastService: ToastService
   ) { }
 

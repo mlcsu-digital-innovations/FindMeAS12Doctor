@@ -61,3 +61,7 @@ th[sortable].desc:before {
 th {
   border-top: 0;
 }
+
+.btn-spaced {
+  margin-left: 10px;
+}

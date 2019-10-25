@@ -130,7 +130,18 @@
                 />
               </div>
             </div>
-            <hr>
+            <div class="form-row mt-more-2">
+                <div class="col-md-2 mb-2 offset-md-10 text-right">
+                    <button class="btn btn-standard btn-cancel" type="button" (click)="CancelView()">
+                      <i class="far fa-times-circle"></i>
+                      Cancel
+                    </button>
+                    <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="EditExamination()">
+                      <i class="far fa-edit"></i>
+                      Edit
+                    </button>
+                  </div>
+            </div>
             <label>Exam History</label>
             <div class="form-row" style="padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">

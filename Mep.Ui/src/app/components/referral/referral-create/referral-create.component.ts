@@ -18,7 +18,7 @@ import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result
 import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
 import { Referral } from '../../../interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
-import { Router } from '@angular/router';
+import { RouterService } from 'src/app/services/router/router.service';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../../../services/toast/toast.service';
@@ -73,7 +73,7 @@ export class ReferralCreateComponent implements OnInit {
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private renderer: Renderer2,
-    private router: Router,
+    private routerService: RouterService,
     private toastService: ToastService
   ) { }
 
@@ -155,7 +155,7 @@ export class ReferralCreateComponent implements OnInit {
         size: 'lg'
       });
     } else {
-      this.router.navigate(['/referral']);
+      this.routerService.navigate(['/referral']);
     }
   }
 
@@ -179,7 +179,7 @@ export class ReferralCreateComponent implements OnInit {
   ConfirmCancellation(): void {
     // close the modal
     this.cancelModal.close();
-    this.router.navigate(['/referral']);
+    this.routerService.navigate(['/referral']);
   }
 
   CreatePatient() {
@@ -534,7 +534,7 @@ export class ReferralCreateComponent implements OnInit {
         });
         this.isCreatingReferral = false;
         // navigate to the create examination page
-        this.router.navigate([`/examination/new/${result.id}`]);
+        this.routerService.navigate([`/examination/new/${result.id}`]);
       },
       error => {
         this.toastService.displayError({
