@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace Mep.Business.Services
 {
@@ -33,13 +34,14 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
-                .Include(e => e.CreatedByUser)
-                .Include(e => e.Details)
-                  .ThenInclude(d => d.ExaminationDetailType)
-                .Include(e => e.UserExaminationNotifications)
-                  .ThenInclude(u => u.User)
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .ToListAsync();
+          .Include(e => e.CompletedByUser)
+          .Include(e => e.CreatedByUser)
+          .Include(e => e.Details)
+            .ThenInclude(d => d.ExaminationDetailType)
+          .Include(e => e.UserExaminationNotifications)
+            .ThenInclude(u => u.User)
+          .WhereIsActiveOrActiveOnly(activeOnly)
+          .ToListAsync();
 
       IEnumerable<Models.Examination> models =
         _mapper.Map<IEnumerable<Models.Examination>>(entities);
@@ -55,13 +57,13 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
-                .Include(e => e.UserExaminationNotifications)
-                  .ThenInclude(u => u.User)
-                    .ThenInclude(u => u.ProfileType)
-                .Where(e => e.UserExaminationNotifications.Any(u => u.UserId == amhpUserId))
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .ToListAsync();
+          .Include(e => e.UserExaminationNotifications)
+            .ThenInclude(u => u.User)
+              .ThenInclude(u => u.ProfileType)
+          .Where(e => e.UserExaminationNotifications.Any(u => u.UserId == amhpUserId))
+          .WhereIsActiveOrActiveOnly(activeOnly)
+          .AsNoTracking(asNoTracking)
+          .ToListAsync();
 
       if (entities.Any())
       {
@@ -86,14 +88,62 @@ namespace Mep.Business.Services
       return models;
     }
 
-    protected override async Task<Entities.Examination> GetEntityByIdAsync(
+    public async Task<ExaminationOutcome> UpdateOutcomeAsync(ExaminationOutcome model)
+    {
+      if (!model.IsSuccessful && !model.UnsuccessfulExaminationTypeId.HasValue)
+      {
+        throw new ModelStateException("UnsuccessfulExaminationTypeId",
+          "The field UnsuccessfulExaminationTypeId must have a value when the field " +
+          "IsSuccessful is true.");
+      }
+
+      Entities.Examination entity = await GetEntityByIdAsync(model.Id, false, true);
+
+      if (entity == null)
+      {
+        throw new EntityNotFoundException(_typeName, model.Id);
+      }
+      else
+      {
+
+        CheckExaminationDoesNotAlreadyHaveAnOutcome(entity);        
+
+        Serilog.Log.Verbose("Examination Update model: {@model}", model);
+        Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
+
+        UpdateModified(entity);
+        entity.CompletedByUserId = entity.ModifiedByUserId;
+        entity.CompletedTime = model.CompletedTime;
+        entity.IsSuccessful = model.IsSuccessful;
+        entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
+        // TODO: Save the attending doctors
+
+        await _context.SaveChangesAsync();
+
+        entity = await GetEntityByIdAsync(model.Id, false, false);
+
+        // TODO: Get the attending doctors
+        // model.AttendingDoctors = 
+        model.CompletedTime = entity.CompletedTime ?? default;
+        model.IsSuccessful = entity.IsSuccessful ?? default;
+        model.UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId ?? default;
+
+        Serilog.Log.Verbose("Examination Updated entity: {@entity}", entity);
+        Serilog.Log.Verbose("Examination Updated model: {@model}", model);
+
+        return model;
+      }
+    }
+
+   protected override async Task<Entities.Examination> GetEntityByIdAsync(
       int entityId,
       bool asNoTracking,
       bool activeOnly)
     {
       Entities.Examination entity = await
         _context.Examinations
-                .Include(e => e.CreatedByUser)
+                .Include(e => e.CompletedByUser)
+                .Include(e => e.CreatedByUser)                
                 .Include(e => e.Details)
                   .ThenInclude(d => d.ExaminationDetailType)
                 .Include(e => e.Referral)
@@ -124,11 +174,12 @@ namespace Mep.Business.Services
 
     /// <summary>
     /// Sets the examination entity's properties from the provided business model
-    /// The CCG id is set from the referral patient's ccg, it's duplicated on the examination so that
-    /// the patient's CCG is fixed at the time of the examination so if they change their CCG
+    /// The CCG id is set from the referral patient's ccg, it's duplicated on the examination so 
+    /// that the patient's CCG is fixed at the time of the examination so if they change their CCG
     /// after the examination has taken place to won't change the CCG of the claim 
     /// </summary>
-    protected override async Task<bool> InternalCreateAsync(Examination model, Entities.Examination entity)
+    protected override async Task<bool> InternalCreateAsync(
+      Examination model, Entities.Examination entity)
     {
       Serilog.Log.Verbose("Examination Create model: {@model}", model);
       Serilog.Log.Verbose("Examination Create entity: {@entity}", entity);
@@ -147,7 +198,8 @@ namespace Mep.Business.Services
       return true;
     }
 
-    protected override async Task<bool> InternalUpdateAsync(Examination model, Entities.Examination entity)
+    protected override async Task<bool> InternalUpdateAsync(
+      Examination model, Entities.Examination entity)
     {
       Serilog.Log.Verbose("Examination Update model: {@model}", model);
       Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
@@ -176,7 +228,8 @@ namespace Mep.Business.Services
       return true;
     }
 
-    private async Task<bool> AddAmhpToUserExaminationNotifications(Examination model, Entities.Examination entity)
+    private async Task<bool> AddAmhpToUserExaminationNotifications(
+      Examination model, Entities.Examination entity)
     {
       await CheckUserIdIsAnAmhp(model.AmhpUserId);
 
@@ -235,6 +288,20 @@ namespace Mep.Business.Services
       return referral.Patient.CcgId;
     }
 
+    private void CheckExaminationDoesNotAlreadyHaveAnOutcome(Entities.Examination entity)
+    {
+      if (entity.IsSuccessful.HasValue ||
+          entity.CompletedTime.HasValue)
+      {
+        throw new ExaminationAlreadyHasOutcomeException(
+          entity.Id,
+          entity.IsSuccessful,
+          entity.CompletedTime,
+          entity?.CompletedByUser?.DisplayName
+        );
+      }
+    }
+
     private async Task<bool> CheckUserIdIsAnAmhp(int amhpUserId)
     {
       User user = await _userService.GetByIdAsync(amhpUserId, true);
@@ -287,19 +354,24 @@ namespace Mep.Business.Services
       }
     }
 
-    private async Task<bool> UpdateAmhpToUserExaminationNotifications(Examination model, Entities.Examination entity)
+    private async Task<bool> UpdateAmhpToUserExaminationNotifications(
+      Examination model, Entities.Examination entity)
     {
       await CheckUserIdIsAnAmhp(model.AmhpUserId);
 
       if (entity.HasUserExaminationNotifications)
       {
         Entities.UserExaminationNotification amhpUserExaminationNotification =
-          entity.UserExaminationNotifications.SingleOrDefault(u => u.User.ProfileTypeId == ProfileType.AMHP);
+          entity.UserExaminationNotifications.SingleOrDefault(
+            u => u.User.ProfileTypeId == ProfileType.AMHP);
 
         if (amhpUserExaminationNotification == null)
         {
           throw new EntityNotLoadedException(
-            "Examination", model.Id, "UserExaminationNotification.User.ProfileType of AMHP", ProfileType.AMHP);
+            "Examination", 
+            model.Id, 
+            "UserExaminationNotification.User.ProfileType of AMHP", 
+            ProfileType.AMHP);
         }
         else
         {
@@ -310,7 +382,10 @@ namespace Mep.Business.Services
       else
       {
         throw new EntityNotLoadedException(
-          "Examination", model.Id, "UserExaminationNotification.User.ProfileType of AMHP", ProfileType.AMHP);
+          "Examination", 
+          model.Id, 
+          "UserExaminationNotification.User.ProfileType of AMHP", 
+          ProfileType.AMHP);
       }
       return true;
     }
