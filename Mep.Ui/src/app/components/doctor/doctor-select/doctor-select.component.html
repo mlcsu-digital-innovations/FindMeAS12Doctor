@@ -17,20 +17,16 @@
         <div class="card-header-details">
         </div>
         <div class="card-body">
-          <form novalidate>
+          <form [formGroup]="doctorForm" novalidate>
             <!-- Search Doctor -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
                 <label for="searchDoctor">Search Doctor</label>
-                <input 
+                <input
                 type="text"
                 class="form-control"
                 id="searchDoctor"
                 #searchDoctor
-                [appDisableControl]="
-                  !IsPatientIdValidated() ||
-                  IsUnknownFieldChecked('unknownDoctor')
-                "
                 [class.is-invalid]="hasDoctorSearchFailed"
                 formControlName="searchDoctor"
                 [ngbTypeahead]="DoctorSearch"
@@ -40,7 +36,7 @@
               </div>
               <div class="col-md-2 centered-div">
                 <div class="col-md-2 mb-2 text-right" style="margin-top: 10px">
-                  <a 
+                  <a
                     aria-disabled="true"
                     class="btn btn-primary vcenter"
                     ngbTooltip="Confirm search"
@@ -66,8 +62,8 @@
                 </div>
               </div>
             </div>
-            <div class="form-row mt-less-1">
-              <div class="col-md-12" *ngIf="amhpField.errors != null">
+            <div class="form-row mt-less-1" *ngIf="doctorField.errors">
+              <div class="col-md-12">
                 <div *ngIf="doctorField.errors.InvalidDoctor" class="invalid-field">
                   <span>* Invalid Doctor </span>
                 </div>
@@ -123,7 +119,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-between p-2">
+            <!-- <div class="d-flex justify-content-between p-2">
               <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
               <select class="custom-select" style="width: auto" name="pageSize"
                 [(ngModel)]="referralListService.pageSize">
@@ -131,7 +127,7 @@
                 <option [ngValue]="10">10 items per page</option>
                 <option [ngValue]="9999999">All items</option>
               </select>
-            </div>
+            </div> -->
 
             <div class="form-row" style="padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
@@ -177,7 +173,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-between p-2">
+            <!-- <div class="d-flex justify-content-between p-2">
               <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
               <select class="custom-select" style="width: auto" name="pageSize"
                 [(ngModel)]="referralListService.pageSize">
@@ -185,7 +181,7 @@
                 <option [ngValue]="10">10 items per page</option>
                 <option [ngValue]="9999999">All items</option>
               </select>
-            </div>
+            </div> -->
 
           </form>
         </div>
