@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DoctorAcceptComponent } from './doctor-accept.component';
+import { SharedComponentsModule } from '../../shared-components.module';
 
 describe('DoctorAcceptComponent', () => {
   let component: DoctorAcceptComponent;
@@ -8,7 +9,13 @@ describe('DoctorAcceptComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DoctorAcceptComponent ]
+      declarations:
+      [
+        DoctorAcceptComponent
+      ],
+      imports: [
+        SharedComponentsModule
+      ]
     })
     .compileComponents();
   }));

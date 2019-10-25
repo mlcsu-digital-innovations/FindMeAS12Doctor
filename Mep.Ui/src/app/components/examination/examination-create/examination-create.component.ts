@@ -1,4 +1,4 @@
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from '../../../services/amhp-list/amhp-list.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -19,6 +19,7 @@ import { PostcodeRegex } from '../../../constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
+import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
@@ -52,10 +53,9 @@ export class ExaminationCreateComponent implements OnInit {
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralId: number;
+  selectedDate: Date;
   selectedDetails: NameIdList[] = [];
   specialities: NameIdList[];
-
-  selectedDate: Date;
 
   @ViewChild('cancelExamination', null) cancelExaminationTemplate;
 
@@ -68,7 +68,7 @@ export class ExaminationCreateComponent implements OnInit {
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private route: ActivatedRoute,
-    private router: Router,
+    private routerService: RouterService,
     private toastService: ToastService
   ) { }
 
@@ -234,7 +234,7 @@ export class ExaminationCreateComponent implements OnInit {
         size: 'lg'
       });
     } else {
-      this.router.navigate(['/referral']);
+      this.routerService.navigate(['/referral']);
     }
   }
 
@@ -296,7 +296,7 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   EditExamination() {
-    this.router.navigate([`/examination/edit/${this.examinationId}`]);
+    this.routerService.navigate([`/examination/edit/${this.examinationId}`]);
   }
 
   FormatAddress(): string[] {
@@ -428,7 +428,7 @@ export class ExaminationCreateComponent implements OnInit {
     this.cancelModal.close();
 
     if (action) {
-      this.router.navigate(['/referral']);
+      this.routerService.navigate(['/referral']);
     }
   }
 
@@ -439,6 +439,10 @@ export class ExaminationCreateComponent implements OnInit {
 
   OnItemSelect(item: NameIdList) {
     this.selectedDetails.push(item);
+  }
+
+  OpenLocationTab(): void {
+    window.open(environment.locationEndpoint, '_blank');
   }
 
   PostExamination(examination: Examination) {
@@ -466,7 +470,7 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   ReferralListNavigation() {
-    this.router.navigate(['/referral/list']);
+    this.routerService.navigate(['/referral/list']);
   }
 
   RoundToNearestFiveMinutes(minute: number): number {
@@ -551,6 +555,10 @@ export class ExaminationCreateComponent implements OnInit {
     this.PostExamination(examination);
   }
 
+  SelectDoctor() {
+    this.routerService.navigate([`/examination/${this.examinationId}/select-doctors`]);
+  }
+
   SetAmhpField(id: number | null, text: string | null) {
     const amhp = {} as TypeAheadResult;
 
@@ -593,9 +601,5 @@ export class ExaminationCreateComponent implements OnInit {
       this.toBeCompletedByTimeField.setValue(this.defaultCompletionTime);
       this.toBeCompletedByDateField.setErrors(null);
     }
-  }
-
-  OpenLocationTab(): void {
-    window.open(environment.locationEndpoint, '_blank');
   }
 }
