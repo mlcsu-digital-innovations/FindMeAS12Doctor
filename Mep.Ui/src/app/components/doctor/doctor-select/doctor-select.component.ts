@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-doctor-select',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DoctorSelectComponent implements OnInit {
 
-  constructor() { }
+  selectDoctor: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
+
+    this.selectDoctor = this.formBuilder.group({
+     doctorSearch: []
+    });
+
   }
 
 }
