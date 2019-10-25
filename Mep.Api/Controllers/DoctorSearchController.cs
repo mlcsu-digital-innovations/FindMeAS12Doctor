@@ -7,13 +7,13 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class AmhpSearchController : GeneralSearchController<BusinessModels.UserAmhp>
+  public class DoctorSearchController : GeneralSearchController<BusinessModels.UserDoctor>
   {
-    public AmhpSearchController(
-      IModelGeneralSearchService<BusinessModels.UserAmhp> service,
+    public DoctorSearchController(
+      IModelGeneralSearchService<BusinessModels.UserDoctor> service,
       IMapper mapper)
       : base(service, mapper)
-    {      
+    {
     }
   }
 }
