@@ -1,6 +1,6 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -46,6 +46,8 @@ export class ExaminationEditComponent implements OnInit {
   selectedDetails: NameIdList[] = [];
   selectedDoctors: string[] = [];
   specialities: NameIdList[];
+
+  @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -195,6 +197,10 @@ export class ExaminationEditComponent implements OnInit {
       tap(() => (this.isAmhpSearching = false))
     )
 
+  CancelEdit() {
+
+  }
+
   ClearField(fieldName: string) {
     if (this.examinationForm.contains(fieldName)) {
       this.examinationForm.controls[fieldName].setValue('');
@@ -288,7 +294,7 @@ export class ExaminationEditComponent implements OnInit {
     this.SetDefaultDateTimeFields(referral.currentExamination.mustBeCompletedBy);
 
     this.selectedDoctors = ['Doctor Smith', 'Doctor Jones'];
-    this.allocatedDoctors= ['Doctor Livingstone'];
+    this.allocatedDoctors = ['Doctor Livingstone'];
 
   }
 
@@ -312,6 +318,10 @@ export class ExaminationEditComponent implements OnInit {
     // ToDo: Find a better way to do this !
     await this.Delay(100);
     this.renderer.selectRootElement(fieldName).focus();
+  }
+
+  UpdateReferral() {
+
   }
 
 }

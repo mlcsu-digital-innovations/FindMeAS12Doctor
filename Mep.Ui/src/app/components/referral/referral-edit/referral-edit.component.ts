@@ -29,6 +29,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class ReferralEditComponent implements OnInit {
 
+  cancelModal: NgbModalRef;
   hasAmhpSearchFailed: boolean;
   hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
@@ -68,7 +69,7 @@ export class ReferralEditComponent implements OnInit {
   ) { }
 
   @ViewChild('patientResults', {static: true}) patientResultTemplate;
-  @ViewChild('cancelReferral', null) cancelReferralTemplate;
+  @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
 
   ngOnInit() {
 
@@ -149,7 +150,13 @@ export class ReferralEditComponent implements OnInit {
     )
 
   CancelEdit() {
-    // ToDo: add the code for this
+    if (this.referralForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelUpdateTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigate(['/referral']);
+    }
   }
 
   async CancelPatientResultsModal() {
@@ -425,6 +432,15 @@ export class ReferralEditComponent implements OnInit {
 
   IsUnknownFieldChecked(fieldName: string): boolean {
     return this.referralForm.get(fieldName).value;
+  }
+
+  OnCancelModalAction(action: boolean) {
+
+    this.cancelModal.close();
+
+    if (action) {
+      this.routerService.navigate(['/referral']);
+    }
   }
 
   OnChanges(): void {
