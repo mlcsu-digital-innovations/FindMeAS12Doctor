@@ -13,6 +13,7 @@
     "team.remoteUrl": " https://einnovationteam-mlcsu.visualstudio.com",
     "team.teamProject": "Medical Examinations Portal",
     "team.buildDefinitionId": 92,
-    "editor.wrappingIndent": "indent"
+    "editor.wrappingIndent": "indent",
+    "editor.rulers": [100]
 	}
 }
