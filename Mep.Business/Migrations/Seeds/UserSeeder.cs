@@ -16,39 +16,50 @@ namespace Mep.Business.Migrations.Seeds
     internal const string DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";    
     internal const string DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
     internal const string DISPLAY_NAME_FINANCE_MALE = "Finance Male";
-    internal readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_12 =
+    internal const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
+    internal const int GMCNUMBER_DOCTOR_MALE = 2222222;
+    internal const int GMCNUMBER_DOCTOR_ON_CALL = 3333333;
+    internal const int GMCNUMBER_DOCTOR_PATIENTS_GP = 5555555;
+    internal const int GMCNUMBER_DOCTOR_S12_APPROVED = 4444444;
+    internal const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = "bf673270-2538-4e59-9d26-5b4808fd9ef6";                          
+
+    internal readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_S12_APPROVED =
       new DateTimeOffset(2025, 1, 1,
                          0, 00, 00, 00, DateTimeOffset.Now.Offset);   
-    internal const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = "bf673270-2538-4e59-9d26-5b4808fd9ef6";                          
 
     #endregion
     internal void SeedData()
     {
       AddUpdateUserDoctorWithDefaults(
         DISPLAY_NAME_DOCTOR_FEMALE, 
-        GetGenderTypeFemale().Id
+        GetGenderTypeFemale().Id,
+        gmcNumber: GMCNUMBER_DOCTOR_FEMALE
       );
 
       AddUpdateUserDoctorWithDefaults(
         DISPLAY_NAME_DOCTOR_MALE,
-        GetGenderTypeMale().Id
+        GetGenderTypeMale().Id,
+        gmcNumber: GMCNUMBER_DOCTOR_MALE
       );
     
       AddUpdateUserDoctorWithDefaults(
         DISPLAY_NAME_DOCTOR_ON_CALL, 
-        GetGenderTypeFemale().Id
+        GetGenderTypeFemale().Id,
+        gmcNumber: GMCNUMBER_DOCTOR_ON_CALL
       );
 
       AddUpdateUserDoctorWithDefaults(
         DISPLAY_NAME_DOCTOR_S12_APPROVED,
         GetGenderTypeMale().Id,
         section12ApprovalStatusId: GetSection12ApprovalStatusApproved().Id,
-        section12ExpiryDate: SECTION_12_EXPIRY_DATE_DOCTOR_12
+        section12ExpiryDate: SECTION_12_EXPIRY_DATE_DOCTOR_S12_APPROVED,
+        gmcNumber: GMCNUMBER_DOCTOR_S12_APPROVED
       );
 
       AddUpdateUserDoctorWithDefaults(
         DISPLAY_NAME_DOCTOR_PATIENTS_GP,
-        GetGenderTypeMale().Id
+        GetGenderTypeMale().Id,
+        gmcNumber: GMCNUMBER_DOCTOR_PATIENTS_GP
       );
 
       AddUpdateUserWithDefaults(

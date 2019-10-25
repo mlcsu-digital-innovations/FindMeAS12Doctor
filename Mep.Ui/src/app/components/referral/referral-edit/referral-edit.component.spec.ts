@@ -1,5 +1,9 @@
+import { ActivatedRoute } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { of } from 'rxjs';
 import { ReferralEditComponent } from './referral-edit.component';
+import { RouterService } from 'src/app/services/router/router.service';
 import { SharedComponentsModule } from '../../shared-components.module';
 
 describe('ReferralEditComponent', () => {
@@ -8,8 +12,27 @@ describe('ReferralEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReferralEditComponent ],
-      imports: [ SharedComponentsModule ]
+      declarations: [
+        ReferralEditComponent
+      ],
+      imports: [
+        HttpClientModule,
+        SharedComponentsModule
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({referralId: 1})
+          }
+        },
+        {
+         provide: RouterService,
+         useValue: {
+           paramMap: of({referralId: 1})
+         }
+       }
+      ]
     })
     .compileComponents();
   }));

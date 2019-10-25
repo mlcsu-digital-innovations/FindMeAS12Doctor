@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReferralCreateComponent } from './referral-create.component';
-import { SharedComponentsModule } from '../../shared-components.module';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { RouterService } from 'src/app/services/router/router.service';
+import { SharedComponentsModule } from '../../shared-components.module';
 
 describe('ReferralCreateComponent', () => {
   let component: ReferralCreateComponent;
@@ -24,7 +25,7 @@ describe('ReferralCreateComponent', () => {
       ],
       providers: [
         {
-          provide: Router,
+          provide: RouterService,
           useValue: {
             paramMap: of({referralId: 1})
           }

@@ -8,6 +8,7 @@ import { ReferralView } from 'src/app/interfaces/referral-view';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
+import { RouterService } from 'src/app/services/router/router.service';
 
 @Component({
   selector: 'app-examination-view',
@@ -27,6 +28,7 @@ export class ExaminationViewComponent implements OnInit {
     private formBuilder: FormBuilder,
     private referralService: ReferralService,
     private route: ActivatedRoute,
+    private routerService: RouterService,
     private toastService: ToastService,
   ) { }
 
@@ -91,6 +93,14 @@ export class ExaminationViewComponent implements OnInit {
         ''
       ],
     });
+  }
+
+  CancelView() {
+    this.routerService.navigatePrevious();
+  }
+
+  EditExamination() {
+    this.routerService.navigateByUrl(`/examination/edit/${this.referralId}`);
   }
 
   InitialiseForm(referral: ReferralView) {

@@ -19,10 +19,10 @@
             <div class="form-row">
               <div class="col-md-4">
                 <label for="searchTerm">Full text search:</label>
-                <input 
-                  class="form-control" 
-                  id="searchTerm" 
-                  type="text" 
+                <input
+                  class="form-control"
+                  id="searchTerm"
+                  type="text"
                   name="searchTerm"
                   [(ngModel)]="referralListService.searchTerm" />
               </div>
@@ -59,7 +59,7 @@
                       </a>
                     </td>
                     <td>
-                      <a routerLink="/patient/edit/{{referral.patientId}}" routerLinkActive="active">
+                      <a routerLink="/referral/edit/{{referral.referralId}}" routerLinkActive="active">
                         <ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>

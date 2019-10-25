@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
+import { RouterService } from './services/router/router.service';
 
 @NgModule({
   declarations: [
@@ -29,4 +30,8 @@ import { RouterModule } from '@angular/router';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    private routerExtService: RouterService
+  ) {}
+}

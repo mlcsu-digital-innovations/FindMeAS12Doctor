@@ -3,6 +3,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { GpPracticeListService } from '../../../services/gp-practice-list/gp-practice-list.service';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-doctor-select',
@@ -15,13 +16,18 @@ export class DoctorSelectComponent implements OnInit {
   isDoctorFieldsShown: boolean;
   isDoctorSearching: boolean;
   unknownDoctorId: number;
+  selectDoctor: FormGroup;
 
   constructor(
     private doctorListService: GpPracticeListService,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
     this.unknownDoctorId = 0;
+    this.selectDoctor = this.formBuilder.group({
+      doctorSearch: []
+     });
   }
 
   FormatTypeAheadResults(value: any): string {
