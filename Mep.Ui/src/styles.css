@@ -386,6 +386,10 @@ label {
   margin-top: -2.5rem !important;
 }
 
+.mt-more-2 {
+  margin-top: 1rem !important;
+}
+
 .ml-less-2 {
   margin-left: -1rem !important;
 }
@@ -404,4 +408,22 @@ label {
 
 .mb-more-2 {
   margin-bottom: 1rem;
+}
+.mb-more-4 {
+  margin-bottom: 2rem;
+}
+
+.btn-trash {
+  background-color: #0dadb7;
+  color: #fff;
+}
+
+.btn-trash:hover {
+  background-color: #0db3bf;
+  color: #fff;
+}
+
+.btn-trash:disabled {
+  background-color: #497679;
+  color: #ccc;
 }

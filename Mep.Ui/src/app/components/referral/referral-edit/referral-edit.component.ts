@@ -1,3 +1,4 @@
+import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
 import { CcgListService } from 'src/app/services/ccg-list/ccg-list.service';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -27,9 +28,11 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class ReferralEditComponent implements OnInit {
 
+  hasAmhpSearchFailed: boolean;
   hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
   initialReferralDetails: ReferralEdit;
+  isAmhpSearching: boolean;
   isCcgSearching: boolean;
   isGpFieldsShown: boolean;
   isGpSearching: boolean;
@@ -49,6 +52,7 @@ export class ReferralEditComponent implements OnInit {
   updatedReferral: ReferralEdit;
 
   constructor(
+    private amhpListService: AmhpListService,
     private ccgListService: CcgListService,
     private formBuilder: FormBuilder,
     private gpPracticeListService: GpPracticeListService,
@@ -117,12 +121,34 @@ export class ReferralEditComponent implements OnInit {
       unknownResidentialPostcode: false,
       ccg: [''],
       unknownCcg: false,
+      amhp: ['']
     });
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
     this.OnChanges();
 
+  }
+
+  AmhpSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.isAmhpSearching = true)),
+      switchMap(term =>
+        this.amhpListService.GetAmhpList(term).pipe(
+          tap(() => (this.hasAmhpSearchFailed = false)),
+          catchError(() => {
+            this.hasAmhpSearchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.isAmhpSearching = false))
+    )
+
+  CancelEdit() {
+    // ToDo: add the code for this
   }
 
   async CancelPatientResultsModal() {
@@ -147,6 +173,13 @@ export class ReferralEditComponent implements OnInit {
       tap(() => (this.isCcgSearching = false))
     )
 
+  ClearField(fieldName: string) {
+    if (this.referralForm.contains(fieldName)) {
+      this.referralForm.controls[fieldName].setValue('');
+      this.SetFieldFocus(`#${fieldName}`);
+    }
+  }
+
   async Delay(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
@@ -160,6 +193,10 @@ export class ReferralEditComponent implements OnInit {
         `DisableIfFieldHasValue(fieldName: string) unable to find field [${fieldName}]`
       );
     }
+  }
+
+  DisableIfParentIsDisabled(fieldName: string): boolean {
+    return this.referralForm.controls[fieldName].disabled;
   }
 
   DisablePatientValidationButtonIfFieldsAreInvalid(): boolean {
@@ -193,6 +230,10 @@ export class ReferralEditComponent implements OnInit {
 
   get alternativeIdentifierField() {
     return this.referralForm.controls.alternativeIdentifier;
+  }
+
+  get amhpField() {
+    return this.referralForm.controls.amhp;
   }
 
   get ccgField() {
@@ -341,6 +382,18 @@ export class ReferralEditComponent implements OnInit {
     this.ccgField.setValue(ccgValue);
     this.unknownCcg.setValue(ccgValue.id === 0);
 
+    const amhpUser = referral.leadAmhpUserId === null
+      ? {
+        id: 0,
+        resultText: 'Unknown'
+      }
+      : {
+        id: referral.leadAmhpUserId,
+        resultText: referral.leadAmhpUserDisplayName
+      };
+
+    this.amhpField.setValue(amhpUser);
+
   }
 
   IsPatientIdUnchanged(): boolean {
@@ -450,6 +503,10 @@ export class ReferralEditComponent implements OnInit {
 
       this.SetFieldFocus('#residentialPostcode');
     }
+  }
+
+  UpdateReferral() {
+    // ToDo: add the code for this
   }
 
   async UseExistingPatient() {
