@@ -17,21 +17,43 @@
         <div class="card-header-details">
         </div>
         <div class="card-body">
-          <form [formGroup]="selectDoctor" novalidate>
+          <form novalidate>
             <!-- Search Doctor -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
-                <label for="doctorSearch">Search Doctor</label>
-                <input type="text" class="form-control" id="doctorSearch" #amhp
-                  [appDisableControl]="!IsDoctorIdValidated()" [class.is-invalid]="hasDoctorSearchFailed"
-                  formControlName="doctorSearch" [ngbTypeahead]="DoctorSearch"
-                  [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
+                <label for="searchDoctor">Search Doctor</label>
+                <input 
+                type="text"
+                class="form-control"
+                id="searchDoctor"
+                #searchDoctor
+                [appDisableControl]="
+                  !IsPatientIdValidated() ||
+                  IsUnknownFieldChecked('unknownDoctor')
+                "
+                [class.is-invalid]="hasDoctorSearchFailed"
+                formControlName="searchDoctor"
+                [ngbTypeahead]="DoctorSearch"
+                [resultFormatter]="FormatTypeAheadResults"
+                [inputFormatter]="FormatTypeAheadResults"
+                />
               </div>
               <div class="col-md-2 centered-div">
                 <div class="col-md-2 mb-2 text-right" style="margin-top: 10px">
-                  <a routerLink="" routerLinkActive="active" class="btn btn-primary vcenter" role="button"
-                    aria-disabled="true" placement="right" ngbTooltip="Confirm search" [openDelay]="1000"
-                    [closeDelay]="500" tooltipClass="subtle-tooltip">Confirm</a>
+                  <a 
+                    aria-disabled="true"
+                    class="btn btn-primary vcenter"
+                    ngbTooltip="Confirm search"
+                    placement="right"
+                    role="button"
+                    routerLink=""
+                    routerLinkActive="active"
+                    tooltipClass="subtle-tooltip"
+                    [closeDelay]="500"
+                    [openDelay]="1000"
+                  >
+                    Confirm
+                  </a>
                 </div>
               </div>
             </div>
