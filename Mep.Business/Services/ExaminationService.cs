@@ -96,6 +96,9 @@ namespace Mep.Business.Services
 
       Entities.Examination entity = await GetEntityByIdAsync(model.Id, false, true);
 
+      Serilog.Log.Verbose("Examination Update model: {@model}", model);
+      Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
+
       if (entity == null)
       {
         throw new EntityNotFoundException(_typeName, model.Id);
@@ -105,24 +108,32 @@ namespace Mep.Business.Services
 
         CheckExaminationDoesNotAlreadyHaveAnOutcome(entity);
 
-        Serilog.Log.Verbose("Examination Update model: {@model}", model);
-        Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
-
         UpdateModified(entity);
+
+        UpdateDoctorStatuses(model, entity);
+        
         entity.CompletedByUserId = entity.ModifiedByUserId;
         entity.CompletedTime = model.CompletedTime;
         entity.IsSuccessful = model.IsSuccessful;
         entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
-        
 
         await _context.SaveChangesAsync();
 
         entity = await GetEntityByIdAsync(model.Id, false, false);
-
-        // TODO: Get the attending doctors
+        
         model.CompletedTime = entity.CompletedTime ?? default;
         model.IsSuccessful = entity.IsSuccessful ?? default;
         model.UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId ?? default;
+
+        if (entity.Doctors.Any())
+        {
+          model.AttendingDoctors = entity.Doctors
+            .Select(doctor => new ExaminationOutcomeDoctor {
+              Attended = doctor.StatusId == ExaminationDoctorStatus.ATTENDED,
+              Id = doctor.DoctorUserId
+            })
+            .ToList();
+        }        
 
         Serilog.Log.Verbose("Examination Updated entity: {@entity}", entity);
         Serilog.Log.Verbose("Examination Updated model: {@model}", model);
@@ -388,5 +399,37 @@ namespace Mep.Business.Services
       }
       return true;
     }
+
+    /// <summary>
+    /// Update the doctor statuses checking that the doctors are those expected
+    /// </summary>
+    private void UpdateDoctorStatuses(ExaminationOutcome model, Entities.Examination entity)
+    {
+      int[] attendingDoctorIds = model.AttendingDoctors.Select(d => d.Id).ToArray();
+      Entities.ExaminationDoctor[] allocatedDoctors = entity.Doctors
+        .Where(d => d.StatusId == ExaminationDoctorStatus.ALLOCATED)
+        .ToArray();
+      int[] allocatedDoctorIds = allocatedDoctors.Select(a => a.DoctorUserId).ToArray();
+
+      if (attendingDoctorIds.Except(allocatedDoctorIds).Any())
+      {
+        throw new ModelStateException(
+          "AttendingDoctors", 
+          "Expected the following doctor user id's:(" +
+          $"{string.Join(",", allocatedDoctorIds.OrderBy(id => id))}" +
+          ") but received: (" +
+          $"{string.Join(",", attendingDoctorIds.OrderBy(id => id))}).");
+      }
+
+      foreach (Entities.ExaminationDoctor examinationDoctor in allocatedDoctors)
+      {
+        ExaminationOutcomeDoctor examinationOutcomeDoctor = 
+          model.AttendingDoctors.Single(d => d.Id == examinationDoctor.DoctorUserId);
+
+        examinationDoctor.AttendanceConfirmedByUserId = entity.ModifiedByUserId;
+        examinationDoctor.StatusId = ExaminationDoctorStatus.ATTENDED;
+        UpdateModified(examinationDoctor);
+      }
+    }    
   }
 }
