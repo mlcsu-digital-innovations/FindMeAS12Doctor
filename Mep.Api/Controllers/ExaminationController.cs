@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using Mep.Business.Exceptions;
+using System.Linq.Expressions;
 
 namespace Mep.Api.Controllers
 {
@@ -41,14 +42,15 @@ namespace Mep.Api.Controllers
       if (businessModels.Any())
       {
         IEnumerable<ViewModels.ExaminationList> viewModels =
-            _mapper.Map<IEnumerable<ViewModels.ExaminationList>>(businessModels);
+          businessModels.Select(ViewModels.ExaminationList.ProjectFromModel).ToList();
+
         return Ok(viewModels);
       }
       else
       {
         return NoContent();
       }
-    }
+    }    
 
     [HttpPut]
     [Route("outcome/{id:int}/failure")]

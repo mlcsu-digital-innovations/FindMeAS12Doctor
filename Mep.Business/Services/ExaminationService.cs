@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using System.Linq.Expressions;
 
 namespace Mep.Business.Services
 {
@@ -58,31 +59,32 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Entities.Examination> entities =
+      IEnumerable<Models.Examination> models =
         await _context.Examinations
-          .Include(e => e.AmhpUser)
-            .ThenInclude(u => u.ProfileType)
+          .Where(e => e.AmhpUserId == amhpUserId)
           .WhereIsActiveOrActiveOnly(activeOnly)
           .AsNoTracking(asNoTracking)
+          .Select(EntityToModel)
           .ToListAsync();
 
-      if (entities.Any())
-      {
-        Entities.ProfileType amhpProfileType = entities.Select(e => e.AmhpUser.ProfileType).First();
-
-        if (amhpProfileType.Id != Models.ProfileType.AMHP)
-        {
-          throw new ModelStateException("AmhpUserId",
-            $"UserId {amhpUserId} must have a ProfileType " +
-            $"of AMHP but is a {amhpProfileType.Name}.");
-        }
-
-      }
-
-      IEnumerable<Models.Examination> models =
-        _mapper.Map<IEnumerable<Models.Examination>>(entities);
-
       return models;
+    }
+
+    public static Expression<Func<Entities.Examination, Examination>> EntityToModel
+    {
+      get
+      {
+        return e => new Examination()
+        {
+          Address1 = e.Address1,
+          Address2 = e.Address2,
+          Address3 = e.Address3,
+          Address4 = e.Address4,
+          MustBeCompletedBy = e.MustBeCompletedBy,
+          Id = e.Id,
+          Postcode = e.Postcode
+        };
+      }
     }
 
     public async Task<ExaminationOutcome> UpdateOutcomeAsync(ExaminationOutcome model)
@@ -111,7 +113,7 @@ namespace Mep.Business.Services
         UpdateModified(entity);
 
         UpdateDoctorStatuses(model, entity);
-        
+
         entity.CompletedByUserId = entity.ModifiedByUserId;
         entity.CompletedTime = model.CompletedTime;
         entity.IsSuccessful = model.IsSuccessful;
@@ -120,7 +122,7 @@ namespace Mep.Business.Services
         await _context.SaveChangesAsync();
 
         entity = await GetEntityByIdAsync(model.Id, false, false);
-        
+
         model.CompletedTime = entity.CompletedTime ?? default;
         model.IsSuccessful = entity.IsSuccessful ?? default;
         model.UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId ?? default;
@@ -128,12 +130,13 @@ namespace Mep.Business.Services
         if (entity.Doctors.Any())
         {
           model.AttendingDoctors = entity.Doctors
-            .Select(doctor => new ExaminationOutcomeDoctor {
+            .Select(doctor => new ExaminationOutcomeDoctor
+            {
               Attended = doctor.StatusId == ExaminationDoctorStatus.ATTENDED,
               Id = doctor.DoctorUserId
             })
             .ToList();
-        }        
+        }
 
         Serilog.Log.Verbose("Examination Updated entity: {@entity}", entity);
         Serilog.Log.Verbose("Examination Updated model: {@model}", model);
@@ -414,7 +417,7 @@ namespace Mep.Business.Services
       if (attendingDoctorIds.Except(allocatedDoctorIds).Any())
       {
         throw new ModelStateException(
-          "AttendingDoctors", 
+          "AttendingDoctors",
           "Expected the following doctor user id's:(" +
           $"{string.Join(",", allocatedDoctorIds.OrderBy(id => id))}" +
           ") but received: (" +
@@ -423,13 +426,13 @@ namespace Mep.Business.Services
 
       foreach (Entities.ExaminationDoctor examinationDoctor in allocatedDoctors)
       {
-        ExaminationOutcomeDoctor examinationOutcomeDoctor = 
+        ExaminationOutcomeDoctor examinationOutcomeDoctor =
           model.AttendingDoctors.Single(d => d.Id == examinationDoctor.DoctorUserId);
 
         examinationDoctor.AttendanceConfirmedByUserId = entity.ModifiedByUserId;
         examinationDoctor.StatusId = ExaminationDoctorStatus.ATTENDED;
         UpdateModified(examinationDoctor);
       }
-    }    
+    }
   }
 }

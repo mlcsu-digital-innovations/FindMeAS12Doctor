@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 
 namespace Mep.Api.ViewModels
 {
@@ -7,5 +8,20 @@ namespace Mep.Api.ViewModels
     public DateTimeOffset DateTime { get; set; }
     public int Id { get; set; }
     public string Postcode { get; set; }
+
+    public static Func<Business.Models.Examination, ExaminationList> ProjectFromModel
+    {
+      get
+      {
+        return b => new ExaminationList()
+        {
+          DateTime = b.DateTime,
+          Id = b.Id,
+          Postcode = b.Postcode
+        };
+      }
+    }    
   }
+
+  
 }
