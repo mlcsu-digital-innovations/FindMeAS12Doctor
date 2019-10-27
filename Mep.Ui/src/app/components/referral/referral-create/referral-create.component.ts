@@ -681,38 +681,28 @@ export class ReferralCreateComponent implements OnInit {
     }
 
     this.patientSearchService.patientSearch(params).subscribe(
-      (results: PatientSearchResult[]) => {
+      (result: PatientSearchResult) => {
         this.isSearchingForPatient = false;
         // if there are any matching results then display them in a modal
-        switch (results.length) {
-          case 0:
-            // no matching patients found, inform user with toast ?
-            this.toastService.displayInfo({
-              message: 'No existing patients found'
-            });
-            this.isPatientIdValidated = true;
-            this.patientDetails.nhsNumber = +this.nhsNumber;
-            this.patientDetails.alternativeIdentifier = this.alternativeIdentifier;
-            this.isGpFieldsShown = true;
-            this.nhsNumberField.setErrors(null);
-            this.SetFieldFocus('#gpPractice');
-            break;
-          case 1:
-            this.nhsNumberField.setErrors(null);
-            this.patientResult = results[0];
-            this.modalResult = results[0];
-            this.patientModal = this.modalService.open(
-              this.patientResultTemplate,
-              { size: 'lg' }
-            );
-            break;
-          default:
-            this.toastService.displayError({
-              title: 'Validation Error',
-              message: 'Multiple patients found ! Please inform a system administrator'
-            });
-            this.isPatientIdValidated = false;
-            break;
+        if (result === null) {
+          // no matching patients found, inform user with toast ?
+          this.toastService.displayInfo({
+            message: 'No existing patients found'
+          });
+          this.isPatientIdValidated = true;
+          this.patientDetails.nhsNumber = +this.nhsNumber;
+          this.patientDetails.alternativeIdentifier = this.alternativeIdentifier;
+          this.isGpFieldsShown = true;
+          this.nhsNumberField.setErrors(null);
+          this.SetFieldFocus('#gpPractice');
+        } else {
+          this.nhsNumberField.setErrors(null);
+          this.patientResult = result;
+          this.modalResult = result;
+          this.patientModal = this.modalService.open(
+            this.patientResultTemplate,
+            { size: 'lg' }
+          );
         }
       },
       error => {

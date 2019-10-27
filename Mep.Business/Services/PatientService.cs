@@ -19,12 +19,12 @@ namespace Mep.Business.Services
       IModelSearchService<Patient, PatientSearch>, 
       IPatientService
   {
-    private readonly IModelService<GpPractice> _gpPracticeService;
+    private readonly IGpPracticeService _gpPracticeService;
 
     public PatientService(
       ApplicationContext context,
       IMapper mapper,
-      IModelService<GpPractice> gpPracticeService)
+      IGpPracticeService gpPracticeService)
       : base("Patient", context, mapper)
     {
       _gpPracticeService = gpPracticeService;
