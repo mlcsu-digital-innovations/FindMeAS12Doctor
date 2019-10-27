@@ -1,14 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Mep.Business.Models
 {
   public class Patient : BaseModel
   {
     public Patient() {}
-    public Patient(Data.Entities.Patient entity)
+    public Patient(Data.Entities.Patient entity) : base(entity)
     {
+      if (entity == null) return;
+      
       AlternativeIdentifier = entity.AlternativeIdentifier;
       // TODO Ccg
       CcgId = entity.CcgId;
@@ -55,5 +59,29 @@ namespace Mep.Business.Models
         return latestNotClosedReferralId;
       }
     }
+
+    // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
+    // for this to work with .ThenInclude()
+    public static Expression<Func<Data.Entities.Patient, Patient>> ProjectFromEntity
+    {
+      get
+      {
+        return patientEntity => new Patient(patientEntity);
+      }
+    }
+
+      // get
+      // {
+      //   return entity => new Patient()
+      //   {
+      //     AlternativeIdentifier = entity.AlternativeIdentifier,
+      //     // TODO Ccg
+      //     CcgId = entity.CcgId,
+      //     // TODO GpPractice
+      //     GpPracticeId = entity.GpPracticeId,
+      //     NhsNumber = entity.NhsNumber,
+      //     ResidentialPostcode = entity.ResidentialPostcode
+      //   };
+      // }    
   }
 }

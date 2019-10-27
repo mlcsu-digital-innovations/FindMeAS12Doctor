@@ -27,7 +27,7 @@ namespace Mep.Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GeneralSearchResult>>> Get([FromQuery] SearchString searchString )
     {
-      IEnumerable<business.GeneralSearchResult> businessSearchResult = await _service.SearchAsync(searchString.Search);
+      IEnumerable<business.GeneralSearchResult> businessSearchResult = await _service.SearchAsync(searchString.Criteria);
 
       IEnumerable<GeneralSearchResult> searchResults = _mapper.Map<IEnumerable<GeneralSearchResult>>(businessSearchResult);
 

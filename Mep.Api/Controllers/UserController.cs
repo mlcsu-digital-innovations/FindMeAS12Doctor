@@ -51,7 +51,7 @@ namespace Mep.Api.Controllers
     )
     {
       IEnumerable<Business.Models.SearchModels.GeneralSearchResult> businessSearchResults =
-        await userService.SearchAsync(searchString.Search);
+        await userService.SearchAsync(searchString.Criteria);
 
       if (businessSearchResults.Any())
       {

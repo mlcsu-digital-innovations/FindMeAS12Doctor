@@ -16,9 +16,7 @@ namespace Mep.Api.Controllers
                     RequestModels.ReferralPut,
                     RequestModels.ReferralPost>
   {
-    public ReferralController(
-      IReferralService service,
-      IMapper mapper)
+    public ReferralController(IReferralService service, IMapper mapper)
       : base(service, mapper)
     {
     }

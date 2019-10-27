@@ -13,8 +13,11 @@ using Mep.Business.Exceptions;
 
 namespace Mep.Business.Services
 {
+
   public class PatientService
-    : SearchServiceBase<Patient, Entities.Patient, PatientSearch>, IModelSearchService<Patient, PatientSearch>
+    : SearchServiceBase<Patient, Entities.Patient, PatientSearch>, 
+      IModelSearchService<Patient, PatientSearch>, 
+      IPatientService
   {
     private readonly IModelService<GpPractice> _gpPracticeService;
 
@@ -77,6 +80,43 @@ namespace Mep.Business.Services
       return models;
     }
 
+    public async Task<Models.Patient> GetByNhsNumber(
+      long nhsNumber,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      Models.Patient model = await _context.Patients
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(p => p.NhsNumber == nhsNumber)
+        .AsNoTracking(asNoTracking)
+        .Select(Patient.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }
+
+    public async Task<Models.Patient> GetByAlternativeIdentifier(
+      string alternativeIdentifier,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      if (string.IsNullOrWhiteSpace(alternativeIdentifier))
+      {
+        throw new ModelStateException(
+          "AlternativeIdentifier",
+          "The field AlternativeIdentifier must have a value.");
+      }
+
+      Models.Patient model = await _context.Patients
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(p => p.AlternativeIdentifier == alternativeIdentifier)
+        .AsNoTracking(asNoTracking)
+        .Select(Patient.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }
+
     protected override async Task<Entities.Patient> GetEntityByIdAsync(
       int entityId,
       bool asNoTracking,
@@ -105,13 +145,13 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(patient => patient.Id == entityId);
 
       return entity;
-    }  
+    }
 
     /// <summary>
     /// TODO: Residential Postcode => CCG Id
     /// </summary>
     protected override async Task<bool> InternalCreateAsync(Patient model, Entities.Patient entity)
-    {      
+    {
       await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
       await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
       return true;
@@ -164,11 +204,11 @@ namespace Mep.Business.Services
             $"patient with an AlternativeIdentifier of {model.AlternativeIdentifier} already exists");
         }
       }
-      return true;     
+      return true;
     }
 
     private async Task<bool> PopulateCcgIdFromGpPracticeIdIfPresent(
-      Patient model, 
+      Patient model,
       Entities.Patient entity)
     {
 
@@ -187,7 +227,7 @@ namespace Mep.Business.Services
       else
       {
         return false;
-      }      
+      }
     }
   }
 }
