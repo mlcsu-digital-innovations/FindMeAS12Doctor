@@ -170,10 +170,10 @@ namespace Mep.Business.Services
 
       List<Entities.Examination> entities =
         await _context.Examinations
-          .Where(e => e.AmhpUserId == amhpUserId)
-          .WhereIsActiveOrActiveOnly(activeOnly)
-          .AsNoTracking(asNoTracking)
-          .ToListAsync();
+                      .Where(e => e.AmhpUserId == amhpUserId)
+                      .WhereIsActiveOrActiveOnly(activeOnly)
+                      .AsNoTracking(asNoTracking)
+                      .ToListAsync();
 
       IEnumerable<Models.Examination> models = 
         entities.Select(e => new Examination(e)).ToList();

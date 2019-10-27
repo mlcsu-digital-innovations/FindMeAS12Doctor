@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Mep.Data.Entities;
 
 namespace Mep.Business.Models
 {
@@ -8,13 +7,15 @@ namespace Mep.Business.Models
   {
     protected BaseModel() {}
 
-    protected BaseModel(BaseEntity model)
+    protected BaseModel(Data.Entities.BaseEntity entity)
     {
-      Id = model.Id;
-      ModifiedAt = model.ModifiedAt;
-      // TODO ModifiedByUser = model.ModifiedByUser;
-      ModifiedByUserId = model.ModifiedByUserId;      
-      IsActive = model.IsActive;
+      if (entity == null) return;
+      
+      Id = entity.Id;
+      ModifiedAt = entity.ModifiedAt;
+      ModifiedByUser = entity.ModifiedByUser == null ? null : new User(entity.ModifiedByUser);
+      ModifiedByUserId = entity.ModifiedByUserId;      
+      IsActive = entity.IsActive;
     }
 
     [Required]

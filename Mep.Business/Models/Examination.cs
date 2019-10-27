@@ -11,8 +11,10 @@ namespace Mep.Business.Models
   public class Examination : BaseModel
   {
     public Examination() { }
-    public Examination(Data.Entities.Examination entity)
+    public Examination(Data.Entities.Examination entity, bool ignoreReferral = false) : base(entity)
     {
+      if (entity == null) return;
+
       Address1 = entity.Address1;
       Address2 = entity.Address2;
       Address3 = entity.Address3;
@@ -39,15 +41,20 @@ namespace Mep.Business.Models
       Postcode = entity.Postcode;
       //TODO PreferredDoctorGenderType = null;
       PreferredDoctorGenderTypeId = entity.PreferredDoctorGenderTypeId;
-      Referral = entity.Referral == null ? null : new Referral(entity.Referral);
+      if (!ignoreReferral)
+      {
+        Referral = entity.Referral == null ? null : new Referral(entity.Referral);
+      }
       ReferralId = entity.ReferralId;
       ScheduledTime = entity.ScheduledTime;
-      //TODO Speciality = null;
+      Speciality = entity.Speciality == null ? null : new Speciality(entity.Speciality);
       SpecialityId = entity.SpecialityId;
       //TODO UnsuccessfulExaminationType = null;
       UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId;
       //TODO UserExaminationClaims = null;
-      //TODO UserExaminationNotifications = null;
+      UserExaminationNotifications = 
+        entity.UserExaminationNotifications?
+          .Select(u => new UserExaminationNotification(u)).ToList();
     }
 
     [Required]

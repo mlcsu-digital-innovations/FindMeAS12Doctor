@@ -7,8 +7,8 @@ namespace Mep.Business.Migrations.Seeds
   internal class PatientSeeder : SeederBase<Patient>
   {
     #region Constants
-    internal const string ALTERNATIVE_IDENTIFIER_FOR_ALLOCATED_DOCTORS_REFERRAL = "Jo Allocated";
-    internal const string ALTERNATIVE_IDENTIFIER_FOR_ASSIGNING_DOCTORS_REFERRAL = "Jim Assigning";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_ALLOCATED_DOCTORS_REFERRAL = "JoAllocated1";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_ASSIGNING_DOCTORS_REFERRAL = "JimAssigning1";
     internal const string ALTERNATIVE_IDENTIFIER_FOR_AWAITING_RESPONSES_REFERRAL = 
       "AwaitingResponses1";
     internal const long NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE = 9486844275;

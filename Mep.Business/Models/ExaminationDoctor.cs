@@ -9,7 +9,7 @@ namespace Mep.Business.Models
     {
       AttendanceConfirmedByUserId = doctor.Id;
       // TODO AttendanceConfirmedByUser =
-      DoctorUser = new User(doctor.DoctorUser);
+      DoctorUser = doctor.DoctorUser == null ? null : new User(doctor.DoctorUser);
       DoctorUserId = doctor.DoctorUserId;
       // TODO Examination =
       ExaminationId = doctor.ExaminationId;

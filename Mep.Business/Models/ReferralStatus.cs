@@ -1,3 +1,5 @@
+using Mep.Data.Entities;
+
 namespace Mep.Business.Models
 {
   public class ReferralStatus : NameDescription
@@ -12,5 +14,9 @@ namespace Mep.Business.Models
     public const int AWAITING_REVIEW = 8;
     public const int CLOSED = 9;
     public const int OPEN = 10;
+
+    public ReferralStatus() { }
+    public ReferralStatus(Data.Entities.ReferralStatus referralStatus) : base(referralStatus)
+    { }
   }
 }
