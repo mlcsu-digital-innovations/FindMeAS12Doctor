@@ -1,11 +1,18 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Mep.Data.Entities;
 
 namespace Mep.Business.Models
 {
   public class User : BaseModel
   {
+    public User() {}
+    public User(Data.Entities.User user)
+    {
+      DisplayName = user.DisplayName;
+    }
+
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<Examination> CompletedExaminations { get; set; }
     public virtual IList<Examination> CompletionConfirmationExaminations { get; set; }

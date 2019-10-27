@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
-using Mep.Business.Exceptions;
-using System.Linq.Expressions;
 
 namespace Mep.Api.Controllers
 {
@@ -17,7 +15,7 @@ namespace Mep.Api.Controllers
     ModelController<BusinessModels.Examination,
                     ViewModels.Examination,
                     RequestModels.ExaminationPut,
-                    RequestModels.ExaminationPost>
+                    RequestModels.Examination>
   {
     public ExaminationController(
       IModelService<BusinessModels.Examination> service,
@@ -50,7 +48,7 @@ namespace Mep.Api.Controllers
       {
         return NoContent();
       }
-    }    
+    }
 
     [HttpPut]
     [Route("outcome/{id:int}/failure")]
@@ -92,6 +90,44 @@ namespace Mep.Api.Controllers
       }
     }
 
+    [HttpPost]
+    [Route("emergency")]
+    public async Task<ActionResult<RequestModels.ExaminationPostEmergency>> PostEmergency(
+      [FromBody] RequestModels.ExaminationPostEmergency requestModel)
+    {
+      try
+      {
+        BusinessModels.ExaminationCreate businessModel = requestModel.MapToBusinessModel();
+        businessModel = await (_service as ExaminationService).CreateAsync(businessModel);
+        requestModel = new RequestModels.ExaminationPostEmergency(businessModel);
+
+        return Created(GetCreatedModelUri(businessModel.Id), requestModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }     
+
+    [HttpPost]
+    [Route("planned")]
+    public async Task<ActionResult<RequestModels.ExaminationPostPlanned>> PostPlanned(
+      [FromBody] RequestModels.ExaminationPostPlanned requestModel)
+    {
+      try
+      {
+        BusinessModels.ExaminationCreate businessModel = requestModel.MapToBusinessModel();
+        businessModel = await (_service as ExaminationService).CreateAsync(businessModel);
+        requestModel = new RequestModels.ExaminationPostPlanned(businessModel);
+
+        return Created(GetCreatedModelUri(businessModel.Id), requestModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
+
     [HttpGet]
     [Route("view/{id:int}")]
     public async Task<ActionResult<ViewModels.ExaminationView>> ViewGet(int id)
@@ -107,9 +143,8 @@ namespace Mep.Api.Controllers
         }
         else
         {
-          ViewModels.ExaminationView viewModel =
-              _mapper.Map<ViewModels.ExaminationView>(businessModel);
 
+          ViewModels.ExaminationView viewModel = new ViewModels.ExaminationView(businessModel);
           return Ok(viewModel);
         }
       }

@@ -7,7 +7,7 @@ namespace Mep.Api.RequestModels.Profiles
     {
         public ExaminationPostProfile()
         {
-            CreateMap<ExaminationPost, BusinessModels.Examination>();
+            CreateMap<Examination, BusinessModels.Examination>();
         }
     }
 }

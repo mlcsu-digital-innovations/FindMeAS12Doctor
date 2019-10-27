@@ -1,10 +1,22 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Mep.Data.Entities;
 
 namespace Mep.Business.Models
 {
   public abstract class BaseModel : IBaseModel
   {
+    protected BaseModel() {}
+
+    protected BaseModel(BaseEntity model)
+    {
+      Id = model.Id;
+      ModifiedAt = model.ModifiedAt;
+      // TODO ModifiedByUser = model.ModifiedByUser;
+      ModifiedByUserId = model.ModifiedByUserId;      
+      IsActive = model.IsActive;
+    }
+
     [Required]
     public int Id { get; set; }
     [Required]

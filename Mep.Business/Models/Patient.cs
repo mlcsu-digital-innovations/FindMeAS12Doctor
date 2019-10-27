@@ -1,10 +1,24 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+
 namespace Mep.Business.Models
 {
   public class Patient : BaseModel
   {
+    public Patient() {}
+    public Patient(Data.Entities.Patient entity)
+    {
+      AlternativeIdentifier = entity.AlternativeIdentifier;
+      // TODO Ccg
+      CcgId = entity.CcgId;
+      // TODO GpPractice
+      GpPracticeId = entity.GpPracticeId;
+      NhsNumber = entity.NhsNumber;
+      ResidentialPostcode = entity.ResidentialPostcode;
+      // TODO Referrals
+    }
+
     [MaxLength(200)]
     public string AlternativeIdentifier { get; set; }
     public virtual Ccg Ccg { get; set; }

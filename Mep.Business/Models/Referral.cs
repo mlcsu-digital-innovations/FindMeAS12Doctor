@@ -6,6 +6,22 @@ namespace Mep.Business.Models
 {
   public class Referral : BaseModel
   {
+    public Referral() {}
+    public Referral(Data.Entities.Referral entity)
+    {
+      CreatedAt = entity.CreatedAt;
+      // TODO CreatedByUser =
+      CreatedByUserId = entity.CreatedByUserId;
+      // TODO Examinations =
+      Patient = new Patient(entity.Patient);
+      PatientId = entity.PatientId;
+      // TODO ReferralStatus
+      ReferralStatusId = entity.ReferralStatusId;
+      // TODO LeadAmhpUser
+      LeadAmhpUserId = entity.LeadAmhpUserId;
+      IsPlannedExamination = entity.IsPlannedExamination;
+    }
+
     public DateTimeOffset CreatedAt { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }

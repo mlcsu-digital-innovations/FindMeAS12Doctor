@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
+using Mep.Business.Exceptions;
+using System.Linq;
 
 namespace Mep.Business.Services
 {
@@ -91,6 +93,19 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(referral => referral.Id == entityId);
 
       return entity;
+    }
+
+    internal async Task<int?> GetCcgIdFromReferralPatient(int id)
+    {
+      int? ccgId = await _context.Referrals
+                                 .Include(r => r.Patient)
+                                 .Where(r => r.Id == id)
+                                 .WhereIsActiveOrActiveOnly(true)
+                                 .AsNoTracking(true)
+                                 .Select(r => r.Patient.CcgId)
+                                 .SingleOrDefaultAsync();
+
+      return ccgId;
     }    
   }
 }

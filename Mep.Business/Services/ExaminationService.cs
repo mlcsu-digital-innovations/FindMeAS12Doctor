@@ -7,16 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System;
-using System.Linq.Expressions;
 
 namespace Mep.Business.Services
 {
   public class ExaminationService
     : ServiceBase<Examination, Entities.Examination>, IModelService<Examination>
   {
-    private readonly IModelService<Referral> _referralService;
-    private readonly IModelService<User> _userService;
+    private readonly ReferralService _referralService;
+    private readonly UserService _userService;
 
     public ExaminationService(
       ApplicationContext context,
@@ -25,9 +23,120 @@ namespace Mep.Business.Services
       IModelService<User> userService)
       : base("Examination", context, mapper)
     {
-      _referralService = referralService;
-      _userService = userService;
+      _referralService = referralService as ReferralService;
+      _userService = userService as UserService;
     }
+
+    private async Task<bool> AddAmhpToUserExaminationNotifications(
+      int amhpUserId, Entities.Examination entity)
+    {
+      await CheckUserIdIsAnAmhp(amhpUserId);
+
+      if (entity.UserExaminationNotifications == null)
+      {
+        entity.UserExaminationNotifications = new List<Entities.UserExaminationNotification>();
+      }
+
+      Entities.UserExaminationNotification userExaminationNotification =
+        new Entities.UserExaminationNotification
+        {
+          NotificationTextId = NotificationText.SELECTED_FOR_EXAMINATION,
+          UserId = amhpUserId
+        };
+      UpdateModified(userExaminationNotification);
+      entity.UserExaminationNotifications.Add(userExaminationNotification);
+
+      return true;
+    }
+
+    private void AddExaminationDetail(int examinationDetailTypeId, Entities.Examination entity)
+    {
+      Entities.ExaminationDetail examinationDetail = new Entities.ExaminationDetail()
+      {
+        ExaminationDetailTypeId = examinationDetailTypeId,
+        IsActive = true
+      };
+      UpdateModified(examinationDetail);
+      entity.Details.Add(examinationDetail);
+    }
+
+    private void AddExaminationDetails(IList<int> detailTypeIds, Entities.Examination entity)
+    {
+      if (detailTypeIds != null && detailTypeIds.Any())
+      {
+        if (entity.Details == null)
+        {
+          entity.Details = new List<Entities.ExaminationDetail>();
+        }
+        foreach (int examinationDetailTypeId in detailTypeIds)
+        {
+          AddExaminationDetail(examinationDetailTypeId, entity);
+        }
+      }
+    }
+
+    private void CheckExaminationDoesNotAlreadyHaveAnOutcome(Entities.Examination entity)
+    {
+      if (entity.IsSuccessful.HasValue ||
+          entity.CompletedTime.HasValue)
+      {
+        throw new ExaminationAlreadyHasOutcomeException(
+          entity.Id,
+          entity.IsSuccessful,
+          entity.CompletedTime,
+          entity?.CompletedByUser?.DisplayName
+        );
+      }
+    }
+
+    private async Task<bool> CheckUserIdIsAnAmhp(int amhpUserId)
+    {
+      User user = await _userService.GetByIdAsync(amhpUserId, true);
+      if (user == null)
+      {
+        throw new ModelStateException(
+          "AmhpUserId", $"An active User with an Id of {amhpUserId} does not exist.");
+      }
+      if (!user.IsAmhp)
+      {
+        throw new ModelStateException(
+          "AmhpUserId", 
+          $"The User with an Id of {amhpUserId} must be an AMHP but is a {user.ProfileType.Name}.");
+      }
+      return true;
+    }
+
+    /// <summary>
+    /// Sets the examination entity's properties from the provided business model
+    /// The CCG id is set from the referral patient's ccg, it's duplicated on the examination so 
+    /// that the patient's CCG is fixed at the time of the examination so if they change their CCG
+    /// after the examination has taken place to won't change the CCG of the claim 
+    /// </summary>
+    public virtual async Task<ExaminationCreate> CreateAsync(ExaminationCreate model)
+    {
+      Entities.Examination entity = model.MapToEntity();
+
+      entity.Id = 0;
+      entity.IsActive = true;
+
+      UpdateModified(entity);      
+      entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
+      entity.CreatedByUserId = entity.ModifiedByUserId;
+      AddExaminationDetails(model.DetailTypeIds, entity);
+      await AddAmhpToUserExaminationNotifications(model.AmhpUserId, entity);
+      _context.Add(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = _context.Examinations
+                      .Include(e => e.Details)
+                      .Where(e => e.Id == entity.Id)                      
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(ExaminationCreate.ProjectFromEntity)
+                      .Single();
+      return model;
+    }    
 
     public async Task<IEnumerable<Models.Examination>> GetAllAsync(
       bool activeOnly)
@@ -59,90 +168,17 @@ namespace Mep.Business.Services
       bool activeOnly)
     {
 
-      IEnumerable<Models.Examination> models =
+      List<Entities.Examination> entities =
         await _context.Examinations
           .Where(e => e.AmhpUserId == amhpUserId)
           .WhereIsActiveOrActiveOnly(activeOnly)
           .AsNoTracking(asNoTracking)
-          .Select(EntityToModel)
           .ToListAsync();
 
+      IEnumerable<Models.Examination> models = 
+        entities.Select(e => new Examination(e)).ToList();
+
       return models;
-    }
-
-    public static Expression<Func<Entities.Examination, Examination>> EntityToModel
-    {
-      get
-      {
-        return e => new Examination()
-        {
-          Address1 = e.Address1,
-          Address2 = e.Address2,
-          Address3 = e.Address3,
-          Address4 = e.Address4,
-          MustBeCompletedBy = e.MustBeCompletedBy,
-          Id = e.Id,
-          Postcode = e.Postcode
-        };
-      }
-    }
-
-    public async Task<ExaminationOutcome> UpdateOutcomeAsync(ExaminationOutcome model)
-    {
-      if (!model.IsSuccessful && !model.UnsuccessfulExaminationTypeId.HasValue)
-      {
-        throw new ModelStateException("UnsuccessfulExaminationTypeId",
-          "The field UnsuccessfulExaminationTypeId must have a value when the field " +
-          "IsSuccessful is true.");
-      }
-
-      Entities.Examination entity = await GetEntityByIdAsync(model.Id, false, true);
-
-      Serilog.Log.Verbose("Examination Update model: {@model}", model);
-      Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
-
-      if (entity == null)
-      {
-        throw new EntityNotFoundException(_typeName, model.Id);
-      }
-      else
-      {
-
-        CheckExaminationDoesNotAlreadyHaveAnOutcome(entity);
-
-        UpdateModified(entity);
-
-        UpdateDoctorStatuses(model, entity);
-
-        entity.CompletedByUserId = entity.ModifiedByUserId;
-        entity.CompletedTime = model.CompletedTime;
-        entity.IsSuccessful = model.IsSuccessful;
-        entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
-
-        await _context.SaveChangesAsync();
-
-        entity = await GetEntityByIdAsync(model.Id, false, false);
-
-        model.CompletedTime = entity.CompletedTime ?? default;
-        model.IsSuccessful = entity.IsSuccessful ?? default;
-        model.UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId ?? default;
-
-        if (entity.Doctors.Any())
-        {
-          model.AttendingDoctors = entity.Doctors
-            .Select(doctor => new ExaminationOutcomeDoctor
-            {
-              Attended = doctor.StatusId == ExaminationDoctorStatus.ATTENDED,
-              Id = doctor.DoctorUserId
-            })
-            .ToList();
-        }
-
-        Serilog.Log.Verbose("Examination Updated entity: {@entity}", entity);
-        Serilog.Log.Verbose("Examination Updated model: {@model}", model);
-
-        return model;
-      }
     }
 
     protected override async Task<Entities.Examination> GetEntityByIdAsync(
@@ -171,6 +207,34 @@ namespace Mep.Business.Services
       return entity;
     }
 
+    public override async Task<Examination> GetByIdAsync(
+      int id,
+      bool activeOnly)
+    {
+      Entities.Examination entity = await
+        _context.Examinations
+                .Include(e => e.AmhpUser)
+                .Include(e => e.CompletedByUser)
+                .Include(e => e.CreatedByUser)
+                .Include(e => e.Details)
+                  .ThenInclude(d => d.ExaminationDetailType)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.Patient)
+                .Include(e => e.UserExaminationNotifications)
+                  .ThenInclude(u => u.User)
+                    .ThenInclude(u => u.ProfileType)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(true)
+                .SingleOrDefaultAsync(u => u.Id == id);
+
+      Models.Examination model = new Examination(entity);
+
+      return model;
+    }
+
+
     protected override async Task<Entities.Examination> GetEntityWithNoIncludesByIdAsync(
       int entityId,
       bool asNoTracking,
@@ -185,32 +249,6 @@ namespace Mep.Business.Services
       return entity;
     }
 
-    /// <summary>
-    /// Sets the examination entity's properties from the provided business model
-    /// The CCG id is set from the referral patient's ccg, it's duplicated on the examination so 
-    /// that the patient's CCG is fixed at the time of the examination so if they change their CCG
-    /// after the examination has taken place to won't change the CCG of the claim 
-    /// </summary>
-    protected override async Task<bool> InternalCreateAsync(
-      Examination model, Entities.Examination entity)
-    {
-      Serilog.Log.Verbose("Examination Create model: {@model}", model);
-      Serilog.Log.Verbose("Examination Create entity: {@entity}", entity);
-
-      entity.CcgId = await GetCcgIdFromReferralPatient(model);
-      entity.CompletedByUserId = null;
-      entity.CompletedTime = null;
-      entity.CompletionConfirmationByUserId = null;
-      entity.CreatedByUserId = entity.ModifiedByUserId;
-      entity.IsSuccessful = null;
-      entity.NonPaymentLocationId = null;
-      entity.UnsuccessfulExaminationTypeId = null;
-      AddExaminationDetails(model, entity);
-      await AddAmhpToUserExaminationNotifications(model, entity);
-
-      return true;
-    }
-
     protected override async Task<bool> InternalUpdateAsync(
       Examination model, Entities.Examination entity)
     {
@@ -221,7 +259,7 @@ namespace Mep.Business.Services
       entity.Address2 = model.Address2;
       entity.Address3 = model.Address3;
       entity.Address4 = model.Address4;
-      entity.CcgId = await GetCcgIdFromReferralPatient(model);
+      entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
       entity.CompletedByUserId = model.CompletedByUserId;
       entity.CompletedTime = model.CompletedTime;
       entity.CompletionConfirmationByUserId = model.CompletionConfirmationByUserId;
@@ -239,132 +277,6 @@ namespace Mep.Business.Services
       await UpdateAmhpToUserExaminationNotifications(model, entity);
 
       return true;
-    }
-
-    private async Task<bool> AddAmhpToUserExaminationNotifications(
-      Examination model, Entities.Examination entity)
-    {
-      await CheckUserIdIsAnAmhp(model.AmhpUserId);
-
-      entity.UserExaminationNotifications = new List<Entities.UserExaminationNotification>(1);
-      Entities.UserExaminationNotification userExaminationNotification =
-        new Entities.UserExaminationNotification
-        {
-          NotificationTextId = NotificationText.SELECTED_FOR_EXAMINATION,
-          UserId = model.AmhpUserId
-        };
-      UpdateModified(userExaminationNotification);
-      entity.UserExaminationNotifications.Add(userExaminationNotification);
-
-      return true;
-    }
-
-    private void AddExaminationDetail(int examinationDetailTypeId, Entities.Examination entity)
-    {
-      Entities.ExaminationDetail examinationDetail = new Entities.ExaminationDetail()
-      {
-        ExaminationDetailTypeId = examinationDetailTypeId,
-        IsActive = true
-      };
-      UpdateModified(examinationDetail);
-      entity.Details.Add(examinationDetail);
-    }
-
-    private void AddExaminationDetails(Examination model, Entities.Examination entity)
-    {
-      if (model.HasDetailTypeIds)
-      {
-        entity.Details = new List<Entities.ExaminationDetail>(model.DetailTypeIds.Count);
-        foreach (int examinationDetailTypeId in model.DetailTypeIds)
-        {
-          AddExaminationDetail(examinationDetailTypeId, entity);
-        }
-      }
-    }
-
-    private async Task<int?> GetCcgIdFromReferralPatient(Examination model)
-    {
-      Referral referral = await _referralService.GetByIdAsync(model.ReferralId, true);
-
-      if (referral == null)
-      {
-        throw new ModelStateException(
-          "ReferralId", $"An active ReferralId of {model.ReferralId} does not exist.");
-      }
-
-      if (referral.Patient == null)
-      {
-        throw new EntityNotLoadedException(
-          "Referral", referral.Id, "Patient", referral.PatientId);
-      }
-
-      return referral.Patient.CcgId;
-    }
-
-    private void CheckExaminationDoesNotAlreadyHaveAnOutcome(Entities.Examination entity)
-    {
-      if (entity.IsSuccessful.HasValue ||
-          entity.CompletedTime.HasValue)
-      {
-        throw new ExaminationAlreadyHasOutcomeException(
-          entity.Id,
-          entity.IsSuccessful,
-          entity.CompletedTime,
-          entity?.CompletedByUser?.DisplayName
-        );
-      }
-    }
-
-    private async Task<bool> CheckUserIdIsAnAmhp(int amhpUserId)
-    {
-      User user = await _userService.GetByIdAsync(amhpUserId, true);
-      if (user == null)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", $"An active UserId of {amhpUserId} does not exist.");
-      }
-      if (!user.IsAmhp)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", $"UserId {amhpUserId} must be an AMHP but is a {user.ProfileType.Name}.");
-      }
-      return true;
-    }
-
-    private void UpdateExaminationDetails(Examination model, Entities.Examination entity)
-    {
-      if (entity.HasDetails)
-      {
-        foreach (Entities.ExaminationDetail examinationDetail in entity.Details)
-        {
-          UpdateModified(examinationDetail);
-          examinationDetail.IsActive = false;
-        }
-      }
-
-      if (model.HasDetailTypeIds)
-      {
-        if (entity.HasDetails)
-        {
-          foreach (int detailTypeId in model.DetailTypeIds)
-          {
-            Entities.ExaminationDetail examinationDetail =
-              entity.Details.SingleOrDefault(d => d.ExaminationDetailTypeId == detailTypeId);
-            if (examinationDetail == null)
-            {
-              AddExaminationDetail(detailTypeId, entity);
-            }
-            else
-            {
-              examinationDetail.IsActive = true;
-            }
-          }
-        }
-        else
-        {
-          AddExaminationDetails(model, entity);
-        }
-      }
     }
 
     private async Task<bool> UpdateAmhpToUserExaminationNotifications(
@@ -432,6 +344,99 @@ namespace Mep.Business.Services
         examinationDoctor.AttendanceConfirmedByUserId = entity.ModifiedByUserId;
         examinationDoctor.StatusId = ExaminationDoctorStatus.ATTENDED;
         UpdateModified(examinationDoctor);
+      }
+    }
+
+    private void UpdateExaminationDetails(Examination model, Entities.Examination entity)
+    {
+      if (entity.HasDetails)
+      {
+        foreach (Entities.ExaminationDetail examinationDetail in entity.Details)
+        {
+          UpdateModified(examinationDetail);
+          examinationDetail.IsActive = false;
+        }
+      }
+
+      if (model.HasDetailTypeIds)
+      {
+        if (entity.HasDetails)
+        {
+          foreach (int detailTypeId in model.DetailTypeIds)
+          {
+            Entities.ExaminationDetail examinationDetail =
+              entity.Details.SingleOrDefault(d => d.ExaminationDetailTypeId == detailTypeId);
+            if (examinationDetail == null)
+            {
+              AddExaminationDetail(detailTypeId, entity);
+            }
+            else
+            {
+              examinationDetail.IsActive = true;
+            }
+          }
+        }
+        else
+        {
+          AddExaminationDetails(model.DetailTypeIds, entity);
+        }
+      }
+    }
+    public async Task<ExaminationOutcome> UpdateOutcomeAsync(ExaminationOutcome model)
+    {
+      if (!model.IsSuccessful && !model.UnsuccessfulExaminationTypeId.HasValue)
+      {
+        throw new ModelStateException("UnsuccessfulExaminationTypeId",
+          "The field UnsuccessfulExaminationTypeId must have a value when the field " +
+          "IsSuccessful is true.");
+      }
+
+      Entities.Examination entity = await GetEntityByIdAsync(model.Id, false, true);
+
+      Serilog.Log.Verbose("Examination Update model: {@model}", model);
+      Serilog.Log.Verbose("Examination Update entity: {@entity}", entity);
+
+      if (entity == null)
+      {
+        throw new EntityNotFoundException(_typeName, model.Id);
+      }
+      else
+      {
+
+        CheckExaminationDoesNotAlreadyHaveAnOutcome(entity);
+
+        UpdateModified(entity);
+
+        UpdateDoctorStatuses(model, entity);
+
+        entity.CompletedByUserId = entity.ModifiedByUserId;
+        entity.CompletedTime = model.CompletedTime;
+        entity.IsSuccessful = model.IsSuccessful;
+        entity.UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
+
+        await _context.SaveChangesAsync();
+
+        entity = await GetEntityByIdAsync(model.Id, false, false);
+
+        model.CompletedTime = entity.CompletedTime ?? default;
+        model.IsSuccessful = entity.IsSuccessful ?? default;
+        model.UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId ?? default;
+
+        if (entity.Doctors.Any())
+        {
+          model.AttendingDoctors = entity.Doctors
+            .Select(doctor => new ExaminationOutcomeDoctor
+            {
+              Attended = doctor.StatusId == ExaminationDoctorStatus.ATTENDED,
+              Id = doctor.DoctorUserId
+            })
+            .ToList();
+        }
+
+        Serilog.Log.Verbose("Examination Updated entity: {@entity}", entity);
+        Serilog.Log.Verbose("Examination Updated model: {@model}", model);
+
+        return model;
       }
     }
   }

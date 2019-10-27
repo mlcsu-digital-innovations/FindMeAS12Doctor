@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Mep.Api.ViewModels;
 
 namespace Mep.Api.RequestModels
 {
