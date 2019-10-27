@@ -5,13 +5,18 @@ using System.Collections.Generic;
 using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
+using Mep.Business.Exceptions;
+using System.Linq;
 
 namespace Mep.Business.Services
 {
   public class GpPracticeService
-    : ServiceBase<GpPractice, Entities.GpPractice>, IModelService<GpPractice>
+    : ServiceBase<GpPractice, Entities.GpPractice>, 
+      IGpPracticeService
   {
-    public GpPracticeService(ApplicationContext context, IMapper mapper)
+    public GpPracticeService(
+      ApplicationContext context,
+      IMapper mapper)
       : base("GpPractice", context, mapper)
     {
     }
@@ -52,5 +57,33 @@ namespace Mep.Business.Services
 
       return entity;
     }
+
+    public async Task<IEnumerable<IdResultText>> SearchAsync(
+      string criteria,
+      bool isActiveOrActiveOnly = true)
+    {
+      if (string.IsNullOrWhiteSpace(criteria))
+      {
+        throw new MissingSearchParameterException();
+      }
+      else
+      {
+        IQueryable<Data.Entities.GpPractice> query = 
+          _context.GpPractices.WhereIsActiveOrActiveOnly(isActiveOrActiveOnly);
+
+        string[] searchParams = criteria.Split(' ');
+
+        foreach (string searchParam in searchParams) {
+          query = 
+            query.Where(gp => gp.Name.Contains(searchParam) ||
+                        gp.Postcode.Contains(searchParam));
+        }
+
+        IEnumerable<IdResultText> entities =
+          await query.Select(e => new IdResultText(e)).ToListAsync();
+
+        return entities;
+      }
+    }    
   }
 }

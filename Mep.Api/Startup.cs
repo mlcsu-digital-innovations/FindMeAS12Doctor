@@ -72,7 +72,8 @@ namespace Mep.Api
       services.AddScoped<IModelService<Examination>, ExaminationService>();
       services.AddScoped<IModelService<ExaminationDetailType>, ExaminationDetailTypeService>();
       services.AddScoped<IModelService<GenderType>, GenderTypeService>();
-      services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
+      //services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
+      services.AddScoped<IGpPracticeService, GpPracticeService>();
       // services.AddScoped<IModelSearchService<Patient, Business.Models.SearchModels.PatientSearch>, PatientService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
