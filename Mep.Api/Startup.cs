@@ -70,7 +70,7 @@ namespace Mep.Api
       services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
       services.AddScoped<IModelService<Examination>, ExaminationService>();
-      services.AddScoped<IModelService<ExaminationDetailType>, ExaminationDetailTypeService>();
+      services.AddScoped<IExaminationDetailTypeService, ExaminationDetailTypeService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<IPatientService, PatientService>();
