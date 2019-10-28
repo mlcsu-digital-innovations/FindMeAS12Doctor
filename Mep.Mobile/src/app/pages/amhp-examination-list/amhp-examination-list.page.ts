@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AmhpExaminationList } from '../../models/amhp-examination-list.model';
 import { AmhpExaminationService } from '../../services/amhp-examination.service/amhp-examination.service';
 
@@ -9,25 +10,15 @@ import { AmhpExaminationService } from '../../services/amhp-examination.service/
 })
 export class AmhpExaminationListPage implements OnInit {
   public examinationListLastUpdated: Date;
-  public examinationList: AmhpExaminationList[];
+  public examinationList$: Observable<AmhpExaminationList[]>;
 
   constructor(private examinationService: AmhpExaminationService) { }
 
   ngOnInit() {
-    this.examinationListLastUpdated = new Date();
-    this.examinationService.getList(10)
-      .subscribe((result: AmhpExaminationList[]) => {
-        this.examinationList = result.sort(
-          (examination1: AmhpExaminationList, examination2: AmhpExaminationList) => {
-          if (examination1.dateTime > examination2.dateTime) {
-            return 1;
-          }
-          else if (examination1.dateTime < examination2.dateTime) {
-            return -1;
-          }
-          return 0;
-        });
-      });
+    this.examinationListLastUpdated = new Date();    
+
+    // currently set to get examinations for user id 9
+    this.examinationList$ = this.examinationService.getList(9);
   }
 
 }

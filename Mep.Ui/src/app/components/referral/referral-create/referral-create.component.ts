@@ -13,12 +13,12 @@ import { PatientSearchParams } from '../../../interfaces/patient-search-params';
 import { PatientSearchResult } from '../../../interfaces/patient-search-result';
 import { PatientSearchService } from '../../../services/patient-search/patient-search.service';
 import { PatientService } from '../../../services/patient/patient.service';
-import { PostcodeRegex } from '../../../constants/Constants';
+import { PostcodeRegex, UNKNOWN } from '../../../constants/Constants';
 import { PostcodeSearchResult } from '../../../interfaces/postcode-search-result';
 import { PostcodeValidationService } from '../../../services/postcode-validation/postcode-validation.service';
 import { Referral } from '../../../interfaces/referral';
 import { ReferralService } from '../../../services/referral/referral.service';
-import { Router } from '@angular/router';
+import { RouterService } from 'src/app/services/router/router.service';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../../../services/toast/toast.service';
@@ -73,7 +73,7 @@ export class ReferralCreateComponent implements OnInit {
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private renderer: Renderer2,
-    private router: Router,
+    private routerService: RouterService,
     private toastService: ToastService
   ) { }
 
@@ -155,7 +155,7 @@ export class ReferralCreateComponent implements OnInit {
         size: 'lg'
       });
     } else {
-      this.router.navigate(['/referral']);
+      this.routerService.navigate(['/referral']);
     }
   }
 
@@ -179,7 +179,7 @@ export class ReferralCreateComponent implements OnInit {
   ConfirmCancellation(): void {
     // close the modal
     this.cancelModal.close();
-    this.router.navigate(['/referral']);
+    this.routerService.navigate(['/referral']);
   }
 
   CreatePatient() {
@@ -191,7 +191,9 @@ export class ReferralCreateComponent implements OnInit {
     this.patientDetails.gpPracticeId =
       this.gpPractice.id === 0 ? null : this.gpPractice.id;
     this.patientDetails.residentialPostcode =
-      this.residentialPostcode === '' || this.residentialPostcode === 'Unknown' ? null : this.residentialPostcode;
+      this.residentialPostcode === '' || this.residentialPostcode === 'Unknown'
+        ? 'Unknown'
+        : this.residentialPostcode;
     this.patientDetails.ccgId = this.ccg.id === 0 ? null : this.ccg.id;
 
     return this.patientService.createPatient(this.patientDetails).pipe(
@@ -352,6 +354,10 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.amhp;
   }
 
+  get unknownPostcodeField() {
+    return this.patientForm.controls.unknownResidentialPostcode;
+  }
+
   GpSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -504,6 +510,10 @@ export class ReferralCreateComponent implements OnInit {
     });
   }
 
+  PostcodeIsUnknown(): boolean {
+    return this.unknownPostcodeField.value;
+  }
+
   OnPatientModalAction(action: number) {
     switch (action) {
       case PatientAction.Cancel:
@@ -534,9 +544,10 @@ export class ReferralCreateComponent implements OnInit {
         });
         this.isCreatingReferral = false;
         // navigate to the create examination page
-        this.router.navigate([`/examination/new/${result.id}`]);
+        this.routerService.navigate([`/examination/new/${result.id}`]);
       },
       error => {
+        console.log(error);
         this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to create new referral ! Please try again in a few moments'
@@ -602,7 +613,7 @@ export class ReferralCreateComponent implements OnInit {
   ToggleResidentialPostcodeUnknown(event: any) {
     if (event.target.checked) {
       // set the field to unknown, show the CCG field and set focus
-      this.SetResidentialPostcodeField(UNKNOWN_POSTCODE);
+      this.SetResidentialPostcodeField(UNKNOWN);
       this.isCcgFieldsShown = true;
       this.SetFieldFocus('#ccg');
       this.isPatientPostcodeValidated = true;

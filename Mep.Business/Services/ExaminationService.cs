@@ -144,6 +144,7 @@ namespace Mep.Business.Services
 
       IEnumerable<Entities.Examination> entities =
         await _context.Examinations
+
           .Include(e => e.AmhpUser)
           .Include(e => e.CompletedByUser)
           .Include(e => e.CreatedByUser)
@@ -197,6 +198,7 @@ namespace Mep.Business.Services
                   .ThenInclude(d => d.DoctorUser)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
+                .Include(e => e.Speciality)
                 .Include(e => e.UserExaminationNotifications)
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)

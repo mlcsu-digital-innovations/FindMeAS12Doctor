@@ -266,10 +266,10 @@
                   #speciality
                   id="speciality"
                 >
-                <option [selected]=true></option>
-                <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
-                  {{specialities[i].name}}
-                </option>
+                  <option [selected]=true></option>
+                  <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
+                    {{specialities[i].name}}
+                  </option>
                 </select>
               </div>
               <!-- gender dropdown -->
@@ -344,6 +344,8 @@
                 <button
                   type="button"
                   class="btn btn-primary"
+                  (click)="SelectDoctor()"
+                  [disabled]="IsFormInCreatingState()"
                   *ngIf="plannedExamination.checked"
                 >
                   Enter / Search Doctor
@@ -351,6 +353,8 @@
                 <button
                   type="button"
                    class="btn btn-primary"
+                   (click)="SelectDoctor()"
+                   [disabled]="IsFormInCreatingState()"
                     *ngIf="!plannedExamination.checked"
                 >
                   <i class="fas fa-user-plus"></i>

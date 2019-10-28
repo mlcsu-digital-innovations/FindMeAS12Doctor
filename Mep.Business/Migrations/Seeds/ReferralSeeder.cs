@@ -122,6 +122,7 @@ namespace Mep.Business.Migrations.Seeds
           meetingArrangementComment: AWAITING_RESPONSES_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: AWAITING_RESPONSES_MUST_BE_COMPLETED_BY,
           postcode: AWAITING_RESPONSES_POSTCODE,
+          specialityId: Models.Speciality.CHILD,
           userExaminationNotifications: userExaminationNotifications
         )
       };
@@ -192,6 +193,7 @@ namespace Mep.Business.Migrations.Seeds
           meetingArrangementComment: ALLOCATED_DOCTORS_MEETING_ARRGANEMENT_COMMENT,
           mustBeCompletedBy: ALLOCATED_DOCTORS_MUST_BE_COMPLETED_BY,
           postcode: ALLOCATED_DOCTORS_POSTCODE,
+          specialityId: Models.Speciality.LEARNING_DIFFICULTY,
           userExaminationNotifications: userExaminationNotifications
         )
       };
@@ -242,6 +244,7 @@ namespace Mep.Business.Migrations.Seeds
           meetingArrangementComment: ASSIGNING_DOCTORS_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: ASSIGNING_DOCTORS_MUST_BE_COMPLETED_BY,
           postcode: ASSIGNING_DOCTORS_POSTCODE,
+          specialityId: Models.Speciality.LEARNING_DIFFICULTY,
           userExaminationNotifications: userExaminationNotifications
         )
       };

@@ -9,6 +9,7 @@ namespace Mep.Api.ViewModels
     }
 
     public string DisplayName { get; set; }
+    public int GmcNumber { get; set; }
     public int Id { get; set; }
   }
 }
