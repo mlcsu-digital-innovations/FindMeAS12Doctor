@@ -5,12 +5,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'amhp-examination-list', pathMatch: 'full'
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module')
-      .then(m => m.HomePageModule)
-  },
+  },  
   {
     path: 'amhp-examination-list',
     loadChildren:
@@ -20,6 +15,15 @@ const routes: Routes = [
     path: 'amhp-examination-view/:id',
     loadChildren: 
       './pages/amhp-examination-view/amhp-examination-view.module#AmhpExaminationViewPageModule'
+  },
+  { 
+    path: 'help', 
+    loadChildren: './pages/help/help.module#HelpPageModule' 
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module')
+      .then(m => m.HomePageModule)
   },
 
 
