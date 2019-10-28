@@ -16,6 +16,8 @@ namespace Mep.Data.Entities
     public string Address3 { get; set; }
     [MaxLength(500)]
     public string Address4 { get; set; }
+    public User AmhpUser { get; set; }
+    public int AmhpUserId { get; set; }
     public virtual Ccg Ccg { get; set; }
     public int? CcgId { get; set; }
     public virtual User CompletedByUser { get; set; }
@@ -25,6 +27,7 @@ namespace Mep.Data.Entities
     public int? CompletionConfirmationByUserId { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
+    public IList<ExaminationDoctor> Doctors { get; set; }
     public virtual IList<ExaminationDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]

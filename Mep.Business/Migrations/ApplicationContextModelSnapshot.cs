@@ -4,10 +4,11 @@ using Mep.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace mep.business.Migrations
 {
-  [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(ApplicationContext))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -775,6 +776,9 @@ namespace mep.business.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
+                    b.Property<int>("AmhpUserId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("CcgId")
                         .HasColumnType("int");
 
@@ -833,6 +837,8 @@ namespace mep.business.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AmhpUserId");
 
                     b.HasIndex("CcgId");
 
@@ -1122,6 +1128,193 @@ namespace mep.business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("ExaminationDetailTypesAudit");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AttendanceConfirmedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExaminationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("ExaminationId", "DoctorUserId");
+
+                    b.HasIndex("AttendanceConfirmedByUserId");
+
+                    b.HasIndex("DoctorUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("ExaminationDoctors");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctorAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AttendanceConfirmedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("DoctorUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExaminationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("AttendanceConfirmedByUserId");
+
+                    b.HasIndex("DoctorUserId");
+
+                    b.HasIndex("ExaminationId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("ExaminationDoctorsAudit");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctorStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("ExaminationDoctorStatuses");
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctorStatusAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("ExaminationDoctorStatusesAudit");
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.GenderType", b =>
@@ -3374,6 +3567,12 @@ namespace mep.business.Migrations
 
             modelBuilder.Entity("Mep.Data.Entities.Examination", b =>
                 {
+                    b.HasOne("Mep.Data.Entities.User", "AmhpUser")
+                        .WithMany("AmhpExaminations")
+                        .HasForeignKey("AmhpUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Mep.Data.Entities.Ccg", "Ccg")
                         .WithMany("Examinations")
                         .HasForeignKey("CcgId");
@@ -3443,6 +3642,71 @@ namespace mep.business.Migrations
                 });
 
             modelBuilder.Entity("Mep.Data.Entities.ExaminationDetailType", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctor", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.User", "AttendanceConfirmedByUser")
+                        .WithMany("ExaminationAttendanceConfirmations")
+                        .HasForeignKey("AttendanceConfirmedByUserId");
+
+                    b.HasOne("Mep.Data.Entities.User", "DoctorUser")
+                        .WithMany("DoctorExaminations")
+                        .HasForeignKey("DoctorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Mep.Data.Entities.Examination", "Examination")
+                        .WithMany("Doctors")
+                        .HasForeignKey("ExaminationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Mep.Data.Entities.ExaminationDoctorStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctorAudit", b =>
+                {
+                    b.HasOne("Mep.Data.Entities.User", "AttendanceConfirmedByUser")
+                        .WithMany()
+                        .HasForeignKey("AttendanceConfirmedByUserId");
+
+                    b.HasOne("Mep.Data.Entities.User", "DoctorUser")
+                        .WithMany()
+                        .HasForeignKey("DoctorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Mep.Data.Entities.Examination", "Examination")
+                        .WithMany()
+                        .HasForeignKey("ExaminationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Mep.Data.Entities.ExaminationDoctorStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Mep.Data.Entities.ExaminationDoctorStatus", b =>
                 {
                     b.HasOne("Mep.Data.Entities.User", "ModifiedByUser")
                         .WithMany()

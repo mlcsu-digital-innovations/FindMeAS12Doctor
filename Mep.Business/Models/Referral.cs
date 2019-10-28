@@ -6,6 +6,24 @@ namespace Mep.Business.Models
 {
   public class Referral : BaseModel
   {
+    public Referral() {}
+    public Referral(Data.Entities.Referral entity) : base(entity)
+    {
+      CreatedAt = entity.CreatedAt;
+      CreatedByUser = entity.CreatedByUser == null ? null : new User(entity.CreatedByUser);
+      CreatedByUserId = entity.CreatedByUserId;
+      Examinations = entity.Examinations?.Select(e => new Examination(e, true)).ToList();
+      Patient = new Patient(entity.Patient);
+      PatientId = entity.PatientId;
+      ReferralStatus = entity.ReferralStatus == null 
+        ? null 
+        : new ReferralStatus(entity.ReferralStatus);
+      ReferralStatusId = entity.ReferralStatusId;
+      LeadAmhpUser = entity.LeadAmhpUser == null ? null : new User(entity.LeadAmhpUser);
+      LeadAmhpUserId = entity.LeadAmhpUserId;
+      IsPlannedExamination = entity.IsPlannedExamination;
+    }
+
     public DateTimeOffset CreatedAt { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
@@ -30,8 +48,8 @@ namespace Mep.Business.Models
     {
       get
       {
-        return Examinations.Where(e => e.IsActive)
-                           .SingleOrDefault(e => e.IsCurrent);
+        return Examinations?.Where(e => e.IsActive)
+                            .SingleOrDefault(e => e.IsCurrent);
       }
     }
 
@@ -53,8 +71,8 @@ namespace Mep.Business.Models
       {
         return Examinations?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
-                            ?.UserExaminationClaims
-                            .Count(uec => uec.IsActive) ?? 0;
+                            ?.DoctorsAllocated
+                            .Count ?? 0;
       }
     }
 
@@ -69,7 +87,7 @@ namespace Mep.Business.Models
     }
 
     public string LeadAmhp
-    { get { return LeadAmhpUser.DisplayName; } }
+    { get { return LeadAmhpUser?.DisplayName; } }
 
     public int NumberOfExaminationAttempts
     {
@@ -121,14 +139,14 @@ namespace Mep.Business.Models
         return Examinations?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.UserExaminationNotifications
-                            .Where(uen => uen.IsActive)
+                            ?.Where(uen => uen.IsActive)
                             .Count(uen => uen.RespondedAt != null) ?? 0;
       }
     }
-    public string Speciality
+    public string SpecialityName
     { get { return CurrentExamination?.SpecialityName; } }
     
-    public string Status
+    public string StatusName
     { get { return ReferralStatus?.Name; } }
 
     public DateTimeOffset? Timescale

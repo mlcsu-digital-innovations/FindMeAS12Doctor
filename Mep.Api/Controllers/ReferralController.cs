@@ -4,6 +4,7 @@ using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Mep.Api.Controllers
 {
@@ -15,12 +16,12 @@ namespace Mep.Api.Controllers
                     RequestModels.ReferralPut,
                     RequestModels.ReferralPost>
   {
-    public ReferralController(
-      IModelService<BusinessModels.Referral> service,
-      IMapper mapper)
+    public ReferralController(IReferralService service, IMapper mapper)
       : base(service, mapper)
     {
     }
+
+    private ReferralService Service { get { return _service as ReferralService; } }
 
     [HttpGet]
     [Route("edit/{id:int}")]
@@ -39,13 +40,19 @@ namespace Mep.Api.Controllers
     [Route("list")]
     public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetList()
     {
-      IEnumerable<BusinessModels.Referral> businessModels =
-          await _service.GetAllAsync(true);
+      IEnumerable<BusinessModels.Referral> businessModels = await Service.GetListAsync(true);
 
-      IEnumerable<ViewModels.ReferralList> viewModels =
-          _mapper.Map<IEnumerable<ViewModels.ReferralList>>(businessModels);
+      if (businessModels.Any())
+      {
+        IEnumerable<ViewModels.ReferralList> viewModels =
+            businessModels.Select(ViewModels.ReferralList.ProjectFromModel).ToList();
 
-      return Ok(viewModels);
+        return Ok(viewModels);
+      }
+      else
+      {
+        return NoContent();
+      }
     }
 
     [HttpGet]
@@ -59,7 +66,7 @@ namespace Mep.Api.Controllers
           _mapper.Map<ViewModels.ReferralView>(businessModels);
 
       return Ok(viewModel);
-    }    
-    
+    }
+
   }
 }

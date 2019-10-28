@@ -1,9 +1,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Mep.Data.Entities;
+
 namespace Mep.Business.Models
 {
   public class Ccg : BaseModel
   {
+    public Ccg() {}
+    public Ccg(Data.Entities.Ccg ccg)
+    {
+      Id = ccg.Id;
+    }
+
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     public int CostCentre { get; set; }

@@ -1,8 +1,25 @@
 using System;
+
 namespace Mep.Business.Models
 {
   public class UserExaminationNotification : BaseModel
   {
+    public UserExaminationNotification() {}
+    public UserExaminationNotification(Data.Entities.UserExaminationNotification entity) 
+      : base(entity)
+    {
+      if (entity == null) return;
+      
+      // TODO Examination
+      ExaminationId = entity.ExaminationId;
+      HasAccepted = entity.HasAccepted;
+      // TODO NotificationText
+      NotificationTextId = entity.NotificationTextId;
+      RespondedAt = entity.RespondedAt;
+      User = entity.User == null ? null : new User(entity.User);
+      UserId = entity.UserId;
+    }
+
     public virtual Examination Examination { get; set; }
     public int ExaminationId { get; set; }
     public bool? HasAccepted { get; set; }

@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Mep.Business.Exceptions;
 using Mep.Business.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Mep.Api.Controllers
 {
@@ -75,27 +77,60 @@ namespace Mep.Api.Controllers
 
         return Created(GetCreatedModelUri(businessModel.Id), viewModel);
       }
-      catch (ModelStateException ex)
+      catch (Exception ex)
       {
-        return ProcessModelStateException(ex);
+        return ProcessException(ex);
       }
     }
 
     protected string GetCreatedModelUri(int id)
     {
-        return $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}" +
-               $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/{id}";
+      return $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}" +
+             $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/{id}";
+    }
+
+    protected ActionResult ProcessException(Exception exception)
+    {
+      if (exception is Business.Exceptions.SerilogException serilogEx)
+      {
+        Log.Error(serilogEx, serilogEx.MessageTemplate, serilogEx.PropertyValues);
+        if (exception is Business.Exceptions.ExaminationAlreadyHasOutcomeException ex)
+        {
+          return StatusCode(StatusCodes.Status409Conflict, ex.Message);
+        }
+      }
+      else
+      {
+        Log.Error(exception, exception.Message);
+      }
+
+      if (exception is Business.Exceptions.ModelStateException)
+      {
+        return ProcessModelStateException(exception as Business.Exceptions.ModelStateException);
+      }
+      else if (exception is Business.Exceptions.MissingSearchParameterException)
+      {
+        return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+      }
+      else if (exception is Business.Exceptions.EntityNotFoundException)
+      {
+        return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+      }
+      else
+      {
+        return StatusCode(StatusCodes.Status500InternalServerError, exception.Message);
+      }
     }
 
     protected ActionResult ProcessModelStateException(
-      ModelStateException modelStateException)
+      Business.Exceptions.ModelStateException modelStateException)
     {
-        ModelState.AddModelError(modelStateException.Key, modelStateException.Message);
-        Serilog.Log.Warning(
-                    "Bad Request {ActionName}: {ModelStateErrors}",
-                    ControllerContext.ActionDescriptor.ActionName,
-                    ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
-        return ValidationProblem(ModelState);
+      ModelState.AddModelError(modelStateException.Key, modelStateException.Message);
+      Serilog.Log.Warning(
+                  "Bad Request {ActionName}: {ModelStateErrors}",
+                  ControllerContext.ActionDescriptor.ActionName,
+                  ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
+      return ValidationProblem(ModelState);
     }
 
     // PUT api/speciality/5

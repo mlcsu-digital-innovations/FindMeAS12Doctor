@@ -49,6 +49,9 @@ namespace Mep.Api.Controllers
       if (exceptionThatOccurred is Business.Exceptions.MissingSearchParameterException) {
         return StatusCode(StatusCodes.Status400BadRequest, exceptionThatOccurred.Message);
       }
+      else if (exceptionThatOccurred is Business.Exceptions.ExaminationAlreadyHasOutcomeException) {
+        return StatusCode(StatusCodes.Status409Conflict, exceptionThatOccurred.Message);
+      }      
       else if (exceptionThatOccurred is Business.Exceptions.EntityNotFoundException) {
         return StatusCode(StatusCodes.Status404NotFound, exceptionThatOccurred.Message);
       }      

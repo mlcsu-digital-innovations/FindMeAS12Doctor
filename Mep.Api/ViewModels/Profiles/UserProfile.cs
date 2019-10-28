@@ -10,7 +10,7 @@ namespace Mep.Api.ViewModels.Profiles
       CreateMap<User, BusinessModels.User>();
 
       CreateMap<BusinessModels.User, User>()
-      .ForMember(u => u.Gender, opt => opt.MapFrom(x => x.GenderType.Name));
+      .ForMember(u => u.GenderName, opt => opt.MapFrom(x => x.GenderType.Name));
     }
   }
 }

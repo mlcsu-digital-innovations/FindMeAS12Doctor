@@ -16,6 +16,8 @@ namespace Mep.Business.Migrations.Seeds
         NAME_ACCEPTED,
         DESCRIPTION_ACCEPTED
       );
+      
+      SaveChangesWithIdentity();
     }
   }
 }

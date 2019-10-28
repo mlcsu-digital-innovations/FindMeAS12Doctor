@@ -5,11 +5,16 @@ using System.Collections.Generic;
 using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
+using Mep.Business.Exceptions;
+using System.Linq;
+using System;
 
 namespace Mep.Business.Services
 {
+
+
   public class ReferralService
-    : ServiceBase<Referral, Entities.Referral>, IModelService<Referral>
+: ServiceBase<Referral, Entities.Referral>, IReferralService
   {
     public ReferralService(ApplicationContext context, IMapper mapper)
       : base("Referral", context, mapper)
@@ -23,14 +28,14 @@ namespace Mep.Business.Services
       IEnumerable<Entities.Referral> entities =
         await _context.Referrals
                 .Include(r => r.CreatedByUser)
-                .Include(r => r.Examinations)                  
+                .Include(r => r.Examinations)
                   .ThenInclude(e => e.UserExaminationNotifications)
                     .ThenInclude(u => u.User)
                       .ThenInclude(u => u.ProfileType)
                 .Include(r => r.Examinations)
                   .ThenInclude(e => e.PreferredDoctorGenderType)
                 .Include(r => r.Examinations)
-                  .ThenInclude(e => e.Speciality)                  
+                  .ThenInclude(e => e.Speciality)
                 .Include(r => r.Examinations)
                   .ThenInclude(e => e.UnsuccessfulExaminationType)
                 .Include(r => r.Patient)
@@ -45,6 +50,28 @@ namespace Mep.Business.Services
       return models;
     }
 
+    public async Task<IEnumerable<Referral>> GetListAsync(bool activeOnly)
+    {
+      IEnumerable<Entities.Referral> entities =
+        await _context.Referrals
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Speciality)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.UserExaminationNotifications)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Doctors)                  
+                      .Include(r => r.Patient)
+                      .Include(r => r.ReferralStatus)
+                      .Include(r => r.LeadAmhpUser)
+                      .WhereIsActiveOrActiveOnly(activeOnly)
+                      .ToListAsync();
+
+      IEnumerable<Models.Referral> models = 
+        entities.Select(r => new Referral(r)).ToList();
+
+      return models;
+    }
+
     protected override async Task<Entities.Referral> GetEntityByIdAsync(
       int entityId,
       bool asNoTracking,
@@ -53,7 +80,7 @@ namespace Mep.Business.Services
       Entities.Referral entity = await
         _context.Referrals
                 .Include(r => r.CreatedByUser)
-                .Include(r => r.Examinations)                  
+                .Include(r => r.Examinations)
                   .ThenInclude(e => e.UserExaminationNotifications)
                     .ThenInclude(u => u.User)
                       .ThenInclude(u => u.ProfileType)
@@ -63,7 +90,7 @@ namespace Mep.Business.Services
                 .Include(r => r.Examinations)
                   .ThenInclude(e => e.PreferredDoctorGenderType)
                 .Include(r => r.Examinations)
-                  .ThenInclude(e => e.Speciality)                  
+                  .ThenInclude(e => e.Speciality)
                 .Include(r => r.Examinations)
                   .ThenInclude(e => e.UnsuccessfulExaminationType)
                 .Include(r => r.Patient)
@@ -91,6 +118,19 @@ namespace Mep.Business.Services
                 .SingleOrDefaultAsync(referral => referral.Id == entityId);
 
       return entity;
-    }    
+    }
+
+    internal async Task<int?> GetCcgIdFromReferralPatient(int id)
+    {
+      int? ccgId = await _context.Referrals
+                                 .Include(r => r.Patient)
+                                 .Where(r => r.Id == id)
+                                 .WhereIsActiveOrActiveOnly(true)
+                                 .AsNoTracking(true)
+                                 .Select(r => r.Patient.CcgId)
+                                 .SingleOrDefaultAsync();
+
+      return ccgId;
+    }
   }
 }

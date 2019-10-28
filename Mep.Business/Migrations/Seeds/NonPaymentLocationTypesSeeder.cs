@@ -22,7 +22,9 @@ namespace Mep.Business.Migrations.Seeds
         Models.NonPaymentLocationType.HOSPITAL,
         NAME_HOSPITAL,
         DESCRIPTION_HOSPITAL
-      );      
+      );
+
+      SaveChangesWithIdentity();  
     }
   }
 }

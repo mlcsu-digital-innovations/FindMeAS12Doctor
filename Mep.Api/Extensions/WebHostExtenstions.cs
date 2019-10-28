@@ -31,7 +31,7 @@ namespace Mep.Api.Extensions
       IConfiguration config = services.GetRequiredService<IConfiguration>();
 
       // now we have the DbContext. Run migrations
-      context.Database.Migrate();
+      // context.Database.Migrate();
 
       // now that the database is up to date. Let's seed
       switch (seedType)
