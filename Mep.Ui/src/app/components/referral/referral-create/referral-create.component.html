@@ -75,7 +75,7 @@
             </div>
             <!-- Row for divs showing patient number validation errors -->
             <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
-              <div class="col-md-3 mb-2 mt-less-2">
+              <div class="col-md-3 mb-2 mt-less-1">
                 <div *ngIf="patient.nhsNumber.errors != null">
                   <div *ngIf="patient.nhsNumber.errors.NhsNumberValidFormat" class="invalid-field">
                     <span>Invalid NHS Number</span>
@@ -266,7 +266,7 @@
             </div>
             <!-- AMHP User -->
             <div class="form-row">
-              <div class="col-md-8 mb-2">
+              <div class="col-md-8">
                 <label for="amhp">Lead AMHP</label>
                 <input
                   type="text"
@@ -290,9 +290,7 @@
                   Sorry, suggestions could not be loaded.
                 </div>
               </div>
-            </div>
-            <div class="form-row mt-less-1">
-              <div class="col-md-12" *ngIf="amhpField.errors != null">
+              <div class="col-md-8 mb-2 mt-less-1" *ngIf="amhpField.errors != null">
                 <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
                   <span>* Invalid Lead AMHP </span>
                 </div>
