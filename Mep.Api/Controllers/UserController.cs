@@ -1,4 +1,4 @@
-using AutoMapper;
+using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,61 +9,40 @@ namespace Mep.Api.Controllers
 
   [Route("api/[controller]")]
   [ApiController]
-  public class UserController :
-    ModelController<Business.Models.User,
-                    ViewModels.User,
-                    RequestModels.UserPut,
-                    RequestModels.UserPost>
+  public class UserController : ModelControllerNoAutoMapper
   {
-    private readonly Business.Services.UserSearchService _userAmhpService;
-    private readonly Business.Services.UserSearchService _userDoctorService;
-
-    public UserController(
-      Business.Services.IModelService<Business.Models.User> service,
-      Business.Services.IModelGeneralSearchService<Business.Models.UserAmhp> userAmhpService,
-      Business.Services.IModelGeneralSearchService<Business.Models.UserDoctor> userDoctorService,
-      IMapper mapper)
-      : base(service, mapper)
+    public UserController(IUserService service)
+      : base(service)
     {
-      _userAmhpService = userAmhpService as Business.Services.UserSearchService;
-      _userDoctorService = userDoctorService as Business.Services.UserSearchService;
     }
 
-    [Route("amhp/search")]
+    [Route("search")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SearchModels.GeneralSearchResult>>> GetAmhpSearch(
-      [FromQuery] RequestModels.SearchString searchString)
+    public async Task<ActionResult<IEnumerable<ViewModels.IdResultText>>> GetSearch(
+      [FromQuery] RequestModels.UserSearch search)
     {
-      return await UserSearch(searchString, _userAmhpService);
-    }
-
-    [Route("doctor/search")]
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<SearchModels.GeneralSearchResult>>> GetDoctorSearch(
-      [FromQuery] RequestModels.SearchString searchString)
-    {
-      return await UserSearch(searchString, _userDoctorService);
-    }
-
-    private async Task<ActionResult<IEnumerable<SearchModels.GeneralSearchResult>>> UserSearch(
-      [FromQuery] RequestModels.SearchString searchString,
-      Business.Services.IModelGeneralSearchService<Business.Models.User> userService
-    )
-    {
-      IEnumerable<Business.Models.SearchModels.GeneralSearchResult> businessSearchResults =
-        await userService.SearchAsync(searchString.Criteria);
-
-      if (businessSearchResults.Any())
+      IEnumerable<Business.Models.User> models;
+      if (search.IsByAmhpName)
       {
-        IEnumerable<SearchModels.GeneralSearchResult> searchResults =
-          businessSearchResults.Select(SearchModels.GeneralSearchResult.ProjectFromModel).ToList();
+        models = await Service.GetAllByAmhpName(search.AmhpName, activeOnly: false);
+      }
+      else
+      {
+        models = await Service.GetAllByDoctorName(search.DoctorName, activeOnly: false);
+      }
 
-        return Ok(searchResults);
+      if (models.Any())
+      {
+        IEnumerable<ViewModels.IdResultText> viewModels = 
+          models.Select(ViewModels.IdResultText.ProjectFromUserModel).ToList();
+        return Ok(viewModels);
       }
       else
       {
         return NoContent();
-      }      
+      }
     }
+
+    private IUserService Service { get { return _service as IUserService; } }
   }
 }

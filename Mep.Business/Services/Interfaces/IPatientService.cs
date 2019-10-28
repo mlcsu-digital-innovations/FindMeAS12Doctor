@@ -1,15 +1,18 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Mep.Business.Models;
+using System.Threading.Tasks;
 
 namespace Mep.Business.Services
 {
-  public interface IPatientService : IModelService<Models.Patient>
+  public interface IPatientService : IServiceBaseNoAutoMapper
   {
+    Task<Patient> CreateAsync(Patient model);
     Task<Patient> GetByAlternativeIdentifier(
       string alternativeIdentifier, 
-      bool asNoTracking, 
-      bool activeOnly);
-    Task<Patient> GetByNhsNumber(long nhsNumber, bool asNoTracking, bool activeOnly);
+      bool asNoTracking = false, 
+      bool activeOnly = false);
+    Task<Patient> GetByNhsNumber(
+      long nhsNumber, 
+      bool asNoTracking = false, 
+      bool activeOnly = false);
   }
 }

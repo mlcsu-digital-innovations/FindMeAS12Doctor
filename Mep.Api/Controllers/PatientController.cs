@@ -1,36 +1,51 @@
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using BusinessModels = Mep.Business.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class PatientController :
-    ModelControllerNoAutoMapper<Business.Models.Patient>
+  public class PatientController : ModelControllerNoAutoMapper
   {
     public PatientController(IPatientService service)
       : base(service)
     {
     }
 
+    [HttpPost]
+    public virtual async Task<ActionResult<ViewModels.PatientPost>> Post(
+      [FromBody] RequestModels.PatientPost requestModel)
+    {
+      try
+      {
+        Business.Models.Patient businessModel = requestModel.MapToBusinessModel();
+        businessModel = await Service.CreateAsync(businessModel);
+        ViewModels.PatientPost viewModel = new ViewModels.PatientPost(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
+
     [Route("search")]
     [HttpGet]
     public async Task<ActionResult<ViewModels.Patient>> GetSearch(
       [FromQuery] RequestModels.PatientSearch search)
     {
-      BusinessModels.Patient model;
+      Business.Models.Patient model;
       if (search.IsByNhsNumber)
       {
 
-        model = await Service.GetByNhsNumber(search.NhsNumberAsLong, activeOnly: false);
+        model = await Service.GetByNhsNumber(search.NhsNumberAsLong);
       }
       else
       {
-        model = await Service.GetByAlternativeIdentifier(
-          search.AlternativeIdentifier,
-          activeOnly: false);
+        model = await Service.GetByAlternativeIdentifier(search.AlternativeIdentifier);
       }
 
       if (model == null)
@@ -44,6 +59,6 @@ namespace Mep.Api.Controllers
       }
     }
 
-    private PatientService Service { get { return _service as PatientService; } }
+    private IPatientService Service { get { return _service as IPatientService; } }
   }
 }

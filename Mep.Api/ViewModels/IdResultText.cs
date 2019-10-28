@@ -17,6 +17,18 @@ namespace Mep.Api.ViewModels
           ResultText = model.ResultText
         };
       }
-    } 
+    }
+
+    public static Func<Business.Models.User, IdResultText> ProjectFromUserModel
+    {
+      get
+      {
+        return model => new IdResultText()
+        {
+          Id = model.Id,
+          ResultText = model.DisplayName
+        };
+      }
+    }     
   }
 }

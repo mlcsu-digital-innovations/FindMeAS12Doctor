@@ -67,7 +67,8 @@ namespace Mep.Api
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-      services.AddScoped<IModelService<Ccg>, CcgService>();
+      //services.AddScoped<IModelService<Ccg>, CcgService>();
+      services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
       services.AddScoped<IModelService<Examination>, ExaminationService>();
       services.AddScoped<IModelService<ExaminationDetailType>, ExaminationDetailTypeService>();
@@ -79,7 +80,8 @@ namespace Mep.Api
       services.AddScoped<IReferralService, ReferralService>();
       services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
-      services.AddScoped<IModelService<User>, UserService>();
+      //services.AddScoped<IModelService<User>, UserService>();
+      services.AddScoped<IUserService, UserService>();
 
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 

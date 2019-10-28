@@ -10,13 +10,12 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public abstract class ModelControllerNoAutoMapper<BusinessModel>
-      : ControllerBase where BusinessModel : Business.Models.BaseModel
+  public abstract class ModelControllerNoAutoMapper : ControllerBase
   {
-    protected readonly IModelService<BusinessModel> _service;
+    protected readonly IServiceBaseNoAutoMapper _service;
 
     protected ModelControllerNoAutoMapper(
-        IModelService<BusinessModel> service
+        IServiceBaseNoAutoMapper service
     )
     {
       _service = service;

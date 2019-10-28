@@ -13,7 +13,7 @@ namespace Mep.Business.Models
       
       Id = entity.Id;
       ModifiedAt = entity.ModifiedAt;
-      ModifiedByUser = entity.ModifiedByUser == null ? null : new User(entity.ModifiedByUser);
+      //ModifiedByUser = entity.ModifiedByUser == null ? null : new User(entity.ModifiedByUser);
       ModifiedByUserId = entity.ModifiedByUserId;      
       IsActive = entity.IsActive;
     }
@@ -27,5 +27,16 @@ namespace Mep.Business.Models
     public virtual User ModifiedByUser {get; set;}
     [Required]
     public bool IsActive { get; set; }
+    
+    public virtual void BaseMapToEntity(Data.Entities.BaseEntity entity)
+    {
+      if (entity == null) return;
+
+      entity.Id = Id;
+      entity.ModifiedAt = ModifiedAt;
+      //TODO entity.ModifiedByUser = ModifiedByUser
+      entity.ModifiedByUserId = ModifiedByUserId;
+      entity.IsActive = IsActive;
+    }
   }
 }

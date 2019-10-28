@@ -1,15 +1,16 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Mep.Business.Models
 {
   public class User : BaseModel
   {
     public User() { }
-    public User(Data.Entities.User entity)
+    public User(Data.Entities.User entity) : base(entity)
     {
-      if (entity == null ) return;
+      if (entity == null) return;
       // TODO AmhpReferrals
       // TODO BankDetails
       // TODO CompletedExaminations
@@ -27,7 +28,7 @@ namespace Mep.Business.Models
       // TODO Organisation
       OrganisationId = entity.OrganisationId;
       // TODO PaymentMethods
-      ProfileType = entity.ProfileType == null ? null : new ProfileType(entity.ProfileType);
+      //ProfileType = entity.ProfileType == null ? null : new ProfileType(entity.ProfileType);
       ProfileTypeId = entity.ProfileTypeId;
       // TODO Referrals
       // TODO Section12ApprovalStatus
@@ -46,7 +47,7 @@ namespace Mep.Business.Models
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     public virtual IList<Examination> CreatedExaminations { get; set; }
     [MaxLength(256)]
-    public string DisplayName { get; set; }    
+    public string DisplayName { get; set; }
     public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }
@@ -70,8 +71,20 @@ namespace Mep.Business.Models
     public virtual IList<UserExaminationClaim> UserExaminationClaimSelections { get; set; }
     public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
 
+    public string GenderName { get { return GenderType?.Name; } }
+
     public bool IsAmhp { get { return ProfileType?.IsAmhp ?? false; } }
 
     public bool IsDoctor { get { return ProfileType?.IsDoctor ?? false; } }
+
+    // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
+    // for this to work with .ThenInclude()
+    public static Expression<Func<Data.Entities.User, User>> ProjectFromEntity
+    {
+      get
+      {
+        return userEntity => new User(userEntity);
+      }
+    }
   }
 }

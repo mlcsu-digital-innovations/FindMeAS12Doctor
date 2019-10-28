@@ -1,4 +1,4 @@
-namespace Mep.Api.RequestModels
+namespace Mep.Api.ViewModels
 {
   public class PatientPost : Patient
   {
