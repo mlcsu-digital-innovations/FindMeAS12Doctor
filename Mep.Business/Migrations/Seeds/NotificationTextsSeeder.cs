@@ -59,8 +59,10 @@ namespace Mep.Business.Migrations.Seeds
       if ((notificationText = Context.NotificationTexts
           .SingleOrDefault(g => g.Id == id)) == null)
       {
-        notificationText = new NotificationText();
-        notificationText.Id = id;
+        notificationText = new NotificationText
+        {
+          Id = id
+        };
         Context.Add(notificationText);
       }
       notificationText.MessageTemplate = template;

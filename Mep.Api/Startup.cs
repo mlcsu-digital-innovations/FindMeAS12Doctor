@@ -82,6 +82,7 @@ namespace Mep.Api
       services.AddScoped<IModelService<Speciality>, SpecialityService>();
       //services.AddScoped<IModelService<User>, UserService>();
       services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IUnsuccessfulExaminationTypeService, UnsuccessfulExaminationTypeService>();
 
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
