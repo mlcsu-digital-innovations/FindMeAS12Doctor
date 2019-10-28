@@ -21,6 +21,11 @@ const routes: Routes = [
     loadChildren: 
       './pages/amhp-examination-view/amhp-examination-view.module#AmhpExaminationViewPageModule'
   },
+  { 
+    path: 'help', 
+    loadChildren: './pages/help/help.module#HelpPageModule' 
+  },
+
 
 
 ];
