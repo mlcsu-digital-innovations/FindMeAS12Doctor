@@ -5,12 +5,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'amhp-examination-list', pathMatch: 'full'
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module')
-      .then(m => m.HomePageModule)
-  },
+  },  
   {
     path: 'amhp-examination-list',
     loadChildren:
@@ -25,7 +20,11 @@ const routes: Routes = [
     path: 'help', 
     loadChildren: './pages/help/help.module#HelpPageModule' 
   },
-
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module')
+      .then(m => m.HomePageModule)
+  },
 
 
 ];
