@@ -5,8 +5,7 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class UnsuccessfulExaminationTypeController : 
-    IdNameDescriptionBaseController<Business.Models.UnsuccessfulExaminationType>
+  public class UnsuccessfulExaminationTypeController : IdNameDescriptionBaseController
   {
     public UnsuccessfulExaminationTypeController(IUnsuccessfulExaminationTypeService service)
       : base(service)

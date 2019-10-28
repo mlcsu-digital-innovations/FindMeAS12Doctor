@@ -9,8 +9,7 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public abstract class IdNameDescriptionBaseController<BusinessModel> : ModelControllerNoAutoMapper
-      where BusinessModel : Business.Models.NameDescription
+  public abstract class IdNameDescriptionBaseController : ModelControllerNoAutoMapper
   {
     protected IdNameDescriptionBaseController(INameDescriptionBaseService service)
       : base(service)
