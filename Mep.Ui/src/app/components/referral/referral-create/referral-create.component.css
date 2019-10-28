@@ -64,3 +64,9 @@ form {
   margin-top: 10px;
   align-items: flex-end;
 }
+
+.required-field::after {
+  content: "*";
+  color: red;
+}
+ 

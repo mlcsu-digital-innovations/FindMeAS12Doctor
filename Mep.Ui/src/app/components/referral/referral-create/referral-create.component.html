@@ -18,8 +18,11 @@
         <div class="card-body">
           <form [formGroup]="patientForm" novalidate>
             <div class="form-row">
+              <div class="required-field col-md-2 mb-2 offset-md-10 text-right">Denotes required field.</div>
+            </div>
+            <div class="form-row">
               <div class="col-md-3">
-                <label for="nhsNumber">NHS Number</label>
+                <label class="required-field" for="nhsNumber">NHS Number</label>
                 <input
                   class="form-control"
                   digitOnly
@@ -37,7 +40,7 @@
                 <span class="or">Or</span>
               </div>
               <div class="col-md-4">
-                <label for="alternativeIdentifier">Alternative Identifier</label>
+                <label class="required-field" for="alternativeIdentifier">Alternative Identifier</label>
                 <input
                   class="form-control"
                   formControlName="alternativeIdentifier"
@@ -94,7 +97,7 @@
             <!-- GP Practice -->
             <div class="form-row" *ngIf="isGpFieldsShown">
               <div class="col-md-8 mb-2">
-                <label for="gpPractice">GP Practice</label>
+                <label class="required-field" for="gpPractice">GP Practice</label>
                 <input
                   type="text"
                   class="form-control"
@@ -145,7 +148,7 @@
             <!-- Residential Postcode -->
             <div class="form-row" *ngIf="isResidentialPostcodeFieldShown">
               <div class="col-md-3 mb-2">
-                <label for="residentialPostcode">Residential Postcode</label>
+                <label class="required-field" for="residentialPostcode">Residential Postcode</label>
                 <input
                   type="text"
                   maxlength="8"
@@ -220,7 +223,7 @@
             <!-- CCG -->
             <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-8 mb-2">
-                <label for="ccg">Clinical Commissioning Group</label>
+                <label class="required-field" for="ccg">Clinical Commissioning Group</label>
                 <input
                   type="text"
                   class="form-control"
@@ -267,7 +270,7 @@
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
-                <label for="amhp">Lead AMHP</label>
+                <label class="required-field" for="amhp">Lead AMHP</label>
                 <input
                   type="text"
                   class="form-control"
