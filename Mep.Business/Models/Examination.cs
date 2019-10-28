@@ -11,7 +11,8 @@ namespace Mep.Business.Models
   public class Examination : BaseModel
   {
     public Examination() { }
-    public Examination(Data.Entities.Examination entity, bool ignoreReferral = false) : base(entity)
+    public Examination(Data.Entities.Examination entity, bool ignoreReferral = false) 
+      : base(entity)
     {
       if (entity == null) return;
 
@@ -52,9 +53,9 @@ namespace Mep.Business.Models
       //TODO UnsuccessfulExaminationType = null;
       UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId;
       //TODO UserExaminationClaims = null;
-      UserExaminationNotifications = 
-        entity.UserExaminationNotifications?
-          .Select(u => new UserExaminationNotification(u)).ToList();
+      UserExaminationNotifications = entity
+        .UserExaminationNotifications
+        ?.Select(u => new UserExaminationNotification(u)).ToList();
     }
 
     [Required]
@@ -110,7 +111,7 @@ namespace Mep.Business.Models
     }
 
     public DateTimeOffset DateTime
-    { get { return (DateTimeOffset)(MustBeCompletedBy ?? ScheduledTime); } }
+    { get { return MustBeCompletedBy ?? ScheduledTime ?? default; } }
 
     public virtual IList<ExaminationDetailType> DetailTypes
     {

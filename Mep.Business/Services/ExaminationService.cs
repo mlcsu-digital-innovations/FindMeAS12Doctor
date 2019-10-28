@@ -19,8 +19,8 @@ namespace Mep.Business.Services
     public ExaminationService(
       ApplicationContext context,
       IMapper mapper,
-      IModelService<Referral> referralService,
-      IModelService<User> userService)
+      IReferralService referralService,
+      IUserService userService)
       : base("Examination", context, mapper)
     {
       _referralService = referralService as ReferralService;
