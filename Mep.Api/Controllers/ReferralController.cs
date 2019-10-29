@@ -94,6 +94,32 @@ namespace Mep.Api.Controllers
       }
     }
 
+    [HttpGet]
+    [Route("view/{id:int}/summary")]
+    public async Task<ActionResult<ViewModels.ReferralViewSummary>> GetViewSummary(int id)
+    {
+      try
+      {
+
+        Business.Models.Referral businessModel = await Service.GetViewByIdAsync(id);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.ReferralViewSummary viewModel = 
+            new ViewModels.ReferralViewSummary(businessModel);
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
     [HttpPost]
     public virtual async Task<ActionResult<ViewModels.Referral>> Post(
       [FromBody] RequestModels.ReferralPost requestModel)
