@@ -18,11 +18,18 @@
         <div class="card-body">
           <form [formGroup]="patientForm" novalidate>
             <div class="form-row">
-              <div class="required-field col-md-2 mb-2 offset-md-10 text-right">Denotes required field.</div>
+              <div class="required-field col-md-2 mb-2 offset-md-10 text-right">
+                Denotes required field.
+              </div>
             </div>
             <div class="form-row">
               <div class="col-md-3">
-                <label class="required-field" for="nhsNumber">NHS Number</label>
+                <label class="required-field" for="nhsNumber"
+                [ngClass]="{
+                  'required-field': !DisableIfFieldHasValue('alternativeIdentifier')
+                }">
+                  NHS Number
+                </label>
                 <input
                   class="form-control"
                   digitOnly
@@ -40,7 +47,12 @@
                 <span class="or">Or</span>
               </div>
               <div class="col-md-4">
-                <label class="required-field" for="alternativeIdentifier">Alternative Identifier</label>
+                <label class="required-field" for="alternativeIdentifier"
+                  [ngClass]="{
+                    'required-field': !DisableIfFieldHasValue('nhsNumber')
+                  }">
+                  Alternative Identifier
+                </label>
                 <input
                   class="form-control"
                   formControlName="alternativeIdentifier"
