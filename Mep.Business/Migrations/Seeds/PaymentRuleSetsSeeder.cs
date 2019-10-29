@@ -45,8 +45,10 @@ namespace Mep.Business.Migrations.Seeds
       if ((paymentRuleSet = Context.PaymentRuleSets
         .SingleOrDefault(g => g.Id == id)) == null)
       {
-        paymentRuleSet = new PaymentRuleSet();
-        paymentRuleSet.Id = id;
+        paymentRuleSet = new PaymentRuleSet
+        {
+          Id = id
+        };
         Context.Add(paymentRuleSet);
       }
       paymentRuleSet.CcgId = GetCcgByName(ccgName).Id;

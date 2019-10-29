@@ -1,5 +1,4 @@
 using Mep.Api.RequestModels;
-using Mep.Api.SearchModels;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

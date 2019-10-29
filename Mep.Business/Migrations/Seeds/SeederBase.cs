@@ -18,8 +18,10 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((entity = Context.Set<TEntity>().SingleOrDefault(e => e.Id == id)) == null)
       {
-        entity = new TEntity();
-        entity.Id = id;
+        entity = new TEntity
+        {
+          Id = id
+        };
         Context.Add(entity);
       }
       PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(entity, name, description);

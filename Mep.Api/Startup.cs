@@ -67,21 +67,18 @@ namespace Mep.Api
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-      //services.AddScoped<IModelService<Ccg>, CcgService>();
       services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
       services.AddScoped<IModelService<Examination>, ExaminationService>();
-      services.AddScoped<IModelService<ExaminationDetailType>, ExaminationDetailTypeService>();
-      services.AddScoped<IModelService<GenderType>, GenderTypeService>();
-      //services.AddScoped<IModelService<GpPractice>, GpPracticeService>();
+      services.AddScoped<IExaminationDetailTypeService, ExaminationDetailTypeService>();
+      services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
-      // services.AddScoped<IModelSearchService<Patient, Business.Models.SearchModels.PatientSearch>, PatientService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
       services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
-      services.AddScoped<IModelService<Speciality>, SpecialityService>();
-      //services.AddScoped<IModelService<User>, UserService>();
+      services.AddScoped<ISpecialityService, SpecialityService>();
       services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IUnsuccessfulExaminationTypeService, UnsuccessfulExaminationTypeService>();
 
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 

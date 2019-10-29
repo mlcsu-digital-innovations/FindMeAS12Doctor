@@ -192,7 +192,7 @@ export class ReferralCreateComponent implements OnInit {
       this.gpPractice.id === 0 ? null : this.gpPractice.id;
     this.patientDetails.residentialPostcode =
       this.residentialPostcode === '' || this.residentialPostcode === 'Unknown'
-        ? 'Unknown'
+        ? null
         : this.residentialPostcode;
     this.patientDetails.ccgId = this.ccg.id === 0 ? null : this.ccg.id;
 

@@ -4,6 +4,25 @@ namespace Mep.Api.ViewModels
 {
   public class ReferralEdit
   {
+    public ReferralEdit() {}
+    public ReferralEdit(Business.Models.Referral model)
+    {
+      if (model == null) return ;
+
+      CreatedAt = model.CreatedAt;
+      Id = model.Id;
+      LeadAmhpUserDisplayName = model.LeadAmhpUser?.DisplayName;
+      LeadAmhpUserId = model.LeadAmhpUserId;
+      PatientAlternativeIdentifier = model.Patient?.AlternativeIdentifier;
+      PatientCcgId = model.Patient?.CcgId;
+      PatientCcgName = model.Patient?.Ccg?.Name;
+      PatientGpPracticeNameAndPostcode = model.PatientGpPracticeNameAndPostcode;
+      PatientGpPracticeId = model.Patient?.GpPracticeId;
+      PatientNhsNumber = model.Patient?.NhsNumber;
+      PatientResidentialPostcode = model.Patient?.ResidentialPostcode;
+      StatusName = model.StatusName;
+    }
+
     public DateTimeOffset CreatedAt { get; set; }
     public int Id { get; set; }
     public string LeadAmhpUserDisplayName {get; set;}
@@ -15,6 +34,6 @@ namespace Mep.Api.ViewModels
     public int? PatientGpPracticeId { get; set; }
     public long? PatientNhsNumber { get; set; }
     public string PatientResidentialPostcode { get; set; }
-    public string Status { get; set; }
+    public string StatusName { get; set; }
   }
 }

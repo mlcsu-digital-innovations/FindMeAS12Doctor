@@ -5,9 +5,9 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class GenderTypeController : IdNameDescriptionBaseController
+  public class UnsuccessfulExaminationTypeController : IdNameDescriptionBaseController
   {
-    public GenderTypeController(IGenderTypeService service)
+    public UnsuccessfulExaminationTypeController(IUnsuccessfulExaminationTypeService service)
       : base(service)
     {
     }
