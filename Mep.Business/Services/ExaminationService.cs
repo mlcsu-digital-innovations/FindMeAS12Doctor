@@ -30,7 +30,7 @@ namespace Mep.Business.Services
     private async Task<bool> AddAmhpToUserExaminationNotifications(
       int amhpUserId, Entities.Examination entity)
     {
-      await CheckUserIdIsAnAmhp(amhpUserId);
+      await _userService.CheckUserIsAnAmhpById(amhpUserId);
 
       if (entity.UserExaminationNotifications == null)
       {
@@ -87,23 +87,6 @@ namespace Mep.Business.Services
           entity?.CompletedByUser?.DisplayName
         );
       }
-    }
-
-    private async Task<bool> CheckUserIdIsAnAmhp(int amhpUserId)
-    {
-      User user = await _userService.GetByIdAsync(amhpUserId, true);
-      if (user == null)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", $"An active User with an Id of {amhpUserId} does not exist.");
-      }
-      if (!user.IsAmhp)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", 
-          $"The User with an Id of {amhpUserId} must be an AMHP but is a {user.ProfileType.Name}.");
-      }
-      return true;
     }
 
     /// <summary>
@@ -284,7 +267,7 @@ namespace Mep.Business.Services
     private async Task<bool> UpdateAmhpToUserExaminationNotifications(
       Examination model, Entities.Examination entity)
     {
-      await CheckUserIdIsAnAmhp(model.AmhpUserId);
+      await _userService.CheckUserIsAnAmhpById(model.AmhpUserId);
 
       if (entity.HasUserExaminationNotifications)
       {

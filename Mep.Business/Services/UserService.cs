@@ -6,6 +6,7 @@ using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
 using System.Linq;
+using Mep.Business.Exceptions;
 
 namespace Mep.Business.Services
 {
@@ -98,5 +99,33 @@ namespace Mep.Business.Services
 
       return entity;
     }
+
+    public async Task<bool> CheckUserIsAnAmhpById(
+      int id,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      User user = await _context.Users
+                                .Include(u => u.ProfileType)
+                                .Where(u => u.Id == id)
+                                .Where(u => u.ProfileTypeId == Models.ProfileType.AMHP)
+                                .WhereIsActiveOrActiveOnly(activeOnly)
+                                .AsNoTracking(asNoTracking)
+                                .Select(User.ProjectFromEntity)
+                                .SingleOrDefaultAsync();
+      if (user == null)
+      {
+        throw new ModelStateException(
+          "AmhpUserId", $"An {(activeOnly ? "active" : "inactive")} User with an Id of {id} " +
+          "does not exist.");
+      }
+      if (!user.IsAmhp)
+      {
+        throw new ModelStateException(
+          "AmhpUserId", 
+          $"The User with an Id of {id} must be an AMHP but is a {user.ProfileType.Name}.");
+      }
+      return true;
+    }    
   }
 }

@@ -20,8 +20,9 @@ namespace Mep.Business.Models
       Address2 = entity.Address2;
       Address3 = entity.Address3;
       Address4 = entity.Address4;
+      AmhpUser = new User(entity.AmhpUser);
       AmhpUserId = entity.AmhpUserId;
-      Ccg = entity.Ccg == null ? null : new Ccg(entity.Ccg);
+      Ccg = new Ccg(entity.Ccg);
       CcgId = entity.CcgId;
       //TODO CompletedByUser = null;
       CompletedByUserId = entity.CompletedByUserId;
@@ -30,7 +31,7 @@ namespace Mep.Business.Models
       CompletionConfirmationByUserId = entity.CompletionConfirmationByUserId;
       //TODO CreatedByUser = null;
       CreatedByUserId = entity.CreatedByUserId;
-      //TODO Details = null;
+      Details = entity.Details?.Select(d => new ExaminationDetail(d)).ToList();
       Doctors = entity.Doctors?.Select(d => new ExaminationDoctor(d)).ToList();
       Id = entity.Id;
       IsActive = entity.IsActive;
@@ -40,15 +41,15 @@ namespace Mep.Business.Models
       //TODO NonPaymentLocation = null;
       NonPaymentLocationId = entity.NonPaymentLocationId;
       Postcode = entity.Postcode;
-      //TODO PreferredDoctorGenderType = null;
+      PreferredDoctorGenderType = new GenderType(entity.PreferredDoctorGenderType);
       PreferredDoctorGenderTypeId = entity.PreferredDoctorGenderTypeId;
       if (!ignoreReferral)
       {
-        Referral = entity.Referral == null ? null : new Referral(entity.Referral);
+        Referral = new Referral(entity.Referral);
       }
       ReferralId = entity.ReferralId;
       ScheduledTime = entity.ScheduledTime;
-      Speciality = entity.Speciality == null ? null : new Speciality(entity.Speciality);
+      Speciality = new Speciality(entity.Speciality);
       SpecialityId = entity.SpecialityId;
       //TODO UnsuccessfulExaminationType = null;
       UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId;
@@ -117,7 +118,7 @@ namespace Mep.Business.Models
     {
       get
       {
-        return Details.Where(d => d.IsActive)
+        return Details?.Where(d => d.IsActive)
                       .Select(d => d.ExaminationDetailType).ToList();
       }
     }

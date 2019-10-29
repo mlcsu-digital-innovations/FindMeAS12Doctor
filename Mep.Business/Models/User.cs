@@ -28,7 +28,7 @@ namespace Mep.Business.Models
       // TODO Organisation
       OrganisationId = entity.OrganisationId;
       // TODO PaymentMethods
-      //ProfileType = entity.ProfileType == null ? null : new ProfileType(entity.ProfileType);
+      ProfileType = new ProfileType(entity.ProfileType);
       ProfileTypeId = entity.ProfileTypeId;
       // TODO Referrals
       // TODO Section12ApprovalStatus

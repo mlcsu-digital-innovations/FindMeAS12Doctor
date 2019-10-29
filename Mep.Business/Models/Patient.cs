@@ -15,9 +15,9 @@ namespace Mep.Business.Models
       if (entity == null) return;
 
       AlternativeIdentifier = entity.AlternativeIdentifier;
-      // TODO Ccg
+      Ccg = new Ccg(entity.Ccg);
       CcgId = entity.CcgId;
-      // TODO GpPractice
+      GpPractice = new GpPractice(entity.GpPractice);
       GpPracticeId = entity.GpPracticeId;
       NhsNumber = entity.NhsNumber;
       ResidentialPostcode = entity.ResidentialPostcode;

@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using Mep.Data.Entities;
 
 namespace Mep.Business.Models
 {
   public class Referral : BaseModel
   {
-    public Referral() {}
+    public Referral() { }
     public Referral(Data.Entities.Referral entity) : base(entity)
     {
+      if (entity == null) return;
+
       CreatedAt = entity.CreatedAt;
       CreatedByUser = entity.CreatedByUser == null ? null : new User(entity.CreatedByUser);
       CreatedByUserId = entity.CreatedByUserId;
       Examinations = entity.Examinations?.Select(e => new Examination(e, true)).ToList();
       Patient = new Patient(entity.Patient);
       PatientId = entity.PatientId;
-      ReferralStatus = entity.ReferralStatus == null 
-        ? null 
+      ReferralStatus = entity.ReferralStatus == null
+        ? null
         : new ReferralStatus(entity.ReferralStatus);
       ReferralStatusId = entity.ReferralStatusId;
       LeadAmhpUser = entity.LeadAmhpUser == null ? null : new User(entity.LeadAmhpUser);
@@ -36,14 +40,6 @@ namespace Mep.Business.Models
     public int LeadAmhpUserId { get; set; }
     public bool IsPlannedExamination { get; set; }
 
-    public string PatientCcgName 
-    {
-      get
-      {
-        return Patient?.Ccg?.Name;
-      }
-    }
-
     public Examination CurrentExamination
     {
       get
@@ -57,7 +53,7 @@ namespace Mep.Business.Models
     /// TODO: Get the examination offset hours from the application config
     /// </summary>
     public DateTimeOffset DefaultToBeCompletedBy
-    {      
+    {
       get
       {
         return Examinations.Any(e => e.IsActive) ?
@@ -129,9 +125,6 @@ namespace Mep.Business.Models
       }
     }
 
-    public int ReferralId
-    { get { return Id; } }
-
     public int ResponsesReceived
     {
       get
@@ -145,7 +138,7 @@ namespace Mep.Business.Models
     }
     public string SpecialityName
     { get { return CurrentExamination?.SpecialityName; } }
-    
+
     public string StatusName
     { get { return ReferralStatus?.Name; } }
 
@@ -163,6 +156,30 @@ namespace Mep.Business.Models
                : timescale;
       }
     }
+
+    internal Data.Entities.Referral MapToEntity()
+    {
+      Data.Entities.Referral entity = new Data.Entities.Referral()
+      {
+        CreatedAt = CreatedAt,
+        CreatedByUserId = CreatedByUserId,
+        PatientId = PatientId,
+        LeadAmhpUserId = LeadAmhpUserId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
+    }
+
+    // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
+    // for this to work with .ThenInclude()
+    public static Expression<Func<Data.Entities.Referral, Referral>> ProjectFromEntity
+    {
+      get
+      {
+        return entity => new Referral(entity);
+      }
+    }    
 
   }
 }
