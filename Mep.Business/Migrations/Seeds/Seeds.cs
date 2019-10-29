@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -28,29 +30,29 @@ namespace Mep.Business.Migrations.Seeds
 
       new ContactDetailTypesSeeder().SeedData();
 
-      new ExaminationDetailTypeSeeder().SeedData();
+      new ExaminationDetailTypesSeeder().SeedData();
 
-      new GenderTypeSeeder().SeedData();
+      new ExaminationDoctorStatusSeeder().SeedData();
+
+      new GenderTypesSeeder().SeedData();
 
       new NonPaymentLocationTypesSeeder().SeedData();
 
-      new NotificationTextsSeeder().SeedData();      
+      new NotificationTextsSeeder().SeedData();
 
       new PaymentMethodTypesSeeder().SeedData();
 
       new PaymentRuleSetsSeeder().SeedData();
 
-      new ProfileTypeSeeder().SeedData();
+      new ProfileTypesSeeder().SeedData();
 
-      new ReferralStatusSeeder().SeedData();
+      new ReferralStatusesSeeder().SeedData();
 
       new Section12ApprovalStatusesSeeder().SeedData();
 
-      new SpecialitySeeder().SeedData();
+      new SpecialitiesSeeder().SeedData();
 
       new UnsuccessfulExaminationTypesSeeder().SeedData();
-
-      Context.SaveChanges();
     }
 
     public void RemoveSeedAll(bool noGpPractices, bool noCcgs)
@@ -73,30 +75,30 @@ namespace Mep.Business.Migrations.Seeds
 
       new ContactDetailTypesSeeder().DeleteSeeds();
 
-      new ExaminationDetailTypeSeeder().DeleteSeeds();
+      new ExaminationDetailTypesSeeder().DeleteSeeds();
 
-      new GenderTypeSeeder().DeleteSeeds();
+      new GenderTypesSeeder().DeleteSeeds();
 
       new NonPaymentLocationTypesSeeder().DeleteSeeds();
 
-      new NotificationTextsSeeder().DeleteSeeds();      
+      new NotificationTextsSeeder().DeleteSeeds();
 
       new PaymentMethodTypesSeeder().DeleteSeeds();
 
       new PaymentRuleSetsSeeder().DeleteSeeds();
 
-      new ProfileTypeSeeder().DeleteSeeds();
+      new ProfileTypesSeeder().DeleteSeeds();
 
-      new ReferralStatusSeeder().DeleteSeeds();
+      new ReferralStatusesSeeder().DeleteSeeds();
 
       new Section12ApprovalStatusesSeeder().DeleteSeeds();
 
-      new SpecialitySeeder().DeleteSeeds();
+      new SpecialitiesSeeder().DeleteSeeds();
 
       new UnsuccessfulExaminationTypesSeeder().DeleteSeeds();
 
       Context.SaveChanges();
-    }    
+    }
 
     public void SeedTestAll()
     {

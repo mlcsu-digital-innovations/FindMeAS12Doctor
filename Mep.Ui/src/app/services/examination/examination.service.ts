@@ -12,10 +12,17 @@ export class ExaminationService {
 
   public createExamination(examination: Examination) {
 
+    let examinationType = '';
+    if (examination.isPlanned) {
+      examinationType = '/planned';
+    } else {
+      examinationType = '/emergency';
+    }
+
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post(
-      environment.apiEndpoint + '/examination',
+      environment.apiEndpoint + '/examination' + examinationType,
       examination,
       { headers }
     );

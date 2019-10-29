@@ -5,11 +5,15 @@ using Mep.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mep.Business.Exceptions;
+using System.Linq;
 
 namespace Mep.Business.Services
 {
-  public class CcgService
-    : ServiceBase<Ccg, Entities.Ccg>, IModelService<Ccg>
+  public class CcgService :
+    ServiceBase<Ccg, Entities.Ccg>,
+    ICcgService,
+    ISearchService
   {
     public CcgService(ApplicationContext context, IMapper mapper)
       : base("Ccg", context, mapper)
@@ -52,5 +56,32 @@ namespace Mep.Business.Services
 
       return entity;
     }
+
+    public async Task<IEnumerable<IdResultText>> SearchAsync(
+      string criteria,
+      bool isActiveOrActiveOnly = true)
+    {
+      if (string.IsNullOrWhiteSpace(criteria))
+      {
+        throw new MissingSearchParameterException();
+      }
+      else
+      {
+        IQueryable<Data.Entities.Ccg> query = 
+          _context.Ccgs.WhereIsActiveOrActiveOnly(isActiveOrActiveOnly);
+
+        string[] searchParams = criteria.Split(' ');
+
+        foreach (string searchParam in searchParams) {
+          query = 
+            query.Where(gp => gp.Name.Contains(searchParam));
+        }
+
+        IEnumerable<IdResultText> entities =
+          await query.Select(e => new IdResultText(e)).ToListAsync();
+
+        return entities;
+      }
+    }     
   }
 }

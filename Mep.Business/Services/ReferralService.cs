@@ -1,96 +1,129 @@
-using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Mep.Business.Models;
 using Entities = Mep.Data.Entities;
 using Mep.Business.Extensions;
+using Mep.Business.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mep.Business.Services
 {
-  public class ReferralService
-    : ServiceBase<Referral, Entities.Referral>, IModelService<Referral>
+  public class ReferralService : ServiceBaseNoAutoMapper<Entities.Referral>, IReferralService
   {
-    public ReferralService(ApplicationContext context, IMapper mapper)
-      : base("Referral", context, mapper)
+    private readonly IUserService _userService;
+    public ReferralService(ApplicationContext context, IUserService userService)
+      : base(context)
     {
+      this._userService = userService;
     }
 
-    public async Task<IEnumerable<Models.Referral>> GetAllAsync(
-      bool activeOnly)
+    public async Task<Referral> CreateAsync(ReferralCreate model)
     {
+      await _userService.CheckUserIsAnAmhpById(model.LeadAmhpUserId);
 
-      IEnumerable<Entities.Referral> entities =
+      Entities.Referral entity = model.MapToEntity();
+
+      entity.Id = 0;
+      entity.IsActive = true;
+      entity.ReferralStatusId = ReferralStatus.NEW;
+
+      UpdateModified(entity);
+
+      _context.Add(entity);
+
+      await _context.SaveChangesAsync();
+
+      Referral createdModel = _context.Referrals
+                      .Where(e => e.Id == entity.Id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(Referral.ProjectFromEntity)
+                      .Single();
+      return createdModel;
+    }
+
+    public async Task<int?> GetCcgIdFromReferralPatient(int id)
+    {
+      int? ccgId = await _context.Referrals
+                                 .Include(r => r.Patient)
+                                 .Where(r => r.Id == id)
+                                 .WhereIsActiveOrActiveOnly(true)
+                                 .AsNoTracking(true)
+                                 .Select(r => r.Patient.CcgId)
+                                 .SingleOrDefaultAsync();
+
+      return ccgId;
+    }
+
+    public async Task<Referral> GetEditByIdAsync(
+      int id, bool activeOnly = true, bool asNoTracking = true)
+    {
+      Models.Referral model =
         await _context.Referrals
-                .Include(r => r.CreatedByUser)
-                .Include(r => r.Examinations)                  
-                  .ThenInclude(e => e.UserExaminationNotifications)
-                    .ThenInclude(u => u.User)
-                      .ThenInclude(u => u.ProfileType)
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.PreferredDoctorGenderType)
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.Speciality)                  
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.UnsuccessfulExaminationType)
-                .Include(r => r.Patient)
-                .Include(r => r.ReferralStatus)
-                .Include(r => r.LeadAmhpUser)
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .ToListAsync();
+                      .Include(r => r.LeadAmhpUser)
+                      .Include(r => r.Patient)
+                        .ThenInclude(p => p.Ccg)
+                      .Include(r => r.Patient)
+                        .ThenInclude(p => p.GpPractice)
+                      .Include(r => r.ReferralStatus)
+                      .Where(r => r.Id == id)
+                      .WhereIsActiveOrActiveOnly(activeOnly)
+                      .AsNoTracking(asNoTracking)
+                      .Select(r => new Referral(r))
+                      .SingleOrDefaultAsync();
 
+      return model;
+    }
+
+    public async Task<IEnumerable<Referral>> GetListAsync(
+      bool activeOnly = true, bool asNoTracking = true)
+    {
       IEnumerable<Models.Referral> models =
-        _mapper.Map<IEnumerable<Models.Referral>>(entities);
+        await _context.Referrals
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Speciality)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.UserExaminationNotifications)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Doctors)
+                      .Include(r => r.Patient)
+                      .Include(r => r.ReferralStatus)
+                      .Include(r => r.LeadAmhpUser)
+                      .WhereIsActiveOrActiveOnly(activeOnly)
+                      .AsNoTracking(asNoTracking)
+                      .Select(r => new Referral(r))
+                      .ToListAsync();
 
       return models;
     }
 
-    protected override async Task<Entities.Referral> GetEntityByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
+    public async Task<Referral> GetViewByIdAsync(
+      int id, bool activeOnly = true, bool asNoTracking = true)
     {
-      Entities.Referral entity = await
-        _context.Referrals
-                .Include(r => r.CreatedByUser)
-                .Include(r => r.Examinations)                  
-                  .ThenInclude(e => e.UserExaminationNotifications)
-                    .ThenInclude(u => u.User)
-                      .ThenInclude(u => u.ProfileType)
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.Details)
-                    .ThenInclude(d => d.ExaminationDetailType)
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.PreferredDoctorGenderType)
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.Speciality)                  
-                .Include(r => r.Examinations)
-                  .ThenInclude(e => e.UnsuccessfulExaminationType)
-                .Include(r => r.Patient)
-                  .ThenInclude(p => p.Ccg)
-                .Include(r => r.Patient)
-                  .ThenInclude(p => p.GpPractice)
-                .Include(r => r.ReferralStatus)
-                .Include(r => r.LeadAmhpUser)
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(referral => referral.Id == entityId);
+      Models.Referral model =
+        await _context.Referrals
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.AmhpUser)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Details)
+                          .ThenInclude(d => d.ExaminationDetailType)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Doctors)
+                          .ThenInclude(d => d.DoctorUser)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.PreferredDoctorGenderType)
+                      .Include(r => r.Examinations)
+                        .ThenInclude(e => e.Speciality)
+                      .Include(r => r.LeadAmhpUser)
+                      .Include(r => r.Patient)
+                      .Include(r => r.ReferralStatus)
+                      .Where(r => r.Id == id)
+                      .WhereIsActiveOrActiveOnly(activeOnly)
+                      .AsNoTracking(asNoTracking)
+                      .Select(r => new Referral(r))
+                      .SingleOrDefaultAsync();
 
-      return entity;
+      return model;
     }
-
-    protected override async Task<Entities.Referral> GetEntityWithNoIncludesByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
-    {
-      Entities.Referral entity = await
-        _context.Referrals
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(referral => referral.Id == entityId);
-
-      return entity;
-    }    
   }
 }

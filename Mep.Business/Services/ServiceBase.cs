@@ -27,7 +27,7 @@ namespace Mep.Business.Services
       return await SetActiveStatus(id, true);
     }
 
-    public async Task<TBusinessModel> CreateAsync(
+    public virtual async Task<TBusinessModel> CreateAsync(
       TBusinessModel model)
     {
       TEntity entity = _mapper.Map<TEntity>(model);
@@ -50,7 +50,7 @@ namespace Mep.Business.Services
       return await SetActiveStatus(id, false);
     }
 
-    public async Task<TBusinessModel> GetByIdAsync(
+    public virtual async Task<TBusinessModel> GetByIdAsync(
       int id,
       bool activeOnly)
     {

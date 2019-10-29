@@ -7,16 +7,16 @@ namespace Mep.Business.Migrations.Seeds
   internal class ReferralSeeder : SeederBase<Referral>
   {
     #region Constants
-    internal const string ALLOCATING_DOCTORS_ADDRESS1 = "Baldwins Gate Filling Station";
-    internal const string ALLOCATING_DOCTORS_ADDRESS2 = "Newcastle Road";
-    internal const string ALLOCATING_DOCTORS_ADDRESS3 = "Baldwin's Gate";
-    internal const string ALLOCATING_DOCTORS_ADDRESS4 = "Newcastle";
-    internal const string ALLOCATING_DOCTORS_MEETING_ARRGANEMENT_COMMENT =
+    internal const string AWAITING_RESPONSES_ADDRESS1 = "Baldwins Gate Filling Station";
+    internal const string AWAITING_RESPONSES_ADDRESS2 = "Newcastle Road";
+    internal const string AWAITING_RESPONSES_ADDRESS3 = "Baldwin's Gate";
+    internal const string AWAITING_RESPONSES_ADDRESS4 = "Newcastle";
+    internal const string AWAITING_RESPONSES_MEETING_ARRANGEMENT_COMMENT =
       "Allocating Meeting Arangement Comment";
-    internal readonly DateTimeOffset ALLOCATING_DOCTORS_MUST_BE_COMPLETED_BY =
+    internal readonly DateTimeOffset AWAITING_RESPONSES_MUST_BE_COMPLETED_BY =
       new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                          16, 30, 00, 00, DateTimeOffset.Now.Offset);
-    internal const string ALLOCATING_DOCTORS_POSTCODE = "ST5 5DA";
+    internal const string AWAITING_RESPONSES_POSTCODE = "ST5 5DA";
 
     internal const string ALLOCATED_DOCTORS_ADDRESS1 = "97 Thornton Rd";
     internal const string ALLOCATED_DOCTORS_ADDRESS2 = "Stoke-on-Trent";
@@ -41,6 +41,8 @@ namespace Mep.Business.Migrations.Seeds
     internal const string ASSIGNING_DOCTORS_POSTCODE = "ST5 3EU";    
     #endregion
 
+    private readonly ExaminationDoctorSeeder _examinationDoctorSeeder = 
+      new ExaminationDoctorSeeder();
     private readonly ExaminationSeeder _examinationSeeder = new ExaminationSeeder();
     private readonly UserExaminationNotificationSeeder _userExaminationNotificationSeeder =
       new UserExaminationNotificationSeeder();
@@ -48,6 +50,7 @@ namespace Mep.Business.Migrations.Seeds
     /// <summary>
     /// Deletes all the following seeds because updating is too difficult:
     /// UserExaminationNotification
+    /// Examination Doctor
     /// Examination Details
     /// Examination
     /// Referral
@@ -56,90 +59,102 @@ namespace Mep.Business.Migrations.Seeds
     {
 
       _userExaminationNotificationSeeder.DeleteSeeds();
+      _examinationDoctorSeeder.DeleteSeeds();
       _examinationSeeder.DeleteSeeds();
       DeleteSeeds();
       Context.SaveChanges();
 
       AddNewReferral();      
 
-      AddAssigningDoctorsReferral();
+      AddSelectingDoctorsReferral();
 
-      AddAllocatingDoctorsReferral();
+      AddAwaitingResponsesReferral();
 
-      AddAllocatedDoctorsReferral();
+      AddExaminationScheduledReferral();
     }
 
-    private void AddAllocatingDoctorsReferral()
+    private void AddAwaitingResponsesReferral()
     {
       List<UserExaminationNotification> userExaminationNotifications =
         new List<UserExaminationNotification>() {
         _userExaminationNotificationSeeder.Create(
           hasAccepted: true,
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE
         ),
         _userExaminationNotificationSeeder.Create(
           hasAccepted: true,
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         ),
         _userExaminationNotificationSeeder.Create(
           hasAccepted: true,
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
         ),
       };
-      userExaminationNotifications.ForEach(userExaminationNotification => 
-        PopulateActiveAndModifiedWithSystemUser(userExaminationNotification)
-      );
+
+      List<ExaminationDoctor> examinationDoctors = new List<ExaminationDoctor>
+      {      
+        _examinationDoctorSeeder.Create(
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
+          statusId: Models.ExaminationDoctorStatus.SELECTED
+        ),
+        _examinationDoctorSeeder.Create(
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
+          statusId: Models.ExaminationDoctorStatus.SELECTED
+        )        
+      };
 
       List<Examination> examinations = new List<Examination> {
         _examinationSeeder.Create(
-          address1: ALLOCATING_DOCTORS_ADDRESS1,
-          address2: ALLOCATING_DOCTORS_ADDRESS2,
-          address3: ALLOCATING_DOCTORS_ADDRESS3,
-          address4: ALLOCATING_DOCTORS_ADDRESS4,
+          address1: AWAITING_RESPONSES_ADDRESS1,
+          address2: AWAITING_RESPONSES_ADDRESS2,
+          address3: AWAITING_RESPONSES_ADDRESS3,
+          address4: AWAITING_RESPONSES_ADDRESS4,
+          amhpUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
           ccgName: CcgSeeder.STOKE_ON_TRENT,
           createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
-          meetingArrangementComment: ALLOCATING_DOCTORS_MEETING_ARRGANEMENT_COMMENT,
-          mustBeCompletedBy: ALLOCATING_DOCTORS_MUST_BE_COMPLETED_BY,
-          postcode: ALLOCATING_DOCTORS_POSTCODE,
+          doctors: examinationDoctors,
+          meetingArrangementComment: AWAITING_RESPONSES_MEETING_ARRANGEMENT_COMMENT,
+          mustBeCompletedBy: AWAITING_RESPONSES_MUST_BE_COMPLETED_BY,
+          postcode: AWAITING_RESPONSES_POSTCODE,
           specialityId: Models.Speciality.CHILD,
           userExaminationNotifications: userExaminationNotifications
         )
       };
 
       AddReferral(
-        alternativeIdentifier: PatientSeeder.ALTERNATIVE_IDENTIFIER_FOR_ALLOCATING_DOCTORS_REFERRAL,
+        alternativeIdentifier: PatientSeeder.ALTERNATIVE_IDENTIFIER_FOR_AWAITING_RESPONSES_REFERRAL,
         createdAt: _now,
         examinations: examinations,
         leadAmhpName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
-        referralStatusId: Models.ReferralStatus.ALLOCATING_DOCTORS
+        referralStatusId: Models.ReferralStatus.AWAITING_RESPONSES
       );
     }
 
-    private void AddAllocatedDoctorsReferral()
+    private void AddExaminationScheduledReferral()
     {
       List<UserExaminationNotification> userExaminationNotifications =
         new List<UserExaminationNotification>() {
         _userExaminationNotificationSeeder.Create(
           hasAccepted: true,
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE
         ),
         _userExaminationNotificationSeeder.Create(
           hasAccepted: true,
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         ),
         _userExaminationNotificationSeeder.Create(
           hasAccepted: true,
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
         ),          
@@ -152,9 +167,18 @@ namespace Mep.Business.Migrations.Seeds
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         )
       };
-      userExaminationNotifications.ForEach(userExaminationNotification => 
-        PopulateActiveAndModifiedWithSystemUser(userExaminationNotification)
-      );
+
+      List<ExaminationDoctor> examinationDoctors = new List<ExaminationDoctor>
+      {
+        _examinationDoctorSeeder.Create(
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
+          statusId: Models.ExaminationDoctorStatus.SELECTED
+        ),        
+        _examinationDoctorSeeder.Create(
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
+          statusId: Models.ExaminationDoctorStatus.ALLOCATED
+        )
+      };
 
       List<Examination> examinations = new List<Examination> {
         _examinationSeeder.Create(
@@ -162,8 +186,10 @@ namespace Mep.Business.Migrations.Seeds
           address2: ALLOCATED_DOCTORS_ADDRESS2,
           address3: ALLOCATED_DOCTORS_ADDRESS3,
           address4: ALLOCATED_DOCTORS_ADDRESS4,
+          amhpUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
           ccgName: CcgSeeder.STOKE_ON_TRENT,
           createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
+          doctors: examinationDoctors,
           meetingArrangementComment: ALLOCATED_DOCTORS_MEETING_ARRGANEMENT_COMMENT,
           mustBeCompletedBy: ALLOCATED_DOCTORS_MUST_BE_COMPLETED_BY,
           postcode: ALLOCATED_DOCTORS_POSTCODE,
@@ -177,16 +203,16 @@ namespace Mep.Business.Migrations.Seeds
         createdAt: _now,
         examinations: examinations,
         leadAmhpName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
-        referralStatusId: Models.ReferralStatus.ALLOCATED_DOCTORS
+        referralStatusId: Models.ReferralStatus.RESPONSES_PARTIAL
       );
     }
 
-    private void AddAssigningDoctorsReferral()
+    private void AddSelectingDoctorsReferral()
     {
       List<UserExaminationNotification> userExaminationNotifications =
         new List<UserExaminationNotification>() {
         _userExaminationNotificationSeeder.Create(
-          notificationTextId: Models.NotificationText.ASSIGNED_TO_EXAMINATION,
+          notificationTextId: Models.NotificationText.SELECTED_FOR_EXAMINATION,
           userName: UserSeeder.DISPLAY_NAME_AMHP_MALE
         )
       };
@@ -197,7 +223,7 @@ namespace Mep.Business.Migrations.Seeds
       List<ExaminationDetail> examinationDetails = new List<ExaminationDetail> {
         new ExaminationDetail() {
           ExaminationDetailTypeId = GetExaminationDetailTypeByName(
-              ExaminationDetailTypeSeeder.NAME_AGRESSIVE_NEIGHBOUR).Id,
+              ExaminationDetailTypesSeeder.NAME_AGRESSIVE_NEIGHBOUR).Id,
           IsActive = true          
         }
       };
@@ -211,6 +237,7 @@ namespace Mep.Business.Migrations.Seeds
           address2: ASSIGNING_DOCTORS_ADDRESS2,
           address3: ASSIGNING_DOCTORS_ADDRESS3,
           address4: ASSIGNING_DOCTORS_ADDRESS4,
+          amhpUserName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
           ccgName: CcgSeeder.STOKE_ON_TRENT,
           createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
           details: examinationDetails,
@@ -227,7 +254,7 @@ namespace Mep.Business.Migrations.Seeds
         createdAt: _now,
         examinations: examinations,
         leadAmhpName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
-        referralStatusId: Models.ReferralStatus.ASSIGNING_DOCTORS
+        referralStatusId: Models.ReferralStatus.SELECTING_DOCTORS
       );
 
     }

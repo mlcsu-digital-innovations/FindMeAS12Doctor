@@ -1,28 +1,64 @@
-using AutoMapper;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using BusinessModels = Mep.Business.Models;
-using BusinessSearch = Mep.Business.Models.SearchModels;
-using ApiSearch = Mep.Api.SearchModels;
+using System;
+using System.Threading.Tasks;
 
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class PatientController :
-    SearchModelController<BusinessModels.Patient,
-                    ViewModels.Patient,
-                    RequestModels.PatientPut,
-                    RequestModels.PatientPost,
-                    ApiSearch.PatientSearch,
-                    BusinessSearch.PatientSearch,
-                    ViewModels.ReferralPatientSearch>
+  public class PatientController : ModelControllerNoAutoMapper
   {
-    public PatientController(
-      IModelSearchService<BusinessModels.Patient, BusinessSearch.PatientSearch> service,
-      IMapper mapper)
-      : base(service, mapper)
+    public PatientController(IPatientService service)
+      : base(service)
     {
     }
+
+    [HttpPost]
+    public virtual async Task<ActionResult<ViewModels.PatientPost>> Post(
+      [FromBody] RequestModels.PatientPost requestModel)
+    {
+      try
+      {
+        Business.Models.Patient businessModel = requestModel.MapToBusinessModel();
+        businessModel = await Service.CreateAsync(businessModel);
+        ViewModels.PatientPost viewModel = new ViewModels.PatientPost(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
+
+    [Route("search")]
+    [HttpGet]
+    public async Task<ActionResult<ViewModels.Patient>> GetSearch(
+      [FromQuery] RequestModels.PatientSearch search)
+    {
+      Business.Models.Patient model;
+      if (search.IsByNhsNumber)
+      {
+
+        model = await Service.GetByNhsNumber(search.NhsNumberAsLong);
+      }
+      else
+      {
+        model = await Service.GetByAlternativeIdentifier(search.AlternativeIdentifier);
+      }
+
+      if (model == null)
+      {
+        return NoContent();
+      }
+      else
+      {
+        ViewModels.Patient viewModel = new ViewModels.Patient(model);
+        return Ok(viewModel);
+      }
+    }
+
+    private IPatientService Service { get { return _service as IPatientService; } }
   }
 }

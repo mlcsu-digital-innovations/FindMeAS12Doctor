@@ -14,9 +14,9 @@ import { ReferralView } from 'src/app/interfaces/referral-view';
 export class ReferralService {
   constructor(private httpClient: HttpClient) {}
 
-  public getReferral(referralId: number): Observable<Referral> {
+  public getReferralSummary(referralId: number): Observable<Referral> {
     return this.httpClient.get(
-      environment.apiEndpoint + `/referral/${referralId}`
+      environment.apiEndpoint + `/referral/view/${referralId}/summary`
     )
     .pipe(delay(1000))
     .pipe

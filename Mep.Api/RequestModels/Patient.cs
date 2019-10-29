@@ -1,11 +1,25 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Mep.Business.Models;
 
 namespace Mep.Api.RequestModels
 {
   public abstract class Patient : IValidatableObject
   {
+    protected Patient() {}
+    
+    protected Patient(Business.Models.Patient model)
+    {
+      if (model == null) return;
+
+      AlternativeIdentifier = model.AlternativeIdentifier;
+      CcgId = model.CcgId;
+      GpPracticeId = model.GpPracticeId;
+      NhsNumber = model.NhsNumber;
+      ResidentialPostcode = model.ResidentialPostcode;
+    }
+
     [MaxLength(200)]
     public string AlternativeIdentifier { get; set; }
     [Range(1, int.MaxValue)]
@@ -16,6 +30,19 @@ namespace Mep.Api.RequestModels
     public long? NhsNumber { get; set; }
     [MaxLength(10)]
     public string ResidentialPostcode { get; set; }
+
+    internal virtual Business.Models.Patient MapToBusinessModel()
+    {
+      Business.Models.Patient model = new Business.Models.Patient()
+      {
+        AlternativeIdentifier = AlternativeIdentifier,
+        CcgId = CcgId,
+        GpPracticeId = GpPracticeId,
+        NhsNumber = NhsNumber,
+        ResidentialPostcode = ResidentialPostcode
+      };
+      return model;
+    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -54,42 +81,42 @@ namespace Mep.Api.RequestModels
         }
       }
 
-      if (!GpPracticeId.HasValue && 
+      if (!GpPracticeId.HasValue &&
           string.IsNullOrWhiteSpace(ResidentialPostcode) &&
           !CcgId.HasValue)
       {
-          yield return new ValidationResult(
-              "At least one of the CcgId, GpPractice or ResidentialPostcode fields must be provided.",
-              new[] { "CcgId", "GpPracticeId", "ResidentialPostcode" });
+        yield return new ValidationResult(
+            "At least one of the CcgId, GpPractice or ResidentialPostcode fields must be provided.",
+            new[] { "CcgId", "GpPracticeId", "ResidentialPostcode" });
       }
-      else if (GpPracticeId.HasValue && 
+      else if (GpPracticeId.HasValue &&
                !string.IsNullOrWhiteSpace(ResidentialPostcode) &&
                CcgId.HasValue)
       {
-          yield return new ValidationResult(
-              "The GpPractice and ResidentialPostcode fields must not be provided when the CcgId field is provided.",
-              new[] { "GpPracticeId", "ResidentialPostcode" });
+        yield return new ValidationResult(
+            "The GpPractice and ResidentialPostcode fields must not be provided when the CcgId field is provided.",
+            new[] { "GpPracticeId", "ResidentialPostcode" });
       }
       else if (!string.IsNullOrWhiteSpace(ResidentialPostcode) &&
                CcgId.HasValue)
       {
-          yield return new ValidationResult(
-              "The ResidentialPostcode field must not be provided when the CcgId field is provided.",
-              new[] { "ResidentialPostcode" });
+        yield return new ValidationResult(
+            "The ResidentialPostcode field must not be provided when the CcgId field is provided.",
+            new[] { "ResidentialPostcode" });
       }
       else if (GpPracticeId.HasValue &&
                CcgId.HasValue)
       {
-          yield return new ValidationResult(
-              "The GpPracticeId field must not be provided when the CcgId field is provided.",
-              new[] { "GpPracticeId" });
+        yield return new ValidationResult(
+            "The GpPracticeId field must not be provided when the CcgId field is provided.",
+            new[] { "GpPracticeId" });
       }
-      else if (GpPracticeId.HasValue && 
+      else if (GpPracticeId.HasValue &&
                !string.IsNullOrWhiteSpace(ResidentialPostcode))
       {
-          yield return new ValidationResult(
-              "The GpPractice field must not be provided when the ResidentialPostcode field is provided.",
-              new[] { "GpPracticeId" });
+        yield return new ValidationResult(
+            "The GpPractice field must not be provided when the ResidentialPostcode field is provided.",
+            new[] { "GpPracticeId" });
       }
 
     }

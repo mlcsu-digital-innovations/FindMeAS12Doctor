@@ -15,10 +15,10 @@ export class CcgListService {
     if (searchTerm === '' || searchTerm.length < 3) {
       return of([]);
     }
-    const options = { params: new HttpParams().set('search', searchTerm) };
+    const options = { params: new HttpParams().set('term', searchTerm) };
 
     return this.httpClient.get(
-      environment.apiEndpoint + '/ccgsearch', options
+      environment.apiEndpoint + '/ccg/search', options
     ).pipe(
       map(response => response)
     );

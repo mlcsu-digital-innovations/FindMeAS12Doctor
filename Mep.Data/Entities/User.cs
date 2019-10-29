@@ -7,8 +7,10 @@ namespace Mep.Data.Entities
 {
   public partial class User : BaseEntity, IUser
   {
+    [InverseProperty("AmhpUser")]
+    public virtual IList<Examination> AmhpExaminations { get; set; }        
     [InverseProperty("LeadAmhpUser")]
-    public virtual IList<Referral> AmhpReferrals { get; set; }    
+    public virtual IList<Referral> AmhpReferrals { get; set; } 
     [InverseProperty("User")]
     public virtual IList<BankDetail> BankDetails { get; set; }
     [InverseProperty("CompletedByUser")]
@@ -20,9 +22,13 @@ namespace Mep.Data.Entities
     [InverseProperty("CreatedByUser")]
     public virtual IList<Examination> CreatedExaminations { get; set; }
     [MaxLength(256)]
-    public string DisplayName { get; set; }    
+    public string DisplayName { get; set; }
+    [InverseProperty("DoctorUser")]
+    public virtual IList<ExaminationDoctor> DoctorExaminations{ get; set; }    
     [InverseProperty("User")]
     public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
+    [InverseProperty("AttendanceConfirmedByUser")]
+    public virtual IList<ExaminationDoctor> ExaminationAttendanceConfirmations { get; set; }       
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }    
     public int? GmcNumber { get; set; }

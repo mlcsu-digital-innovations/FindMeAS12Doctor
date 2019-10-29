@@ -88,7 +88,7 @@ export class ExaminationCreateComponent implements OnInit {
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.referralService.getReferral(+params.get('referralId'))
+          return this.referralService.getReferralSummary(+params.get('referralId'))
             .pipe(
               map(referral => {
                 this.SetAmhpField(referral.leadAmhpUser.id, referral.leadAmhpUser.displayName);

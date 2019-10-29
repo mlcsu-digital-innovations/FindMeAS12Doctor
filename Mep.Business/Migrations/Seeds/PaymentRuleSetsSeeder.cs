@@ -6,8 +6,9 @@ namespace Mep.Business.Migrations.Seeds
 {
   internal class PaymentRuleSetsSeeder : SeederBase<PaymentRuleSet>
   {
-    #region Constants
+    #region Constants    
     internal const string DESCRIPTION_NORTH_STAFFORDSHIRE_1 = "North Staffordshire Rule Set Description";
+    internal const int ID_NORTH_STAFFORDSHIRE_1 = 1;
     internal const string NAME_NORTH_STAFFORDSHIRE_1 = "North Staffordshire Name";
     internal readonly DateTimeOffset DATE_TIME_FROM_NORTH_STAFFORDSHIRE_1 =
       new DateTimeOffset(2019, 1, 1,
@@ -20,16 +21,20 @@ namespace Mep.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddOrUpdate(
+        ID_NORTH_STAFFORDSHIRE_1,
         NAME_NORTH_STAFFORDSHIRE_1,
         DESCRIPTION_NORTH_STAFFORDSHIRE_1,
         CcgSeeder.NORTH_STAFFORDSHIRE,
         DATE_TIME_FROM_NORTH_STAFFORDSHIRE_1,
         DATE_TIME_TO_NORTH_STAFFORDSHIRE_1
       );
+
+      SaveChangesWithIdentity();
     }
 
     private void AddOrUpdate(
-      string name, 
+      int id, 
+      string name,
       string description, 
       string ccgName,
       DateTimeOffset from,
@@ -38,9 +43,12 @@ namespace Mep.Business.Migrations.Seeds
       PaymentRuleSet paymentRuleSet;
 
       if ((paymentRuleSet = Context.PaymentRuleSets
-        .SingleOrDefault(g => g.Name == name)) == null)
+        .SingleOrDefault(g => g.Id == id)) == null)
       {
-        paymentRuleSet = new PaymentRuleSet();
+        paymentRuleSet = new PaymentRuleSet
+        {
+          Id = id
+        };
         Context.Add(paymentRuleSet);
       }
       paymentRuleSet.CcgId = GetCcgByName(ccgName).Id;

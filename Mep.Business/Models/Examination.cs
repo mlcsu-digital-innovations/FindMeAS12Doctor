@@ -2,18 +2,70 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using Mep.Data.Entities;
 
 namespace Mep.Business.Models
 {
   public class Examination : BaseModel
   {
+    public Examination() { }
+    public Examination(Data.Entities.Examination entity, bool ignoreReferral = false) 
+      : base(entity)
+    {
+      if (entity == null) return;
+
+      Address1 = entity.Address1;
+      Address2 = entity.Address2;
+      Address3 = entity.Address3;
+      Address4 = entity.Address4;
+      AmhpUser = new User(entity.AmhpUser);
+      AmhpUserId = entity.AmhpUserId;
+      Ccg = new Ccg(entity.Ccg);
+      CcgId = entity.CcgId;
+      //TODO CompletedByUser = null;
+      CompletedByUserId = entity.CompletedByUserId;
+      CompletedTime = entity.CompletedTime;
+      CompletionConfirmationByUser = null;
+      CompletionConfirmationByUserId = entity.CompletionConfirmationByUserId;
+      //TODO CreatedByUser = null;
+      CreatedByUserId = entity.CreatedByUserId;
+      Details = entity.Details?.Select(d => new ExaminationDetail(d)).ToList();
+      Doctors = entity.Doctors?.Select(d => new ExaminationDoctor(d)).ToList();
+      Id = entity.Id;
+      IsActive = entity.IsActive;
+      IsSuccessful = entity.IsSuccessful;
+      MeetingArrangementComment = entity.MeetingArrangementComment;
+      MustBeCompletedBy = entity.MustBeCompletedBy;
+      //TODO NonPaymentLocation = null;
+      NonPaymentLocationId = entity.NonPaymentLocationId;
+      Postcode = entity.Postcode;
+      PreferredDoctorGenderType = new GenderType(entity.PreferredDoctorGenderType);
+      PreferredDoctorGenderTypeId = entity.PreferredDoctorGenderTypeId;
+      if (!ignoreReferral)
+      {
+        Referral = new Referral(entity.Referral);
+      }
+      ReferralId = entity.ReferralId;
+      ScheduledTime = entity.ScheduledTime;
+      Speciality = new Speciality(entity.Speciality);
+      SpecialityId = entity.SpecialityId;
+      //TODO UnsuccessfulExaminationType = null;
+      UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId;
+      //TODO UserExaminationClaims = null;
+      UserExaminationNotifications = entity
+        .UserExaminationNotifications
+        ?.Select(u => new UserExaminationNotification(u)).ToList();
+    }
+
     [Required]
     [MaxLength(200)]
     public string Address1 { get; set; }
     public string Address2 { get; set; }
     public string Address3 { get; set; }
     public string Address4 { get; set; }
+    public User AmhpUser { get; set; }
     public int AmhpUserId { get; set; }
     public virtual Ccg Ccg { get; set; }
     public int? CcgId { get; set; }
@@ -24,6 +76,7 @@ namespace Mep.Business.Models
     public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
+    public IList<ExaminationDoctor> Doctors { get; set; }
     public virtual IList<int> DetailTypeIds { get; set; }
     public virtual IList<ExaminationDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
@@ -59,13 +112,13 @@ namespace Mep.Business.Models
     }
 
     public DateTimeOffset DateTime
-    { get { return (DateTimeOffset)(MustBeCompletedBy ?? ScheduledTime); } }
+    { get { return MustBeCompletedBy ?? ScheduledTime ?? default; } }
 
     public virtual IList<ExaminationDetailType> DetailTypes
     {
       get
       {
-        return Details.Where(d => d.IsActive)
+        return Details?.Where(d => d.IsActive)
                       .Select(d => d.ExaminationDetailType).ToList();
       }
     }
@@ -74,12 +127,10 @@ namespace Mep.Business.Models
     {
       get
       {
-        return UserExaminationNotifications
-          .Where(u => u.IsActive)
-          .Where(u => u.IsDoctor)
-          .Where(u => u.HasAccepted ?? false)
-          .Where(u => u.NotificationTextId == NotificationText.ASSIGNED_TO_EXAMINATION)
-          .Select(u => u.UserName)
+        return Doctors
+          .Where(d => d.IsActive)
+          .Where(d => d.StatusId == ExaminationDoctorStatus.SELECTED)
+          .Select(d => d.DoctorUser?.DisplayName)
           .ToList();
       }
     }
@@ -88,8 +139,8 @@ namespace Mep.Business.Models
     {
       get
       {
-        return DoctorsAllocated.Select(d => d.DisplayName)
-                               .ToList();
+        return DoctorsAllocated?.Select(d => d.DisplayName)
+                               ?.ToList();
       }
     }
 
@@ -97,14 +148,20 @@ namespace Mep.Business.Models
     {
       get
       {
-        return UserExaminationNotifications
-          .Where(u => u.IsActive)
-          .Where(u => u.NotificationTextId == NotificationText.ALLOCATED_TO_EXAMINATION)
-          .Where(u => u.IsDoctor)
-          .Select(u => u.User)
-          .ToList();
+        if (Doctors == null)
+        {
+          return null;
+        }
+        else
+        {
+          return Doctors
+            .Where(d => d.IsActive)
+            .Where(d => d.StatusId == ExaminationDoctorStatus.ALLOCATED)
+            .Select(u => u.DoctorUser)
+            .ToList();
+        }
       }
-    }    
+    }
 
     public string FullAddress
     {
@@ -146,5 +203,16 @@ namespace Mep.Business.Models
 
     public string UnsuccessfulExaminationTypeName
     { get { return UnsuccessfulExaminationType?.Name; } }
+
+    // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
+    // public static Expression<Func<Data.Entities.Examination, Examination>> ProjectFromEntity
+    // {
+    //   get
+    //   {
+    //     return e => new Examination()
+    //     {         
+    //     };
+    //   }
+    // }
   }
 }

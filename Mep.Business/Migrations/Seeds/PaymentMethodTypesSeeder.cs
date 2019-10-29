@@ -23,7 +23,9 @@ namespace Mep.Business.Migrations.Seeds
         Models.PaymentMethodType.CHEQUE,
         NAME_CHEQUE,
         DESCRIPTION_CHEQUE
-      );      
+      );
+
+      SaveChangesWithIdentity();    
     }
   }
 }

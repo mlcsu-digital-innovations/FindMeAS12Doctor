@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+
 namespace Mep.Business.Models
 {
   public class ProfileType : NameDescription
@@ -7,6 +8,12 @@ namespace Mep.Business.Models
     public const int AMHP = 2;
     public const int DOCTOR = 3;
     public const int FINANCE = 4;
+
+    public ProfileType() {}
+    public ProfileType(Data.Entities.ProfileType entity) : base(entity)
+    {
+      // TODO Users
+    }
 
     public virtual IList<User> Users { get; set; }
     public bool IsAmhp { get { return Id == AMHP; } }

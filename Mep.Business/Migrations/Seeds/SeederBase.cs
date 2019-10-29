@@ -1,7 +1,7 @@
 using Mep.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
-using Microsoft.EntityFrameworkCore;
 
 namespace Mep.Business.Migrations.Seeds
 {
@@ -18,7 +18,10 @@ namespace Mep.Business.Migrations.Seeds
 
       if ((entity = Context.Set<TEntity>().SingleOrDefault(e => e.Id == id)) == null)
       {
-        entity = new TEntity();
+        entity = new TEntity
+        {
+          Id = id
+        };
         Context.Add(entity);
       }
       PopulateNameDescriptionAndActiveAndModifiedWithSystemUser(entity, name, description);
@@ -32,13 +35,11 @@ namespace Mep.Business.Migrations.Seeds
         Context.Set<TEntity>().ToList()
       );
       ResetIdentity();
-    }   
+    }
 
     internal virtual void ResetIdentity(int newReseedValue = 0)
     {
-      string tableName = Context.Model.GetEntityTypes()
-        .First(t => t.ClrType == typeof(TEntity)).GetAnnotations()
-        .First(a => a.Name == "Relational:TableName").Value.ToString();
+      string tableName = GetEntityTableName();
 
       Context.Database.ExecuteSqlRaw(
         "IF EXISTS (SELECT * FROM sys.identity_columns WHERE " +
@@ -447,6 +448,29 @@ namespace Mep.Business.Migrations.Seeds
       (entity as NameDescription).Name = name;
       (entity as NameDescription).Description = description;
       PopulateActiveAndModifiedWithSystemUser(entity);
+    }
+
+    protected void SaveChangesWithIdentity()
+    {
+      string tableName = GetEntityTableName();
+      Context.Database.OpenConnection();
+      try
+      {
+        Context.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT dbo.{tableName} ON");
+        Context.SaveChanges();
+        Context.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT dbo.{tableName} OFF");
+      }
+      finally
+      {
+        Context.Database.CloseConnection();
+      }
+    }
+
+    private string GetEntityTableName()
+    {
+      return Context.Model.GetEntityTypes()
+                          .First(t => t.ClrType == typeof(TEntity)).GetAnnotations()
+                          .First(a => a.Name == "Relational:TableName").Value.ToString();
     }
 
   }

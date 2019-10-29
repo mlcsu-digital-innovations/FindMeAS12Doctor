@@ -2,7 +2,7 @@ using Mep.Data.Entities;
 
 namespace Mep.Business.Migrations.Seeds
 {
-  internal class SpecialitySeeder : SeederBase<Speciality>
+  internal class SpecialitiesSeeder : SeederBase<Speciality>
   {
     #region Constants
     internal const string DESCRIPTION_CHILD = "Child Description";
@@ -23,7 +23,9 @@ namespace Mep.Business.Migrations.Seeds
         Models.Speciality.LEARNING_DIFFICULTY,
         NAME_LEARNING_DIFFICULTY,
         DESCRIPTION_LEARNING_DIFFICULTY
-      );      
+      );    
+
+      SaveChangesWithIdentity();  
     }
   }
 }

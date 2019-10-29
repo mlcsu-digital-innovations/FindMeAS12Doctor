@@ -15,10 +15,10 @@ export class GpPracticeListService {
     if (searchTerm === '' || searchTerm.length < 3) {
       return of([]);
     }
-    const options = { params: new HttpParams().set('search', searchTerm) };
+    const options = { params: new HttpParams().set('term', searchTerm) };
 
     return this.httpClient.get(
-      environment.apiEndpoint + '/gppracticesearch', options
+      environment.apiEndpoint + '/gppractice/search', options
     ).pipe(
       map(response => response)
     );

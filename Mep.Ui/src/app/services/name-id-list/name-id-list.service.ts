@@ -14,7 +14,7 @@ export class NameIdListService {
   }
 
   GetListData(listType: string): Observable<NameIdList[]> {
-    return this.httpClient.get<NameIdList[]>(`${environment.apiEndpoint}/${listType}`)
+    return this.httpClient.get<NameIdList[]>(`${environment.apiEndpoint}/${listType}/list?type=ddl`)
     .pipe(
       map(listValues => listValues)
     );
