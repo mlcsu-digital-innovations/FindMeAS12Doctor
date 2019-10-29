@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 /// 
 /// dotnet ef migrations add <migration-name> --project Mep.Business --startup-project Mep.Api
 /// dotnet ef database update --project Mep.Api
+/// dotnet ef migrations script <from-migration-name> --project=Mep.Api > update.sql
 /// </summary>
 namespace Mep.Business
 {
