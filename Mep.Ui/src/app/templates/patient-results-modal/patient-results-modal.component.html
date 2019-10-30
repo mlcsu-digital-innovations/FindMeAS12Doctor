@@ -57,14 +57,14 @@
     type="button"
     class="btn btn-primary"
     (click)="modalAction(existingPatient)"
-    *ngIf="patientResult.currentReferralId == null">
+    *ngIf="!patientResult.currentReferralId">
     Use Existing Details
   </button>
   <button
     type="button"
     class="btn btn-primary"
     (click)="modalAction(existingReferral)"
-    *ngIf="patientResult.currentReferralId !== null">
+    *ngIf="patientResult.currentReferralId">
     Use Existing Referral
   </button>
 </div>
