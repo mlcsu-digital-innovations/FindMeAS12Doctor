@@ -15,8 +15,8 @@ namespace Mep.Business.Services
 {
 
   public class PatientService
-    : SearchServiceBase<Patient, Entities.Patient, PatientSearch>, 
-      IModelSearchService<Patient, PatientSearch>, 
+    : SearchServiceBase<Patient, Entities.Patient, PatientSearch>,
+      IModelSearchService<Patient, PatientSearch>,
       IPatientService
   {
     private readonly IGpPracticeService _gpPracticeService;
@@ -37,7 +37,7 @@ namespace Mep.Business.Services
       entity.Id = 0;
       entity.IsActive = true;
 
-      UpdateModified(entity);      
+      UpdateModified(entity);
 
       await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);
       await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
@@ -47,13 +47,13 @@ namespace Mep.Business.Services
       await _context.SaveChangesAsync();
 
       model = _context.Patients
-                      .Where(e => e.Id == entity.Id)                      
+                      .Where(e => e.Id == entity.Id)
                       .WhereIsActiveOrActiveOnly(true)
                       .AsNoTracking(true)
                       .Select(Patient.ProjectFromEntity)
                       .Single();
       return model;
-    }      
+    }
 
     public async Task<IEnumerable<Models.Patient>> GetAllAsync(
       bool activeOnly)
@@ -75,14 +75,43 @@ namespace Mep.Business.Services
     public async Task<Models.Patient> GetByNhsNumber(
       long nhsNumber,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true,
+      bool onlyCurrentReferral = true)
     {
-      Models.Patient model = await _context.Patients
+      IQueryable<Entities.Patient> query = _context.Patients
+        .Include(p => p.Ccg)
+        .Include(p => p.GpPractice)
+        .Include(p => p.Referrals)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .Where(p => p.NhsNumber == nhsNumber)
-        .AsNoTracking(asNoTracking)
+        .AsNoTracking(asNoTracking);
+
+      // Awaiting a fix in EF Core 3 to implement this.
+      // https://github.com/aspnet/EntityFrameworkCore/pull/18625
+      Models.Patient model;
+      // if (onlyCurrentReferral)
+      // {
+      //   var PatientAndCurrentReferral =
+      //   await query.Select(p => new 
+      //   {
+      //     Patient = p // new Patient(p),
+      //     //Referral = p.Referrals
+      //       // .Where(r => r.IsActive)  
+      //       // .Where(r => r.ReferralStatusId != Models.ReferralStatus.CLOSED)
+      //       // .OrderByDescending(r => r.CreatedAt)
+      //       // .FirstOrDefault()
+      //   }).SingleOrDefaultAsync();
+
+      //   Serilog.Log.Information("{@PatientAndCurrentReferral}", PatientAndCurrentReferral);
+      //   model = null;
+      //   //model = PatientAndCurrentReferral.Merge();
+      // }
+      // else
+      // {
+      model = await query
         .Select(Patient.ProjectFromEntity)
         .SingleOrDefaultAsync();
+      // }
 
       return model;
     }
@@ -90,7 +119,8 @@ namespace Mep.Business.Services
     public async Task<Models.Patient> GetByAlternativeIdentifier(
       string alternativeIdentifier,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true,
+      bool onlyCurrentReferral = true)
     {
       if (string.IsNullOrWhiteSpace(alternativeIdentifier))
       {
@@ -100,6 +130,9 @@ namespace Mep.Business.Services
       }
 
       Models.Patient model = await _context.Patients
+        .Include(p => p.Ccg)
+        .Include(p => p.GpPractice)
+        .Include(p => p.Referrals)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .Where(p => p.AlternativeIdentifier == alternativeIdentifier)
         .AsNoTracking(asNoTracking)
@@ -248,6 +281,21 @@ namespace Mep.Business.Services
 
         return models;
       }
-    }    
+    }
+
+    private class PatientReferral
+    {
+      public Patient Patient { get; set; }
+      public Referral Referral { get; set; }
+
+      public Patient Merge()
+      {
+        if (Patient != null && Referral != null)
+        {
+          Patient.Referrals = new List<Referral>() { Referral };
+        }
+        return Patient;
+      }
+    }
   }
 }

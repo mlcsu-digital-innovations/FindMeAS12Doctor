@@ -69,7 +69,7 @@ namespace Mep.Business.Services
                       .Where(r => r.Id == id)
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .AsNoTracking(asNoTracking)
-                      .Select(r => new Referral(r))
+                      .Select(r => new Referral(r, false))
                       .SingleOrDefaultAsync();
 
       return model;
@@ -91,7 +91,7 @@ namespace Mep.Business.Services
                       .Include(r => r.LeadAmhpUser)
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .AsNoTracking(asNoTracking)
-                      .Select(r => new Referral(r))
+                      .Select(r => new Referral(r, false))
                       .ToListAsync();
 
       return models;
@@ -120,7 +120,7 @@ namespace Mep.Business.Services
                       .Where(r => r.Id == id)
                       .WhereIsActiveOrActiveOnly(activeOnly)
                       .AsNoTracking(asNoTracking)
-                      .Select(r => new Referral(r))
+                      .Select(r => new Referral(r, false))
                       .SingleOrDefaultAsync();
 
       return model;

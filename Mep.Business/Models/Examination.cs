@@ -45,7 +45,7 @@ namespace Mep.Business.Models
       PreferredDoctorGenderTypeId = entity.PreferredDoctorGenderTypeId;
       if (!ignoreReferral)
       {
-        Referral = new Referral(entity.Referral);
+        Referral = new Referral(entity.Referral, false);
       }
       ReferralId = entity.ReferralId;
       ScheduledTime = entity.ScheduledTime;
