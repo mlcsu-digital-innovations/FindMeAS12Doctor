@@ -7,6 +7,8 @@ export class AmhpExaminationView {
   address4: string;
   dateTime: Date;
   doctorsAllocated: AmhpExaminationViewDoctor[];
+  id: number;
+  isSuccessful?: boolean;
   meetingArrangementComment: string;
   patientIdentifier: string;
   postcode: string;
