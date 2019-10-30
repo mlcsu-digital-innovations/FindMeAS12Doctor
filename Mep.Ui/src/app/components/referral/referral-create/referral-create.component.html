@@ -37,6 +37,7 @@
                   id="nhsNumber"
                   maxlength="10"
                   type="text"
+                  [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')"
                   [ngClass]="{
                     'is-invalid': HasInvalidNHSNumber(),
                     'is-valid': HasValidNHSNumber()

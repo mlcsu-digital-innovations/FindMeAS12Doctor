@@ -36,7 +36,6 @@ export class ReferralListComponent {
         });
       }
     );
-    console.log(referralListService.total$.source._value);
   }
 
   onSort({column, direction}: SortEvent) {
