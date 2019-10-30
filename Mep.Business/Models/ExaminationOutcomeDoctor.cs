@@ -8,6 +8,6 @@ namespace Mep.Business.Models
     [Range(1, int.MaxValue)]
     public int Id { get; set; }    
     [Required]
-    public bool? Attended { get; set; }
+    public bool Attended { get; set; }
   }
 }
