@@ -668,8 +668,40 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   UseExistingReferral(): void {
-    // ToDo: navigate to the existing referral page
+    this.patientDetails.alternativeIdentifier = this.patientResult.alternativeIdentifier;
+    this.patientDetails.ccgId = this.patientResult.ccgId;
+    this.patientDetails.gpPracticeId = this.patientResult.gpPracticeId;
+    this.patientDetails.id = this.patientResult.patientId;
+    this.patientDetails.isExistingPatient = true;
+    this.patientDetails.nhsNumber = this.patientResult.nhsNumber;
+    this.patientDetails.residentialPostcode = this.patientResult.residentialPostcode;
+
+    this.isAmhpFieldsShown = true;
+    this.isCcgFieldsShown = true;
+    this.isGpFieldsShown = true;
+    this.isResidentialPostcodeFieldShown = true;
+
+    if (this.patientDetails.ccgId = null) {
+      this.SetGpPracticeField(this.unknownCcgId, UNKNOWN_CCG);
+    } else {
+      this.SetCcgField(this.patientResult.ccgId, this.patientResult.ccgName);
+    }
+
+    if (this.patientDetails.gpPracticeId = null) {
+      this.SetGpPracticeField(this.unknownGpPracticeId, UNKNOWN_GP_PRACTICE);
+    } else {
+      this.SetGpPracticeField(this.patientResult.gpPracticeId, this.patientResult.gpPracticeNameAndPostcode);
+    }
+
+    if (this.patientDetails.residentialPostcode = null) {
+      this.SetGpPracticeField(this.unknownPostcodeField.value, UNKNOWN_POSTCODE);
+    } else {
+      this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
+    }
     this.patientModal.close();
+    this.SetFieldFocus('#amhp');
+    this.isPatientIdValidated = true;
+
   }
 
   ValidatePatient(): void {
