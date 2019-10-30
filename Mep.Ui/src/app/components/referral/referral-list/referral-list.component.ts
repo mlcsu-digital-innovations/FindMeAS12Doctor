@@ -18,8 +18,7 @@ export class ReferralListComponent {
   noOfReferralsInList: number;
   referralList$: Observable<ReferralList[]>;
   total$: Observable<number>;
-  userDataSubscription: Subscription;
-  userData: any;
+
 
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
  
@@ -27,9 +26,13 @@ export class ReferralListComponent {
     public referralListService: ReferralListService,
     public oidcSecurityService: OidcSecurityService,
     private toastService: ToastService) {
+    
+  }
 
-    this.referralList$ = referralListService.referralList$;
-    this.total$ = referralListService.total$;
+  ngOnInit() {
+
+    this.referralList$ = this.referralListService.referralList$;
+    this.total$ = this.referralListService.total$;  
 
     this.referralList$.subscribe(
       result => this.noOfReferralsInList = result.length,
@@ -39,17 +42,7 @@ export class ReferralListComponent {
           message: error
         });
       }
-    );
-  }
-
-  ngOnInit() {
-    this.userDataSubscription = this.oidcSecurityService.getUserData().subscribe(userData => {
-      this.userData = userData;
-    });
-  }
-
-  ngOnDestroy() {
-    this.userDataSubscription.unsubscribe();
+    );    
   }
 
   onSort({ column, direction }: SortEvent) {

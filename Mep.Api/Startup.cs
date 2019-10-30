@@ -42,6 +42,10 @@ namespace Mep.Api
         o.Authority = "https://login.microsoftonline.com/df7baf74-a29e-4c5e-abee-0f073b7a5b91/v2.0";
         o.Audience = "c898ea46-4e6e-4e55-b53b-8ae61c825507";
         o.RequireHttpsMetadata = false;
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        {
+          o.SaveToken = true;
+        }
       });
 
       services.AddAuthorization();
@@ -80,7 +84,7 @@ namespace Mep.Api
                              opt => opt.EnableRetryOnFailure());
 
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-        {          
+        {
           options.EnableSensitiveDataLogging();
           options.EnableDetailedErrors();
         }

@@ -108,9 +108,9 @@ namespace Mep.Api.Controllers
       }
       //config.post_logout_redirect_uri = $"{protocol}{Request.Host.ToUriComponent()}/";
       config.post_logout_redirect_uri = "http://localhost:4200/";
-      config.post_login_route = "/home";
-      config.forbidden_route = "/home";
-      config.unauthorized_route = "/home";
+      config.post_login_route = "/";
+      config.forbidden_route = "/welcome";
+      config.unauthorized_route = "/welcome";
       config.auto_userinfo = false;
       config.log_console_warning_active = true;
       config.log_console_debug_active = _env.IsDevelopment();

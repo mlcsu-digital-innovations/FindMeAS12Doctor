@@ -19,6 +19,8 @@ import {
   OpenIdConfiguration
 } from 'angular-auth-oidc-client';
 import { AuthInterceptor } from './services/auth-interceptor';
+import { AuthorizationGuard } from './authorization.guard';
+
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
@@ -44,9 +46,10 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     HttpClientModule,
     PatientModule,
     ReferralModule,
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes)    
   ],
   providers: [
+    AuthorizationGuard,
 	  OidcSecurityService,
 	  OidcConfigService,
 	  {
@@ -82,7 +85,7 @@ export class AppModule {
         start_checksession: configResult.customConfig.start_checksession,
         silent_renew: configResult.customConfig.silent_renew,
         silent_renew_url: 'http://localhost:44311/silent-renew.html',
-        post_login_route: '/referral/list',
+        post_login_route: configResult.customConfig.post_login_route,
         forbidden_route: configResult.customConfig.forbidden_route,
         unauthorized_route: configResult.customConfig.unauthorized_route,
         log_console_warning_active: configResult.customConfig.log_console_warning_active,

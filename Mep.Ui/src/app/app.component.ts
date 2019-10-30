@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { OidcSecurityService, AuthorizationResult, AuthorizationState } from 'angular-auth-oidc-client';
-import { Router } from '@angular/router';
+import { RouterService } from './services/router/router.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent {
   title = 'Mep';
 
   constructor(public oidcSecurityService: OidcSecurityService,
-              private router: Router
+              private routerService: RouterService,
   ) {
     if (this.oidcSecurityService.moduleSetup) {
       this.onOidcModuleSetup();
@@ -65,10 +65,10 @@ export class AppComponent {
     const path = this.read('redirect');
     if (authorizationResult.authorizationState === AuthorizationState.authorized) {
       if (path) {
-        this.router.navigate([path]);
+        this.routerService.navigate([path]);
       }
     } else {
-      this.router.navigate(['/unauthorized']);
+      this.routerService.navigate(['/welcome']);
     }
   }
 

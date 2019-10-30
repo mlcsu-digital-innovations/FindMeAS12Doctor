@@ -14,6 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
 import { TemplateModule } from '../templates/template.module';
 import { ToastsComponent } from './toasts/toasts.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { ToastsComponent } from './toasts/toasts.component';
     FocusOnShowDirective,
     NavbarComponent,
     TableHeaderSortable,
-    ToastsComponent
+    ToastsComponent,
+    UnauthorizedComponent,
+    WelcomeComponent
   ],
   imports: [
     CommonModule,

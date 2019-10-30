@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ReferralCreateComponent } from './referral-create/referral-create.component';
 import { ReferralEditComponent } from './referral-edit/referral-edit.component';
 import { ReferralListComponent } from './referral-list/referral-list.component';
+import { AuthorizationGuard } from 'src/app/authorization.guard';
 
 export const ReferralRoutes: Routes = [
   {
@@ -11,14 +12,17 @@ export const ReferralRoutes: Routes = [
   },
   {
     path: 'referral/list',
-    component: ReferralListComponent
+    component: ReferralListComponent,
+    canActivate: [AuthorizationGuard] 
   },
   {
     path: 'referral/new',
-    component: ReferralCreateComponent
+    component: ReferralCreateComponent,
+    canActivate: [AuthorizationGuard] 
   },
   {
     path: 'referral/edit/:referralId',
-    component: ReferralEditComponent
+    component: ReferralEditComponent,
+    canActivate: [AuthorizationGuard] 
   }
 ];

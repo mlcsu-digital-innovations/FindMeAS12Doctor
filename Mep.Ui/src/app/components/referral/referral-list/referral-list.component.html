@@ -119,8 +119,6 @@
   </div>
 </div>
 
-UserData: {{userData | json}}
-
 <app-delay-spinner *ngIf="referralListService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
