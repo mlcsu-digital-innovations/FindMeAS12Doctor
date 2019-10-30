@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using AutoMapper;
 using Mep.Business;
 using Mep.Business.Models;
 using Mep.Business.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -30,6 +33,24 @@ namespace Mep.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddAuthentication(options =>
+      {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      }).AddJwtBearer(o =>
+      {
+        o.Authority = "https://login.microsoftonline.com/df7baf74-a29e-4c5e-abee-0f073b7a5b91/v2.0";
+        o.Audience = "c898ea46-4e6e-4e55-b53b-8ae61c825507";
+        o.RequireHttpsMetadata = false;
+      });
+
+      services.AddAuthorization();
+      //   options =>
+      // {
+      //   options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
+      //   options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
+      // });
+
       services.AddMvc()
               .AddNewtonsoftJson(options =>
               {
@@ -59,7 +80,7 @@ namespace Mep.Api
                              opt => opt.EnableRetryOnFailure());
 
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-        {
+        {          
           options.EnableSensitiveDataLogging();
           options.EnableDetailedErrors();
         }
@@ -107,18 +128,21 @@ namespace Mep.Api
       if (env.IsDevelopment() || env.IsEnvironment(ENV_AZURE_DEVELOPMENT))
       {
         app.UseDeveloperExceptionPage();
+        IdentityModelEventSource.ShowPII = true;
       }
       else
       {
         // The default HSTS value is 30 days. You may want to change this for production scenarios, 
         // see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();        
-      }      
+        app.UseHsts();
+      }
       app.UseExceptionHandler("/Error");
       app.UseSerilogRequestLogging();
       app.UseHttpsRedirection();
       app.UseRouting();
       app.UseCors("AllowAnyOrigin");
+      app.UseAuthentication();
+      app.UseAuthorization();
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();

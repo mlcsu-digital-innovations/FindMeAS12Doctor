@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
+  [Authorize]
   [ApiController]
   public class ReferralController : ModelControllerNoAutoMapper
   {
