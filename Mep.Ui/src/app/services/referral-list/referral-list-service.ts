@@ -43,12 +43,12 @@ function matches(referral: ReferralList, term: string, pipe: PipeTransform) {
       referral.leadAmhp.toLowerCase().includes(term.toLowerCase()))
     || (referral.numberOfExaminationAttempts &&
       pipe.transform(referral.numberOfExaminationAttempts).includes(term))
-    || (referral.speciality &&
-      referral.speciality.toLowerCase().includes(term.toLowerCase()))
+    || (referral.specialityName &&
+      referral.specialityName.toLowerCase().includes(term.toLowerCase()))
     || (referral.timescale &&
       pipe.transform(referral.timescale).includes(term.toLowerCase()))
-    || (referral.status &&
-      referral.status.toLowerCase().includes(term.toLowerCase()))
+    || (referral.statusName &&
+      referral.statusName.toLowerCase().includes(term.toLowerCase()))
     || (referral.responsesReceived &&
       pipe.transform(referral.responsesReceived).includes(term))
     || (referral.doctorsAllocated &&
