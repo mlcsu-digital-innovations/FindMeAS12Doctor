@@ -91,7 +91,7 @@ export class AppModule {
         log_console_warning_active: configResult.customConfig.log_console_warning_active,
         log_console_debug_active: configResult.customConfig.log_console_debug_active,
         max_id_token_iat_offset_allowed_in_seconds: configResult.customConfig.max_id_token_iat_offset_allowed_in_seconds,
-        auto_userinfo: true,
+        auto_userinfo: false,
         history_cleanup_off: true,
         iss_validation_off: true
         // disable_iat_offset_validation: true

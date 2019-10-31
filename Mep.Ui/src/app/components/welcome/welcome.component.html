@@ -5,15 +5,13 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <button type="button" class="btn btn-primary" (click)="login()">Login</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
       <button type="button" class="btn btn-danger" (click)="gotoReferralList()">Referral List</button>
     </div>
   </div>
-  <div class="row">
-    <pre><code>{{userData | json}}</code></pre>
+  <div class="row" *ngIf="isDevelopment">
+    <div class="col-md-12" *ngIf="isAuthorized">
+      <p>User Data and Access Token</p>
+      <pre><code>{{userData | json}}</code></pre>
+    </div>
   </div>
 </div>

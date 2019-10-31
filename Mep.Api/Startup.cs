@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using Mep.Business;
 using Mep.Business.Models;
@@ -45,15 +46,30 @@ namespace Mep.Api
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
           o.SaveToken = true;
-        }
+        };
       });
 
-      services.AddAuthorization();
-      //   options =>
-      // {
-      //   options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
-      //   options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
-      // });
+      services.AddAuthorization(
+        options =>
+      {
+        options.AddPolicy("Admin", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "SystemAdmin"));        
+
+        options.AddPolicy("AMHP", policy => 
+        policy.RequireClaim("JobTitle", "Admin", "AMHP", "SystemAdmin"));
+
+        options.AddPolicy("Doctor", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "Doctor", "SystemAdmin"));
+
+        options.AddPolicy("Finance", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "Finance", "SystemAdmin"));
+
+        options.AddPolicy("SystemAdmin", policy => 
+          policy.RequireClaim("JobTitle", "SystemAdmin"));
+
+        options.AddPolicy("User", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "AMHP", "Doctor", "Finance", "SystemAdmin"));
+      });
 
       services.AddMvc()
               .AddNewtonsoftJson(options =>

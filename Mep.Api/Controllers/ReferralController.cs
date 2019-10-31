@@ -11,7 +11,6 @@ using System.IdentityModel.Tokens.Jwt;
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
-  [Authorize]
   [ApiController]
   public class ReferralController : ModelControllerNoAutoMapper
   {
@@ -52,10 +51,6 @@ namespace Mep.Api.Controllers
     {
       try
       {
-        string accessToken = await HttpContext.GetTokenAsync("access_token");
-        JwtSecurityToken jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
-
-        Serilog.Log.Information("{@jwt}", jwtToken);
         IEnumerable<Business.Models.Referral> businessModels = await Service.GetListAsync(true);
 
         if (businessModels == null || !businessModels.Any())

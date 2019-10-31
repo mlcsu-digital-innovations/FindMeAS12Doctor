@@ -9,6 +9,10 @@ export const AppRoutes: Routes = [
     component: WelcomeComponent
   },
   {
+    path: 'welcome',
+    component: WelcomeComponent
+  },   
+  {
     path: 'unauthorized',
     component: UnauthorizedComponent
   },  
