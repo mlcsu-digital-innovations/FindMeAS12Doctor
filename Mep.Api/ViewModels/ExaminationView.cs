@@ -16,6 +16,8 @@ namespace Mep.Api.ViewModels
       Address3 = model.Address3;
       Address4 = model.Address4;
       DateTime = model.DateTime;
+      Id = model.Id;
+      IsSuccessful = model.IsSuccessful;
       MeetingArrangementComment = model.MeetingArrangementComment;
       PatientIdentifier = model.PatientIdentifier;
       Postcode = model.Postcode;
@@ -39,10 +41,12 @@ namespace Mep.Api.ViewModels
     public string Address4 { get; set; }
     public DateTimeOffset DateTime { get; set; }
     public IList<ExaminationViewDoctor> DoctorsAllocated { get; set; }
+    public int Id { get; set; }
+    public bool? IsSuccessful { get; set; }
     public string MeetingArrangementComment { get; set; }    
     public string PatientIdentifier { get; set; }
     public string Postcode { get; set; }
     public int ReferralId { get; set; }
-    public string SpecialityName { get; set; }
+    public string SpecialityName { get; set; }    
   }
 }

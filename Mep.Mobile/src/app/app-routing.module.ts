@@ -11,6 +11,12 @@ const routes: Routes = [
     loadChildren:
       './pages/amhp-examination-list/amhp-examination-list.module#AmhpExaminationListPageModule'
   },
+  { 
+    path: 'amhp-examination-outcome', 
+    loadChildren: 
+      './pages/amhp-examination-outcome' + 
+      '/amhp-examination-outcome.module#AmhpExaminationOutcomePageModule' 
+  },
   {
     path: 'amhp-examination-view/:id',
     loadChildren: 
@@ -25,7 +31,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module')
       .then(m => m.HomePageModule)
   },
-
+  
 
 ];
 

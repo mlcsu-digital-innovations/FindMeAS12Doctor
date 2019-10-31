@@ -1,7 +1,7 @@
+import { AmhpExaminationList } from '../../models/amhp-examination-list.model';
+import { AmhpExaminationService } from '../../services/amhp-examination/amhp-examination.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AmhpExaminationList } from '../../models/amhp-examination-list.model';
-import { AmhpExaminationService } from '../../services/amhp-examination.service/amhp-examination.service';
 
 @Component({
   selector: 'app-amhp-examination-list',

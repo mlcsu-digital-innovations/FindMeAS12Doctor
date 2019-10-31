@@ -15,7 +15,7 @@ namespace Mep.Api.RequestModels
     {
       BusinessModels.ExaminationOutcomeDoctor model = new BusinessModels.ExaminationOutcomeDoctor()
       {
-        Attended = Attended,
+        Attended = Attended.Value,
         Id = Id
       };
 

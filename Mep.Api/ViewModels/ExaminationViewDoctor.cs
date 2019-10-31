@@ -2,14 +2,15 @@ namespace Mep.Api.ViewModels
 {
   public class ExaminationViewDoctor
   {
-    public ExaminationViewDoctor(Business.Models.User user)
+    public ExaminationViewDoctor(Business.Models.User model)
     {
-      DisplayName = user.DisplayName;
-      Id = user.Id;
+      DisplayName = model.DisplayName;
+      GmcNumber = model.GmcNumber;
+      Id = model.Id;      
     }
 
     public string DisplayName { get; set; }
-    public int GmcNumber { get; set; }
+    public int? GmcNumber { get; set; }
     public int Id { get; set; }
   }
 }
