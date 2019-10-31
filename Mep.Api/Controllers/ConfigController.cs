@@ -111,7 +111,7 @@ namespace Mep.Api.Controllers
       config.post_login_route = "/";
       config.forbidden_route = "/welcome";
       config.unauthorized_route = "/welcome";
-      config.auto_userinfo = false;
+      config.auto_userinfo = true;
       config.log_console_warning_active = true;
       config.log_console_debug_active = _env.IsDevelopment();
       config.max_id_token_iat_offset_allowed_in_seconds = 1000;
