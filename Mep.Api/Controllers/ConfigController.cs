@@ -12,14 +12,13 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Mep.Api.Controllers
 {
-   [Route("api/[controller]")]
+  [Route("api/[controller]")]
   [ApiController]
   public class ConfigController : ControllerBase
   {
 
-    private IConfiguration _configuration;
-    private IWebHostEnvironment _env;
-
+    private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _env;
     private OidcWellKnown _wellKnown;
     private JwtKs _jwtKs;
 
@@ -33,10 +32,13 @@ namespace Mep.Api.Controllers
     {
       if (_wellKnown == null)
       {
-        var client = new HttpClient();
-        client.BaseAddress = new Uri(_configuration["oidc:issuer"]);
+        using HttpClient client = new HttpClient
+        {
+          BaseAddress = new Uri(_configuration["oidc:issuer"])
+        };
         client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.DefaultRequestHeaders.Accept.Add(
+          new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.GetAsync(".well-known/openid-configuration");
         if (response.IsSuccessStatusCode)
@@ -52,11 +54,12 @@ namespace Mep.Api.Controllers
     {
       if (_jwtKs == null)
       {
-        var client = new HttpClient();
-        var wellKnown = await GetWellKnownAsync();
+        using HttpClient client = new HttpClient();
+        OidcWellKnown wellKnown = await GetWellKnownAsync();
         client.BaseAddress = new Uri(wellKnown.jwks_uri);
         client.DefaultRequestHeaders.Clear();
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.DefaultRequestHeaders.Accept.Add(
+          new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.GetAsync("");
         if (response.IsSuccessStatusCode)
@@ -87,37 +90,12 @@ namespace Mep.Api.Controllers
     }
 
     [HttpGet("configuration")]
-    public async Task<ActionResult<OIDCConfig>> ConfigurationAsync()
+    public ActionResult<OIDCConfig> ConfigurationAsync()
     {
       OIDCConfig config = new OIDCConfig();
-      OidcWellKnown wellKnown = await GetWellKnownAsync();
 
       string protocol = Request.IsHttps ? "https://" : "http://";
       config.stsServer = $"{protocol}{Request.Host.ToUriComponent()}/api/config";
-      config.redirect_url = "http://localhost:4200/";
-      config.client_id = _configuration["oidc:client_id"];
-      config.response_type = "id_token token";
-      if (!String.IsNullOrEmpty(_configuration["oidc:scope"]))
-      {
-        config.scope = _configuration["oidc:scope"];
-      }
-      else
-      {
-        config.scope = "openid profile email https://graph.microsoft.com/User.Read";
-      }
-      config.post_logout_redirect_uri = "https://www.digitalinnovationwm.nhs.uk/";
-      config.post_login_route = "/";
-      config.forbidden_route = "/unauthorized";
-      config.unauthorized_route = "/unauthorized";
-      config.auto_userinfo = true;
-      config.log_console_warning_active = true;
-      config.log_console_debug_active = _env.IsDevelopment();
-      config.max_id_token_iat_offset_allowed_in_seconds = 1000;
-      if (!String.IsNullOrEmpty(_configuration["oidc:resource"]))
-      {
-        config.additional_login_parameters["resource"] = _configuration["oidc:resource"];
-      }
-      config.additional_login_parameters["response_mode"] = "fragment";
 
       return config;
     }
