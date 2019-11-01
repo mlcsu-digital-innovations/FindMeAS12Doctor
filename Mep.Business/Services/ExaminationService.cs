@@ -207,6 +207,7 @@ namespace Mep.Business.Services
                   .ThenInclude(d => d.DoctorUser)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
+                .Include(e => e.Speciality)
                 .Include(e => e.UserExaminationNotifications)
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)
@@ -327,7 +328,9 @@ namespace Mep.Business.Services
           model.AttendingDoctors.Single(d => d.Id == examinationDoctor.DoctorUserId);
 
         examinationDoctor.AttendanceConfirmedByUserId = entity.ModifiedByUserId;
-        examinationDoctor.StatusId = ExaminationDoctorStatus.ATTENDED;
+        examinationDoctor.StatusId = examinationOutcomeDoctor.Attended 
+          ? Models.ExaminationDoctorStatus.ATTENDED 
+          : Models.ExaminationDoctorStatus.NOT_ATTENDED;
         UpdateModified(examinationDoctor);
       }
     }

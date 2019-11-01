@@ -1,6 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-
 import { AmhpExaminationService } from './amhp-examination.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('AmhpExaminationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

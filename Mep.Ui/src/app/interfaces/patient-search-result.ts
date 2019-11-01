@@ -5,6 +5,7 @@ export interface PatientSearchResult  {
   currentReferralId: number | null;
   gpPracticeId: number | null;
   gpPracticeNameAndPostcode: string | null;
+  leadAmhp: string | null;
   nhsNumber: number | null;
   patientId: number;
   residentialPostcode: string | null;

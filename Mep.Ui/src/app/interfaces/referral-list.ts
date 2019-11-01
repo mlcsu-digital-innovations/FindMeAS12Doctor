@@ -7,7 +7,7 @@ export interface ReferralList {
   patientId: number;
   referralId: number;
   responsesReceived: number;
-  speciality: string;
-  status: string;
+  specialityName: string;
+  statusName: string;
   timescale: Date;
 }

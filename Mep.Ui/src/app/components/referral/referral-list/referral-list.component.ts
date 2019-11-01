@@ -56,4 +56,5 @@ export class ReferralListComponent {
     this.referralListService.sortColumn = column;
     this.referralListService.sortDirection = direction;
   }
+  
 }
