@@ -1,7 +1,7 @@
 using AutoMapper;
-using BusinessModels = Mep.Business.Models;
+using BusinessModels = Fmas12d.Business.Models;
 
-namespace Mep.Api.RequestModels.Profiles
+namespace Fmas12d.Api.RequestModels.Profiles
 {
     public class ReferralStatusPostProfile : Profile
     {

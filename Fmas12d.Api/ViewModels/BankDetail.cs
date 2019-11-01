@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace Mep.Api.ViewModels
+namespace Fmas12d.Api.ViewModels
 {
   public class BankDetail : BaseViewModel
   {

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   public class Log
   {

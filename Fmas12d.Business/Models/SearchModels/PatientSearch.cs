@@ -1,4 +1,4 @@
-namespace Mep.Business.Models.SearchModels
+namespace Fmas12d.Business.Models.SearchModels
 {
   public class PatientSearch : BaseSearchModel
   {

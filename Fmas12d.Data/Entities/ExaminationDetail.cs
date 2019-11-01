@@ -1,4 +1,4 @@
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
     public class ExaminationDetail : BaseEntity, IExaminationDetail
     {

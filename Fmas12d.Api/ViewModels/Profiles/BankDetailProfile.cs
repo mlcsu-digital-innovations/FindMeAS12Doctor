@@ -1,5 +1,5 @@
 using AutoMapper;
-namespace Mep.Api.ViewModels.Profiles
+namespace Fmas12d.Api.ViewModels.Profiles
 {
   public class BankDetailProfile : Profile
   {

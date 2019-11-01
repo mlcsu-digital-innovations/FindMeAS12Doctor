@@ -1,5 +1,5 @@
 using System;
-namespace Mep.Business.Migrations.Seeds.SpineServiceModels
+namespace Fmas12d.Business.Migrations.Seeds.SpineServiceModels
 {
     public class SpineServiceOrganisation
     {

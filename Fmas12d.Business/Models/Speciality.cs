@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class Speciality : NameDescription
   {

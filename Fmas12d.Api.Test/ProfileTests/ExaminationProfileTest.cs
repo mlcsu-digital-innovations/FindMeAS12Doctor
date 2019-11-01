@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mep.Api.Test.ProfileTests;
+using Fmas12d.Api.Test.ProfileTests;
 
-namespace Mep.Api.Test
+namespace Fmas12d.Api.Test
 {
   [TestClass]
   public class ExaminationProfileTest : GenericApiProfileTest<Business.Models.Examination, ViewModels.Examination>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using Mep.Business;
-using Mep.Business.Models;
-using Mep.Business.Services;
+using Fmas12d.Business;
+using Fmas12d.Business.Models;
+using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace Mep.Api
+namespace Fmas12d.Api
 {
   public class Startup
   {

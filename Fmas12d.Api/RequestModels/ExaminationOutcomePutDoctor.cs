@@ -1,8 +1,8 @@
-using BusinessModels = Mep.Business.Models;
+using BusinessModels = Fmas12d.Business.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
   public class ExaminationOutcomePutDoctor
   {

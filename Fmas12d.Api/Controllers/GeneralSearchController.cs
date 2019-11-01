@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Mep.Business.Services;
+using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using Mep.Api.SearchModels;
-using business = Mep.Business.Models.SearchModels;
-using Mep.Business.Models;
-using Mep.Api.RequestModels;
+using Fmas12d.Api.SearchModels;
+using business = Fmas12d.Business.Models.SearchModels;
+using Fmas12d.Business.Models;
+using Fmas12d.Api.RequestModels;
 using System.Linq;
 
-namespace Mep.Api.Controllers
+namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
@@ -27,9 +27,11 @@ namespace Mep.Api.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GeneralSearchResult>>> Get([FromQuery] SearchString searchString )
     {
-      IEnumerable<business.GeneralSearchResult> businessSearchResult = await _service.SearchAsync(searchString.Criteria);
+      IEnumerable<Business.Models.SearchModels.GeneralSearchResult> businessSearchResult = 
+        await _service.SearchAsync(searchString.Criteria);
 
-      IEnumerable<GeneralSearchResult> searchResults = _mapper.Map<IEnumerable<GeneralSearchResult>>(businessSearchResult);
+      IEnumerable<GeneralSearchResult> searchResults = 
+        _mapper.Map<IEnumerable<GeneralSearchResult>>(businessSearchResult);
 
       if (searchResults.Any())
       {

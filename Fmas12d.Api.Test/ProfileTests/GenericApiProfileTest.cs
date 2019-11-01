@@ -4,11 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-namespace Mep.Api.Test.ProfileTests
+namespace Fmas12d.Api.Test.ProfileTests
 {
   public abstract class GenericApiProfileTest<BusinessModel, ApiModel>
-    where BusinessModel : Mep.Business.Models.BaseModel
-    where ApiModel : Mep.Api.ViewModels.BaseViewModel
+    where BusinessModel : Fmas12d.Business.Models.BaseModel
+    where ApiModel : Fmas12d.Api.ViewModels.BaseViewModel
   {
     public void AssertBusiness2ApiMappingIsValid()
     {

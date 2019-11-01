@@ -1,4 +1,4 @@
-namespace Mep.Api.SearchModels
+namespace Fmas12d.Api.SearchModels
 {
     public abstract class SearchModel
     {

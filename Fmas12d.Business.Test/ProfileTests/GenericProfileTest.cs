@@ -4,11 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-namespace Mep.Business.Test.ProfileTests
+namespace Fmas12d.Business.Test.ProfileTests
 {
   public abstract class GenericProfileTest<BusinessModel, Entity>
-    where BusinessModel : Mep.Business.Models.BaseModel
-    where Entity : Mep.Data.Entities.BaseEntity
+    where BusinessModel : Fmas12d.Business.Models.BaseModel
+    where Entity : Fmas12d.Data.Entities.BaseEntity
   {
     public void AssertBusiness2EntityMappingIsValid()
     {

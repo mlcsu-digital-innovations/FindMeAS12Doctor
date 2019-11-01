@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   public interface IOnCallUser
   {

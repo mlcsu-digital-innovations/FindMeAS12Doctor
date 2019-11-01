@@ -1,7 +1,7 @@
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 using System.Linq;
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class ContactDetailsSeeder : SeederBase<ContactDetail>
   {
@@ -9,7 +9,7 @@ namespace Mep.Business.Migrations.Seeds
     protected const string ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
     protected const string ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
     protected const string ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
-    protected const string EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@mep.local";
+    protected const string EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@fmas12d.local";
     protected const decimal LATITUDE_DOCTOR_FEMALE = 52.991581m;
     protected const decimal LONGITUDE_DOCTOR_FEMALE = -2.167857m;
     protected const string POSTCODE_DOCTOR_FEMALE = "ST4 1NF";

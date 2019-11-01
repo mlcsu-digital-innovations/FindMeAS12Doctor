@@ -1,10 +1,10 @@
 ﻿using System;
-using Mep.Api.Extensions;
+using Fmas12d.Api.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 
-namespace Mep.Api
+namespace Fmas12d.Api
 {
   public static class Program
   {

@@ -1,11 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mep.Business.Test.ProfileTests;
-using Entities = Mep.Data.Entities;
+using Fmas12d.Business.Test.ProfileTests;
+using Entities = Fmas12d.Data.Entities;
 using System;
 using AutoMapper;
-using Mep.Business.Models.Profiles;
+using Fmas12d.Business.Models.Profiles;
 
-namespace Mep.Business.Test
+namespace Fmas12d.Business.Test
 {
   [TestClass]
   public class LogProfileTest 

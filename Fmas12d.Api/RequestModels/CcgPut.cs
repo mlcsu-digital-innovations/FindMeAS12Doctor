@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
   public class CcgPut : Ccg
   {

@@ -1,8 +1,8 @@
 using System.Linq;
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mep.Business.Extensions
+namespace Fmas12d.Business.Extensions
 {
   public static class IQueryableExtensions
   {

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Mep.Business.Exceptions
+namespace Fmas12d.Business.Exceptions
 {
   [Serializable()]
   public class ModelStateException : Exception

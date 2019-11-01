@@ -1,5 +1,5 @@
-using Mep.Business.Migrations.Seeds.SpineServiceModels;
-using Mep.Data.Entities;
+using Fmas12d.Business.Migrations.Seeds.SpineServiceModels;
+using Fmas12d.Data.Entities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Net.Http;
 using System;
 using System.Collections.Generic;
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class GpPracticeSeeder : SeederBase<GpPractice>
   {

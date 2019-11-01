@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
   public abstract class Ccg
   {

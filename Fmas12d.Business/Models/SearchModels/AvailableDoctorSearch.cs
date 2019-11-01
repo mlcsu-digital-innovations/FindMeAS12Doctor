@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System;
 
-namespace Mep.Business.Models.SearchModels
+namespace Fmas12d.Business.Models.SearchModels
 {
   public class AvailableDoctorSearch : BaseSearchModel
   {

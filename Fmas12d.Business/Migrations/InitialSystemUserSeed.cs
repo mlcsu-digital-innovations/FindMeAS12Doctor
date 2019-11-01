@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace mep.business.Migrations
+namespace Fmas12d.business.Migrations
 {
     public static class InitialSystemUserSeed
     {

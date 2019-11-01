@@ -1,12 +1,12 @@
-using Mep.Business.Migrations.Seeds;
-using Mep.Business;
+using Fmas12d.Business.Migrations.Seeds;
+using Fmas12d.Business;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Microsoft.Extensions.Configuration;
 
-namespace Mep.Api.Extensions
+namespace Fmas12d.Api.Extensions
 {
   public static class WebHostExtenstions
   {

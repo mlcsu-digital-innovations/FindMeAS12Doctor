@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   [Table("ExaminationsAudit")]
   public partial class ExaminationAudit : BaseAudit, IExamination

@@ -1,8 +1,8 @@
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 using System;
 using System.Linq;
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class PaymentRuleSetsSeeder : SeederBase<PaymentRuleSet>
   {

@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Mep.Business.Exceptions;
-using Mep.Business.Models;
-using Mep.Data.Entities;
+using Fmas12d.Business.Exceptions;
+using Fmas12d.Business.Models;
+using Fmas12d.Data.Entities;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public abstract class ServiceBase<TBusinessModel, TEntity>
     where TBusinessModel : BaseModel

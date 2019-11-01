@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   public partial class Section12ApprovalStatus : 
     NameDescription, ISection12ApprovalStatus

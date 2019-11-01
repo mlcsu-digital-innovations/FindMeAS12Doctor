@@ -1,12 +1,12 @@
-using Entities = Mep.Data.Entities;
-using Mep.Business.Extensions;
-using Mep.Business.Models;
+using Entities = Fmas12d.Data.Entities;
+using Fmas12d.Business.Extensions;
+using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public class ReferralService : ServiceBaseNoAutoMapper<Entities.Referral>, IReferralService
   {

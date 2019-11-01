@@ -1,16 +1,16 @@
 using AutoMapper;
 using System.Threading.Tasks;
-using Mep.Business.Models;
-using Mep.Business.Models.SearchModels;
+using Fmas12d.Business.Models;
+using Fmas12d.Business.Models.SearchModels;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using Entities = Mep.Data.Entities;
-using Mep.Business.Exceptions;
+using Entities = Fmas12d.Data.Entities;
+using Fmas12d.Business.Exceptions;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public class AvailableDoctorService : IModelSimpleSearchService<AvailableDoctor, AvailableDoctorSearch>
   {

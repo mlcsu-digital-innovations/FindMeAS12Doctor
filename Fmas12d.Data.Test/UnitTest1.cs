@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Mep.Data.Test
+namespace Fmas12d.Data.Test
 {
     [TestClass]
     public class UnitTest1

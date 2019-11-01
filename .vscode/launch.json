@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Mep.Api/bin/Debug/netcoreapp3.0/Mep.Api.dll",
+            "program": "${workspaceFolder}/Fmas12d.Api/bin/Debug/netcoreapp3.0/Fmas12d.Api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Mep.Api",
+            "cwd": "${workspaceFolder}/Fmas12d.Api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "env": {

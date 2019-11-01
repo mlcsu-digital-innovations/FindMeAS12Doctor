@@ -1,6 +1,6 @@
 using System;
 
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class UserExaminationNotification : BaseModel
   {

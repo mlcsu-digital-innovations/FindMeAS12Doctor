@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class UserExaminationClaim : BaseModel
   {

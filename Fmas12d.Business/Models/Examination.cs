@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class Examination : BaseModel
   {

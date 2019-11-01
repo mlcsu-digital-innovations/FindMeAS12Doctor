@@ -1,4 +1,4 @@
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public class SpecialityService : 
     NameDescriptionBaseService<Data.Entities.Speciality>,

@@ -1,7 +1,7 @@
 using AutoMapper;
-using BusinessModels = Mep.Business.Models;
+using BusinessModels = Fmas12d.Business.Models;
 
-namespace Mep.Api.ViewModels.Profiles
+namespace Fmas12d.Api.ViewModels.Profiles
 {
     public class PatientProfile : Profile
     {

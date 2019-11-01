@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   public class Seeds : SeederBaseBase
   {

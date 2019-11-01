@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mep.Api.ViewModels
+namespace Fmas12d.Api.ViewModels
 {
   public class ReferralView
   {

@@ -1,11 +1,11 @@
 {
-  "name": "mep.mobile2",
+  "name": "fmas12d.mobile2",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "build": "ng build",
-    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Mep.Mobile --force && ng build --configuration=azure-development",
+    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development",
     "e2e": "ng e2e",
     "ionic": "ionic",
     "lint": "ng lint",

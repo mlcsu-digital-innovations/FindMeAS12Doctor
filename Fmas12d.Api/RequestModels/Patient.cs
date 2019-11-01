@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Mep.Business.Models;
+using Fmas12d.Business.Models;
 
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
   public abstract class Patient : IValidatableObject
   {

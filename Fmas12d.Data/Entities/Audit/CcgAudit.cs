@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   [Table("CcgsAudit")]
   public partial class CcgAudit : BaseAudit, ICcg

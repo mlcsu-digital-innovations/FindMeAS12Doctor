@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Api.ViewModels
+namespace Fmas12d.Api.ViewModels
 {
   public class Ccg : BaseViewModel
   {

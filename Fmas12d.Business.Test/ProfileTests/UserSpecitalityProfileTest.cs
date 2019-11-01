@@ -1,8 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mep.Business.Test.ProfileTests;
-using Entities = Mep.Data.Entities;
+using Fmas12d.Business.Test.ProfileTests;
+using Entities = Fmas12d.Data.Entities;
 using System;
-namespace Mep.Business.Test
+namespace Fmas12d.Business.Test
 {
   [TestClass]
   public class UserSpecitalityProfileTest : GenericProfileTest<Business.Models.UserSpeciality, Entities.UserSpeciality>

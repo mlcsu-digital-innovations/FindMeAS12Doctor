@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   public partial class Referral : BaseEntity, IReferral
   {

@@ -1,17 +1,18 @@
 ﻿using System.Linq;
 using Audit.Core;
 using Audit.EntityFramework;
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 /// <summary>
-/// Add this to the initial migration to create the inital system records: InitialSystemUserSeed.Seed(migrationBuilder); 
-/// 
-/// dotnet ef migrations add <migration-name> --project Mep.Business --startup-project Mep.Api
-/// dotnet ef database update --project Mep.Api
-/// dotnet ef migrations script <from-migration-name> --project=Mep.Api > update.sql
+/// Add this to the initial migration to create the inital system records: 
+/// InitialSystemUserSeed.Seed(migrationBuilder); 
+///
+/// dotnet ef migrations add <migration-name> --project Fmas12d.Business --startup-project Fmas12d.Api
+/// dotnet ef database update --project Fmas12d.Api
+/// dotnet ef migrations script <from-migration-name> --project=Fmas12d.Api > update.sql
 /// </summary>
-namespace Mep.Business
+namespace Fmas12d.Business
 {
   public partial class ApplicationContext : AuditDbContext
   {

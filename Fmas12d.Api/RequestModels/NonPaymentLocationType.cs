@@ -1,4 +1,4 @@
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
     public class NonPaymentLocationType
     {

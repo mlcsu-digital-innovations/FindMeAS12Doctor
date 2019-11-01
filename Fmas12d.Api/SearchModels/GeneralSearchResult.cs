@@ -1,7 +1,7 @@
 using System;
-using BusinessModels = Mep.Business.Models.SearchModels;
+using BusinessModels = Fmas12d.Business.Models.SearchModels;
 
-namespace Mep.Api.SearchModels
+namespace Fmas12d.Api.SearchModels
 {
   public class GeneralSearchResult
   {

@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class ReferralCreate
   {

@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-namespace Mep.Api.Test.ProfileTests
+namespace Fmas12d.Api.Test.ProfileTests
 {
 
   [TestClass]

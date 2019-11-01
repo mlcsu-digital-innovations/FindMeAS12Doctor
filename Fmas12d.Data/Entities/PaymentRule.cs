@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   public partial class PaymentRule : NameDescription, IPaymentRule
   {

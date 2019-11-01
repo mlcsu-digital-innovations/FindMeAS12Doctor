@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mep.Business.Helpers
+namespace Fmas12d.Business.Helpers
 {
   public static class NhsNumber
   {

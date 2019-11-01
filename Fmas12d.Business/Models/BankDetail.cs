@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class BankDetail : BaseModel
   {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
   public class PatientSearch : IValidatableObject
   {

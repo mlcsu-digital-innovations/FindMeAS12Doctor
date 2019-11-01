@@ -1,14 +1,14 @@
 using AutoMapper;
-using Mep.Business.Exceptions;
-using Mep.Business.Extensions;
-using Mep.Business.Models.SearchModels;
-using Mep.Business.Models;
+using Fmas12d.Business.Exceptions;
+using Fmas12d.Business.Extensions;
+using Fmas12d.Business.Models.SearchModels;
+using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public abstract class UserSearchService : GeneralSearchServiceBase, IModelGeneralSearchService<User>
   {

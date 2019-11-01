@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class Organisation : NameDescription
   {

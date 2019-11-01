@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-namespace Mep.Api.RequestModels
+namespace Fmas12d.Api.RequestModels
 {
   public class AvailableDoctor
   {

@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Mep.Business.Models.SearchModels;
+using Fmas12d.Business.Models.SearchModels;
 using System.Collections.Generic;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public abstract class GeneralSearchServiceBase
   {

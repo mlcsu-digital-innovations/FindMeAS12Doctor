@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Mep.Business.Models;
+using Fmas12d.Business.Models;
 
-namespace Mep.Api.ViewModels
+namespace Fmas12d.Api.ViewModels
 {
   public class PatientSearch
   {

@@ -1,4 +1,4 @@
-namespace Mep.Business.Migrations.Seeds.OGPServiceModels
+namespace Fmas12d.Business.Migrations.Seeds.OGPServiceModels
 {
   public class OgpServiceAttribute
   {

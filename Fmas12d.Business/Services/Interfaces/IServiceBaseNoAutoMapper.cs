@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public interface IServiceBaseNoAutoMapper
   {

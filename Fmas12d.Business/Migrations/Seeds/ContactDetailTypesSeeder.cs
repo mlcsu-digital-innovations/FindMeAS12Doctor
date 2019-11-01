@@ -1,6 +1,6 @@
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class ContactDetailTypesSeeder : SeederBase<ContactDetailType>
   {

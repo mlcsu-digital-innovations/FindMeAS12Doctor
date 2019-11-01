@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Mep.Api.ViewModels
+namespace Fmas12d.Api.ViewModels
 {
   public class ExaminationView
   {

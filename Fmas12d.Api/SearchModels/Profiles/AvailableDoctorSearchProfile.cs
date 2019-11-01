@@ -1,7 +1,7 @@
 using AutoMapper;
-using BusinessSearch = Mep.Business.Models.SearchModels;
+using BusinessSearch = Fmas12d.Business.Models.SearchModels;
 
-namespace Mep.Api.SearchModels.Profiles
+namespace Fmas12d.Api.SearchModels.Profiles
 {
     public class DoctorStatusSearchProfile : Profile
     {

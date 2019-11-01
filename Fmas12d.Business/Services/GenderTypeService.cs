@@ -1,4 +1,4 @@
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public class GenderTypeService : 
     NameDescriptionBaseService<Data.Entities.GenderType>,

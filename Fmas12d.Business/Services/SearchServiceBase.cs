@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Mep.Business.Models;
-using Mep.Data.Entities;
-using Mep.Business.Models.SearchModels;
+using Fmas12d.Business.Models;
+using Fmas12d.Data.Entities;
+using Fmas12d.Business.Models.SearchModels;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public abstract class SearchServiceBase<TBusinessModel, TEntity, TSearchModel> : ServiceBase<TBusinessModel, TEntity>
     where TBusinessModel : BaseModel

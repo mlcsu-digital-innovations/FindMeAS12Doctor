@@ -76,7 +76,7 @@
                   "with": "src/environments/environment.azure-development.ts"
                 }
               ],
-              "outputPath": "../Deployment/AzureDevelopment/Mep.Mobile"
+              "outputPath": "../Deployment/AzureDevelopment/Fmas12d.Mobile"
             }            
           }
         },

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
-namespace Mep.Api.Controllers
+namespace Fmas12d.Api.Controllers
 {
   [ApiController]
   [Route("[controller]")]

@@ -1,5 +1,5 @@
 using AutoMapper;
-namespace Mep.Api.RequestModels.Profiles
+namespace Fmas12d.Api.RequestModels.Profiles
 {
   public class PostcodeProfile : Profile
   {

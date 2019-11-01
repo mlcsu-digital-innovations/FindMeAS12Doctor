@@ -1,9 +1,9 @@
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   public class SeederBase<TEntity> : SeederBaseBase where TEntity : BaseEntity, new()
   {

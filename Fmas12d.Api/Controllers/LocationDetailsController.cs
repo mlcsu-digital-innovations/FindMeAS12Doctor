@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Mep.Business.Services;
+using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using Mep.Api.RequestModels;
+using Fmas12d.Api.RequestModels;
 
-namespace Mep.Api.Controllers
+namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]

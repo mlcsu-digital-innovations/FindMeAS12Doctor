@@ -1,6 +1,6 @@
 using AutoMapper;
-using Entities = Mep.Data.Entities;
-namespace Mep.Business.Models.Profiles
+using Entities = Fmas12d.Data.Entities;
+namespace Fmas12d.Business.Models.Profiles
 {
   public class ExaminationDetailTypeProfile : Profile
   {

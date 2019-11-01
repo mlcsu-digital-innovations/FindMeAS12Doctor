@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Mep": {
+    "Fmas12d": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/Mep",
+            "outputPath": "dist/Fmas12d",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,25 +66,25 @@
                   "with": "src/environments/environment.azure-development.ts"
                 }
               ],
-              "outputPath": "../Deployment/AzureDevelopment/Mep.Ui"
+              "outputPath": "../Deployment/AzureDevelopment/Fmas12d.Ui"
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Mep:build"
+            "browserTarget": "Fmas12d:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "Mep:build:production"
+              "browserTarget": "Fmas12d:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Mep:build"
+            "browserTarget": "Fmas12d:build"
           }
         },
         "test": {
@@ -121,15 +121,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Mep:serve"
+            "devServerTarget": "Fmas12d:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "Mep:serve:production"
+              "devServerTarget": "Fmas12d:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "Mep"
+  "defaultProject": "Fmas12d"
 }

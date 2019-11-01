@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mep.Business.Extensions;
+using Fmas12d.Business.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public abstract class NameDescriptionBaseService<TEntity> : 
     ServiceBaseNoAutoMapper<TEntity>, INameDescriptionBaseService 

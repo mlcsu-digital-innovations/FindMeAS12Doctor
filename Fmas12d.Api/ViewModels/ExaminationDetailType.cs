@@ -1,4 +1,4 @@
-namespace Mep.Api.ViewModels
+namespace Fmas12d.Api.ViewModels
 {
   public class ExaminationDetailType : NameDescriptionNoBase
   {

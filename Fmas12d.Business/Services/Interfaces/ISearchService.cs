@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mep.Business.Models;
+using Fmas12d.Business.Models;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public interface ISearchService : IServiceBaseNoAutoMapper
   {

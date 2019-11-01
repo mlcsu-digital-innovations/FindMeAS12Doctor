@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mep.Data.Entities
+namespace Fmas12d.Data.Entities
 {
   [Table("ExaminationDoctorStatusesAudit")]
   public partial class ExaminationDoctorStatusAudit : 

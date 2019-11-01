@@ -1,12 +1,12 @@
-using Mep.Business.Migrations.Seeds.OGPServiceModels;
-using Mep.Data.Entities;
+using Fmas12d.Business.Migrations.Seeds.OGPServiceModels;
+using Fmas12d.Data.Entities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http;
 
-namespace Mep.Business.Migrations.Seeds
+namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class CcgSeeder : SeederBase<Ccg>
   {

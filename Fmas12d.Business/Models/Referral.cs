@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Mep.Data.Entities;
+using Fmas12d.Data.Entities;
 
-namespace Mep.Business.Models
+namespace Fmas12d.Business.Models
 {
   public class Referral : BaseModel
   {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mep.Business.Models;
-using Mep.Business.Models.SearchModels;
+using Fmas12d.Business.Models;
+using Fmas12d.Business.Models.SearchModels;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
     public interface IModelSimpleSearchService<T, S> where T : BaseModel where S : BaseSearchModel
     {

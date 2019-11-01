@@ -2,13 +2,13 @@ using AutoMapper;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Mep.Business.Models;
-using Entities = Mep.Data.Entities;
-using Mep.Business.Extensions;
+using Fmas12d.Business.Models;
+using Entities = Fmas12d.Data.Entities;
+using Fmas12d.Business.Extensions;
 using System.Linq;
-using Mep.Business.Exceptions;
+using Fmas12d.Business.Exceptions;
 
-namespace Mep.Business.Services
+namespace Fmas12d.Business.Services
 {
   public class UserService
 : ServiceBase<User, Entities.User>, IModelService<User>, IUserService
