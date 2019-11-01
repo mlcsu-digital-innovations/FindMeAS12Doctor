@@ -43,12 +43,12 @@ function matches(referral: ReferralList, term: string, pipe: PipeTransform) {
       referral.leadAmhp.toLowerCase().includes(term.toLowerCase()))
     || (referral.numberOfExaminationAttempts &&
       pipe.transform(referral.numberOfExaminationAttempts).includes(term))
-    || (referral.speciality &&
-      referral.speciality.toLowerCase().includes(term.toLowerCase()))
+    || (referral.specialityName &&
+      referral.specialityName.toLowerCase().includes(term.toLowerCase()))
     || (referral.timescale &&
       pipe.transform(referral.timescale).includes(term.toLowerCase()))
-    || (referral.status &&
-      referral.status.toLowerCase().includes(term.toLowerCase()))
+    || (referral.statusName &&
+      referral.statusName.toLowerCase().includes(term.toLowerCase()))
     || (referral.responsesReceived &&
       pipe.transform(referral.responsesReceived).includes(term))
     || (referral.doctorsAllocated &&
@@ -126,6 +126,7 @@ export class ReferralListService {
   private _search(): Observable<SearchResult> {
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
+    if (this._rawReferralList != null) {
       // 1. sort
       let referralList = sort(this._rawReferralList, sortColumn, sortDirection);
 
@@ -137,5 +138,10 @@ export class ReferralListService {
       referralList = referralList.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
 
       return of({ referralList: referralList, total });
+
+    } else {
+
+      return of({ referralList: [], total: 0 });
+    }
   }
 }

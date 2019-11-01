@@ -49,3 +49,8 @@ th[sortable].desc:before {
 th {
   border-top: 0;
 }
+ 
+.empty-table {
+  color:#666;
+  font-weight: 500;
+}

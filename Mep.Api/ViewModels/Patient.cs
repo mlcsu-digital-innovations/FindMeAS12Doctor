@@ -11,6 +11,7 @@ namespace Mep.Api.ViewModels
       AlternativeIdentifier = model.AlternativeIdentifier;
       // TODO CCG
       CcgId = model.CcgId;
+      CurrentReferralId = model.GetCurrentReferralId();
       // TODO GpPractice
       GpPracticeId = model.GpPracticeId;
       NhsNumber = model.NhsNumber;
@@ -22,6 +23,7 @@ namespace Mep.Api.ViewModels
     public string AlternativeIdentifier { get; set; }
     public virtual Ccg Ccg { get; set; }
     public int? CcgId { get; set; }
+    public int? CurrentReferralId { get; set; }
     public virtual GpPractice GpPractice { get; set; }
     public int? GpPracticeId { get; set; }
     public long? NhsNumber { get; set; }
