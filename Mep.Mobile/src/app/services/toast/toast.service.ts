@@ -20,9 +20,15 @@ export class ToastService {
     this.show(options);
   }
 
+  public displayMessage(options: ToastOptions) {
+    options.duration = 3000;
+    options.color = 'primary';
+    this.show(options);
+  }
+
   private async show(options: any = {}) {
     options.animated = true;
-    options.position = 'bottom';
+    options.position = 'top';
     const toast = await this.toastCtrl.create(options);
     toast.present();
   }

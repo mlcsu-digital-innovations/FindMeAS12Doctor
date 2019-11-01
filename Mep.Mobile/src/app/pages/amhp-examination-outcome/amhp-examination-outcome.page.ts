@@ -104,14 +104,12 @@ export class AmhpExaminationOutcomePage implements OnInit {
     this.examinationService.putOutcome(examinationOutcome, this.examinationView.id, this.examinationSuccessful)
       .subscribe(
         result => {
-          this.toastService.displaySuccess({
-            header: 'Examination Outcome Updated',
-            message: ''
+          this.toastService.displaySuccess({            
+            message: 'Examination Outcome Updated'
           });
           this.navCtrl.navigateRoot("amhp-examination-list");
         },
         error => {
-          console.log(error);
           this.toastService.displayError({
             header: 'Error',
             message: error.error.title

@@ -1,7 +1,7 @@
 import { AmhpExaminationList } from '../../models/amhp-examination-list.model';
 import { AmhpExaminationOutcome } from 'src/app/models/amhp-examination-outcome.model';
 import { AmhpExaminationView } from '../../models/amhp-examination-view.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiService } from '../api/api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -13,22 +13,25 @@ import { map } from 'rxjs/operators';
 export class AmhpExaminationService {
   private examinationView: AmhpExaminationView;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private apiService: ApiService
+  ) { }
 
-  public getList(amhpUserId: number): Observable<AmhpExaminationList[]> {
-    return this.http
-      .get<AmhpExaminationList[]>(
-        `${environment.apiEndpoint}/examination/list?amhpUserId=${amhpUserId}`
-      )
-      .pipe(map(result => this.examinationListSort(result)));
+  public getList(amhpUserId: number): Observable<AmhpExaminationList[]> {   
+    return (this.apiService.get(
+      `${environment.apiEndpoint}/examination/list?amhpUserId=${amhpUserId}`, 
+      'AmhpUserList'
+    ) as Observable<AmhpExaminationList[]>)
+    .pipe(
+      map(result => this.examinationListSort(result)),
+    );
   }
 
-  public getView(examinationId: string): Observable<AmhpExaminationView> {
-    return this.http
-      .get<AmhpExaminationView>(
-        `${environment.apiEndpoint}/examination/view/${examinationId}`
-      )
-      .pipe(map(result => result));
+  public getView(examinationId: string): Observable<AmhpExaminationView> {  
+    return this.apiService.get(
+      `${environment.apiEndpoint}/examination/view/${examinationId}`,
+      `AmhpUserView-${examinationId}`
+    ) as Observable<AmhpExaminationView>;
   }
 
   public putOutcome(
@@ -36,15 +39,10 @@ export class AmhpExaminationService {
     examinationId: number,
     success: boolean):
     Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     let url: string = `${environment.apiEndpoint}/examination/outcome/${examinationId}/${success ?
       'success' : 'failure'}`;
 
-    return this.http.put(
-      url,
-      examinationOutcome,
-      { headers }
-    );
+    return this.apiService.put(url, examinationOutcome);  
   }
 
   public storeView(examinationView: AmhpExaminationView): void {

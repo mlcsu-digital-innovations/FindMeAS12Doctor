@@ -3,7 +3,7 @@ export class ToastOptions {
   color?: string;
   cssClass?: string; 
   duration?: number;
-  header: string;
+  header?: string;
   message: string;
   position?: string;
   showCloseButton?: boolean;  
