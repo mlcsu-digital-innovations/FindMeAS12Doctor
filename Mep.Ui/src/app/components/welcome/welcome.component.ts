@@ -23,8 +23,12 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.isDevelopment = !environment.production;
-    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe(
+
+
+
+    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe(      
       (isAuthorized: boolean) => {
+
         this.isAuthorized = isAuthorized;
         this.userDataSubscription = this.oidcSecurityService.getUserData().subscribe(userData => {
           this.userData = userData;

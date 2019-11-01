@@ -1,5 +1,10 @@
+  
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
+import { AuthInterceptor } from './services/auth-interceptor';
+import { AuthModule,  OidcSecurityService,  ConfigResult,  OidcConfigService,  OpenIdConfiguration} 
+  from 'angular-auth-oidc-client';
+import { AuthorizationGuard } from './authorization.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DoctorModule } from './components/doctor/doctor.module';
@@ -11,15 +16,6 @@ import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
-import {
-  AuthModule,
-  OidcSecurityService,
-  ConfigResult,
-  OidcConfigService,
-  OpenIdConfiguration
-} from 'angular-auth-oidc-client';
-import { AuthInterceptor } from './services/auth-interceptor';
-import { AuthorizationGuard } from './authorization.guard';
 
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
@@ -76,24 +72,25 @@ export class AppModule {
     this.oidcConfigService.onConfigurationLoaded.subscribe((configResult: ConfigResult) => {
 
       const config: OpenIdConfiguration = {
-        stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
-        redirect_url: configResult.customConfig.redirect_url,
+        auto_userinfo: false,
         client_id: configResult.customConfig.client_id,
+        forbidden_route: configResult.customConfig.forbidden_route,
+        history_cleanup_off: true,
+        iss_validation_off: true,
+        log_console_debug_active: configResult.customConfig.log_console_debug_active,
+        log_console_warning_active: configResult.customConfig.log_console_warning_active,
+        max_id_token_iat_offset_allowed_in_seconds: configResult.customConfig.max_id_token_iat_offset_allowed_in_seconds,
+        post_login_route: '', //configResult.customConfig.post_login_route,
+        post_logout_redirect_uri: configResult.customConfig.post_logout_redirect_uri,
+        redirect_url: configResult.customConfig.redirect_url,
         response_type: configResult.customConfig.response_type,
         scope: configResult.customConfig.scope,
-        post_logout_redirect_uri: configResult.customConfig.post_logout_redirect_uri,
-        start_checksession: configResult.customConfig.start_checksession,
         silent_renew: configResult.customConfig.silent_renew,
         silent_renew_url: 'http://localhost:44311/silent-renew.html',
-        post_login_route: configResult.customConfig.post_login_route,
-        forbidden_route: configResult.customConfig.forbidden_route,
+        start_checksession: configResult.customConfig.start_checksession,
+        stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
+        trigger_authorization_result_event: true, //configResult.customConfig.trigger_authorization_result_event,
         unauthorized_route: configResult.customConfig.unauthorized_route,
-        log_console_warning_active: configResult.customConfig.log_console_warning_active,
-        log_console_debug_active: configResult.customConfig.log_console_debug_active,
-        max_id_token_iat_offset_allowed_in_seconds: configResult.customConfig.max_id_token_iat_offset_allowed_in_seconds,
-        auto_userinfo: false,
-        history_cleanup_off: true,
-        iss_validation_off: true
         // disable_iat_offset_validation: true
       };
 

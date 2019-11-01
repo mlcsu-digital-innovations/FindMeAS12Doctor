@@ -1,5 +1,4 @@
-
-
+import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { CommonModule } from '@angular/common';
 import { DelaySpinnerComponent } from '../components/delay-spinner/delay-spinner.component';
 import { DisableControlDirective } from '../directives/disable-control/disable-control.directive';
@@ -19,6 +18,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
+    AutoLoginComponent,
     DelaySpinnerComponent,
     DisableControlDirective,
     FocusOnShowDirective,

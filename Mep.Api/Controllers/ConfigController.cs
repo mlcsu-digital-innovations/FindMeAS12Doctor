@@ -94,7 +94,6 @@ namespace Mep.Api.Controllers
 
       string protocol = Request.IsHttps ? "https://" : "http://";
       config.stsServer = $"{protocol}{Request.Host.ToUriComponent()}/api/config";
-      //config.redirect_url = $"{protocol}{Request.Host.ToUriComponent()}/";
       config.redirect_url = "http://localhost:4200/";
       config.client_id = _configuration["oidc:client_id"];
       config.response_type = "id_token token";
@@ -106,11 +105,10 @@ namespace Mep.Api.Controllers
       {
         config.scope = "openid profile email https://graph.microsoft.com/User.Read";
       }
-      //config.post_logout_redirect_uri = $"{protocol}{Request.Host.ToUriComponent()}/";
-      config.post_logout_redirect_uri = "http://localhost:4200/";
+      config.post_logout_redirect_uri = "https://www.digitalinnovationwm.nhs.uk/";
       config.post_login_route = "/";
-      config.forbidden_route = "/welcome";
-      config.unauthorized_route = "/welcome";
+      config.forbidden_route = "/unauthorized";
+      config.unauthorized_route = "/unauthorized";
       config.auto_userinfo = true;
       config.log_console_warning_active = true;
       config.log_console_debug_active = _env.IsDevelopment();

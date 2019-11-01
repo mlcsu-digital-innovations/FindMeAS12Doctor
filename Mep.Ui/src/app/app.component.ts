@@ -11,7 +11,7 @@ export class AppComponent {
   title = 'Mep';
 
   constructor(public oidcSecurityService: OidcSecurityService,
-              private routerService: RouterService,
+    private routerService: RouterService,
   ) {
     if (this.oidcSecurityService.moduleSetup) {
       this.onOidcModuleSetup();
@@ -57,6 +57,11 @@ export class AppComponent {
         this.write('redirect', window.location.pathname);
       }
       console.log('AppComponent:onModuleSetup');
+      this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
+        if (!authorized) {
+          this.routerService.navigate(['/autologin']);
+        }
+      });
     }
   }
 
@@ -68,7 +73,7 @@ export class AppComponent {
         this.routerService.navigate([path]);
       }
     } else {
-      this.routerService.navigate(['/welcome']);
+      this.routerService.navigate(['/unauthorized']);
     }
   }
 
