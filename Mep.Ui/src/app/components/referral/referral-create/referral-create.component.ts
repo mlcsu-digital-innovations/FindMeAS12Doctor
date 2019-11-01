@@ -558,6 +558,10 @@ export class ReferralCreateComponent implements OnInit {
     );
   }
 
+  SetLeadAmhpField(text: string | null) {
+    this.amhpField.setValue(text);
+  }
+
   SetCcgField(id: number | null, text: string | null) {
     const ccg = {} as TypeAheadResult;
     ccg.id = id;
@@ -668,8 +672,59 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   UseExistingReferral(): void {
-    // ToDo: navigate to the existing referral page
+    this.patientDetails.alternativeIdentifier = this.patientResult.alternativeIdentifier;
+    this.patientDetails.ccgId = this.patientResult.ccgId;
+    this.patientDetails.gpPracticeId = this.patientResult.gpPracticeId;
+    this.patientDetails.id = this.patientResult.patientId;
+    this.patientDetails.isExistingPatient = true;
+    this.patientDetails.nhsNumber = this.patientResult.nhsNumber;
+    this.patientDetails.residentialPostcode = this.patientResult.residentialPostcode;
+
+    this.isGpFieldsShown = true;
+    // set gp practice field to unknown if is it is null
+    if (this.patientDetails.gpPracticeId === null) {
+      this.SetGpPracticeField(this.unknownGpPracticeId, UNKNOWN_GP_PRACTICE);
+    } else {
+      this.SetGpPracticeField(this.patientResult.gpPracticeId, this.patientResult.gpPracticeNameAndPostcode);
+    }
+
+    // only show the ccg field if the postcode field is null
+    if (
+      this.patientResult.residentialPostcode !== '' &&
+      this.patientResult.gpPracticeId == null
+    ) {
+      this.isResidentialPostcodeFieldShown = true;
+    }
+
+    // set ccg field to unknown if is it is null
+    if (this.patientDetails.ccgId === null) {
+      this.SetGpPracticeField(this.unknownCcgId, UNKNOWN_CCG);
+    } else {
+      this.SetCcgField(this.patientResult.ccgId, this.patientResult.ccgName);
+    }
+
+    // only show the postcode field if the gpPractice field is null
+    if (
+      this.patientResult.residentialPostcode !== '' &&
+      this.patientResult.gpPracticeId == null
+    ) {
+      this.isResidentialPostcodeFieldShown = true;
+    }
+
+    // set postcode field to unknown if is it is null
+    if (this.patientDetails.residentialPostcode === null) {
+      this.SetResidentialPostcodeField(UNKNOWN);
+    } else {
+      this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
+    }
+
+    this.isAmhpFieldsShown = true;
+    // TODO: patientResult.leadAmhp currently undefined
+    this.SetLeadAmhpField(this.patientResult.leadAmhp);
+
     this.patientModal.close();
+    this.SetFieldFocus('#amhp');
+    this.isPatientIdValidated = true;
   }
 
   ValidatePatient(): void {

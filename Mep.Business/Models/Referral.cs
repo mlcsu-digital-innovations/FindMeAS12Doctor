@@ -9,7 +9,7 @@ namespace Mep.Business.Models
   public class Referral : BaseModel
   {
     public Referral() { }
-    public Referral(Data.Entities.Referral entity) : base(entity)
+    public Referral(Data.Entities.Referral entity, bool ignorePatient) : base(entity)
     {
       if (entity == null) return;
 
@@ -17,7 +17,10 @@ namespace Mep.Business.Models
       CreatedByUser = entity.CreatedByUser == null ? null : new User(entity.CreatedByUser);
       CreatedByUserId = entity.CreatedByUserId;
       Examinations = entity.Examinations?.Select(e => new Examination(e, true)).ToList();
-      Patient = new Patient(entity.Patient);
+      if (!ignorePatient)
+      {
+        Patient = new Patient(entity.Patient);
+      }
       PatientId = entity.PatientId;
       ReferralStatus = entity.ReferralStatus == null
         ? null
@@ -177,9 +180,9 @@ namespace Mep.Business.Models
     {
       get
       {
-        return entity => new Referral(entity);
+        return entity => new Referral(entity, false);
       }
-    }    
+    }
 
   }
 }

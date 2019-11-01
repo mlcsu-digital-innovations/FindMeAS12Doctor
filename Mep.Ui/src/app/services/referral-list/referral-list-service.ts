@@ -126,6 +126,7 @@ export class ReferralListService {
   private _search(): Observable<SearchResult> {
     const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
+    if (this._rawReferralList != null) {
       // 1. sort
       let referralList = sort(this._rawReferralList, sortColumn, sortDirection);
 
@@ -137,5 +138,10 @@ export class ReferralListService {
       referralList = referralList.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
 
       return of({ referralList: referralList, total });
+
+    } else {
+
+      return of({ referralList: [], total: 0 });
+    }
   }
 }

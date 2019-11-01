@@ -34,7 +34,7 @@ namespace Mep.Api.Controllers
 
     [Route("search")]
     [HttpGet]
-    public async Task<ActionResult<ViewModels.Patient>> GetSearch(
+    public async Task<ActionResult<ViewModels.PatientSearch>> GetSearch(
       [FromQuery] RequestModels.PatientSearch search)
     {
       Business.Models.Patient model;
@@ -54,7 +54,7 @@ namespace Mep.Api.Controllers
       }
       else
       {
-        ViewModels.Patient viewModel = new ViewModels.Patient(model);
+        ViewModels.PatientSearch viewModel = new ViewModels.PatientSearch(model);
         return Ok(viewModel);
       }
     }

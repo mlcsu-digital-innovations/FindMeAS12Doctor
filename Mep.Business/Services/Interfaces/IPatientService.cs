@@ -9,10 +9,12 @@ namespace Mep.Business.Services
     Task<Patient> GetByAlternativeIdentifier(
       string alternativeIdentifier, 
       bool asNoTracking = false, 
-      bool activeOnly = false);
+      bool activeOnly = false,
+      bool onlyCurrentReferral = true);
     Task<Patient> GetByNhsNumber(
       long nhsNumber, 
       bool asNoTracking = false, 
-      bool activeOnly = false);
+      bool activeOnly = false,
+      bool onlyCurrentReferral = true);
   }
 }

@@ -21,7 +21,7 @@ namespace Mep.Business.Models
       GpPracticeId = entity.GpPracticeId;
       NhsNumber = entity.NhsNumber;
       ResidentialPostcode = entity.ResidentialPostcode;
-      // TODO Referrals
+      Referrals = entity.Referrals?.Select(r => new Referral(r, true)).ToList();
     }
 
     [MaxLength(200)]
@@ -37,28 +37,25 @@ namespace Mep.Business.Models
 
     public virtual IList<Referral> Referrals { get; set; }
 
+    public int? GetCurrentReferralId()
+    {
+      int? latestNotClosedReferralId = null;
+
+      if (Referrals != null)
+      {
+        Referral referral = Referrals.OrderByDescending(r => r.CreatedAt)
+          .FirstOrDefault(r => r.ReferralStatusId != Data.Entities.ReferralStatus.CLOSED);
+
+        latestNotClosedReferralId = referral?.Id;
+      }
+      return latestNotClosedReferralId;
+    }
+
     public string GpPracticeNameAndPostcode
     {
       get
       {
-        return GpPracticeId != null ? ($"{GpPractice.Name}, {GpPractice.Postcode}") : "";
-      }
-    }
-
-    public int? GetLatestNotClosedReferralId
-    {
-      get
-      {
-        int? latestNotClosedReferralId = null;
-
-        if (Referrals != null)
-        {
-          Referral referral = Referrals.OrderByDescending(r => r.CreatedAt)
-          .FirstOrDefault(r => r.ReferralStatusId != Data.Entities.ReferralStatus.CLOSED);
-
-          latestNotClosedReferralId = referral?.Id;
-        }
-        return latestNotClosedReferralId;
+        return GpPracticeId != null ? ($"{GpPractice.Name}, {GpPractice.Postcode}") : null;
       }
     }
 
@@ -72,7 +69,7 @@ namespace Mep.Business.Models
         NhsNumber = NhsNumber,
         ResidentialPostcode = ResidentialPostcode
       };
-      
+
       BaseMapToEntity(entity);
       return entity;
     }
