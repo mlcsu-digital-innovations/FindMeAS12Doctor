@@ -3,11 +3,13 @@ using AutoMapper;
 using Mep.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Mep.Api.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public class LocationDetailsController : ControllerBase
   {
     protected readonly IMapper _mapper;

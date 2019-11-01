@@ -1,5 +1,6 @@
 using Mep.Api.RequestModels;
 using Mep.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public abstract class SearchBaseController<BusinessModel> : ModelControllerNoAutoMapper
       where BusinessModel : Business.Models.BaseModel
   {

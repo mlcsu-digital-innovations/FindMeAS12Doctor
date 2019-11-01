@@ -8,11 +8,13 @@ using business = Mep.Business.Models.SearchModels;
 using Mep.Business.Models;
 using Mep.Api.RequestModels;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public abstract class GeneralSearchController<BusinessModel> : ControllerBase where BusinessModel : BaseModel
   {
     protected readonly IModelGeneralSearchService<BusinessModel> _service;

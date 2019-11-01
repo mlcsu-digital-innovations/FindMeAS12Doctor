@@ -9,6 +9,7 @@ namespace Mep.Api.Controllers
 {
   [ApiController]
   [Route("[controller]")]
+  [Authorize(Policy="User")]
   public class ErrorController : ControllerBase
   {
     public ErrorController()

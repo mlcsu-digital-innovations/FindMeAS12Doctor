@@ -8,6 +8,7 @@ namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public class PatientController : ModelControllerNoAutoMapper
   {
     public PatientController(IPatientService service)

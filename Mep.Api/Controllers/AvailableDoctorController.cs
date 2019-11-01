@@ -7,12 +7,13 @@ using Mep.Api.SearchModels;
 using System.Collections.Generic;
 using SearchModel = Mep.Business.Models.SearchModels;
 using BusinessModel = Mep.Business.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mep.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public class AvailableDoctorController : ControllerBase
   {
     protected readonly IMapper _mapper;

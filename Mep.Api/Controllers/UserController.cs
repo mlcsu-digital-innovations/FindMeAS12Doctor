@@ -1,4 +1,5 @@
 using Mep.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Mep.Api.Controllers
 
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public class UserController : ModelControllerNoAutoMapper
   {
     public UserController(IUserService service)
