@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'https://mep-dev-api.azurewebsites.net/api/',
+  apiEndpoint: 'https://fmas12d-dev-api.azurewebsites.net/api/',
 };
 
 /*
