@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Mep.Data\mep.data.csproj" />    
+    <ProjectReference Include="..\Fmas12d.Data\Fmas12d.Data.csproj" />    
   </ItemGroup>
 
   <ItemGroup>

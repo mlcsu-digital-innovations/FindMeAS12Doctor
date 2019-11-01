@@ -11,34 +11,34 @@ pool:
 steps:
 
 - task: DotNetCoreCLI@2
-  displayName: 'Mep.Api - Check build completes successfully'
+  displayName: 'Fmas12d.Api - Check build completes successfully'
   inputs:
     projects: '**/*.csproj'
     arguments: '-c AzureDevelopment'
 
 - task: Npm@1
-  displayName: 'Mep.Ui - Install npm packages'
+  displayName: 'Fmas12d.Ui - Install npm packages'
   inputs:
     command: 'install'
-    workingDir: './Mep.Ui'
+    workingDir: './Fmas12d.Ui'
 
 - task: Npm@1
-  displayName: "Mep.Ui - Check build completes successfully"
+  displayName: "Fmas12d.Ui - Check build completes successfully"
   inputs:
     command: 'custom'
-    workingDir: './Mep.Ui'
+    workingDir: './Fmas12d.Ui'
     customCommand: 'run build:azure-development'
 
 - task: Npm@1
-  displayName: 'Mep.Mobile - Install npm packages'
+  displayName: 'Fmas12d.Mobile - Install npm packages'
   inputs:
     command: 'install'
-    workingDir: './Mep.Mobile'
+    workingDir: './Fmas12d.Mobile'
 
 - task: Npm@1
-  displayName: "Mep.Mobile - Check build completes successfully"
+  displayName: "Fmas12d.Mobile - Check build completes successfully"
   inputs:
     command: 'custom'
-    workingDir: './Mep.Mobile'
+    workingDir: './Fmas12d.Mobile'
     customCommand: 'run build:azure-development'
     

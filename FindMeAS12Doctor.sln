@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mep.data", "Mep.Data\mep.data.csproj", "{199CDADA-62AE-4FF1-ABE4-94FB23DB7E84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmas12d.data", "Fmas12d.Data\Fmas12d.data.csproj", "{199CDADA-62AE-4FF1-ABE4-94FB23DB7E84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mep.business", "Mep.Business\mep.business.csproj", "{824B8DED-7B43-4BFF-A7AD-0821AC4A93D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmas12d.business", "Fmas12d.Business\Fmas12d.business.csproj", "{824B8DED-7B43-4BFF-A7AD-0821AC4A93D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mep.Api", "Mep.Api\Mep.Api.csproj", "{D31BDC09-42FC-4B2F-ADF0-CDD655B9CF4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmas12d.Api", "Fmas12d.Api\Fmas12d.Api.csproj", "{D31BDC09-42FC-4B2F-ADF0-CDD655B9CF4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mep.Api.Test", "Mep.Api.Test\Mep.Api.Test.csproj", "{0EB80613-E45D-4CF6-9432-73FAD622368A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmas12d.Api.Test", "Fmas12d.Api.Test\Fmas12d.Api.Test.csproj", "{0EB80613-E45D-4CF6-9432-73FAD622368A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mep.Business.Test", "Mep.Business.Test\Mep.Business.Test.csproj", "{E64167A0-6409-4DE4-9177-429D3267E4A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmas12d.Business.Test", "Fmas12d.Business.Test\Fmas12d.Business.Test.csproj", "{E64167A0-6409-4DE4-9177-429D3267E4A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mep.Data.Test", "Mep.Data.Test\Mep.Data.Test.csproj", "{0212EA09-5453-43D3-BE4D-7D5F049422D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fmas12d.Data.Test", "Fmas12d.Data.Test\Fmas12d.Data.Test.csproj", "{0212EA09-5453-43D3-BE4D-7D5F049422D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

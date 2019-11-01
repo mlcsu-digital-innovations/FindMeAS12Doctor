@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mep.Business\mep.business.csproj" />
+    <ProjectReference Include="..\Fmas12d.Business\Fmas12d.Business.csproj" />
   </ItemGroup>
 
 </Project>

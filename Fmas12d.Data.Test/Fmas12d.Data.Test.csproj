@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <ProjectGuid>{E64167A0-6409-4DE4-9177-429D3267E4A9}</ProjectGuid>
+    <ProjectGuid>{0212EA09-5453-43D3-BE4D-7D5F049422D0}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mep.Business\mep.business.csproj" />
+    <ProjectReference Include="..\Fmas12d.Data\Fmas12d.Data.csproj" />
   </ItemGroup>
 
 </Project>
