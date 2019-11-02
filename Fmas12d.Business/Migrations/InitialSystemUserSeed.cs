@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Fmas12d.business.Migrations
+namespace Fmas12d.Business.Migrations
 {
+    /// <summary>
+    /// This must be called at the end of the initial migration's Up method
+    /// </summary>
     public static class InitialSystemUserSeed
     {
         static internal void Seed(MigrationBuilder migrationBuilder)
