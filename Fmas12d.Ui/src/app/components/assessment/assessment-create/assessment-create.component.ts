@@ -5,8 +5,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { Examination } from 'src/app/interfaces/assessment';
-import { ExaminationService } from 'src/app/services/assessment/assessment.service';
+import { Assessment } from 'src/app/interfaces/assessment';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LeadAmhpUser } from 'src/app/interfaces/user';
@@ -25,11 +25,11 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-examination-create',
-  templateUrl: './examination-create.component.html',
-  styleUrls: ['./examination-create.component.css']
+  selector: 'app-assessment-create',
+  templateUrl: './assessment-create.component.html',
+  styleUrls: ['./assessment-create.component.css']
 })
-export class ExaminationCreateComponent implements OnInit {
+export class AssessmentCreateComponent implements OnInit {
 
   addresses$: Observable<any>;
   addressList: AddressResult[];
@@ -37,16 +37,16 @@ export class ExaminationCreateComponent implements OnInit {
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
   dropdownSettings: IDropdownSettings;
-  examinationDetails: NameIdList[] = [];
-  examinationForm: FormGroup;
-  examinationId: number;
-  examinationPostcodeValidationMessage: string;
-  examinationShouldBeCompletedByDate: NgbDateStruct;
-  examinationShouldBeCompletedByTime: NgbTimeStruct;
+  assessmentDetails: NameIdList[] = [];
+  assessmentForm: FormGroup;
+  assessmentId: number;
+  assessmentPostcodeValidationMessage: string;
+  assessmentShouldBeCompletedByDate: NgbDateStruct;
+  assessmentShouldBeCompletedByTime: NgbTimeStruct;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
-  isCreatingExamination: boolean;
+  isCreatingAssessment: boolean;
   isFormInCreatingState: boolean = true;
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
@@ -57,11 +57,11 @@ export class ExaminationCreateComponent implements OnInit {
   selectedDetails: NameIdList[] = [];
   specialities: NameIdList[];
 
-  @ViewChild('cancelExamination', null) cancelExaminationTemplate;
+  @ViewChild('cancelAssessment', null) cancelAssessmentTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
-    private examinationService: ExaminationService,
+    private assessmentService: AssessmentService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
@@ -144,21 +144,21 @@ export class ExaminationCreateComponent implements OnInit {
         });
 
     // get the list of risks for the dropdown
-    this.nameIdListService.GetListData('examinationdetailtype')
+    this.nameIdListService.GetListData('assessmentdetailtype')
       .subscribe(details => {
-        this.examinationDetails = details;
+        this.assessmentDetails = details;
       },
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Examination Risks'
+          message: 'Error Retrieving Assessment Risks'
       });
     });
 
-    this.examinationForm = this.formBuilder.group({
-      plannedExamination: false,
+    this.assessmentForm = this.formBuilder.group({
+      plannedAssessment: false,
       amhp: [''],
-      examinationPostcode: [
+      assessmentPostcode: [
         '',
         [
           Validators.minLength(6),
@@ -166,7 +166,7 @@ export class ExaminationCreateComponent implements OnInit {
           Validators.pattern(`${PostcodeRegex}$`)
         ]
       ],
-      examinationAddress: [''],
+      assessmentAddress: [''],
       additionalDetails: ['',
         [
           Validators.maxLength(2000)
@@ -174,25 +174,25 @@ export class ExaminationCreateComponent implements OnInit {
       ],
       speciality: [''],
       preferredGender: [''],
-      examinationDetails: [''],
+      assessmentDetails: [''],
       scheduledDate: [''],
       scheduledTime: [''],
       toBeCompletedByDate: [
-        this.examinationShouldBeCompletedByDate,
+        this.assessmentShouldBeCompletedByDate,
         [
           DatePickerFormat
         ]
       ],
-      toBeCompletedByTime: [this.examinationShouldBeCompletedByTime]
+      toBeCompletedByTime: [this.assessmentShouldBeCompletedByTime]
     });
   }
 
   AddressSearch(): void {
     this.addressList = [];
-    this.examinationAddressField.setValue('');
+    this.assessmentAddressField.setValue('');
     this.isSearchingForPostcode = true;
 
-    this.postcodeValidationService.searchPostcode(this.examinationPostcodeField.value)
+    this.postcodeValidationService.searchPostcode(this.assessmentPostcodeField.value)
       .subscribe(address => {
         this.addressList.push(address);
       }, (err) => {
@@ -205,7 +205,7 @@ export class ExaminationCreateComponent implements OnInit {
         this.isSearchingForPostcode = false;
         // show an error if no matching addresses are returned
         if (this.addressList.length === 0) {
-          this.examinationPostcodeField.setErrors({ NoResultsReturned: true });
+          this.assessmentPostcodeField.setErrors({ NoResultsReturned: true });
         }
       });
   }
@@ -227,10 +227,10 @@ export class ExaminationCreateComponent implements OnInit {
       tap(() => (this.isAmhpSearching = false))
     )
 
-  CancelExamination() {
+  CancelAssessment() {
 
-    if (this.examinationForm.dirty) {
-      this.cancelModal = this.modalService.open(this.cancelExaminationTemplate, {
+    if (this.assessmentForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelAssessmentTemplate, {
         size: 'lg'
       });
     } else {
@@ -278,15 +278,15 @@ export class ExaminationCreateComponent implements OnInit {
 
   DisableForm() {
     this.amhpField.disable();
-    this.examinationPostcodeField.disable();
-    this.examinationAddressField.disable();
+    this.assessmentPostcodeField.disable();
+    this.assessmentAddressField.disable();
     this.additionalDetailsField.disable();
     this.specialityField.disable();
     this.preferredDoctorGenderField.disable();
-    this.examinationDetailsField.disable();
-    this.plannedExaminationField.disable();
+    this.assessmentDetailsField.disable();
+    this.plannedAssessmentField.disable();
 
-    if (this.plannedExaminationField.value === true) {
+    if (this.plannedAssessmentField.value === true) {
       this.scheduledDateField.disable();
       this.scheduledTimeField.disable();
     } else {
@@ -295,19 +295,19 @@ export class ExaminationCreateComponent implements OnInit {
     }
   }
 
-  EditExamination() {
-    this.routerService.navigate([`/examination/edit/${this.examinationId}`]);
+  EditAssessment() {
+    this.routerService.navigate([`/assessment/edit/${this.assessmentId}`]);
   }
 
   FormatAddress(): string[] {
 
     const addressLines: string[] = [];
-    const addressSplitByCommas = this.examinationAddressField.value.split(',');
+    const addressSplitByCommas = this.assessmentAddressField.value.split(',');
 
     // can only store 4 lines of the address
     for (let i = 0; i < 4; i++) {
       if (addressSplitByCommas.length >= i &&
-          addressSplitByCommas[i].trim() !== this.examinationPostcodeField.value) {
+          addressSplitByCommas[i].trim() !== this.assessmentPostcodeField.value) {
             addressLines.push(addressSplitByCommas[i].trim());
       } else {
         addressLines.push(null);
@@ -322,63 +322,63 @@ export class ExaminationCreateComponent implements OnInit {
   }
 
   get additionalDetailsField() {
-    return this.examinationForm.controls.additionalDetails;
+    return this.assessmentForm.controls.additionalDetails;
   }
 
   get amhpField() {
-    return this.examinationForm.controls.amhp;
+    return this.assessmentForm.controls.amhp;
   }
 
   get amhpUser(): TypeAheadResult {
-    return this.examinationForm.controls.amhp.value;
+    return this.assessmentForm.controls.amhp.value;
   }
 
-  get examination() {
-    return this.examinationForm.controls;
+  get assessment() {
+    return this.assessmentForm.controls;
   }
 
-  get examinationAddressField() {
-    return this.examinationForm.controls.examinationAddress;
+  get assessmentAddressField() {
+    return this.assessmentForm.controls.assessmentAddress;
   }
 
-  get examinationDetailsField() {
-    return this.examinationForm.controls.examinationDetails;
+  get assessmentDetailsField() {
+    return this.assessmentForm.controls.assessmentDetails;
   }
 
-  get examinationPostcodeField() {
-    return this.examinationForm.controls.examinationPostcode;
+  get assessmentPostcodeField() {
+    return this.assessmentForm.controls.assessmentPostcode;
   }
 
-  get plannedExaminationField() {
-    return this.examinationForm.controls.plannedExamination;
+  get plannedAssessmentField() {
+    return this.assessmentForm.controls.plannedAssessment;
   }
 
   get preferredDoctorGenderField() {
-    return this.examinationForm.controls.preferredGender;
+    return this.assessmentForm.controls.preferredGender;
   }
 
   get toBeCompletedByDateField() {
-    return this.examinationForm.controls.toBeCompletedByDate;
+    return this.assessmentForm.controls.toBeCompletedByDate;
   }
 
   get toBeCompletedByTimeField() {
-    return this.examinationForm.controls.toBeCompletedByTime;
+    return this.assessmentForm.controls.toBeCompletedByTime;
   }
 
   get scheduledDateField() {
-    return this.examinationForm.controls.scheduledDate;
+    return this.assessmentForm.controls.scheduledDate;
   }
 
   get scheduledTimeField() {
-    return this.examinationForm.controls.scheduledTime;
+    return this.assessmentForm.controls.scheduledTime;
   }
 
   get specialityField() {
-    return this.examinationForm.controls.speciality;
+    return this.assessmentForm.controls.speciality;
   }
 
   HasValidAddress(): boolean {
-    return this.examinationAddressField.value !== '';
+    return this.assessmentAddressField.value !== '';
   }
 
   HasValidAmhp(): boolean {
@@ -387,25 +387,25 @@ export class ExaminationCreateComponent implements OnInit {
 
   HasValidPostcode(): boolean {
     return (
-      this.examinationPostcodeField.value !== '' &&
-      this.examinationPostcodeField.errors == null
+      this.assessmentPostcodeField.value !== '' &&
+      this.assessmentPostcodeField.errors == null
     );
   }
 
-  IsExaminationBeforeReferralCreationDate(dateField: AbstractControl, timeField: AbstractControl ): boolean {
+  IsAssessmentBeforeReferralCreationDate(dateField: AbstractControl, timeField: AbstractControl ): boolean {
 
     const compareDate = this.CreateDateFromPickerObjects(dateField.value, timeField.value);
 
-    const examinationDateIsBeforeReferralCreatedAt =
+    const assessmentDateIsBeforeReferralCreatedAt =
       moment(compareDate).isBefore(moment(this.referralCreated));
 
-    if (examinationDateIsBeforeReferralCreatedAt) {
-      dateField.setErrors({InvalidExaminationDate: true});
+    if (assessmentDateIsBeforeReferralCreatedAt) {
+      dateField.setErrors({InvalidAssessmentDate: true});
     } else {
-      dateField.setErrors({InvalidExaminationDate: false});
+      dateField.setErrors({InvalidAssessmentDate: false});
     }
 
-    return examinationDateIsBeforeReferralCreatedAt;
+    return assessmentDateIsBeforeReferralCreatedAt;
   }
 
   IsFormInCreatingState(): boolean {
@@ -414,8 +414,8 @@ export class ExaminationCreateComponent implements OnInit {
 
   HasInvalidPostcode(): boolean {
     return (
-      this.examinationPostcodeField.value !== '' &&
-      this.examinationPostcodeField.errors !== null
+      this.assessmentPostcodeField.value !== '' &&
+      this.assessmentPostcodeField.errors !== null
     );
   }
 
@@ -445,25 +445,25 @@ export class ExaminationCreateComponent implements OnInit {
     window.open(environment.locationEndpoint, '_blank');
   }
 
-  PostExamination(examination: Examination) {
-    this.isCreatingExamination = true;
-    this.examinationService.createExamination(examination).subscribe(
-      (result: Examination) => {
+  PostAssessment(assessment: Assessment) {
+    this.isCreatingAssessment = true;
+    this.assessmentService.createAssessment(assessment).subscribe(
+      (result: Assessment) => {
         this.toastService.displaySuccess({
-          message: 'Examination Created'
+          message: 'Assessment Created'
         });
-        this.isCreatingExamination = false;
+        this.isCreatingAssessment = false;
         // update the page - edit mode
         this.isFormInCreatingState = false;
-        this.examinationId = result.id;
+        this.assessmentId = result.id;
         this.DisableForm();
       },
       error => {
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to create new examination! Please try again in a few moments'
+          message: 'Unable to create new assessment! Please try again in a few moments'
         });
-        this.isCreatingExamination = false;
+        this.isCreatingAssessment = false;
         return throwError(error);
       }
     );
@@ -477,7 +477,7 @@ export class ExaminationCreateComponent implements OnInit {
     return Math.ceil(minute / 5) * 5;
   }
 
-  SaveExamination() {
+  SaveAssessment() {
     let canContinue = true;
 
     // check AMHP
@@ -488,20 +488,20 @@ export class ExaminationCreateComponent implements OnInit {
 
     // check postcode
     if (!this.HasValidPostcode()) {
-      this.examinationPostcodeField.setErrors({ MissingPostcode: true });
+      this.assessmentPostcodeField.setErrors({ MissingPostcode: true });
       canContinue = false;
     }
 
     // check address
     if (!this.HasValidAddress()) {
-      this.examinationAddressField.setErrors({ InvalidAddress: true });
+      this.assessmentAddressField.setErrors({ InvalidAddress: true });
       canContinue = false;
     }
 
-    if (this.plannedExaminationField.value === true ) {
-      // check the scheduled examination date
+    if (this.plannedAssessmentField.value === true ) {
+      // check the scheduled assessment date
       canContinue =
-        this.IsExaminationBeforeReferralCreationDate(
+        this.IsAssessmentBeforeReferralCreationDate(
           this.scheduledDateField,
           this.scheduledTimeField
         ) ? false : canContinue;
@@ -509,7 +509,7 @@ export class ExaminationCreateComponent implements OnInit {
     } else {
       // check the to be completed by date
       canContinue =
-        this.IsExaminationBeforeReferralCreationDate(
+        this.IsAssessmentBeforeReferralCreationDate(
           this.toBeCompletedByDateField,
           this.toBeCompletedByTimeField
         ) ? false : canContinue;
@@ -519,44 +519,44 @@ export class ExaminationCreateComponent implements OnInit {
       return;
     }
 
-    // create an examination object
-    const examination = {} as Examination;
+    // create an assessment object
+    const assessment = {} as Assessment;
 
-    examination.amhpUserId = this.amhpUser.id;
-    examination.postcode = this.examinationPostcodeField.value;
-    examination.isPlanned = this.plannedExaminationField.value;
-    examination.meetingArrangementComment = this.additionalDetailsField.value;
-    examination.referralId = this.referralId;
-    examination.preferredDoctorGenderTypeId = this.preferredDoctorGenderField.value;
-    examination.specialityId = this.specialityField.value;
+    assessment.amhpUserId = this.amhpUser.id;
+    assessment.postcode = this.assessmentPostcodeField.value;
+    assessment.isPlanned = this.plannedAssessmentField.value;
+    assessment.meetingArrangementComment = this.additionalDetailsField.value;
+    assessment.referralId = this.referralId;
+    assessment.preferredDoctorGenderTypeId = this.preferredDoctorGenderField.value;
+    assessment.specialityId = this.specialityField.value;
 
-    examination.mustBeCompletedBy =
-      this.plannedExaminationField.value ?
+    assessment.mustBeCompletedBy =
+      this.plannedAssessmentField.value ?
         null :
         this.CreateDateFromPickerObjects(this.toBeCompletedByDateField.value, this.toBeCompletedByTimeField.value);
 
-    examination.scheduledTime =
-      this.plannedExaminationField.value ?
+    assessment.scheduledTime =
+      this.plannedAssessmentField.value ?
         this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value) :
         null;
 
     const addressLines: string[] = this.FormatAddress();
-    examination.address1 = addressLines[0];
-    examination.address2 = addressLines[1];
-    examination.address3 = addressLines[2];
-    examination.address4 = addressLines[3];
+    assessment.address1 = addressLines[0];
+    assessment.address2 = addressLines[1];
+    assessment.address3 = addressLines[2];
+    assessment.address4 = addressLines[3];
 
-    examination.examinationDetails = [];
+    assessment.assessmentDetails = [];
 
     this.selectedDetails.forEach(detail => {
-      examination.examinationDetails.push(detail.id);
+      assessment.assessmentDetails.push(detail.id);
     });
 
-    this.PostExamination(examination);
+    this.PostAssessment(assessment);
   }
 
   SelectDoctor() {
-    this.routerService.navigate([`/examination/${this.examinationId}/select-doctors`]);
+    this.routerService.navigate([`/assessment/${this.assessmentId}/select-doctors`]);
   }
 
   SetAmhpField(id: number | null, text: string | null) {
@@ -575,10 +575,10 @@ export class ExaminationCreateComponent implements OnInit {
     this.defaultCompletionTime = this.ConvertToTimeStruct(defaultDatetIme);
   }
 
-  TogglePlannedExamination(event: any) {
+  TogglePlannedAssessment(event: any) {
 
-    if (this.examinationForm.controls.plannedExamination.value === true) {
-      // planned examination
+    if (this.assessmentForm.controls.plannedAssessment.value === true) {
+      // planned assessment
       const now = new Date();
       const scheduledDate = {
         year: now.getFullYear(),

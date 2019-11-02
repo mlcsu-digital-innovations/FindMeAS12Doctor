@@ -1,5 +1,5 @@
 import { ConfigService } from '../config/config.service';
-import { Injectable } from '../../pages/amhp-assessment-list/node_modules/@angular/core';
+import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { StoredError } from 'src/app/interfaces/stored-error.interface';
 

@@ -1,4 +1,4 @@
-export interface CurrentExamination {
+export interface CurrentAssessment {
   amhpUserName: string;
   doctorNamesAccepted: string[];
   doctorNamesAllocated: string[];

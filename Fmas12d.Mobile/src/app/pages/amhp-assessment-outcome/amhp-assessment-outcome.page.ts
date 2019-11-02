@@ -1,31 +1,31 @@
 import { AlertController, NavController } from '@ionic/angular'
-import { AmhpExaminationOutcome } from 'src/app/models/amhp-assessment-outcome.model';
-import { AmhpExaminationService } from '../../services/amhp-assessment/amhp-assessment.service';
-import { AmhpExaminationView } from '../../models/amhp-assessment-view.model';
-import { AmhpExaminationViewDoctor } from 'src/app/models/amhp-assessment-view-doctor.model';
+import { AmhpAssessmentOutcome } from 'src/app/models/amhp-assessment-outcome.model';
+import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service';
+import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
+import { AmhpAssessmentViewDoctor } from 'src/app/models/amhp-assessment-view-doctor.model';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { UnsuccessfulExaminationType } from 'src/app/models/unsuccessful-assessment-type.model';
-import { UnsuccessfulExaminationTypeService } from
+import { UnsuccessfulAssessmentType } from 'src/app/models/unsuccessful-assessment-type.model';
+import { UnsuccessfulAssessmentTypeService } from
   'src/app/services/unsuccessful-assessment-type/unsuccessful-assessment-type.service';
 
 @Component({
-  selector: 'app-amhp-examination-outcome',
-  templateUrl: './amhp-examination-outcome.page.html',
-  styleUrls: ['./amhp-examination-outcome.page.scss'],
+  selector: 'app-amhp-assessment-outcome',
+  templateUrl: './amhp-assessment-outcome.page.html',
+  styleUrls: ['./amhp-assessment-outcome.page.scss'],
 })
-export class AmhpExaminationOutcomePage implements OnInit {
-  public examinationLastUpdated: Date;
-  public examinationSuccessful: boolean = true;
-  public examinationView: AmhpExaminationView;
-  public unsuccessfulExaminationTypeId?: number;
-  public unsuccessfulExaminationTypeList: UnsuccessfulExaminationType[] = [];
-  public unsuccessfulExaminationTypeName: string
+export class AmhpAssessmentOutcomePage implements OnInit {
+  public assessmentLastUpdated: Date;
+  public assessmentSuccessful: boolean = true;
+  public assessmentView: AmhpAssessmentView;
+  public unsuccessfulAssessmentTypeId?: number;
+  public unsuccessfulAssessmentTypeList: UnsuccessfulAssessmentType[] = [];
+  public unsuccessfulAssessmentTypeName: string
 
   constructor(
     private alertCtrl: AlertController,
-    private examinationService: AmhpExaminationService,
-    private unsuccessfulExaminationTypeService: UnsuccessfulExaminationTypeService,
+    private assessmentService: AmhpAssessmentService,
+    private unsuccessfulAssessmentTypeService: UnsuccessfulAssessmentTypeService,
     private toastService: ToastService,
     private navCtrl: NavController
   ) {
@@ -33,22 +33,22 @@ export class AmhpExaminationOutcomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.examinationLastUpdated = new Date();
-    this.examinationView = this.examinationService.retrieveView();
+    this.assessmentLastUpdated = new Date();
+    this.assessmentView = this.assessmentService.retrieveView();
 
-    if (this.examinationView.doctorsAllocated) {
-      this.examinationView.doctorsAllocated.forEach(doctor => doctor.attended = true);
+    if (this.assessmentView.doctorsAllocated) {
+      this.assessmentView.doctorsAllocated.forEach(doctor => doctor.attended = true);
     }
 
-    this.unsuccessfulExaminationTypeService.getList()
-      .subscribe(data => this.unsuccessfulExaminationTypeList = data);
+    this.unsuccessfulAssessmentTypeService.getList()
+      .subscribe(data => this.unsuccessfulAssessmentTypeList = data);
   }
 
   public async confirmSave() {
     let alert = await this.alertCtrl.create({
       header: 'Confirm Outcome',
       message: this.confirmMessage(),
-      cssClass: 'amhp-examination-outcome-alert',
+      cssClass: 'amhp-assessment-outcome-alert',
       buttons: [
         {
           text: 'Cancel',
@@ -67,24 +67,24 @@ export class AmhpExaminationOutcomePage implements OnInit {
   }
 
   private confirmMessage(): string {
-    return `<strong>Examination ${this.examinationSuccessful ? 'Successful' : 'Unsuccessful'}</strong><br />
-            ${this.examinationSuccessful ? '' : '<strong>Unsuccessful Exam Type:</strong> ' +
-        this.getUnsuccessfulExaminationTypeName() + '<br />'}
-            <strong>Referral Id:</strong> ${this.examinationView.referralId}<br />
-            <strong>Patient Id:</strong> ${this.examinationView.patientIdentifier}<br />
+    return `<strong>Assessment ${this.assessmentSuccessful ? 'Successful' : 'Unsuccessful'}</strong><br />
+            ${this.assessmentSuccessful ? '' : '<strong>Unsuccessful Assessment Type:</strong> ' +
+        this.getUnsuccessfulAssessmentTypeName() + '<br />'}
+            <strong>Referral Id:</strong> ${this.assessmentView.referralId}<br />
+            <strong>Patient Id:</strong> ${this.assessmentView.patientIdentifier}<br />
             <strong>Attending Doctors:</strong> ${this.getDoctorsAllocatedNames()}`;
   }
 
-  private getUnsuccessfulExaminationTypeName(): string {
-    if (this.unsuccessfulExaminationTypeId) {
-      return this.unsuccessfulExaminationTypeList.filter((unsuccessfulExaminationType: UnsuccessfulExaminationType) =>
-        this.unsuccessfulExaminationTypeId == unsuccessfulExaminationType.id)[0].name;
+  private getUnsuccessfulAssessmentTypeName(): string {
+    if (this.unsuccessfulAssessmentTypeId) {
+      return this.unsuccessfulAssessmentTypeList.filter((unsuccessfulAssessmentType: UnsuccessfulAssessmentType) =>
+        this.unsuccessfulAssessmentTypeId == unsuccessfulAssessmentType.id)[0].name;
     }
     return '';
   }
 
   private getDoctorsAllocatedNames(): string {
-    let attendingDoctors: AmhpExaminationViewDoctor[] = this.attendingDoctors();
+    let attendingDoctors: AmhpAssessmentViewDoctor[] = this.attendingDoctors();
 
     if (attendingDoctors && attendingDoctors.length > 0) {
       return attendingDoctors.map(doctor => doctor.displayName).join(", ");
@@ -94,20 +94,20 @@ export class AmhpExaminationOutcomePage implements OnInit {
   }
 
   private save(): void {
-    let examinationOutcome: AmhpExaminationOutcome =
-      new AmhpExaminationOutcome(
+    let assessmentOutcome: AmhpAssessmentOutcome =
+      new AmhpAssessmentOutcome(
         new Date(),
-        this.examinationView.doctorsAllocated,
-        this.examinationView.id,
-        this.examinationSuccessful ? null : this.unsuccessfulExaminationTypeId);
+        this.assessmentView.doctorsAllocated,
+        this.assessmentView.id,
+        this.assessmentSuccessful ? null : this.unsuccessfulAssessmentTypeId);
             
-    this.examinationService.putOutcome(examinationOutcome, this.examinationView.id, this.examinationSuccessful)
+    this.assessmentService.putOutcome(assessmentOutcome, this.assessmentView.id, this.assessmentSuccessful)
       .subscribe(
         result => {
           this.toastService.displaySuccess({            
-            message: 'Examination Outcome Updated'
+            message: 'Assessment Outcome Updated'
           });
-          this.navCtrl.navigateRoot("amhp-examination-list");
+          this.navCtrl.navigateRoot("amhp-assessment-list");
         },
         error => {
           this.toastService.displayError({
@@ -117,9 +117,9 @@ export class AmhpExaminationOutcomePage implements OnInit {
         });
   }
 
-  private attendingDoctors(): AmhpExaminationViewDoctor[] {
-    if (this.examinationView.doctorsAllocated) {
-      return this.examinationView.doctorsAllocated.filter(doctor => doctor.attended);
+  private attendingDoctors(): AmhpAssessmentViewDoctor[] {
+    if (this.assessmentView.doctorsAllocated) {
+      return this.assessmentView.doctorsAllocated.filter(doctor => doctor.attended);
     }
     return [];
   }

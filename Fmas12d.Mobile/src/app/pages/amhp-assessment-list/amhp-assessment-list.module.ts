@@ -1,4 +1,4 @@
-import { AmhpExaminationListPage } from './amhp-assessment-list.page';
+import { AmhpAssessmentListPage } from './amhp-assessment-list.page';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    component: AmhpExaminationListPage
+    component: AmhpAssessmentListPage
   }
 ];
 
@@ -22,9 +22,9 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [
-    AmhpExaminationListPage    
+    AmhpAssessmentListPage    
   ],
   exports: [    
   ]
 })
-export class AmhpExaminationListPageModule { }
+export class AmhpAssessmentListPageModule { }

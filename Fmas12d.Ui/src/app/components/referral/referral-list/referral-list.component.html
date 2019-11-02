@@ -39,9 +39,9 @@
                     <th scope="col" sortable="referralId" (sort)="onSort($event)">Referral Id</th>
                     <th scope="col" sortable="patientIdentifier" (sort)="onSort($event)">Patient Identifier</th>
                     <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
-                    <th scope="col" sortable="numberOfExaminationAttempts" (sort)="onSort($event)">No. of Exam Attempts
+                    <th scope="col" sortable="numberOfAssessmentAttempts" (sort)="onSort($event)">No. of Assessment Attempts
                     </th>
-                    <th scope="col" sortable="examinationLocationPostcode" (sort)="onSort($event)">Exam Location
+                    <th scope="col" sortable="assessmentLocationPostcode" (sort)="onSort($event)">Assessment Location
                       Postcode</th>
                     <th scope="col" sortable="speciality" (sort)="onSort($event)">Speciality</th>
                     <th scope="col" sortable="timescale" (sort)="onSort($event)">Timescale</th>
@@ -69,11 +69,11 @@
                       </ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="referral.numberOfExaminationAttempts"
+                      <ngb-highlight [result]="referral.numberOfAssessmentAttempts"
                         [term]="referralListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="referral.examinationLocationPostcode"
+                      <ngb-highlight [result]="referral.assessmentLocationPostcode"
                         [term]="referralListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>

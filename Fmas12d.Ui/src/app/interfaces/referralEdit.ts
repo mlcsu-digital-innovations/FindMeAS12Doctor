@@ -1,7 +1,7 @@
 export interface ReferralEdit {
   createdAt: Date;
   id: number;
-  isPlannedExamination: boolean;
+  isPlannedAssessment: boolean;
   leadAmhpUserId: number;
   leadAmhpUserDisplayName: string;
   patientAlternativeIdentifier: string;

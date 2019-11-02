@@ -4,11 +4,11 @@ import { DoctorAcceptComponent } from './doctor-accept/doctor-accept.component';
 
 export const DoctorRoutes: Routes = [
   {
-    path: 'examination/:examinationId/select-doctors',
+    path: 'assessment/:assessmentId/select-doctors',
     component: DoctorSelectComponent
   },
   {
-    path: 'examination/:examinationId/accept-doctors',
+    path: 'assessment/:assessmentId/accept-doctors',
     component: DoctorAcceptComponent
   }
 ];

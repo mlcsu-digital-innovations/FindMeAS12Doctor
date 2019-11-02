@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AmhpExaminationViewPage } from './amhp-assessment-view.page';
+import { AmhpAssessmentViewPage } from './amhp-assessment-view.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: AmhpExaminationViewPage
+    component: AmhpAssessmentViewPage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AmhpExaminationViewPage]
+  declarations: [AmhpAssessmentViewPage]
 })
-export class AmhpExaminationViewPageModule {}
+export class AmhpAssessmentViewPageModule {}

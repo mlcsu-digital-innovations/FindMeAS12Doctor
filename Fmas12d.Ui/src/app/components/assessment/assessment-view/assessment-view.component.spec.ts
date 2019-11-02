@@ -1,19 +1,19 @@
 import { ActivatedRoute } from '@angular/router';
 import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
-import { ExaminationViewComponent } from './assessment-view.component';
+import { AssessmentViewComponent } from './assessment-view.component';
 import { HttpClientModule } from 'src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
 import { of } from 'src/app/components/assessment/assessment-create/node_modules/rxjs';
 import { RouterService } from 'src/app/services/router/router.service';
 import { SharedComponentsModule } from '../../shared-components.module';
 
-describe('ExaminationViewComponent', () => {
-  let component: ExaminationViewComponent;
-  let fixture: ComponentFixture<ExaminationViewComponent>;
+describe('AssessmentViewComponent', () => {
+  let component: AssessmentViewComponent;
+  let fixture: ComponentFixture<AssessmentViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ExaminationViewComponent
+        AssessmentViewComponent
       ],
       imports: [
         HttpClientModule,
@@ -38,7 +38,7 @@ describe('ExaminationViewComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExaminationViewComponent);
+    fixture = TestBed.createComponent(AssessmentViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,29 +1,29 @@
 import { environment } from 'src/environments/environment';
-import { Examination } from 'src/app/interfaces/assessment';
+import { Assessment } from 'src/app/interfaces/assessment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ExaminationService {
+export class AssessmentService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public createExamination(examination: Examination) {
+  public createAssessment(assessment: Assessment) {
 
-    let examinationType = '';
-    if (examination.isPlanned) {
-      examinationType = '/planned';
+    let assessmentType = '';
+    if (assessment.isPlanned) {
+      assessmentType = '/planned';
     } else {
-      examinationType = '/emergency';
+      assessmentType = '/emergency';
     }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post(
-      environment.apiEndpoint + '/examination' + examinationType,
-      examination,
+      environment.apiEndpoint + '/assessment' + assessmentType,
+      assessment,
       { headers }
     );
   }

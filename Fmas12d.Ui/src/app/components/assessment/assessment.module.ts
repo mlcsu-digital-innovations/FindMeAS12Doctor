@@ -1,25 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { ExaminationCreateComponent } from './assessment-create/assessment-create.component';
-import { ExaminationEditComponent } from './assessment-edit/assessment-edit.component';
-import { ExaminationListComponent } from './assessment-list/assessment-list.component';
-import { ExaminationRoutes } from './assessment.routes';
-import { ExaminationViewComponent } from './examination-view/examination-view.component';
+import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
+import { AssessmentEditComponent } from './assessment-edit/assessment-edit.component';
+import { AssessmentListComponent } from './assessment-list/assessment-list.component';
+import { AssessmentRoutes } from './assessment.routes';
+import { AssessmentViewComponent } from './assessment-view/assessment-view.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedComponentsModule } from '../shared-components.module';
 
 @NgModule({
   declarations: [
-    ExaminationCreateComponent,
-    ExaminationEditComponent,
-    ExaminationListComponent,
-    ExaminationViewComponent
+    AssessmentCreateComponent,
+    AssessmentEditComponent,
+    AssessmentListComponent,
+    AssessmentViewComponent
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(ExaminationRoutes),
+    RouterModule.forChild(AssessmentRoutes),
     SharedComponentsModule
   ],
   providers: []
 })
-export class ExaminationModule {}
+export class AssessmentModule {}

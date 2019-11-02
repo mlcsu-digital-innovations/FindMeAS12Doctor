@@ -1,11 +1,11 @@
 import { TestBed } from 'src/app/services/amhp-assessment/node_modules/@angular/core/testing';
-import { UnsuccessfulExaminationTypeService } from './unsuccessful-assessment-type.service';
+import { UnsuccessfulAssessmentTypeService } from './unsuccessful-assessment-type.service';
 
-describe('UnsuccessfulExaminationTypeService', () => {
+describe('UnsuccessfulAssessmentTypeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: UnsuccessfulExaminationTypeService = TestBed.get(UnsuccessfulExaminationTypeService);
+    const service: UnsuccessfulAssessmentTypeService = TestBed.get(UnsuccessfulAssessmentTypeService);
     expect(service).toBeTruthy();
   });
 });

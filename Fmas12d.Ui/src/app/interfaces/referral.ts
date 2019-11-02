@@ -5,9 +5,9 @@ export interface Referral {
   createdAt: Date;
   createdByUserId: number;
   defaultToBeCompletedBy: Date;
-  examinations: any[];
+  assessments: any[];
   id: number;
-  isPlannedExamination: boolean;
+  isPlannedAssessment: boolean;
   leadAmhpUser: LeadAmhpUser;
   leadAmhpUserId: number;
   patient: Patient;

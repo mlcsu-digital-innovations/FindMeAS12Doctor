@@ -2,8 +2,8 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-label class="examination-view-last-updated">
-          Last Updated: {{examinationLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
+        <ion-label class="assessment-view-last-updated">
+          Last Updated: {{assessmentLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
         </ion-label>
       </ion-col>
     </ion-row>
@@ -11,7 +11,7 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label><strong>Referral Id:</strong> {{examinationView?.referralId}}</ion-label>
+          <ion-label><strong>Referral Id:</strong> {{assessmentView?.referralId}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -19,7 +19,7 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label><strong>Patient Id:</strong> {{examinationView?.patientIdentifier}}</ion-label>
+          <ion-label><strong>Patient Id:</strong> {{assessmentView?.patientIdentifier}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -27,7 +27,7 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label>{{examinationView?.dateTime | date: "d MMMM yyyy H:mm"}}</ion-label>
+          <ion-label>{{assessmentView?.dateTime | date: "d MMMM yyyy H:mm"}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -36,8 +36,8 @@
       <ion-col>
         <ion-item>
           <ion-label>
-            <strong>Exam Speciality: </strong> 
-            <ion-text class="ion-text-wrap">{{examinationView?.specialityName}}</ion-text>
+            <strong>Assessment Speciality: </strong> 
+            <ion-text class="ion-text-wrap">{{assessmentView?.specialityName}}</ion-text>
           </ion-label>
         </ion-item>
       </ion-col>
@@ -47,15 +47,15 @@
       <ion-col>
         <ion-item class="item item-text-wrap">
           <ion-label>
-            {{examinationView?.address1}}
-            <br *ngIf="examinationView?.address1?.length > 0" />
-            {{examinationView?.address2}}
-            <br *ngIf="examinationView?.address2?.length > 0" />
-            {{examinationView?.address3}}
-            <br *ngIf="examinationView?.address3?.length > 0" />             
-            {{examinationView?.address4}}
-            <br *ngIf="examinationView?.address4?.length > 0" />
-            {{examinationView?.postcode}}
+            {{assessmentView?.address1}}
+            <br *ngIf="assessmentView?.address1?.length > 0" />
+            {{assessmentView?.address2}}
+            <br *ngIf="assessmentView?.address2?.length > 0" />
+            {{assessmentView?.address3}}
+            <br *ngIf="assessmentView?.address3?.length > 0" />             
+            {{assessmentView?.address4}}
+            <br *ngIf="assessmentView?.address4?.length > 0" />
+            {{assessmentView?.postcode}}
           </ion-label>
         </ion-item>
       </ion-col>
@@ -65,7 +65,7 @@
       <ion-col>
         <ion-item>
           <ion-label>
-            <ion-text *ngFor="let doctor of examinationView?.doctorsAllocated">
+            <ion-text *ngFor="let doctor of assessmentView?.doctorsAllocated">
               {{doctor.displayName}}<br />
             </ion-text>
           </ion-label>
@@ -76,7 +76,7 @@
     <ion-row>
       <ion-col>
         <ion-item class="item item-text-wrap">
-          {{examinationView?.meetingArrangementComment}}
+          {{assessmentView?.meetingArrangementComment}}
         </ion-item>
       </ion-col>
     </ion-row>    
@@ -84,13 +84,13 @@
     <ion-row>
       <ion-col>
         <ion-button 
-          *ngIf="examinationView 
-            && examinationView.isSuccessful===null 
-            && examinationView.doctorsAllocated
-            && examinationView.doctorsAllocated.length > 0"
+          *ngIf="assessmentView 
+            && assessmentView.isSuccessful===null 
+            && assessmentView.doctorsAllocated
+            && assessmentView.doctorsAllocated.length > 0"
           expand="block" 
           color="warning" 
-          (click)="this.updateExamination()">
+          (click)="this.updateAssessment()">
           Update status
         </ion-button>
       </ion-col>

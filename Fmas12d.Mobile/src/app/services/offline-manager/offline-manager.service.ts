@@ -1,10 +1,10 @@
 import { ConfigService } from '../config/config.service';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '../../pages/amhp-assessment-list/node_modules/@angular/core';
-import { Observable, from, of, forkJoin } from '../../pages/amhp-assessment-list/node_modules/rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, from, of, forkJoin } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { switchMap, finalize } from '../amhp-assessment/node_modules/rxjs/operators';
+import { switchMap, finalize } from 'rxjs/operators';
 import { StoredRequest } from 'src/app/interfaces/stored-request.interface';
 
 @Injectable({

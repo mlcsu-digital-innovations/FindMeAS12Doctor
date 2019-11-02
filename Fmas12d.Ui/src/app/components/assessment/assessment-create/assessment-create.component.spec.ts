@@ -1,19 +1,19 @@
 import { ActivatedRoute } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ExaminationCreateComponent } from './assessment-create.component';
+import { AssessmentCreateComponent } from './assessment-create.component';
 import { HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
 import { SharedComponentsModule } from '../../shared-components.module';
 import { RouterService } from 'src/app/services/router/router.service';
 
-describe('ExaminationCreateComponent', () => {
-  let component: ExaminationCreateComponent;
-  let fixture: ComponentFixture<ExaminationCreateComponent>;
+describe('AssessmentCreateComponent', () => {
+  let component: AssessmentCreateComponent;
+  let fixture: ComponentFixture<AssessmentCreateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ExaminationCreateComponent
+        AssessmentCreateComponent
       ],
       imports: [
         HttpClientModule,
@@ -38,7 +38,7 @@ describe('ExaminationCreateComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExaminationCreateComponent);
+    fixture = TestBed.createComponent(AssessmentCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

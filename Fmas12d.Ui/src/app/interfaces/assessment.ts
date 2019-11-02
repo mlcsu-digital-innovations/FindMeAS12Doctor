@@ -1,10 +1,10 @@
-export interface Examination {
+export interface Assessment {
   address1?: string;
   address2?: string;
   address3?: string;
   address4?: string;
   amhpUserId: number;
-  examinationDetails: number[];
+  assessmentDetails: number[];
   id: number;
   isPlanned: boolean;
   meetingArrangementComment?: string;

@@ -8,7 +8,7 @@
             <i class="fas fa-file-alt fa-4x"></i>
           </div>
           <div class="card-header-text">
-            <h4 class="card-title">View Examination</h4>
+            <h4 class="card-title">View Assessment</h4>
             <h6 class="card-subtitle mb-2 text-muted">
               Additional explanation text can be added here if required
             </h6>
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form [formGroup]="currentExaminationForm" novalidate>
+          <form [formGroup]="currentAssessmentForm" novalidate>
             <div class="form-row">
               <div class="col-md-12">
                 <label for="amhpUserName">AMHP User Name</label>
@@ -43,7 +43,7 @@
             </div>
             <div class="form-row">
               <div class="col-md-9">
-                  <label for="fullAddress">Examination Address</label>
+                  <label for="fullAddress">Assessment Address</label>
                   <input
                     class="form-control"
                     formControlName="fullAddress"
@@ -101,11 +101,11 @@
                 />
               </div>
               <div class="col-md-12">
-                <label for="examinationDetails">Examination Details</label>
+                <label for="assessmentDetails">Assessment Details</label>
                 <input
                   class="form-control"
-                  formControlName="examinationDetails"
-                  id="examinationDetails"
+                  formControlName="assessmentDetails"
+                  id="assessmentDetails"
                   type="text"
                 />
               </div>
@@ -136,22 +136,22 @@
                       <i class="far fa-times-circle"></i>
                       Cancel
                     </button>
-                    <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="EditExamination()">
+                    <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="EditAssessment()">
                       <i class="far fa-edit"></i>
                       Edit
                     </button>
                   </div>
             </div>
-            <label>Exam History</label>
+            <label>Assessment History</label>
             <div class="form-row" style="padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th scope="col" sortable="examinationId" (sort)="onSort($event)">Examination Id</th>
-                    <th scope="col" sortable="examinationPostcode" (sort)="onSort($event)">Examination Postcode</th>
-                    <th scope="col" sortable="examinationType" (sort)="onSort($event)">Examination Type</th>
+                    <th scope="col" sortable="assessmentId" (sort)="onSort($event)">Assessment Id</th>
+                    <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Assessment Postcode</th>
+                    <th scope="col" sortable="assessmentType" (sort)="onSort($event)">Assessment Type</th>
                     <th scope="col" sortable="dateTime" (sort)="onSort($event)">Date/Time</th>
-                    <th scope="col" sortable="examinationStatus" (sort)="onSort($event)">Status</th>
+                    <th scope="col" sortable="assessmentStatus" (sort)="onSort($event)">Status</th>
                     <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
                     <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
                     <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Allocated</th>
@@ -160,28 +160,28 @@
                 <tbody>
                   <tr *ngFor="">
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="examinationListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
                     </td>
                   </tr>
                 </tbody>

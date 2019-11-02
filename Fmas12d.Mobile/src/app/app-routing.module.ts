@@ -4,23 +4,23 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'amhp-examination-list', pathMatch: 'full'
+    redirectTo: 'amhp-assessment-list', pathMatch: 'full'
   },  
   {
-    path: 'amhp-examination-list',
+    path: 'amhp-assessment-list',
     loadChildren:
-      './pages/amhp-examination-list/amhp-examination-list.module#AmhpExaminationListPageModule'
+      './pages/amhp-assessment-list/amhp-assessment-list.module#AmhpAssessmentListPageModule'
   },
   { 
-    path: 'amhp-examination-outcome', 
+    path: 'amhp-assessment-outcome', 
     loadChildren: 
-      './pages/amhp-examination-outcome' + 
-      '/amhp-examination-outcome.module#AmhpExaminationOutcomePageModule' 
+      './pages/amhp-assessment-outcome' + 
+      '/amhp-assessment-outcome.module#AmhpAssessmentOutcomePageModule' 
   },
   {
-    path: 'amhp-examination-view/:id',
+    path: 'amhp-assessment-view/:id',
     loadChildren: 
-      './pages/amhp-examination-view/amhp-examination-view.module#AmhpExaminationViewPageModule'
+      './pages/amhp-assessment-view/amhp-assessment-view.module#AmhpAssessmentViewPageModule'
   },
   { 
     path: 'help', 

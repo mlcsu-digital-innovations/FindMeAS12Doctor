@@ -19,21 +19,21 @@ import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-examination-edit',
-  templateUrl: './examination-edit.component.html',
-  styleUrls: ['./examination-edit.component.css']
+  selector: 'app-assessment-edit',
+  templateUrl: './assessment-edit.component.html',
+  styleUrls: ['./assessment-edit.component.css']
 })
-export class ExaminationEditComponent implements OnInit {
+export class AssessmentEditComponent implements OnInit {
 
   allocatedDoctors: string[] = [];
   cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
   dropdownSettings: IDropdownSettings;
-  examinationForm: FormGroup;
-  examinationDetails: NameIdList[] = [];
-  examinationShouldBeCompletedByDate: NgbDateStruct;
-  examinationShouldBeCompletedByTime: NgbTimeStruct;
+  assessmentForm: FormGroup;
+  assessmentDetails: NameIdList[] = [];
+  assessmentShouldBeCompletedByDate: NgbDateStruct;
+  assessmentShouldBeCompletedByTime: NgbTimeStruct;
   genderSelected: number;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
@@ -125,22 +125,22 @@ export class ExaminationEditComponent implements OnInit {
       });
 
     // get the list of risks for the dropdown
-    this.nameIdListService.GetListData('examinationdetailtype')
+    this.nameIdListService.GetListData('assessmentdetailtype')
       .subscribe(details => {
-        this.examinationDetails = details;
+        this.assessmentDetails = details;
       },
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Examination Risks'
+          message: 'Error Retrieving Assessment Risks'
       });
     });
 
-    this.examinationForm = this.formBuilder.group({
+    this.assessmentForm = this.formBuilder.group({
       amhp: [
         ''
       ],
-      currentExamination: [
+      currentAssessment: [
         ''
       ],
       doctorNamesAccepted: [
@@ -149,7 +149,7 @@ export class ExaminationEditComponent implements OnInit {
       doctorNamesAllocated: [
         ''
       ],
-      examinationDetails: [
+      assessmentDetails: [
         ''
       ],
       fullAddress: [
@@ -174,12 +174,12 @@ export class ExaminationEditComponent implements OnInit {
         ''
       ],
       toBeCompletedByDate: [
-        this.examinationShouldBeCompletedByDate,
+        this.assessmentShouldBeCompletedByDate,
         [
           DatePickerFormat
         ]
       ],
-      toBeCompletedByTime: [this.examinationShouldBeCompletedByTime]
+      toBeCompletedByTime: [this.assessmentShouldBeCompletedByTime]
     });
   }
 
@@ -201,7 +201,7 @@ export class ExaminationEditComponent implements OnInit {
     )
 
   CancelEdit() {
-    if (this.examinationForm.dirty) {
+    if (this.assessmentForm.dirty) {
       this.cancelModal = this.modalService.open(this.cancelUpdateTemplate, {
         size: 'lg'
       });
@@ -211,17 +211,17 @@ export class ExaminationEditComponent implements OnInit {
   }
 
   ClearField(fieldName: string) {
-    if (this.examinationForm.contains(fieldName)) {
-      this.examinationForm.controls[fieldName].setValue('');
+    if (this.assessmentForm.contains(fieldName)) {
+      this.assessmentForm.controls[fieldName].setValue('');
       this.SetFieldFocus(`#${fieldName}`);
-      this.examinationForm.markAsDirty();
+      this.assessmentForm.markAsDirty();
     }
   }
 
   ClearSelect(fieldName: string) {
-    if (this.examinationForm.contains(fieldName)) {
-      this.examinationForm.controls[fieldName].setValue([]);
-      // this.examinationForm.controls[fieldName].updateValueAndValidity();
+    if (this.assessmentForm.contains(fieldName)) {
+      this.assessmentForm.controls[fieldName].setValue([]);
+      // this.assessmentForm.controls[fieldName].updateValueAndValidity();
 
       this.genderSelected = 0;
     }
@@ -269,39 +269,39 @@ export class ExaminationEditComponent implements OnInit {
   }
 
   DisableIfParentIsDisabled(fieldName: string): boolean {
-    return this.examinationForm.controls[fieldName].disabled;
+    return this.assessmentForm.controls[fieldName].disabled;
   }
 
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
   }
 
-  get examinationPostcode() {
-    return this.examinationForm.controls.postCode;
+  get assessmentPostcode() {
+    return this.assessmentForm.controls.postCode;
   }
 
   get toBeCompletedByDateField() {
-    return this.examinationForm.controls.toBeCompletedByDate;
+    return this.assessmentForm.controls.toBeCompletedByDate;
   }
 
   get toBeCompletedByTimeField() {
-    return this.examinationForm.controls.toBeCompletedByTime;
+    return this.assessmentForm.controls.toBeCompletedByTime;
   }
 
   InitialiseForm(referral: ReferralView) {
 
-    const examination = referral.currentExamination;
+    const assessment = referral.currentAssessment;
 
     // AMHP User - mandatory field
-    const AmhpUser: TypeAheadResult = {id: 1, resultText: examination.amhpUserName };
-    this.examinationForm.controls.amhp.setValue(AmhpUser);
+    const AmhpUser: TypeAheadResult = {id: 1, resultText: assessment.amhpUserName };
+    this.assessmentForm.controls.amhp.setValue(AmhpUser);
 
-    this.examinationForm.controls.meetingArrangementComment.setValue(referral.currentExamination.meetingArrangementComment);
-    this.examinationForm.controls.fullAddress.setValue(referral.currentExamination.fullAddress);
-    this.examinationForm.controls.postCode.setValue(referral.currentExamination.postcode);
+    this.assessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
+    this.assessmentForm.controls.fullAddress.setValue(referral.currentAssessment.fullAddress);
+    this.assessmentForm.controls.postCode.setValue(referral.currentAssessment.postcode);
 
-    this.minDate = this.ConvertToDateStruct(referral.currentExamination.mustBeCompletedBy);
-    this.SetDefaultDateTimeFields(referral.currentExamination.mustBeCompletedBy);
+    this.minDate = this.ConvertToDateStruct(referral.currentAssessment.mustBeCompletedBy);
+    this.SetDefaultDateTimeFields(referral.currentAssessment.mustBeCompletedBy);
 
     this.selectedDoctors = ['Doctor Smith', 'Doctor Jones'];
     this.allocatedDoctors = ['Doctor Livingstone'];

@@ -1,4 +1,4 @@
-export class UnsuccessfulExaminationType {
+export class UnsuccessfulAssessmentType {
   description: string;
   id: number;
   name: string;

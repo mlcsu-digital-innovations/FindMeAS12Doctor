@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AmhpExaminationListPage } from './amhp-assessment-list.page';
+import { AmhpAssessmentListPage } from './amhp-assessment-list.page';
 
-describe('AmhpExaminationListPage', () => {
-  let component: AmhpExaminationListPage;
-  let fixture: ComponentFixture<AmhpExaminationListPage>;
+describe('AmhpAssessmentListPage', () => {
+  let component: AmhpAssessmentListPage;
+  let fixture: ComponentFixture<AmhpAssessmentListPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AmhpExaminationListPage ],
+      declarations: [ AmhpAssessmentListPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AmhpExaminationListPage);
+    fixture = TestBed.createComponent(AmhpAssessmentListPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

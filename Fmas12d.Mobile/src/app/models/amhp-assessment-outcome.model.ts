@@ -1,25 +1,25 @@
-import { AmhpExaminationViewDoctor } from './amhp-assessment-view-doctor.model';
+import { AmhpAssessmentViewDoctor } from './amhp-assessment-view-doctor.model';
 
-export class AmhpExaminationOutcome {
-  attendingDoctors: AmhpExaminationViewDoctor[];
+export class AmhpAssessmentOutcome {
+  attendingDoctors: AmhpAssessmentViewDoctor[];
   completedTime?: Date;
-  examinationId: number;
-  unsuccessfulExaminationTypeId?: number;
+  assessmentId: number;
+  unsuccessfulAssessmentTypeId?: number;
 
   constructor(
     completedTime?: Date,
-    attendingDoctors?: AmhpExaminationViewDoctor[],
-    examinationId?: number,
-    unsuccessfulExaminationTypeId?: number) {
+    attendingDoctors?: AmhpAssessmentViewDoctor[],
+    assessmentId?: number,
+    unsuccessfulAssessmentTypeId?: number) {
     if (attendingDoctors) {
       this.attendingDoctors = attendingDoctors;
     }
 
-    if (examinationId) {
-      this.examinationId = examinationId;
+    if (assessmentId) {
+      this.assessmentId = assessmentId;
     }
     
     this.completedTime = completedTime;
-    this.unsuccessfulExaminationTypeId = unsuccessfulExaminationTypeId;
+    this.unsuccessfulAssessmentTypeId = unsuccessfulAssessmentTypeId;
   }
 }

@@ -1,12 +1,12 @@
-import { AmhpExaminationViewDoctor } from './amhp-assessment-view-doctor.model';
+import { AmhpAssessmentViewDoctor } from './amhp-assessment-view-doctor.model';
 
-export class AmhpExaminationView {
+export class AmhpAssessmentView {
   address1: string;
   address2: string;
   address3: string;
   address4: string;
   dateTime: Date;
-  doctorsAllocated: AmhpExaminationViewDoctor[];
+  doctorsAllocated: AmhpAssessmentViewDoctor[];
   id: number;
   isSuccessful?: boolean;
   meetingArrangementComment: string;

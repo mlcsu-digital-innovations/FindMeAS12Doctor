@@ -1,15 +1,15 @@
-import { ExaminationService } from './assessment.service';
+import { AssessmentService } from './assessment.service';
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-describe('ExaminationService', () => {
+describe('AssessmentService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     declarations: [],
     imports: [HttpClientModule]
   }));
 
   it('should be created', () => {
-    const service: ExaminationService = TestBed.get(ExaminationService);
+    const service: AssessmentService = TestBed.get(AssessmentService);
     expect(service).toBeTruthy();
   });
 });

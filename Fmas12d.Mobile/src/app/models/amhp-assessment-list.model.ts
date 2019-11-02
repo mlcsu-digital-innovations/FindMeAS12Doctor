@@ -1,4 +1,4 @@
-export class AmhpExaminationList {
+export class AmhpAssessmentList {
   dateTime: Date;
   id: number;
   postcode: string;

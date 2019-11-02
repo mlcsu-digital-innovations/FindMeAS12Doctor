@@ -1,37 +1,37 @@
 import { ActivatedRoute } from '@angular/router'
-import { AmhpExaminationService } from '../../services/amhp-assessment/amhp-assessment.service'
-import { AmhpExaminationView } from '../../models/amhp-assessment-view.model';
+import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service'
+import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-amhp-examination-view',
-  templateUrl: './amhp-examination-view.page.html',
-  styleUrls: ['./amhp-examination-view.page.scss'],
+  selector: 'app-amhp-assessment-view',
+  templateUrl: './amhp-assessment-view.page.html',
+  styleUrls: ['./amhp-assessment-view.page.scss'],
 })
-export class AmhpExaminationViewPage implements OnInit {
-  public examinationLastUpdated: Date;
-  public examinationView: AmhpExaminationView;
+export class AmhpAssessmentViewPage implements OnInit {
+  public assessmentLastUpdated: Date;
+  public assessmentView: AmhpAssessmentView;
 
   constructor(
     private route: ActivatedRoute,
-    private examinationService: AmhpExaminationService,
+    private assessmentService: AmhpAssessmentService,
     private navCtrl: NavController
   ) { }
 
   ngOnInit() {
-    this.examinationLastUpdated = new Date();
-    let examinationId = this.route.snapshot.paramMap.get('id');
+    this.assessmentLastUpdated = new Date();
+    let assessmentId = this.route.snapshot.paramMap.get('id');
 
-    if (examinationId) {
-      this.examinationService.getView(examinationId)
-        .subscribe(data => this.examinationView = data);
+    if (assessmentId) {
+      this.assessmentService.getView(assessmentId)
+        .subscribe(data => this.assessmentView = data);
     }
 
   }
 
-  public updateExamination(): void {
-    this.examinationService.storeView(this.examinationView);
-    this.navCtrl.navigateForward("amhp-examination-outcome");
+  public updateAssessment(): void {
+    this.assessmentService.storeView(this.assessmentView);
+    this.navCtrl.navigateForward("amhp-assessment-outcome");
   }
 }

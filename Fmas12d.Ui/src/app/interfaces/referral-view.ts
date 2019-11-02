@@ -1,11 +1,11 @@
-import { CurrentExamination } from './current-assessment';
-import { PreviousExamination } from './previous-assessment';
+import { CurrentAssessment } from './current-assessment';
+import { PreviousAssessment } from './previous-assessment';
 
 export interface ReferralView {
-  currentExamination: CurrentExamination;
+  currentAssessment: CurrentAssessment;
   id: number;
   leadAmhp: string;
   patientIdentifier: string;
-  previousExaminations: PreviousExamination;
+  previousAssessments: PreviousAssessment;
   status: string;
 }

@@ -1,22 +1,22 @@
 
 import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
-import { ExaminationListComponent } from './assessment-list.component';
+import { AssessmentListComponent } from './assessment-list.component';
 import { SharedComponentsModule } from '../../shared-components.module';
 
-describe('ExaminationListComponent', () => {
-  let component: ExaminationListComponent;
-  let fixture: ComponentFixture<ExaminationListComponent>;
+describe('AssessmentListComponent', () => {
+  let component: AssessmentListComponent;
+  let fixture: ComponentFixture<AssessmentListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExaminationListComponent ],
+      declarations: [ AssessmentListComponent ],
       imports: [ SharedComponentsModule ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExaminationListComponent);
+    fixture = TestBed.createComponent(AssessmentListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

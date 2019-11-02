@@ -2,8 +2,8 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-label class="examination-last-updated">
-          Last Updated: {{examinationLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
+        <ion-label class="assessment-last-updated">
+          Last Updated: {{assessmentLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
         </ion-label>
       </ion-col>
     </ion-row>
@@ -11,7 +11,7 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label><strong>Referral Id: </strong>{{examinationView ? examinationView.referralId : ""}}</ion-label>
+          <ion-label><strong>Referral Id: </strong>{{assessmentView ? assessmentView.referralId : ""}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -20,7 +20,7 @@
       <ion-col>
         <ion-item>
           <ion-label>
-            <strong>Patient Id: </strong>{{examinationView ? examinationView.patientIdentifier : ""}}
+            <strong>Patient Id: </strong>{{assessmentView ? assessmentView.patientIdentifier : ""}}
           </ion-label>
         </ion-item>
       </ion-col>
@@ -29,35 +29,35 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label><strong>Examination Successful?</strong></ion-label>
-          <ion-toggle [(ngModel)]="examinationSuccessful"></ion-toggle> 
+          <ion-label><strong>Assessment Successful?</strong></ion-label>
+          <ion-toggle [(ngModel)]="assessmentSuccessful"></ion-toggle> 
         </ion-item>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="!examinationSuccessful">
+    <ion-row *ngIf="!assessmentSuccessful">
       <ion-col>
         <ion-item>
           <ion-select 
-            class="unsuccessful-exam-type" 
+            class="unsuccessful-assessment-type" 
             interface="action-sheet" 
-            placeholder="Unsuccessful Exam Type"
-            [(ngModel)]="unsuccessfulExaminationTypeId">
+            placeholder="Unsuccessful Assessment Type"
+            [(ngModel)]="unsuccessfulAssessmentTypeId">
             <ion-select-option 
-              *ngFor="let unsuccessfulExamType of unsuccessfulExaminationTypeList"
-              [value]="unsuccessfulExamType.id">
-              <ion-label>{{unsuccessfulExamType.name}}</ion-label>
+              *ngFor="let unsuccessfulAssessmentType of unsuccessfulAssessmentTypeList"
+              [value]="unsuccessfulAssessmentType.id">
+              <ion-label>{{unsuccessfulAssessmentType.name}}</ion-label>
             </ion-select-option>           
           </ion-select>
         </ion-item>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="examinationView?.doctorsAllocated?.length > 0">
+    <ion-row *ngIf="assessmentView?.doctorsAllocated?.length > 0">
       <ion-col>
         <ion-list>
           <ion-list-header>Confirm attending doctors</ion-list-header>
-          <div *ngFor="let doctor of examinationView.doctorsAllocated">
+          <div *ngFor="let doctor of assessmentView.doctorsAllocated">
             <ion-item>
               <ion-label><strong>{{doctor.displayName}}</strong></ion-label>
               <ion-toggle [(ngModel)]="doctor.attended"></ion-toggle>              
@@ -71,7 +71,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="examinationSuccessful || unsuccessfulExaminationTypeId">
+    <ion-row *ngIf="assessmentSuccessful || unsuccessfulAssessmentTypeId">
       <ion-col offset="5">
         <ion-icon name="save" (click)="confirmSave()"></ion-icon>
       </ion-col>

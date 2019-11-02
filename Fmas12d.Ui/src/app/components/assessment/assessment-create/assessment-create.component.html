@@ -9,7 +9,7 @@
             <i class="fas fa-folder-plus fa-4x"></i>
           </div>
           <div class="card-header-text">
-            <h4 class="card-title">Create New Examination</h4>
+            <h4 class="card-title">Create New Assessment</h4>
             <h6 class="card-subtitle mb-2 text-muted">
               Additional explanation text can be added here if required
             </h6>
@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form [formGroup]="examinationForm" novalidate>
+          <form [formGroup]="assessmentForm" novalidate>
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
@@ -46,7 +46,7 @@
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults" />
               </div>
-              <!-- Planned examination -->
+              <!-- Planned assessment -->
               <div class="col-md-3 offset-md-1 text-left">
                   <div class="checkmark-content">
                       <label class="container">
@@ -54,13 +54,13 @@
                           class="form-control"
                           type="checkbox"
                           value=""
-                          id="plannedExamination"
-                          formControlName="plannedExamination"
-                          #plannedExamination
-                          (change)="TogglePlannedExamination($event)"
+                          id="plannedAssessment"
+                          formControlName="plannedAssessment"
+                          #plannedAssessment
+                          (change)="TogglePlannedAssessment($event)"
                         />
                         <span class="checkmark"></span>
-                        Planned Examination
+                        Planned Assessment
                       </label>
                     </div>
               </div>
@@ -81,10 +81,10 @@
                 </div>
               </div>
             </div>
-            <!-- Planned examination date / time -->
-            <div class="form-row" *ngIf="plannedExamination.checked">
+            <!-- Planned assessment date / time -->
+            <div class="form-row" *ngIf="plannedAssessment.checked">
               <div class="col-md-6">
-                <label for="plannedPicker">Planned Examination Date / Time</label>
+                <label for="plannedPicker">Planned Assessment Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-5">
                     <input
@@ -113,7 +113,7 @@
               </div>
             </div>
             <!-- Date Format Errors-->
-            <div class="form-row" *ngIf="plannedExamination.checked">
+            <div class="form-row" *ngIf="plannedAssessment.checked">
               <div class="col-md-4 mb-2 reduced-top-margin">
                 <div
                   class="invalid-field"
@@ -123,23 +123,23 @@
                 </div>
                 <div
                   class="invalid-field"
-                  *ngIf="scheduledDateField.errors && scheduledDateField.errors.InvalidExaminationDate"
+                  *ngIf="scheduledDateField.errors && scheduledDateField.errors.InvalidAssessmentDate"
                 >
                   <span>* Date is earlier than the referral creation date</span>
                 </div>
               </div>
             </div>
-            <!-- Examination Postcode -->
+            <!-- Assessment Postcode -->
             <div class="form-row">
               <div class="col-md-3 mb-2">
-                <label for="examinationPostcode">Examination Postcode</label>
+                <label for="assessmentPostcode">Assessment Postcode</label>
                 <input
                   type="text"
                   maxlength="8"
                   minlength="6"
-                  formControlName="examinationPostcode"
-                  #examinationPostcode
-                  id="examinationPostcode"
+                  formControlName="assessmentPostcode"
+                  #assessmentPostcode
+                  id="assessmentPostcode"
                   oninput="this.value = this.value.toUpperCase()"
                   class="form-control"
                   [ngClass]="{
@@ -151,7 +151,7 @@
                   <div class="button-container">
                     <button
                       type="button"
-                      class="btn btn-primary btn-exam"
+                      class="btn btn-primary btn-assessment"
                       placement="top"
                       ngbTooltip="Search for addresses"
                       [openDelay]="1000"
@@ -159,7 +159,7 @@
                       tooltipClass="subtle-tooltip"
                       [disabled]="!IsFormInCreatingState()"
                       (click)="AddressSearch()"
-                      [disabled]="examinationPostcode.value == '' || examinationPostcode.errors != null"
+                      [disabled]="assessmentPostcode.value == '' || assessmentPostcode.errors != null"
                     >
                     <i class="fas fa-search-location"></i>
                     {{ IsSearchingForPostcode() ? "Searching" : "Find" }}
@@ -173,7 +173,7 @@
                     </button>
                     <button
                     type="button"
-                    class="btn btn-primary btn-exam btn-spaced"
+                    class="btn btn-primary btn-assessment btn-spaced"
                     placement="top"
                     [disabled]="!IsFormInCreatingState()"
                     ngbTooltip="Locate an address using an external web site"
@@ -188,29 +188,29 @@
                 </div>
               </div>
             </div>
-            <!-- Examination Postcode Errors-->
-            <div class="form-row" *ngIf="examinationPostcodeField.errors">
+            <!-- Assessment Postcode Errors-->
+            <div class="form-row" *ngIf="assessmentPostcodeField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.pattern">
+                <div class="invalid-field" *ngIf="assessmentPostcodeField.errors.pattern">
                   <span>Invalid Postcode Format</span>
                 </div>
-                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.NoResultsReturned">
+                <div class="invalid-field" *ngIf="assessmentPostcodeField.errors.NoResultsReturned">
                     <span>No Matches Found</span>
                 </div>
-                <div class="invalid-field" *ngIf="examinationPostcodeField.errors.MissingPostcode">
+                <div class="invalid-field" *ngIf="assessmentPostcodeField.errors.MissingPostcode">
                   <span>* Postcode must be provided</span>
                 </div>
               </div>
             </div>
-            <!-- Examination Address -->
+            <!-- Assessment Address -->
             <div class="form-row" *ngIf="addressList.length > 0">
               <div class="col-md-8 mb-2">
-                <label for="examinationAddress">Examination Address</label>
+                <label for="assessmentAddress">Assessment Address</label>
                 <select
                   class="custom-select custom-select-lg mb-2 form-control"
-                  formControlName="examinationAddress"
-                  #examinationAddress
-                  id="examinationAddress"
+                  formControlName="assessmentAddress"
+                  #assessmentAddress
+                  id="assessmentAddress"
                   appFocusOnShow
                 >
                   <option disabled=true [selected]=true>Please Select Address</option>
@@ -220,10 +220,10 @@
                 </select>
               </div>
             </div>
-            <!-- Examination Address Errors-->
-            <div class="form-row" *ngIf="examinationAddressField.errors">
+            <!-- Assessment Address Errors-->
+            <div class="form-row" *ngIf="assessmentAddressField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div class="invalid-field" *ngIf="examinationAddressField.errors.InvalidAddress">
+                <div class="invalid-field" *ngIf="assessmentAddressField.errors.InvalidAddress">
                   <span>* Address must be provided</span>
                 </div>
               </div>
@@ -244,11 +244,11 @@
             <!-- Further information / risks -->
             <div class="form-row">
                 <div class="col-md-8 mb-2">
-                    <label for="examinationDetails">Further Information / Risks</label>
+                    <label for="assessmentDetails">Further Information / Risks</label>
                     <ng-multiselect-dropdown
-                      formControlName="examinationDetails"
+                      formControlName="assessmentDetails"
                       [settings]="dropdownSettings"
-                      [data]="examinationDetails"
+                      [data]="assessmentDetails"
                       (onSelect)="OnItemSelect($event)"
                       (onDeSelect)="OnItemDeselect($event)"
                       [disabled]="!IsFormInCreatingState()"
@@ -289,7 +289,7 @@
               </div>
             </div>
             <!-- To Be Completed By -->
-            <div class="form-row" *ngIf="!plannedExamination.checked">
+            <div class="form-row" *ngIf="!plannedAssessment.checked">
               <div class="col-md-6">
                 <label for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
@@ -322,7 +322,7 @@
               </div>
             </div>
             <!-- Date Format Errors-->
-            <div class="form-row" *ngIf="!plannedExamination.checked">
+            <div class="form-row" *ngIf="!plannedAssessment.checked">
               <div class="col-md-4 mb-2 reduced-top-margin">
                 <div
                   class="invalid-field"
@@ -332,7 +332,7 @@
                 </div>
                 <div
                   class="invalid-field"
-                  *ngIf="toBeCompletedByDateField.errors && toBeCompletedByDateField.errors.InvalidExaminationDate"
+                  *ngIf="toBeCompletedByDateField.errors && toBeCompletedByDateField.errors.InvalidAssessmentDate"
                 >
                   <span>* Date is earlier than the referral creation date</span>
                 </div>
@@ -346,7 +346,7 @@
                   class="btn btn-primary"
                   (click)="SelectDoctor()"
                   [disabled]="IsFormInCreatingState()"
-                  *ngIf="plannedExamination.checked"
+                  *ngIf="plannedAssessment.checked"
                 >
                   Enter / Search Doctor
                 </button>
@@ -355,7 +355,7 @@
                    class="btn btn-primary"
                    (click)="SelectDoctor()"
                    [disabled]="IsFormInCreatingState()"
-                    *ngIf="!plannedExamination.checked"
+                    *ngIf="!plannedAssessment.checked"
                 >
                   <i class="fas fa-user-plus"></i>
                   Select Doctor
@@ -365,7 +365,7 @@
                 <button
                   type="button"
                   class="btn btn-standard btn-cancel"
-                  (click)="CancelExamination()"
+                  (click)="CancelAssessment()"
                   *ngIf="IsFormInCreatingState()"
                 >
                   <i class="far fa-times-circle"></i>
@@ -385,7 +385,7 @@
                 <button
                   type="button"
                   class="btn btn-primary btn-standard"
-                  (click)="SaveExamination()"
+                  (click)="SaveAssessment()"
                   *ngIf="IsFormInCreatingState()"
                 >
                   <i class="far fa-check-circle"></i>
@@ -394,7 +394,7 @@
                 <button
                   type="button"
                   class="btn btn-primary btn-standard"
-                  (click)="EditExamination()"
+                  (click)="EditAssessment()"
                   *ngIf="!IsFormInCreatingState()"
                 >
                   <i class="far fa-edit"></i>
@@ -408,7 +408,7 @@
     </div>
   </div>
 
-  <app-delay-spinner *ngIf="isCreatingExamination" [delayMessage]="'Creating Examination'"></app-delay-spinner>
+  <app-delay-spinner *ngIf="isCreatingAssessment" [delayMessage]="'Creating Assessment'"></app-delay-spinner>
 
   <ng-template #loading>
     <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
@@ -416,10 +416,10 @@
 
   <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
-  <ng-template #cancelExamination>
+  <ng-template #cancelAssessment>
     <app-cancel-action-modal
-      [modalTitle]="'Cancel Examination'"
-      [modalBody]="'Do you wish to cancel this examination? All changes will be lost.'"
+      [modalTitle]="'Cancel Assessment'"
+      [modalBody]="'Do you wish to cancel this assessment? All changes will be lost.'"
       (actioned)="OnCancelModalAction($event)"
     >
     </app-cancel-action-modal>

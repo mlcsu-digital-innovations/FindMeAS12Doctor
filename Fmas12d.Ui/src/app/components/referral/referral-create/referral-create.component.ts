@@ -543,8 +543,8 @@ export class ReferralCreateComponent implements OnInit {
           message: 'Referral Created'
         });
         this.isCreatingReferral = false;
-        // navigate to the create examination page
-        this.routerService.navigate([`/examination/new/${result.id}`]);
+        // navigate to the create assessment page
+        this.routerService.navigate([`/assessment/new/${result.id}`]);
       },
       error => {
         console.log(error);

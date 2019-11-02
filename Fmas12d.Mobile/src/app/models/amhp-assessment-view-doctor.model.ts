@@ -1,4 +1,4 @@
-export class AmhpExaminationViewDoctor {
+export class AmhpAssessmentViewDoctor {
   attended?: boolean;
   displayName: string;
   gmcNumber?: number;

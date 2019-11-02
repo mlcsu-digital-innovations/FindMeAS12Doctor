@@ -1,29 +1,29 @@
-import { ExaminationCreateComponent } from './assessment-create/assessment-create.component';
-import { ExaminationEditComponent } from './assessment-edit/assessment-edit.component';
-import { ExaminationListComponent } from './assessment-list/assessment-list.component';
-import { ExaminationViewComponent } from './assessment-view/assessment-view.component';
+import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
+import { AssessmentEditComponent } from './assessment-edit/assessment-edit.component';
+import { AssessmentListComponent } from './assessment-list/assessment-list.component';
+import { AssessmentViewComponent } from './assessment-view/assessment-view.component';
 import { Routes } from '@angular/router';
 
-export const ExaminationRoutes: Routes = [
+export const AssessmentRoutes: Routes = [
   {
-    path: 'examination',
+    path: 'assessment',
     pathMatch: 'full',
-    redirectTo: 'examination/list'
+    redirectTo: 'assessment/list'
   },
   {
-    path: 'examination/edit/:referralId',
-    component: ExaminationEditComponent
+    path: 'assessment/edit/:referralId',
+    component: AssessmentEditComponent
   },
   {
-    path: 'examination/list',
-    component: ExaminationListComponent
+    path: 'assessment/list',
+    component: AssessmentListComponent
   },
   {
-    path: 'examination/view/:referralId',
-    component: ExaminationViewComponent
+    path: 'assessment/view/:referralId',
+    component: AssessmentViewComponent
   },
   {
-    path: 'examination/new/:referralId',
-    component: ExaminationCreateComponent
+    path: 'assessment/new/:referralId',
+    component: AssessmentCreateComponent
   }
 ];

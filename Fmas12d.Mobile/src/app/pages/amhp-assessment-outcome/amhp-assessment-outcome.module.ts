@@ -1,4 +1,4 @@
-import { AmhpExaminationOutcomePage } from './amhp-assessment-outcome.page';
+import { AmhpAssessmentOutcomePage } from './amhp-assessment-outcome.page';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -8,7 +8,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    component: AmhpExaminationOutcomePage
+    component: AmhpAssessmentOutcomePage
   }
 ];
 
@@ -19,6 +19,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AmhpExaminationOutcomePage]
+  declarations: [AmhpAssessmentOutcomePage]
 })
-export class AmhpExaminationOutcomePageModule {}
+export class AmhpAssessmentOutcomePageModule {}

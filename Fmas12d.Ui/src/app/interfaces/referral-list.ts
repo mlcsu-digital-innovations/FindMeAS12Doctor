@@ -1,8 +1,8 @@
 export interface ReferralList {
   doctorsAllocated: number;
-  examinationLocationPostcode: string;
+  assessmentLocationPostcode: string;
   leadAmhp: string;
-  numberOfExaminationAttempts: number;
+  numberOfAssessmentAttempts: number;
   patientIdentifier: string;
   patientId: number;
   referralId: number;
