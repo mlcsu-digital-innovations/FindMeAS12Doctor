@@ -54,7 +54,7 @@ namespace Fmas12d.Api
       services.AddDbContext<ApplicationContext>
       (options =>
       {
-        options.UseSqlServer(Configuration.GetConnectionString("MedicalAssessmentsPortal"),
+        options.UseSqlServer(Configuration.GetConnectionString("Fmas12d"),
                              // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
                              opt => opt.EnableRetryOnFailure());
 

@@ -4,6 +4,6 @@
 .scannerwork/**
 .sonarqube/**
 Deployment/**
-Fmas12d.Api/MedicalAssessmentsPortal.db
+Fmas12d.Api/Fmas12d.db
 Fmas12d.Ui/dist/*
 node_modules
