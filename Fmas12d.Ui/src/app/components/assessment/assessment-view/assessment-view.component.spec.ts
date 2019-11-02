@@ -1,19 +1,19 @@
 import { ActivatedRoute } from '@angular/router';
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
-import { HttpClientModule } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
-import { of } from 'rxjs';
-import { ReferralEditComponent } from './referral-edit.component';
+import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
+import { ExaminationViewComponent } from './assessment-view.component';
+import { HttpClientModule } from 'src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
+import { of } from 'src/app/components/assessment/assessment-create/node_modules/rxjs';
 import { RouterService } from 'src/app/services/router/router.service';
 import { SharedComponentsModule } from '../../shared-components.module';
 
-describe('ReferralEditComponent', () => {
-  let component: ReferralEditComponent;
-  let fixture: ComponentFixture<ReferralEditComponent>;
+describe('ExaminationViewComponent', () => {
+  let component: ExaminationViewComponent;
+  let fixture: ComponentFixture<ExaminationViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ReferralEditComponent
+        ExaminationViewComponent
       ],
       imports: [
         HttpClientModule,
@@ -38,7 +38,7 @@ describe('ReferralEditComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReferralEditComponent);
+    fixture = TestBed.createComponent(ExaminationViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

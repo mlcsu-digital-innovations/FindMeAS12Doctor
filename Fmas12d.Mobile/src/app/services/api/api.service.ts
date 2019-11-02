@@ -1,12 +1,12 @@
 import { ConfigService } from '../config/config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable } from '../../pages/amhp-assessment-list/node_modules/@angular/core';
 import { LogService } from '../log/log.service';
 import { NetworkService, ConnectionStatus } from '../network/network.service';
-import { Observable, from } from 'rxjs';
+import { Observable, from } from '../../pages/amhp-assessment-list/node_modules/rxjs';
 import { OfflineManagerService } from '../offline-manager/offline-manager.service';
 import { Storage } from '@ionic/storage';
-import { tap, map, catchError } from 'rxjs/operators';
+import { tap, map, catchError } from '../amhp-assessment/node_modules/rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

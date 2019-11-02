@@ -1,5 +1,5 @@
 import { LogService } from './log.service';
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from 'src/app/services/amhp-assessment/node_modules/@angular/core/testing';
 
 describe('LogService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

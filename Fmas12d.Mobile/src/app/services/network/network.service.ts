@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from '../../pages/amhp-assessment-list/node_modules/rxjs';
+import { Injectable } from '../../pages/amhp-assessment-list/node_modules/@angular/core';
 import { Network } from '@ionic-native/network/ngx'
 import { Platform } from '@ionic/angular';
 import { ToastService } from 'src/app/services/toast/toast.service';

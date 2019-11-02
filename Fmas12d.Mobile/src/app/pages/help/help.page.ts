@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HelpService } from 'src/app/services/help/help.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'src/app/pages/amhp-assessment-list/node_modules/rxjs';
 import { version } from '../../../../package.json';
 
 @Component({

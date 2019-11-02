@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '../../pages/amhp-assessment-list/node_modules/@angular/core';
 
 @Injectable({
   providedIn: 'root'

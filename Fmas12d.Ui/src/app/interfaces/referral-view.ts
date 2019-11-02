@@ -1,5 +1,5 @@
-import { CurrentExamination } from './current-examination';
-import { PreviousExamination } from './previous-examination';
+import { CurrentExamination } from './current-assessment';
+import { PreviousExamination } from './previous-assessment';
 
 export interface ReferralView {
   currentExamination: CurrentExamination;

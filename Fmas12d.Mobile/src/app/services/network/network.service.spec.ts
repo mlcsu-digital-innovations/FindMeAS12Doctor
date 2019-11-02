@@ -1,5 +1,5 @@
 import { NetworkService } from './network.service';
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from 'src/app/services/amhp-assessment/node_modules/@angular/core/testing';
 
 describe('NetworkService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

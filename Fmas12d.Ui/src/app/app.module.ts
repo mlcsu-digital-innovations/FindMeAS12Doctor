@@ -3,7 +3,7 @@ import { AppRoutes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DoctorModule } from './components/doctor/doctor.module';
-import { ExaminationModule } from './components/examination/examination.module';
+import { ExaminationModule } from './components/assessment/assessment.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
