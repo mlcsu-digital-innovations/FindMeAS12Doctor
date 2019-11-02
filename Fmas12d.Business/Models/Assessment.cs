@@ -8,10 +8,10 @@ using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Models
 {
-  public class Examination : BaseModel
+  public class Assessment : BaseModel
   {
-    public Examination() { }
-    public Examination(Data.Entities.Examination entity, bool ignoreReferral = false) 
+    public Assessment() { }
+    public Assessment(Data.Entities.Assessment entity, bool ignoreReferral = false) 
       : base(entity)
     {
       if (entity == null) return;
@@ -31,8 +31,8 @@ namespace Fmas12d.Business.Models
       CompletionConfirmationByUserId = entity.CompletionConfirmationByUserId;
       //TODO CreatedByUser = null;
       CreatedByUserId = entity.CreatedByUserId;
-      Details = entity.Details?.Select(d => new ExaminationDetail(d)).ToList();
-      Doctors = entity.Doctors?.Select(d => new ExaminationDoctor(d)).ToList();
+      Details = entity.Details?.Select(d => new AssessmentDetail(d)).ToList();
+      Doctors = entity.Doctors?.Select(d => new AssessmentDoctor(d)).ToList();
       Id = entity.Id;
       IsActive = entity.IsActive;
       IsSuccessful = entity.IsSuccessful;
@@ -51,12 +51,12 @@ namespace Fmas12d.Business.Models
       ScheduledTime = entity.ScheduledTime;
       Speciality = new Speciality(entity.Speciality);
       SpecialityId = entity.SpecialityId;
-      //TODO UnsuccessfulExaminationType = null;
-      UnsuccessfulExaminationTypeId = entity.UnsuccessfulExaminationTypeId;
-      //TODO UserExaminationClaims = null;
-      UserExaminationNotifications = entity
-        .UserExaminationNotifications
-        ?.Select(u => new UserExaminationNotification(u)).ToList();
+      //TODO UnsuccessfulAssessmentType = null;
+      UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId;
+      //TODO UserAssessmentClaims = null;
+      UserAssessmentNotifications = entity
+        .UserAssessmentNotifications
+        ?.Select(u => new UserAssessmentNotification(u)).ToList();
     }
 
     [Required]
@@ -76,9 +76,9 @@ namespace Fmas12d.Business.Models
     public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
-    public IList<ExaminationDoctor> Doctors { get; set; }
+    public IList<AssessmentDoctor> Doctors { get; set; }
     public virtual IList<int> DetailTypeIds { get; set; }
-    public virtual IList<ExaminationDetail> Details { get; set; }
+    public virtual IList<AssessmentDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
@@ -95,16 +95,16 @@ namespace Fmas12d.Business.Models
     public DateTimeOffset? ScheduledTime { get; set; }
     public int? SpecialityId { get; set; }
     public Speciality Speciality { get; set; }
-    public int? UnsuccessfulExaminationTypeId { get; set; }
-    public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
-    public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
-    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
+    public UnsuccessfulAssessmentType UnsuccessfulAssessmentType { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
 
     public string AmhpUserName
     {
       get
       {
-        return UserExaminationNotifications
+        return UserAssessmentNotifications
           .Where(u => u.IsActive)
           .FirstOrDefault(u => u.IsAmhp)
           ?.UserName;
@@ -114,12 +114,12 @@ namespace Fmas12d.Business.Models
     public DateTimeOffset DateTime
     { get { return MustBeCompletedBy ?? ScheduledTime ?? default; } }
 
-    public virtual IList<ExaminationDetailType> DetailTypes
+    public virtual IList<AssessmentDetailType> DetailTypes
     {
       get
       {
         return Details?.Where(d => d.IsActive)
-                      .Select(d => d.ExaminationDetailType).ToList();
+                      .Select(d => d.AssessmentDetailType).ToList();
       }
     }
 
@@ -129,7 +129,7 @@ namespace Fmas12d.Business.Models
       {
         return Doctors
           .Where(d => d.IsActive)
-          .Where(d => d.StatusId == ExaminationDoctorStatus.SELECTED)
+          .Where(d => d.StatusId == AssessmentDoctorStatus.SELECTED)
           .Select(d => d.DoctorUser?.DisplayName)
           .ToList();
       }
@@ -156,7 +156,7 @@ namespace Fmas12d.Business.Models
         {
           return Doctors
             .Where(d => d.IsActive)
-            .Where(d => d.StatusId == ExaminationDoctorStatus.ALLOCATED)
+            .Where(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED)
             .Select(u => u.DoctorUser)
             .ToList();
         }
@@ -184,7 +184,7 @@ namespace Fmas12d.Business.Models
       get
       {
         return IsActive &&
-               UnsuccessfulExaminationTypeId == null &&
+               UnsuccessfulAssessmentTypeId == null &&
                CompletionConfirmationByUserId == null;
       }
     }
@@ -201,15 +201,15 @@ namespace Fmas12d.Business.Models
     public string SpecialityName
     { get { return Speciality?.Name; } }
 
-    public string UnsuccessfulExaminationTypeName
-    { get { return UnsuccessfulExaminationType?.Name; } }
+    public string UnsuccessfulAssessmentTypeName
+    { get { return UnsuccessfulAssessmentType?.Name; } }
 
     // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
-    // public static Expression<Func<Data.Entities.Examination, Examination>> ProjectFromEntity
+    // public static Expression<Func<Data.Entities.Assessment, Assessment>> ProjectFromEntity
     // {
     //   get
     //   {
-    //     return e => new Examination()
+    //     return e => new Assessment()
     //     {         
     //     };
     //   }

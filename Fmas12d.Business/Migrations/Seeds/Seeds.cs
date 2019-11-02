@@ -30,9 +30,9 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new ContactDetailTypesSeeder().SeedData();
 
-      new ExaminationDetailTypesSeeder().SeedData();
+      new AssessmentDetailTypesSeeder().SeedData();
 
-      new ExaminationDoctorStatusSeeder().SeedData();
+      new AssessmentDoctorStatusSeeder().SeedData();
 
       new GenderTypesSeeder().SeedData();
 
@@ -52,7 +52,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new SpecialitiesSeeder().SeedData();
 
-      new UnsuccessfulExaminationTypesSeeder().SeedData();
+      new UnsuccessfulAssessmentTypesSeeder().SeedData();
     }
 
     public void RemoveSeedAll(bool noGpPractices, bool noCcgs)
@@ -75,7 +75,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new ContactDetailTypesSeeder().DeleteSeeds();
 
-      new ExaminationDetailTypesSeeder().DeleteSeeds();
+      new AssessmentDetailTypesSeeder().DeleteSeeds();
 
       new GenderTypesSeeder().DeleteSeeds();
 
@@ -95,7 +95,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new SpecialitiesSeeder().DeleteSeeds();
 
-      new UnsuccessfulExaminationTypesSeeder().DeleteSeeds();
+      new UnsuccessfulAssessmentTypesSeeder().DeleteSeeds();
 
       Context.SaveChanges();
     }
@@ -162,13 +162,13 @@ namespace Fmas12d.Business.Migrations.Seeds
       new BankDetailsSeeder().DeleteSeeds();
       Context.SaveChanges();
 
-      new UserExaminationClaimsSeeder().DeleteSeeds();
+      new UserAssessmentClaimsSeeder().DeleteSeeds();
       Context.SaveChanges();
 
-      new UserExaminationNotificationSeeder().DeleteSeeds();
+      new UserAssessmentNotificationSeeder().DeleteSeeds();
       Context.SaveChanges();
 
-      new ExaminationSeeder().DeleteSeeds();
+      new AssessmentSeeder().DeleteSeeds();
       Context.SaveChanges();
 
       new ReferralSeeder().DeleteSeeds();

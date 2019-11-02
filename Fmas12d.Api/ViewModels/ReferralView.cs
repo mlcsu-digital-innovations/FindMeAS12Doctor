@@ -10,20 +10,20 @@ namespace Fmas12d.Api.ViewModels
     {
       if (model == null) return;
 
-      CurrentExamination = new ReferralViewCurrentExamination(model.CurrentExamination);
+      CurrentAssessment = new ReferralViewCurrentAssessment(model.CurrentAssessment);
       Id = model.Id;
       LeadAmhp = model.LeadAmhp;
       PatientIdentifier = model.PatientIdentifier;
-      PreviousExaminations = model.PreviousExaminations
-        ?.Select(p => new ReferralViewPreviousExamination(p)).ToList();
+      PreviousAssessments = model.PreviousAssessments
+        ?.Select(p => new ReferralViewPreviousAssessment(p)).ToList();
       StatusName = model.StatusName;
     }
 
-    public ReferralViewCurrentExamination CurrentExamination { get; set; }
+    public ReferralViewCurrentAssessment CurrentAssessment { get; set; }
     public int Id { get; set; }
     public string LeadAmhp { get; set; }
     public string PatientIdentifier { get; set; }
-    public IEnumerable<ReferralViewPreviousExamination> PreviousExaminations { get; set; }
+    public IEnumerable<ReferralViewPreviousAssessment> PreviousAssessments { get; set; }
     public string StatusName { get; set; }
   }
 }

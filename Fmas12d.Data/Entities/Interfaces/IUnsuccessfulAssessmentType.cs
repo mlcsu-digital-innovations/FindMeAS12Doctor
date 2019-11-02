@@ -1,6 +1,6 @@
 ﻿namespace Fmas12d.Data.Entities
 {
-  public interface IUnsuccessfulExaminationType
+  public interface IUnsuccessfulAssessmentType
   {
   }
 }

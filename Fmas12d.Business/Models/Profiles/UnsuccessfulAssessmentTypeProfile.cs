@@ -2,13 +2,13 @@ using AutoMapper;
 using Entities = Fmas12d.Data.Entities;
 namespace Fmas12d.Business.Models.Profiles
 {
-  public class UnsuccessfulExaminationTypeProfile : Profile
+  public class UnsuccessfulAssessmentTypeProfile : Profile
   {
-    public UnsuccessfulExaminationTypeProfile()
+    public UnsuccessfulAssessmentTypeProfile()
     {
-      CreateMap<Entities.UnsuccessfulExaminationType, Models.UnsuccessfulExaminationType>();
+      CreateMap<Entities.UnsuccessfulAssessmentType, Models.UnsuccessfulAssessmentType>();
 
-      CreateMap<Models.UnsuccessfulExaminationType, Entities.UnsuccessfulExaminationType>();
+      CreateMap<Models.UnsuccessfulAssessmentType, Entities.UnsuccessfulAssessmentType>();
     }
   }
 }

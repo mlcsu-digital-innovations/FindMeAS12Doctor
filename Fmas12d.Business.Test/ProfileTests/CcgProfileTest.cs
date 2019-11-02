@@ -10,7 +10,7 @@ namespace Fmas12d.Business.Test
     private readonly String[] ignoredMappings = new string[9] {
       "BankDetails", 
       "ContactDetails", 
-      "Examinations", 
+      "Assessments", 
       "GpPractices", 
       "NonPaymentLocationTypes", 
       "Patients", 

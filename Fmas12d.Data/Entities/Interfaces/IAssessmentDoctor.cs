@@ -1,10 +1,10 @@
 namespace Fmas12d.Data.Entities
 {
-  public interface IExaminationDoctor
+  public interface IAssessmentDoctor
   {
     int? AttendanceConfirmedByUserId { get; set; }
     int DoctorUserId { get; set; }    
-    int ExaminationId { get; set; }
+    int AssessmentId { get; set; }
     int StatusId { get; set; }
   }
 }

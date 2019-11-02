@@ -1,8 +1,8 @@
 namespace Fmas12d.Api.ViewModels
 {
-  public class ExaminationDetailType : NameDescriptionNoBase
+  public class AssessmentDetailType : NameDescriptionNoBase
   {
-    public ExaminationDetailType(Business.Models.ExaminationDetailType model) : base(model)
+    public AssessmentDetailType(Business.Models.AssessmentDetailType model) : base(model)
     {
     }
   }

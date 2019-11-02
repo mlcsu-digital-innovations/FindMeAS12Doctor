@@ -12,8 +12,8 @@ namespace Fmas12d.Business.Models
       // TODO BankDetails
       // TODO ContactDetails
       CostCentre = entity.CostCentre;
-      // TODO Examinations
-      FailedExamPayment = entity.FailedExamPayment;
+      // TODO Assessments
+      FailedAssessmentPayment = entity.FailedAssessmentPayment;
       // TODO GpPractices
       IsPaymentApprovalRequired = entity.IsPaymentApprovalRequired;
       LongCode = entity.LongCode;
@@ -30,8 +30,8 @@ namespace Fmas12d.Business.Models
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     public int CostCentre { get; set; }
-    public virtual IList<Examination> Examinations { get; set; }
-    public decimal FailedExamPayment { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
+    public decimal FailedAssessmentPayment { get; set; }
     public virtual IList<GpPractice> GpPractices { get; set; }
     public bool IsPaymentApprovalRequired { get; set; }
     [MaxLength(10)]

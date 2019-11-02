@@ -9,9 +9,9 @@ namespace Fmas12d.Api.RequestModels
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     [Required]
     public int CostCentre { get; set; }
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
     [Required]
-    public decimal FailedExamPayment { get; set; }
+    public decimal FailedAssessmentPayment { get; set; }
     public virtual IList<GpPractice> GpPractices { get; set; }
     [Required]
     public bool IsPaymentApprovalRequired { get; set; }

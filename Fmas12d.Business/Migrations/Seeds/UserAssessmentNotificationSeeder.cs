@@ -3,25 +3,25 @@ using System;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class UserExaminationNotificationSeeder : SeederBase<UserExaminationNotification>
+  internal class UserAssessmentNotificationSeeder : SeederBase<UserAssessmentNotification>
   {
-    internal UserExaminationNotification Create(
+    internal UserAssessmentNotification Create(
       int notificationTextId,
       string userName,
       bool? hasAccepted = null,
       DateTimeOffset? respondedAt = null
     )
     {
-      UserExaminationNotification userExaminationNotification = new UserExaminationNotification
+      UserAssessmentNotification userAssessmentNotification = new UserAssessmentNotification
       {
         HasAccepted = hasAccepted == null ? null : hasAccepted,
         NotificationTextId = notificationTextId,
         RespondedAt = respondedAt == null ? null : respondedAt,
         UserId = GetUserByDisplayName(userName).Id
       };
-      PopulateActiveAndModifiedWithSystemUser(userExaminationNotification);
+      PopulateActiveAndModifiedWithSystemUser(userAssessmentNotification);
 
-      return userExaminationNotification;
+      return userAssessmentNotification;
     }
   }
 }

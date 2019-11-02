@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Fmas12d.Api.ViewModels
 {
-  public class ExaminationView
+  public class AssessmentView
   {
-    public ExaminationView()
+    public AssessmentView()
     {}    
-    public ExaminationView(Business.Models.Examination model)
+    public AssessmentView(Business.Models.Assessment model)
     {
       Address1 = model.Address1;
       Address2 = model.Address2;
@@ -26,10 +26,10 @@ namespace Fmas12d.Api.ViewModels
 
       if (model.DoctorsAllocated != null && model.DoctorsAllocated.Any())
       {
-        DoctorsAllocated = new Collection<ExaminationViewDoctor>();
+        DoctorsAllocated = new Collection<AssessmentViewDoctor>();
         foreach (var doctorAllocated in model.DoctorsAllocated.OrderBy(d => d.DisplayName))
         {
-          DoctorsAllocated.Add(new ExaminationViewDoctor(doctorAllocated));
+          DoctorsAllocated.Add(new AssessmentViewDoctor(doctorAllocated));
         }
       }      
 
@@ -40,7 +40,7 @@ namespace Fmas12d.Api.ViewModels
     public string Address3 { get; set; }
     public string Address4 { get; set; }
     public DateTimeOffset DateTime { get; set; }
-    public IList<ExaminationViewDoctor> DoctorsAllocated { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public int Id { get; set; }
     public bool? IsSuccessful { get; set; }
     public string MeetingArrangementComment { get; set; }    

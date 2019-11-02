@@ -2,7 +2,7 @@
 
 namespace Fmas12d.Data.Entities
 {
-  public interface IExamination
+  public interface IAssessment
   {
     string Address1 { get; set; }
     string Address2 { get; set; }
@@ -22,6 +22,6 @@ namespace Fmas12d.Data.Entities
     int ReferralId { get; set; }
     DateTimeOffset? ScheduledTime { get; set; }
     int? SpecialityId { get; set; }
-    int? UnsuccessfulExaminationTypeId { get; set; }
+    int? UnsuccessfulAssessmentTypeId { get; set; }
   }
 }

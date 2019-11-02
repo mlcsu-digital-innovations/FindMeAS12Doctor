@@ -94,7 +94,7 @@ namespace Fmas12d.Api.Controllers
       if (exception is Business.Exceptions.SerilogException serilogEx)
       {
         Log.Error(serilogEx, serilogEx.MessageTemplate, serilogEx.PropertyValues);
-        if (exception is Business.Exceptions.ExaminationAlreadyHasOutcomeException ex)
+        if (exception is Business.Exceptions.AssessmentAlreadyHasOutcomeException ex)
         {
           return StatusCode(StatusCodes.Status409Conflict, ex.Message);
         }

@@ -5,9 +5,9 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class UnsuccessfulExaminationTypeController : IdNameDescriptionBaseController
+  public class UnsuccessfulAssessmentTypeController : IdNameDescriptionBaseController
   {
-    public UnsuccessfulExaminationTypeController(IUnsuccessfulExaminationTypeService service)
+    public UnsuccessfulAssessmentTypeController(IUnsuccessfulAssessmentTypeService service)
       : base(service)
     {
     }

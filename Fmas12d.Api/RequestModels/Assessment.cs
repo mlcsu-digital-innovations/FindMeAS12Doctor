@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class Examination
+  public class Assessment
   {
-    public Examination() {}
-    public Examination(Business.Models.ExaminationCreate model)
+    public Assessment() {}
+    public Assessment(Business.Models.AssessmentCreate model)
     {
       Address1 = model.Address1;
       Address2 = model.Address2;
@@ -43,9 +43,9 @@ namespace Fmas12d.Api.RequestModels
     [Range(1, int.MaxValue)]
     public int? SpecialityId { get; set; }
 
-    internal virtual Business.Models.ExaminationCreate MapToBusinessModel()
+    internal virtual Business.Models.AssessmentCreate MapToBusinessModel()
     {
-      Business.Models.ExaminationCreate model = new Business.Models.ExaminationCreate
+      Business.Models.AssessmentCreate model = new Business.Models.AssessmentCreate
       {
         Address1 = Address1,
         Address2 = Address2,

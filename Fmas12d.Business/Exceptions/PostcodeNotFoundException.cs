@@ -6,7 +6,7 @@ namespace Fmas12d.Business.Exceptions
   public class PostcodeNotFoundException : Exception
   {
     public PostcodeNotFoundException(string postcode)
-      : base($"Details for examination postcode [{postcode}] not found")
+      : base($"Details for assessment postcode [{postcode}] not found")
     {
     }
 

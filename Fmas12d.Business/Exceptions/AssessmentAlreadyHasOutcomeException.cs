@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace Fmas12d.Business.Exceptions
 {
   [Serializable()]
-  public class ExaminationAlreadyHasOutcomeException : SerilogException
+  public class AssessmentAlreadyHasOutcomeException : SerilogException
   {
-    public ExaminationAlreadyHasOutcomeException(
+    public AssessmentAlreadyHasOutcomeException(
         int id,
         bool? isSuccessful,
         DateTimeOffset? completedTime,
@@ -25,18 +25,18 @@ namespace Fmas12d.Business.Exceptions
           : userDisplayName;
     }
 
-    protected ExaminationAlreadyHasOutcomeException(
+    protected AssessmentAlreadyHasOutcomeException(
       SerializationInfo info, StreamingContext context)
       : base(info, context) { }
 
     protected override string GetMessage()
     {
-      return "Examination {0} already has its outcome set to {1} at {2} by {3}";
+      return "Assessment {0} already has its outcome set to {1} at {2} by {3}";
     }
 
     protected override string GetMessageTemplate()
     {
-      return "Examination {ExaminationId} already has its outcome set to {IsSuccessful} " +
+      return "Assessment {AssessmentId} already has its outcome set to {IsSuccessful} " +
              "at {CompletedTime} by {UserDisplayName}";
     }
   }

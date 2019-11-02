@@ -1,6 +1,6 @@
 namespace Fmas12d.Api.RequestModels
 {
-    public class ExaminationDetailTypePost : ReferralStatus
+    public class AssessmentDetailTypePost : ReferralStatus
     {
         
     }

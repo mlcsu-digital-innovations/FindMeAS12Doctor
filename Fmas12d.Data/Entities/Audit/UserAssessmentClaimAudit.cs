@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
-  [Table("UserExaminationClaimsAudit")]
-  public partial class UserExaminationClaimAudit : BaseAudit, IUserExaminationClaim
+  [Table("UserAssessmentClaimsAudit")]
+  public partial class UserAssessmentClaimAudit : BaseAudit, IUserAssessmentClaim
   {
     public int? ClaimReference { get; set; }
     public int? ClaimStatusId { get; set; }
-    public int ExaminationId { get; set; }
+    public int AssessmentId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
-    public decimal? ExaminationPayment { get; set; }
+    public decimal? AssessmentPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
     public int? Mileage { get; set; }

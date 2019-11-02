@@ -2,9 +2,9 @@
 
 namespace Fmas12d.Data.Entities
 {
-  [Table("ExaminationDoctorStatusesAudit")]
-  public partial class ExaminationDoctorStatusAudit : 
-    NameDescriptionAudit, IExaminationDoctorStatus
+  [Table("AssessmentDoctorStatusesAudit")]
+  public partial class AssessmentDoctorStatusAudit : 
+    NameDescriptionAudit, IAssessmentDoctorStatus
   {
   }
 }

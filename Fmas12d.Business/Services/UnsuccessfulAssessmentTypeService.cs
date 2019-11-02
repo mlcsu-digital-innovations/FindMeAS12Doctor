@@ -1,10 +1,10 @@
 namespace Fmas12d.Business.Services
 {
-  public class UnsuccessfulExaminationTypeService : 
-    NameDescriptionBaseService<Data.Entities.UnsuccessfulExaminationType>,
-    IUnsuccessfulExaminationTypeService
+  public class UnsuccessfulAssessmentTypeService : 
+    NameDescriptionBaseService<Data.Entities.UnsuccessfulAssessmentType>,
+    IUnsuccessfulAssessmentTypeService
   {
-    public UnsuccessfulExaminationTypeService(ApplicationContext context)
+    public UnsuccessfulAssessmentTypeService(ApplicationContext context)
       :base(context)
     {
     }

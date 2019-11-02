@@ -5,7 +5,7 @@ namespace Fmas12d.Data.Entities
 {
   public partial class Speciality : NameDescription, ISpeciality
   {
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
     public int? FinanceMileageSubjectiveCode { get; set; }
     public int? FinanceSubjectiveCode { get; set; }
     public int LevelOfUrgencyTimescaleMinutes { get; set; }

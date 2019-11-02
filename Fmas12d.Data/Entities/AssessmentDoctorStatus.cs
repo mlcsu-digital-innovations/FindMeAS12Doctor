@@ -1,6 +1,6 @@
 ﻿namespace Fmas12d.Data.Entities
 {
-  public partial class ExaminationDoctorStatus : NameDescription, IExaminationDoctorStatus
+  public partial class AssessmentDoctorStatus : NameDescription, IAssessmentDoctorStatus
   {
   }
 }

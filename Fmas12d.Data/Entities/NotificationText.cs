@@ -8,6 +8,6 @@ namespace Fmas12d.Data.Entities
     [MaxLength(2000)]
     [Required]
     public string MessageTemplate { get; set; }
-    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
   }
 }

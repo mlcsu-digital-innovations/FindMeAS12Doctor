@@ -2,9 +2,9 @@
 
 namespace Fmas12d.Data.Entities
 {
-  public partial class UnsuccessfulExaminationType : 
-    NameDescription, IUnsuccessfulExaminationType
+  public partial class UnsuccessfulAssessmentType : 
+    NameDescription, IUnsuccessfulAssessmentType
     {
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
   }
 }

@@ -9,7 +9,7 @@ namespace Fmas12d.Business.Models
     public const int AWAITING_RESPONSES = 3;
     public const int RESPONSES_PARTIAL = 4;
     public const int RESPONSES_COMPLETE = 5;
-    public const int EXAMINATION_SCHEDULED = 6;
+    public const int ASSESSMENT_SCHEDULED = 6;
     public const int AWAITING_RESCHEDULING = 7;
     public const int AWAITING_REVIEW = 8;
     public const int CLOSED = 9;

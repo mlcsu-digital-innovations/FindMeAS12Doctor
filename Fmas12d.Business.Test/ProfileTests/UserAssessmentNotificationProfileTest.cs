@@ -5,18 +5,18 @@ using System;
 namespace Fmas12d.Business.Test
 {
   [TestClass]
-  public class UserExaminationNotificationProfileTest : GenericProfileTest<Business.Models.UserExaminationNotification, Entities.UserExaminationNotification>
+  public class UserAssessmentNotificationProfileTest : GenericProfileTest<Business.Models.UserAssessmentNotification, Entities.UserAssessmentNotification>
   {
-    private readonly String[] ignoredMappings = new string[4] { "Examination", "NotificationText", "User", "ModifiedByUser" };
+    private readonly String[] ignoredMappings = new string[4] { "Assessment", "NotificationText", "User", "ModifiedByUser" };
    
     [TestMethod]
-    public void UserExaminationNotificationBusiness2EntityIsValid()
+    public void UserAssessmentNotificationBusiness2EntityIsValid()
     { 
       AssertBusiness2EntityMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
-    public void UserExaminationNotificationEntity2BusinessIsValid()
+    public void UserAssessmentNotificationEntity2BusinessIsValid()
     {
       AssertEntity2BusinessMappingIsValid(ignoredMappings);
     }

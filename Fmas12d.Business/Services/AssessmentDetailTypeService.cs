@@ -1,10 +1,10 @@
 namespace Fmas12d.Business.Services
 {
-  public class ExaminationDetailTypeService : 
-    NameDescriptionBaseService<Data.Entities.ExaminationDetailType>,
-    IExaminationDetailTypeService
+  public class AssessmentDetailTypeService : 
+    NameDescriptionBaseService<Data.Entities.AssessmentDetailType>,
+    IAssessmentDetailTypeService
   {
-    public ExaminationDetailTypeService(ApplicationContext context)
+    public AssessmentDetailTypeService(ApplicationContext context)
       : base(context)
     {
     }

@@ -18,10 +18,10 @@ namespace Fmas12d.Business.Services
     private readonly ApplicationContext _context;
 
     private List<AvailableDoctor> matchingDoctors;
-    private DateTimeOffset examinationWindowStart;
-    private DateTimeOffset examinationWindowEnd;
-    private Decimal? examinationLatitude;
-    private Decimal? examinationLongitude;
+    private DateTimeOffset assessmentWindowStart;
+    private DateTimeOffset assessmentWindowEnd;
+    private Decimal? assessmentLatitude;
+    private Decimal? assessmentLongitude;
     private int maxDistance;
 
     public AvailableDoctorService(ApplicationContext context, IMapper mapper)
@@ -47,16 +47,16 @@ namespace Fmas12d.Business.Services
         {
           throw new PostcodeNotFoundException(searchModel.PostCode);
         }
-        examinationLatitude = postcodeDetails.Latitude;
-        examinationLongitude = postcodeDetails.Longitude;
+        assessmentLatitude = postcodeDetails.Latitude;
+        assessmentLongitude = postcodeDetails.Longitude;
         maxDistance = searchModel.Distance;
       }
 
-      searchModel.ExaminationWindowStart = searchModel.ExaminationWindowStart == default(DateTime) ? new DateTimeOffset(DateTime.Now) : searchModel.ExaminationWindowStart;
-      searchModel.ExaminationWindowEnd = searchModel.ExaminationWindowEnd == default(DateTime) ? new DateTimeOffset(DateTime.Now).AddHours(3) : searchModel.ExaminationWindowEnd;
+      searchModel.AssessmentWindowStart = searchModel.AssessmentWindowStart == default(DateTime) ? new DateTimeOffset(DateTime.Now) : searchModel.AssessmentWindowStart;
+      searchModel.AssessmentWindowEnd = searchModel.AssessmentWindowEnd == default(DateTime) ? new DateTimeOffset(DateTime.Now).AddHours(3) : searchModel.AssessmentWindowEnd;
 
-      examinationWindowStart = searchModel.ExaminationWindowStart;
-      examinationWindowEnd = searchModel.ExaminationWindowEnd;
+      assessmentWindowStart = searchModel.AssessmentWindowStart;
+      assessmentWindowEnd = searchModel.AssessmentWindowEnd;
 
       // query should look for all active doctor statuses where there availability matches the supplied date / time
       // and their distance from the location is less than the supplied limit
@@ -65,17 +65,17 @@ namespace Fmas12d.Business.Services
         await _context.DoctorStatuses
         .Include(d => d.ModifiedByUser)
         .Where(d => d.IsActive && (
-          (d.AvailabilityStart <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.AvailabilityEnd) ||
-          (d.ExtendedAvailabilityStart1 <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.ExtendedAvailabilityEnd1) ||
-          (d.ExtendedAvailabilityStart2 <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.ExtendedAvailabilityEnd2) ||
-          (d.ExtendedAvailabilityStart3 <= searchModel.ExaminationWindowEnd && searchModel.ExaminationWindowStart <= d.ExtendedAvailabilityEnd3)
+          (d.AvailabilityStart <= searchModel.AssessmentWindowEnd && searchModel.AssessmentWindowStart <= d.AvailabilityEnd) ||
+          (d.ExtendedAvailabilityStart1 <= searchModel.AssessmentWindowEnd && searchModel.AssessmentWindowStart <= d.ExtendedAvailabilityEnd1) ||
+          (d.ExtendedAvailabilityStart2 <= searchModel.AssessmentWindowEnd && searchModel.AssessmentWindowStart <= d.ExtendedAvailabilityEnd2) ||
+          (d.ExtendedAvailabilityStart3 <= searchModel.AssessmentWindowEnd && searchModel.AssessmentWindowStart <= d.ExtendedAvailabilityEnd3)
         ))
         .ToListAsync();
 
       IEnumerable<DoctorStatus> doctorStatuses = _mapper.Map<IEnumerable<DoctorStatus>>(entities);
 
       // calculate the distance for each of the available doctors
-      matchingDoctors = CalculateDistanceFromExamination(doctorStatuses);
+      matchingDoctors = CalculateDistanceFromAssessment(doctorStatuses);
 
       IEnumerable<Models.AvailableDoctor> models =
         _mapper.Map<IEnumerable<Models.AvailableDoctor>>(matchingDoctors);
@@ -87,7 +87,7 @@ namespace Fmas12d.Business.Services
       return (double)degrees * Math.PI / 180;  
     }
 
-    private List<AvailableDoctor> CalculateDistanceFromExamination(IEnumerable<DoctorStatus> availableDoctors)
+    private List<AvailableDoctor> CalculateDistanceFromAssessment(IEnumerable<DoctorStatus> availableDoctors)
     {
       matchingDoctors = new List<AvailableDoctor>();
 
@@ -101,7 +101,7 @@ namespace Fmas12d.Business.Services
     private void AddDoctorToList(DoctorStatus doctorStatus, DateTimeOffset availabilityStart, DateTimeOffset availabilityEnd, Decimal latitude, Decimal longitude)
     {
       // is there an overlap in the dates / times ?
-      if ( availabilityStart <= examinationWindowEnd && examinationWindowStart <= availabilityEnd ) {
+      if ( availabilityStart <= assessmentWindowEnd && assessmentWindowStart <= availabilityEnd ) {
 
         double distance = CalculateDistanceAsCrowFlies(latitude, longitude);
 
@@ -129,9 +129,9 @@ namespace Fmas12d.Business.Services
 
       int r = 6371000; // radius of the earth in metres 
       double phi_1 = ConvertDegreesToRadians(latitude);
-      double phi_2 = ConvertDegreesToRadians(examinationLatitude);
-      double delta_phi = ConvertDegreesToRadians(examinationLatitude - latitude);
-      double delta_lambda = ConvertDegreesToRadians(examinationLongitude - longitude);
+      double phi_2 = ConvertDegreesToRadians(assessmentLatitude);
+      double delta_phi = ConvertDegreesToRadians(assessmentLatitude - latitude);
+      double delta_lambda = ConvertDegreesToRadians(assessmentLongitude - longitude);
 
 
       double a = Math.Sin(delta_phi/2) * Math.Sin(delta_phi/2) + Math.Cos(phi_1) * Math.Cos(phi_2) * Math.Sin(delta_lambda/2) * Math.Sin(delta_lambda/2); 

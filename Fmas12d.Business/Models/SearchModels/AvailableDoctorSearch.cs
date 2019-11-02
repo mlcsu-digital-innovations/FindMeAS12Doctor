@@ -12,7 +12,7 @@ namespace Fmas12d.Business.Models.SearchModels
     public decimal? Latitude { get; set; }
     [Column(TypeName = "decimal(9,6)")]
     public decimal? Longitude { get; set; }
-    public DateTimeOffset ExaminationWindowStart { get; set; }
-    public DateTimeOffset ExaminationWindowEnd { get; set; }
+    public DateTimeOffset AssessmentWindowStart { get; set; }
+    public DateTimeOffset AssessmentWindowEnd { get; set; }
   }
 }

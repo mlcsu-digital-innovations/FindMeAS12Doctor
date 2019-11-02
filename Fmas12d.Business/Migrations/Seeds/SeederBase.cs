@@ -107,31 +107,31 @@ namespace Fmas12d.Business.Migrations.Seeds
       return GetContactDetailTypeById(Models.ContactDetailType.WORK);
     }
 
-    protected ExaminationDetailType GetExaminationDetailTypeByName(string name)
+    protected AssessmentDetailType GetAssessmentDetailTypeByName(string name)
     {
       try
       {
-        return Context.ExaminationDetailTypes.Single(e => e.Name == name);
+        return Context.AssessmentDetailTypes.Single(e => e.Name == name);
       }
       catch (Exception ex)
       {
         throw new ArgumentException(
-          $"Cannot find an ExaminationDetailType with the name of {name}", ex);
+          $"Cannot find an AssessmentDetailType with the name of {name}", ex);
       }
     }
 
-    protected int GetExaminationIdByExaminationAddress(string examinationAddress)
+    protected int GetAssessmentIdByAssessmentAddress(string assessmentAddress)
     {
       try
       {
         return Context
-          .Examinations
-            .Single(examination => examination.Address1 == examinationAddress).Id;
+          .Assessments
+            .Single(assessment => assessment.Address1 == assessmentAddress).Id;
       }
       catch (Exception ex)
       {
         throw new ArgumentException(
-          $"Cannot find examination with an Address1 of {examinationAddress} in Examinations", ex);
+          $"Cannot find assessment with an Address1 of {assessmentAddress} in Assessments", ex);
       }
     }
 

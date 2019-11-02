@@ -2,14 +2,14 @@ using System;
 using System.ComponentModel.DataAnnotations;
 namespace Fmas12d.Business.Models
 {
-  public class UserExaminationClaim : BaseModel
+  public class UserAssessmentClaim : BaseModel
   {
     public int? ClaimReference { get; set; }
     public virtual ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
-    public virtual Examination Examination { get; set; }
-    public int ExaminationId { get; set; }
-    public decimal? ExaminationPayment { get; set; }
+    public virtual Assessment Assessment { get; set; }
+    public int AssessmentId { get; set; }
+    public decimal? AssessmentPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
     public int? Mileage { get; set; }

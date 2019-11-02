@@ -2,7 +2,7 @@ using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class ExaminationDetailTypesSeeder : SeederBase<ExaminationDetailType>
+  internal class AssessmentDetailTypesSeeder : SeederBase<AssessmentDetailType>
   {
     #region Constants
     internal const string DESCRIPTION_AGRESSIVE_NEIGHBOUR =
@@ -19,19 +19,19 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddOrUpdateNameDescriptionEntityById(
-        ExaminationDetailType.AGRESSIVE_NEIGHBOUR,
+        AssessmentDetailType.AGRESSIVE_NEIGHBOUR,
         NAME_AGRESSIVE_NEIGHBOUR,
         DESCRIPTION_AGRESSIVE_NEIGHBOUR
       ); 
 
       AddOrUpdateNameDescriptionEntityById(
-        ExaminationDetailType.DANGEROUS_ANIMAL,
+        AssessmentDetailType.DANGEROUS_ANIMAL,
         NAME_DANGEROUS_ANIMAL,
         DESCRIPTION_DANGEROUS_ANIMAL
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        ExaminationDetailType.DIFFICULT_PARKING,
+        AssessmentDetailType.DIFFICULT_PARKING,
         NAME_DIFFICULT_PARKING,
         DESCRIPTION_DIFFICULT_PARKING
       );

@@ -49,7 +49,7 @@ namespace Fmas12d.Api.Controllers
       if (exceptionThatOccurred is Business.Exceptions.MissingSearchParameterException) {
         return StatusCode(StatusCodes.Status400BadRequest, exceptionThatOccurred.Message);
       }
-      else if (exceptionThatOccurred is Business.Exceptions.ExaminationAlreadyHasOutcomeException) {
+      else if (exceptionThatOccurred is Business.Exceptions.AssessmentAlreadyHasOutcomeException) {
         return StatusCode(StatusCodes.Status409Conflict, exceptionThatOccurred.Message);
       }      
       else if (exceptionThatOccurred is Business.Exceptions.EntityNotFoundException) {

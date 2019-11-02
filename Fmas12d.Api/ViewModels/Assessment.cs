@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Fmas12d.Api.ViewModels
 {
-  public class Examination : BaseViewModel
+  public class Assessment : BaseViewModel
   {
     [Required]
     [MaxLength(200)]
@@ -21,7 +21,7 @@ namespace Fmas12d.Api.ViewModels
     public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
-    public virtual IList<ExaminationDetailType> DetailTypes { get; set; }
+    public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
@@ -36,10 +36,10 @@ namespace Fmas12d.Api.ViewModels
     public DateTimeOffset ScheduledTime { get; set; }
     public int SpecialityId { get; set; }
     public virtual Speciality Speciality { get; set; }
-    public int? UnsuccessfulExaminationTypeId { get; set; }
-    public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
-    public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
-    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
+    public UnsuccessfulAssessmentType UnsuccessfulAssessmentType { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
     public virtual GenderType PreferredDoctorGenderType { get; set; }
     public int? PreferredDoctorGenderTypeId { get; set; }
   }

@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class ExaminationSeeder : SeederBase<Examination>
+  internal class AssessmentSeeder : SeederBase<Assessment>
   {
-    internal Examination Create(
+    internal Assessment Create(
       string address1,
       string amhpUserName,
       string ccgName,
@@ -19,8 +19,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       string completedByUserName = null,
       string completionConfirmationByUserName = null,
       DateTimeOffset? completedTime = null,
-      List<ExaminationDetail> details = null,
-      List<ExaminationDoctor> doctors = null,
+      List<AssessmentDetail> details = null,
+      List<AssessmentDoctor> doctors = null,
       bool? isSuccessful = null,
       string meetingArrangementComment = null,
       DateTimeOffset? mustBeCompletedBy = null,
@@ -28,11 +28,11 @@ namespace Fmas12d.Business.Migrations.Seeds
       int? preferredDoctorGenderTypeId = null,
       DateTimeOffset? scheduledTime = null,
       int? specialityId = null,
-      int? unsuccessfulExaminationTypeId = null,
-      List<UserExaminationNotification> userExaminationNotifications = null
+      int? unsuccessfulAssessmentTypeId = null,
+      List<UserAssessmentNotification> userAssessmentNotifications = null
     )
     {
-      Examination examination = new Examination
+      Assessment assessment = new Assessment
       {
         Address1 = address1,
         Address2 = address2,
@@ -60,26 +60,26 @@ namespace Fmas12d.Business.Migrations.Seeds
           preferredDoctorGenderTypeId == null ? null : preferredDoctorGenderTypeId,
         ScheduledTime = scheduledTime == null ? null : scheduledTime,
         SpecialityId = specialityId == null ? (int?)null : specialityId,
-        UnsuccessfulExaminationTypeId =
-          unsuccessfulExaminationTypeId == null ? null : unsuccessfulExaminationTypeId,
-        UserExaminationNotifications = userExaminationNotifications
+        UnsuccessfulAssessmentTypeId =
+          unsuccessfulAssessmentTypeId == null ? null : unsuccessfulAssessmentTypeId,
+        UserAssessmentNotifications = userAssessmentNotifications
       };
 
-      PopulateActiveAndModifiedWithSystemUser(examination);
+      PopulateActiveAndModifiedWithSystemUser(assessment);
 
-      return examination;
+      return assessment;
     }
 
     /// <summary>
-    /// Also deletes all ExaminationDetails, ExaminationDoctors
+    /// Also deletes all AssessmentDetails, AssessmentDoctors
     /// </summary>
     internal override void DeleteSeeds()
     {
-      Context.ExaminationDetails.RemoveRange(
-        Context.ExaminationDetails.ToList()
+      Context.AssessmentDetails.RemoveRange(
+        Context.AssessmentDetails.ToList()
       );      
-      Context.ExaminationDoctors.RemoveRange(
-        Context.ExaminationDoctors.ToList()
+      Context.AssessmentDoctors.RemoveRange(
+        Context.AssessmentDoctors.ToList()
       );      
       base.DeleteSeeds();
     }

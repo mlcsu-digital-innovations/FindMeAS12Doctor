@@ -80,11 +80,11 @@ namespace Fmas12d.Business.Services
     {
       IEnumerable<Models.Referral> models =
         await _context.Referrals
-                      .Include(r => r.Examinations)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.Speciality)
-                      .Include(r => r.Examinations)
-                        .ThenInclude(e => e.UserExaminationNotifications)
-                      .Include(r => r.Examinations)
+                      .Include(r => r.Assessments)
+                        .ThenInclude(e => e.UserAssessmentNotifications)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.Doctors)
                       .Include(r => r.Patient)
                       .Include(r => r.ReferralStatus)
@@ -102,17 +102,17 @@ namespace Fmas12d.Business.Services
     {
       Models.Referral model =
         await _context.Referrals
-                      .Include(r => r.Examinations)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.AmhpUser)
-                      .Include(r => r.Examinations)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.Details)
-                          .ThenInclude(d => d.ExaminationDetailType)
-                      .Include(r => r.Examinations)
+                          .ThenInclude(d => d.AssessmentDetailType)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.Doctors)
                           .ThenInclude(d => d.DoctorUser)
-                      .Include(r => r.Examinations)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.PreferredDoctorGenderType)
-                      .Include(r => r.Examinations)
+                      .Include(r => r.Assessments)
                         .ThenInclude(e => e.Speciality)
                       .Include(r => r.LeadAmhpUser)
                       .Include(r => r.Patient)

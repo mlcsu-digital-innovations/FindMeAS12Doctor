@@ -7,7 +7,7 @@ namespace Fmas12d.Business.Test
   [TestClass]
   public class ReferralProfileTest : GenericProfileTest<Business.Models.Referral, Entities.Referral>
   {
-    private readonly String[] ignoredMappings = new string[6] { "CreatedByUser", "Examinations", "Patient", "ReferralStatus", "ModifiedByUser", "LeadAmhpUser" };
+    private readonly String[] ignoredMappings = new string[6] { "CreatedByUser", "Assessments", "Patient", "ReferralStatus", "ModifiedByUser", "LeadAmhpUser" };
    
     [TestMethod]
     public void ReferralProfileBusiness2EntityIsValid()

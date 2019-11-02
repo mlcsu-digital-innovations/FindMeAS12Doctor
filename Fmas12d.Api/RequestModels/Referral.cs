@@ -11,7 +11,7 @@ namespace Fmas12d.Api.RequestModels
     public virtual UserPut CreatedByUser { get; set; }
     [Required]
     public int? CreatedByUserId { get; set; }
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
     public virtual Patient Patient { get; set; }
     [Required]
     public int? PatientId { get; set; }
@@ -19,7 +19,7 @@ namespace Fmas12d.Api.RequestModels
     public int? ReferralStatusId { get; set; }
     public virtual User LeadAmhpUser { get; set; }
     public int LeadAmhpUserId { get; set; }
-    public bool IsPlannedExamination { get; set; }
+    public bool IsPlannedAssessment { get; set; }
  
   }
 }

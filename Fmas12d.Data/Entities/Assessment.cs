@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
-  public partial class Examination : BaseEntity, IExamination
+  public partial class Assessment : BaseEntity, IAssessment
   {
     [Required]
     [MaxLength(200)]
@@ -27,8 +27,8 @@ namespace Fmas12d.Data.Entities
     public int? CompletionConfirmationByUserId { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
-    public IList<ExaminationDoctor> Doctors { get; set; }
-    public virtual IList<ExaminationDetail> Details { get; set; }
+    public IList<AssessmentDoctor> Doctors { get; set; }
+    public virtual IList<AssessmentDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
@@ -45,21 +45,21 @@ namespace Fmas12d.Data.Entities
     public DateTimeOffset? ScheduledTime { get; set; }
     public Speciality Speciality { get; set; }
     public int? SpecialityId { get; set; }
-    public int? UnsuccessfulExaminationTypeId { get; set; }
-    public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
-    public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
-    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
+    public UnsuccessfulAssessmentType UnsuccessfulAssessmentType { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
 
     [NotMapped]
     public bool HasDetails { get { return Details != null && Details.Count > 0; } }
 
     [NotMapped]
-    public bool HasUserExaminationNotifications
+    public bool HasUserAssessmentNotifications
     {
       get
       {
-        return UserExaminationNotifications != null &&
-               UserExaminationNotifications.Count > 0;
+        return UserAssessmentNotifications != null &&
+               UserAssessmentNotifications.Count > 0;
       }
     }
   }

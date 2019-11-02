@@ -9,9 +9,9 @@ namespace Fmas12d.Data.Entities
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     public int CostCentre { get; set; }
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
     [Column(TypeName = "decimal(18,2)")]
-    public decimal FailedExamPayment { get; set; }
+    public decimal FailedAssessmentPayment { get; set; }
     public virtual IList<GpPractice> GpPractices { get; set; }
     public bool IsPaymentApprovalRequired { get; set; }
     [MaxLength(10)]

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ExaminationPut : Examination
+  public class AssessmentPut : Assessment
   {
     public int? CompletedByUserId { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
@@ -13,8 +13,8 @@ namespace Fmas12d.Api.RequestModels
     public bool? IsActive { get; set; }
     public bool? IsSuccessful { get; set; }
     public int? NonPaymentLocationId { get; set; }
-    public int? UnsuccessfulExaminationTypeId { get; set; }
-    public UnsuccessfulExaminationType UnsuccessfulExaminationType { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
+    public UnsuccessfulAssessmentType UnsuccessfulAssessmentType { get; set; }
 
   }
 }

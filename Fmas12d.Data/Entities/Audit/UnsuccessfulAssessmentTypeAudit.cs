@@ -2,9 +2,9 @@
 
 namespace Fmas12d.Data.Entities
 {
-  [Table("UnsuccessfulExaminationTypesAudit")]
-  public partial class UnsuccessfulExaminationTypeAudit : 
-    NameDescriptionAudit, IUnsuccessfulExaminationType
+  [Table("UnsuccessfulAssessmentTypesAudit")]
+  public partial class UnsuccessfulAssessmentTypeAudit : 
+    NameDescriptionAudit, IUnsuccessfulAssessmentType
   {
   }
 }

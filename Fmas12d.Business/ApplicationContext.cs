@@ -59,16 +59,16 @@ namespace Fmas12d.Business
     public virtual DbSet<ContactDetailTypeAudit> ContactDetailTypeAudits { get; set; }
     public virtual DbSet<DoctorStatus> DoctorStatuses { get; set; }
     public virtual DbSet<DoctorStatusAudit> DoctorStatusAudits { get; set; }
-    public virtual DbSet<Examination> Examinations { get; set; }
-    public virtual DbSet<ExaminationAudit> ExaminationAudits { get; set; }
-    public virtual DbSet<ExaminationDetail> ExaminationDetails { get; set; }
-    public virtual DbSet<ExaminationDoctor> ExaminationDoctors { get; set; }
-    public virtual DbSet<ExaminationDoctorAudit> ExaminationDoctorAudits { get; set; }
-    public virtual DbSet<ExaminationDoctorStatus> ExaminationDoctorStatuses { get; set; }
-    public virtual DbSet<ExaminationDoctorStatusAudit> ExaminationDoctorStatusAudits { get; set; }
-    public virtual DbSet<ExaminationDetailAudit> ExaminationDetailAudits { get; set; }
-    public virtual DbSet<ExaminationDetailType> ExaminationDetailTypes { get; set; }
-    public virtual DbSet<ExaminationDetailTypeAudit> ExaminationDetailTypeAudits { get; set; }
+    public virtual DbSet<Assessment> Assessments { get; set; }
+    public virtual DbSet<AssessmentAudit> AssessmentAudits { get; set; }
+    public virtual DbSet<AssessmentDetail> AssessmentDetails { get; set; }
+    public virtual DbSet<AssessmentDoctor> AssessmentDoctors { get; set; }
+    public virtual DbSet<AssessmentDoctorAudit> AssessmentDoctorAudits { get; set; }
+    public virtual DbSet<AssessmentDoctorStatus> AssessmentDoctorStatuses { get; set; }
+    public virtual DbSet<AssessmentDoctorStatusAudit> AssessmentDoctorStatusAudits { get; set; }
+    public virtual DbSet<AssessmentDetailAudit> AssessmentDetailAudits { get; set; }
+    public virtual DbSet<AssessmentDetailType> AssessmentDetailTypes { get; set; }
+    public virtual DbSet<AssessmentDetailTypeAudit> AssessmentDetailTypeAudits { get; set; }
     public virtual DbSet<GenderType> GenderTypes { get; set; }
     public virtual DbSet<GenderTypeAudit> GenderTypeAudits { get; set; }
     public virtual DbSet<GpPractice> GpPractices { get; set; }
@@ -104,15 +104,15 @@ namespace Fmas12d.Business
     public virtual DbSet<Section12ApprovalStatusAudit> Section12ApprovalStatusAudits { get; set; }
     public virtual DbSet<Speciality> Specialities { get; set; }
     public virtual DbSet<SpecialityAudit> SpecialityAudits { get; set; }
-    public virtual DbSet<UnsuccessfulExaminationType> UnsuccessfulExaminationTypes { get; set; }
-    public virtual DbSet<UnsuccessfulExaminationTypeAudit> UnsuccessfulExaminationTypeAudits 
+    public virtual DbSet<UnsuccessfulAssessmentType> UnsuccessfulAssessmentTypes { get; set; }
+    public virtual DbSet<UnsuccessfulAssessmentTypeAudit> UnsuccessfulAssessmentTypeAudits 
       { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<UserAudit> UserAudits { get; set; }
-    public virtual DbSet<UserExaminationClaim> UserExaminationClaims { get; set; }
-    public virtual DbSet<UserExaminationClaimAudit> UserExaminationClaimAudits { get; set; }
-    public virtual DbSet<UserExaminationNotification> UserExaminationNotifications { get; set; }
-    public virtual DbSet<UserExaminationNotificationAudit> UserExaminationNotificationAudits 
+    public virtual DbSet<UserAssessmentClaim> UserAssessmentClaims { get; set; }
+    public virtual DbSet<UserAssessmentClaimAudit> UserAssessmentClaimAudits { get; set; }
+    public virtual DbSet<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
+    public virtual DbSet<UserAssessmentNotificationAudit> UserAssessmentNotificationAudits 
       { get; set; }
     public virtual DbSet<UserSpeciality> UserSpecialities { get; set; }
     public virtual DbSet<UserSpecialityAudit> UserSpecialitieAudits { get; set; }
@@ -156,11 +156,11 @@ namespace Fmas12d.Business
         .HasIndex(c => c.Name)
         .IsUnique();
 
-      modelBuilder.Entity<ExaminationDoctorStatus>()
+      modelBuilder.Entity<AssessmentDoctorStatus>()
         .HasIndex(c => c.Name)
         .IsUnique();
 
-      modelBuilder.Entity<ExaminationDetailType>()
+      modelBuilder.Entity<AssessmentDetailType>()
         .HasIndex(c => c.Name)
         .IsUnique();
 
@@ -207,7 +207,7 @@ namespace Fmas12d.Business
         .HasIndex(c => c.Name)
         .IsUnique();    
 
-      modelBuilder.Entity<UnsuccessfulExaminationType>()
+      modelBuilder.Entity<UnsuccessfulAssessmentType>()
         .HasIndex(c => c.Name)
         .IsUnique();    
 
@@ -236,18 +236,18 @@ namespace Fmas12d.Business
           contextDetail.UserId
         });
 
-      modelBuilder.Entity<ExaminationDetail>()
-        .HasAlternateKey(examinationDetail => new
+      modelBuilder.Entity<AssessmentDetail>()
+        .HasAlternateKey(assessmentDetail => new
         {
-          examinationDetail.ExaminationDetailTypeId,
-          examinationDetail.ExaminationId,
+          assessmentDetail.AssessmentDetailTypeId,
+          assessmentDetail.AssessmentId,
         });
 
-      modelBuilder.Entity<ExaminationDoctor>()
-        .HasAlternateKey(examinationDoctor => new
+      modelBuilder.Entity<AssessmentDoctor>()
+        .HasAlternateKey(assessmentDoctor => new
         {
-          examinationDoctor.ExaminationId,
-          examinationDoctor.DoctorUserId
+          assessmentDoctor.AssessmentId,
+          assessmentDoctor.DoctorUserId
         });
 
       modelBuilder.Entity<NonPaymentLocation>()
@@ -265,19 +265,19 @@ namespace Fmas12d.Business
           paymentMethod.UserId
         });
 
-      modelBuilder.Entity<UserExaminationClaim>()
-        .HasAlternateKey(userExaminationClaim => new
+      modelBuilder.Entity<UserAssessmentClaim>()
+        .HasAlternateKey(userAssessmentClaim => new
         {
-          userExaminationClaim.ExaminationId,
-          userExaminationClaim.UserId
+          userAssessmentClaim.AssessmentId,
+          userAssessmentClaim.UserId
         });
 
-      modelBuilder.Entity<UserExaminationNotification>()
-        .HasAlternateKey(userExaminationNotification => new
+      modelBuilder.Entity<UserAssessmentNotification>()
+        .HasAlternateKey(userAssessmentNotification => new
         {
-          userExaminationNotification.ExaminationId,
-          userExaminationNotification.NotificationTextId,
-          userExaminationNotification.UserId
+          userAssessmentNotification.AssessmentId,
+          userAssessmentNotification.NotificationTextId,
+          userAssessmentNotification.UserId
         });
 
       modelBuilder.Entity<UserSpeciality>()

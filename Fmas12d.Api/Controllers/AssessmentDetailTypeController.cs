@@ -5,9 +5,9 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class ExaminationDetailTypeController : IdNameDescriptionBaseController
+  public class AssessmentDetailTypeController : IdNameDescriptionBaseController
   {
-    public ExaminationDetailTypeController( IExaminationDetailTypeService service)
+    public AssessmentDetailTypeController( IAssessmentDetailTypeService service)
       : base(service)
     {
     }

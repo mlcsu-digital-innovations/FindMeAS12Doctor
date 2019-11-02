@@ -1,9 +1,9 @@
 namespace Fmas12d.Business.Models
 {
-  public class ExaminationDetailType : NameDescription
+  public class AssessmentDetailType : NameDescription
   {
-    public ExaminationDetailType() { }
-    public ExaminationDetailType(Data.Entities.ExaminationDetailType entity) : base(entity)
+    public AssessmentDetailType() { }
+    public AssessmentDetailType(Data.Entities.AssessmentDetailType entity) : base(entity)
     {
     }
   }

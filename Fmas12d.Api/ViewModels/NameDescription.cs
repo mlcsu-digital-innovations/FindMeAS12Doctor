@@ -3,7 +3,7 @@ namespace Fmas12d.Api.ViewModels
   public abstract class NameDescription : BaseViewModel
   {
     protected NameDescription() {}
-    protected NameDescription(Business.Models.ExaminationDetailType model) : base(model)
+    protected NameDescription(Business.Models.AssessmentDetailType model) : base(model)
     {
       if (model == null) return;
       

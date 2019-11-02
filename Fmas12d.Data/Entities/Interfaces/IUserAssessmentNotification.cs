@@ -2,9 +2,9 @@
 
 namespace Fmas12d.Data.Entities
 {
-  public interface IUserExaminationNotification
+  public interface IUserAssessmentNotification
   {
-    int ExaminationId { get; set; }
+    int AssessmentId { get; set; }
     bool? HasAccepted { get; set; }
     int NotificationTextId { get; set; }
     DateTimeOffset? RespondedAt { get; set; }

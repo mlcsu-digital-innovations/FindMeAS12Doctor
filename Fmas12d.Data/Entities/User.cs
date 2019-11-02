@@ -8,27 +8,27 @@ namespace Fmas12d.Data.Entities
   public partial class User : BaseEntity, IUser
   {
     [InverseProperty("AmhpUser")]
-    public virtual IList<Examination> AmhpExaminations { get; set; }        
+    public virtual IList<Assessment> AmhpAssessments { get; set; }        
     [InverseProperty("LeadAmhpUser")]
     public virtual IList<Referral> AmhpReferrals { get; set; } 
     [InverseProperty("User")]
     public virtual IList<BankDetail> BankDetails { get; set; }
     [InverseProperty("CompletedByUser")]
-    public virtual IList<Examination> CompletedExaminations { get; set; }
+    public virtual IList<Assessment> CompletedAssessments { get; set; }
     [InverseProperty("CompletionConfirmationByUser")]
-    public virtual IList<Examination> CompletionConfirmationExaminations { get; set; }
+    public virtual IList<Assessment> CompletionConfirmationAssessments { get; set; }
     [InverseProperty("User")]
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     [InverseProperty("CreatedByUser")]
-    public virtual IList<Examination> CreatedExaminations { get; set; }
+    public virtual IList<Assessment> CreatedAssessments { get; set; }
     [MaxLength(256)]
     public string DisplayName { get; set; }
     [InverseProperty("DoctorUser")]
-    public virtual IList<ExaminationDoctor> DoctorExaminations{ get; set; }    
+    public virtual IList<AssessmentDoctor> DoctorAssessments{ get; set; }    
     [InverseProperty("User")]
     public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
     [InverseProperty("AttendanceConfirmedByUser")]
-    public virtual IList<ExaminationDoctor> ExaminationAttendanceConfirmations { get; set; }       
+    public virtual IList<AssessmentDoctor> AssessmentAttendanceConfirmations { get; set; }       
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }    
     public int? GmcNumber { get; set; }
@@ -52,10 +52,10 @@ namespace Fmas12d.Data.Entities
     [InverseProperty("User")]
     public virtual IList<UserSpeciality> UserSpecialities { get; set; }
     [InverseProperty("User")]
-    public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
     [InverseProperty("SelectedByUser")]
-    public virtual IList<UserExaminationClaim> UserExaminationClaimSelections { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaimSelections { get; set; }
     [InverseProperty("User")]
-    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
   }
 }

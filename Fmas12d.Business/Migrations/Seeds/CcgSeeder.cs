@@ -123,7 +123,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       ccg.ShortCode = shortCode;
       ccg.LongCode = longCode;
       ccg.CostCentre = 1;
-      ccg.FailedExamPayment = 0.0m;
+      ccg.FailedAssessmentPayment = 0.0m;
       ccg.IsPaymentApprovalRequired = true;
       ccg.SuccessfulPencePerMile = 0.0m;
       ccg.UnsuccessfulPencePerMile = 0.0m;

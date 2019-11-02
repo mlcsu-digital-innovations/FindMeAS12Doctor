@@ -6,15 +6,15 @@ using System.Linq;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ExaminationOutcomePut : IValidatableObject
+  public class AssessmentOutcomePut : IValidatableObject
   {
-    public ExaminationOutcomePut() {}
-    public ExaminationOutcomePut(BusinessModels.ExaminationOutcome model)
+    public AssessmentOutcomePut() {}
+    public AssessmentOutcomePut(BusinessModels.AssessmentOutcome model)
     {
-      AttendingDoctors = new List<ExaminationOutcomePutDoctor>();
+      AttendingDoctors = new List<AssessmentOutcomePutDoctor>();
       foreach (var doctor in model.AttendingDoctors)
       {
-        AttendingDoctors.Add(new ExaminationOutcomePutDoctor()
+        AttendingDoctors.Add(new AssessmentOutcomePutDoctor()
         {
           Attended = doctor.Attended,
           Id = doctor.Id
@@ -24,7 +24,7 @@ namespace Fmas12d.Api.RequestModels
     }
 
     [Required]
-    public List<ExaminationOutcomePutDoctor> AttendingDoctors { get; set; }
+    public List<AssessmentOutcomePutDoctor> AttendingDoctors { get; set; }
     [Required]
     public DateTimeOffset? CompletedTime { get; set; }
 
@@ -38,11 +38,11 @@ namespace Fmas12d.Api.RequestModels
       } 
     }
 
-    internal virtual BusinessModels.ExaminationOutcome MapToBusinessModel(int id)
+    internal virtual BusinessModels.AssessmentOutcome MapToBusinessModel(int id)
     {
-      BusinessModels.ExaminationOutcome model = new BusinessModels.ExaminationOutcome()
+      BusinessModels.AssessmentOutcome model = new BusinessModels.AssessmentOutcome()
       {
-        AttendingDoctors = new List<BusinessModels.ExaminationOutcomeDoctor>(),
+        AttendingDoctors = new List<BusinessModels.AssessmentOutcomeDoctor>(),
         CompletedTime = (DateTimeOffset)CompletedTime,
         Id = id
       };

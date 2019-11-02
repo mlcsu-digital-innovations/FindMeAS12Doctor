@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
-  public interface IUserExaminationClaim
+  public interface IUserAssessmentClaim
   {
     int? ClaimReference { get; set; }
     int? ClaimStatusId { get; set; }
-    int ExaminationId { get; set; }
+    int AssessmentId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
-    decimal? ExaminationPayment { get; set; }
+    decimal? AssessmentPayment { get; set; }
     bool IsAttendanceConfirmed { get; set; }
     bool? IsClaimable { get; set; }
     int? Mileage { get; set; }

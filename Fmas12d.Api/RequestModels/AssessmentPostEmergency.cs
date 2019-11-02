@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ExaminationPostEmergency : Examination
+  public class AssessmentPostEmergency : Assessment
   {
-    public ExaminationPostEmergency() {}
-    public ExaminationPostEmergency(Business.Models.ExaminationCreate model) : base(model)
+    public AssessmentPostEmergency() {}
+    public AssessmentPostEmergency(Business.Models.AssessmentCreate model) : base(model)
     {
       MustBeCompletedBy = model.MustBeCompletedBy;
     }
 
-    internal override Business.Models.ExaminationCreate MapToBusinessModel()
+    internal override Business.Models.AssessmentCreate MapToBusinessModel()
     {
-      Business.Models.ExaminationCreate model = base.MapToBusinessModel();
+      Business.Models.AssessmentCreate model = base.MapToBusinessModel();
       model.MustBeCompletedBy = MustBeCompletedBy;
       return model;
     }

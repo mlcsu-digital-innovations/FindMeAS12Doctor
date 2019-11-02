@@ -2,17 +2,17 @@ using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Models
 {
-  public class ExaminationDoctor : BaseModel
+  public class AssessmentDoctor : BaseModel
   {
-    public ExaminationDoctor() {}
-    public ExaminationDoctor(Data.Entities.ExaminationDoctor doctor) : base (doctor)
+    public AssessmentDoctor() {}
+    public AssessmentDoctor(Data.Entities.AssessmentDoctor doctor) : base (doctor)
     {
       AttendanceConfirmedByUserId = doctor.Id;
       // TODO AttendanceConfirmedByUser =
       DoctorUser = doctor.DoctorUser == null ? null : new User(doctor.DoctorUser);
       DoctorUserId = doctor.DoctorUserId;
-      // TODO Examination =
-      ExaminationId = doctor.ExaminationId;
+      // TODO Assessment =
+      AssessmentId = doctor.AssessmentId;
       // TODO Status =
       StatusId = doctor.StatusId;
     }
@@ -21,9 +21,9 @@ namespace Fmas12d.Business.Models
     public virtual User AttendanceConfirmedByUser { get; set; }
     public virtual User DoctorUser { get; set; }
     public int DoctorUserId { get; set; }
-    public virtual Examination Examination { get; set; }
-    public int ExaminationId { get; set; }
-    public virtual ExaminationDoctorStatus Status { get; set; }
+    public virtual Assessment Assessment { get; set; }
+    public int AssessmentId { get; set; }
+    public virtual AssessmentDoctorStatus Status { get; set; }
     public int StatusId { get; set; }
   }
 }

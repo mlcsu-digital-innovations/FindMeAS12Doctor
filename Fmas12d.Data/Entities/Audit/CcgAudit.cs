@@ -8,7 +8,7 @@ namespace Fmas12d.Data.Entities
   {
     public int CostCentre { get; set; }
     [Column(TypeName = "decimal(18,2)")]
-    public decimal FailedExamPayment { get; set; }
+    public decimal FailedAssessmentPayment { get; set; }
     public bool IsPaymentApprovalRequired { get; set; }
     [MaxLength(10)]
     public string LongCode { get; set; }    

@@ -2,11 +2,11 @@
 
 namespace Fmas12d.Data.Entities
 {
-  public partial class UserExaminationNotification : 
-    BaseEntity, IUserExaminationNotification
+  public partial class UserAssessmentNotification : 
+    BaseEntity, IUserAssessmentNotification
   {
-    public virtual Examination Examination { get; set; }
-    public int ExaminationId { get; set; }
+    public virtual Assessment Assessment { get; set; }
+    public int AssessmentId { get; set; }
     public bool? HasAccepted { get; set; }
     public virtual NotificationText NotificationText { get; set; }
     public int NotificationTextId { get; set; }

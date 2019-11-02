@@ -2,7 +2,7 @@ using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class ExaminationDoctorStatusSeeder : SeederBase<ExaminationDoctorStatus>
+  internal class AssessmentDoctorStatusSeeder : SeederBase<AssessmentDoctorStatus>
   {
     #region Constants
     internal const string DESCRIPTION_ALLOCATED = "Allocated Description";    
@@ -19,25 +19,25 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddOrUpdateNameDescriptionEntityById(
-        Models.ExaminationDoctorStatus.SELECTED,
+        Models.AssessmentDoctorStatus.SELECTED,
         NAME_SELECTED,
         DESCRIPTION_SELECTED
       );
       
       AddOrUpdateNameDescriptionEntityById(
-        Models.ExaminationDoctorStatus.ALLOCATED,
+        Models.AssessmentDoctorStatus.ALLOCATED,
         NAME_ALLOCATED,
         DESCRIPTION_ALLOCATED
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ExaminationDoctorStatus.ATTENDED,
+        Models.AssessmentDoctorStatus.ATTENDED,
         NAME_ATTENDED,
         DESCRIPTION_ATTENDED
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ExaminationDoctorStatus.NOT_ATTENDED,
+        Models.AssessmentDoctorStatus.NOT_ATTENDED,
         NAME_NOT_ATTENDED,
         DESCRIPTION_NOT_ATTENDED
       );

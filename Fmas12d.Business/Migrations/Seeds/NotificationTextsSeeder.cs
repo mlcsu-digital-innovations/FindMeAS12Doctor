@@ -7,46 +7,46 @@ namespace Fmas12d.Business.Migrations.Seeds
   {
 
     #region Constants
-    internal const string DESCRIPTION_ALLOCATED_TO_EXAMINATION =
-      "Allocated to examination description";
-    internal const string DESCRIPTION_SELECTED_FOR_EXAMINATION =
-      "Selected for examination description";      
-    internal const string DESCRIPTION_EXAMINATION_CANCELLED =
-      "Examination cancelled description";
-    internal const string MESSAGE_TEMPLATE_ALLOCATED_TO_EXAMINATION =
-      "Allocated to examination {0} at {1} template";
-    internal const string MESSAGE_TEMPLATE_SELECTED_FOR_EXAMINATION =
-      "Selected for examination {0} at {1} template";      
-    internal const string MESSAGE_TEMPLATE_EXAMINATION_CANCELLED =
-      "Examination {0} at {1} cancelled template";
-    internal const string NAME_ALLOCATED_TO_EXAMINATION =
-      "Allocated to examination";
-    internal const string NAME_SELECTED_FOR_EXAMINATION =
-      "Selected for examination";
-    internal const string NAME_EXAMINATION_CANCELLED = "Examination Cancelled";
+    internal const string DESCRIPTION_ALLOCATED_TO_ASSESSMENT =
+      "Allocated to assessment description";
+    internal const string DESCRIPTION_SELECTED_FOR_ASSESSMENT =
+      "Selected for assessment description";      
+    internal const string DESCRIPTION_ASSESSMENT_CANCELLED =
+      "Assessment cancelled description";
+    internal const string MESSAGE_TEMPLATE_ALLOCATED_TO_ASSESSMENT =
+      "Allocated to assessment {0} at {1} template";
+    internal const string MESSAGE_TEMPLATE_SELECTED_FOR_ASSESSMENT =
+      "Selected for assessment {0} at {1} template";      
+    internal const string MESSAGE_TEMPLATE_ASSESSMENT_CANCELLED =
+      "Assessment {0} at {1} cancelled template";
+    internal const string NAME_ALLOCATED_TO_ASSESSMENT =
+      "Allocated to assessment";
+    internal const string NAME_SELECTED_FOR_ASSESSMENT =
+      "Selected for assessment";
+    internal const string NAME_ASSESSMENT_CANCELLED = "Assessment Cancelled";
     #endregion
 
     internal void SeedData()
     {
       AddOrUpdate(
-        Models.NotificationText.SELECTED_FOR_EXAMINATION,
-        NAME_SELECTED_FOR_EXAMINATION,
-        DESCRIPTION_SELECTED_FOR_EXAMINATION,
-        MESSAGE_TEMPLATE_SELECTED_FOR_EXAMINATION
+        Models.NotificationText.SELECTED_FOR_ASSESSMENT,
+        NAME_SELECTED_FOR_ASSESSMENT,
+        DESCRIPTION_SELECTED_FOR_ASSESSMENT,
+        MESSAGE_TEMPLATE_SELECTED_FOR_ASSESSMENT
       );
             
       AddOrUpdate(
-        Models.NotificationText.ALLOCATED_TO_EXAMINATION,
-        NAME_ALLOCATED_TO_EXAMINATION,
-        DESCRIPTION_ALLOCATED_TO_EXAMINATION,
-        MESSAGE_TEMPLATE_ALLOCATED_TO_EXAMINATION
+        Models.NotificationText.ALLOCATED_TO_ASSESSMENT,
+        NAME_ALLOCATED_TO_ASSESSMENT,
+        DESCRIPTION_ALLOCATED_TO_ASSESSMENT,
+        MESSAGE_TEMPLATE_ALLOCATED_TO_ASSESSMENT
       );
 
       AddOrUpdate(
-        Models.NotificationText.EXAMINATION_CANCELLED,
-        NAME_EXAMINATION_CANCELLED,
-        DESCRIPTION_EXAMINATION_CANCELLED,
-        MESSAGE_TEMPLATE_EXAMINATION_CANCELLED
+        Models.NotificationText.ASSESSMENT_CANCELLED,
+        NAME_ASSESSMENT_CANCELLED,
+        DESCRIPTION_ASSESSMENT_CANCELLED,
+        MESSAGE_TEMPLATE_ASSESSMENT_CANCELLED
       );
 
       SaveChangesWithIdentity();

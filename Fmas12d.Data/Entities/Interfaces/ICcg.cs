@@ -3,7 +3,7 @@
     public interface ICcg
   {
     int CostCentre { get; set; }
-    decimal FailedExamPayment { get; set; }
+    decimal FailedAssessmentPayment { get; set; }
     bool IsPaymentApprovalRequired { get; set; }
     string LongCode {get; set;}    
     string Name { get; set; }

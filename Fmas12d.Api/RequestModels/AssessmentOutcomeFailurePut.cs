@@ -4,24 +4,24 @@ using System;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ExaminationOutcomeFailurePut : ExaminationOutcomePut
+  public class AssessmentOutcomeFailurePut : AssessmentOutcomePut
   {
-    public ExaminationOutcomeFailurePut() {}
+    public AssessmentOutcomeFailurePut() {}
 
-    public ExaminationOutcomeFailurePut(BusinessModels.ExaminationOutcome model)
+    public AssessmentOutcomeFailurePut(BusinessModels.AssessmentOutcome model)
       : base(model)
     {
-      UnsuccessfulExaminationTypeId = model.UnsuccessfulExaminationTypeId;
+      UnsuccessfulAssessmentTypeId = model.UnsuccessfulAssessmentTypeId;
     }
 
     [Required]
     [Range(1, int.MaxValue)]
-    public int? UnsuccessfulExaminationTypeId { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
 
-    internal override BusinessModels.ExaminationOutcome MapToBusinessModel(int id)
+    internal override BusinessModels.AssessmentOutcome MapToBusinessModel(int id)
     {
-      BusinessModels.ExaminationOutcome model = base.MapToBusinessModel(id);
-      model.UnsuccessfulExaminationTypeId = UnsuccessfulExaminationTypeId;
+      BusinessModels.AssessmentOutcome model = base.MapToBusinessModel(id);
+      model.UnsuccessfulAssessmentTypeId = UnsuccessfulAssessmentTypeId;
       model.IsSuccessful = false;
       return model;
     }

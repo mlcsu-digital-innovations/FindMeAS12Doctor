@@ -1,8 +1,8 @@
 namespace Fmas12d.Data.Entities
 {
-  public interface IExaminationDetail
+  public interface IAssessmentDetail
   {
-    int ExaminationId { get; set; }
-    int ExaminationDetailTypeId { get; set; }
+    int AssessmentId { get; set; }
+    int AssessmentDetailTypeId { get; set; }
   }
 }

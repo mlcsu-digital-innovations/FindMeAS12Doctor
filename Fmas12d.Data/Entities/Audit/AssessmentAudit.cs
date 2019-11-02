@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
-  [Table("ExaminationsAudit")]
-  public partial class ExaminationAudit : BaseAudit, IExamination
+  [Table("AssessmentsAudit")]
+  public partial class AssessmentAudit : BaseAudit, IAssessment
   {
     [Required]
     [MaxLength(200)]
@@ -33,6 +33,6 @@ namespace Fmas12d.Data.Entities
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public int? SpecialityId { get; set; }
-    public int? UnsuccessfulExaminationTypeId { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
   }
 }

@@ -6,17 +6,17 @@ using System.Linq.Expressions;
 
 namespace Fmas12d.Business.Models
 {
-  public class ExaminationCreate
+  public class AssessmentCreate
   {
-    public ExaminationCreate() { }
-    public ExaminationCreate(Data.Entities.Examination entity)
+    public AssessmentCreate() { }
+    public AssessmentCreate(Data.Entities.Assessment entity)
     {
       Address1 = entity.Address1;
       Address2 = entity.Address2;
       Address3 = entity.Address3;
       Address4 = entity.Address4;
       AmhpUserId = entity.AmhpUserId;
-      DetailTypeIds = entity.Details?.Select(d => d.ExaminationDetailTypeId).ToList();
+      DetailTypeIds = entity.Details?.Select(d => d.AssessmentDetailTypeId).ToList();
       Id = entity.Id;
       MeetingArrangementComment = entity.MeetingArrangementComment;
       MustBeCompletedBy = entity.MustBeCompletedBy;
@@ -44,9 +44,9 @@ namespace Fmas12d.Business.Models
     public DateTimeOffset? ScheduledTime { get; set; }
     public int? SpecialityId { get; set; }
 
-    internal Data.Entities.Examination MapToEntity()
+    internal Data.Entities.Assessment MapToEntity()
     {
-      Data.Entities.Examination entity = new Data.Entities.Examination
+      Data.Entities.Assessment entity = new Data.Entities.Assessment
       {
         Address1 = Address1,
         Address2 = Address2,
@@ -66,11 +66,11 @@ namespace Fmas12d.Business.Models
 
     // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
     // for this to work with .ThenInclude()
-    public static Expression<Func<Data.Entities.Examination, ExaminationCreate>> ProjectFromEntity
+    public static Expression<Func<Data.Entities.Assessment, AssessmentCreate>> ProjectFromEntity
     {
       get
       {
-        return e => new ExaminationCreate(e);
+        return e => new AssessmentCreate(e);
       }
     }
   }

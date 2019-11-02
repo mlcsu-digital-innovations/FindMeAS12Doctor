@@ -13,7 +13,7 @@ namespace Fmas12d.Business.Models
     {
       if (entity == null) return;
       
-      // TODO Examinations
+      // TODO Assessments
       FinanceMileageSubjectiveCode = entity.FinanceMileageSubjectiveCode;
       FinanceSubjectiveCode = entity.FinanceSubjectiveCode;
       LevelOfUrgencyTimescaleMinutes = entity.LevelOfUrgencyTimescaleMinutes;
@@ -22,7 +22,7 @@ namespace Fmas12d.Business.Models
       // TODO UserSpecialities
     }
 
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
     public int? FinanceMileageSubjectiveCode { get; set; }
     public int? FinanceSubjectiveCode { get; set; }
     public int LevelOfUrgencyTimescaleMinutes { get; set; }

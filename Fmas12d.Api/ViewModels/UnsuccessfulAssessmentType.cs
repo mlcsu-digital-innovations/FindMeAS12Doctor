@@ -1,6 +1,6 @@
 namespace Fmas12d.Api.ViewModels
 {
-    public class UnsuccessfulExaminationType
+    public class UnsuccessfulAssessmentType
     {
         
     }

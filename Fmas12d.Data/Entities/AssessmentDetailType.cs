@@ -1,7 +1,7 @@
 namespace Fmas12d.Data.Entities
 {
-  public class ExaminationDetailType : 
-    NameDescription, IExaminationDetailType
+  public class AssessmentDetailType : 
+    NameDescription, IAssessmentDetailType
   {
     public const int AGRESSIVE_NEIGHBOUR = 1;
     public const int DANGEROUS_ANIMAL = 2;

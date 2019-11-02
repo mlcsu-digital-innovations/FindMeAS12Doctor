@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ExaminationListSearch : IValidatableObject
+  public class AssessmentListSearch : IValidatableObject
   {
     [Range(1, int.MaxValue)]
     public int? AmhpUserId { get; set; }

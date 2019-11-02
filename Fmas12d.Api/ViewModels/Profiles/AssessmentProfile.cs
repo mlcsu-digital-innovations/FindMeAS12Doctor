@@ -3,12 +3,12 @@ using BusinessModels = Fmas12d.Business.Models;
 
 namespace Fmas12d.Api.ViewModels.Profiles
 {
-    public class ExaminationProfile : Profile
+    public class AssessmentProfile : Profile
     {
-        public ExaminationProfile()
+        public AssessmentProfile()
         {
-            CreateMap<Examination, BusinessModels.Examination>();
-            CreateMap<BusinessModels.Examination, Examination>();
+            CreateMap<Assessment, BusinessModels.Assessment>();
+            CreateMap<BusinessModels.Assessment, Assessment>();
         }
     }
 }

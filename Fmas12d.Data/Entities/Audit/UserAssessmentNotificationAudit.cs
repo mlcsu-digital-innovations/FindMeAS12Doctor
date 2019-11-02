@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
-  [Table("UserExaminationNotificationsAudit")]
-  public partial class UserExaminationNotificationAudit : 
-    BaseAudit, IUserExaminationNotification
+  [Table("UserAssessmentNotificationsAudit")]
+  public partial class UserAssessmentNotificationAudit : 
+    BaseAudit, IUserAssessmentNotification
   {
-    public int ExaminationId { get; set; }
+    public int AssessmentId { get; set; }
     public bool? HasAccepted { get; set; }
     public int NotificationTextId { get; set; }
     public DateTimeOffset? RespondedAt { get; set; }

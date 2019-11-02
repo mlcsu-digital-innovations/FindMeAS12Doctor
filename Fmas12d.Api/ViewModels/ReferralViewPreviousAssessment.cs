@@ -4,11 +4,11 @@ using System.Collections.Generic;
 namespace Fmas12d.Api.ViewModels
 {
   /// <summary>
-  /// TODO : Type of Examination
+  /// TODO : Type of Assessment
   /// </summary>
-  public class ReferralViewPreviousExamination
+  public class ReferralViewPreviousAssessment
   {
-    public ReferralViewPreviousExamination(Business.Models.Examination model)
+    public ReferralViewPreviousAssessment(Business.Models.Assessment model)
     {
       if (model == null) return;
 
@@ -16,7 +16,7 @@ namespace Fmas12d.Api.ViewModels
       DoctorNamesAllocated = model.DoctorNamesAllocated;
       Id = model.Id;
       Postcode = model.Postcode;
-      UnsuccessfulExaminationTypeName = model.UnsuccessfulExaminationType?.Name;
+      UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentType?.Name;
     }
 
     public string AmhpUserName { get; set; }
@@ -24,6 +24,6 @@ namespace Fmas12d.Api.ViewModels
     public IList<string> DoctorNamesAllocated { get; set; }
     public int Id { get; set; }
     public string Postcode { get; set; }
-    public string UnsuccessfulExaminationTypeName { get; set; }
+    public string UnsuccessfulAssessmentTypeName { get; set; }
   }
 }

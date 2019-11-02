@@ -1,21 +1,21 @@
 namespace Fmas12d.Business.Models
 {
-  public class ExaminationDetail : BaseModel
+  public class AssessmentDetail : BaseModel
   {
-    public ExaminationDetail() { }
-    public ExaminationDetail(Data.Entities.ExaminationDetail entity) : base(entity)
+    public AssessmentDetail() { }
+    public AssessmentDetail(Data.Entities.AssessmentDetail entity) : base(entity)
     {
       if (entity == null) return;
 
-      ExaminationId = entity.ExaminationId;
-      // TODO Examination
-      ExaminationDetailTypeId = entity.ExaminationDetailTypeId;
-      ExaminationDetailType = new ExaminationDetailType(entity.ExaminationDetailType);
+      AssessmentId = entity.AssessmentId;
+      // TODO Assessment
+      AssessmentDetailTypeId = entity.AssessmentDetailTypeId;
+      AssessmentDetailType = new AssessmentDetailType(entity.AssessmentDetailType);
     }
 
-    public int ExaminationId { get; set; }
-    public virtual Examination Examination { get; set; }
-    public int ExaminationDetailTypeId { get; set; }
-    public virtual ExaminationDetailType ExaminationDetailType { get; set; }
+    public int AssessmentId { get; set; }
+    public virtual Assessment Assessment { get; set; }
+    public int AssessmentDetailTypeId { get; set; }
+    public virtual AssessmentDetailType AssessmentDetailType { get; set; }
   }
 }

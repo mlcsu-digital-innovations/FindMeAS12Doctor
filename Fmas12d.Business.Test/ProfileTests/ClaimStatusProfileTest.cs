@@ -9,7 +9,7 @@ namespace Fmas12d.Business.Test
   {
     private readonly String[] ignoredMappings = new string[2] {
        "ModifiedByUser",
-       "UserExaminationClaims"
+       "UserAssessmentClaims"
       };
    
     [TestMethod]

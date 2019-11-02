@@ -13,10 +13,10 @@ namespace Fmas12d.Business.Models
       if (entity == null) return;
       // TODO AmhpReferrals
       // TODO BankDetails
-      // TODO CompletedExaminations
-      // TODO CompletionConfirmationExaminations
+      // TODO CompletedAssessments
+      // TODO CompletionConfirmationAssessments
       // TODO ContactDetails
-      // TODO CreatedExaminations
+      // TODO CreatedAssessments
       DisplayName = entity.DisplayName;
       // TODO DoctorStatuses
       // TODO GenderType
@@ -35,17 +35,17 @@ namespace Fmas12d.Business.Models
       Section12ApprovalStatusId = entity.Section12ApprovalStatusId;
       Section12ExpiryDate = entity.Section12ExpiryDate;
       // TODO UserSpecialities
-      // TODO UserExaminationClaims
-      // TODO UserExaminationClaimSelections
-      // TODO UserExaminationNotification
+      // TODO UserAssessmentClaims
+      // TODO UserAssessmentClaimSelections
+      // TODO UserAssessmentNotification
     }
 
     public virtual IList<Referral> AmhpReferrals { get; set; }
     public virtual IList<BankDetail> BankDetails { get; set; }
-    public virtual IList<Examination> CompletedExaminations { get; set; }
-    public virtual IList<Examination> CompletionConfirmationExaminations { get; set; }
+    public virtual IList<Assessment> CompletedAssessments { get; set; }
+    public virtual IList<Assessment> CompletionConfirmationAssessments { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }
-    public virtual IList<Examination> CreatedExaminations { get; set; }
+    public virtual IList<Assessment> CreatedAssessments { get; set; }
     [MaxLength(256)]
     public string DisplayName { get; set; }
     public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
@@ -67,9 +67,9 @@ namespace Fmas12d.Business.Models
     public int? Section12ApprovalStatusId { get; set; }
     public DateTimeOffset? Section12ExpiryDate { get; set; }
     public virtual IList<UserSpeciality> UserSpecialities { get; set; }
-    public virtual IList<UserExaminationClaim> UserExaminationClaims { get; set; }
-    public virtual IList<UserExaminationClaim> UserExaminationClaimSelections { get; set; }
-    public virtual IList<UserExaminationNotification> UserExaminationNotifications { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaimSelections { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
 
     public string GenderName { get { return GenderType?.Name; } }
 

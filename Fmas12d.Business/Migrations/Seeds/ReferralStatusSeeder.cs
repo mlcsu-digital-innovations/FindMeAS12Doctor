@@ -9,7 +9,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_AWAITING_RESPONSES = "Awaiting Responses Description";    
     internal const string DESCRIPTION_AWAITING_REVIEW = "Awaiting Review Description";
     internal const string DESCRIPTION_CLOSED = "Closed Description";
-    internal const string DESCRIPTION_EXAMINATION_SCHEDULED = "Examination Scheduled Description";
+    internal const string DESCRIPTION_ASSESSMENT_SCHEDULED = "Assessment Scheduled Description";
     internal const string DESCRIPTION_NEW = "New Description";
     internal const string DESCRIPTION_OPEN = "Open Description";
     internal const string DESCRIPTION_RESPONSES_COMPLETE = "Responses Complete Description";
@@ -20,7 +20,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string NAME_AWAITING_RESPONSES = "Awaiting Responses";
     internal const string NAME_AWAITING_REVIEW = "Awaiting Review";
     internal const string NAME_CLOSED = "Closed";
-    internal const string NAME_EXAMINATION_SCHEDULED = "Examination Scheduled";
+    internal const string NAME_ASSESSMENT_SCHEDULED = "Assessment Scheduled";
     internal const string NAME_NEW = "New";
     internal const string NAME_OPEN = "Open";
     internal const string NAME_RESPONSES_COMPLETE = "Responses Complete";
@@ -61,9 +61,9 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ReferralStatus.EXAMINATION_SCHEDULED,
-        NAME_EXAMINATION_SCHEDULED,
-        DESCRIPTION_EXAMINATION_SCHEDULED
+        Models.ReferralStatus.ASSESSMENT_SCHEDULED,
+        NAME_ASSESSMENT_SCHEDULED,
+        DESCRIPTION_ASSESSMENT_SCHEDULED
       );
 
       AddOrUpdateNameDescriptionEntityById(

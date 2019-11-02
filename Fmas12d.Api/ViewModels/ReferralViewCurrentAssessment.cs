@@ -5,17 +5,17 @@ using System.Linq;
 namespace Fmas12d.Api.ViewModels
 {
   /// <summary>
-  /// TODO : Type of Examination
+  /// TODO : Type of Assessment
   /// </summary>
-  public class ReferralViewCurrentExamination
+  public class ReferralViewCurrentAssessment
   {
-    public ReferralViewCurrentExamination() {}
-    public ReferralViewCurrentExamination(Business.Models.Examination model)
+    public ReferralViewCurrentAssessment() {}
+    public ReferralViewCurrentAssessment(Business.Models.Assessment model)
     {
       if (model == null) return;
 
       AmhpUserName = model.AmhpUser?.DisplayName;
-      DetailTypes = model.DetailTypes?.Select(d => new ExaminationDetailType(d)).ToList();
+      DetailTypes = model.DetailTypes?.Select(d => new AssessmentDetailType(d)).ToList();
       DoctorNamesAccepted = model.DoctorNamesAccepted;
       DoctorNamesAllocated = model.DoctorNamesAllocated;
       FullAddress = model.FullAddress;
@@ -30,7 +30,7 @@ namespace Fmas12d.Api.ViewModels
     }
 
     public string AmhpUserName { get; set; }
-    public virtual IList<ExaminationDetailType> DetailTypes { get; set; }
+    public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
     public IList<string> DoctorNamesAccepted { get; set; }
     public IList<string> DoctorNamesAllocated { get; set; }
     public string FullAddress { get; set; }

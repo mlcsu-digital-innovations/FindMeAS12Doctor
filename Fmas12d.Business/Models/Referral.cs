@@ -16,7 +16,7 @@ namespace Fmas12d.Business.Models
       CreatedAt = entity.CreatedAt;
       CreatedByUser = entity.CreatedByUser == null ? null : new User(entity.CreatedByUser);
       CreatedByUserId = entity.CreatedByUserId;
-      Examinations = entity.Examinations?.Select(e => new Examination(e, true)).ToList();
+      Assessments = entity.Assessments?.Select(e => new Assessment(e, true)).ToList();
       if (!ignorePatient)
       {
         Patient = new Patient(entity.Patient);
@@ -28,38 +28,38 @@ namespace Fmas12d.Business.Models
       ReferralStatusId = entity.ReferralStatusId;
       LeadAmhpUser = entity.LeadAmhpUser == null ? null : new User(entity.LeadAmhpUser);
       LeadAmhpUserId = entity.LeadAmhpUserId;
-      IsPlannedExamination = entity.IsPlannedExamination;
+      IsPlannedAssessment = entity.IsPlannedAssessment;
     }
 
     public DateTimeOffset CreatedAt { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
-    public virtual IList<Examination> Examinations { get; set; }
+    public virtual IList<Assessment> Assessments { get; set; }
     public virtual Patient Patient { get; set; }
     public int PatientId { get; set; }
     public virtual ReferralStatus ReferralStatus { get; set; }
     public int ReferralStatusId { get; set; }
     public virtual User LeadAmhpUser { get; set; }
     public int LeadAmhpUserId { get; set; }
-    public bool IsPlannedExamination { get; set; }
+    public bool IsPlannedAssessment { get; set; }
 
-    public Examination CurrentExamination
+    public Assessment CurrentAssessment
     {
       get
       {
-        return Examinations?.Where(e => e.IsActive)
+        return Assessments?.Where(e => e.IsActive)
                             .SingleOrDefault(e => e.IsCurrent);
       }
     }
 
     /// <summary>
-    /// TODO: Get the examination offset hours from the application config
+    /// TODO: Get the assessment offset hours from the application config
     /// </summary>
     public DateTimeOffset DefaultToBeCompletedBy
     {
       get
       {
-        return Examinations.Any(e => e.IsActive) ?
+        return Assessments.Any(e => e.IsActive) ?
                DateTimeOffset.Now.AddHours(3) :
                CreatedAt.AddHours(3);
       }
@@ -68,18 +68,18 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        return Examinations?.Where(e => e.IsActive)
+        return Assessments?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.DoctorsAllocated
                             .Count ?? 0;
       }
     }
 
-    public string ExaminationLocationPostcode
+    public string AssessmentLocationPostcode
     {
       get
       {
-        return Examinations?.Where(e => e.IsActive)
+        return Assessments?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
                             ?.Postcode;
       }
@@ -88,11 +88,11 @@ namespace Fmas12d.Business.Models
     public string LeadAmhp
     { get { return LeadAmhpUser?.DisplayName; } }
 
-    public int NumberOfExaminationAttempts
+    public int NumberOfAssessmentAttempts
     {
       get
       {
-        return Examinations?.Where(e => e.IsActive)
+        return Assessments?.Where(e => e.IsActive)
                             .Count(e => !e.IsSuccessful ?? false) ?? 0;
       }
     }
@@ -117,11 +117,11 @@ namespace Fmas12d.Business.Models
       }
     }
 
-    public IList<Examination> PreviousExaminations
+    public IList<Assessment> PreviousAssessments
     {
       get
       {
-        return Examinations.Where(e => e.IsActive)
+        return Assessments.Where(e => e.IsActive)
                            .Where(e => !e.IsCurrent)
                            .OrderByDescending(e => e.CompletedTime)
                            .ToList();
@@ -132,15 +132,15 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        return Examinations?.Where(e => e.IsActive)
+        return Assessments?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
-                            ?.UserExaminationNotifications
+                            ?.UserAssessmentNotifications
                             ?.Where(uen => uen.IsActive)
                             .Count(uen => uen.RespondedAt != null) ?? 0;
       }
     }
     public string SpecialityName
-    { get { return CurrentExamination?.SpecialityName; } }
+    { get { return CurrentAssessment?.SpecialityName; } }
 
     public string StatusName
     { get { return ReferralStatus?.Name; } }
@@ -150,7 +150,7 @@ namespace Fmas12d.Business.Models
       get
       {
         DateTimeOffset? timescale =
-          Examinations?.Where(e => e.IsActive)
+          Assessments?.Where(e => e.IsActive)
                        .FirstOrDefault(e => e.IsCurrent)
                        ?.MustBeCompletedBy;
 

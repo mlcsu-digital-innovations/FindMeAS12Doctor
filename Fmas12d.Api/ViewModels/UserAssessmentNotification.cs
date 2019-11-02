@@ -2,9 +2,9 @@ using System;
 
 namespace Fmas12d.Api.ViewModels
 {
-  public class UserExaminationNotification
+  public class UserAssessmentNotification
   {
-    public int ExaminationId { get; set; }
+    public int AssessmentId { get; set; }
     public bool? HasAccepted { get; set; }
     public int NotificationTextId { get; set; }
     public DateTimeOffset? RespondedAt { get; set; }

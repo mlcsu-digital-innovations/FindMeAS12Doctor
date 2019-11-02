@@ -2,16 +2,16 @@ using System;
 
 namespace Fmas12d.Business.Models
 {
-  public class UserExaminationNotification : BaseModel
+  public class UserAssessmentNotification : BaseModel
   {
-    public UserExaminationNotification() {}
-    public UserExaminationNotification(Data.Entities.UserExaminationNotification entity) 
+    public UserAssessmentNotification() {}
+    public UserAssessmentNotification(Data.Entities.UserAssessmentNotification entity) 
       : base(entity)
     {
       if (entity == null) return;
       
-      // TODO Examination
-      ExaminationId = entity.ExaminationId;
+      // TODO Assessment
+      AssessmentId = entity.AssessmentId;
       HasAccepted = entity.HasAccepted;
       // TODO NotificationText
       NotificationTextId = entity.NotificationTextId;
@@ -20,8 +20,8 @@ namespace Fmas12d.Business.Models
       UserId = entity.UserId;
     }
 
-    public virtual Examination Examination { get; set; }
-    public int ExaminationId { get; set; }
+    public virtual Assessment Assessment { get; set; }
+    public int AssessmentId { get; set; }
     public bool? HasAccepted { get; set; }
     public virtual NotificationText NotificationText { get; set; }
     public int NotificationTextId { get; set; }

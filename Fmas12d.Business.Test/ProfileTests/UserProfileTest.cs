@@ -10,10 +10,10 @@ namespace Fmas12d.Business.Test
     private readonly String[] ignoredMappings = new string[18] 
     { 
       "BankDetails", 
-      "CompletedExaminations", 
-      "CompletionConfirmationExaminations", 
+      "CompletedAssessments", 
+      "CompletionConfirmationAssessments", 
       "ContactDetails",
-      "CreatedExaminations",
+      "CreatedAssessments",
       "DoctorStatuses",
       "OnCallUsers",
       "Organisation",
@@ -22,9 +22,9 @@ namespace Fmas12d.Business.Test
       "Referrals",
       "Section12ApprovalStatus",
       "UserSpecialities",
-      "UserExaminationClaims",
-      "UserExaminationClaimSelections",
-      "UserExaminationNotifications",
+      "UserAssessmentClaims",
+      "UserAssessmentClaimSelections",
+      "UserAssessmentNotifications",
       "GenderType",
       "AmhpReferrals"
     };

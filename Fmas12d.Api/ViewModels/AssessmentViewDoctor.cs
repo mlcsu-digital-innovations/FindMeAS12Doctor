@@ -1,8 +1,8 @@
 namespace Fmas12d.Api.ViewModels
 {
-  public class ExaminationViewDoctor
+  public class AssessmentViewDoctor
   {
-    public ExaminationViewDoctor(Business.Models.User model)
+    public AssessmentViewDoctor(Business.Models.User model)
     {
       DisplayName = model.DisplayName;
       GmcNumber = model.GmcNumber;

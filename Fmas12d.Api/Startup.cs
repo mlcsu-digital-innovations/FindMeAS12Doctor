@@ -54,7 +54,7 @@ namespace Fmas12d.Api
       services.AddDbContext<ApplicationContext>
       (options =>
       {
-        options.UseSqlServer(Configuration.GetConnectionString("MedicalExaminationsPortal"),
+        options.UseSqlServer(Configuration.GetConnectionString("MedicalAssessmentsPortal"),
                              // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
                              opt => opt.EnableRetryOnFailure());
 
@@ -69,8 +69,8 @@ namespace Fmas12d.Api
 
       services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
-      services.AddScoped<IModelService<Examination>, ExaminationService>();
-      services.AddScoped<IExaminationDetailTypeService, ExaminationDetailTypeService>();
+      services.AddScoped<IModelService<Assessment>, AssessmentService>();
+      services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<IPatientService, PatientService>();
@@ -78,7 +78,7 @@ namespace Fmas12d.Api
       services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<ISpecialityService, SpecialityService>();
       services.AddScoped<IUserService, UserService>();
-      services.AddScoped<IUnsuccessfulExaminationTypeService, UnsuccessfulExaminationTypeService>();
+      services.AddScoped<IUnsuccessfulAssessmentTypeService, UnsuccessfulAssessmentTypeService>();
 
       services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 

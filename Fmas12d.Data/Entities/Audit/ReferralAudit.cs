@@ -8,7 +8,7 @@ namespace Fmas12d.Data.Entities
   {
     public DateTimeOffset CreatedAt { get; set; }
     public int CreatedByUserId { get; set; }
-    public bool IsPlannedExamination {get; set;}
+    public bool IsPlannedAssessment {get; set;}
     public int PatientId { get; set; }
     public int ReferralStatusId { get; set; }
     public int LeadAmhpUserId {get; set;}    

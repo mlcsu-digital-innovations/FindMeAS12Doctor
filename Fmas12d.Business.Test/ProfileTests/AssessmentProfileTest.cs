@@ -5,7 +5,7 @@ using System;
 namespace Fmas12d.Business.Test
 {
   [TestClass]
-  public class ExaminationProfileTest : GenericProfileTest<Business.Models.Examination, Entities.Examination>
+  public class AssessmentProfileTest : GenericProfileTest<Business.Models.Assessment, Entities.Assessment>
   {
     private readonly String[] ignoredMappings = new string[12] {
        "ModifiedByUser",
@@ -16,20 +16,20 @@ namespace Fmas12d.Business.Test
        "NonPaymentLocation",
        "Referral",
        "Speciality",
-       "UnsuccessfulExaminationType",
-       "UserExaminationClaims",
-       "UserExaminationNotifications",
+       "UnsuccessfulAssessmentType",
+       "UserAssessmentClaims",
+       "UserAssessmentNotifications",
        "PreferredDoctorGenderType"
       };
    
     [TestMethod]
-    public void ExaminationProfileBusiness2EntityIsValid()
+    public void AssessmentProfileBusiness2EntityIsValid()
     {      
       AssertBusiness2EntityMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
-    public void ExaminationProfileEntity2BusinessIsValid()
+    public void AssessmentProfileEntity2BusinessIsValid()
     {
       AssertEntity2BusinessMappingIsValid(ignoredMappings);
     }

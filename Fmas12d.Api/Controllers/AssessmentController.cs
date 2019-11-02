@@ -11,14 +11,14 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class ExaminationController :
-    ModelController<BusinessModels.Examination,
-                    ViewModels.Examination,
-                    RequestModels.ExaminationPut,
-                    RequestModels.Examination>
+  public class AssessmentController :
+    ModelController<BusinessModels.Assessment,
+                    ViewModels.Assessment,
+                    RequestModels.AssessmentPut,
+                    RequestModels.Assessment>
   {
-    public ExaminationController(
-      IModelService<BusinessModels.Examination> service,
+    public AssessmentController(
+      IModelService<BusinessModels.Assessment> service,
       IMapper mapper)
       : base(service, mapper)
     {
@@ -26,21 +26,21 @@ namespace Fmas12d.Api.Controllers
 
     [HttpGet]
     [Route("list")]
-    public async Task<ActionResult<IEnumerable<ViewModels.ExaminationList>>> ListGet([FromQuery]
-      RequestModels.ExaminationListSearch examinationListSearch)
+    public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> ListGet([FromQuery]
+      RequestModels.AssessmentListSearch assessmentListSearch)
     {
 
-      IEnumerable<BusinessModels.Examination> businessModels = null;
-      if (examinationListSearch.AmhpUserId.HasValue)
+      IEnumerable<BusinessModels.Assessment> businessModels = null;
+      if (assessmentListSearch.AmhpUserId.HasValue)
       {
-        businessModels = await (_service as ExaminationService)
-          .GetAllFilterByAmhpUserIdAsync((int)examinationListSearch.AmhpUserId, true, false);
+        businessModels = await (_service as AssessmentService)
+          .GetAllFilterByAmhpUserIdAsync((int)assessmentListSearch.AmhpUserId, true, false);
       }
 
       if (businessModels.Any())
       {
-        IEnumerable<ViewModels.ExaminationList> viewModels =
-          businessModels.Select(ViewModels.ExaminationList.ProjectFromModel).ToList();
+        IEnumerable<ViewModels.AssessmentList> viewModels =
+          businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
 
         return Ok(viewModels);
       }
@@ -52,15 +52,15 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPut]
     [Route("outcome/{id:int}/failure")]
-    public async Task<ActionResult<RequestModels.ExaminationOutcomeFailurePut>> OutcomeFailurePut(
+    public async Task<ActionResult<RequestModels.AssessmentOutcomeFailurePut>> OutcomeFailurePut(
       int id,
-      [FromBody] RequestModels.ExaminationOutcomeFailurePut requestModel)
+      [FromBody] RequestModels.AssessmentOutcomeFailurePut requestModel)
     {
       try
       {
-        BusinessModels.ExaminationOutcome businessModel = requestModel.MapToBusinessModel(id);
-        businessModel = await (_service as ExaminationService).UpdateOutcomeAsync(businessModel);
-        requestModel = new RequestModels.ExaminationOutcomeFailurePut(businessModel);
+        BusinessModels.AssessmentOutcome businessModel = requestModel.MapToBusinessModel(id);
+        businessModel = await (_service as AssessmentService).UpdateOutcomeAsync(businessModel);
+        requestModel = new RequestModels.AssessmentOutcomeFailurePut(businessModel);
 
         return Ok(requestModel);
       }
@@ -72,15 +72,15 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPut]
     [Route("outcome/{id:int}/success")]
-    public async Task<ActionResult<RequestModels.ExaminationOutcomeSuccessPut>> OutcomeSuccessPut(
+    public async Task<ActionResult<RequestModels.AssessmentOutcomeSuccessPut>> OutcomeSuccessPut(
       int id,
-      [FromBody] RequestModels.ExaminationOutcomeSuccessPut requestModel)
+      [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
     {
       try
       {
-        BusinessModels.ExaminationOutcome businessModel = requestModel.MapToBusinessModel(id);
-        businessModel = await (_service as ExaminationService).UpdateOutcomeAsync(businessModel);
-        requestModel = new RequestModels.ExaminationOutcomeSuccessPut(businessModel);
+        BusinessModels.AssessmentOutcome businessModel = requestModel.MapToBusinessModel(id);
+        businessModel = await (_service as AssessmentService).UpdateOutcomeAsync(businessModel);
+        requestModel = new RequestModels.AssessmentOutcomeSuccessPut(businessModel);
 
         return Ok(requestModel);
       }
@@ -92,14 +92,14 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPost]
     [Route("emergency")]
-    public async Task<ActionResult<RequestModels.ExaminationPostEmergency>> PostEmergency(
-      [FromBody] RequestModels.ExaminationPostEmergency requestModel)
+    public async Task<ActionResult<RequestModels.AssessmentPostEmergency>> PostEmergency(
+      [FromBody] RequestModels.AssessmentPostEmergency requestModel)
     {
       try
       {
-        BusinessModels.ExaminationCreate businessModel = requestModel.MapToBusinessModel();
-        businessModel = await (_service as ExaminationService).CreateAsync(businessModel);
-        requestModel = new RequestModels.ExaminationPostEmergency(businessModel);
+        BusinessModels.AssessmentCreate businessModel = requestModel.MapToBusinessModel();
+        businessModel = await (_service as AssessmentService).CreateAsync(businessModel);
+        requestModel = new RequestModels.AssessmentPostEmergency(businessModel);
 
         return Created(GetCreatedModelUri(businessModel.Id), requestModel);
       }
@@ -111,14 +111,14 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPost]
     [Route("planned")]
-    public async Task<ActionResult<RequestModels.ExaminationPostPlanned>> PostPlanned(
-      [FromBody] RequestModels.ExaminationPostPlanned requestModel)
+    public async Task<ActionResult<RequestModels.AssessmentPostPlanned>> PostPlanned(
+      [FromBody] RequestModels.AssessmentPostPlanned requestModel)
     {
       try
       {
-        BusinessModels.ExaminationCreate businessModel = requestModel.MapToBusinessModel();
-        businessModel = await (_service as ExaminationService).CreateAsync(businessModel);
-        requestModel = new RequestModels.ExaminationPostPlanned(businessModel);
+        BusinessModels.AssessmentCreate businessModel = requestModel.MapToBusinessModel();
+        businessModel = await (_service as AssessmentService).CreateAsync(businessModel);
+        requestModel = new RequestModels.AssessmentPostPlanned(businessModel);
 
         return Created(GetCreatedModelUri(businessModel.Id), requestModel);
       }
@@ -130,12 +130,12 @@ namespace Fmas12d.Api.Controllers
 
     [HttpGet]
     [Route("view/{id:int}")]
-    public async Task<ActionResult<ViewModels.ExaminationView>> ViewGet(int id)
+    public async Task<ActionResult<ViewModels.AssessmentView>> ViewGet(int id)
     {
       try
       {
-        BusinessModels.Examination businessModel =
-            await (_service as ExaminationService).GetByIdAsync(id, true);
+        BusinessModels.Assessment businessModel =
+            await (_service as AssessmentService).GetByIdAsync(id, true);
 
         if (businessModel == null)
         {
@@ -144,7 +144,7 @@ namespace Fmas12d.Api.Controllers
         else
         {
 
-          ViewModels.ExaminationView viewModel = new ViewModels.ExaminationView(businessModel);
+          ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
           return Ok(viewModel);
         }
       }

@@ -5,25 +5,25 @@ using System;
 namespace Fmas12d.Business.Test
 {
   [TestClass]
-  public class UserExaminationClaimProfileTest : GenericProfileTest<Business.Models.UserExaminationClaim, Entities.UserExaminationClaim>
+  public class UserAssessmentClaimProfileTest : GenericProfileTest<Business.Models.UserAssessmentClaim, Entities.UserAssessmentClaim>
   {
     private readonly String[] ignoredMappings = new string[5] 
     { 
       "ClaimStatus", 
-      "Examination", 
+      "Assessment", 
       "SelectedByUser", 
       "User", 
       "ModifiedByUser" 
     };
    
     [TestMethod]
-    public void UserExaminationClaimProfileBusiness2EntityIsValid()
+    public void UserAssessmentClaimProfileBusiness2EntityIsValid()
     { 
       AssertBusiness2EntityMappingIsValid(ignoredMappings);
     }
 
     [TestMethod]
-    public void UserExaminationClaimProfileEntity2BusinessIsValid()
+    public void UserAssessmentClaimProfileEntity2BusinessIsValid()
     {
       AssertEntity2BusinessMappingIsValid(ignoredMappings);
     }

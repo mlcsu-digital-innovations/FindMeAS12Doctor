@@ -1,6 +1,6 @@
 namespace Fmas12d.Api.RequestModels
 {
-  public abstract class ExaminationDetailType : NameDescription
+  public abstract class AssessmentDetailType : NameDescription
     {
     }
 }

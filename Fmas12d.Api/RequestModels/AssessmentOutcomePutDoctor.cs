@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ExaminationOutcomePutDoctor
+  public class AssessmentOutcomePutDoctor
   {
     [Range(1, int.MaxValue)]
     public int Id { get; set; }
     [Required]
     public bool? Attended { get; set; }
 
-    internal BusinessModels.ExaminationOutcomeDoctor MapToBusinessModel()
+    internal BusinessModels.AssessmentOutcomeDoctor MapToBusinessModel()
     {
-      BusinessModels.ExaminationOutcomeDoctor model = new BusinessModels.ExaminationOutcomeDoctor()
+      BusinessModels.AssessmentOutcomeDoctor model = new BusinessModels.AssessmentOutcomeDoctor()
       {
         Attended = Attended.Value,
         Id = Id

@@ -1,10 +1,10 @@
 namespace Fmas12d.Data.Entities
 {
-    public class ExaminationDetail : BaseEntity, IExaminationDetail
+    public class AssessmentDetail : BaseEntity, IAssessmentDetail
     {
-        public int ExaminationId { get; set; }
-        public virtual Examination Examination { get; set; }
-        public int ExaminationDetailTypeId { get; set; }
-        public virtual ExaminationDetailType ExaminationDetailType { get; set; }
+        public int AssessmentId { get; set; }
+        public virtual Assessment Assessment { get; set; }
+        public int AssessmentDetailTypeId { get; set; }
+        public virtual AssessmentDetailType AssessmentDetailType { get; set; }
     }
 }
