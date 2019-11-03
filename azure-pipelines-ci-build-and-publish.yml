@@ -12,72 +12,72 @@ pool:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Mep.Api - Create Deployment'
+  displayName: 'Fmas12d.Api - Create Deployment'
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: './Mep.Api/mep.api.csproj'
+    projects: './Fmas12d.Api/Fmas12d.api.csproj'
     zipAfterPublish: false
     modifyOutputPath: false
-    arguments: '-c AzureDevelopment -r win-x86 --output ./Deployment/AzureDevelopment/Mep.Api --self-contained true -p:Version=$(build.buildNumber)'
+    arguments: '-c AzureDevelopment -r win-x86 --output ./Deployment/AzureDevelopment/Fmas12d.Api --self-contained true -p:Version=$(build.buildNumber)'
 
 - task: Npm@1
-  displayName: 'Mep.Ui - Install npm packages'
+  displayName: 'Fmas12d.Ui - Install npm packages'
   inputs:
     command: 'install'
-    workingDir: './Mep.Ui'
+    workingDir: './Fmas12d.Ui'
 
 - task: Npm@1
-  displayName: "Mep.Ui - Set the version number"
+  displayName: "Fmas12d.Ui - Set the version number"
   inputs:
     command: 'custom'
-    workingDir: './Mep.Ui'
+    workingDir: './Fmas12d.Ui'
     customCommand: 'version $(build.buildNumber) --force'
 
 - task: Npm@1
-  displayName: "Mep.Ui - Create deployment"
+  displayName: "Fmas12d.Ui - Create deployment"
   inputs:
     command: 'custom'
-    workingDir: './Mep.Ui'
+    workingDir: './Fmas12d.Ui'
     customCommand: 'run build:azure-development'
 
 - task: Npm@1
-  displayName: 'Mep.Mobile - Install npm packages'
+  displayName: 'Fmas12d.Mobile - Install npm packages'
   inputs:
     command: 'install'
-    workingDir: './Mep.Mobile'
+    workingDir: './Fmas12d.Mobile'
 
 - task: Npm@1
-  displayName: "Mep.Mobile - Set the version number"
+  displayName: "Fmas12d.Mobile - Set the version number"
   inputs:
     command: 'custom'
-    workingDir: './Mep.Mobile'
+    workingDir: './Fmas12d.Mobile'
     customCommand: 'version $(build.buildNumber) --force'    
 
 - task: Npm@1
-  displayName: "Mep.Mobile - Check build completes successfully"
+  displayName: "Fmas12d.Mobile - Check build completes successfully"
   inputs:
     command: 'custom'
-    workingDir: './Mep.Mobile'
+    workingDir: './Fmas12d.Mobile'
     customCommand: 'run build:azure-development'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Mep.Api - Publish build artifacts'
+  displayName: 'Fmas12d.Api - Publish build artifacts'
   inputs:
-    PathtoPublish: './Deployment/AzureDevelopment/Mep.Api'
+    PathtoPublish: './Deployment/AzureDevelopment/Fmas12d.Api'
     ArtifactName: 'api'
     publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Mep.Ui - Publish build artifacts'
+  displayName: 'Fmas12d.Ui - Publish build artifacts'
   inputs:
-    PathtoPublish: './Deployment/AzureDevelopment/Mep.Ui'
+    PathtoPublish: './Deployment/AzureDevelopment/Fmas12d.Ui'
     ArtifactName: 'ui'
     publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Mep.Mobile - Publish build artifacts'
+  displayName: 'Fmas12d.Mobile - Publish build artifacts'
   inputs:
-    PathtoPublish: './Deployment/AzureDevelopment/Mep.Mobile'
+    PathtoPublish: './Deployment/AzureDevelopment/Fmas12d.Mobile'
     ArtifactName: 'mobile'
     publishLocation: 'Container'    

@@ -1,0 +1,7 @@
+{
+  "name": "fmas12d.mobile2",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

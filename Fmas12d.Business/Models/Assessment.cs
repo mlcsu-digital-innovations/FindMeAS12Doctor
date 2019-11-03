@@ -1,0 +1,218 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using Fmas12d.Data.Entities;
+
+namespace Fmas12d.Business.Models
+{
+  public class Assessment : BaseModel
+  {
+    public Assessment() { }
+    public Assessment(Data.Entities.Assessment entity, bool ignoreReferral = false) 
+      : base(entity)
+    {
+      if (entity == null) return;
+
+      Address1 = entity.Address1;
+      Address2 = entity.Address2;
+      Address3 = entity.Address3;
+      Address4 = entity.Address4;
+      AmhpUser = new User(entity.AmhpUser);
+      AmhpUserId = entity.AmhpUserId;
+      Ccg = new Ccg(entity.Ccg);
+      CcgId = entity.CcgId;
+      //TODO CompletedByUser = null;
+      CompletedByUserId = entity.CompletedByUserId;
+      CompletedTime = entity.CompletedTime;
+      CompletionConfirmationByUser = null;
+      CompletionConfirmationByUserId = entity.CompletionConfirmationByUserId;
+      //TODO CreatedByUser = null;
+      CreatedByUserId = entity.CreatedByUserId;
+      Details = entity.Details?.Select(d => new AssessmentDetail(d)).ToList();
+      Doctors = entity.Doctors?.Select(d => new AssessmentDoctor(d)).ToList();
+      Id = entity.Id;
+      IsActive = entity.IsActive;
+      IsSuccessful = entity.IsSuccessful;
+      MeetingArrangementComment = entity.MeetingArrangementComment;
+      MustBeCompletedBy = entity.MustBeCompletedBy;
+      //TODO NonPaymentLocation = null;
+      NonPaymentLocationId = entity.NonPaymentLocationId;
+      Postcode = entity.Postcode;
+      PreferredDoctorGenderType = new GenderType(entity.PreferredDoctorGenderType);
+      PreferredDoctorGenderTypeId = entity.PreferredDoctorGenderTypeId;
+      if (!ignoreReferral)
+      {
+        Referral = new Referral(entity.Referral, false);
+      }
+      ReferralId = entity.ReferralId;
+      ScheduledTime = entity.ScheduledTime;
+      Speciality = new Speciality(entity.Speciality);
+      SpecialityId = entity.SpecialityId;
+      //TODO UnsuccessfulAssessmentType = null;
+      UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId;
+      //TODO UserAssessmentClaims = null;
+      UserAssessmentNotifications = entity
+        .UserAssessmentNotifications
+        ?.Select(u => new UserAssessmentNotification(u)).ToList();
+    }
+
+    [Required]
+    [MaxLength(200)]
+    public string Address1 { get; set; }
+    public string Address2 { get; set; }
+    public string Address3 { get; set; }
+    public string Address4 { get; set; }
+    public User AmhpUser { get; set; }
+    public int AmhpUserId { get; set; }
+    public virtual Ccg Ccg { get; set; }
+    public int? CcgId { get; set; }
+    public int? CompletedByUserId { get; set; }
+    public virtual User CompletedByUser { get; set; }
+    public DateTimeOffset? CompletedTime { get; set; }
+    public int? CompletionConfirmationByUserId { get; set; }
+    public virtual User CompletionConfirmationByUser { get; set; }
+    public virtual User CreatedByUser { get; set; }
+    public int CreatedByUserId { get; set; }
+    public IList<AssessmentDoctor> Doctors { get; set; }
+    public virtual IList<int> DetailTypeIds { get; set; }
+    public virtual IList<AssessmentDetail> Details { get; set; }
+    public bool? IsSuccessful { get; set; }
+    [MaxLength(2000)]
+    public string MeetingArrangementComment { get; set; }
+    public DateTimeOffset? MustBeCompletedBy { get; set; }
+    public int? NonPaymentLocationId { get; set; }
+    public virtual NonPaymentLocation NonPaymentLocation { get; set; }
+    [Required]
+    [MaxLength(10)]
+    public string Postcode { get; set; }
+    public virtual GenderType PreferredDoctorGenderType { get; set; }
+    public int? PreferredDoctorGenderTypeId { get; set; }
+    public int ReferralId { get; set; }
+    public virtual Referral Referral { get; set; }
+    public DateTimeOffset? ScheduledTime { get; set; }
+    public int? SpecialityId { get; set; }
+    public Speciality Speciality { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }
+    public UnsuccessfulAssessmentType UnsuccessfulAssessmentType { get; set; }
+    public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
+    public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
+
+    public string AmhpUserName
+    {
+      get
+      {
+        return UserAssessmentNotifications
+          .Where(u => u.IsActive)
+          .FirstOrDefault(u => u.IsAmhp)
+          ?.UserName;
+      }
+    }
+
+    public DateTimeOffset DateTime
+    { get { return MustBeCompletedBy ?? ScheduledTime ?? default; } }
+
+    public virtual IList<AssessmentDetailType> DetailTypes
+    {
+      get
+      {
+        return Details?.Where(d => d.IsActive)
+                      .Select(d => d.AssessmentDetailType).ToList();
+      }
+    }
+
+    public IList<string> DoctorNamesAccepted
+    {
+      get
+      {
+        return Doctors
+          .Where(d => d.IsActive)
+          .Where(d => d.StatusId == AssessmentDoctorStatus.SELECTED)
+          .Select(d => d.DoctorUser?.DisplayName)
+          .ToList();
+      }
+    }
+
+    public IList<string> DoctorNamesAllocated
+    {
+      get
+      {
+        return DoctorsAllocated?.Select(d => d.DisplayName)
+                               ?.ToList();
+      }
+    }
+
+    public IList<User> DoctorsAllocated
+    {
+      get
+      {
+        if (Doctors == null)
+        {
+          return null;
+        }
+        else
+        {
+          return Doctors
+            .Where(d => d.IsActive)
+            .Where(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED)
+            .Select(u => u.DoctorUser)
+            .ToList();
+        }
+      }
+    }
+
+    public string FullAddress
+    {
+      get
+      {
+        StringBuilder fullAddress = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(Address1)) { fullAddress.Append(Address1); }
+        if (!string.IsNullOrWhiteSpace(Address2)) { fullAddress.Append(", " + Address2); }
+        if (!string.IsNullOrWhiteSpace(Address3)) { fullAddress.Append(", " + Address3); }
+        if (!string.IsNullOrWhiteSpace(Address4)) { fullAddress.Append(", " + Address4); }
+        return fullAddress.ToString();
+      }
+    }
+
+    public bool HasDetailTypeIds
+    { get { return DetailTypeIds != null && DetailTypeIds.Count > 0; } }
+
+    public bool IsCurrent
+    {
+      get
+      {
+        return IsActive &&
+               UnsuccessfulAssessmentTypeId == null &&
+               CompletionConfirmationByUserId == null;
+      }
+    }
+
+    public bool IsPlanned
+    { get { return ScheduledTime != null; } }
+
+    public string PatientIdentifier
+    { get { return Referral?.PatientIdentifier; } }
+
+    public string PreferredDoctorGenderTypeName
+    { get { return PreferredDoctorGenderType?.Name; } }
+
+    public string SpecialityName
+    { get { return Speciality?.Name; } }
+
+    public string UnsuccessfulAssessmentTypeName
+    { get { return UnsuccessfulAssessmentType?.Name; } }
+
+    // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
+    // public static Expression<Func<Data.Entities.Assessment, Assessment>> ProjectFromEntity
+    // {
+    //   get
+    //   {
+    //     return e => new Assessment()
+    //     {         
+    //     };
+    //   }
+    // }
+  }
+}

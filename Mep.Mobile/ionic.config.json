@@ -1,7 +1,0 @@
-{
-  "name": "mep.mobile2",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}

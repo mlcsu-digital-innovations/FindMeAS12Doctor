@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Mep.Api/Mep.Api.csproj"
+                "${workspaceFolder}/Fmas12d.Api/Fmas12d.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Mep.Api/Mep.Api.csproj"
+                "${workspaceFolder}/Fmas12d.Api/Fmas12d.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,7 +28,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/Mep.Api/Mep.Api.csproj"
+                "${workspaceFolder}/Fmas12d.Api/Fmas12d.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         }

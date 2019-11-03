@@ -1,0 +1,343 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card" *ngIf="referral$ | async as referral; else loading">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="far fa-edit fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Edit Assessment</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-header-details">
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
+          </div>
+          <div class="flex-item">
+            Patient Identifier: <strong>{{referral.patientIdentifier}}</strong>
+          </div>
+          <div class="flex-item">
+            Lead AMHP: <strong>{{referral.leadAmhp}}</strong>
+          </div>
+          <div class="flex-item">
+            Referral Status: <strong>{{referral.status}}</strong>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="assessmentForm" novalidate>
+            <div class="form-row">
+              <div class="col-md-8">
+                <label for="amhp">AMHP</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button
+                      [disabled]="DisableIfParentIsDisabled('amhp')"
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearField('amhp')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="amhp"
+                    #amhp
+                    [class.is-invalid]="hasAmhpSearchFailed"
+                    formControlName="amhp"
+                    [ngbTypeahead]="AmhpSearch"
+                    [resultFormatter]="FormatTypeAheadResults"
+                    [inputFormatter]="FormatTypeAheadResults" />
+                </div>
+              </div>
+            </div>
+            <!-- AMHP User Errors-->
+            <div class="form-row" *ngIf="hasAmhpSearchFailed">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isAmhpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <!-- residential postcode -->
+            <div class="form-row">
+              <div class="col-md-2">
+                <label for="postCode">Post Code</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button
+                      [disabled]="DisableIfParentIsDisabled('postCode')"
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearField('postCode')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <input
+                    class="form-control"
+                    formControlName="postCode"
+                    id="postCode"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="button-container">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-assessment mb-more-1"
+                    placement="top"
+                    ngbTooltip="Search for addresses"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    (click)="AddressSearch()"
+                    [disabled]="assessmentPostcode.value == '' || assessmentPostcode.errors != null"
+                  >
+                    <i class="fas fa-search-location"></i>
+                    {{ isSearchingForPostcode ? "Searching" : "Find" }}
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                      *ngIf="isSearchingForPostcode"
+                    >
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-assessment btn-spaced mb-more-1"
+                    placement="top"
+                    ngbTooltip="Locate an address using an external web site"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    (click)="OpenLocationTab()"
+                  >
+                    <i class="far fa-map"></i>
+                    Locate
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-8">
+                <label for="fullAddress">Assessment Address</label>
+                <input
+                  class="form-control"
+                  formControlName="fullAddress"
+                  id="fullAddress"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-8">
+                <label for="meetingArrangementComment">Additional Location Details</label>
+                <textarea
+                  class="form-control"
+                  formControlName="meetingArrangementComment"
+                  id="meetingArrangementComment"
+                >
+                </textarea>
+              </div>
+            </div>
+            <!-- Further information / risks -->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <label for="assessmentDetails">Further Information / Risks</label>
+                <ng-multiselect-dropdown
+                  formControlName="assessmentDetails"
+                  [settings]="dropdownSettings"
+                  [data]="assessmentDetails"
+                  (onSelect)="OnItemSelect($event)"
+                  (onDeSelect)="OnItemDeselect($event)"
+                >
+                </ng-multiselect-dropdown>
+              </div>
+            </div>
+            <!-- speciality -->
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="specialityName">Speciality</label>
+                <div class="input-group">
+                  <div class="input-group-prepend select-trash">
+                    <button
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearField('speciality')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <select
+                    class="custom-select custom-select-lg mb-2 form-control"
+                    formControlName="speciality"
+                    #speciality
+                    id="speciality"
+                  >
+                    <option [selected]=true></option>
+                    <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
+                      {{specialities[i].name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="preferredDoctorGenderTypeName">Preferred Doctor Gender</label>
+                <div class="input-group">
+                  <div class="input-group-prepend select-trash">
+                    <button
+                      type="button"
+                      class="btn btn-trash"
+                      (click)="ClearSelect('preferredGender')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <select
+                    class="custom-select custom-select-lg mb-2 form-control"
+                    formControlName="preferredGender"
+                    #preferredGender
+                    id="preferredGender"
+                  >
+                    <!-- <option [selected]=true></option> -->
+                    <option *ngFor="let gender of genderTypes; let i=index;" [value]="genderTypes[i].id">
+                      {{genderTypes[i].name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- To Be Completed By -->
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="picker">To Be Completed By</label>
+                <div class="row" name="picker">
+                  <div class="col-md-4">
+                    <input
+                      class="form-control"
+                      formControlName='toBeCompletedByDate'
+                      placeholder="dd/mm/yyyy"
+                      name="toBeCompletedByDate"
+                      [minDate]='minDate'
+                      ngbDatepicker
+                      #d="ngbDatepicker"
+                    />
+                  </div>
+                  <div class="col-md-1 padding-left-1">
+                    <button
+                      id="calendarBtn"
+                      class="btn btn-outline-secondary calendar"
+                      (click)="d.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mlt-less-1 mt-less-5">
+                    <ngb-timepicker formControlName="toBeCompletedByTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="doctorsSelected">Doctors Selected</label>
+                <div class="doctor-list">
+                  <div *ngFor="let doctor of selectedDoctors; let i=index" class="doctor-row">
+
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor}}
+                      </div>
+                      <div class="col-md-4">
+                        <label class="container mb-more-2">
+                          <input
+                            class="form-control"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span class="checkmark"></span>
+                          Send Update
+                        </label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="doctorsSelected">Doctors Allocated</label>
+                <div class="doctor-list">
+                  <div *ngFor="let doctor of allocatedDoctors; let i=index" class="doctor-row">
+
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor}}
+                      </div>
+                      <div class="col-md-4">
+                        <label class="container mb-more-2">
+                          <input
+                            class="form-control"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span class="checkmark"></span>
+                          Send Update
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row mt-more-2">
+              <div class="col-md-2 mb-2">
+                <button class="btn btn-primary btn-standard" type="button" (click)="UpdateReferral()">
+                  <i class="fas fa-redo"></i>
+                    Reselect Doctors
+                </button>
+              </div>
+              <div class="col-md-2 mb-2 offset-md-8 text-right">
+                <button class="btn btn-standard btn-cancel" type="button" (click)="CancelEdit()">
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="UpdateReferral()">
+                  <i class="fas fa-check"></i>
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<ng-template #cancelUpdate>
+  <app-cancel-action-modal
+    [modalTitle]="'Cancel Update'"
+    [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
+    (actioned)="OnCancelModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
