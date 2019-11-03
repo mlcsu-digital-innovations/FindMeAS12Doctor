@@ -16,7 +16,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: './Fmas12d.Api/Fmas12d.api.csproj'
+    projects: './Fmas12d.Api/Fmas12d.Api.csproj'
     zipAfterPublish: false
     modifyOutputPath: false
     arguments: '-c AzureDevelopment -r win-x86 --output ./Deployment/AzureDevelopment/Fmas12d.Api --self-contained true -p:Version=$(build.buildNumber)'
