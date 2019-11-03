@@ -8,9 +8,25 @@ using Microsoft.EntityFrameworkCore;
 /// Add this to the initial migration to create the inital system records: 
 /// InitialSystemUserSeed.Seed(migrationBuilder); 
 ///
+/// To add a new migration
 /// dotnet ef migrations add <migration-name> --project Fmas12d.Business --startup-project Fmas12d.Api
+/// 
+/// To update the database with any required migrations
 /// dotnet ef database update --project Fmas12d.Api
+/// 
+/// To update the Azure database you need to create a script from the last migration
 /// dotnet ef migrations script <from-migration-name> --project=Fmas12d.Api > update.sql
+/// 
+/// To run the seeds on the Azure database you need to first add the fmas12d-development-api user
+/// to the db_owner role
+/// sp_addrolemember @rolename='db_owner', @membername='fmas12d-development-api'
+/// 
+/// Then run the seed with the AzureDevelopment launch profile
+/// dotnet run /seednogppractice --launch-profile AzureDevelopment
+/// 
+/// Then remove fmas12d-development-api user from the db_owner role
+/// sp_droprolemember @rolename='db_owner', @membername='fmas12d-development-api'
+/// 
 /// </summary>
 namespace Fmas12d.Business
 {
