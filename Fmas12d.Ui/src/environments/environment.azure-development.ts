@@ -5,8 +5,8 @@
 export const environment = {
   apiEndpoint: 'https://fmas12d-api-dev.azurewebsites.net/api',
   defaultAssessmentCompletedInHours: 3,
-  oidc_redirect_url: "https://fmas12d-dev.azurewebsites.net/",
   locationEndpoint: 'https://www.google.com/maps/@52.9856552,-2.8707448,7z',
+  oidc_redirect_url: "https://fmas12d-dev.azurewebsites.net/",
   production: false,
 };
 
