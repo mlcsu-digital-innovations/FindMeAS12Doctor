@@ -22,9 +22,8 @@ export class WelcomeComponent implements OnInit {
     private routerService: RouterService) { }
 
   ngOnInit() {
+
     this.isDevelopment = !environment.production;
-
-
 
     this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe(      
       (isAuthorized: boolean) => {
@@ -38,18 +37,23 @@ export class WelcomeComponent implements OnInit {
         });
       }
     );
+
   }
 
   ngOnDestroy() {
     this.userDataSubscription.unsubscribe();
   }
 
-  login() {
-    this.oidcSecurityService.authorize();
+  copyToken() {
+    navigator.clipboard.writeText(this.userData.access_token);
   }
 
   gotoReferralList() {
     this.routerService.navigate(['/referral/list']);
+  }
+
+  login() {
+    this.oidcSecurityService.authorize();
   }
 
 }

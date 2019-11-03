@@ -6,6 +6,7 @@ using AutoMapper;
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,16 +34,19 @@ namespace Fmas12d.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      bool IsDevelopment = 
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
       }).AddJwtBearer(o =>
       {
-        o.Authority = "https://login.microsoftonline.com/df7baf74-a29e-4c5e-abee-0f073b7a5b91/v2.0";
-        o.Audience = "c898ea46-4e6e-4e55-b53b-8ae61c825507";
+        o.Authority = Configuration["jwtBearer:authority"];
+        o.Audience = Configuration["jwtBearer:audience"];
         o.RequireHttpsMetadata = false;
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        if (IsDevelopment)
         {
           o.SaveToken = true;
         };
@@ -68,6 +72,7 @@ namespace Fmas12d.Api
 
         options.AddPolicy("User", policy => 
           policy.RequireClaim("JobTitle", "Admin", "AMHP", "Doctor", "Finance", "SystemAdmin"));
+
       });
 
       services.AddMvc()
@@ -98,7 +103,7 @@ namespace Fmas12d.Api
                              // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
                              opt => opt.EnableRetryOnFailure());
 
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        if (IsDevelopment)
         {
           options.EnableSensitiveDataLogging();
           options.EnableDetailedErrors();
