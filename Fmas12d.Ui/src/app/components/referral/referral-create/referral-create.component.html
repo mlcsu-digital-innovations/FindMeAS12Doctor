@@ -77,7 +77,8 @@
                   tooltipClass="subtle-tooltip"
                   [disabled]="
                     DisablePatientValidationButtonIfFieldsAreInvalid() ||
-                    IsSearchingForPatient()
+                    IsSearchingForPatient() ||
+                    existingPatientDetailsUsed
                   "
                   (click)="ValidatePatient()"
                   [ngClass]="{ validating: IsSearchingForPatient() }"
@@ -145,12 +146,14 @@
               </div>
             </div>
             <!-- GP Practice Errors-->
-            <div class="form-row" *ngIf="isGpFieldsShown">
-              <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
+            <div class="form-row" *ngIf="gpPracticeField.errors">
+              <div class="col-md-12 mb-2">
                 <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
                   <span>* GP practice, Postcode or CCG Required </span>
                 </div>
               </div>
+            </div>
+            <div class="form-row" *ngIf="isGpSearching || hasGpSearchFailed">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isGpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasGpSearchFailed">
