@@ -21,28 +21,28 @@
       <strong>{{ patientResult.alternativeIdentifier }}</strong>
     </div>
   </div>
-  <div class="row" *ngIf="patientResult.gpPracticeNameAndPostcode !== null">
+  <div class="row">
     <div class="col-md-4 row-title">
       GP Practice
     </div>
     <div class="col-md-8 row-value">
-      <strong>{{ patientResult.gpPracticeNameAndPostcode }}</strong>
+      <strong>{{ patientResult.gpPracticeNameAndPostcode === null ? 'Unknown' : patientResult.gpPracticeNameAndPostcode}}</strong>
     </div>
   </div>
-  <div class="row" *ngIf="patientResult.residentialPostcode !== null">
+  <div class="row">
     <div class="col-md-4 row-title">
       Patients Residential Postcode
     </div>
     <div class="col-md-8 row-value">
-      <strong>{{ patientResult.residentialPostcode }}</strong>
+      <strong>{{ patientResult.residentialPostcode === null ? 'Unknown' : patientResult.residentialPostcode}}</strong>
     </div>
   </div>
-  <div class="row" *ngIf="patientResult.ccgName !== null">
+  <div class="row">
     <div class="col-md-4 row-title">
       CCG
     </div>
     <div class="col-md-8 row-value">
-      <strong>{{ patientResult.ccgName }}</strong>
+      <strong>{{ patientResult.ccgName === null ? 'Unknown' : patientResult.ccgName}}</strong>
     </div>
   </div>
 </div>
