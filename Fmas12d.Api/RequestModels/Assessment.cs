@@ -15,6 +15,7 @@ namespace Fmas12d.Api.RequestModels
       Address4 = model.Address4;
       AmhpUserId = model.AmhpUserId;
       DetailTypeIds = model.DetailTypeIds;
+      Id = model.Id;
       MeetingArrangementComment = model.MeetingArrangementComment;
       Postcode = model.Postcode;
       PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
@@ -31,6 +32,7 @@ namespace Fmas12d.Api.RequestModels
     [Range(1, int.MaxValue)]
     public int AmhpUserId { get; set; }
     public IList<int> DetailTypeIds { get; set; }
+    public int Id {get; set;}
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
     [Required]
