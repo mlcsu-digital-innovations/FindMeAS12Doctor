@@ -59,6 +59,7 @@ namespace Fmas12d.Business.Services
       IEnumerable<int> existingAvailabilitiesIds = 
         await _context.UserAvailabilities
                       .Where(u => u.IsActive)
+                      .Where(u => model.UserId == u.UserId)
                       .Where(u => model.Start <= u.End)
                       .Where(u => model.End >= u.Start)
                       .Select(u => u.Id)
