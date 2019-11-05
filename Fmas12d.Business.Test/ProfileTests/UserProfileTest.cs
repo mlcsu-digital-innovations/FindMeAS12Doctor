@@ -7,14 +7,13 @@ namespace Fmas12d.Business.Test
   [TestClass]
   public class UserProfileTest : GenericProfileTest<Business.Models.User, Entities.User>
   {
-    private readonly String[] ignoredMappings = new string[18] 
+    private readonly String[] ignoredMappings = new string[17] 
     { 
       "BankDetails", 
       "CompletedAssessments", 
       "CompletionConfirmationAssessments", 
       "ContactDetails",
       "CreatedAssessments",
-      "DoctorStatuses",
       "OnCallUsers",
       "Organisation",
       "PaymentMethods",

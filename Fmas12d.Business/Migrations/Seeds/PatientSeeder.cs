@@ -7,10 +7,12 @@ namespace Fmas12d.Business.Migrations.Seeds
   internal class PatientSeeder : SeederBase<Patient>
   {
     #region Constants
-    internal const string ALTERNATIVE_IDENTIFIER_FOR_ALLOCATED_DOCTORS_REFERRAL = "JoAllocated1";
-    internal const string ALTERNATIVE_IDENTIFIER_FOR_ASSIGNING_DOCTORS_REFERRAL = "JimAssigning1";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_ASSESSMENT_SCHEDULED_REFERRAL = "JoAllocated1";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_SELECTING_DOCTORS_REFERRAL = "JimAssigning1";
     internal const string ALTERNATIVE_IDENTIFIER_FOR_AWAITING_RESPONSES_REFERRAL = 
       "AwaitingResponses1";
+    internal const string ALTERNATIVE_IDENTIFIER_FOR_RESPONSES_PARTIAL_REFERRAL = 
+      "ResponsesPartial1";
     internal const long NHS_NUMBER_CCG_NORTH_STAFFORDSHIRE = 9486844275;
     internal const long NHS_NUMBER_POSTCODE_NORTH_STAFFORDSHIRE = 9070304333;
     internal const long NHS_NUMBER_POTTERIES_MEDICAL_CENTRE = 9813607416;
@@ -26,7 +28,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddOrUpdate(
-        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_ASSIGNING_DOCTORS_REFERRAL,
+        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_SELECTING_DOCTORS_REFERRAL,
         gpPracticeName: GpPracticeSeeder.NAME_STAFFORD_MEDICAL_CENTRE
       );
       
@@ -37,7 +39,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddOrUpdate(
-        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_ALLOCATED_DOCTORS_REFERRAL,
+        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_ASSESSMENT_SCHEDULED_REFERRAL,
         ccgName: CcgSeeder.STOKE_ON_TRENT,
         residentialPostcode: RESIDENTIAL_POSTCODE_STOKE_ON_TRENT
       );       
@@ -52,6 +54,10 @@ namespace Fmas12d.Business.Migrations.Seeds
         ccgName: CcgSeeder.STOKE_ON_TRENT
       );
 
+      AddOrUpdate(
+        alternativeIdentifier: ALTERNATIVE_IDENTIFIER_FOR_RESPONSES_PARTIAL_REFERRAL,
+        ccgName: CcgSeeder.STOKE_ON_TRENT
+      );
     }
 
     private void AddOrUpdate(
