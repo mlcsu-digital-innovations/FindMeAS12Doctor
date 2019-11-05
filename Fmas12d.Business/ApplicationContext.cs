@@ -73,8 +73,10 @@ namespace Fmas12d.Business
     public virtual DbSet<ContactDetailAudit> ContactDetailAudits { get; set; }
     public virtual DbSet<ContactDetailType> ContactDetailTypes { get; set; }
     public virtual DbSet<ContactDetailTypeAudit> ContactDetailTypeAudits { get; set; }
-    public virtual DbSet<DoctorStatus> DoctorStatuses { get; set; }
-    public virtual DbSet<DoctorStatusAudit> DoctorStatusAudits { get; set; }
+    public virtual DbSet<UserAvailability> UserAvailabilities { get; set; }
+    public virtual DbSet<UserAvailabilityAudit> UserAvailabilityAudits { get; set; }
+    public virtual DbSet<UserAvailabilityStatus> UserAvailabilityStatus { get; set; }
+    public virtual DbSet<UserAvailabilityStatusAudit> UserAvailabilityStatusAudits { get; set; }
     public virtual DbSet<Assessment> Assessments { get; set; }
     public virtual DbSet<AssessmentAudit> AssessmentAudits { get; set; }
     public virtual DbSet<AssessmentDetail> AssessmentDetails { get; set; }

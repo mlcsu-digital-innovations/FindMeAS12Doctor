@@ -25,9 +25,9 @@ namespace Fmas12d.Business.Services
     }
 
     /// <summary>
-    /// //TODO: Get the current users sub claim
+    /// TODO: Get the current users sub claim
     /// </summary>
-    protected void UpdateModified(BaseEntity entity)
+    protected void UpdateModified(IBaseEntity entity)
     {
       entity.ModifiedByUserId = 1;
       entity.ModifiedAt = DateTimeOffset.Now;

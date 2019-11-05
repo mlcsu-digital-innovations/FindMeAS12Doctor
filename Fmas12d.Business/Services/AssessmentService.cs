@@ -401,6 +401,7 @@ namespace Fmas12d.Business.Services
         entity.CompletedTime = model.CompletedTime;
         entity.IsSuccessful = model.IsSuccessful;
         entity.UnsuccessfulAssessmentTypeId = model.UnsuccessfulAssessmentTypeId;
+        entity.Referral.ReferralStatusId = Models.ReferralStatus.AWAITING_REVIEW;
 
         await _context.SaveChangesAsync();
 
@@ -408,7 +409,7 @@ namespace Fmas12d.Business.Services
 
         model.CompletedTime = entity.CompletedTime ?? default;
         model.IsSuccessful = entity.IsSuccessful ?? default;
-        model.UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId ?? default;
+        model.UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId ?? default;        
 
         if (entity.Doctors.Any())
         {

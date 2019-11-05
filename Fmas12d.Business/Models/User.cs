@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Fmas12d.Business.Models
 {
-  public class User : BaseModel
+  public class User : BaseModel, IUser
   {
     public User() { }
     public User(Data.Entities.User entity) : base(entity)
@@ -48,7 +48,7 @@ namespace Fmas12d.Business.Models
     public virtual IList<Assessment> CreatedAssessments { get; set; }
     [MaxLength(256)]
     public string DisplayName { get; set; }
-    public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
+    public virtual IList<UserAvailability> UserAvailabilities { get; set; }
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }
     public int? GmcNumber { get; set; }
