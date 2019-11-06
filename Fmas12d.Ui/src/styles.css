@@ -144,8 +144,8 @@ label {
 
 /** change primary colour **/
 .btn-primary {
-  background-color: #0dadb7;
-  border-color: #0c9da7;
+  background-color: #0dadb7 !important;
+  border-color: #0c9da7 !important;
 }
 
 .btn-primary:disabled {
@@ -390,6 +390,10 @@ label {
   margin-top: 1rem !important;
 }
 
+.mt-more-4 {
+  margin-top: 2rem !important;
+}
+
 .ml-less-2 {
   margin-left: -1rem !important;
 }
@@ -430,4 +434,9 @@ label {
 
 a:hover {
   text-decoration: none;
+}
+
+.subtle-tooltip.bs-tooltip-top .arrow::before {
+  border-right-color: transparent;
+  border-top-color: #0dadb7;
 }
