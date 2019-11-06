@@ -26,8 +26,7 @@ export class UserAvailabilityService {
       {doctorName: 'Doctor Francis', doctorGender: 'Male', doctorType: '', doctorSpeciality: '', distanceFromAssessment: 8.0},
       {doctorName: 'Doctor Hunter', doctorGender: 'Male', doctorType: '', doctorSpeciality: '', distanceFromAssessment: 9.0},
       {doctorName: 'Doctor Matthews', doctorGender: 'Male', doctorType: 'Consultant', doctorSpeciality: '', distanceFromAssessment: 10.0},
-      {doctorName: 'Doctor Lane', doctorGender: 'Female', doctorType: '', doctorSpeciality: '', distanceFromAssessment: 10.5},
-      {doctorName: 'Doctor PoopyPants', doctorGender: 'Male', doctorType: '', doctorSpeciality: '', distanceFromAssessment: 12.5},
+      {doctorName: 'Doctor Lane', doctorGender: 'Female', doctorType: '', doctorSpeciality: '', distanceFromAssessment: 10.5}
     ]);
 
     return doctors

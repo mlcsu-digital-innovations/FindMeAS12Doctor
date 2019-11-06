@@ -14,38 +14,104 @@
             </h6>
           </div>
         </div>
-        <div class="card-header-details">
-        </div>
-        <div class="card-body">
+
+        <div class="card-body" *ngIf="assessment$ | async as assessment; else loading">
+
+          <div class="assessment-details">
+
+            <div class="row">
+              <div class="col-md-3 label">
+                Assessment To be Completed By:
+              </div>
+              <div class="col-md-4">
+                {{assessment.dateTime | date:'medium'}}
+              </div>
+              <div class="col-md-2 label">
+                Assessment Postcode:
+              </div>
+              <div class="col-md-3">
+                {{assessment.postcode}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 label">
+                Patient Identifier:
+              </div>
+              <div class="col-md-4">
+                {{assessment.patientIdentifier}}
+              </div>
+              <div class="col-md-2 label">
+                Speciality:
+              </div>
+              <div class="col-md-3">
+                {{assessment.specialityName == null ? 'None' : assessment.specialityName}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 label">
+                Lead AMHP:
+              </div>
+              <div class="col-md-4">
+                Martin Price
+              </div>
+              <div class="col-md-2 label">
+                Preferred Doctor Gender:
+              </div>
+              <div class="col-md-3">
+                {{assessment.specialityName == null ? 'N/A' : assessment.specialityName}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 label">
+                Doctors Allocated:
+              </div>
+              <div class="col-md-4">
+                <span>Dr John Jones</span>
+                <span>Dr Elizabeth Fielding</span>
+              </div>
+            </div>
+          </div>
+
+
           <form [formGroup]="doctorForm" novalidate>
             <!-- Search Doctor -->
-            <div class="form-row">
+            <div class="form-row" style="margin-left:6px;">
               <div class="col-md-4 mb-2">
                 <label for="searchDoctor">Search Doctor</label>
-                <input 
-                  type="text" class="form-control" id="searchDoctor" #searchDoctor
-                  [class.is-invalid]="hasDoctorSearchFailed" formControlName="searchDoctor"
-                  [ngbTypeahead]="DoctorSearch" [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults"
-                />
+                <input type="text" class="form-control" id="searchDoctor" #searchDoctor [class.is-invalid]="hasDoctorSearchFailed"
+                  formControlName="searchDoctor" [ngbTypeahead]="DoctorSearch" [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults" />
               </div>
-              <div class="col-md-2 centered-div" style="justify-content: left;">
-                <div class="col-md-2 mb-2 text-right" style="margin-top: 10px">
-                  <a aria-disabled="true" class="btn btn-primary vcenter" 
-                    ngbTooltip="Confirm search" placement="right" role="button" routerLink="" 
-                    routerLinkActive="active" tooltipClass="subtle-tooltip"
-                    [closeDelay]="500" [openDelay]="1000">
-                    Confirm
-                  </a>
-                </div>
+              <div class="col-md-1 mb-2 text-left mt-more-4">
+                <button type="button" class="btn btn-primary" ngbTooltip="Select this doctor" placement="top"
+                  tooltipClass="subtle-tooltip" [closeDelay]="500" [openDelay]="1000">
+                  <i class="far fa-check-circle"></i>
+                  Confirm
+              </button>
               </div>
-              <div class="col-md-6 mb-2">
-              <label for="selectDistance">Doctors within:</label>
-                <select class="browser-default custom-select">
-                  <option selected id="selectDistance">select distance from patient</option>
+              <div class="col-md-3 mb-2 text-left mt-more-4">
+                <button type="button" class="btn btn-primary" ngbTooltip="Add Other Doctor" placement="top"
+                  tooltipClass="subtle-tooltip" [closeDelay]="500" [openDelay]="1000">
+                  <i class="fas fa-user-plus"></i>
+                  Unregistered Doctor
+              </button>
+              </div>
+              <div class="col-md-3 mb-2 ">
+              <label for="selectDistance">Search Doctors within:</label>
+                <select
+                  class="browser-default custom-select"
+                  formControlName="doctorDistance"
+                  #doctorDistance
+                  id="doctorDistance"
+                >
+                  <option selected id="selectDistance">Select distance from patient</option>
                   <option value="1">1 Mile</option>
-                  <option value="2">5 Miles</option>
-                  <option value="3">10 Miles</option>
+                  <option value="5">5 Miles</option>
+                  <option value="10">10 Miles</option>
+                  <option value="100">More than 10 Miles</option>
                 </select>
               </div>
             </div>
@@ -58,152 +124,81 @@
                 </div>
               </div>
             </div>
-            <div class="form-row mt-less-1" *ngIf="doctorField.errors">
-              <div class="col-md-12">
-                <div *ngIf="doctorField.errors.InvalidDoctor" class="invalid-field">
-                  <span>* Invalid Doctor </span>
-                </div>
-              </div>
-            </div>
-            <div class="form-row" style="padding-top:10px; overflow: auto;">
+
+            <app-delay-spinner [delayMessage]="'Retrieving Available Doctors'" *ngIf="isAvailableDoctorSearching"></app-delay-spinner>
+
+            <div class="form-row" style="margin:10px; padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th scope="col" sortable="referralId" (sort)="onSort($event)">
-                      Referral Id
-                    </th>
-                    <th scope="col" sortable="patientDetails" (sort)="onSort($event)">
-                      Patient Details
-                    </th>
-                    <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">
-                      Lead AMHP
-                    </th>
-                    <th scope="col" sortable="locationPostcode" (sort)="onSort($event)">
-                      Location Postcode
-                    </th>
-                    <th scope="col" sortable="speciality" (sort)="onSort($event)">
-                      Speciality
-                    </th>
-                    <th scope="col" sortable="urgencyLevel" (sort)="onSort($event)">
-                      UrgencyLevel
-                    </th>
-                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">
-                      Doctors Allocated
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="">
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="form-row" style="padding-top:10px; overflow: auto;">
-              <table class="table table-bordered table-sm table-referral-list">
-                <thead>
-                  <tr>
-                    <th scope="col" sortable="referralId" (sort)="onSort($event)">
+                    <th class="text-center" scope="col" sortable="doctorName" (sort)="OnSort($event)">
                       Doctor
                     </th>
-                    <th scope="col" sortable="gender" (sort)="onSort($event)">
+                    <th class="text-center" scope="col" sortable="doctorGender" (sort)="OnSort($event)">
                       Gender
                     </th>
-                    <th scope="col" sortable="doctorType" (sort)="onSort($event)">
+                    <th class="text-center" scope="col" sortable="doctorType" (sort)="OnSort($event)">
                       Doctor Type
                     </th>
-                    <th scope="col" sortable="speciality" (sort)="onSort($event)">
+                    <th class="text-center" scope="col" sortable="doctorSpeciality" (sort)="OnSort($event)">
                       Speciality
                     </th>
-                    <th scope="col" sortable="scheduledAssessment" (sort)="onSort($event)">
+                    <th class="text-center sm-col" scope="col" sortable="otherAssessmentDetails" (sort)="OnSort($event)">
                       Scheduled Assessment
                     </th>
-                    <th scope="col" sortable="availability" (sort)="onSort($event)">
+                    <th class="text-center" scope="col" sortable="availabilityDetails" (sort)="OnSort($event)">
                       Availability
                     </th>
-                    <th scope="col" sortable="distance" (sort)="onSort($event)">
-                      Distance
+                    <th class="text-center sm-col" scope="col" sortable="distanceFromAssessment" (sort)="OnSort($event)">
+                      Distance (miles)
                     </th>
-                    <th scope="col" sortable="select" (sort)="onSort($event)">
+                    <th class="text-center" scope="col">
                       Select
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="">
+                  <tr *ngFor="let availableDoctor of availableDoctors">
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                      {{availableDoctor.doctorName}}
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                      {{availableDoctor.doctorGender}}
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                      {{availableDoctor.doctorType}}
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                      {{availableDoctor.doctorSpeciality}}
                     </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                    <td class="text-center sm-col">
+                      <i
+                        class="fas fa-calendar-check scheduled"
+                        *ngIf="availableDoctor.otherAssessmentDetails"
+                        ngbTooltip={{availableDoctor.otherAssessmentDetails}}
+                        placement="right"
+                        tooltipClass="subtle-tooltip"
+                        [closeDelay]="500" [openDelay]="500"
+                        ></i>
                     </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                    <td class="text-center">
+                      {{availableDoctor.availabilityDetails}}
                     </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-
-                      </ngb-highlight>
+                    <td class="text-center sm-col">
+                      {{availableDoctor.distanceFromAssessment}}
                     </td>
-                    <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm">
-                        
-                      </ngb-highlight>
+                    <td class="checkmark-content text-center sm-col" style="position: relative">
+
+                            <label class="container">
+                              <input
+                                class=""
+                                type="checkbox"
+                                value=""
+                                (change)="TogglePlannedAssessment($event)"
+                              />
+                              <span class="checkmark"></span>
+                            </label>
+
                     </td>
                   </tr>
                 </tbody>
@@ -214,10 +209,11 @@
       </div>
     </div>
   </div>
-</div>
+
 
 <ng-template #loading>
-  <app-delay-spinner [delayMessage]="''"></app-delay-spinner>
+  <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
+
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
