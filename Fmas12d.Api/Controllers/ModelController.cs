@@ -125,7 +125,10 @@ namespace Fmas12d.Api.Controllers
     protected ActionResult ProcessModelStateException(
       Business.Exceptions.ModelStateException modelStateException)
     {
-      ModelState.AddModelError(modelStateException.Key, modelStateException.Message);
+      foreach (string key in modelStateException.Keys)
+      {
+        ModelState.AddModelError(key, modelStateException.Message);
+      }   
       Serilog.Log.Warning(
                   "Bad Request {ActionName}: {ModelStateErrors}",
                   ControllerContext.ActionDescriptor.ActionName,

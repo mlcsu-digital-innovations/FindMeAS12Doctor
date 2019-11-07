@@ -26,7 +26,7 @@ namespace Fmas12d.Data.Entities
     [InverseProperty("DoctorUser")]
     public virtual IList<AssessmentDoctor> DoctorAssessments{ get; set; }    
     [InverseProperty("User")]
-    public virtual IList<DoctorStatus> DoctorStatuses { get; set; }
+    public virtual IList<UserAvailability> UserAvailabilities { get; set; }
     [InverseProperty("AttendanceConfirmedByUser")]
     public virtual IList<AssessmentDoctor> AssessmentAttendanceConfirmations { get; set; }       
     public virtual GenderType GenderType { get; set; }

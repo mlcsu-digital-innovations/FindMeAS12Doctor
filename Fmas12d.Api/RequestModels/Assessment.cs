@@ -9,6 +9,8 @@ namespace Fmas12d.Api.RequestModels
     public Assessment() {}
     public Assessment(Business.Models.AssessmentCreate model)
     {
+      if (model == null) return ;
+      
       Address1 = model.Address1;
       Address2 = model.Address2;
       Address3 = model.Address3;

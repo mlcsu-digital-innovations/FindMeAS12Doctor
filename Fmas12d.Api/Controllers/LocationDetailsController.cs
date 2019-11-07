@@ -1,39 +1,41 @@
-using System.Threading.Tasks;
-using AutoMapper;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using Fmas12d.Api.RequestModels;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  [Authorize(Policy="User")]
-  public class LocationDetailsController : ControllerBase
+  public class LocationDetailsController : ModelControllerNoAutoMapper
   {
-    protected readonly IMapper _mapper;
-
-    public LocationDetailsController(IMapper mapper)
+    public LocationDetailsController(ILocationDetailService service) : base(service)
     {
-      _mapper = mapper;
     }
 
     [HttpGet("{postcode}")]
-    public async Task<ActionResult<Postcode>> Get(string postcode)
+    public async Task<ActionResult<ViewModels.Postcode>> Get(string postcode)
     {
-
-      Postcode postcodeDetail = new Postcode()
+      try
       {
-        Code = postcode
-      };
+        Business.Models.Postcode businessModel = await Service.GetPostcodeDetailsAsync(postcode);
+        ViewModels.Postcode viewModel = new ViewModels.Postcode(businessModel);
 
-      using LocationDetailService locationDetailService = new LocationDetailService(_mapper);
-      Business.Models.Postcode businessModel = _mapper.Map<Business.Models.Postcode>(postcodeDetail);
-      businessModel = await locationDetailService.GetPostcodeDetailsAsync(businessModel);
-
-      Postcode postcodeWithDetails = _mapper.Map<Postcode>(businessModel);
-      return Ok(postcodeWithDetails);
+        if (viewModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
     }
+
+    private ILocationDetailService Service { get { return _service as ILocationDetailService; } }
   }
 }

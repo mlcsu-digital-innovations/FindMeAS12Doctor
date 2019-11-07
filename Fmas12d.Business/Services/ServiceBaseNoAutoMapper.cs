@@ -25,9 +25,9 @@ namespace Fmas12d.Business.Services
     }
 
     /// <summary>
-    /// //TODO: Get the current users sub claim
+    /// TODO: Get the current users sub claim
     /// </summary>
-    protected void UpdateModified(BaseEntity entity)
+    protected void UpdateModified(IBaseEntity entity)
     {
       entity.ModifiedByUserId = 1;
       entity.ModifiedAt = DateTimeOffset.Now;
@@ -40,11 +40,14 @@ namespace Fmas12d.Business.Services
 
       if (entity == null)
       {
-        throw new EntityNotFoundException(typeof(TEntity).Name, id);
+        throw new ModelStateException("Id",
+          $"A {typeof(TEntity).Name} with an id of {id} was not found.");
       }
       else if (entity.IsActive == isActivating)
       {
-        throw new EntityAlreadyActiveException(isActivating, typeof(TEntity).Name, id);
+        throw new ModelStateException("Id",
+          $"{typeof(TEntity).Name} with an id of {id} is already " + 
+          $"{(isActivating ? "active" : "inactive")}.");
       }
       else
       {

@@ -112,20 +112,21 @@ namespace Fmas12d.Api
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-      services.AddScoped<ICcgService, CcgService>();
-      services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
-      services.AddScoped<IModelService<Assessment>, AssessmentService>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
+      services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
+      services.AddScoped<ILocationDetailService, LocationDetailService>();
+      services.AddScoped<IAssessmentService, AssessmentService>();
+      services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
-      services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<ISpecialityService, SpecialityService>();
-      services.AddScoped<IUserService, UserService>();
       services.AddScoped<IUnsuccessfulAssessmentTypeService, UnsuccessfulAssessmentTypeService>();
+      services.AddScoped<IUserAvailabilityService, UserAvailabilityService>();
+      services.AddScoped<IUserService, UserService>();
 
-      services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
+      // services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
       services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
       services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
