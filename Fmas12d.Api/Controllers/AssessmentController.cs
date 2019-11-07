@@ -90,21 +90,22 @@ namespace Fmas12d.Api.Controllers
       return await Create(requestModel);
     }
 
-    private async Task<ActionResult<ViewModels.AssessmentPost>> Create(
-      RequestModels.Assessment requestModel)
+    [HttpPut]
+    [Route("{id:int}/emergency")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutEmergency(
+      int id,
+      [FromBody] RequestModels.AssessmentPutEmergency requestModel)
     {
-      try
-      {
-        Business.Models.AssessmentCreate businessModel = requestModel.MapToBusinessModel();
-        businessModel = await Service.CreateAsync(businessModel);
-        ViewModels.AssessmentPost viewModel = new ViewModels.AssessmentPost(businessModel);
+      return await Update(id, requestModel);
+    }
 
-        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
+    [HttpPut]
+    [Route("{id:int}/planned")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutPlanned(
+      int id,
+      [FromBody] RequestModels.AssessmentPutPlanned requestModel)
+    {
+      return await Update(id, requestModel);
     }    
 
     [HttpPut]
@@ -125,6 +126,24 @@ namespace Fmas12d.Api.Controllers
       return await PutOutcome(id, requestModel);
     }  
 
+    private async Task<ActionResult<ViewModels.AssessmentPost>> Create(
+      RequestModels.AssessmentPostPut requestModel)
+    {
+      try
+      {
+        Business.Models.AssessmentCreate businessModel = new Business.Models.AssessmentCreate();
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel = await Service.CreateAsync(businessModel);
+        ViewModels.AssessmentPost viewModel = new ViewModels.AssessmentPost(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }  
+    
     private async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcome(
       int id,
       RequestModels.AssessmentOutcomePut requestModel)
@@ -143,5 +162,26 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }       
+
+    private async Task<ActionResult<ViewModels.AssessmentPut>> Update(
+      int id,
+      RequestModels.AssessmentPostPut requestModel)
+    {
+      try
+      {
+        Business.Models.AssessmentUpdate businessModel = new Business.Models.AssessmentUpdate();
+        businessModel.Id = id;
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel = await Service.UpdateAsync(businessModel);
+        ViewModels.AssessmentPut viewModel = new ViewModels.AssessmentPut(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }  
+
   }
 }

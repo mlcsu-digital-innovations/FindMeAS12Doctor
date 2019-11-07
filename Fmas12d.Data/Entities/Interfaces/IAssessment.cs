@@ -2,12 +2,13 @@
 
 namespace Fmas12d.Data.Entities
 {
-  public interface IAssessment
+  public interface IAssessment : IBaseEntity
   {
     string Address1 { get; set; }
     string Address2 { get; set; }
     string Address3 { get; set; }
     string Address4 { get; set; }
+    int AmhpUserId { get; set; }
     int? CcgId { get; set; }
     int? CompletedByUserId { get; set; }
     DateTimeOffset? CompletedTime { get; set; }
