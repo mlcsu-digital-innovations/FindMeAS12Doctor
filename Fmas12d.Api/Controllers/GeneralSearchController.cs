@@ -8,11 +8,13 @@ using business = Fmas12d.Business.Models.SearchModels;
 using Fmas12d.Business.Models;
 using Fmas12d.Api.RequestModels;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
   public abstract class GeneralSearchController<BusinessModel> : ControllerBase where BusinessModel : BaseModel
   {
     protected readonly IModelGeneralSearchService<BusinessModel> _service;

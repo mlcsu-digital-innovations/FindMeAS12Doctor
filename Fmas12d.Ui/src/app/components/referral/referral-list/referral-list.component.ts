@@ -1,9 +1,10 @@
 import { Component, QueryList, ViewChildren, ViewChild } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, Subscription } from 'rxjs';
 import { ReferralList } from '../../../interfaces/referral-list';
 import { ReferralListService } from '../../../services/referral-list/referral-list-service';
 import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
 import { ToastService } from '../../../services/toast/toast.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   providers: [ReferralListService],
@@ -18,27 +19,33 @@ export class ReferralListComponent {
   referralList$: Observable<ReferralList[]>;
   total$: Observable<number>;
 
-  @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
 
+  @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
+ 
   constructor(
     public referralListService: ReferralListService,
+    public oidcSecurityService: OidcSecurityService,
     private toastService: ToastService) {
+    
+  }
 
-    this.referralList$ = referralListService.referralList$;
-    this.total$ = referralListService.total$;
+  ngOnInit() {
+
+    this.referralList$ = this.referralListService.referralList$;
+    this.total$ = this.referralListService.total$;  
 
     this.referralList$.subscribe(
       result => this.noOfReferralsInList = result.length,
       error => {
-        this.toastService.displayError( {
+        this.toastService.displayError({
           title: 'Error',
           message: error
         });
       }
-    );
+    );    
   }
 
-  onSort({column, direction}: SortEvent) {
+  onSort({ column, direction }: SortEvent) {
     // resetting other headers
     this.headers.forEach(header => {
       if (header.sortable !== column) {

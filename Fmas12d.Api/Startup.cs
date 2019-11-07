@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -30,6 +34,47 @@ namespace Fmas12d.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      bool IsDevelopment = 
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
+      services.AddAuthentication(options =>
+      {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      }).AddJwtBearer(o =>
+      {
+        o.Authority = Configuration["jwtBearer:authority"];
+        o.Audience = Configuration["jwtBearer:audience"];
+        o.RequireHttpsMetadata = false;
+        if (IsDevelopment)
+        {
+          o.SaveToken = true;
+        };
+      });
+
+      services.AddAuthorization(
+        options =>
+      {
+        options.AddPolicy("Admin", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "SystemAdmin"));        
+
+        options.AddPolicy("AMHP", policy => 
+        policy.RequireClaim("JobTitle", "Admin", "AMHP", "SystemAdmin"));
+
+        options.AddPolicy("Doctor", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "Doctor", "SystemAdmin"));
+
+        options.AddPolicy("Finance", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "Finance", "SystemAdmin"));
+
+        options.AddPolicy("SystemAdmin", policy => 
+          policy.RequireClaim("JobTitle", "SystemAdmin"));
+
+        options.AddPolicy("User", policy => 
+          policy.RequireClaim("JobTitle", "Admin", "AMHP", "Doctor", "Finance", "SystemAdmin"));
+
+      });
+
       services.AddMvc()
               .AddNewtonsoftJson(options =>
               {
@@ -58,7 +103,7 @@ namespace Fmas12d.Api
                              // https://docs.microsoft.com/en-us/azure/architecture/best-practices/retry-service-specific#sql-database-using-entity-framework-core
                              opt => opt.EnableRetryOnFailure());
 
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        if (IsDevelopment)
         {
           options.EnableSensitiveDataLogging();
           options.EnableDetailedErrors();
@@ -108,18 +153,21 @@ namespace Fmas12d.Api
       if (env.IsDevelopment() || env.IsEnvironment(ENV_AZURE_DEVELOPMENT))
       {
         app.UseDeveloperExceptionPage();
+        IdentityModelEventSource.ShowPII = true;
       }
       else
       {
         // The default HSTS value is 30 days. You may want to change this for production scenarios, 
         // see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();        
-      }      
+        app.UseHsts();
+      }
       app.UseExceptionHandler("/Error");
       app.UseSerilogRequestLogging();
       app.UseHttpsRedirection();
       app.UseRouting();
       app.UseCors("AllowAnyOrigin");
+      app.UseAuthentication();
+      app.UseAuthorization();
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();

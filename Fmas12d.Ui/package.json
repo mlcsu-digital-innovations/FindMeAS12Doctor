@@ -26,6 +26,7 @@
     "@angular/router": "~8.2.4",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@uiowa/digit-only": "^1.1.1",
+    "angular-auth-oidc-client": "^10.0.10",
     "moment": "^2.24.0",
     "ng-multiselect-dropdown": "^0.2.5",
     "rxjs": "~6.4.0",

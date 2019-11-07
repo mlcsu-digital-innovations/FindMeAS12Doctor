@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="jumbotron">
+    <h1 class="display-4">Hello, world! and welcome to the MEP</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" 
+              class="btn btn-primary" 
+              (click)="gotoReferralList()">Referral List</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="isDevelopment">
+    <div class="col-md-12" *ngIf="isAuthorized">
+      <button type="button" class="btn btn-danger" (click)="copyToken()">Copy Access Token</button>
+      <p>User Data and Access Token</p>
+      <pre><code>{{userData | json}}</code></pre>
+    </div>
+  </div>
+</div>
