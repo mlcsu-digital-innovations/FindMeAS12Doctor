@@ -129,11 +129,7 @@ export class DoctorSelectComponent implements OnInit {
     )
 
     OnChanges(): void {
-
-      // fields are NOT validated if they are changed after initial validation
       this.doctorDistance.valueChanges.subscribe(val => {
-        // ToDo: Refresh the list of available doctors
-        console.log('Refresh the list ...' + val);
         this.FetchAvailableDoctors(val);
       });
     }

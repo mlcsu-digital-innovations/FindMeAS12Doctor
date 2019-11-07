@@ -45,7 +45,7 @@
                 Speciality:
               </div>
               <div class="col-md-3">
-                {{assessment.specialityName == null ? 'None' : assessment.specialityName}}
+                {{assessment.specialityName === null ? 'None' : assessment.specialityName}}
               </div>
             </div>
 
@@ -60,7 +60,7 @@
                 Preferred Doctor Gender:
               </div>
               <div class="col-md-3">
-                {{assessment.specialityName == null ? 'N/A' : assessment.specialityName}}
+                {{assessment.preferredDoctorGenderTypeName === null ? 'N/A' : assessment.preferredDoctorGenderTypeName}}
               </div>
             </div>
 
@@ -81,23 +81,45 @@
             <div class="form-row" style="margin-left:6px;">
               <div class="col-md-4 mb-2">
                 <label for="searchDoctor">Search Doctor</label>
-                <input type="text" class="form-control" id="searchDoctor" #searchDoctor [class.is-invalid]="hasDoctorSearchFailed"
-                  formControlName="searchDoctor" [ngbTypeahead]="DoctorSearch" [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults" />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="searchDoctor"
+                  #searchDoctor
+                  [class.is-invalid]="hasDoctorSearchFailed"
+                  formControlName="searchDoctor"
+                  [ngbTypeahead]="DoctorSearch"
+                  [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults"
+                />
               </div>
               <div class="col-md-1 mb-2 text-left mt-more-4">
-                <button type="button" class="btn btn-primary" ngbTooltip="Select this doctor" placement="top"
-                  tooltipClass="subtle-tooltip" [closeDelay]="500" [openDelay]="1000">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ngbTooltip="Select this doctor"
+                  placement="top"
+                  tooltipClass="subtle-tooltip"
+                  [closeDelay]="500"
+                  [openDelay]="1000"
+                >
                   <i class="far fa-check-circle"></i>
                   Confirm
-              </button>
+                </button>
               </div>
               <div class="col-md-3 mb-2 text-left mt-more-4">
-                <button type="button" class="btn btn-primary" ngbTooltip="Add Other Doctor" placement="top"
-                  tooltipClass="subtle-tooltip" [closeDelay]="500" [openDelay]="1000">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ngbTooltip="Add doctor not registered with FMAS12D"
+                  placement="top"
+                  tooltipClass="subtle-tooltip"
+                  [closeDelay]="500"
+                  [openDelay]="1000"
+                >
                   <i class="fas fa-user-plus"></i>
-                  Unregistered Doctor
-              </button>
+                  Additional Doctor
+                </button>
               </div>
               <div class="col-md-3 mb-2 ">
               <label for="selectDistance">Search Doctors within:</label>
