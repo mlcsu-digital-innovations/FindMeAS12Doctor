@@ -75,6 +75,8 @@ namespace Fmas12d.Business.Models
       }
     }
 
+    public bool HasCurrentAssessment { get { return CurrentAssessment != null; } }
+
     public string AssessmentLocationPostcode
     {
       get
