@@ -9,6 +9,7 @@ import { AuthorizationGuard } from './authorization.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DoctorModule } from './components/doctor/doctor.module';
+import { environment } from 'src/environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -16,7 +17,6 @@ import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
-import { environment } from 'src/environments/environment.prod';
 
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
