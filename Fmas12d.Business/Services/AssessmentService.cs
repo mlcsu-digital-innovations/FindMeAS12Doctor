@@ -1,4 +1,3 @@
-using AutoMapper;
 using Entities = Fmas12d.Data.Entities;
 using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
@@ -7,21 +6,23 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace Fmas12d.Business.Services
 {
-  public class AssessmentService
-    : ServiceBase<Assessment, Entities.Assessment>, IModelService<Assessment>
+  public class AssessmentService :
+    ServiceBaseNoAutoMapper<Entities.Referral>,
+    IServiceBaseNoAutoMapper,
+    IAssessmentService
   {
     private readonly ReferralService _referralService;
     private readonly UserService _userService;
 
     public AssessmentService(
       ApplicationContext context,
-      IMapper mapper,
       IReferralService referralService,
       IUserService userService)
-      : base("Assessment", context, mapper)
+      : base(context)
     {
       _referralService = referralService as ReferralService;
       _userService = userService as UserService;
@@ -84,10 +85,22 @@ namespace Fmas12d.Business.Services
           entity.Id,
           entity.IsSuccessful,
           entity.CompletedTime,
-          entity?.CompletedByUser?.DisplayName
+          entity.CompletedByUser?.DisplayName
         );
       }
     }
+
+    private async Task<bool> CheckReferralDoesNotAlreadyHaveACurrentAssessment(
+      AssessmentCreate model)
+    {
+      bool hasCurrentAssessment = await _referralService.HasCurrentAssessment(model.ReferralId);
+      if (hasCurrentAssessment)
+      {
+        throw new ModelStateException("ReferralId",
+        $"The Referral with an id of {model.ReferralId} already has a current assessment.");
+      }
+      return true;
+    }    
 
     /// <summary>
     /// Sets the assessment entity's properties from the provided business model
@@ -97,53 +110,33 @@ namespace Fmas12d.Business.Services
     /// </summary>
     public virtual async Task<AssessmentCreate> CreateAsync(AssessmentCreate model)
     {
+      await CheckReferralDoesNotAlreadyHaveACurrentAssessment(model);
+
       Entities.Assessment entity = model.MapToEntity();
 
       entity.Id = 0;
       entity.IsActive = true;
 
-      UpdateModified(entity);      
+      UpdateModified(entity);
       entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
       entity.CreatedByUserId = entity.ModifiedByUserId;
       AddAssessmentDetails(model.DetailTypeIds, entity);
       await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
       _context.Add(entity);
 
+      Entities.Referral referral = _context.Referrals.Find(model.ReferralId);
+      referral.ReferralStatusId = Models.ReferralStatus.SELECTING_DOCTORS;
+
       await _context.SaveChangesAsync();
 
       model = _context.Assessments
                       .Include(e => e.Details)
-                      .Where(e => e.Id == entity.Id)                      
+                      .Where(e => e.Id == entity.Id)
                       .WhereIsActiveOrActiveOnly(true)
                       .AsNoTracking(true)
                       .Select(AssessmentCreate.ProjectFromEntity)
                       .Single();
       return model;
-    }    
-
-    public async Task<IEnumerable<Models.Assessment>> GetAllAsync(
-      bool activeOnly)
-    {
-
-      IEnumerable<Entities.Assessment> entities =
-        await _context.Assessments
-
-          .Include(e => e.AmhpUser)
-          .Include(e => e.CompletedByUser)
-          .Include(e => e.CreatedByUser)
-          .Include(e => e.Details)
-            .ThenInclude(d => d.AssessmentDetailType)
-          .Include(e => e.Doctors)
-            .ThenInclude(d => d.DoctorUser)
-          .Include(e => e.UserAssessmentNotifications)
-            .ThenInclude(u => u.User)
-          .WhereIsActiveOrActiveOnly(activeOnly)
-          .ToListAsync();
-
-      IEnumerable<Models.Assessment> models =
-        _mapper.Map<IEnumerable<Models.Assessment>>(entities);
-
-      return models;
     }
 
     public async Task<IEnumerable<Models.Assessment>> GetAllFilterByAmhpUserIdAsync(
@@ -159,13 +152,13 @@ namespace Fmas12d.Business.Services
                       .AsNoTracking(asNoTracking)
                       .ToListAsync();
 
-      IEnumerable<Models.Assessment> models = 
+      IEnumerable<Models.Assessment> models =
         entities.Select(e => new Assessment(e)).ToList();
 
       return models;
     }
 
-    protected override async Task<Entities.Assessment> GetEntityByIdAsync(
+    protected async Task<Entities.Assessment> GetEntityByIdAsync(
        int entityId,
        bool asNoTracking,
        bool activeOnly)
@@ -192,7 +185,7 @@ namespace Fmas12d.Business.Services
       return entity;
     }
 
-    public override async Task<Assessment> GetByIdAsync(
+    public async Task<Assessment> GetByIdAsync(
       int id,
       bool activeOnly)
     {
@@ -220,49 +213,40 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-
-    protected override async Task<Entities.Assessment> GetEntityWithNoIncludesByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
+    private void UpdateAssessmentDetails(Assessment model, Entities.Assessment entity)
     {
-      Entities.Assessment entity = await
-        _context.Assessments
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == entityId);
+      if (entity.HasDetails)
+      {
+        foreach (Entities.AssessmentDetail assessmentDetail in entity.Details)
+        {
+          UpdateModified(assessmentDetail);
+          assessmentDetail.IsActive = false;
+        }
+      }
 
-      return entity;
-    }
-
-    protected override async Task<bool> InternalUpdateAsync(
-      Assessment model, Entities.Assessment entity)
-    {
-      Serilog.Log.Verbose("Assessment Update model: {@model}", model);
-      Serilog.Log.Verbose("Assessment Update entity: {@entity}", entity);
-
-      entity.Address1 = model.Address1;
-      entity.Address2 = model.Address2;
-      entity.Address3 = model.Address3;
-      entity.Address4 = model.Address4;
-      entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
-      entity.CompletedByUserId = model.CompletedByUserId;
-      entity.CompletedTime = model.CompletedTime;
-      entity.CompletionConfirmationByUserId = model.CompletionConfirmationByUserId;
-      entity.IsSuccessful = model.IsSuccessful;
-      entity.MeetingArrangementComment = model.MeetingArrangementComment;
-      entity.MustBeCompletedBy = model.MustBeCompletedBy;
-      entity.NonPaymentLocationId = model.NonPaymentLocationId;
-      entity.Postcode = model.Postcode;
-      entity.PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
-      entity.ReferralId = model.ReferralId;
-      entity.ScheduledTime = model.ScheduledTime;
-      entity.SpecialityId = model.SpecialityId;
-      entity.UnsuccessfulAssessmentTypeId = model.UnsuccessfulAssessmentTypeId;
-      UpdateAssessmentDetails(model, entity);
-      await UpdateAmhpToUserAssessmentNotifications(model, entity);
-
-      return true;
+      if (model.HasDetailTypeIds)
+      {
+        if (entity.HasDetails)
+        {
+          foreach (int detailTypeId in model.DetailTypeIds)
+          {
+            Entities.AssessmentDetail assessmentDetail =
+              entity.Details.SingleOrDefault(d => d.AssessmentDetailTypeId == detailTypeId);
+            if (assessmentDetail == null)
+            {
+              AddAssessmentDetail(detailTypeId, entity);
+            }
+            else
+            {
+              assessmentDetail.IsActive = true;
+            }
+          }
+        }
+        else
+        {
+          AddAssessmentDetails(model.DetailTypeIds, entity);
+        }
+      }
     }
 
     private async Task<bool> UpdateAmhpToUserAssessmentNotifications(
@@ -301,6 +285,35 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
+    protected async Task<bool> UpdateAsync(Assessment model, Entities.Assessment entity)
+    {
+      Serilog.Log.Verbose("Assessment Update model: {@model}", model);
+      Serilog.Log.Verbose("Assessment Update entity: {@entity}", entity);
+
+      entity.Address1 = model.Address1;
+      entity.Address2 = model.Address2;
+      entity.Address3 = model.Address3;
+      entity.Address4 = model.Address4;
+      entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
+      entity.CompletedByUserId = model.CompletedByUserId;
+      entity.CompletedTime = model.CompletedTime;
+      entity.CompletionConfirmationByUserId = model.CompletionConfirmationByUserId;
+      entity.IsSuccessful = model.IsSuccessful;
+      entity.MeetingArrangementComment = model.MeetingArrangementComment;
+      entity.MustBeCompletedBy = model.MustBeCompletedBy;
+      entity.NonPaymentLocationId = model.NonPaymentLocationId;
+      entity.Postcode = model.Postcode;
+      entity.PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
+      entity.ReferralId = model.ReferralId;
+      entity.ScheduledTime = model.ScheduledTime;
+      entity.SpecialityId = model.SpecialityId;
+      entity.UnsuccessfulAssessmentTypeId = model.UnsuccessfulAssessmentTypeId;
+      UpdateAssessmentDetails(model, entity);
+      await UpdateAmhpToUserAssessmentNotifications(model, entity);
+
+      return true;
+    }
+
     /// <summary>
     /// Update the doctor statuses checking that the doctors are those expected
     /// </summary>
@@ -328,48 +341,13 @@ namespace Fmas12d.Business.Services
           model.AttendingDoctors.Single(d => d.Id == assessmentDoctor.DoctorUserId);
 
         assessmentDoctor.AttendanceConfirmedByUserId = entity.ModifiedByUserId;
-        assessmentDoctor.StatusId = assessmentOutcomeDoctor.Attended 
-          ? Models.AssessmentDoctorStatus.ATTENDED 
+        assessmentDoctor.StatusId = assessmentOutcomeDoctor.Attended
+          ? Models.AssessmentDoctorStatus.ATTENDED
           : Models.AssessmentDoctorStatus.NOT_ATTENDED;
         UpdateModified(assessmentDoctor);
       }
     }
 
-    private void UpdateAssessmentDetails(Assessment model, Entities.Assessment entity)
-    {
-      if (entity.HasDetails)
-      {
-        foreach (Entities.AssessmentDetail assessmentDetail in entity.Details)
-        {
-          UpdateModified(assessmentDetail);
-          assessmentDetail.IsActive = false;
-        }
-      }
-
-      if (model.HasDetailTypeIds)
-      {
-        if (entity.HasDetails)
-        {
-          foreach (int detailTypeId in model.DetailTypeIds)
-          {
-            Entities.AssessmentDetail assessmentDetail =
-              entity.Details.SingleOrDefault(d => d.AssessmentDetailTypeId == detailTypeId);
-            if (assessmentDetail == null)
-            {
-              AddAssessmentDetail(detailTypeId, entity);
-            }
-            else
-            {
-              assessmentDetail.IsActive = true;
-            }
-          }
-        }
-        else
-        {
-          AddAssessmentDetails(model.DetailTypeIds, entity);
-        }
-      }
-    }
     public async Task<AssessmentOutcome> UpdateOutcomeAsync(AssessmentOutcome model)
     {
       if (!model.IsSuccessful && !model.UnsuccessfulAssessmentTypeId.HasValue)
@@ -380,13 +358,16 @@ namespace Fmas12d.Business.Services
       }
 
       Entities.Assessment entity = await GetEntityByIdAsync(model.Id, false, true);
-
-      Serilog.Log.Verbose("Assessment Update model: {@model}", model);
-      Serilog.Log.Verbose("Assessment Update entity: {@entity}", entity);
-
       if (entity == null)
       {
-        throw new EntityNotFoundException(_typeName, model.Id);
+        throw new ModelStateException("Id",
+          $"An active Assessment with an id of {model.Id} was not found.");
+      }
+      else if (entity.Referral.ReferralStatusId != Models.ReferralStatus.ASSESSMENT_SCHEDULED)
+      {
+        throw new ModelStateException("Id",
+          $"The Assessment with an id of {model.Id} does not have the correct status " +
+          $"[{entity.Referral.ReferralStatusId}]");
       }
       else
       {
@@ -409,7 +390,7 @@ namespace Fmas12d.Business.Services
 
         model.CompletedTime = entity.CompletedTime ?? default;
         model.IsSuccessful = entity.IsSuccessful ?? default;
-        model.UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId ?? default;        
+        model.UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId ?? default;
 
         if (entity.Doctors.Any())
         {
@@ -421,9 +402,6 @@ namespace Fmas12d.Business.Services
             })
             .ToList();
         }
-
-        Serilog.Log.Verbose("Assessment Updated entity: {@entity}", entity);
-        Serilog.Log.Verbose("Assessment Updated model: {@model}", model);
 
         return model;
       }

@@ -384,6 +384,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           ccgName: CcgSeeder.STOKE_ON_TRENT,
           createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
           completedTime: _now,
+          completedByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
           completionConfirmationByUserName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
           doctors: assessmentDoctors,
           isSuccessful: false,
@@ -391,7 +392,8 @@ namespace Fmas12d.Business.Migrations.Seeds
           mustBeCompletedBy: ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY,
           postcode: ASSESSMENT_SCHEDULED_POSTCODE,
           specialityId: Models.Speciality.LEARNING_DIFFICULTY,
-          userAssessmentNotifications: userAssessmentNotifications
+          userAssessmentNotifications: userAssessmentNotifications,
+          unsuccessfulAssessmentTypeId: Models.UnsuccessfulAssessmentType.REFUSED_ENTRY
         )
       };      
 

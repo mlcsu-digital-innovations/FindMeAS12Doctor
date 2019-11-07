@@ -1,10 +1,10 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace Fmas12d.Api.Controllers
 {
@@ -24,21 +24,35 @@ namespace Fmas12d.Api.Controllers
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-      await _service.DeactivateAsync(id);
-      return Ok();
+      try
+      {
+        await _service.DeactivateAsync(id);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
     }
 
     protected string GetCreatedModelUri(int id)
     {
       return $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}" +
-             $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/{id}";
-    }    
+             $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/view/{id}";
+    }
 
     [HttpPatch("{id:int}")]
     public async Task<ActionResult> Patch(int id)
     {
-      await _service.ActivateAsync(id);
-      return Ok();
+      try
+      {
+        await _service.ActivateAsync(id);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
     }
 
     protected ActionResult ProcessException(Exception exception)
@@ -80,12 +94,12 @@ namespace Fmas12d.Api.Controllers
       foreach (string key in modelStateException.Keys)
       {
         ModelState.AddModelError(key, modelStateException.Message);
-      }      
+      }
       Serilog.Log.Warning(
                   "Bad Request {ActionName}: {ModelStateErrors}",
                   ControllerContext.ActionDescriptor.ActionName,
                   ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
-                  
+
       return ValidationProblem(ModelState);
     }
   }

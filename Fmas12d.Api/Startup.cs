@@ -72,7 +72,7 @@ namespace Fmas12d.Api
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<ILocationDetailService, LocationDetailService>();
-      services.AddScoped<IModelService<Assessment>, AssessmentService>();
+      services.AddScoped<IAssessmentService, AssessmentService>();
       services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
