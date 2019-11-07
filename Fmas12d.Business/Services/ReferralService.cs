@@ -137,7 +137,7 @@ namespace Fmas12d.Business.Services
                       .Select(r => new Referral(r, true))
                       .SingleOrDefaultAsync();
 
-      return model.HasCurrentAssessment;
+      return model?.HasCurrentAssessment ?? false;
     }
   }
 }

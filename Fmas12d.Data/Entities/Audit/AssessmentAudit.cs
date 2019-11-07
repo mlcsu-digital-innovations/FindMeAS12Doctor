@@ -16,6 +16,7 @@ namespace Fmas12d.Data.Entities
     public string Address3 { get; set; }
     [MaxLength(500)]
     public string Address4 { get; set; }
+    public int AmhpUserId { get; set; }
     public int? CcgId { get; set; }
     public int? CompletedByUserId { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
@@ -33,6 +34,6 @@ namespace Fmas12d.Data.Entities
     public int ReferralId { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public int? SpecialityId { get; set; }
-    public int? UnsuccessfulAssessmentTypeId { get; set; }
+    public int? UnsuccessfulAssessmentTypeId { get; set; }    
   }
 }

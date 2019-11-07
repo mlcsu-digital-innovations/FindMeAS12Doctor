@@ -41,6 +41,7 @@ namespace Fmas12d.Business.Services
       Entities.UserAssessmentNotification userAssessmentNotification =
         new Entities.UserAssessmentNotification
         {
+          IsActive = true,
           NotificationTextId = NotificationText.SELECTED_FOR_ASSESSMENT,
           UserId = amhpUserId
         };
@@ -100,7 +101,7 @@ namespace Fmas12d.Business.Services
         $"The Referral with an id of {model.ReferralId} already has a current assessment.");
       }
       return true;
-    }    
+    }
 
     /// <summary>
     /// Sets the assessment entity's properties from the provided business model
@@ -112,16 +113,16 @@ namespace Fmas12d.Business.Services
     {
       await CheckReferralDoesNotAlreadyHaveACurrentAssessment(model);
 
-      Entities.Assessment entity = model.MapToEntity();
+      Entities.Assessment entity = new Entities.Assessment();
+      model.MapToEntity(entity);
 
-      entity.Id = 0;
-      entity.IsActive = true;
-
-      UpdateModified(entity);
       entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
       entity.CreatedByUserId = entity.ModifiedByUserId;
+      entity.Id = 0;
+      entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
       await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
+      UpdateModified(entity);
       _context.Add(entity);
 
       Entities.Referral referral = _context.Referrals.Find(model.ReferralId);
@@ -213,7 +214,7 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    private void UpdateAssessmentDetails(Assessment model, Entities.Assessment entity)
+    private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
     {
       if (entity.HasDetails)
       {
@@ -249,18 +250,17 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    private async Task<bool> UpdateAmhpToUserAssessmentNotifications(
-      Assessment model, Entities.Assessment entity)
+    private async Task<bool> UpdateAmhpUserAssessmentNotification(
+      AssessmentUpdate model, Entities.Assessment entity)
     {
-      await _userService.CheckUserIsAnAmhpById(model.AmhpUserId);
-
       if (entity.HasUserAssessmentNotifications)
       {
-        Entities.UserAssessmentNotification amhpUserAssessmentNotification =
-          entity.UserAssessmentNotifications.SingleOrDefault(
-            u => u.User.ProfileTypeId == ProfileType.AMHP);
+        Entities.UserAssessmentNotification currentUserAssessmentNotification =
+          entity.UserAssessmentNotifications
+                .Where(u => u.IsActive)
+                .SingleOrDefault(u => u.UserId == entity.AmhpUserId);
 
-        if (amhpUserAssessmentNotification == null)
+        if (currentUserAssessmentNotification == null)
         {
           throw new EntityNotLoadedException(
             "Assessment",
@@ -270,8 +270,29 @@ namespace Fmas12d.Business.Services
         }
         else
         {
-          UpdateModified(amhpUserAssessmentNotification);
-          amhpUserAssessmentNotification.IsActive = true;
+
+          UpdateModified(currentUserAssessmentNotification);
+
+          if (entity.AmhpUserId != model.AmhpUserId)
+          {
+            currentUserAssessmentNotification.IsActive = false;
+
+            Entities.UserAssessmentNotification previousUserAssessmentNotification =
+              entity.UserAssessmentNotifications
+                    .SingleOrDefault(u => u.UserId == model.AmhpUserId);
+
+            if (previousUserAssessmentNotification == null)
+            {
+              await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
+            }
+            else
+            {
+              previousUserAssessmentNotification.HasAccepted = null;
+              previousUserAssessmentNotification.IsActive = true;
+              previousUserAssessmentNotification.RespondedAt = null;
+              UpdateModified(previousUserAssessmentNotification);
+            }
+          }
         }
       }
       else
@@ -285,33 +306,41 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
-    protected async Task<bool> UpdateAsync(Assessment model, Entities.Assessment entity)
+    public async Task<AssessmentUpdate> UpdateAsync(AssessmentUpdate model)
     {
-      Serilog.Log.Verbose("Assessment Update model: {@model}", model);
-      Serilog.Log.Verbose("Assessment Update entity: {@entity}", entity);
 
-      entity.Address1 = model.Address1;
-      entity.Address2 = model.Address2;
-      entity.Address3 = model.Address3;
-      entity.Address4 = model.Address4;
-      entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
-      entity.CompletedByUserId = model.CompletedByUserId;
-      entity.CompletedTime = model.CompletedTime;
-      entity.CompletionConfirmationByUserId = model.CompletionConfirmationByUserId;
-      entity.IsSuccessful = model.IsSuccessful;
-      entity.MeetingArrangementComment = model.MeetingArrangementComment;
-      entity.MustBeCompletedBy = model.MustBeCompletedBy;
-      entity.NonPaymentLocationId = model.NonPaymentLocationId;
-      entity.Postcode = model.Postcode;
-      entity.PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
-      entity.ReferralId = model.ReferralId;
-      entity.ScheduledTime = model.ScheduledTime;
-      entity.SpecialityId = model.SpecialityId;
-      entity.UnsuccessfulAssessmentTypeId = model.UnsuccessfulAssessmentTypeId;
+      Entities.Assessment entity = _context.Assessments
+                                           .Include(a => a.Details)
+                                           .Include(a => a.UserAssessmentNotifications)
+                                            .ThenInclude(a => a.User)
+                                           .Where(a => a.Id == model.Id)
+                                           .AsNoTracking(false)
+                                           .WhereIsActiveOrActiveOnly(true)
+                                           .SingleOrDefault();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("Id",
+          $"An active Assessment with an id of {model.Id} could not be found.");
+      }
+
       UpdateAssessmentDetails(model, entity);
-      await UpdateAmhpToUserAssessmentNotifications(model, entity);
+      await UpdateAmhpUserAssessmentNotification(model, entity);
 
-      return true;
+      model.MapToEntity(entity);
+
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = _context.Assessments
+                      .Include(e => e.Details)
+                      .Where(e => e.Id == entity.Id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(AssessmentUpdate.ProjectFromEntity)
+                      .Single();
+      return model;
     }
 
     /// <summary>
