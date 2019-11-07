@@ -9,6 +9,7 @@ namespace Fmas12d.Api.Controllers
 {
   [ApiController]
   [Route("[controller]")]
+  [Authorize(Policy="User")]
   public class ErrorController : ControllerBase
   {
     public ErrorController()
