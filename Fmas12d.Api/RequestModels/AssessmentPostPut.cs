@@ -4,20 +4,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class Assessment
+  public class AssessmentPostPut : IAssessmentPostPut
   {
-    public Assessment() {}
-    public Assessment(Business.Models.IAssessmentUpdate model)
+    public AssessmentPostPut() { }
+    public AssessmentPostPut(Business.Models.IAssessmentUpdate model)
     {
-      if (model == null) return ;
-      
+      if (model == null) return;
+
       Address1 = model.Address1;
       Address2 = model.Address2;
       Address3 = model.Address3;
       Address4 = model.Address4;
       AmhpUserId = model.AmhpUserId;
       DetailTypeIds = model.DetailTypeIds;
-      Id = model.Id;
       MeetingArrangementComment = model.MeetingArrangementComment;
       Postcode = model.Postcode;
       PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
@@ -33,18 +32,17 @@ namespace Fmas12d.Api.RequestModels
     [Range(1, int.MaxValue)]
     public int AmhpUserId { get; set; }
     public IList<int> DetailTypeIds { get; set; }
-    public int Id {get; set;}
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
     [Required]
     [MaxLength(10)]
     public string Postcode { get; set; }
     [Range(1, int.MaxValue)]
-    public int? PreferredDoctorGenderTypeId { get; set; } 
+    public int? PreferredDoctorGenderTypeId { get; set; }
     [Range(1, int.MaxValue)]
     public int? SpecialityId { get; set; }
 
-    internal virtual void MapToBusinessModel(Business.Models.IAssessmentUpdate model)
+    public virtual void MapToBusinessModel(Business.Models.IAssessmentUpdate model)
     {
       if (model == null) return;
 
