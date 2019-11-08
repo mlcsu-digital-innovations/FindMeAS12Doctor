@@ -10,7 +10,7 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  [Authorize(Policy="User")]
+  // [Authorize(Policy="User")]
   
   public class AssessmentController : ModelControllerNoAutoMapper
   {
@@ -21,7 +21,7 @@ namespace Fmas12d.Api.Controllers
     private IAssessmentService Service { get { return _service as IAssessmentService; } }
 
     [HttpGet]
-    [Route("list")]
+    [Route("")]
     public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
       RequestModels.AssessmentListSearch assessmentListSearch)
     {
@@ -53,7 +53,7 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
-    [Route("view/{id:int}")]
+    [Route("{id:int}")]
     public async Task<ActionResult<ViewModels.AssessmentView>> GetView(int id)
     {
       try
@@ -112,7 +112,7 @@ namespace Fmas12d.Api.Controllers
     }    
 
     [HttpPut]
-    [Route("outcome/{id:int}/failure")]
+    [Route("{id:int}/outcome/failure")]
     public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeFailure(
       int id,
       [FromBody] RequestModels.AssessmentOutcomeFailurePut requestModel)
@@ -121,7 +121,7 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
-    [Route("outcome/{id:int}/success")]
+    [Route("{id:int}/outcome/success")]
      public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeSuccess(
       int id,
       [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)

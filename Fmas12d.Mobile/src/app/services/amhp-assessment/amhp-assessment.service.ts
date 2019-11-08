@@ -19,7 +19,7 @@ export class AmhpAssessmentService {
 
   public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {   
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment/list?amhpUserId=${amhpUserId}`, 
+      `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`, 
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(
@@ -29,7 +29,7 @@ export class AmhpAssessmentService {
 
   public getView(assessmentId: string): Observable<AmhpAssessmentView> {  
     return this.apiService.get(
-      `${environment.apiEndpoint}/assessment/view/${assessmentId}`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}`,
       `AmhpUserView-${assessmentId}`
     ) as Observable<AmhpAssessmentView>;
   }
@@ -39,7 +39,7 @@ export class AmhpAssessmentService {
     assessmentId: number,
     success: boolean):
     Observable<any> {
-    let url: string = `${environment.apiEndpoint}/assessment/outcome/${assessmentId}/${success ?
+    let url: string = `${environment.apiEndpoint}/assessment/${assessmentId}/outcome/${success ?
       'success' : 'failure'}`;
 
     return this.apiService.put(url, assessmentOutcome);  
