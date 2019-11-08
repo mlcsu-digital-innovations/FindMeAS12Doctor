@@ -22,6 +22,7 @@ export class DoctorSelectComponent implements OnInit {
 
   allDoctors: AvailableDoctor[];
   assessment$: Observable<Assessment | any>;
+  assessmentId: number;
   availableDoctors: AvailableDoctor[];
   cancelModal: NgbModalRef;
   collectionSize: number;
@@ -63,6 +64,7 @@ export class DoctorSelectComponent implements OnInit {
           return this.assessmentService.getAssessment(+params.get('assessmentId'))
             .pipe(
               map(assessment => {
+                this.assessmentId = assessment.id;
                 return assessment;
               })
             );
@@ -171,7 +173,7 @@ export class DoctorSelectComponent implements OnInit {
   }
 
   SearchDoctors() {
-    this.routerService.navigate(['search-doctors']);
+    this.routerService.navigate([`assessment/${this.assessmentId}/add-doctor`]);
   }
 
   ToggleSelection(id: number, event) {
