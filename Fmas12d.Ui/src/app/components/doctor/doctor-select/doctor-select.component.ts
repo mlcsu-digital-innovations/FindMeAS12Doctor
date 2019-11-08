@@ -1,7 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Assessment } from 'src/app/interfaces/assessment';
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
-import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
+import { AssessmentAvailability } from 'src/app/interfaces/assessment-availability';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -11,6 +11,7 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
+import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 
 @Component({
   selector: 'app-doctor-select',
@@ -61,10 +62,12 @@ export class DoctorSelectComponent implements OnInit {
     this.assessment$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.assessmentService.getAssessment(+params.get('assessmentId'))
+          return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
             .pipe(
-              map(assessment => {
+              map((assessment: AssessmentAvailability) => {
+                console.log(assessment);
                 this.assessmentId = assessment.id;
+                this.allDoctors = assessment.availableDoctors;
                 return assessment;
               })
             );

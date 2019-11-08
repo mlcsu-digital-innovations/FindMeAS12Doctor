@@ -54,8 +54,7 @@
                 Lead AMHP:
               </div>
               <div class="col-md-4">
-                <!-- ToDo: update the API to get the AMHP name -->
-                Martin Price
+                {{assessment.leadAmhpName}}
               </div>
               <div class="col-md-2 label">
                 Preferred Doctor Gender:
@@ -64,6 +63,15 @@
                 {{assessment.preferredDoctorGenderTypeName === null ? 'N/A' : assessment.preferredDoctorGenderTypeName}}
               </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-3 label">
+                  AMHP:
+                </div>
+                <div class="col-md-4">
+                  {{assessment.amhpName}}
+                </div>
+              </div>
 
             <div class="row">
               <div class="col-md-3 label">

@@ -1,11 +1,11 @@
+import { ActiveAssessment } from './active-assessment';
+
 export interface AvailableDoctor {
-  availabilityDetails?: string;
-  distanceFromAssessment: number;
-  doctorGender?: string;
-  doctorName: string;
-  doctorSpeciality?: string;
-  doctorType?: string;
-  id: number;
-  otherAssessmentDetails?: string;
-  selected?: boolean;
+  activeAssessments: ActiveAssessment[];
+  distance: number;
+  genderName: string;
+  name: string;
+  selected: boolean;
+  specialityNames: string[];
+  type: string;
 }

@@ -3,7 +3,7 @@ import { filter, delay, map } from 'rxjs/operators';
 import { from, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
+import { AvailableDoctor } from 'src/app/interfaces/assessment-availability';
 
 @Injectable({
   providedIn: 'root'
