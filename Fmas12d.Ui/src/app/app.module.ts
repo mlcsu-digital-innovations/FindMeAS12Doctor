@@ -89,7 +89,7 @@ export class AppModule {
         silent_renew: false,
         silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,
         start_checksession: true,
-        stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
+        stsServer: 'https://login.microsoftonline.com/df7baf74-a29e-4c5e-abee-0f073b7a5b91/',
         trigger_authorization_result_event: true,
         unauthorized_route: '/unauthorized',
       };
