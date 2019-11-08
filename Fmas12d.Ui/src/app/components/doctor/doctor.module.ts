@@ -5,9 +5,11 @@ import { DoctorSelectComponent } from './doctor-select/doctor-select.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedComponentsModule } from '../shared-components.module';
+import { DoctorAddComponent } from './doctor-add/doctor-add.component';
 
 @NgModule({
   declarations: [
+    DoctorAddComponent,
     DoctorAllocateComponent,
     DoctorSelectComponent
   ],
