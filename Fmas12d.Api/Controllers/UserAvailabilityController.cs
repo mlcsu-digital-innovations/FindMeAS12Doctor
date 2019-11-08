@@ -1,12 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using Fmas12d.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/user")]
   [ApiController]
+  [Authorize(Policy="User")]
+  
   public class UserAvailabilityController : ModelControllerNoAutoMapper
   {
     public UserAvailabilityController(IUserAvailabilityService service)
