@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-doctor-add',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DoctorAddComponent implements OnInit {
 
-  constructor() { }
+  registeredDoctorForm: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
+    this.registeredDoctorForm = this.formBuilder.group({
+      gmcNumber: ['',
+      [
+        Validators.pattern('^[1-9]\\d{9}$')
+      ]]
+    });
   }
 
 }

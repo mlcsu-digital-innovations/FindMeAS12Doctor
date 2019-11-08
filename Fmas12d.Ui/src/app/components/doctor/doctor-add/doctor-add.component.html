@@ -1,1 +1,98 @@
-<p>doctor-add works!</p>
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+              <i class="fas fa-user-plus fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Add Other Doctor</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+
+        <div class="card-body">
+
+          <!-- form for existing (registered) doctors -->
+          <form [formGroup]="registeredDoctorForm" novalidate>
+
+            <div class="form-row">
+              Search for registered doctor
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="gmcNumber">GMC Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="gmcNumber"
+                  id="gmcNumber"
+                  #gmcNumber
+                  minlength="7"
+                  maxlength="7"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4" *ngIf="gmcNumber.errors" class="invalid-field">
+                <span>GMC Number must have 7 digits only</span>
+              </div>
+            </div>
+
+            **{{gmcNumber.errors}}**
+
+          </form>
+
+          <!-- <form [formGroup]="doctorForm" novalidate>
+
+            <div class="form-row ml-more-2 mr-more-2">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-4">
+              </div>
+              <div class="col-md-6 text-right">
+                  <button
+                  type="button"
+                  class="btn btn-standard btn-cancel"
+                  (click)="Cancel()"
+                  >
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-standard"
+                  (click)="UpdateAssessment()"
+                  [disabled]="allocatedDoctors.length === 0"
+                >
+                  <i class="far fa-check-circle"></i>
+                  Save
+                </button>
+              </div>
+            </div>
+          </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
+</ng-template>
+
+<ng-template #cancelAssessment>
+    <app-cancel-action-modal
+      [modalTitle]="'Cancel Doctor Allocation'"
+      [modalBody]="'Do you wish to cancel this doctor allocation? All changes will be lost.'"
+      (actioned)="OnCancelModalAction($event)"
+    >
+    </app-cancel-action-modal>
+  </ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
