@@ -5,11 +5,14 @@ using Serilog;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
+  
   public abstract class ModelControllerNoAutoMapper : ControllerBase
   {
     protected readonly IServiceBaseNoAutoMapper _service;

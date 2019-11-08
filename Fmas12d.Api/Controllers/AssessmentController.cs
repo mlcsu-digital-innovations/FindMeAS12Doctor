@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
+  
   public class AssessmentController : ModelControllerNoAutoMapper
   {
     public AssessmentController(IAssessmentService service) : base(service)
