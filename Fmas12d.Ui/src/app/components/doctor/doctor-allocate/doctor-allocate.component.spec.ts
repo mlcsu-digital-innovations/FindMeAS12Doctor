@@ -1,15 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DoctorSelectComponent } from './doctor-select.component';
+import { DoctorAllocateComponent } from './doctor-allocate.component';
 import { SharedComponentsModule } from '../../shared-components.module';
 
-describe('DoctorSelectComponent', () => {
-  let component: DoctorSelectComponent;
-  let fixture: ComponentFixture<DoctorSelectComponent>;
+describe('DoctorAcceptComponent', () => {
+  let component: DoctorAllocateComponent;
+  let fixture: ComponentFixture<DoctorAllocateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        DoctorSelectComponent
+      declarations:
+      [
+        DoctorAllocateComponent
       ],
       imports: [
         SharedComponentsModule
@@ -19,7 +20,7 @@ describe('DoctorSelectComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DoctorSelectComponent);
+    fixture = TestBed.createComponent(DoctorAllocateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

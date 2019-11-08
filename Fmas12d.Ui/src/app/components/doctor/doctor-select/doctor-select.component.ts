@@ -15,7 +15,7 @@ import { UserAvailabilityService } from 'src/app/services/user-availability/user
 @Component({
   selector: 'app-doctor-select',
   templateUrl: './doctor-select.component.html',
-  styleUrls: ['./doctor-select.component.css']
+  styleUrls: ['../doctor-styles.css']
 })
 export class DoctorSelectComponent implements OnInit {
 

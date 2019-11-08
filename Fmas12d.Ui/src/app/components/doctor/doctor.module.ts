@@ -1,5 +1,5 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { DoctorAcceptComponent } from './doctor-accept/doctor-accept.component';
+import { DoctorAllocateComponent } from './doctor-allocate/doctor-allocate.component';
 import { DoctorRoutes } from './doctor.routes';
 import { DoctorSelectComponent } from './doctor-select/doctor-select.component';
 import { NgModule } from '@angular/core';
@@ -8,7 +8,7 @@ import { SharedComponentsModule } from '../shared-components.module';
 
 @NgModule({
   declarations: [
-    DoctorAcceptComponent,
+    DoctorAllocateComponent,
     DoctorSelectComponent
   ],
   imports: [
