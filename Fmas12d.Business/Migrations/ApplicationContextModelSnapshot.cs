@@ -154,6 +154,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
+                    b.Property<int>("AmhpUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("AuditAction")
                         .HasColumnType("nvarchar(max)");
 
@@ -1141,172 +1144,6 @@ namespace Fmas12d.Business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("ContactDetailTypesAudit");
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.DoctorStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTimeOffset>("AvailabilityEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("AvailabilityStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude1")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude2")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude3")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude1")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude2")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude3")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DoctorStatuses");
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.DoctorStatusAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuditDuration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuditErrorMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuditResult")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("AuditSuccess")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("AvailabilityEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("AvailabilityStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd1")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd2")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityEnd3")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude1")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude2")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLatitude3")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude1")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude2")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal?>("ExtendedAvailabilityLongitude3")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart1")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart2")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("ExtendedAvailabilityStart3")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(8,6)");
-
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("DoctorStatusesAudit");
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.GenderType", b =>
@@ -3389,6 +3226,204 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("UsersAudit");
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserAvailability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ContactDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("End")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(8,6)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Start")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("UserAvailabilityStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactDetailId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("UserAvailabilityStatusId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAvailabilities");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserAvailabilityAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ContactDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("End")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(8,6)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Start")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("UserAvailabilityStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("UserAvailabilitiesAudit");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserAvailabilityStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("UserAvailabilityStatus");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserAvailabilityStatusAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("UserAvailabilityStatusesAudit");
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.UserSpeciality", b =>
                 {
                     b.Property<int>("Id")
@@ -3663,21 +3698,6 @@ namespace Fmas12d.Business.Migrations
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.DoctorStatus", b =>
-                {
-                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fmas12d.Data.Entities.User", "User")
-                        .WithMany("DoctorStatuses")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -4013,6 +4033,40 @@ namespace Fmas12d.Business.Migrations
                     b.HasOne("Fmas12d.Data.Entities.User", "User")
                         .WithMany("UserAssessmentNotifications")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserAvailability", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.ContactDetail", "ContactDetail")
+                        .WithMany()
+                        .HasForeignKey("ContactDetailId");
+
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.UserAvailabilityStatus", "UserAvailabilityStatus")
+                        .WithMany()
+                        .HasForeignKey("UserAvailabilityStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.User", "User")
+                        .WithMany("UserAvailabilities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserAvailabilityStatus", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

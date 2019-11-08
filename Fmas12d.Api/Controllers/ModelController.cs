@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fmas12d.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -12,6 +13,8 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(Policy="User")]
+  
   public abstract class ModelController<BusinessModel,
                                         ViewModel,
                                         PutRequestModel,
@@ -125,7 +128,10 @@ namespace Fmas12d.Api.Controllers
     protected ActionResult ProcessModelStateException(
       Business.Exceptions.ModelStateException modelStateException)
     {
-      ModelState.AddModelError(modelStateException.Key, modelStateException.Message);
+      foreach (string key in modelStateException.Keys)
+      {
+        ModelState.AddModelError(key, modelStateException.Message);
+      }   
       Serilog.Log.Warning(
                   "Bad Request {ActionName}: {ModelStateErrors}",
                   ControllerContext.ActionDescriptor.ActionName,

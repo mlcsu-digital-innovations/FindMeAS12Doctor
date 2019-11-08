@@ -3,21 +3,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class AssessmentPostPlanned : Assessment
+  public class AssessmentPostPlanned : AssessmentPostPut
   {
-    public AssessmentPostPlanned() {}
-    public AssessmentPostPlanned(Business.Models.AssessmentCreate model) : base(model)
+    public AssessmentPostPlanned() { }
+
+    public override void MapToBusinessModel(Business.Models.IAssessmentUpdate model)
     {
-      ScheduledTime = model.ScheduledTime;
+      if (model == null) return;
+      base.MapToBusinessModel(model);
+
+      (model as Business.Models.IAssessmentCreate).ReferralId = ReferralId;
+      model.ScheduledTime = ScheduledTime;      
     }
 
-    internal override Business.Models.AssessmentCreate MapToBusinessModel()
-    {
-      Business.Models.AssessmentCreate model = base.MapToBusinessModel();
-      model.ScheduledTime = ScheduledTime;
-      return model;
-    }
-
+    [Range(1, int.MaxValue)]
+    public int ReferralId { get; set; } 
     [Required]
     public DateTimeOffset? ScheduledTime { get; set; }
   }

@@ -125,5 +125,19 @@ namespace Fmas12d.Business.Services
 
       return model;
     }
+
+    public async Task<bool> HasCurrentAssessment(int id)
+    {
+      Models.Referral model =
+        await _context.Referrals
+                      .Include(r => r.Assessments)
+                      .Where(r => r.Id == id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(r => new Referral(r, true))
+                      .SingleOrDefaultAsync();
+
+      return model?.HasCurrentAssessment ?? false;
+    }
   }
 }

@@ -33,6 +33,7 @@ import { UNKNOWN_CCG, UNKNOWN_GP_PRACTICE, UNKNOWN_POSTCODE } from '../../../con
 export class ReferralCreateComponent implements OnInit {
 
   cancelModal: NgbModalRef;
+  existingPatientDetailsUsed: boolean;
   hasAmhpSearchFailed: boolean;
   hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
@@ -354,6 +355,14 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.amhp;
   }
 
+  get unknownCcgField() {
+    return this.patientForm.controls.unknownCcg;
+  }
+
+  get unknownGpPracticeField() {
+    return this.patientForm.controls.unknownGpPractice;
+  }
+
   get unknownPostcodeField() {
     return this.patientForm.controls.unknownResidentialPostcode;
   }
@@ -547,10 +556,9 @@ export class ReferralCreateComponent implements OnInit {
         this.routerService.navigate([`/assessment/new/${result.id}`]);
       },
       error => {
-        console.log(error);
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to create new referral ! Please try again in a few moments'
+          message: 'Unable to create new referral! Please try again in a few moments'
         });
         this.isCreatingReferral = false;
         return throwError(error);
@@ -624,6 +632,7 @@ export class ReferralCreateComponent implements OnInit {
     } else {
       this.SetResidentialPostcodeField('');
       this.SetCcgField(null, '');
+      this.unknownCcgField.setValue(false);
       this.isCcgFieldsShown = false;
       this.SetFieldFocus('#residentialPostcode');
       this.isPatientPostcodeValidated = false;
@@ -631,8 +640,8 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   async UseExistingPatient() {
-    // ToDo: copy the existing patient details
 
+    this.existingPatientDetailsUsed = true;
     this.patientDetails.id = this.patientResult.patientId;
     this.patientDetails.alternativeIdentifier = this.patientResult.alternativeIdentifier;
     this.patientDetails.nhsNumber = this.patientResult.nhsNumber;
@@ -642,11 +651,40 @@ export class ReferralCreateComponent implements OnInit {
     this.patientDetails.isExistingPatient = true;
 
     this.isGpFieldsShown = true;
-    this.SetGpPracticeField(
-      this.patientResult.gpPracticeId,
-      this.patientResult.gpPracticeNameAndPostcode
-    );
-    this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
+    if (this.patientResult.gpPracticeId === null) {
+      this.SetGpPracticeField(
+        0,
+        UNKNOWN
+      );
+      this.unknownGpPracticeField.setValue(true);
+    } else {
+      this.SetGpPracticeField(
+        this.patientResult.gpPracticeId,
+        this.patientResult.gpPracticeNameAndPostcode
+      );
+    }
+
+    if (this.patientResult.residentialPostcode === null ) {
+      this.SetResidentialPostcodeField(UNKNOWN);
+      this.unknownPostcodeField.setValue(true);
+    } else {
+      this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
+    }
+
+    if (this.patientResult.ccgId === null ) {
+      this.SetCcgField(
+        0,
+        UNKNOWN
+      );
+      this.unknownCcgField.setValue(true);
+    } else {
+      this.SetCcgField(
+        this.patientResult.ccgId,
+        this.patientResult.ccgName
+      );
+    }
+
+
     this.patientModal.close();
     this.SetFieldFocus('#amhp');
 
@@ -664,67 +702,18 @@ export class ReferralCreateComponent implements OnInit {
     // only show the ccg field if the postcode field is null
     if (
       this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
+      this.patientResult.residentialPostcode !== 'Unknown'
     ) {
-      this.isResidentialPostcodeFieldShown = true;
+      this.isCcgFieldsShown = true;
     }
     this.isPatientIdValidated = true;
   }
 
   UseExistingReferral(): void {
-    this.patientDetails.alternativeIdentifier = this.patientResult.alternativeIdentifier;
-    this.patientDetails.ccgId = this.patientResult.ccgId;
-    this.patientDetails.gpPracticeId = this.patientResult.gpPracticeId;
-    this.patientDetails.id = this.patientResult.patientId;
-    this.patientDetails.isExistingPatient = true;
-    this.patientDetails.nhsNumber = this.patientResult.nhsNumber;
-    this.patientDetails.residentialPostcode = this.patientResult.residentialPostcode;
 
-    this.isGpFieldsShown = true;
-    // set gp practice field to unknown if is it is null
-    if (this.patientDetails.gpPracticeId === null) {
-      this.SetGpPracticeField(this.unknownGpPracticeId, UNKNOWN_GP_PRACTICE);
-    } else {
-      this.SetGpPracticeField(this.patientResult.gpPracticeId, this.patientResult.gpPracticeNameAndPostcode);
-    }
-
-    // only show the ccg field if the postcode field is null
-    if (
-      this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
-    ) {
-      this.isResidentialPostcodeFieldShown = true;
-    }
-
-    // set ccg field to unknown if is it is null
-    if (this.patientDetails.ccgId === null) {
-      this.SetGpPracticeField(this.unknownCcgId, UNKNOWN_CCG);
-    } else {
-      this.SetCcgField(this.patientResult.ccgId, this.patientResult.ccgName);
-    }
-
-    // only show the postcode field if the gpPractice field is null
-    if (
-      this.patientResult.residentialPostcode !== '' &&
-      this.patientResult.gpPracticeId == null
-    ) {
-      this.isResidentialPostcodeFieldShown = true;
-    }
-
-    // set postcode field to unknown if is it is null
-    if (this.patientDetails.residentialPostcode === null) {
-      this.SetResidentialPostcodeField(UNKNOWN);
-    } else {
-      this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
-    }
-
-    this.isAmhpFieldsShown = true;
-    // TODO: patientResult.leadAmhp currently undefined
-    this.SetLeadAmhpField(this.patientResult.leadAmhp);
-
+    // navigate to the referral edit page
     this.patientModal.close();
-    this.SetFieldFocus('#amhp');
-    this.isPatientIdValidated = true;
+    this.routerService.navigate([`/referral/edit/${this.patientResult.currentReferralId}`]);
   }
 
   ValidatePatient(): void {
@@ -775,7 +764,7 @@ export class ReferralCreateComponent implements OnInit {
         this.isSearchingForPatient = false;
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to validate patient details ! Please try again in a few moments'
+          message: 'Unable to validate patient details! Please try again in a few moments'
         });
         return throwError(error);
       }
@@ -812,7 +801,7 @@ export class ReferralCreateComponent implements OnInit {
           this.isSearchingForPostcode = false;
           this.toastService.displayError({
             title: 'Server Error',
-            message: 'Unable to validate residential postcode ! Please try again in a few moments'
+            message: 'Unable to validate residential postcode! Please try again in a few moments'
           });
           return throwError(error);
         }

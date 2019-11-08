@@ -3,9 +3,10 @@ using System;
 namespace Fmas12d.Api.ViewModels
 {
   public class ReferralList
-  {
-    public int DoctorsAllocated { get; set; }
+  {    
     public string AssessmentLocationPostcode { get; set; }
+    public int? CurrentAssessmentId { get; set; }
+    public int DoctorsAllocated { get; set; }
     public string LeadAmhp { get; set; }
     public int NumberOfAssessmentAttempts { get; set; }
     public string PatientIdentifier { get; set; }
@@ -22,8 +23,9 @@ namespace Fmas12d.Api.ViewModels
       {
         return referral => new ReferralList()
         {
-          DoctorsAllocated = referral.DoctorsAllocated,
           AssessmentLocationPostcode = referral.AssessmentLocationPostcode,
+          CurrentAssessmentId = referral?.CurrentAssessment?.Id,
+          DoctorsAllocated = referral.DoctorsAllocated,
           LeadAmhp = referral.LeadAmhp,
           NumberOfAssessmentAttempts = referral.NumberOfAssessmentAttempts,
           PatientId = referral.PatientId,

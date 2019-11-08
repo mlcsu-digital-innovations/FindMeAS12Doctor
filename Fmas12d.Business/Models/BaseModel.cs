@@ -7,7 +7,7 @@ namespace Fmas12d.Business.Models
   {
     protected BaseModel() {}
 
-    protected BaseModel(Data.Entities.BaseEntity entity)
+    protected BaseModel(Data.Entities.IBaseEntity entity)
     {
       if (entity == null) return;
       

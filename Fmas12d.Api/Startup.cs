@@ -23,6 +23,8 @@ namespace Fmas12d.Api
   public class Startup
   {
     private const string ENV_AZURE_DEVELOPMENT = "AzureDevelopment";
+    private const string ENV_DEVELOPMENT = "Development";
+    private const string ENV_POSTMAN = "Postman";
 
     public Startup(IConfiguration configuration)
     {
@@ -34,8 +36,11 @@ namespace Fmas12d.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      bool IsDevelopment = 
-        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+      bool IsDevelopment =
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_AZURE_DEVELOPMENT ||
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_DEVELOPMENT ||
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_POSTMAN;
+
 
       services.AddAuthentication(options =>
       {
@@ -45,9 +50,9 @@ namespace Fmas12d.Api
       {
         o.Authority = Configuration["jwtBearer:authority"];
         o.Audience = Configuration["jwtBearer:audience"];
-        o.RequireHttpsMetadata = false;
         if (IsDevelopment)
         {
+          o.RequireHttpsMetadata = false;
           o.SaveToken = true;
         };
       });
@@ -55,23 +60,51 @@ namespace Fmas12d.Api
       services.AddAuthorization(
         options =>
       {
-        options.AddPolicy("Admin", policy => 
-          policy.RequireClaim("JobTitle", "Admin", "SystemAdmin"));        
 
-        options.AddPolicy("AMHP", policy => 
-        policy.RequireClaim("JobTitle", "Admin", "AMHP", "SystemAdmin"));
 
-        options.AddPolicy("Doctor", policy => 
-          policy.RequireClaim("JobTitle", "Admin", "Doctor", "SystemAdmin"));
+        // POSTMAN doesn't get the correct audience using the oauth2 endpoint
+        // so until it does we'll have to fudge the User policy
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_POSTMAN)
+        {
 
-        options.AddPolicy("Finance", policy => 
-          policy.RequireClaim("JobTitle", "Admin", "Finance", "SystemAdmin"));
+          options.AddPolicy("Admin", policy =>
+            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
 
-        options.AddPolicy("SystemAdmin", policy => 
-          policy.RequireClaim("JobTitle", "SystemAdmin"));
+          options.AddPolicy("AMHP", policy =>
+            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
 
-        options.AddPolicy("User", policy => 
-          policy.RequireClaim("JobTitle", "Admin", "AMHP", "Doctor", "Finance", "SystemAdmin"));
+          options.AddPolicy("Doctor", policy =>
+            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+
+          options.AddPolicy("Finance", policy =>
+            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+
+          options.AddPolicy("SystemAdmin", policy =>
+            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+
+          options.AddPolicy("User", policy =>
+            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+        }
+        else
+        {
+          options.AddPolicy("Admin", policy =>
+            policy.RequireClaim("JobTitle", "Admin", "SystemAdmin"));
+
+          options.AddPolicy("AMHP", policy =>
+          policy.RequireClaim("JobTitle", "Admin", "AMHP", "SystemAdmin"));
+
+          options.AddPolicy("Doctor", policy =>
+            policy.RequireClaim("JobTitle", "Admin", "Doctor", "SystemAdmin"));
+
+          options.AddPolicy("Finance", policy =>
+            policy.RequireClaim("JobTitle", "Admin", "Finance", "SystemAdmin"));
+
+          options.AddPolicy("SystemAdmin", policy =>
+            policy.RequireClaim("JobTitle", "SystemAdmin"));
+
+          options.AddPolicy("User", policy =>
+            policy.RequireClaim("JobTitle", "Admin", "AMHP", "Doctor", "Finance", "SystemAdmin"));
+        }
 
       });
 
@@ -112,20 +145,21 @@ namespace Fmas12d.Api
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-      services.AddScoped<ICcgService, CcgService>();
-      services.AddScoped<IModelService<DoctorStatus>, DoctorStatusService>();
-      services.AddScoped<IModelService<Assessment>, AssessmentService>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
+      services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
+      services.AddScoped<ILocationDetailService, LocationDetailService>();
+      services.AddScoped<IAssessmentService, AssessmentService>();
+      services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
-      services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
       services.AddScoped<ISpecialityService, SpecialityService>();
-      services.AddScoped<IUserService, UserService>();
       services.AddScoped<IUnsuccessfulAssessmentTypeService, UnsuccessfulAssessmentTypeService>();
+      services.AddScoped<IUserAvailabilityService, UserAvailabilityService>();
+      services.AddScoped<IUserService, UserService>();
 
-      services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
+      // services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
       services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
       services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
@@ -149,7 +183,9 @@ namespace Fmas12d.Api
     // Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      if (env.IsDevelopment() || env.IsEnvironment(ENV_AZURE_DEVELOPMENT))
+      if (env.IsDevelopment() ||
+          env.IsEnvironment(ENV_AZURE_DEVELOPMENT) ||
+          env.IsEnvironment(ENV_POSTMAN))
       {
         app.UseDeveloperExceptionPage();
         IdentityModelEventSource.ShowPII = true;
@@ -171,6 +207,8 @@ namespace Fmas12d.Api
       {
         endpoints.MapControllers();
       });
+
+      Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);
     }
   }
 }

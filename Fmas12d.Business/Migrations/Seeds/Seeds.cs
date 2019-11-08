@@ -52,6 +52,8 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new SpecialitiesSeeder().SeedData();
 
+      new UserAvailabilityStatusSeeder().SeedData();
+
       new UnsuccessfulAssessmentTypesSeeder().SeedData();
     }
 
@@ -97,6 +99,8 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new UnsuccessfulAssessmentTypesSeeder().DeleteSeeds();
 
+      new UserAvailabilityStatusSeeder().DeleteSeeds();
+
       Context.SaveChanges();
     }
 
@@ -108,7 +112,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       new UserSeeder().SeedData();
       Context.SaveChanges();
 
-      new DoctorStatusesSeeder().SeedData();
+      new UserAvailabilitySeeder().SeedData();
       Context.SaveChanges();
 
       new PatientSeeder().SeedData();
@@ -177,7 +181,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       new PatientSeeder().DeleteSeeds();
       Context.SaveChanges();
 
-      new DoctorStatusesSeeder().DeleteSeeds();
+      new UserAvailabilitySeeder().DeleteSeeds();
       Context.SaveChanges();
 
       new UserSeeder().DeleteSeeds();

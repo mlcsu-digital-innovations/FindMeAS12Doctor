@@ -1,5 +1,3 @@
-using AutoMapper;
-using BusinessModels = Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,137 +5,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]  
   [ApiController]
   [Authorize(Policy="User")]
-  public class AssessmentController :
-    ModelController<BusinessModels.Assessment,
-                    ViewModels.Assessment,
-                    RequestModels.AssessmentPut,
-                    RequestModels.Assessment>
+  public class AssessmentController : ModelControllerNoAutoMapper
   {
-    public AssessmentController(
-      IModelService<BusinessModels.Assessment> service,
-      IMapper mapper)
-      : base(service, mapper)
+    public AssessmentController(IAssessmentService service) : base(service)
     {
     }
+
+    private IAssessmentService Service { get { return _service as IAssessmentService; } }
 
     [HttpGet]
     [Route("list")]
-    public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> ListGet([FromQuery]
+    public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
       RequestModels.AssessmentListSearch assessmentListSearch)
     {
-
-      IEnumerable<BusinessModels.Assessment> businessModels = null;
-      if (assessmentListSearch.AmhpUserId.HasValue)
-      {
-        businessModels = await (_service as AssessmentService)
-          .GetAllFilterByAmhpUserIdAsync((int)assessmentListSearch.AmhpUserId, true, false);
-      }
-
-      if (businessModels.Any())
-      {
-        IEnumerable<ViewModels.AssessmentList> viewModels =
-          businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
-
-        return Ok(viewModels);
-      }
-      else
-      {
-        return NoContent();
-      }
-    }
-
-    [HttpPut]
-    [Route("outcome/{id:int}/failure")]
-    public async Task<ActionResult<RequestModels.AssessmentOutcomeFailurePut>> OutcomeFailurePut(
-      int id,
-      [FromBody] RequestModels.AssessmentOutcomeFailurePut requestModel)
-    {
       try
       {
-        BusinessModels.AssessmentOutcome businessModel = requestModel.MapToBusinessModel(id);
-        businessModel = await (_service as AssessmentService).UpdateOutcomeAsync(businessModel);
-        requestModel = new RequestModels.AssessmentOutcomeFailurePut(businessModel);
+        IEnumerable<Business.Models.Assessment> businessModels = null;
+        if (assessmentListSearch.AmhpUserId.HasValue)
+        {
+          businessModels = await Service.GetAllFilterByAmhpUserIdAsync(
+            assessmentListSearch.AmhpUserId.Value, true, false);
+        }
 
-        return Ok(requestModel);
+        if (businessModels.Any())
+        {
+          IEnumerable<ViewModels.AssessmentList> viewModels =
+            businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
+
+          return Ok(viewModels);
+        }
+        else
+        {
+          return NoContent();
+        }
       }
       catch (Exception ex)
       {
         return ProcessException(ex);
       }
     }
-
-    [HttpPut]
-    [Route("outcome/{id:int}/success")]
-    public async Task<ActionResult<RequestModels.AssessmentOutcomeSuccessPut>> OutcomeSuccessPut(
-      int id,
-      [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
-    {
-      try
-      {
-        BusinessModels.AssessmentOutcome businessModel = requestModel.MapToBusinessModel(id);
-        businessModel = await (_service as AssessmentService).UpdateOutcomeAsync(businessModel);
-        requestModel = new RequestModels.AssessmentOutcomeSuccessPut(businessModel);
-
-        return Ok(requestModel);
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
-    }
-
-    [HttpPost]
-    [Route("emergency")]
-    public async Task<ActionResult<RequestModels.AssessmentPostEmergency>> PostEmergency(
-      [FromBody] RequestModels.AssessmentPostEmergency requestModel)
-    {
-      try
-      {
-        BusinessModels.AssessmentCreate businessModel = requestModel.MapToBusinessModel();
-        businessModel = await (_service as AssessmentService).CreateAsync(businessModel);
-        requestModel = new RequestModels.AssessmentPostEmergency(businessModel);
-
-        return Created(GetCreatedModelUri(businessModel.Id), requestModel);
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
-    }     
-
-    [HttpPost]
-    [Route("planned")]
-    public async Task<ActionResult<RequestModels.AssessmentPostPlanned>> PostPlanned(
-      [FromBody] RequestModels.AssessmentPostPlanned requestModel)
-    {
-      try
-      {
-        BusinessModels.AssessmentCreate businessModel = requestModel.MapToBusinessModel();
-        businessModel = await (_service as AssessmentService).CreateAsync(businessModel);
-        requestModel = new RequestModels.AssessmentPostPlanned(businessModel);
-
-        return Created(GetCreatedModelUri(businessModel.Id), requestModel);
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
-    }    
 
     [HttpGet]
     [Route("view/{id:int}")]
-    public async Task<ActionResult<ViewModels.AssessmentView>> ViewGet(int id)
+    public async Task<ActionResult<ViewModels.AssessmentView>> GetView(int id)
     {
       try
       {
-        BusinessModels.Assessment businessModel =
-            await (_service as AssessmentService).GetByIdAsync(id, true);
+        Business.Models.Assessment businessModel =
+            await Service.GetByIdAsync(id, true);
 
         if (businessModel == null)
         {
@@ -145,7 +67,6 @@ namespace Fmas12d.Api.Controllers
         }
         else
         {
-
           ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
           return Ok(viewModel);
         }
@@ -154,7 +75,116 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
+    }    
+
+    [HttpPost]
+    [Route("emergency")]
+    public async Task<ActionResult<ViewModels.AssessmentPost>> PostEmergency(
+      [FromBody] RequestModels.AssessmentPostEmergency requestModel)
+    {
+      return await Create(requestModel);
     }
+
+    [HttpPost]
+    [Route("planned")]
+    public async Task<ActionResult<ViewModels.AssessmentPost>> PostPlanned(
+      [FromBody] RequestModels.AssessmentPostPlanned requestModel)
+    {
+      return await Create(requestModel);
+    }
+
+    [HttpPut]
+    [Route("{id:int}/emergency")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutEmergency(
+      int id,
+      [FromBody] RequestModels.AssessmentPutEmergency requestModel)
+    {
+      return await Update(id, requestModel);
+    }
+
+    [HttpPut]
+    [Route("{id:int}/planned")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutPlanned(
+      int id,
+      [FromBody] RequestModels.AssessmentPutPlanned requestModel)
+    {
+      return await Update(id, requestModel);
+    }    
+
+    [HttpPut]
+    [Route("outcome/{id:int}/failure")]
+    public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeFailure(
+      int id,
+      [FromBody] RequestModels.AssessmentOutcomeFailurePut requestModel)
+    {
+      return await PutOutcome(id, requestModel);
+    }
+
+    [HttpPut]
+    [Route("outcome/{id:int}/success")]
+     public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeSuccess(
+      int id,
+      [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
+    {
+      return await PutOutcome(id, requestModel);
+    }  
+
+    private async Task<ActionResult<ViewModels.AssessmentPost>> Create(
+      RequestModels.AssessmentPostPut requestModel)
+    {
+      try
+      {
+        Business.Models.AssessmentCreate businessModel = new Business.Models.AssessmentCreate();
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel = await Service.CreateAsync(businessModel);
+        ViewModels.AssessmentPost viewModel = new ViewModels.AssessmentPost(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }  
+    
+    private async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcome(
+      int id,
+      RequestModels.AssessmentOutcomePut requestModel)
+    {
+      try
+      {
+        Business.Models.AssessmentOutcome businessModel = requestModel.MapToBusinessModel(id);
+        businessModel = await Service.UpdateOutcomeAsync(businessModel);
+        ViewModels.AssessmentOutcomePut viewModel = 
+          new ViewModels.AssessmentOutcomePut(businessModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }       
+
+    private async Task<ActionResult<ViewModels.AssessmentPut>> Update(
+      int id,
+      RequestModels.AssessmentPostPut requestModel)
+    {
+      try
+      {
+        Business.Models.AssessmentUpdate businessModel = new Business.Models.AssessmentUpdate();
+        businessModel.Id = id;
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel = await Service.UpdateAsync(businessModel);
+        ViewModels.AssessmentPut viewModel = new ViewModels.AssessmentPut(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }  
 
   }
 }

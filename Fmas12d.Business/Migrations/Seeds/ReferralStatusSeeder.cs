@@ -13,8 +13,8 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_NEW = "New Description";
     internal const string DESCRIPTION_OPEN = "Open Description";
     internal const string DESCRIPTION_RESPONSES_COMPLETE = "Responses Complete Description";
-    internal const string DESCRIPTION_RESPONSES_PARTIAL = "Allocated Doctors Description";    
-    internal const string DESCRIPTION_SELECTING_DOCTORS = "Assigning Doctors Description";
+    internal const string DESCRIPTION_RESPONSES_PARTIAL = "Responses Partial Description";    
+    internal const string DESCRIPTION_SELECTING_DOCTORS = "Selecting Doctors Description";
     
     internal const string NAME_AWAITING_RESCHEDULING = "Awaiting Rescheduling";
     internal const string NAME_AWAITING_RESPONSES = "Awaiting Responses";
@@ -24,8 +24,8 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string NAME_NEW = "New";
     internal const string NAME_OPEN = "Open";
     internal const string NAME_RESPONSES_COMPLETE = "Responses Complete";
-    internal const string NAME_RESPONSES_PARTIAL = "Allocated Doctors";
-    internal const string NAME_SELECTING_DOCTORS = "Assigning Doctors";
+    internal const string NAME_RESPONSES_PARTIAL = "Responses Partial";
+    internal const string NAME_SELECTING_DOCTORS = "Selecting Doctors";
     #endregion
 
     internal void SeedData()

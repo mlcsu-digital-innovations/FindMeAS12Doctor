@@ -7,8 +7,10 @@ namespace Fmas12d.Api.RequestModels
   public class Assessment
   {
     public Assessment() {}
-    public Assessment(Business.Models.AssessmentCreate model)
+    public Assessment(Business.Models.IAssessmentUpdate model)
     {
+      if (model == null) return ;
+      
       Address1 = model.Address1;
       Address2 = model.Address2;
       Address3 = model.Address3;
@@ -18,7 +20,6 @@ namespace Fmas12d.Api.RequestModels
       MeetingArrangementComment = model.MeetingArrangementComment;
       Postcode = model.Postcode;
       PreferredDoctorGenderTypeId = model.PreferredDoctorGenderTypeId;
-      ReferralId = model.ReferralId;
       SpecialityId = model.SpecialityId;
     }
 
@@ -37,29 +38,24 @@ namespace Fmas12d.Api.RequestModels
     [MaxLength(10)]
     public string Postcode { get; set; }
     [Range(1, int.MaxValue)]
-    public int? PreferredDoctorGenderTypeId { get; set; }
-    [Range(1, int.MaxValue)]
-    public int ReferralId { get; set; }    
+    public int? PreferredDoctorGenderTypeId { get; set; } 
     [Range(1, int.MaxValue)]
     public int? SpecialityId { get; set; }
 
-    internal virtual Business.Models.AssessmentCreate MapToBusinessModel()
+    internal virtual void MapToBusinessModel(Business.Models.IAssessmentUpdate model)
     {
-      Business.Models.AssessmentCreate model = new Business.Models.AssessmentCreate
-      {
-        Address1 = Address1,
-        Address2 = Address2,
-        Address3 = Address3,
-        Address4 = Address4,
-        AmhpUserId = AmhpUserId,
-        DetailTypeIds = DetailTypeIds,
-        MeetingArrangementComment = MeetingArrangementComment,
-        Postcode = Postcode,
-        PreferredDoctorGenderTypeId = PreferredDoctorGenderTypeId,
-        ReferralId = ReferralId,
-        SpecialityId = SpecialityId
-      };
-      return model;
+      if (model == null) return;
+
+      model.Address1 = Address1;
+      model.Address2 = Address2;
+      model.Address3 = Address3;
+      model.Address4 = Address4;
+      model.AmhpUserId = AmhpUserId;
+      model.DetailTypeIds = DetailTypeIds;
+      model.MeetingArrangementComment = MeetingArrangementComment;
+      model.Postcode = Postcode;
+      model.PreferredDoctorGenderTypeId = PreferredDoctorGenderTypeId;
+      model.SpecialityId = SpecialityId;
     }
   }
 }
