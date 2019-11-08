@@ -9,6 +9,7 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
+import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 
 @Component({
   selector: 'app-doctor-allocate',
@@ -17,17 +18,11 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 })
 export class DoctorAllocateComponent implements OnInit {
 
+  allocatedDoctors: AvailableDoctor[] = [];
   assessment$: Observable<Assessment | any>;
   assessmentId: number;
   cancelModal: NgbModalRef;
-  collectionSize: number;
   doctorForm: FormGroup;
-  hasDoctorSearchFailed: boolean;
-  isAvailableDoctorSearching: boolean;
-  isDoctorFieldsShown: boolean;
-  isDoctorSearching: boolean;
-  page = 1;
-  pageSize = 10;
   selectDoctor: FormGroup;
   unknownDoctorId: number;
 
@@ -66,12 +61,33 @@ export class DoctorAllocateComponent implements OnInit {
 
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Referral Information'
+          message: 'Error Retrieving Assessment Information'
         });
 
         const emptyAssessment = {} as Assessment;
         return of(emptyAssessment);
       })
     );
+  }
+
+  Cancel() {
+    if (this.allocatedDoctors.length > 0) {
+      this.cancelModal = this.modalService.open(this.cancelAssessmentTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigatePrevious();
+    }
+  }
+
+  OnCancelModalAction(action: boolean) {
+    this.cancelModal.close();
+    if (action) {
+      this.routerService.navigatePrevious();
+    }
+  }
+
+  UpdateAssessment() {
+
   }
 }

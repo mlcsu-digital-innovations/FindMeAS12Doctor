@@ -74,7 +74,7 @@ export class DoctorSelectComponent implements OnInit {
 
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Referral Information'
+          message: 'Error Retrieving Assessment Information'
         });
 
         const emptyAssessment = {} as Assessment;

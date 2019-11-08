@@ -67,11 +67,11 @@
 
             <div class="row">
               <div class="col-md-3 label">
-                Doctors Selected:
+                Attending AMHP:
               </div>
               <div class="col-md-4">
                 <!-- ToDo: loop through the list of selected doctors and display them -->
-                <span>None</span>
+                Emma Hewitt
               </div>
               <div class="col-md-2 label">
                   Doctors Allocated:
@@ -100,17 +100,11 @@
                     <th class="text-center" scope="col" sortable="doctorSpeciality" (sort)="OnSort($event)">
                       Speciality
                     </th>
-                    <th class="text-center sm-col" scope="col" sortable="otherAssessmentDetails" (sort)="OnSort($event)">
-                      Scheduled Assessment
-                    </th>
-                    <th class="text-center" scope="col" sortable="availabilityDetails" (sort)="OnSort($event)">
-                      Availability
-                    </th>
                     <th class="text-center sm-col" scope="col" sortable="distanceFromAssessment" (sort)="OnSort($event)">
                       Distance (miles)
                     </th>
                     <th class="text-center" scope="col">
-                      Select
+                      Allocate
                     </th>
                   </tr>
                 </thead>
@@ -127,19 +121,6 @@
                     </td>
                     <td>
                       {{availableDoctor.doctorSpeciality}}
-                    </td>
-                    <td class="text-center sm-col">
-                      <i
-                        class="fas fa-calendar-check scheduled"
-                        *ngIf="availableDoctor.otherAssessmentDetails"
-                        ngbTooltip={{availableDoctor.otherAssessmentDetails}}
-                        placement="right"
-                        tooltipClass="subtle-tooltip"
-                        [closeDelay]="500" [openDelay]="500"
-                        ></i>
-                    </td>
-                    <td class="text-center">
-                      {{availableDoctor.availabilityDetails}}
                     </td>
                     <td class="text-center sm-col">
                       {{availableDoctor.distanceFromAssessment}}
@@ -179,7 +160,7 @@
                   type="button"
                   class="btn btn-primary btn-standard"
                   (click)="UpdateAssessment()"
-                  [disabled]="selectedDoctors.length === 0"
+                  [disabled]="allocatedDoctors.length === 0"
                 >
                   <i class="far fa-check-circle"></i>
                   Save
@@ -198,8 +179,8 @@
 
 <ng-template #cancelAssessment>
     <app-cancel-action-modal
-      [modalTitle]="'Cancel Doctor Selection'"
-      [modalBody]="'Do you wish to cancel this doctor selection? All changes will be lost.'"
+      [modalTitle]="'Cancel Doctor Allocation'"
+      [modalBody]="'Do you wish to cancel this doctor allocation? All changes will be lost.'"
       (actioned)="OnCancelModalAction($event)"
     >
     </app-cancel-action-modal>
