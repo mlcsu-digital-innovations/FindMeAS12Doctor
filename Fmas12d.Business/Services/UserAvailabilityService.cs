@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fmas12d.Business.Exceptions;
+using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using Entities = Fmas12d.Data.Entities;
@@ -13,12 +15,66 @@ namespace Fmas12d.Business.Services
   {
     private readonly ILocationDetailService _locationDetailService;
     public UserAvailabilityService(
-      ApplicationContext context, 
-      ILocationDetailService locationDetailService) 
+      ApplicationContext context,
+      ILocationDetailService locationDetailService)
       : base(context)
     {
       _locationDetailService = locationDetailService;
     }
+
+    public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctors(
+      DateTimeOffset requiredDateTime,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      IEnumerable<IUserAvailabilityDoctor> models = await 
+      _context.UserAvailabilities
+              .Include(u => u.User)
+                .ThenInclude(u => u.DoctorAssessments)
+              .Include(u => u.User)
+                .ThenInclude(u => u.ProfileType)
+              .Include(u => u.User)
+                .ThenInclude(u => u.GenderType)                
+              .Include(u => u.User)
+                .ThenInclude(u => u.UserSpecialities) 
+                  .ThenInclude(us => us.Speciality)
+              .Where(u => u.Start <= requiredDateTime)
+              .Where(u => u.End >= requiredDateTime)
+              .Where(u => u.User.ProfileTypeId == ProfileType.DOCTOR)
+              .Where(u => u.UserAvailabilityStatusId == UserAvailabilityStatus.AVAILABLE)
+              .WhereIsActiveOrActiveOnly(activeOnly)
+              .AsNoTracking(asNoTracking)
+              .Select(entity => new UserAvailabilityDoctor()
+              {
+                ActiveAssessments = entity.User
+                  .DoctorAssessments
+                  .Where(da => da.IsActive)
+                  .Where(da => da.Assessment.IsActive)
+                  .Where(da => da.Assessment.CompletedTime == null)
+                  .Where(da => da.Assessment.ScheduledTime == null ||
+                               da.Assessment.ScheduledTime <= requiredDateTime.AddHours(-8) ||
+                               da.Assessment.ScheduledTime >= requiredDateTime.AddHours(8))
+                  .Select(da => new Models.Assessment()
+                  {
+                    MustBeCompletedBy = da.Assessment.MustBeCompletedBy,
+                    Postcode = da.Assessment.Postcode,
+                    ScheduledTime = da.Assessment.ScheduledTime
+                  })
+                  .ToList(),
+                End = entity.End,
+                GenderName = entity.User.GenderType.Name,
+                Name = entity.User.DisplayName,
+                SpecialityNames = 
+                  entity.User.UserSpecialities.Select(s => s.Speciality.Name).ToList(),
+                Start = entity.Start,
+                Type = entity.User.ProfileType.Name,
+              })
+              .ToListAsync();
+
+      return models;
+    }
+
+
 
     /// <summary>
     /// TODO Check for overlapping availabilities
@@ -37,7 +93,7 @@ namespace Fmas12d.Business.Services
 
       await CheckForOverlappingAvailability(model);
 
-      Entities.IUserAvailability entity = new Entities.UserAvailability();
+      Entities.UserAvailability entity = new Entities.UserAvailability();
       model.MapToEntity(entity);
       entity.IsActive = true;
       UpdateModified(entity);
@@ -56,7 +112,7 @@ namespace Fmas12d.Business.Services
 
     private async Task<bool> CheckForOverlappingAvailability(IUserAvailability model)
     {
-      IEnumerable<int> existingAvailabilitiesIds = 
+      IEnumerable<int> existingAvailabilitiesIds =
         await _context.UserAvailabilities
                       .Where(u => u.IsActive)
                       .Where(u => model.UserId == u.UserId)
@@ -67,10 +123,10 @@ namespace Fmas12d.Business.Services
 
       if (existingAvailabilitiesIds.Count() > 0)
       {
-          throw new ModelStateException(new string[] {"Start", "End"},
-            $"There are existing availability records for the User with an id of {model.UserId} " +
-            $"between {model.Start} and {model.End} " +
-            $"UserAvailabilities Ids [{string.Join(",", existingAvailabilitiesIds)}]");
+        throw new ModelStateException(new string[] { "Start", "End" },
+          $"There are existing availability records for the User with an id of {model.UserId} " +
+          $"between {model.Start} and {model.End} " +
+          $"UserAvailabilities Ids [{string.Join(",", existingAvailabilitiesIds)}]");
       }
       return true;
     }
@@ -106,12 +162,12 @@ namespace Fmas12d.Business.Services
     {
       if (!string.IsNullOrWhiteSpace(model.Postcode))
       {
-        Postcode postcodeModel = 
+        Postcode postcodeModel =
           await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
 
         model.Latitude = postcodeModel.Latitude;
         model.Longitude = postcodeModel.Longitude;
-        
+
       }
       else if (model.ContactDetailId.HasValue)
       {

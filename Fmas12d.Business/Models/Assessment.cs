@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Models
@@ -11,7 +12,7 @@ namespace Fmas12d.Business.Models
   public class Assessment : BaseModel
   {
     public Assessment() { }
-    public Assessment(Data.Entities.Assessment entity, bool ignoreReferral = false) 
+    public Assessment(Data.Entities.Assessment entity, bool ignoreReferral = false)
       : base(entity)
     {
       if (entity == null) return;
@@ -24,12 +25,12 @@ namespace Fmas12d.Business.Models
       AmhpUserId = entity.AmhpUserId;
       Ccg = new Ccg(entity.Ccg);
       CcgId = entity.CcgId;
-      //TODO CompletedByUser = null;
+      // TODO CompletedByUser = null;
       CompletedByUserId = entity.CompletedByUserId;
       CompletedTime = entity.CompletedTime;
-      CompletionConfirmationByUser = null;
+      // TODO CompletionConfirmationByUser = null;
       CompletionConfirmationByUserId = entity.CompletionConfirmationByUserId;
-      //TODO CreatedByUser = null;
+      // TODO CreatedByUser = null;
       CreatedByUserId = entity.CreatedByUserId;
       Details = entity.Details?.Select(d => new AssessmentDetail(d)).ToList();
       Doctors = entity.Doctors?.Select(d => new AssessmentDoctor(d)).ToList();
@@ -38,7 +39,7 @@ namespace Fmas12d.Business.Models
       IsSuccessful = entity.IsSuccessful;
       MeetingArrangementComment = entity.MeetingArrangementComment;
       MustBeCompletedBy = entity.MustBeCompletedBy;
-      //TODO NonPaymentLocation = null;
+      // TODO NonPaymentLocation = null;
       NonPaymentLocationId = entity.NonPaymentLocationId;
       Postcode = entity.Postcode;
       PreferredDoctorGenderType = new GenderType(entity.PreferredDoctorGenderType);
@@ -77,6 +78,7 @@ namespace Fmas12d.Business.Models
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
     public IList<AssessmentDoctor> Doctors { get; set; }
+    public IEnumerable<IUserAvailabilityDoctor> AvailableDoctors { get; set; }
     public virtual IList<int> DetailTypeIds { get; set; }
     public virtual IList<AssessmentDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
@@ -100,16 +102,7 @@ namespace Fmas12d.Business.Models
     public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
     public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
 
-    public string AmhpUserName
-    {
-      get
-      {
-        return UserAssessmentNotifications
-          .Where(u => u.IsActive)
-          .FirstOrDefault(u => u.IsAmhp)
-          ?.UserName;
-      }
-    }
+    public string AmhpUserName { get { return AmhpUser?.DisplayName; } }
 
     public DateTimeOffset DateTime
     { get { return MustBeCompletedBy ?? ScheduledTime ?? default; } }
@@ -162,6 +155,8 @@ namespace Fmas12d.Business.Models
         }
       }
     }
+
+    public string LeadAmhpName { get { return Referral?.LeadAmhpName; } }
 
     public string FullAddress
     {

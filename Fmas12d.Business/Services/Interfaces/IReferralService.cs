@@ -14,5 +14,6 @@ namespace Fmas12d.Business.Services
       bool activeOnly = true, bool asNoTracking = true);
     Task<Referral> GetViewByIdAsync(
       int id, bool activeOnly = true, bool asNoTracking = true);
+    Task<bool> HasCurrentAssessment(int id);
   }
 }

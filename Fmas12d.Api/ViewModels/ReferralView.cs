@@ -12,7 +12,7 @@ namespace Fmas12d.Api.ViewModels
 
       CurrentAssessment = new ReferralViewCurrentAssessment(model.CurrentAssessment);
       Id = model.Id;
-      LeadAmhp = model.LeadAmhp;
+      LeadAmhp = model.LeadAmhpName;
       PatientIdentifier = model.PatientIdentifier;
       PreviousAssessments = model.PreviousAssessments
         ?.Select(p => new ReferralViewPreviousAssessment(p)).ToList();
