@@ -43,10 +43,18 @@ namespace Fmas12d.Api.ViewModels
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public int Id { get; set; }
     public bool? IsSuccessful { get; set; }
-    public string MeetingArrangementComment { get; set; }    
-    public string PatientIdentifier { get; set; }
+    public string MeetingArrangementComment { get; set; }
+    public string PatientIdentifier { get; set; }    
     public string Postcode { get; set; }
     public int ReferralId { get; set; }
-    public string SpecialityName { get; set; }    
+    public string SpecialityName { get; set; }
+
+    public static Func<Business.Models.Assessment, AssessmentView> ProjectFromModel
+    {
+      get
+      {
+        return model => new AssessmentView(model);
+      }
+    }    
   }
 }

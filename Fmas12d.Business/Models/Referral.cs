@@ -14,7 +14,7 @@ namespace Fmas12d.Business.Models
       if (entity == null) return;
 
       CreatedAt = entity.CreatedAt;
-      CreatedByUser = entity.CreatedByUser == null ? null : new User(entity.CreatedByUser);
+      CreatedByUser = new User(entity.CreatedByUser);
       CreatedByUserId = entity.CreatedByUserId;
       Assessments = entity.Assessments?.Select(e => new Assessment(e, true)).ToList();
       if (!ignorePatient)
@@ -22,11 +22,9 @@ namespace Fmas12d.Business.Models
         Patient = new Patient(entity.Patient);
       }
       PatientId = entity.PatientId;
-      ReferralStatus = entity.ReferralStatus == null
-        ? null
-        : new ReferralStatus(entity.ReferralStatus);
+      ReferralStatus = new ReferralStatus(entity.ReferralStatus);
       ReferralStatusId = entity.ReferralStatusId;
-      LeadAmhpUser = entity.LeadAmhpUser == null ? null : new User(entity.LeadAmhpUser);
+      LeadAmhpUser = new User(entity.LeadAmhpUser);
       LeadAmhpUserId = entity.LeadAmhpUserId;
       IsPlannedAssessment = entity.IsPlannedAssessment;
     }
@@ -87,7 +85,7 @@ namespace Fmas12d.Business.Models
       }
     }
 
-    public string LeadAmhp
+    public string LeadAmhpName
     { get { return LeadAmhpUser?.DisplayName; } }
 
     public int NumberOfAssessmentAttempts
@@ -113,8 +111,8 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        return string.IsNullOrWhiteSpace(Patient.NhsNumber.ToString())
-               ? Patient.AlternativeIdentifier
+        return string.IsNullOrWhiteSpace(Patient?.NhsNumber.ToString())
+               ? Patient?.AlternativeIdentifier ?? "Unknown"
                : Patient.NhsNumber.ToString();
       }
     }
