@@ -28,10 +28,6 @@ form {
   z-index: 100;
 }
 
-.btn-standard {
-  min-width: 100px;
-}
-
 .at {
   color: #666;
   font-size:1.3em;
