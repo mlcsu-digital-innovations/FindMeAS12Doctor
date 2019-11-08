@@ -50,7 +50,7 @@ export class DoctorAllocateComponent implements OnInit {
         (params: ParamMap) => {
           return this.assessmentService.getAssessment(+params.get('assessmentId'))
             .pipe(
-              map(assessment => {
+              map((assessment: Assessment) => {
                 this.assessmentId = assessment.id;
                 return assessment;
               })

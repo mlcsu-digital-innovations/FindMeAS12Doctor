@@ -63,7 +63,7 @@ export class DoctorSelectComponent implements OnInit {
         (params: ParamMap) => {
           return this.assessmentService.getAssessment(+params.get('assessmentId'))
             .pipe(
-              map(assessment => {
+              map((assessment: Assessment) => {
                 this.assessmentId = assessment.id;
                 return assessment;
               })
@@ -110,9 +110,9 @@ export class DoctorSelectComponent implements OnInit {
   FetchAvailableDoctors(maxDistance: number) {
     this.isAvailableDoctorSearching = true;
     this.userAvailabilityService.getAvailableDoctors(maxDistance)
-    .subscribe(x => {
+    .subscribe(doctorList => {
       this.isAvailableDoctorSearching = false;
-      this.allDoctors = x;
+      this.allDoctors = doctorList;
       this.collectionSize = this.allDoctors.length;
       this.allDoctors.sort((a, b) => (a.distanceFromAssessment > b.distanceFromAssessment) ? 1 : -1);
       this.UpdateAvailableDoctorList();
