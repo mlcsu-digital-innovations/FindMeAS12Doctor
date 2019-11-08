@@ -42,7 +42,7 @@ namespace Fmas12d.Business.Services
         new Entities.UserAssessmentNotification
         {
           IsActive = true,
-          NotificationTextId = NotificationText.SELECTED_FOR_ASSESSMENT,
+          NotificationTextId = Models.NotificationText.SELECTED_FOR_ASSESSMENT,
           UserId = amhpUserId
         };
       UpdateModified(userAssessmentNotification);
@@ -76,6 +76,16 @@ namespace Fmas12d.Business.Services
         }
       }
     }
+
+    private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
+    {
+      if (entity.CompletionConfirmationByUserId != null)
+      {
+        throw new ModelStateException("Id",
+          $"The Assessment with an id of {entity.Id} cannot be updated because its completion " +
+           "has been confirmed.");
+      }
+    }    
 
     private void CheckAssessmentDoesNotAlreadyHaveAnOutcome(Entities.Assessment entity)
     {
@@ -154,7 +164,7 @@ namespace Fmas12d.Business.Services
                       .ToListAsync();
 
       IEnumerable<Models.Assessment> models =
-        entities.Select(e => new Assessment(e)).ToList();
+        entities.Select(e => new Models.Assessment(e)).ToList();
 
       return models;
     }
@@ -186,7 +196,7 @@ namespace Fmas12d.Business.Services
       return entity;
     }
 
-    public async Task<Assessment> GetByIdAsync(
+    public async Task<Models.Assessment> GetByIdAsync(
       int id,
       bool activeOnly)
     {
@@ -209,7 +219,7 @@ namespace Fmas12d.Business.Services
                 .AsNoTracking(true)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
-      Models.Assessment model = new Assessment(entity);
+      Models.Assessment model = new Models.Assessment(entity);
 
       return model;
     }
@@ -266,7 +276,7 @@ namespace Fmas12d.Business.Services
             "Assessment",
             model.Id,
             "UserAssessmentNotification.User.ProfileType of AMHP",
-            ProfileType.AMHP);
+            Models.ProfileType.AMHP);
         }
         else
         {
@@ -301,7 +311,7 @@ namespace Fmas12d.Business.Services
           "Assessment",
           model.Id,
           "UserAssessmentNotification.User.ProfileType of AMHP",
-          ProfileType.AMHP);
+          Models.ProfileType.AMHP);
       }
       return true;
     }
@@ -317,6 +327,8 @@ namespace Fmas12d.Business.Services
                                            .AsNoTracking(false)
                                            .WhereIsActiveOrActiveOnly(true)
                                            .SingleOrDefault();
+
+      CheckAssessmentCanBeUpdated(entity);
 
       if (entity == null)
       {
@@ -350,7 +362,7 @@ namespace Fmas12d.Business.Services
     {
       int[] attendingDoctorIds = model.AttendingDoctors.Select(d => d.Id).ToArray();
       Entities.AssessmentDoctor[] allocatedDoctors = entity.Doctors
-        .Where(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED)
+        .Where(d => d.StatusId == Models.AssessmentDoctorStatus.ALLOCATED)
         .ToArray();
       int[] allocatedDoctorIds = allocatedDoctors.Select(a => a.DoctorUserId).ToArray();
 
@@ -426,7 +438,7 @@ namespace Fmas12d.Business.Services
           model.AttendingDoctors = entity.Doctors
             .Select(doctor => new AssessmentOutcomeDoctor
             {
-              Attended = doctor.StatusId == AssessmentDoctorStatus.ATTENDED,
+              Attended = doctor.StatusId == Models.AssessmentDoctorStatus.ATTENDED,
               Id = doctor.DoctorUserId
             })
             .ToList();
