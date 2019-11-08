@@ -4,10 +4,10 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'amhp-assessment-list', pathMatch: 'full'
+    redirectTo: 'login', pathMatch: 'full'
   },  
   {
-    path: 'amhp-assessment-list',
+    path: 'amhp-assessment-list', 
     loadChildren:
       './pages/amhp-assessment-list/amhp-assessment-list.module#AmhpAssessmentListPageModule'
   },
@@ -18,7 +18,7 @@ const routes: Routes = [
       '/amhp-assessment-outcome.module#AmhpAssessmentOutcomePageModule' 
   },
   {
-    path: 'amhp-assessment-view/:id',
+    path: 'amhp-assessment-view/:id', 
     loadChildren: 
       './pages/amhp-assessment-view/amhp-assessment-view.module#AmhpAssessmentViewPageModule'
   },
@@ -31,6 +31,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module')
       .then(m => m.HomePageModule)
   },
+  { 
+    path: 'login', 
+    loadChildren: './pages/login/login.module#LoginPageModule' 
+  },
+
   
 
 ];
