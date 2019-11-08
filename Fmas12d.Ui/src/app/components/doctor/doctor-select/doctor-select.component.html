@@ -54,6 +54,7 @@
                 Lead AMHP:
               </div>
               <div class="col-md-4">
+                <!-- ToDo: update the API to get the AMHP name -->
                 Martin Price
               </div>
               <div class="col-md-2 label">
@@ -66,61 +67,38 @@
 
             <div class="row">
               <div class="col-md-3 label">
-                Doctors Allocated:
+                Doctors Selected:
               </div>
               <div class="col-md-4">
-                <span>Dr John Jones</span>
-                <span>Dr Elizabeth Fielding</span>
+                <!-- ToDo: loop through the list of selected doctors and display them -->
+                <span>None</span>
               </div>
+              <div class="col-md-2 label">
+                  Doctors Allocated:
+                </div>
+                <div class="col-md-3">
+                  <!-- ToDo: loop through the list of allocated doctors and display them -->
+                  <span>None</span>
+                </div>
             </div>
           </div>
-
-
           <form [formGroup]="doctorForm" novalidate>
-            <!-- Search Doctor -->
+            <div class="form-row ml-more-2">
+              <button
+                type="button"
+                class="btn btn-primary"
+                ngbTooltip="Select for doctors not registered with the FMAS12D application"
+                placement="top"
+                tooltipClass="subtle-tooltip"
+                [closeDelay]="500"
+                [openDelay]="1000"
+                (click)="SearchDoctors()"
+              >
+                <i class="fas fa-search"></i>
+                Search Other Doctors
+              </button>
+            </div>
             <div class="form-row" style="margin-left:6px;">
-              <div class="col-md-4 mb-2">
-                <label for="searchDoctor">Search Doctor</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="searchDoctor"
-                  #searchDoctor
-                  [class.is-invalid]="hasDoctorSearchFailed"
-                  formControlName="searchDoctor"
-                  [ngbTypeahead]="DoctorSearch"
-                  [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults"
-                />
-              </div>
-              <div class="col-md-1 mb-2 text-left mt-more-4">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  ngbTooltip="Select this doctor"
-                  placement="top"
-                  tooltipClass="subtle-tooltip"
-                  [closeDelay]="500"
-                  [openDelay]="1000"
-                >
-                  <i class="far fa-check-circle"></i>
-                  Confirm
-                </button>
-              </div>
-              <div class="col-md-3 mb-2 text-left mt-more-4">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  ngbTooltip="Add doctor not registered with FMAS12D"
-                  placement="top"
-                  tooltipClass="subtle-tooltip"
-                  [closeDelay]="500"
-                  [openDelay]="1000"
-                >
-                  <i class="fas fa-user-plus"></i>
-                  Additional Doctor
-                </button>
-              </div>
               <div class="col-md-3 mb-2 ">
               <label for="selectDistance">Search Doctors within:</label>
                 <select
@@ -129,11 +107,13 @@
                   #doctorDistance
                   id="doctorDistance"
                 >
-                  <option selected id="selectDistance">Select distance from patient</option>
                   <option value="1">1 Mile</option>
                   <option value="5">5 Miles</option>
                   <option value="10">10 Miles</option>
-                  <option value="100">More than 10 Miles</option>
+                  <option value="20">20 Miles</option>
+                  <option value="30">30 Miles</option>
+                  <option value="40">40 Miles</option>
+                  <option value="200">More than 40 Miles</option>
                 </select>
               </div>
             </div>
@@ -211,20 +191,53 @@
                     </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
 
-                            <label class="container">
-                              <input
-                                class=""
-                                type="checkbox"
-                                value=""
-                                (change)="TogglePlannedAssessment($event)"
-                              />
-                              <span class="checkmark"></span>
-                            </label>
-
+                      <label class="container">
+                        <input
+                          class=""
+                          type="checkbox"
+                          checked={{availableDoctor.selected}}
+                          (change)="ToggleSelection(availableDoctor.id, $event)"
+                        />
+                        <span class="checkmark"></span>
+                      </label>
                     </td>
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <div class="form-row ml-more-2 mr-more-2">
+              <div class="col-md-2">
+                <ngb-pagination [collectionSize]="collectionSize" (pageChange)="PageChanged($event)" [(page)]="page"
+                  [pageSize]="pageSize">
+                </ngb-pagination>
+              </div>
+              <div class="col-md-4">
+                <select class="custom-select" formControlName="pageSize">
+                  <option value="5">5 items per page</option>
+                  <option value="10" selected=true>10 items per page</option>
+                  <option value="20">20 items per page</option>
+                </select>
+              </div>
+              <div class="col-md-6 text-right">
+                  <button
+                  type="button"
+                  class="btn btn-standard btn-cancel"
+                  (click)="Cancel()"
+                  >
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-standard"
+                  (click)="UpdateAssessment()"
+                  [disabled]="selectedDoctors.length === 0"
+                >
+                  <i class="far fa-check-circle"></i>
+                  Save
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -232,10 +245,17 @@
     </div>
   </div>
 
-
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
 
+<ng-template #cancelAssessment>
+    <app-cancel-action-modal
+      [modalTitle]="'Cancel Doctor Selection'"
+      [modalBody]="'Do you wish to cancel this doctor selection? All changes will be lost.'"
+      (actioned)="OnCancelModalAction($event)"
+    >
+    </app-cancel-action-modal>
+  </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
