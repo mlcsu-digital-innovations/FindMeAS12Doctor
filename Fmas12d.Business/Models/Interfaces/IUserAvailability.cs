@@ -15,6 +15,6 @@ namespace Fmas12d.Business.Models
     IUser User { get; set; }
     int UserId { get; set; }
 
-    void MapToEntity(Data.Entities.IUserAvailability entity);
+    void MapToEntity(Data.Entities.UserAvailability entity);
   }
 }

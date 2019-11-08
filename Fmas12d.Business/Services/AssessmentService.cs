@@ -15,17 +15,20 @@ namespace Fmas12d.Business.Services
     IServiceBaseNoAutoMapper,
     IAssessmentService
   {
-    private readonly ReferralService _referralService;
-    private readonly UserService _userService;
+    private readonly IReferralService _referralService;
+    private readonly IUserService _userService;
+    private readonly IUserAvailabilityService _userAvailabilityService;
 
     public AssessmentService(
       ApplicationContext context,
       IReferralService referralService,
-      IUserService userService)
+      IUserService userService,
+      IUserAvailabilityService userAvailabilityService)
       : base(context)
     {
-      _referralService = referralService as ReferralService;
-      _userService = userService as UserService;
+      _referralService = referralService;
+      _userService = userService;
+      _userAvailabilityService = userAvailabilityService;
     }
 
     private async Task<bool> AddAmhpToUserAssessmentNotifications(
@@ -150,6 +153,34 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
+    public async Task<Assessment> GetAvailableDoctors(
+      int id,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.Assessment entity =
+        await _context.Assessments
+                .Include(e => e.AmhpUser)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.Patient)
+                .Include(e => e.PreferredDoctorGenderType)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.LeadAmhpUser)                  
+                .Include(e => e.Speciality)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(u => u.Id == id);
+
+      Models.Assessment model = new Models.Assessment(entity);
+
+      model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
+        model.DateTime, true, true);
+
+      return model;
+    }
+
     public async Task<IEnumerable<Models.Assessment>> GetAllFilterByAmhpUserIdAsync(
       int amhpUserId,
       bool asNoTracking,
@@ -169,10 +200,9 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    protected async Task<Entities.Assessment> GetEntityByIdAsync(
-       int entityId,
-       bool asNoTracking,
-       bool activeOnly)
+    public async Task<Models.Assessment> GetByIdAsync(
+      int id,
+      bool activeOnly)
     {
       Entities.Assessment entity = await
         _context.Assessments
@@ -190,15 +220,18 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == entityId);
+                .AsNoTracking(true)
+                .SingleOrDefaultAsync(u => u.Id == id);
 
-      return entity;
-    }
+      Models.Assessment model = new Models.Assessment(entity);
 
-    public async Task<Models.Assessment> GetByIdAsync(
-      int id,
-      bool activeOnly)
+      return model;
+    }    
+
+    protected async Task<Entities.Assessment> GetEntityByIdAsync(
+       int entityId,
+       bool asNoTracking,
+       bool activeOnly)
     {
       Entities.Assessment entity = await
         _context.Assessments
@@ -217,12 +250,10 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(true)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(u => u.Id == entityId);
 
-      Models.Assessment model = new Models.Assessment(entity);
-
-      return model;
+      return entity;
     }
 
     private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)

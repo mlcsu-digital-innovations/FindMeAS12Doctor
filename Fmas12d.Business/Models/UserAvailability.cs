@@ -6,7 +6,7 @@ namespace Fmas12d.Business.Models
   public class UserAvailability : BaseModel, IUserAvailability
   {
     public UserAvailability() { }
-    public UserAvailability(Data.Entities.IUserAvailability entity) : base(entity)
+    public UserAvailability(Data.Entities.UserAvailability entity) : base(entity)
     {
       if (entity == null) return;
 
@@ -18,7 +18,7 @@ namespace Fmas12d.Business.Models
       Start = entity.Start;
       // TODO Status = ;
       StatusId = entity.UserAvailabilityStatusId;
-      // TODO User = new User(entity.User);
+      User = new User(entity.User);
       UserId = entity.UserId;
     }
 
@@ -33,7 +33,7 @@ namespace Fmas12d.Business.Models
     public IUser User { get; set; }
     public int UserId { get; set; }
 
-    public void MapToEntity(Data.Entities.IUserAvailability entity)
+    public void MapToEntity(Data.Entities.UserAvailability entity)
     {
       if (entity == null) return;
 
@@ -47,7 +47,7 @@ namespace Fmas12d.Business.Models
       entity.UserId = UserId;
     }
 
-    public static Expression<Func<Data.Entities.IUserAvailability, UserAvailability>> ProjectFromEntity
+    public static Expression<Func<Data.Entities.UserAvailability, UserAvailability>> ProjectFromEntity
     {
       get
       {

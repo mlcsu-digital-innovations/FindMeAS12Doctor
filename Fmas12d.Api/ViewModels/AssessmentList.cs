@@ -4,6 +4,15 @@ namespace Fmas12d.Api.ViewModels
 {
   public class AssessmentList
   {
+    public AssessmentList() {}
+    public AssessmentList(Business.Models.Assessment model)
+    {
+      this.DateTime = model.DateTime;
+      this.Id = model.Id;
+      this.Postcode = model.Postcode;
+
+    }
+
     public DateTimeOffset DateTime { get; set; }
     public int Id { get; set; }
     public string Postcode { get; set; }
@@ -12,15 +21,10 @@ namespace Fmas12d.Api.ViewModels
     {
       get
       {
-        return b => new AssessmentList()
-        {
-          DateTime = b.DateTime,
-          Id = b.Id,
-          Postcode = b.Postcode
-        };
+        return model => new AssessmentList(model);
       }
-    }    
+    }
   }
 
-  
+
 }

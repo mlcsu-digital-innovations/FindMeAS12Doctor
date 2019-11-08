@@ -11,17 +11,44 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy="User")]
-  
   public class AssessmentController : ModelControllerNoAutoMapper
   {
+    private IAssessmentService Service { get { return _service as IAssessmentService; } }  
+
     public AssessmentController(IAssessmentService service) : base(service)
     {
-    }
-
-    private IAssessmentService Service { get { return _service as IAssessmentService; } }
+    }    
 
     [HttpGet]
-    [Route("list")]
+    [Route("{id:int}/availabledoctors")]
+    public async Task<ActionResult<ViewModels.AssessmentAvailableDoctors>> GetAvailableDoctors(
+      int id)
+    {
+      try
+      {
+        Business.Models.Assessment businessModel = 
+          await Service.GetAvailableDoctors(id, true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.AssessmentAvailableDoctors viewModel =
+            new ViewModels.AssessmentAvailableDoctors(businessModel);
+
+          return Ok(viewModel);          
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpGet]
+    [Route("")]
     public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
       RequestModels.AssessmentListSearch assessmentListSearch)
     {
@@ -53,7 +80,7 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
-    [Route("view/{id:int}")]
+    [Route("{id:int}")]
     public async Task<ActionResult<ViewModels.AssessmentView>> GetView(int id)
     {
       try
@@ -75,7 +102,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }    
+    } 
 
     [HttpPost]
     [Route("emergency")]
@@ -112,7 +139,7 @@ namespace Fmas12d.Api.Controllers
     }    
 
     [HttpPut]
-    [Route("outcome/{id:int}/failure")]
+    [Route("{id:int}/outcome/failure")]
     public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeFailure(
       int id,
       [FromBody] RequestModels.AssessmentOutcomeFailurePut requestModel)
@@ -121,7 +148,7 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
-    [Route("outcome/{id:int}/success")]
+    [Route("{id:int}/outcome/success")]
      public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeSuccess(
       int id,
       [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
@@ -184,7 +211,6 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }  
-
+    }      
   }
 }
