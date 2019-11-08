@@ -64,6 +64,7 @@ namespace Fmas12d.Business.Services
                 End = entity.End,
                 GenderName = entity.User.GenderType.Name,
                 Name = entity.User.DisplayName,
+                Id = entity.User.Id,
                 SpecialityNames = 
                   entity.User.UserSpecialities.Select(s => s.Speciality.Name).ToList(),
                 Start = entity.Start,
