@@ -5,6 +5,7 @@ export interface AvailableDoctor {
   doctorName: string;
   doctorSpeciality?: string;
   doctorType?: string;
+  id: number;
   otherAssessmentDetails?: string;
   selected?: boolean;
 }
