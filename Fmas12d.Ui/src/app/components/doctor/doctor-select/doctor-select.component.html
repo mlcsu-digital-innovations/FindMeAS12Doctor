@@ -204,7 +204,7 @@
                       {{availableDoctor.start | timeOnlyFormat}} - {{availableDoctor.end | timeOnlyFormat}}
                     </td>
                     <td class="text-center sm-col">
-                      {{availableDoctor.distance}}
+                      {{availableDoctor.distance | number: '1.1-1'}}
                     </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
 
