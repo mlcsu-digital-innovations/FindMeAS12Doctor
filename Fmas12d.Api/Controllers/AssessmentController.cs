@@ -1,14 +1,15 @@
 using Fmas12d.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("api/[controller]")]  
   [ApiController]
   [Authorize(Policy="User")]
   public class AssessmentController : ModelControllerNoAutoMapper

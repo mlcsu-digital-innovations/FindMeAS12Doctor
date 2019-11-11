@@ -1,26 +1,24 @@
-import { ConfigService } from '../config/config.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, from, of, forkJoin } from 'rxjs';
-import { Storage } from '@ionic/storage';
+import { StorageService } from '../storage/storage.service';
+import { StoredRequest } from 'src/app/interfaces/stored-request.interface';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { switchMap, finalize } from 'rxjs/operators';
-import { StoredRequest } from 'src/app/interfaces/stored-request.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfflineManagerService {
 
-  constructor(
-    private configService: ConfigService,
-    private storage: Storage, 
+  constructor(    
     private http: HttpClient, 
+    private storageService: StorageService,
     private toastService: ToastService
     ) { }
  
-  public checkForEvents(): Observable<any> {
-    return from(this.storage.get(this.configService.REQ_STORAGE_KEY)).pipe(
+  public checkForEvents(): Observable<any> {    
+    return this.storageService.getRequests().pipe(
       switchMap(storedOperations => {
         let storedObj = JSON.parse(storedOperations);
         if (storedObj && storedObj.length > 0) {
@@ -29,8 +27,8 @@ export class OfflineManagerService {
               this.toastService.displayMessage({
                 message: `Local data succesfully synced to API`                          
               });              
- 
-              this.storage.remove(this.configService.REQ_STORAGE_KEY);
+               
+              this.storageService.clearRequests();
             })
           );
         } else {          
@@ -40,7 +38,7 @@ export class OfflineManagerService {
     )
   }
  
-  public storeRequest(url, type, data): Promise<any> {
+  public storeRequest(url, type, data): Observable<any> {
     this.toastService.displayMessage({
       message: 'Your data will be stored locally until you are next online.'  
     });   
@@ -52,8 +50,8 @@ export class OfflineManagerService {
       time: new Date().getTime(),
       id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
     };    
- 
-    return this.storage.get(this.configService.REQ_STORAGE_KEY).then(storedOperations => {
+     
+    return this.storageService.getRequests().do((storedOperations: string) => {
       let storedObj = JSON.parse(storedOperations);
  
       if (storedObj) {
@@ -62,7 +60,7 @@ export class OfflineManagerService {
         storedObj = [action];
       }
 
-      return this.storage.set(this.configService.REQ_STORAGE_KEY, JSON.stringify(storedObj));
+      return this.storageService.storeRequests(JSON.stringify(storedObj));
     });
   }
  
