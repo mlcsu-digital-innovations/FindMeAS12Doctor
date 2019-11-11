@@ -37,8 +37,8 @@ namespace Fmas12d.Business.Services
         _configuration.GetValue("PostcodesIoEndpoint", "https://api.postcodes.io/postcodes/");
       string uri = $"{endpoint}{stringPostcode}";
 
-      using var response = await client.GetAsync(uri);
-      string content = response.Content.ReadAsStringAsync().Result;
+      using HttpResponseMessage response = await client.GetAsync(uri);
+      string content = await response.Content.ReadAsStringAsync();
       PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
 
       Postcode modelPostcode = new Postcode(convertedResult);

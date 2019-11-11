@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Fmas12d.Business.Helpers;
 
 namespace Fmas12d.Business.Services
 {
@@ -15,17 +16,20 @@ namespace Fmas12d.Business.Services
     IServiceBaseNoAutoMapper,
     IAssessmentService
   {
+    private readonly ILocationDetailService _locationDetailService;
     private readonly IReferralService _referralService;
     private readonly IUserService _userService;
     private readonly IUserAvailabilityService _userAvailabilityService;
 
     public AssessmentService(
       ApplicationContext context,
+      ILocationDetailService locationDetailService,
       IReferralService referralService,
       IUserService userService,
       IUserAvailabilityService userAvailabilityService)
       : base(context)
     {
+      _locationDetailService = locationDetailService;
       _referralService = referralService;
       _userService = userService;
       _userAvailabilityService = userAvailabilityService;
@@ -80,6 +84,23 @@ namespace Fmas12d.Business.Services
       }
     }
 
+    private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
+    {
+      Models.Postcode postcodeModel = await 
+        _locationDetailService.GetPostcodeDetailsAsync(postcode);
+
+      if (postcodeModel == null)
+      {
+        throw new ModelStateException("postcode", 
+          $"Unable to find a match for postcode {postcode}");
+      }
+      
+      entity.Latitude = postcodeModel.Latitude;
+      entity.Longitude = postcodeModel.Longitude;
+
+      return true;
+    }    
+
     private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
     {
       if (entity.CompletionConfirmationByUserId != null)
@@ -116,6 +137,17 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
+    private async Task<Models.Referral> GetReferral(int referralId)
+    {
+      Models.Referral referral = await _referralService.GetAsync(referralId, true, false);
+      if (referral == null)
+      {
+        throw new ModelStateException("ReferralId",
+        $"Cannot find an active Referral with an id of {referralId}.");
+      }
+      return referral;
+    }    
+
     /// <summary>
     /// Sets the assessment entity's properties from the provided business model
     /// The CCG id is set from the referral patient's ccg, it's duplicated on the assessment so 
@@ -124,18 +156,20 @@ namespace Fmas12d.Business.Services
     /// </summary>
     public virtual async Task<AssessmentCreate> CreateAsync(AssessmentCreate model)
     {
+      await GetReferral(model.ReferralId);
       await CheckReferralDoesNotAlreadyHaveACurrentAssessment(model);
 
       Entities.Assessment entity = new Entities.Assessment();
       model.MapToEntity(entity);
 
       entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
+      UpdateModified(entity);
       entity.CreatedByUserId = entity.ModifiedByUserId;
       entity.Id = 0;
       entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
       await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
-      UpdateModified(entity);
+      await AddLatitudeAndLongitude(model.Postcode, entity);      
       _context.Add(entity);
 
       Entities.Referral referral = _context.Referrals.Find(model.ReferralId);
@@ -153,7 +187,7 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public async Task<Assessment> GetAvailableDoctors(
+    public async Task<Models.Assessment> GetAvailableDoctorsAsync(
       int id,
       bool asNoTracking,
       bool activeOnly)
@@ -177,6 +211,16 @@ namespace Fmas12d.Business.Services
 
       model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
         model.DateTime, true, true);
+
+      foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
+      {
+        availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+          entity.Latitude, 
+          entity.Longitude,
+          availabilityDoctor.Latitude.Value,
+          availabilityDoctor.Longitude.Value
+        );
+      }
 
       return model;
     }

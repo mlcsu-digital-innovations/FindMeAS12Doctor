@@ -27,7 +27,7 @@ namespace Fmas12d.Api.Controllers
       try
       {
         Business.Models.Assessment businessModel = 
-          await Service.GetAvailableDoctors(id, true, true);
+          await Service.GetAvailableDoctorsAsync(id, true, true);
 
         if (businessModel == null)
         {

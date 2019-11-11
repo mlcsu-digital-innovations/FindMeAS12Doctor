@@ -63,6 +63,8 @@ namespace Fmas12d.Business.Services
                   .ToList(),
                 End = entity.End,
                 GenderName = entity.User.GenderType.Name,
+                Latitude = entity.Latitude,
+                Longitude = entity.Longitude,
                 Name = entity.User.DisplayName,
                 SpecialityNames = 
                   entity.User.UserSpecialities.Select(s => s.Speciality.Name).ToList(),
@@ -73,8 +75,6 @@ namespace Fmas12d.Business.Services
 
       return models;
     }
-
-
 
     /// <summary>
     /// TODO Check for overlapping availabilities

@@ -30,6 +30,10 @@ namespace Fmas12d.Data.Entities
     public IList<AssessmentDoctor> Doctors { get; set; }
     public virtual IList<AssessmentDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
+    [Column(TypeName = "decimal(8,6)")]
+    public decimal Latitude { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal Longitude { get; set; }    
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset? MustBeCompletedBy { get; set; }
