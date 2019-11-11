@@ -23,7 +23,6 @@ namespace Fmas12d.Api.ViewModels
     public string AmhpName { get; set; }
     public IEnumerable<AssessmentAvailableDoctorsAvailability> AvailableDoctors { get; set; }
     public string LeadAmhpName { get; set; }
-    public string PreferredDoctorGenderTypeName { get; set; }
 
     public static new Func<Business.Models.Assessment, AssessmentAvailableDoctors> ProjectFromModel
     {
