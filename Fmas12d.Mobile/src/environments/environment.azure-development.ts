@@ -5,7 +5,13 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://fmas12d-api-dev.azurewebsites.net/api',
+  redirectUri: 'https://fmas12d-mobile-dev.azurewebsites.net/login'
 };
+
+export const ProtectedResourceMap: [string, string[]][] = 
+[  
+  [ "https://fmas12d-api-dev.azurewebsites.net", ["User.Read", "offline_access"] ] 
+];
 
 /*
  * For easier debugging in development mode, you can import the following file

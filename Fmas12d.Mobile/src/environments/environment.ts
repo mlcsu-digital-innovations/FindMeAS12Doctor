@@ -4,9 +4,14 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'https://localhost:5001/api'
+  apiEndpoint: 'https://localhost:5001/api',
+  redirectUri: 'http://localhost:4200/login'
 };
 
+export const ProtectedResourceMap: [string, string[]][] = 
+[  
+  [ "https://localhost:5001", ["User.Read", "offline_access"] ] 
+];
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

@@ -1,6 +1,6 @@
-import { ConfigService } from '../config/config.service';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs';
+import { StorageService } from '../storage/storage.service';
 import { StoredError } from 'src/app/interfaces/stored-error.interface';
 
 @Injectable({
@@ -8,12 +8,11 @@ import { StoredError } from 'src/app/interfaces/stored-error.interface';
 })
 export class LogService {
 
-  constructor(
-    private configService: ConfigService,
-    private storage: Storage
+  constructor( 
+    private storageService: StorageService
     ) { }
 
-  public logError(error: any): Promise<any> {     
+  public logError(error: any): Observable<any> {     
     let err: StoredError = {
       code: error.status,
       url: error.url,
@@ -21,8 +20,8 @@ export class LogService {
       dateTime: new Date(),
       id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
     };    
-
-    return this.storage.get(this.configService.ERROR_STORAGE_KEY).then(storedErrors => {
+    
+    return this.storageService.getErrors().do((storedErrors: string) => {
       let storedObj: any = JSON.parse(storedErrors);
 
       if (storedObj) {
@@ -30,8 +29,8 @@ export class LogService {
       } else {
         storedObj = [err];
       }
-
-      return this.storage.set(this.configService.ERROR_STORAGE_KEY, JSON.stringify(storedObj));
+      
+      return this.storageService.storeErrors(JSON.stringify(storedObj));
     });
   }
 }

@@ -18,12 +18,11 @@ import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
 
-
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
   // https://login.microsoftonline.com/damienbod.onmicrosoft.com/.well-known/openid-configuration
   // jwt keys: https://login.microsoftonline.com/common/discovery/keys
-  // Azure AD does not support CORS, so you need to download the OIDC configuration, 
+  // Azure AD does not support CORS, so you need to download the OIDC configuration,
   // and use these from the application.
   // The jwt keys needs to be configured in the well-known-openid-configuration.json
   return () => oidcConfigService.load(`${environment.apiEndpoint}/config/configuration`);

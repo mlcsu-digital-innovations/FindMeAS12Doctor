@@ -1,68 +1,60 @@
-import { ConfigService } from '../config/config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
 import { NetworkService, ConnectionStatus } from '../network/network.service';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { OfflineManagerService } from '../offline-manager/offline-manager.service';
-import { Storage } from '@ionic/storage';
+import { StorageService } from '../storage/storage.service';
 import { tap, map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {  
-  private headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+export class ApiService {    
+  private contentType: string = "application/json";
+  private accessToken: string;
 
-  constructor(
-    private configService: ConfigService,
+  constructor(        
     private http: HttpClient, 
+    private logService: LogService,
     private networkService: NetworkService,
-    private offlineManager: OfflineManagerService,
-    private storage: Storage,
-    private logService: LogService
-    ) { }
+    private offlineManager: OfflineManagerService,    
+    private storageService: StorageService
+    ) 
+    { }
  
   public get(url: string, storageKey: string): Observable<any> {
-    if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
-      return from(this.getLocalData(storageKey));
+    if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {      
+      return this.storageService.getApiRequestData(storageKey);
     }    
-    else {
-      return this.http.get(url)
+    else {       
+      return this.http.get(url)          
         .pipe(
           catchError(error => {      
-            this.logService.logError(error);
-            throw new Error(error);
+            this.logService.logError(error);            
+            throw new Error(error);            
           }),
           map(result => result),
-          tap(result => this.setLocalData(storageKey, result)
+          tap(result => this.storageService.storeApiRequestData(storageKey, result)
         )      
-      );  
-    }         
+      );       
+    }                             
   }
 
   public put(url: string, body: any): Observable<any> {
     if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
       return from(this.offlineManager.storeRequest(url, "PUT", body));
     }
-    else {
-      return this.http.put(url, body, { headers: this.headers })
+    else {      
+      return this.http.put(url, body)
         .pipe(
           catchError(error => {
             this.logService.logError(error);
             throw new Error(error)
           }
         )        
-      );
-    }
-    
+      );               
+    }        
   }
 
-  private setLocalData(key, data) {
-    this.storage.set(`${this.configService.API_STORAGE_KEY}-${key}`, data);
-  }
- 
-  private getLocalData(key) {
-    return this.storage.get(`${this.configService.API_STORAGE_KEY}-${key}`);
-  }
 }

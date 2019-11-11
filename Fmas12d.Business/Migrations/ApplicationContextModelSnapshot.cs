@@ -67,6 +67,12 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool?>("IsSuccessful")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(8,6)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,6)");
+
                     b.Property<string>("MeetingArrangementComment")
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);

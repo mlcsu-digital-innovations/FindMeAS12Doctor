@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Fmas12d.Business.Helpers;
 
 namespace Fmas12d.Business.Services
 {
@@ -15,17 +16,23 @@ namespace Fmas12d.Business.Services
     IServiceBaseNoAutoMapper,
     IAssessmentService
   {
-    private readonly ReferralService _referralService;
-    private readonly UserService _userService;
+    private readonly ILocationDetailService _locationDetailService;
+    private readonly IReferralService _referralService;
+    private readonly IUserService _userService;
+    private readonly IUserAvailabilityService _userAvailabilityService;
 
     public AssessmentService(
       ApplicationContext context,
+      ILocationDetailService locationDetailService,
       IReferralService referralService,
-      IUserService userService)
+      IUserService userService,
+      IUserAvailabilityService userAvailabilityService)
       : base(context)
     {
-      _referralService = referralService as ReferralService;
-      _userService = userService as UserService;
+      _locationDetailService = locationDetailService;
+      _referralService = referralService;
+      _userService = userService;
+      _userAvailabilityService = userAvailabilityService;
     }
 
     private async Task<bool> AddAmhpToUserAssessmentNotifications(
@@ -77,6 +84,23 @@ namespace Fmas12d.Business.Services
       }
     }
 
+    private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
+    {
+      Models.Postcode postcodeModel = await 
+        _locationDetailService.GetPostcodeDetailsAsync(postcode);
+
+      if (postcodeModel == null)
+      {
+        throw new ModelStateException("postcode", 
+          $"Unable to find a match for postcode {postcode}");
+      }
+      
+      entity.Latitude = postcodeModel.Latitude;
+      entity.Longitude = postcodeModel.Longitude;
+
+      return true;
+    }    
+
     private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
     {
       if (entity.CompletionConfirmationByUserId != null)
@@ -113,6 +137,17 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
+    private async Task<Models.Referral> GetReferral(int referralId)
+    {
+      Models.Referral referral = await _referralService.GetAsync(referralId, true, false);
+      if (referral == null)
+      {
+        throw new ModelStateException("ReferralId",
+        $"Cannot find an active Referral with an id of {referralId}.");
+      }
+      return referral;
+    }    
+
     /// <summary>
     /// Sets the assessment entity's properties from the provided business model
     /// The CCG id is set from the referral patient's ccg, it's duplicated on the assessment so 
@@ -121,18 +156,20 @@ namespace Fmas12d.Business.Services
     /// </summary>
     public virtual async Task<AssessmentCreate> CreateAsync(AssessmentCreate model)
     {
+      await GetReferral(model.ReferralId);
       await CheckReferralDoesNotAlreadyHaveACurrentAssessment(model);
 
       Entities.Assessment entity = new Entities.Assessment();
       model.MapToEntity(entity);
 
       entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
+      UpdateModified(entity);
       entity.CreatedByUserId = entity.ModifiedByUserId;
       entity.Id = 0;
       entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
       await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
-      UpdateModified(entity);
+      await AddLatitudeAndLongitude(model.Postcode, entity);      
       _context.Add(entity);
 
       Entities.Referral referral = _context.Referrals.Find(model.ReferralId);
@@ -147,6 +184,44 @@ namespace Fmas12d.Business.Services
                       .AsNoTracking(true)
                       .Select(AssessmentCreate.ProjectFromEntity)
                       .Single();
+      return model;
+    }
+
+    public async Task<Models.Assessment> GetAvailableDoctorsAsync(
+      int id,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      Entities.Assessment entity =
+        await _context.Assessments
+                .Include(e => e.AmhpUser)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.Patient)
+                .Include(e => e.PreferredDoctorGenderType)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.LeadAmhpUser)                  
+                .Include(e => e.Speciality)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(u => u.Id == id);
+
+      Models.Assessment model = new Models.Assessment(entity);
+
+      model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
+        model.DateTime, true, true);
+
+      foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
+      {
+        availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+          entity.Latitude, 
+          entity.Longitude,
+          availabilityDoctor.Latitude.Value,
+          availabilityDoctor.Longitude.Value
+        );
+      }
+
       return model;
     }
 
@@ -169,10 +244,9 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    protected async Task<Entities.Assessment> GetEntityByIdAsync(
-       int entityId,
-       bool asNoTracking,
-       bool activeOnly)
+    public async Task<Models.Assessment> GetByIdAsync(
+      int id,
+      bool activeOnly)
     {
       Entities.Assessment entity = await
         _context.Assessments
@@ -190,15 +264,18 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(u => u.Id == entityId);
+                .AsNoTracking(true)
+                .SingleOrDefaultAsync(u => u.Id == id);
 
-      return entity;
-    }
+      Models.Assessment model = new Models.Assessment(entity);
 
-    public async Task<Models.Assessment> GetByIdAsync(
-      int id,
-      bool activeOnly)
+      return model;
+    }    
+
+    protected async Task<Entities.Assessment> GetEntityByIdAsync(
+       int entityId,
+       bool asNoTracking,
+       bool activeOnly)
     {
       Entities.Assessment entity = await
         _context.Assessments
@@ -217,12 +294,10 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(true)
-                .SingleOrDefaultAsync(u => u.Id == id);
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(u => u.Id == entityId);
 
-      Models.Assessment model = new Models.Assessment(entity);
-
-      return model;
+      return entity;
     }
 
     private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
