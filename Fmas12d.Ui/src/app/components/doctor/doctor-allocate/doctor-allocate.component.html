@@ -24,7 +24,7 @@
                 Assessment To be Completed By:
               </div>
               <div class="col-md-4">
-                {{assessment.dateTime | date:'medium'}}
+                {{assessment.dateTime | dateTimeFormat}}
               </div>
               <div class="col-md-2 label">
                 Assessment Postcode:
@@ -54,8 +54,7 @@
                 Lead AMHP:
               </div>
               <div class="col-md-4">
-                <!-- ToDo: update the API to get the AMHP name -->
-                Martin Price
+                {{assessment.leadAmhpName}}
               </div>
               <div class="col-md-2 label">
                 Preferred Doctor Gender:
@@ -70,15 +69,15 @@
                 Attending AMHP:
               </div>
               <div class="col-md-4">
-                <!-- ToDo: loop through the list of selected doctors and display them -->
-                Emma Hewitt
+                {{assessment.amhpName}}
               </div>
               <div class="col-md-2 label">
                   Doctors Allocated:
                 </div>
                 <div class="col-md-3">
-                  <!-- ToDo: loop through the list of allocated doctors and display them -->
-                  <span>None</span>
+                  <div *ngFor="let allocated of assessment.doctorsAllocated">
+                    {{allocated.displayName}} [{{allocated.gmcNumber}}]
+                  </div>
                 </div>
             </div>
           </div>
@@ -109,21 +108,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let availableDoctor of availableDoctors">
+                  <tr *ngFor="let selectedDoctor of assessment.doctorsSelected">
                     <td>
-                      {{availableDoctor.doctorName}}
+                      {{selectedDoctor.displayName}}
                     </td>
                     <td>
-                      {{availableDoctor.doctorGender}}
+                      {{selectedDoctor.doctorGender}}
                     </td>
                     <td>
-                      {{availableDoctor.doctorType}}
+                      {{selectedDoctor.doctorType}}
                     </td>
                     <td>
-                      {{availableDoctor.doctorSpeciality}}
+                      {{selectedDoctor.doctorSpeciality}}
                     </td>
                     <td class="text-center sm-col">
-                      {{availableDoctor.distanceFromAssessment}}
+                      {{selectedDoctor.distance | number: '1.1-1'}}
                     </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
 
@@ -131,7 +130,7 @@
                         <input
                           class=""
                           type="checkbox"
-                          checked={{availableDoctor.selected}}
+                          checked={{selectedDoctor.isSelected}}
                           (change)="ToggleSelection(availableDoctor.id, $event)"
                         />
                         <span class="checkmark"></span>
