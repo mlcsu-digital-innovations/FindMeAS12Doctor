@@ -21,6 +21,7 @@ namespace Fmas12d.Api.ViewModels
       MeetingArrangementComment = model.MeetingArrangementComment;
       PatientIdentifier = model.PatientIdentifier;
       Postcode = model.Postcode;
+      PreferredDoctorGenderTypeName = model.PreferredDoctorGenderTypeName;
       ReferralId = model.ReferralId;
       SpecialityName = model.SpecialityName;
 
@@ -46,6 +47,7 @@ namespace Fmas12d.Api.ViewModels
     public string MeetingArrangementComment { get; set; }
     public string PatientIdentifier { get; set; }    
     public string Postcode { get; set; }
+    public string PreferredDoctorGenderTypeName {get; set;}
     public int ReferralId { get; set; }
     public string SpecialityName { get; set; }
 

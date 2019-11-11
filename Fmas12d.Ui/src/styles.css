@@ -144,8 +144,8 @@ label {
 
 /** change primary colour **/
 .btn-primary {
-  background-color: #0dadb7;
-  border-color: #0c9da7;
+  background-color: #0dadb7 !important;
+  border-color: #0c9da7 !important;
 }
 
 .btn-primary:disabled {
@@ -390,12 +390,28 @@ label {
   margin-top: 1rem !important;
 }
 
+.mt-more-4 {
+  margin-top: 2rem !important;
+}
+
 .ml-less-2 {
   margin-left: -1rem !important;
 }
 
 .ml-more-2 {
   margin-left: 1rem !important;
+}
+
+.mr-more {
+  margin-right: 0.25rem;
+}
+
+.mr-more-1 {
+  margin-right: 0.5rem;
+}
+
+.mr-more-2 {
+  margin-right: 1rem;
 }
 
 .mb-more {
@@ -423,6 +439,12 @@ label {
   color: #fff;
 }
 
+.btn-standard {
+  min-width: 100px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
 .btn-trash:disabled {
   background-color: #497679;
   color: #ccc;
@@ -430,4 +452,18 @@ label {
 
 a:hover {
   text-decoration: none;
+}
+
+.subtle-tooltip.bs-tooltip-top .arrow::before {
+  border-right-color: transparent;
+  border-top-color: #0dadb7;
+}
+
+.page-item.active .page-link {
+  background-color: #0dadb7;
+  border-color: #0dadb7;
+}
+
+.page-link {
+  color: #0dadb7;
 }

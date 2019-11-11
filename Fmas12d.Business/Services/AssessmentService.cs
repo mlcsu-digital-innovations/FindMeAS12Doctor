@@ -238,6 +238,7 @@ namespace Fmas12d.Business.Services
                 .Include(e => e.AmhpUser)
                 .Include(e => e.CompletedByUser)
                 .Include(e => e.CreatedByUser)
+                .Include(e => e.PreferredDoctorGenderType)
                 .Include(e => e.Details)
                   .ThenInclude(d => d.AssessmentDetailType)
                 .Include(e => e.Doctors)

@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { DoctorListService } from 'src/app/services/doctor-list/doctor-list.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Assessment } from 'src/app/interfaces/assessment';
+import { AssessmentAvailability } from 'src/app/interfaces/assessment-availability';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
+import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { map } from 'rxjs/operators';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
-import { tap, switchMap, catchError } from 'rxjs/operators';
+import { RouterService } from 'src/app/services/router/router.service';
+import { switchMap, catchError } from 'rxjs/operators';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-doctor-select',
@@ -12,49 +19,163 @@ import { tap, switchMap, catchError } from 'rxjs/operators';
 })
 export class DoctorSelectComponent implements OnInit {
 
+  allDoctors: AvailableDoctor[];
+  assessment$: Observable<Assessment | any>;
+  assessmentId: number;
+  availableDoctors: AvailableDoctor[];
+  cancelModal: NgbModalRef;
+  collectionSize: number;
   doctorForm: FormGroup;
+  filteredDoctorList: AvailableDoctor[];
   hasDoctorSearchFailed: boolean;
+  isAvailableDoctorSearching: boolean;
   isDoctorFieldsShown: boolean;
   isDoctorSearching: boolean;
-  unknownDoctorId: number;
+  page = 1;
+  pageSize = 10;
   selectDoctor: FormGroup;
+  selectedDoctors: AvailableDoctor[] = [];
+
+  @ViewChild('cancelSelection', null) cancelSelectionTemplate;
 
   constructor(
-    private doctorListService: DoctorListService,
-    private formBuilder: FormBuilder
+    private assessmentService: AssessmentService,
+    private formBuilder: FormBuilder,
+    private modalService: NgbModal,
+    private route: ActivatedRoute,
+    private routerService: RouterService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
-    this.unknownDoctorId = 0;
-
     this.doctorForm = this.formBuilder.group({
-      searchDoctor: []
+      searchDoctor: [],
+      doctorDistance: [5],
+      pageSize: [10]
     });
 
-  }
-
-  FormatTypeAheadResults(value: any): string {
-    return value.resultText || '';
-  }
-
-  get doctorField() {
-    return this.doctorForm.controls.searchDoctor;
-  }
-
-  DoctorSearch = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => (this.isDoctorSearching = true)),
-      switchMap(term =>
-        this.doctorListService.GetDoctorList(term).pipe(
-          tap(() => (this.hasDoctorSearchFailed = false)),
-          catchError(() => {
-            this.hasDoctorSearchFailed = true;
-            return of([]);
-          })
-        )
+    this.assessment$ = this.route.paramMap.pipe(
+      switchMap(
+        (params: ParamMap) => {
+          return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
+            .pipe(
+              map((assessment: AssessmentAvailability) => {
+                this.assessmentId = assessment.id;
+                this.allDoctors = assessment.availableDoctors;
+                console.log(assessment);
+                this.DisplayDoctorsWithinSearchRadius(this.doctorDistance.value);
+                return assessment;
+              })
+            );
+        }
       ),
-      tap(() => (this.isDoctorSearching = false))
-    )
+      catchError((err) => {
+
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error Retrieving Referral Information'
+        });
+
+        const emptyAssessment = {} as Assessment;
+        return of(emptyAssessment);
+      })
+    );
+
+    this.OnChanges();
+  }
+
+  AddSelectedDoctor(id: number) {
+    const doctorFromList = this.allDoctors.find(doctor => doctor.id === id);
+    const doctorAlreadySelected = this.selectedDoctors.findIndex(doctor => doctor.id === id);
+
+    doctorFromList.isSelected = true;
+
+    if (doctorAlreadySelected === -1) {
+      this.selectedDoctors.push(doctorFromList);
+    }
+  }
+
+  Cancel() {
+    // if selectedDoctors array has values then ask the user for confirmation
+    if (this.selectedDoctors.length > 0) {
+      this.cancelModal = this.modalService.open(this.cancelSelectionTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigatePrevious();
+    }
+  }
+
+  DisplayDoctorsWithinSearchRadius(searchRadius: number) {
+    this.filteredDoctorList = this.allDoctors.filter(doctor => doctor.distance <= searchRadius);
+    this.UpdateAvailableDoctorList();
+  }
+
+  get doctorDistance() {
+    return this.doctorForm.controls.doctorDistance;
+  }
+
+  get pageSizeField() {
+    return this.doctorForm.controls.pageSize;
+  }
+
+  OnCancelModalAction(action: boolean) {
+
+    this.cancelModal.close();
+
+    if (action) {
+      this.routerService.navigatePrevious();
+    }
+  }
+
+  OnChanges(): void {
+    this.doctorDistance.valueChanges.subscribe(val => {
+      this.DisplayDoctorsWithinSearchRadius(val);
+    });
+
+    this.pageSizeField.valueChanges.subscribe(val => {
+      this.pageSize = val;
+      this.UpdateAvailableDoctorList();
+    });
+  }
+
+  OnSort(event: any) {
+    if (event.direction === 'desc') {
+      this.allDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? -1 : 1);
+    } else {
+      this.allDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? 1 : -1);
+    }
+    this.UpdateAvailableDoctorList();
+  }
+
+  PageChanged(page) {
+    this.page = page;
+    this.UpdateAvailableDoctorList();
+  }
+
+  RemoveSelectedDoctor(id: number) {
+    this.selectedDoctors = this.selectedDoctors.filter(doctor => doctor.id !== id);
+  }
+
+  SearchDoctors() {
+    this.routerService.navigate([`assessment/${this.assessmentId}/add-doctor`]);
+  }
+
+  ToggleSelection(id: number, event) {
+    if (event.target.checked === true) {
+      this.AddSelectedDoctor(id);
+    } else {
+      this.RemoveSelectedDoctor(id);
+    }
+  }
+
+  UpdateAssessment() {
+    // ToDo: use service to update the assessment with the selected doctors
+    console.log('Save details ...');
+    console.log(this.selectedDoctors);
+  }
+
+  UpdateAvailableDoctorList() {
+    this.availableDoctors = this.filteredDoctorList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }
 }

@@ -1,5 +1,6 @@
 import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { CommonModule } from '@angular/common';
+import { CustomPipe } from 'src/app/pipes/custom-pipe.module';
 import { DelaySpinnerComponent } from '../components/delay-spinner/delay-spinner.component';
 import { DisableControlDirective } from '../directives/disable-control/disable-control.directive';
 import { FocusOnShowDirective } from '../directives/focus-on-show/focus-on-show.directive';
@@ -30,6 +31,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
   ],
   imports: [
     CommonModule,
+    CustomPipe,
     FormsModule,
     NgMultiSelectDropDownModule,
     NgbModule,
@@ -38,6 +40,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
   ],
   exports: [
     CommonModule,
+    CustomPipe,
     DelaySpinnerComponent,
     DisableControlDirective,
     FocusOnShowDirective,

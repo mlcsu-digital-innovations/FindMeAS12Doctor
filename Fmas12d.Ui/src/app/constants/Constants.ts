@@ -4,3 +4,6 @@ export const UNKNOWN_CCG = 'Unknown CCG';
 export const UNKNOWN_GP_PRACTICE = 'Unknown GP Practice';
 export const UNKNOWN_POSTCODE = 'Unknown Postcode';
 export const UNKNOWN = 'Unknown';
+
+export const SHORT_DATE_TIME = 'MMM Do YYYY, HH:mm';
+export const TIME_ONLY = 'HH:mm';
