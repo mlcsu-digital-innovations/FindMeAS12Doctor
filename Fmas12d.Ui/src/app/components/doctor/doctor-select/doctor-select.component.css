@@ -167,3 +167,10 @@ th {
   bottom: 0;
   margin-top: -10px;
 }
+
+.assessment-tooltip {
+  border: 1px solid #fff;
+  border-radius: 3px;
+  margin:2px;
+  padding: 2px;
+}

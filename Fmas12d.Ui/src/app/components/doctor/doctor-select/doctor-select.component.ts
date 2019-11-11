@@ -1,17 +1,16 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Assessment } from 'src/app/interfaces/assessment';
-import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { AssessmentAvailability } from 'src/app/interfaces/assessment-availability';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
+import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { map } from 'rxjs/operators';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
-import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 
 @Component({
   selector: 'app-doctor-select',
@@ -20,7 +19,6 @@ import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 })
 export class DoctorSelectComponent implements OnInit {
 
-
   allDoctors: AvailableDoctor[];
   assessment$: Observable<Assessment | any>;
   assessmentId: number;
@@ -28,6 +26,7 @@ export class DoctorSelectComponent implements OnInit {
   cancelModal: NgbModalRef;
   collectionSize: number;
   doctorForm: FormGroup;
+  filteredDoctorList: AvailableDoctor[];
   hasDoctorSearchFailed: boolean;
   isAvailableDoctorSearching: boolean;
   isDoctorFieldsShown: boolean;
@@ -36,9 +35,8 @@ export class DoctorSelectComponent implements OnInit {
   pageSize = 10;
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
-  unknownDoctorId: number;
 
-  @ViewChild('cancelAssessment', null) cancelAssessmentTemplate;
+  @ViewChild('cancelSelection', null) cancelSelectionTemplate;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -46,16 +44,13 @@ export class DoctorSelectComponent implements OnInit {
     private modalService: NgbModal,
     private route: ActivatedRoute,
     private routerService: RouterService,
-    private toastService: ToastService,
-    private userAvailabilityService: UserAvailabilityService
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
-    this.unknownDoctorId = 0;
-
     this.doctorForm = this.formBuilder.group({
       searchDoctor: [],
-      doctorDistance: [],
+      doctorDistance: [5],
       pageSize: [10]
     });
 
@@ -65,9 +60,10 @@ export class DoctorSelectComponent implements OnInit {
           return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
             .pipe(
               map((assessment: AssessmentAvailability) => {
-                console.log(assessment);
                 this.assessmentId = assessment.id;
                 this.allDoctors = assessment.availableDoctors;
+                console.log(assessment);
+                this.DisplayDoctorsWithinSearchRadius(this.doctorDistance.value);
                 return assessment;
               })
             );
@@ -92,7 +88,7 @@ export class DoctorSelectComponent implements OnInit {
     const doctorFromList = this.allDoctors.find(doctor => doctor.id === id);
     const doctorAlreadySelected = this.selectedDoctors.findIndex(doctor => doctor.id === id);
 
-    doctorFromList.selected = true;
+    doctorFromList.isSelected = true;
 
     if (doctorAlreadySelected === -1) {
       this.selectedDoctors.push(doctorFromList);
@@ -102,7 +98,7 @@ export class DoctorSelectComponent implements OnInit {
   Cancel() {
     // if selectedDoctors array has values then ask the user for confirmation
     if (this.selectedDoctors.length > 0) {
-      this.cancelModal = this.modalService.open(this.cancelAssessmentTemplate, {
+      this.cancelModal = this.modalService.open(this.cancelSelectionTemplate, {
         size: 'lg'
       });
     } else {
@@ -110,23 +106,9 @@ export class DoctorSelectComponent implements OnInit {
     }
   }
 
-  FetchAvailableDoctors(maxDistance: number) {
-    this.isAvailableDoctorSearching = true;
-    this.userAvailabilityService.getAvailableDoctors(maxDistance)
-    .subscribe(x => {
-      this.isAvailableDoctorSearching = false;
-      this.allDoctors = x;
-      this.collectionSize = this.allDoctors.length;
-      this.allDoctors.sort((a, b) => (a.distanceFromAssessment > b.distanceFromAssessment) ? 1 : -1);
-      this.UpdateAvailableDoctorList();
-    }
-    , (err) => {
-      this.isAvailableDoctorSearching = false;
-      this.toastService.displayError({
-        title: 'Search Error',
-        message: 'Error Retrieving Available Doctors'
-      });
-    });
+  DisplayDoctorsWithinSearchRadius(searchRadius: number) {
+    this.filteredDoctorList = this.allDoctors.filter(doctor => doctor.distance <= searchRadius);
+    this.UpdateAvailableDoctorList();
   }
 
   get doctorDistance() {
@@ -148,7 +130,7 @@ export class DoctorSelectComponent implements OnInit {
 
   OnChanges(): void {
     this.doctorDistance.valueChanges.subscribe(val => {
-      this.FetchAvailableDoctors(val);
+      this.DisplayDoctorsWithinSearchRadius(val);
     });
 
     this.pageSizeField.valueChanges.subscribe(val => {
@@ -190,9 +172,10 @@ export class DoctorSelectComponent implements OnInit {
   UpdateAssessment() {
     // ToDo: use service to update the assessment with the selected doctors
     console.log('Save details ...');
+    console.log(this.selectedDoctors);
   }
 
   UpdateAvailableDoctorList() {
-    this.availableDoctors = this.allDoctors.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+    this.availableDoctors = this.filteredDoctorList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 }
