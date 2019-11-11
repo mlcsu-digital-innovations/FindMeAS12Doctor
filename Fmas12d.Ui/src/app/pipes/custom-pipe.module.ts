@@ -1,16 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { DateTimeFormatPipe } from 'src/app/pipes/dateTimeFormat-pipe';
 import { NgModule } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { TimeOnlyFormatPipe } from './timeOnlyFormat-pipe';
 
 @NgModule({
   declarations: [
-    DateTimeFormatPipe
+    DateTimeFormatPipe,
+    TimeOnlyFormatPipe
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    DateTimeFormatPipe
+    DateTimeFormatPipe,
+    TimeOnlyFormatPipe
   ]
 })
 

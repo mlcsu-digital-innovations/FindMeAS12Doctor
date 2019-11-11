@@ -6,3 +6,4 @@ export const UNKNOWN_POSTCODE = 'Unknown Postcode';
 export const UNKNOWN = 'Unknown';
 
 export const SHORT_DATE_TIME = 'MMM Do YYYY, HH:mm';
+export const TIME_ONLY = 'HH:mm';
