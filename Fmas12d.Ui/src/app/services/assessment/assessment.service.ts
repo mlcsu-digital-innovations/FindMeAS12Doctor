@@ -3,6 +3,7 @@ import { Assessment } from 'src/app/interfaces/assessment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { AssessmentAvailability } from 'src/app/interfaces/assessment-availability';
 
 @Injectable({
   providedIn: 'root'
@@ -29,10 +30,10 @@ export class AssessmentService {
     );
   }
 
-  public getAssessment(assessmentId: number) {
+  public getAvailableDoctors(assessmentId: number) {
 
     return this.httpClient.get(
-      `${environment.apiEndpoint}/assessment/view/${assessmentId}`
+      `${environment.apiEndpoint}/assessment/${assessmentId}/availabledoctors`
     ).pipe(
       map(response => response)
     );

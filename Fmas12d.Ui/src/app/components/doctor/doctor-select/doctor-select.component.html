@@ -24,7 +24,7 @@
                 Assessment To be Completed By:
               </div>
               <div class="col-md-4">
-                {{assessment.dateTime | date:'medium'}}
+                {{assessment.dateTime | dateTimeFormat}}
               </div>
               <div class="col-md-2 label">
                 Assessment Postcode:
@@ -54,8 +54,7 @@
                 Lead AMHP:
               </div>
               <div class="col-md-4">
-                <!-- ToDo: update the API to get the AMHP name -->
-                Martin Price
+                {{assessment.leadAmhpName}}
               </div>
               <div class="col-md-2 label">
                 Preferred Doctor Gender:
@@ -64,6 +63,15 @@
                 {{assessment.preferredDoctorGenderTypeName === null ? 'N/A' : assessment.preferredDoctorGenderTypeName}}
               </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-3 label">
+                  AMHP:
+                </div>
+                <div class="col-md-4">
+                  {{assessment.amhpName}}
+                </div>
+              </div>
 
             <div class="row">
               <div class="col-md-3 label">
@@ -162,32 +170,41 @@
                 <tbody>
                   <tr *ngFor="let availableDoctor of availableDoctors">
                     <td>
-                      {{availableDoctor.doctorName}}
+                      {{availableDoctor.name}}
                     </td>
                     <td>
-                      {{availableDoctor.doctorGender}}
+                      {{availableDoctor.genderName}}
                     </td>
                     <td>
-                      {{availableDoctor.doctorType}}
+                      {{availableDoctor.type}}
                     </td>
                     <td>
-                      {{availableDoctor.doctorSpeciality}}
+                      <span *ngFor="let speciality of availableDoctor.specialityNames">
+                        {{speciality}},
+                      </span>
                     </td>
+
+                    <ng-template #tipContent>
+                      <div class="assessment-tooltip" *ngFor="let assessment of availableDoctor.activeAssessments">
+                        {{assessment.postcode}} @ {{assessment.dateTime | dateTimeFormat}}
+                      </div>
+                    </ng-template>
+
                     <td class="text-center sm-col">
                       <i
                         class="fas fa-calendar-check scheduled"
-                        *ngIf="availableDoctor.otherAssessmentDetails"
-                        ngbTooltip={{availableDoctor.otherAssessmentDetails}}
+                        *ngIf="availableDoctor.activeAssessments.length > 0"
+                        [ngbTooltip]="tipContent"
                         placement="right"
                         tooltipClass="subtle-tooltip"
                         [closeDelay]="500" [openDelay]="500"
                         ></i>
                     </td>
                     <td class="text-center">
-                      {{availableDoctor.availabilityDetails}}
+                      {{availableDoctor.start | timeOnlyFormat}} - {{availableDoctor.end | timeOnlyFormat}}
                     </td>
                     <td class="text-center sm-col">
-                      {{availableDoctor.distanceFromAssessment}}
+                      {{availableDoctor.distance}}
                     </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
 
@@ -195,7 +212,7 @@
                         <input
                           class=""
                           type="checkbox"
-                          checked={{availableDoctor.selected}}
+                          checked={{availableDoctor.isSelected}}
                           (change)="ToggleSelection(availableDoctor.id, $event)"
                         />
                         <span class="checkmark"></span>
@@ -249,7 +266,7 @@
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
 
-<ng-template #cancelAssessment>
+<ng-template #cancelSelection>
     <app-cancel-action-modal
       [modalTitle]="'Cancel Doctor Selection'"
       [modalBody]="'Do you wish to cancel this doctor selection? All changes will be lost.'"

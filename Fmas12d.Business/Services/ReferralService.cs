@@ -42,6 +42,25 @@ namespace Fmas12d.Business.Services
       return createdModel;
     }
 
+    public async Task<bool> Exists(int id, bool activeOnly = true)
+    {
+      return await _context.Referrals
+                           .Where(r => r.Id == id)
+                           .WhereIsActiveOrActiveOnly(activeOnly)
+                           .AnyAsync();
+    }
+
+    public async Task<Referral> GetAsync(int id, bool activeOnly = true, bool asNoTracking = true)
+    {
+      Referral referral = await _context.Referrals
+                                        .Where(r => r.Id == id)
+                                        .WhereIsActiveOrActiveOnly(activeOnly)
+                                        .AsNoTracking(asNoTracking)
+                                        .Select(Models.Referral.ProjectFromEntity)
+                                        .SingleOrDefaultAsync();
+      return referral;
+    }
+
     public async Task<int?> GetCcgIdFromReferralPatient(int id)
     {
       int? ccgId = await _context.Referrals

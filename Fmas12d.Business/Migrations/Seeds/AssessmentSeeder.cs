@@ -1,18 +1,24 @@
+using Fmas12d.Business.Models.SearchModels;
+using Fmas12d.Business.Services;
 using Fmas12d.Data.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class AssessmentSeeder : SeederBase<Assessment>
   {
+    public AssessmentSeeder() { }
+
     internal Assessment Create(
       string address1,
       string amhpUserName,
       string ccgName,
       string createdByUserName,
-      string postcode,      
+      string postcode,
       string address2 = null,
       string address3 = null,
       string address4 = null,
@@ -32,6 +38,9 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<UserAssessmentNotification> userAssessmentNotifications = null
     )
     {
+
+      Models.Postcode postcodeModel = GetPostcodeDetails(postcode);
+
       Assessment assessment = new Assessment
       {
         Address1 = address1,
@@ -51,6 +60,8 @@ namespace Fmas12d.Business.Migrations.Seeds
         Details = details,
         Doctors = doctors,
         IsSuccessful = isSuccessful == null ? null : isSuccessful,
+        Latitude = postcodeModel.Latitude,
+        Longitude = postcodeModel.Longitude,
         MeetingArrangementComment = meetingArrangementComment,
         MustBeCompletedBy = mustBeCompletedBy == null ? null : mustBeCompletedBy,
         NonPaymentLocationId =
@@ -77,11 +88,24 @@ namespace Fmas12d.Business.Migrations.Seeds
     {
       Context.AssessmentDetails.RemoveRange(
         Context.AssessmentDetails.ToList()
-      );      
+      );
       Context.AssessmentDoctors.RemoveRange(
         Context.AssessmentDoctors.ToList()
-      );      
+      );
       base.DeleteSeeds();
     }
+
+    private Models.Postcode GetPostcodeDetails(string stringPostcode)
+    {
+      using HttpClient client = new HttpClient();
+      string uri = $"https://api.postcodes.io/postcodes/{stringPostcode}";
+
+      using HttpResponseMessage response = client.GetAsync(uri).Result;
+      string content = response.Content.ReadAsStringAsync().Result;
+      PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
+
+      Models.Postcode modelPostcode = new Models.Postcode(convertedResult);
+      return modelPostcode;
+    }    
   }
 }

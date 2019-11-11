@@ -26,7 +26,7 @@ namespace Fmas12d.Api.ViewModels
           AssessmentLocationPostcode = referral.AssessmentLocationPostcode,
           CurrentAssessmentId = referral?.CurrentAssessment?.Id,
           DoctorsAllocated = referral.DoctorsAllocated,
-          LeadAmhp = referral.LeadAmhp,
+          LeadAmhp = referral.LeadAmhpName,
           NumberOfAssessmentAttempts = referral.NumberOfAssessmentAttempts,
           PatientId = referral.PatientId,
           PatientIdentifier = referral.PatientIdentifier,
