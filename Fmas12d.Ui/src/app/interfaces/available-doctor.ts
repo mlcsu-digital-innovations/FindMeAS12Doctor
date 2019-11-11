@@ -4,8 +4,9 @@ export interface AvailableDoctor {
   activeAssessments: ActiveAssessment[];
   distance: number;
   genderName: string;
+  id: number;
+  isSelected: boolean;
   name: string;
-  selected: boolean;
   specialityNames: string[];
   type: string;
 }
