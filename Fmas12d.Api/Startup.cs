@@ -7,6 +7,7 @@ using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace Fmas12d.Api
   {
     private const string ENV_AZURE_DEVELOPMENT = "AzureDevelopment";
     private const string ENV_DEVELOPMENT = "Development";
+    private const string ENV_DISABLEAUTHENTICATION = "DisableAuthentication";
     private const string ENV_POSTMAN = "Postman";
 
     public Startup(IConfiguration configuration)
@@ -36,11 +38,17 @@ namespace Fmas12d.Api
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      bool IsDevelopment =
-        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_AZURE_DEVELOPMENT ||
-        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_DEVELOPMENT ||
-        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_POSTMAN;
+      string aspNetCoreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+      bool IsDevelopment =
+        aspNetCoreEnvironment == ENV_AZURE_DEVELOPMENT ||
+        aspNetCoreEnvironment == ENV_DEVELOPMENT ||
+        aspNetCoreEnvironment == ENV_DISABLEAUTHENTICATION ||
+        aspNetCoreEnvironment == ENV_POSTMAN;
+
+      if (aspNetCoreEnvironment == ENV_DISABLEAUTHENTICATION) {
+        services.AddSingleton<IPolicyEvaluator, DisableAuthenticationPolicyEvaluator>();
+      }
 
       services.AddAuthentication(options =>
       {
