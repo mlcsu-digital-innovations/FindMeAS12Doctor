@@ -7,7 +7,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 
@@ -34,8 +33,7 @@ export class DoctorAllocateComponent implements OnInit {
     private modalService: NgbModal,
     private route: ActivatedRoute,
     private routerService: RouterService,
-    private toastService: ToastService,
-    private userAvailabilityService: UserAvailabilityService
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -48,7 +46,7 @@ export class DoctorAllocateComponent implements OnInit {
     this.assessment$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.assessmentService.getAssessment(+params.get('assessmentId'))
+          return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
             .pipe(
               map((assessment: Assessment) => {
                 this.assessmentId = assessment.id;
