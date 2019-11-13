@@ -1,5 +1,6 @@
 export interface UnregisteredUser {
   address: string;
+  contact: string;
   displayName: string;
   gender: string;
   genderId: number;
@@ -9,6 +10,5 @@ export interface UnregisteredUser {
   numberOfAssessments: number;
   organisation: string;
   postcode: string;
-  telephone: string;
   type: string;
 }
