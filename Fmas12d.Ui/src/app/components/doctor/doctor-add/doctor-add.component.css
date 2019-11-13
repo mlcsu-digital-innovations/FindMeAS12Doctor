@@ -1,0 +1,48 @@
+.form-row {
+  margin-top: 10px;
+  align-items: flex-end;
+}
+
+.form-title {
+  font-size: 1.2em;
+  margin-left: 10px;
+  color: #0dadb7;
+  font-weight: 600;
+}
+
+form {
+  margin:20px;
+}
+
+.input-div {
+  border: 1px solid #ced4da;
+  background: #ddd;
+  border-radius: 0.25rem;
+  min-height: calc(1.5em + .75rem + 2px);
+  padding: 6px 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  font-size: 1.2em;
+  color: #495057;
+}
+
+.flex-top {
+  align-items: flex-start;
+}
+
+.btn-div {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.form-row hr {
+  border-width:5px;
+  border-top: 2px solid #0dadb7;
+  width: 90%;
+}
+
+.form-style {
+  border: 1px solid #18a0aa;
+  border-radius: .25rem;
+  padding: 10px;
+}
