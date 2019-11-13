@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth/auth.service';
 import { BroadcastService } from '@azure/msal-angular';
 import { Component } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
@@ -14,6 +15,7 @@ import { StorageService } from './services/storage/storage.service';
 })
 export class AppComponent {
   constructor(
+    private authService: AuthService,
     private broadcastService: BroadcastService,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
@@ -53,5 +55,9 @@ export class AppComponent {
         console.log(payload);
       });  
     });
+  }
+
+  public logOff(): void {
+    this.authService.signOut();    
   }
 }

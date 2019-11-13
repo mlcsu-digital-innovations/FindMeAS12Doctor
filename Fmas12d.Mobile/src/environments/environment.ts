@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://localhost:5001/api',
-  redirectUri: 'http://localhost:4200/login'
+  redirectUri: 'http://localhost:4200/login',
+  postLogoutRedirectUrl: 'http://localhost:4200/login'
 };
 
 export const ProtectedResourceMap: [string, string[]][] = 

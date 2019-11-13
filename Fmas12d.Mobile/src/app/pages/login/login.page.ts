@@ -19,8 +19,5 @@ export class LoginPage implements OnInit {
   public login(): void {
     this.authService.signIn();
   }  
-
-  public logoff(): void {
-    this.authService.signOut();    
-  }
+  
 }
