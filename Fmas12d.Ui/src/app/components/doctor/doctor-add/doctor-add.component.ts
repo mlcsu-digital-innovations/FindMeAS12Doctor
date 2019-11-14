@@ -30,14 +30,18 @@ export class DoctorAddComponent implements OnInit {
   hasRegisteredDoctorDetails: boolean;
   hasUnregisteredUser: boolean;
   isRegisteredDoctorSearching: boolean;
+  isRegisteredDoctorValidated: boolean;
   isPostcodeSearching: boolean;
   isUnregisteredSearchComplete: boolean;
+  multipleUsersModal: NgbModalRef;
   registeredDoctorDetails: UserDetails;
   registeredDoctorForm: FormGroup;
   unregisteredDoctorForm: FormGroup;
   unregisteredUser: UnregisteredUser;
+  unregisteredUsers: UnregisteredUser[];
 
   @ViewChild('cancelAllocation', null) cancelAllocationTemplate;
+  @ViewChild('unregisteredUserResults', { static: true }) unregisteredUserResults;
 
   constructor(
     private doctorListService: DoctorListService,
@@ -154,6 +158,7 @@ export class DoctorAddComponent implements OnInit {
     this.unregisteredGenderField.disable();
     this.unregisteredOrganisationField.disable();
     this.unregisteredPostcodeField.disable();
+    this.unregisteredSection12Field.disable();
   }
 
   DisableIfParentIsDisabled(fieldName: string): boolean {
@@ -196,6 +201,10 @@ export class DoctorAddComponent implements OnInit {
     return this.unregisteredDoctorForm.controls.postcode;
   }
 
+  get unregisteredSection12Field() {
+    return this.unregisteredDoctorForm.controls.isSection12;
+  }
+
   get unregisteredUserField() {
     return this.unregisteredDoctorForm.controls.unregisteredName;
   }
@@ -231,6 +240,18 @@ export class DoctorAddComponent implements OnInit {
     }
   }
 
+  OnCancelUnregisteredUser() {
+    this.multipleUsersModal.close();
+  }
+
+  OnSelectUnregisteredUser(user: UnregisteredUser) {
+    this.unregisteredUser = user;
+    this.hasUnregisteredUser = true;
+    this.DisableFieldsForUnregisteredUser();
+    this.SetFieldValues();
+    this.multipleUsersModal.close();
+  }
+
   RegisteredDoctorSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -259,6 +280,8 @@ export class DoctorAddComponent implements OnInit {
     this.unregisteredOrganisationField.setValue('');
     this.unregisteredPostcodeField.enable();
     this.unregisteredPostcodeField.setValue('');
+    this.unregisteredSection12Field.enable();
+    this.unregisteredSection12Field.setValue(false);
   }
 
   SearchUnregisteredDoctor() {
@@ -266,30 +289,38 @@ export class DoctorAddComponent implements OnInit {
     this.ResetAllFields();
 
     this.unregisteredUserService.SearchUnregisteredUsers(this.unregisteredUserField.value, +this.unregisteredGmcNumberField.value)
-    .subscribe((unregisteredUser: UnregisteredUser) => {
+    .subscribe((unregisteredUsers: UnregisteredUser[]) => {
       this.isUnregisteredSearchComplete = true;
-      if (unregisteredUser == null) {
-        this.toastService.displayInfo({
-          title: 'Information',
-          message: 'No existing unregistered users found'
-        });
-        this.hasUnregisteredUser = false;
-        this.unregisteredUser = {} as UnregisteredUser;
-      } else {
-          this.unregisteredUser = unregisteredUser;
+
+      switch (unregisteredUsers.length) {
+        case 0:
+          this.toastService.displayInfo({
+            title: 'Information',
+            message: 'No existing unregistered users found'
+          });
+          this.hasUnregisteredUser = false;
+          this.unregisteredUser = {} as UnregisteredUser;
+          break;
+        case 1:
+          this.unregisteredUser = unregisteredUsers[0];
           this.hasUnregisteredUser = true;
-          console.log(this.unregisteredUser);
 
           this.DisableFieldsForUnregisteredUser();
-
-          this.unregisteredGenderField.setValue(unregisteredUser.genderId);
-          this.unregisteredPostcodeField.setValue(unregisteredUser.postcode);
-          this.unregisteredDoctorField.setValue(unregisteredUser.displayName);
+          this.SetFieldValues();
 
           this.toastService.displayInfo({
             title: 'Information',
             message: 'An existing unregistered user has been found'
           });
+          break;
+        default:
+          this.unregisteredUsers = unregisteredUsers;
+          this.multipleUsersModal = this.modalService.open(
+            this.unregisteredUserResults,
+            { size: 'lg' }
+          );
+          this.hasUnregisteredUser = false;
+          this.unregisteredUser = {} as UnregisteredUser;
       }
     },
       (err) => {
@@ -306,11 +337,20 @@ export class DoctorAddComponent implements OnInit {
     this.renderer.selectRootElement(fieldName).focus();
   }
 
+  SetFieldValues() {
+
+    this.unregisteredDoctorField.setValue(this.unregisteredUser.displayName);
+    this.unregisteredGmcNumberField.setValue(this.unregisteredUser.gmcNumber);
+
+    this.unregisteredGenderField.setValue(this.unregisteredUser.genderId);
+    this.unregisteredPostcodeField.setValue(this.unregisteredUser.postcode);
+    this.unregisteredDoctorField.setValue(this.unregisteredUser.displayName);
+  }
+
   ValidateRegisteredDoctor() {
     this.userDetailsService.GetUserDetails(this.registeredDoctorField.value.id)
     .subscribe(userDetails => {
       this.registeredDoctorDetails = userDetails;
-      console.log(this.registeredDoctorDetails);
       this.hasRegisteredDoctorDetails = true;
     },
       (err) => {

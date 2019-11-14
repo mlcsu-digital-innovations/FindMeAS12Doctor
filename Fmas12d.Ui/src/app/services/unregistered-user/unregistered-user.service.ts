@@ -12,7 +12,7 @@ import { UnregisteredUser } from 'src/app/interfaces/unregistered-user';
 export class UnregisteredUserService {
   constructor(private httpClient: HttpClient) {}
 
-  public SearchUnregisteredUsers(userName?: string, gmcNumber?: number): Observable<UnregisteredUser | any> {
+  public SearchUnregisteredUsers(userName?: string, gmcNumber?: number): Observable<UnregisteredUser[] | any> {
 
     console.log('searching - ' + userName);
     console.log('searching - ' + gmcNumber);
@@ -28,34 +28,36 @@ export class UnregisteredUserService {
       isSection12: true,
       numberOfAssessments: 1,
       postcode: 'NG5 1PB',
-      contact: '0121 234 5678',
-      type: 'doctor'
+      contact: '0191 435 8765',
+      type: 'Consultant'
     };
 
     const dummyUser2: UnregisteredUser = {
-      address: 'Hucknall Road, Nottingham',
+      address: 'Martin Road, Nottingham',
       displayName: 'Fred',
-      organisation: 'Nottingham University Hospitals NHS Trust',
-      gender: 'Male',
-      genderId: 2,
+      organisation: 'Other Hospital NHS Trust',
+      gender: 'Female',
+      genderId: 1,
       gmcNumber: 7654321,
       id: 1,
       isSection12: true,
       numberOfAssessments: 1,
-      postcode: 'NG5 1PB',
+      postcode: 'NG9 1DR',
       contact: '0121 234 5678',
-      type: 'doctor'
+      type: 'Consultant'
     };
 
     const users: UnregisteredUser[] = [];
     users.push(dummyUser1, dummyUser2);
 
-    const userList = from(users);
+    const userList = users.filter(user => (user.displayName.toLowerCase() === userName.toLowerCase() || user.gmcNumber === gmcNumber));
 
-    return userList
-    .pipe(delay(2000))
-    .pipe(filter(user => (user.displayName.toLowerCase() === userName.toLowerCase() || user.gmcNumber === gmcNumber)))
-    .pipe(take(1))
-    .pipe(defaultIfEmpty(null));
+    return of(userList);
+
+    // return userList
+    // .pipe(delay(2000))
+    // .pipe(filter(user => (user.displayName.toLowerCase() === userName.toLowerCase() || user.gmcNumber === gmcNumber)))
+    // // .pipe(take(1))
+    // .pipe(defaultIfEmpty(null));
   }
 }

@@ -109,6 +109,7 @@
                 <button
                   type="button"
                   class="btn btn-primary btn-standard"
+                  [disabled]="!hasRegisteredDoctorDetails"
                   (click)="AllocateRegisteredDoctor()"
                 >
                   <i class="far fa-check-circle"></i>
@@ -144,7 +145,6 @@
                     class="form-control"
                     id="unregisteredName"
                     #unregisteredName
-                    [class.is-invalid]="hasDoctorSearchFailed"
                     formControlName="unregisteredName"
                   />
                 </div>
@@ -270,7 +270,7 @@
                       [closeDelay]="500"
                       tooltipClass="subtle-tooltip"
                       (click)="AddressSearch()"
-                      [disabled]="postcode.value == '' || postcode.errors != null"
+                      [disabled]="postcode.value == '' || postcode.errors != null || hasUnregisteredUser"
                     >
                     <i class="fas fa-search-location"></i>
                     {{ isPostcodeSearching ? "Searching" : "Find" }}
@@ -361,13 +361,23 @@
 </ng-template>
 
 <ng-template #cancelAllocation>
-    <app-cancel-action-modal
-      [modalTitle]="'Cancel Doctor Allocation'"
-      [modalBody]="'Do you wish to cancel this doctor allocation? All changes will be lost.'"
-      (actioned)="OnCancelModalAction($event)"
-    >
-    </app-cancel-action-modal>
-  </ng-template>
+  <app-cancel-action-modal
+    [modalTitle]="'Cancel Doctor Allocation'"
+    [modalBody]="'Do you wish to cancel this doctor allocation? All changes will be lost.'"
+    (actioned)="OnCancelModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<!-- multiple unregistered users -->
+<ng-template #unregisteredUserResults >
+  <app-unregistered-users-modal
+    [unregisteredUsers]="unregisteredUsers"
+    (selected)="OnSelectUnregisteredUser($event)"
+    (cancelled)="OnCancelUnregisteredUser()"
+  >
+  </app-unregistered-users-modal>
+</ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
