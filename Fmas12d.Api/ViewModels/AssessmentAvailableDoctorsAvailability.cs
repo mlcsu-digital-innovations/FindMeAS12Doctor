@@ -16,7 +16,7 @@ namespace Fmas12d.Api.ViewModels
       Distance = model.Distance;
       End = model.End;
       GenderName = model.GenderName;
-      Id = model.Id;
+      Id = model.UserId;
       Name = model.Name;
       SpecialityNames = model.SpecialityNames;
       Start = model.Start;

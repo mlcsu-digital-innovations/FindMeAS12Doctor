@@ -86,20 +86,62 @@ namespace Fmas12d.Business.Services
 
     private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
     {
-      Models.Postcode postcodeModel = await 
+      Models.Postcode postcodeModel = await
         _locationDetailService.GetPostcodeDetailsAsync(postcode);
 
       if (postcodeModel == null)
       {
-        throw new ModelStateException("postcode", 
+        throw new ModelStateException("postcode",
           $"Unable to find a match for postcode {postcode}");
       }
-      
+
       entity.Latitude = postcodeModel.Latitude;
       entity.Longitude = postcodeModel.Longitude;
 
       return true;
-    }    
+    }
+
+    public async Task<IAssessmentDoctorsUpdate> AddSelectedDoctors(
+      IAssessmentDoctorsUpdate updateModel)
+    {
+      Models.Assessment model =
+        await GetAvailableDoctorsAsync(updateModel.Id, false, true);
+
+      if (model == null)
+      {
+        throw new ModelStateException("Id",
+          $"An active Assessment with an id of {updateModel.Id} was not found.");
+      }
+      CheckAssessmentHasReferralStatusToAddSelectedDoctors(model);
+      CheckSelectedDoctorsAreAvailable(model, updateModel.UserIds);
+      CheckSelectedDoctorsAreNotAlreadySelected(model, updateModel.UserIds);
+
+      // because the assessment entity has already been loaded from the call to 
+      // GetAvailableDoctorsAsync we can use find here to obtain it directly from the context
+      Entities.Assessment entity = await _context.Assessments.FindAsync(updateModel.Id);
+      UpdateModified(entity);
+
+      foreach (int userId in updateModel.UserIds)
+      {
+        Entities.AssessmentDoctor assessmentDoctor = new Entities.AssessmentDoctor()
+        {
+          DoctorUserId = userId,
+          IsActive = true,
+          StatusId = Models.AssessmentDoctorStatus.SELECTED,          
+        };
+        UpdateModified(assessmentDoctor);
+        entity.Doctors.Add(assessmentDoctor);
+      }
+
+      await _context.SaveChangesAsync();
+
+      return new AssessmentDoctorsUpdate() { 
+        Id = entity.Id, 
+        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED) 
+                                .Select(d => d.DoctorUserId)
+                                .ToList()
+      };
+    }
 
     private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
     {
@@ -109,7 +151,7 @@ namespace Fmas12d.Business.Services
           $"The Assessment with an id of {entity.Id} cannot be updated because its completion " +
            "has been confirmed.");
       }
-    }    
+    }
 
     private void CheckAssessmentDoesNotAlreadyHaveAnOutcome(Entities.Assessment entity)
     {
@@ -125,6 +167,56 @@ namespace Fmas12d.Business.Services
       }
     }
 
+    private void CheckAssessmentHasReferralStatusToAddSelectedDoctors(Models.Assessment model)
+    {
+      if (
+        model.Referral.ReferralStatusId != Models.ReferralStatus.SELECTING_DOCTORS &&
+        model.Referral.ReferralStatusId != Models.ReferralStatus.AWAITING_RESPONSES &&
+        model.Referral.ReferralStatusId != Models.ReferralStatus.RESPONSES_PARTIAL &&
+        model.Referral.ReferralStatusId != Models.ReferralStatus.RESPONSES_COMPLETE)
+      {
+        throw new ModelStateException("Id",
+          $"The Assessment with an id of {model.Id} does not have one of the " +
+          $"required referral statuses [{Models.ReferralStatus.SELECTING_DOCTORS}," +
+          $"{Models.ReferralStatus.AWAITING_RESPONSES}," +
+          $"{Models.ReferralStatus.RESPONSES_PARTIAL}," +
+          $"{Models.ReferralStatus.RESPONSES_COMPLETE}] " +
+          $"it has a referral status of [{model.Referral.ReferralStatusId}]");
+      }
+    }
+
+    private void CheckSelectedDoctorsAreAvailable(
+      Assessment assessment, IEnumerable<int> userIds)
+    {
+      IEnumerable<int> selectedUserIdsAvailable =
+        assessment.AvailableDoctors.Select(ad => ad.UserId).Intersect(userIds);
+      if (selectedUserIdsAvailable.Count() != userIds.Count())
+      {
+        throw new ModelStateException("UserIds",
+        "Only the following doctors id are available " +
+        $"[{string.Join(",", assessment.AvailableDoctors.Select(ad => ad.UserId))}], " +
+        $"from the requested [{string.Join(",", userIds)}]");
+      }
+    }
+    private void CheckSelectedDoctorsAreNotAlreadySelected(
+      Assessment assessment, IEnumerable<int> userIds)
+    {
+      if (assessment.DoctorsSelected != null)
+      {
+        IEnumerable<int> alreadySelectedIds =
+          assessment.DoctorsSelected.Select(user => user.Id).Intersect(userIds);
+
+        if (alreadySelectedIds.Count() != 0)
+        {
+          throw new ModelStateException("UserIds",
+          "The following doctor user id's are already selected " +
+          $"[{string.Join(",", alreadySelectedIds)}], " +
+          $"from the requested [{string.Join(",", userIds)}]");
+        }
+      }
+    }
+
+
     private async Task<bool> CheckReferralDoesNotAlreadyHaveACurrentAssessment(
       AssessmentCreate model)
     {
@@ -136,17 +228,6 @@ namespace Fmas12d.Business.Services
       }
       return true;
     }
-
-    private async Task<Models.Referral> GetReferral(int referralId)
-    {
-      Models.Referral referral = await _referralService.GetAsync(referralId, true, false);
-      if (referral == null)
-      {
-        throw new ModelStateException("ReferralId",
-        $"Cannot find an active Referral with an id of {referralId}.");
-      }
-      return referral;
-    }    
 
     /// <summary>
     /// Sets the assessment entity's properties from the provided business model
@@ -169,7 +250,7 @@ namespace Fmas12d.Business.Services
       entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
       await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
-      await AddLatitudeAndLongitude(model.Postcode, entity);      
+      await AddLatitudeAndLongitude(model.Postcode, entity);
       _context.Add(entity);
 
       Entities.Referral referral = _context.Referrals.Find(model.ReferralId);
@@ -201,28 +282,35 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.PreferredDoctorGenderType)
                 .Include(e => e.Referral)
-                  .ThenInclude(r => r.LeadAmhpUser)                  
+                  .ThenInclude(r => r.LeadAmhpUser)
                 .Include(e => e.Speciality)
                 .WhereIsActiveOrActiveOnly(activeOnly)
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
-      Models.Assessment model = new Models.Assessment(entity);
-
-      model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
-        model.DateTime, true, true);
-
-      foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
+      if (entity == null)
       {
-        availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
-          entity.Latitude, 
-          entity.Longitude,
-          availabilityDoctor.Latitude.Value,
-          availabilityDoctor.Longitude.Value
-        );
+        return null;
       }
+      else
+      {
+        Models.Assessment model = new Models.Assessment(entity);
 
-      return model;
+        model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
+          model.DateTime, true, true);
+
+        foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
+        {
+          availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+            entity.Latitude,
+            entity.Longitude,
+            availabilityDoctor.Latitude.Value,
+            availabilityDoctor.Longitude.Value
+          );
+        }
+
+        return model;
+      }
     }
 
     public async Task<IEnumerable<Models.Assessment>> GetAllFilterByAmhpUserIdAsync(
@@ -270,7 +358,7 @@ namespace Fmas12d.Business.Services
       Models.Assessment model = new Models.Assessment(entity);
 
       return model;
-    }    
+    }
 
     protected async Task<Entities.Assessment> GetEntityByIdAsync(
        int entityId,
@@ -298,6 +386,17 @@ namespace Fmas12d.Business.Services
                 .SingleOrDefaultAsync(u => u.Id == entityId);
 
       return entity;
+    }
+
+    private async Task<Models.Referral> GetReferral(int referralId)
+    {
+      Models.Referral referral = await _referralService.GetAsync(referralId, true, false);
+      if (referral == null)
+      {
+        throw new ModelStateException("ReferralId",
+        $"Cannot find an active Referral with an id of {referralId}.");
+      }
+      return referral;
     }
 
     private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
@@ -390,6 +489,11 @@ namespace Fmas12d.Business.Services
           Models.ProfileType.AMHP);
       }
       return true;
+    }
+
+    public Task<IAssessmentDoctorsUpdate> UpdateAllocatedDoctors(IAssessmentDoctorsUpdate model)
+    {
+      throw new NotImplementedException();
     }
 
     public async Task<AssessmentUpdate> UpdateAsync(AssessmentUpdate model)
@@ -523,5 +627,6 @@ namespace Fmas12d.Business.Services
         return model;
       }
     }
+
   }
 }

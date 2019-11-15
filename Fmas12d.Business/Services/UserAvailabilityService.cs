@@ -65,12 +65,12 @@ namespace Fmas12d.Business.Services
                 GenderName = entity.User.GenderType.Name,
                 Latitude = entity.Latitude,
                 Longitude = entity.Longitude,
-                Name = entity.User.DisplayName,
-                Id = entity.User.Id,
+                Name = entity.User.DisplayName,                
                 SpecialityNames = 
                   entity.User.UserSpecialities.Select(s => s.Speciality.Name).ToList(),
                 Start = entity.Start,
                 Type = entity.User.ProfileType.Name,
+                UserId = entity.User.Id,
               })
               .ToListAsync();
 
