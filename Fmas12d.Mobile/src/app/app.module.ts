@@ -30,6 +30,7 @@ import { environment, ProtectedResourceMap } from 'src/environments/environment'
       authority: OAuthSettings.authority,
       cacheLocation: "localStorage",
       consentScopes: OAuthSettings.consentScopes,
+      postLogoutRedirectUri: environment.postLogoutRedirectUrl,
       protectedResourceMap: ProtectedResourceMap,
       redirectUri: environment.redirectUri     
     })

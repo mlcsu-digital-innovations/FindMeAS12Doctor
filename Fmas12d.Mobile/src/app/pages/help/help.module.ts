@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule } from '@angular/forms';
 import { HelpPage } from './help.page';
 import { IonicModule } from '@ionic/angular';
@@ -15,6 +16,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)

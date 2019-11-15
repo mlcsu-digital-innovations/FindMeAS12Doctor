@@ -41,11 +41,7 @@ export class NetworkService {
   }
 
   private async updateNetworkStatus(status: ConnectionStatus) {
-    this.status.next(status); 
-    let connection = status == ConnectionStatus.Offline ? 'Offline' : 'Online';
-    this.toastService.displayMessage({    
-      message: `App is ${connection}`          
-    });  
+    this.status.next(status);   
   }
 
   public onNetworkChange(): Observable<ConnectionStatus> {
