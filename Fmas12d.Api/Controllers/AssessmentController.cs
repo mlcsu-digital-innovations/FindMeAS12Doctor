@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
@@ -21,8 +20,8 @@ namespace Fmas12d.Api.Controllers
     }    
 
     [HttpGet]
-    [Route("{id:int}/availabledoctors")]
-    public async Task<ActionResult<ViewModels.AssessmentAvailableDoctors>> GetAvailableDoctors(
+    [Route("{id:int}/doctors/available")]
+    public async Task<ActionResult<ViewModels.AssessmentAvailableDoctors>> GetDoctorsAvailable(
       int id)
     {
       try
