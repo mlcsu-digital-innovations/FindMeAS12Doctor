@@ -33,7 +33,7 @@ export class AssessmentService {
   public getAvailableDoctors(assessmentId: number) {
 
     return this.httpClient.get(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/availabledoctors`
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/available`
     ).pipe(
       map(response => response)
     );

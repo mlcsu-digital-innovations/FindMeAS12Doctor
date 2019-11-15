@@ -222,6 +222,8 @@ namespace Fmas12d.Business.Services
         );
       }
 
+      foreach (Iuser)
+
       return model;
     }
 

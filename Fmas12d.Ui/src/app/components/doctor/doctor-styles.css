@@ -15,7 +15,14 @@ button.less-padding {
   margin:10px;
 }
 
-.assessment-details span {display: block;}
+.assessment-details span {display: inline-block;}
+
+.assessment-details span.gmcnumber {
+  color: #666;
+  font-size:0.8em;
+  font-weight: 500;
+  padding-left:10px;
+}
 
 .label {
   color: #666;

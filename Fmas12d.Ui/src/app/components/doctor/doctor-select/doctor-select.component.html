@@ -78,15 +78,19 @@
                 Doctors Selected:
               </div>
               <div class="col-md-4">
-                <!-- ToDo: loop through the list of selected doctors and display them -->
-                <span>None</span>
+                <div *ngFor="let selected of assessment.doctorsSelected">
+                  <span>{{selected.displayName}}</span>
+                  <span class="gmcnumber">GMC#{{selected.gmcNumber}}</span>
+                </div>
               </div>
               <div class="col-md-2 label">
                   Doctors Allocated:
                 </div>
                 <div class="col-md-3">
-                  <!-- ToDo: loop through the list of allocated doctors and display them -->
-                  <span>None</span>
+                  <div *ngFor="let allocated of assessment.doctorsAllocated">
+                    <span>{{allocated.displayName}}</span>
+                    <span class="gmcnumber">GMC#{{allocated.gmcNumber}}</span>
+                  </div>
                 </div>
             </div>
           </div>

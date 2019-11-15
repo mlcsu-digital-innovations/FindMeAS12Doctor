@@ -76,7 +76,8 @@
                 </div>
                 <div class="col-md-3">
                   <div *ngFor="let allocated of assessment.doctorsAllocated">
-                    {{allocated.displayName}} [{{allocated.gmcNumber}}]
+                    <span>{{allocated.displayName}}</span>
+                    <span class="gmcnumber">GMC#{{allocated.gmcNumber}}</span>
                   </div>
                 </div>
             </div>
