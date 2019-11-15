@@ -141,22 +141,17 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        if (Doctors == null)
-        {
-          return null;
-        }
-        else
-        {
-          return Doctors
-            .Where(d => d.IsActive)
-            .Where(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED)
-            .Select(u => u.DoctorUser)
-            .ToList();
-        }
+        return GetActiveDoctorsByAssessmentDoctorStatus(AssessmentDoctorStatus.ALLOCATED);
       }
     }
 
-    public string LeadAmhpName { get { return Referral?.LeadAmhpName; } }
+    public IList<User> DoctorsSelected
+    {
+      get
+      {
+        return GetActiveDoctorsByAssessmentDoctorStatus(AssessmentDoctorStatus.SELECTED);
+      }
+    }
 
     public string FullAddress
     {
@@ -168,6 +163,22 @@ namespace Fmas12d.Business.Models
         if (!string.IsNullOrWhiteSpace(Address3)) { fullAddress.Append(", " + Address3); }
         if (!string.IsNullOrWhiteSpace(Address4)) { fullAddress.Append(", " + Address4); }
         return fullAddress.ToString();
+      }
+    }
+
+    private IList<User> GetActiveDoctorsByAssessmentDoctorStatus(int assessmentDoctorStatusId)
+    {
+      if (Doctors == null)
+      {
+        return null;
+      }
+      else
+      {
+        return Doctors
+          .Where(d => d.IsActive)
+          .Where(d => d.StatusId == assessmentDoctorStatusId)
+          .Select(u => u.DoctorUser)
+          .ToList();
       }
     }
 
@@ -186,6 +197,8 @@ namespace Fmas12d.Business.Models
 
     public bool IsPlanned
     { get { return ScheduledTime != null; } }
+
+    public string LeadAmhpName { get { return Referral?.LeadAmhpName; } }
 
     public string PatientIdentifier
     { get { return Referral?.PatientIdentifier; } }
