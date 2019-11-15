@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GpPracticeListService } from '../../../services/gp-practice-list/gp-practice-list.service';
 import { map } from 'rxjs/operators';
-import { NgbModal, NgbModalRef, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from '../../../helpers/nhs-number.validator';
 import { Patient } from '../../../interfaces/patient';
 import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
@@ -90,6 +90,13 @@ export class ReferralRetrospectiveComponent implements OnInit {
 
     this.residentialPostcodeValidationMessage = 'Invalid Postcode';
 
+    const defaultReferralDateTime = new Date();
+    defaultReferralDateTime.setHours(defaultReferralDateTime.getHours() - 1);
+
+    const currentDateStruct = this.ConvertToDateStruct(defaultReferralDateTime);
+    const currentTimeStruct = this.ConvertToTimeStruct(defaultReferralDateTime);
+    currentTimeStruct.minute = 0;
+
     this.patientForm = this.formBuilder.group({
       nhsNumber: [
         '',
@@ -118,12 +125,12 @@ export class ReferralRetrospectiveComponent implements OnInit {
       unknownCcg: false,
       amhp: [''],
       referralDate: [
-        null,
+        currentDateStruct,
         [
           DatePickerFormat
         ]
       ],
-      referralTime: []
+      referralTime: [currentTimeStruct]
     });
 
     this.maxDate = this.ConvertToDateStruct(new Date());
@@ -206,6 +213,20 @@ export class ReferralRetrospectiveComponent implements OnInit {
     return dateStruct;
   }
 
+  ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
+
+    // round up to the next 5 minute interval
+    const start = moment(dateValue);
+    const remainder = 5 - (start.minute() % 5);
+    const momentDate = moment(start).add(remainder, 'minutes');
+    const timeStruct = {} as NgbTimeStruct;
+    timeStruct.hour = momentDate.hour();
+    timeStruct.minute = momentDate.minutes();
+    timeStruct.second = momentDate.seconds();
+
+    return timeStruct;
+  }
+
   CreatePatient() {
 
     this.patientDetails.nhsNumber =
@@ -255,6 +276,11 @@ export class ReferralRetrospectiveComponent implements OnInit {
 
     if (!this.HasValidLeadAmhp()) {
       this.amhpField.setErrors({ InvalidAmhp: true });
+      canContinue = false;
+    }
+
+    if (this.IsDateTimeInFuture(this.referralDateField.value, this.referralTimeField.value)) {
+      this.referralDateField.setErrors({ InvalidAssessmentDate: true });
       canContinue = false;
     }
 
@@ -374,6 +400,10 @@ export class ReferralRetrospectiveComponent implements OnInit {
     return this.patientForm.controls.referralDate;
   }
 
+  get referralTimeField() {
+    return this.patientForm.controls.referralTime;
+  }
+
   get residentialPostcode(): string {
     return this.patientForm.controls.residentialPostcode.value;
   }
@@ -392,6 +422,25 @@ export class ReferralRetrospectiveComponent implements OnInit {
 
   get unknownPostcodeField() {
     return this.patientForm.controls.unknownResidentialPostcode;
+  }
+
+  GetCreatedDate(): Date {
+    const createdDate = new Date();
+
+    const date = this.referralDateField.value;
+    const time = this.referralTimeField.value;
+
+    if ( date !== null && time !== null ) {
+      createdDate.setFullYear(date.year);
+      createdDate.setMonth(date.month - 1);
+      createdDate.setDate(date.day);
+      createdDate.setHours(time.hour);
+      createdDate.setMinutes(time.minute);
+      createdDate.setSeconds(0);
+      createdDate.setMilliseconds(0);
+    }
+
+    return createdDate;
   }
 
   GpSearch = (text$: Observable<string>) =>
@@ -501,6 +550,20 @@ export class ReferralRetrospectiveComponent implements OnInit {
     );
   }
 
+  IsDateTimeInFuture(date?: NgbDateStruct, time?: NgbTimeStruct): boolean {
+
+    if (date === null || time === null) {
+      return true;
+    }
+
+    const now = moment();
+    const referralDate = moment();
+
+    referralDate.date(date.day).month(date.month - 1).year(date.year).hour(time.hour).minute(time.minute);
+
+    return referralDate >= now;
+  }
+
   IsPatientIdValidated(): boolean {
     return this.isPatientIdValidated;
   }
@@ -572,6 +635,7 @@ export class ReferralRetrospectiveComponent implements OnInit {
     const referral = {} as Referral;
     referral.leadAmhpUserId = this.amhpUser.id;
     referral.patientId = this.patientDetails.id;
+    referral.createdAt = this.GetCreatedDate();
 
     this.referralService.createReferral(referral).subscribe(
       (result: Referral) => {
@@ -579,7 +643,7 @@ export class ReferralRetrospectiveComponent implements OnInit {
           message: 'Referral Created'
         });
         this.isCreatingReferral = false;
-        this.routerService.navigatePrevious();
+        this.routerService.navigateByUrl('/referral');
       },
       error => {
         this.toastService.displayError({
