@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login', pathMatch: 'full'
+    redirectTo: 'home', pathMatch: 'full'
   },  
   {
     path: 'amhp-assessment-list', 

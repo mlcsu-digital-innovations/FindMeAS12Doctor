@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://localhost:5001/api',
-  redirectUri: 'http://localhost:4200/login',
-  postLogoutRedirectUrl: 'http://localhost:4200/login'
+  redirectUri: 'http://localhost:8100/home',
+  postLogoutRedirectUrl: 'http://localhost:8100/login'
 };
 
 export const ProtectedResourceMap: [string, string[]][] = 
 [  
-  [ "https://localhost:5001", ["User.Read", "offline_access"] ] 
+  [ "https://localhost:5001", ["openid", "profile", "email", "https://graph.microsoft.com/User.Read"] ] 
 ];
 /*
  * For easier debugging in development mode, you can import the following file
