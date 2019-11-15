@@ -118,7 +118,7 @@ namespace Fmas12d.Api.Controllers
             Id = id
           };
         requestModel.MapToBusinessModel(businessModel);
-        businessModel = await Service.UpdateAllocatedDoctors(businessModel);
+        businessModel = await Service.AddAllocatedDoctors(businessModel);
         ViewModels.AssessmentDoctorsPost viewModel =
           new ViewModels.AssessmentDoctorsPost(businessModel);
 

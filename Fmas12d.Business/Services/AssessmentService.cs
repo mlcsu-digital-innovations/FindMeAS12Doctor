@@ -35,6 +35,48 @@ namespace Fmas12d.Business.Services
       _userAvailabilityService = userAvailabilityService;
     }
 
+    public async Task<IAssessmentDoctorsUpdate> AddAllocatedDoctors(
+      IAssessmentDoctorsUpdate updateModel)
+    {
+      Entities.Assessment entity = await _context
+        .Assessments
+        .Include(a => a.Doctors)
+        .Include(a => a.Referral)
+        .WhereIsActiveOrActiveOnly(true)
+        .Where(a => a.Id == updateModel.Id)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("Id",
+          $"An active Assessment with an id of {updateModel.Id} was not found.");
+      }
+      CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
+        updateModel.Id, entity.Referral.ReferralStatusId);
+      CheckAllocatedDoctorsAreSelected(entity, updateModel.UserIds);
+
+      UpdateModified(entity);
+
+      foreach (int userId in updateModel.UserIds)
+      {
+        Entities.AssessmentDoctor assessmentDoctor = 
+          entity.Doctors.Single(d => d.DoctorUserId == userId);
+        assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
+        UpdateModified(assessmentDoctor);
+      }
+
+      await _context.SaveChangesAsync();
+
+      return new AssessmentDoctorsUpdate() { 
+        Id = entity.Id, 
+        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.ALLOCATED) 
+                                .Select(d => d.DoctorUserId)
+                                .ToList()
+      };
+    }
+
+
+
     private async Task<bool> AddAmhpToUserAssessmentNotifications(
       int amhpUserId, Entities.Assessment entity)
     {
@@ -112,13 +154,15 @@ namespace Fmas12d.Business.Services
         throw new ModelStateException("Id",
           $"An active Assessment with an id of {updateModel.Id} was not found.");
       }
-      CheckAssessmentHasReferralStatusToAddSelectedDoctors(model);
+      CheckAssessmentHasCorrectReferralStatusToAddSelectedDoctors(
+        model.Id, model.Referral.ReferralStatusId);
       CheckSelectedDoctorsAreAvailable(model, updateModel.UserIds);
       CheckSelectedDoctorsAreNotAlreadySelected(model, updateModel.UserIds);
 
       // because the assessment entity has already been loaded from the call to 
       // GetAvailableDoctorsAsync we can use find here to obtain it directly from the context
       Entities.Assessment entity = await _context.Assessments.FindAsync(updateModel.Id);
+      entity.Referral.ReferralStatusId = Models.ReferralStatus.AWAITING_RESPONSES;
       UpdateModified(entity);
 
       foreach (int userId in updateModel.UserIds)
@@ -141,6 +185,23 @@ namespace Fmas12d.Business.Services
                                 .Select(d => d.DoctorUserId)
                                 .ToList()
       };
+    }
+    
+    private void CheckAllocatedDoctorsAreSelected(
+      Entities.Assessment entity, IEnumerable<int> allocatedUserIds)
+    {
+      IEnumerable<int> selectedUserIds =
+        entity.Doctors
+              .Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED)
+              .Select(ad => ad.DoctorUserId);
+
+      if (allocatedUserIds.Intersect(selectedUserIds).Count() != allocatedUserIds.Count())
+      {
+        throw new ModelStateException("UserIds",
+        "Only the following doctors id's are selected " +
+        $"[{string.Join(",", selectedUserIds)}], " +
+        $"from the requested [{string.Join(",", allocatedUserIds)}]");
+      }
     }
 
     private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
@@ -166,40 +227,62 @@ namespace Fmas12d.Business.Services
         );
       }
     }
-
-    private void CheckAssessmentHasReferralStatusToAddSelectedDoctors(Models.Assessment model)
+    private void CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
+      int id,
+      int referralStatusId)
     {
       if (
-        model.Referral.ReferralStatusId != Models.ReferralStatus.SELECTING_DOCTORS &&
-        model.Referral.ReferralStatusId != Models.ReferralStatus.AWAITING_RESPONSES &&
-        model.Referral.ReferralStatusId != Models.ReferralStatus.RESPONSES_PARTIAL &&
-        model.Referral.ReferralStatusId != Models.ReferralStatus.RESPONSES_COMPLETE)
+        referralStatusId != Models.ReferralStatus.AWAITING_RESPONSES &&
+        referralStatusId != Models.ReferralStatus.RESPONSES_PARTIAL &&
+        referralStatusId != Models.ReferralStatus.RESPONSES_COMPLETE)
       {
         throw new ModelStateException("Id",
-          $"The Assessment with an id of {model.Id} does not have one of the " +
+          $"The Assessment with an id of {id} does not have one of the " +
           $"required referral statuses [{Models.ReferralStatus.SELECTING_DOCTORS}," +
           $"{Models.ReferralStatus.AWAITING_RESPONSES}," +
           $"{Models.ReferralStatus.RESPONSES_PARTIAL}," +
           $"{Models.ReferralStatus.RESPONSES_COMPLETE}] " +
-          $"it has a referral status of [{model.Referral.ReferralStatusId}]");
+          $"it has a referral status of [{referralStatusId}]");
+      }
+    }
+
+    private void CheckAssessmentHasCorrectReferralStatusToAddSelectedDoctors(
+      int id,
+      int referralStatusId)
+    {
+      if (
+        referralStatusId != Models.ReferralStatus.SELECTING_DOCTORS &&
+        referralStatusId != Models.ReferralStatus.AWAITING_RESPONSES &&
+        referralStatusId != Models.ReferralStatus.RESPONSES_PARTIAL &&
+        referralStatusId != Models.ReferralStatus.RESPONSES_COMPLETE)
+      {
+        throw new ModelStateException("Id",
+          $"The Assessment with an id of {id} does not have one of the " +
+          $"required referral statuses [{Models.ReferralStatus.SELECTING_DOCTORS}," +
+          $"{Models.ReferralStatus.AWAITING_RESPONSES}," +
+          $"{Models.ReferralStatus.RESPONSES_PARTIAL}," +
+          $"{Models.ReferralStatus.RESPONSES_COMPLETE}] " +
+          $"it has a referral status of [{referralStatusId}]");
       }
     }
 
     private void CheckSelectedDoctorsAreAvailable(
-      Assessment assessment, IEnumerable<int> userIds)
+      Models.Assessment assessment, IEnumerable<int> selectedUserIds)
     {
-      IEnumerable<int> selectedUserIdsAvailable =
-        assessment.AvailableDoctors.Select(ad => ad.UserId).Intersect(userIds);
-      if (selectedUserIdsAvailable.Count() != userIds.Count())
+      IEnumerable<int> availableUserIds =
+        assessment.AvailableDoctors.Select(ad => ad.UserId);
+
+      if (selectedUserIds.Intersect(availableUserIds).Count() != selectedUserIds.Count())
       {
         throw new ModelStateException("UserIds",
         "Only the following doctors id are available " +
-        $"[{string.Join(",", assessment.AvailableDoctors.Select(ad => ad.UserId))}], " +
-        $"from the requested [{string.Join(",", userIds)}]");
+        $"[{string.Join(",", availableUserIds)}], " +
+        $"from the requested [{string.Join(",", selectedUserIds)}]");
       }
     }
+
     private void CheckSelectedDoctorsAreNotAlreadySelected(
-      Assessment assessment, IEnumerable<int> userIds)
+      Models.Assessment assessment, IEnumerable<int> userIds)
     {
       if (assessment.DoctorsSelected != null)
       {
@@ -489,11 +572,6 @@ namespace Fmas12d.Business.Services
           Models.ProfileType.AMHP);
       }
       return true;
-    }
-
-    public Task<IAssessmentDoctorsUpdate> UpdateAllocatedDoctors(IAssessmentDoctorsUpdate model)
-    {
-      throw new NotImplementedException();
     }
 
     public async Task<AssessmentUpdate> UpdateAsync(AssessmentUpdate model)
