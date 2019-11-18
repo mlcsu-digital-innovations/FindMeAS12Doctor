@@ -1,12 +1,15 @@
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { HttpClientModule } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ReferralListComponent } from './referral-list.component';
 import { ReferralListService } from 'src/app/services/referral-list/referral-list-service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedComponentsModule } from '../../shared-components.module';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
+import { of } from 'rxjs';
 
 @Component({
   template: ''
@@ -35,6 +38,16 @@ describe('ReferralListComponent', () => {
         DecimalPipe,
         ReferralListService,
         ToastService,
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        },
+        {
+          provide: ReferralListService,
+          useValue: {
+            referralList$: of({})
+          }
+        }
       ]
     })
     .compileComponents();

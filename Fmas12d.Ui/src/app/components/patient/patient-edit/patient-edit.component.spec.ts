@@ -1,7 +1,8 @@
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
-
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 import { PatientEditComponent } from './patient-edit.component';
-import { HttpClientModule } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
 import { SharedComponentsModule } from '../../shared-components.module';
 
 describe('PatientEditComponent', () => {
@@ -16,7 +17,13 @@ describe('PatientEditComponent', () => {
       imports: [
         HttpClientModule,
         SharedComponentsModule
-       ]
+       ],
+       providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        }
+      ]
     })
     .compileComponents();
   }));

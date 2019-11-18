@@ -1,6 +1,12 @@
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DoctorSelectComponent } from './doctor-select.component';
+import { HttpClientModule } from '@angular/common/http';
+import { of } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 import { SharedComponentsModule } from '../../shared-components.module';
+import { RouterService } from 'src/app/services/router/router.service';
 
 describe('DoctorSelectComponent', () => {
   let component: DoctorSelectComponent;
@@ -12,7 +18,26 @@ describe('DoctorSelectComponent', () => {
         DoctorSelectComponent
       ],
       imports: [
+        HttpClientModule,
         SharedComponentsModule
+      ],
+      providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({referralId: 1})
+          }
+        },
+        {
+          provide: RouterService,
+          useValue: {
+            paramMap: of({referralId: 1})
+          }
+        }
       ]
     })
     .compileComponents();

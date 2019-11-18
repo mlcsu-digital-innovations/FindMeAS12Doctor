@@ -21,18 +21,17 @@ export class ReferralListComponent {
 
 
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
- 
+
   constructor(
     public referralListService: ReferralListService,
     public oidcSecurityService: OidcSecurityService,
     private toastService: ToastService) {
-    
   }
 
   ngOnInit() {
 
     this.referralList$ = this.referralListService.referralList$;
-    this.total$ = this.referralListService.total$;  
+    this.total$ = this.referralListService.total$;
 
     this.referralList$.subscribe(
       result => this.noOfReferralsInList = result.length,
@@ -42,7 +41,7 @@ export class ReferralListComponent {
           message: error
         });
       }
-    );    
+    );
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -56,5 +55,5 @@ export class ReferralListComponent {
     this.referralListService.sortColumn = column;
     this.referralListService.sortDirection = direction;
   }
-  
+
 }
