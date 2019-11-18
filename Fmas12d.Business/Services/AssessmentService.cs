@@ -59,7 +59,7 @@ namespace Fmas12d.Business.Services
 
       foreach (int userId in updateModel.UserIds)
       {
-        Entities.AssessmentDoctor assessmentDoctor = 
+        Entities.AssessmentDoctor assessmentDoctor =
           entity.Doctors.Single(d => d.DoctorUserId == userId);
         assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
         UpdateModified(assessmentDoctor);
@@ -67,9 +67,10 @@ namespace Fmas12d.Business.Services
 
       await _context.SaveChangesAsync();
 
-      return new AssessmentDoctorsUpdate() { 
-        Id = entity.Id, 
-        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.ALLOCATED) 
+      return new AssessmentDoctorsUpdate()
+      {
+        Id = entity.Id,
+        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.ALLOCATED)
                                 .Select(d => d.DoctorUserId)
                                 .ToList()
       };
@@ -171,7 +172,7 @@ namespace Fmas12d.Business.Services
         {
           DoctorUserId = userId,
           IsActive = true,
-          StatusId = Models.AssessmentDoctorStatus.SELECTED,          
+          StatusId = Models.AssessmentDoctorStatus.SELECTED,
         };
         UpdateModified(assessmentDoctor);
         entity.Doctors.Add(assessmentDoctor);
@@ -179,14 +180,15 @@ namespace Fmas12d.Business.Services
 
       await _context.SaveChangesAsync();
 
-      return new AssessmentDoctorsUpdate() { 
-        Id = entity.Id, 
-        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED) 
+      return new AssessmentDoctorsUpdate()
+      {
+        Id = entity.Id,
+        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED)
                                 .Select(d => d.DoctorUserId)
                                 .ToList()
       };
     }
-    
+
     private void CheckAllocatedDoctorsAreSelected(
       Entities.Assessment entity, IEnumerable<int> allocatedUserIds)
     {
@@ -481,6 +483,135 @@ namespace Fmas12d.Business.Services
       }
       return referral;
     }
+
+    public async Task<Assessment> GetSelectedDoctorsAsync(
+      int id, bool asNoTracking, bool activeOnly)
+    {
+      Models.Assessment model =
+        await _context.Assessments
+                .Include(e => e.AmhpUser)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                    .ThenInclude(u => u.GenderType)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                    .ThenInclude(u => u.ProfileType)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                    .ThenInclude(u => u.UserSpecialities)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.Patient)
+                .Include(e => e.PreferredDoctorGenderType)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.LeadAmhpUser)
+                .Include(e => e.Speciality)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .Select(a => new Models.Assessment()
+                {
+                  AmhpUser = new Models.User()
+                  {
+                    DisplayName = a.AmhpUser.DisplayName
+                  },
+                  Doctors = a.Doctors.Select(d => new AssessmentDoctor()
+                  {
+                    DoctorUser = new User()
+                    {
+                      DisplayName = d.DoctorUser.DisplayName,
+                      GenderType = new Models.GenderType()
+                      {
+                        Name = d.DoctorUser.GenderType.Name
+                      },
+                      GmcNumber = d.DoctorUser.GmcNumber,
+                      Id = d.DoctorUserId,
+                      IsActive = d.DoctorUser.IsActive,
+                      ProfileType = new Models.ProfileType()
+                      {
+                        Name = d.DoctorUser.ProfileType.Name
+                      },
+                      UserSpecialities = d.DoctorUser
+                                          .UserSpecialities
+                                          .Select(us => new Models.UserSpeciality()
+                                          {
+                                            Speciality = new Models.Speciality()
+                                            {
+                                              Name = us.Speciality.Name
+                                            }
+                                          }).ToList()
+                    },
+                    DoctorUserId = d.DoctorUserId,
+                    IsActive = d.IsActive,
+                    StatusId = d.StatusId
+                  }).ToList(),
+                  Id = a.Id,
+                  IsActive = a.IsActive,
+                  Latitude = a.Latitude,
+                  Longitude = a.Longitude,
+                  MustBeCompletedBy = a.MustBeCompletedBy,
+                  Postcode = a.Postcode,
+                  PreferredDoctorGenderType = new Models.GenderType()
+                  {
+                    Name = a.PreferredDoctorGenderType.Name
+                  },
+                  Referral = new Models.Referral()
+                  {
+                    Id = a.Referral.Id,
+                    LeadAmhpUser = new Models.User()
+                    {
+                      DisplayName = a.Referral.LeadAmhpUser.DisplayName
+                    },
+                    Patient = new Models.Patient()
+                    {
+                      AlternativeIdentifier = a.Referral.Patient.AlternativeIdentifier,
+                      Id = a.Referral.Patient.Id,
+                      NhsNumber = a.Referral.Patient.NhsNumber
+                    }
+                  },
+                  ScheduledTime = a.ScheduledTime,
+                  Speciality = new Models.Speciality()
+                  {
+                    Name = a.Speciality.Name
+                  }
+                })
+                .SingleOrDefaultAsync(u => u.Id == id);
+
+      if (model == null)
+      {
+        return null;
+      }
+      else
+      {
+        Dictionary<int, Postcode> doctorPostcodes =
+          await _userAvailabilityService.GetDoctorsPostcodeAt(
+            model.DoctorsSelected.Select(d => d.Id).ToList(),
+            model.DateTime,
+            true,
+            true
+          );
+
+        foreach (AssessmentDoctor assessmentDoctor in model.Doctors.Where(d => d.IsSelected))
+        {
+          Postcode doctorPostcode = doctorPostcodes.GetValueOrDefault(assessmentDoctor.DoctorUserId);
+          if (doctorPostcode == null)
+          {
+            assessmentDoctor.Distance = null;
+            assessmentDoctor.IsAvailable = false;
+          }
+          else
+          {
+            assessmentDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+              model.Latitude,
+              model.Longitude,
+              doctorPostcode.Latitude,
+              doctorPostcode.Longitude
+            );
+            assessmentDoctor.IsAvailable = true;
+          }
+        }
+        return model;
+      }
+    }
+
 
     private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
     {

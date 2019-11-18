@@ -12,6 +12,8 @@ namespace Fmas12d.Api.ViewModels
 
     public AssessmentAvailableDoctorsAvailability(Business.Models.IUserAvailabilityDoctor model)
     {
+      if (model == null) return;
+
       ActiveAssessments = model.ActiveAssessments.Select(aa => new PostcodeTime(aa)).ToList();
       Distance = model.Distance;
       End = model.End;

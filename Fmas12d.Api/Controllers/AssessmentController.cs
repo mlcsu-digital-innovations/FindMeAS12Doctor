@@ -48,6 +48,34 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
+    [Route("{id:int}/doctors/selected")]
+    public async Task<ActionResult<ViewModels.AssessmentSelectedDoctors>> GetDoctorsSelected(
+      int id)
+    {
+      try
+      {
+        Business.Models.Assessment businessModel =
+          await Service.GetSelectedDoctorsAsync(id, true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.AssessmentSelectedDoctors viewModel =
+            new ViewModels.AssessmentSelectedDoctors(businessModel);
+
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    } 
+
+    [HttpGet]
     [Route("")]
     public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
       RequestModels.AssessmentListSearch assessmentListSearch)

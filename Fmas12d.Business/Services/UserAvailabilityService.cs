@@ -22,6 +22,40 @@ namespace Fmas12d.Business.Services
       _locationDetailService = locationDetailService;
     }
 
+    /// <summary>
+    /// TODO Check for overlapping availabilities
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public async Task<IUserAvailability> Create(IUserAvailability model)
+    {
+
+      if (CheckLatitudeLongitude(model) &&
+          !model.Latitude.HasValue &&
+          !model.Longitude.HasValue)
+      {
+        await SetLatitudeLongitude(model);
+      }
+
+      await CheckForOverlappingAvailability(model);
+
+      Entities.UserAvailability entity = new Entities.UserAvailability();
+      model.MapToEntity(entity);
+      entity.IsActive = true;
+      UpdateModified(entity);
+
+      _context.Add(entity);
+      await _context.SaveChangesAsync();
+
+      model = await _context.UserAvailabilities
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(UserAvailability.ProjectFromEntity)
+                      .SingleAsync();
+
+      return model;
+    }
+
     public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctors(
       DateTimeOffset requiredDateTime,
       bool asNoTracking,
@@ -77,39 +111,29 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    /// <summary>
-    /// TODO Check for overlapping availabilities
-    /// </summary>
-    /// <param name="model"></param>
-    /// <returns></returns>
-    public async Task<IUserAvailability> Create(IUserAvailability model)
+    public async Task<Dictionary<int, Postcode>> GetDoctorsPostcodeAt(
+      List<int> userIds, DateTimeOffset dateTime, bool asNoTracking, bool activeOnly)
     {
+      Dictionary<int, Postcode> doctorsPostcode = 
+        await _context.UserAvailabilities
+                      .Where(ua => ua.Start <= dateTime)
+                      .Where(ua => ua.End >= dateTime)
+                      .Where(ua => ua.User.ProfileTypeId == ProfileType.DOCTOR)
+                      .Where(ua => ua.UserAvailabilityStatusId == UserAvailabilityStatus.AVAILABLE)
+                      .Where(ua => userIds.Any(id => id == ua.UserId))
+                      .WhereIsActiveOrActiveOnly(activeOnly)
+                      .AsNoTracking(asNoTracking)
+                      .ToDictionaryAsync(
+                        ua => ua.UserId,
+                        ua => new Postcode(){
+                          Code = ua.Postcode,
+                          Latitude = ua.Latitude,
+                          Longitude = ua.Longitude
+                        }
+                      );
 
-      if (CheckLatitudeLongitude(model) &&
-          !model.Latitude.HasValue &&
-          !model.Longitude.HasValue)
-      {
-        await SetLatitudeLongitude(model);
-      }
-
-      await CheckForOverlappingAvailability(model);
-
-      Entities.UserAvailability entity = new Entities.UserAvailability();
-      model.MapToEntity(entity);
-      entity.IsActive = true;
-      UpdateModified(entity);
-
-      _context.Add(entity);
-      await _context.SaveChangesAsync();
-
-      model = await _context.UserAvailabilities
-                      .Where(u => u.IsActive)
-                      .Where(u => u.Id == entity.Id)
-                      .Select(UserAvailability.ProjectFromEntity)
-                      .SingleAsync();
-
-      return model;
-    }
+      return doctorsPostcode;                      
+    }    
 
     private async Task<bool> CheckForOverlappingAvailability(IUserAvailability model)
     {
@@ -196,5 +220,6 @@ namespace Fmas12d.Business.Services
 
       return true;
     }
+
   }
 }

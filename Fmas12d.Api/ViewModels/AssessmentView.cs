@@ -9,7 +9,7 @@ namespace Fmas12d.Api.ViewModels
   {
     public AssessmentView()
     {}    
-    public AssessmentView(Business.Models.Assessment model)
+    public AssessmentView(Business.Models.Assessment model, bool ignoreSelectedDoctors = false)
     {
       Address1 = model.Address1;
       Address2 = model.Address2;
@@ -25,13 +25,16 @@ namespace Fmas12d.Api.ViewModels
       ReferralId = model.ReferralId;
       SpecialityName = model.SpecialityName;
 
-      if (model.DoctorsAllocated != null && model.DoctorsAllocated.Any())
+      if (model.DoctorsAllocated != null && 
+          model.DoctorsAllocated.Any())
       {
         DoctorsAllocated = model.DoctorsAllocated
                                 .Select(da => new AssessmentViewDoctor(da)).ToList();
       }
 
-      if (model.DoctorsSelected != null && model.DoctorsSelected.Any())
+      if (!ignoreSelectedDoctors && 
+          model.DoctorsSelected != null && 
+          model.DoctorsSelected.Any())
       {
         DoctorsSelected = model.DoctorsSelected
                                .Select(ds => new AssessmentViewDoctor(ds)).ToList();
