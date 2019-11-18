@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 
 @Component({
@@ -7,19 +7,16 @@ import { NetworkService, ConnectionStatus } from 'src/app/services/network/netwo
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  public connection: string;
+  public connection: boolean;
 
-  constructor(private networkService: NetworkService) { }
+  constructor(private networkService: NetworkService, private changeRef: ChangeDetectorRef) { }
 
   ngOnInit() {  
-    this.setConnection(this.networkService.getCurrentNetworkStatus());
+    this.connection = this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Online;
 
     this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {    
-      this.setConnection(status);    
+      this.connection = status === ConnectionStatus.Online; 
+      this.changeRef.detectChanges();      
     });
-  }
-
-  private setConnection(connectionStatus: ConnectionStatus): void {
-    this.connection = connectionStatus === ConnectionStatus.Online ? "light" : "dark";    
   }
 }

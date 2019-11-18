@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://fmas12d-api-dev.azurewebsites.net/api',
-  redirectUri: 'https://fmas12d-mobile-dev.azurewebsites.net/login'
+  redirectUri: 'https://fmas12d-mobile-dev.azurewebsites.net/home',
+  postLogoutRedirectUrl: 'https://fmas12d-mobile-dev.azurewebsites.net/login'
 };
 
 export const ProtectedResourceMap: [string, string[]][] = 
