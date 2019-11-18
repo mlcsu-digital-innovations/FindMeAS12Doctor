@@ -12,5 +12,11 @@ namespace Fmas12d.Business.Services
       DateTimeOffset requiredDateTime,
       bool asNoTracking,
       bool activeOnly);
+    Task<Dictionary<int, Postcode>> GetDoctorsPostcodeAt(
+      List<int> userIds, 
+      DateTimeOffset dateTime, 
+      bool asNoTracking,
+      bool activeOnly);
+
   }
 }

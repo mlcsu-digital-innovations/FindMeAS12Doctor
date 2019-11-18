@@ -37,6 +37,8 @@ namespace Fmas12d.Business.Models
       Id = entity.Id;
       IsActive = entity.IsActive;
       IsSuccessful = entity.IsSuccessful;
+      Latitude = entity.Latitude;
+      Longitude = entity.Longitude;
       MeetingArrangementComment = entity.MeetingArrangementComment;
       MustBeCompletedBy = entity.MustBeCompletedBy;
       // TODO NonPaymentLocation = null;
@@ -60,14 +62,13 @@ namespace Fmas12d.Business.Models
         ?.Select(u => new UserAssessmentNotification(u)).ToList();
     }
 
-    [Required]
-    [MaxLength(200)]
     public string Address1 { get; set; }
     public string Address2 { get; set; }
     public string Address3 { get; set; }
     public string Address4 { get; set; }
     public User AmhpUser { get; set; }
     public int AmhpUserId { get; set; }
+    public IEnumerable<IUserAvailabilityDoctor> AvailableDoctors { get; set; }
     public virtual Ccg Ccg { get; set; }
     public int? CcgId { get; set; }
     public int? CompletedByUserId { get; set; }
@@ -77,18 +78,16 @@ namespace Fmas12d.Business.Models
     public virtual User CompletionConfirmationByUser { get; set; }
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
-    public IList<AssessmentDoctor> Doctors { get; set; }
-    public IEnumerable<IUserAvailabilityDoctor> AvailableDoctors { get; set; }
+    public IList<AssessmentDoctor> Doctors { get; set; }    
     public virtual IList<int> DetailTypeIds { get; set; }
     public virtual IList<AssessmentDetail> Details { get; set; }
     public bool? IsSuccessful { get; set; }
-    [MaxLength(2000)]
+    public decimal Latitude { get; set; }
+    public decimal Longitude { get; set; }    
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset? MustBeCompletedBy { get; set; }
     public int? NonPaymentLocationId { get; set; }
     public virtual NonPaymentLocation NonPaymentLocation { get; set; }
-    [Required]
-    [MaxLength(10)]
     public string Postcode { get; set; }
     public virtual GenderType PreferredDoctorGenderType { get; set; }
     public int? PreferredDoctorGenderTypeId { get; set; }
