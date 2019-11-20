@@ -149,12 +149,11 @@ export class DoctorAllocateComponent implements OnInit {
   }
 
   OnSort(event: any) {
-    // if (event.direction === 'desc') {
-    //   this.allDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? -1 : 1);
-    // } else {
-    //   this.allDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? 1 : -1);
-    // }
-    // this.UpdateAvailableDoctorList();
+    if (event.direction === 'desc') {
+      this.selectedDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? -1 : 1);
+    } else {
+      this.selectedDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? 1 : -1);
+    }
   }
 
   RemoveSelectedDoctor(id: number) {
