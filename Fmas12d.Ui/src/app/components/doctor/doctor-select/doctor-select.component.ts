@@ -36,6 +36,7 @@ export class DoctorSelectComponent implements OnInit {
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
 
+
   @ViewChild('cancelSelection', null) cancelSelectionTemplate;
 
   constructor(
@@ -62,7 +63,6 @@ export class DoctorSelectComponent implements OnInit {
               map((assessment: AssessmentAvailability) => {
                 this.assessmentId = assessment.id;
                 this.allDoctors = assessment.availableDoctors;
-                console.log(assessment);
                 this.DisplayDoctorsWithinSearchRadius(this.doctorDistance.value);
                 return assessment;
               })
@@ -170,10 +170,32 @@ export class DoctorSelectComponent implements OnInit {
   }
 
   UpdateAssessment() {
-    // ToDo: use service to update the assessment with the selected doctors
-    console.log('Save details ...');
-    console.log(this.selectedDoctors);
-  }
+
+    const selectedDoctorIds: number[] = [];
+
+    this.selectedDoctors.forEach(doctor => {
+      selectedDoctorIds.push(doctor.id);
+    });
+
+    const userIds = {
+      UserIds: selectedDoctorIds
+    };
+
+    this.assessmentService.updateSelectedDoctors(this.assessmentId, userIds)
+      .subscribe(() => {
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Assessment Updated'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to update selected doctors!'
+        });
+      });
+    }
 
   UpdateAvailableDoctorList() {
     this.availableDoctors = this.filteredDoctorList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);

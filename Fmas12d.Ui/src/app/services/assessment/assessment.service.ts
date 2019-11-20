@@ -38,4 +38,16 @@ export class AssessmentService {
       map(response => response)
     );
   }
+
+  public updateSelectedDoctors(assessmentId: number, userIds: any) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.post(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/selected`,
+      userIds,
+      { headers }
+    );
+  }
+
 }
