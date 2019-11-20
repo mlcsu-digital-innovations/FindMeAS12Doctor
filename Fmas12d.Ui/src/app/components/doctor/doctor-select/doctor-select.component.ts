@@ -31,6 +31,7 @@ export class DoctorSelectComponent implements OnInit {
   isAvailableDoctorSearching: boolean;
   isDoctorFieldsShown: boolean;
   isDoctorSearching: boolean;
+  isSavingSelection: boolean;
   page = 1;
   pageSize = 10;
   selectDoctor: FormGroup;
@@ -169,8 +170,8 @@ export class DoctorSelectComponent implements OnInit {
     }
   }
 
-  UpdateAssessment() {
-
+  UpdateSelectedDoctors() {
+    this.isSavingSelection = true;
     const selectedDoctorIds: number[] = [];
 
     this.selectedDoctors.forEach(doctor => {
@@ -183,6 +184,7 @@ export class DoctorSelectComponent implements OnInit {
 
     this.assessmentService.updateSelectedDoctors(this.assessmentId, userIds)
       .subscribe(() => {
+        this.isSavingSelection = false;
         this.toastService.displaySuccess({
           title: 'Success',
           message: 'Assessment Updated'
@@ -190,6 +192,7 @@ export class DoctorSelectComponent implements OnInit {
         this.routerService.navigateByUrl('/referral/list');
       },
       error => {
+        this.isSavingSelection = false;
         this.toastService.displayError({
           title: 'Error',
           message: 'Unable to update selected doctors!'
