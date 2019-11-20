@@ -111,16 +111,18 @@
                 <tbody>
                   <tr *ngFor="let selectedDoctor of assessment.doctorsSelected">
                     <td>
-                      {{selectedDoctor.displayName}}
+                      {{selectedDoctor.name}}
                     </td>
                     <td>
-                      {{selectedDoctor.doctorGender}}
+                      {{selectedDoctor.genderName}}
                     </td>
                     <td>
-                      {{selectedDoctor.doctorType}}
+                      {{selectedDoctor.type}}
                     </td>
                     <td>
-                      {{selectedDoctor.doctorSpeciality}}
+                      <span *ngFor="let speciality of selectedDoctor.specialityName">
+                        {{speciality}},
+                      </span>
                     </td>
                     <td class="text-center sm-col">
                       {{selectedDoctor.distance | number: '1.1-1'}}
@@ -132,7 +134,7 @@
                           class=""
                           type="checkbox"
                           checked={{selectedDoctor.isSelected}}
-                          (change)="ToggleSelection(availableDoctor.id, $event)"
+                          (change)="ToggleSelection(selectedDoctor.id, $event)"
                         />
                         <span class="checkmark"></span>
                       </label>
@@ -140,6 +142,12 @@
                   </tr>
                 </tbody>
               </table>
+              <div
+                class="empty-table"
+                *ngIf="assessment.doctorsSelected == null || assessment.doctorsSelected.length == 0"
+              >
+                No doctors have been selected for this assessment!
+              </div>
             </div>
 
             <div class="form-row ml-more-2 mr-more-2">
@@ -159,7 +167,7 @@
                 <button
                   type="button"
                   class="btn btn-primary btn-standard"
-                  (click)="UpdateAssessment()"
+                  (click)="ConfirmAllocation()"
                   [disabled]="allocatedDoctors.length === 0"
                 >
                   <i class="far fa-check-circle"></i>
@@ -173,17 +181,28 @@
     </div>
   </div>
 
+<app-delay-spinner [delayMessage]="'Allocating Doctors'" *ngIf="isSavingAllocation"></app-delay-spinner>
+
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
 
+<ng-template #confirmSelection>
+  <app-cancel-action-modal
+    [modalTitle]="'Allocate the Selected Doctors'"
+    [modalBody]="'Please confirm that you wish to allocate these doctors to the assessment.'"
+    (actioned)="OnCancelConfirmAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
 <ng-template #cancelAssessment>
-    <app-cancel-action-modal
-      [modalTitle]="'Cancel Doctor Allocation'"
-      [modalBody]="'Do you wish to cancel this doctor allocation? All changes will be lost.'"
-      (actioned)="OnCancelModalAction($event)"
-    >
-    </app-cancel-action-modal>
-  </ng-template>
+  <app-cancel-action-modal
+    [modalTitle]="'Cancel Doctor Allocation'"
+    [modalBody]="'Do you wish to cancel this doctor allocation? All changes will be lost.'"
+    (actioned)="OnCancelModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

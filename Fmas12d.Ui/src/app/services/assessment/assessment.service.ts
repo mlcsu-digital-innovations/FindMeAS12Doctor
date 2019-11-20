@@ -39,6 +39,26 @@ export class AssessmentService {
     );
   }
 
+  public getSelectedDoctors(assessmentId: number) {
+
+    return this.httpClient.get(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/selected`
+    ).pipe(
+      map(response => response)
+    );
+  }
+
+  public updateAllocatedDoctors(assessmentId: number, userIds: any) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.post(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/allocated`,
+      userIds,
+      { headers }
+    );
+  }
+
   public updateSelectedDoctors(assessmentId: number, userIds: any) {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');

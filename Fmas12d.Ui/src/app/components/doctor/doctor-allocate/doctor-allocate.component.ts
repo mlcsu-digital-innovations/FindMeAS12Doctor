@@ -1,6 +1,6 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Assessment } from 'src/app/interfaces/assessment';
-import { AssessmentAvailability } from 'src/app/interfaces/assessment-availability';
+import { AssessmentSelected } from 'src/app/interfaces/assessment-selected';
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -22,11 +22,15 @@ export class DoctorAllocateComponent implements OnInit {
   assessment$: Observable<Assessment | any>;
   assessmentId: number;
   cancelModal: NgbModalRef;
+  confirmModal: NgbModalRef;
   doctorForm: FormGroup;
+  isSavingAllocation: boolean;
   selectDoctor: FormGroup;
+  selectedDoctors: AvailableDoctor[] = [];
   unknownDoctorId: number;
 
   @ViewChild('cancelAssessment', null) cancelAssessmentTemplate;
+  @ViewChild('confirmSelection', null) confirmSelectionTemplate;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -47,11 +51,11 @@ export class DoctorAllocateComponent implements OnInit {
     this.assessment$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
+          return this.assessmentService.getSelectedDoctors(+params.get('assessmentId'))
             .pipe(
-              map((assessment: AssessmentAvailability) => {
+              map((assessment: AssessmentSelected) => {
                 this.assessmentId = assessment.id;
-                console.log(assessment);
+                this.selectedDoctors = assessment.doctorsSelected;
                 return assessment;
               })
             );
@@ -70,6 +74,49 @@ export class DoctorAllocateComponent implements OnInit {
     );
   }
 
+  AllocatedDoctorsToAssessment() {
+
+    this.isSavingAllocation = true;
+
+    const allocatedDoctorIds: number[] = [];
+
+    this.allocatedDoctors.forEach(doctor => {
+      allocatedDoctorIds.push(doctor.id);
+    });
+
+    const userIds = {
+      UserIds: allocatedDoctorIds
+    };
+
+    this.assessmentService.updateAllocatedDoctors(this.assessmentId, userIds)
+      .subscribe(() => {
+        this.isSavingAllocation = false;
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Doctors Allocated'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.isSavingAllocation = false;
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to allocate doctors!'
+        });
+      });
+  }
+
+  AddSelectedDoctor(id: number) {
+    const doctorFromList = this.selectedDoctors.find(doctor => doctor.id === id);
+    const doctorAlreadySelected = this.allocatedDoctors.findIndex(doctor => doctor.id === id);
+
+    doctorFromList.isSelected = true;
+
+    if (doctorAlreadySelected === -1) {
+      this.allocatedDoctors.push(doctorFromList);
+    }
+  }
+
   Cancel() {
     if (this.allocatedDoctors.length > 0) {
       this.cancelModal = this.modalService.open(this.cancelAssessmentTemplate, {
@@ -77,6 +124,20 @@ export class DoctorAllocateComponent implements OnInit {
       });
     } else {
       this.routerService.navigatePrevious();
+    }
+  }
+
+  ConfirmAllocation() {
+    this.confirmModal = this.modalService.open(
+      this.confirmSelectionTemplate,
+      { size: 'lg' }
+    );
+  }
+
+  OnCancelConfirmAction(action: boolean) {
+    this.confirmModal.close();
+    if (action) {
+      this.AllocatedDoctorsToAssessment();
     }
   }
 
@@ -96,7 +157,15 @@ export class DoctorAllocateComponent implements OnInit {
     // this.UpdateAvailableDoctorList();
   }
 
-  UpdateAssessment() {
+  RemoveSelectedDoctor(id: number) {
+    this.allocatedDoctors = this.allocatedDoctors.filter(doctor => doctor.id !== id);
+  }
 
+  ToggleSelection(id: number, event) {
+    if (event.target.checked === true) {
+      this.AddSelectedDoctor(id);
+    } else {
+      this.RemoveSelectedDoctor(id);
+    }
   }
 }
