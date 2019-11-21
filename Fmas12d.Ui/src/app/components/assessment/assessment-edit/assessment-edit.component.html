@@ -209,8 +209,11 @@
                     #preferredGender
                     id="preferredGender"
                   >
-                    <!-- <option [selected]=true></option> -->
-                    <option *ngFor="let gender of genderTypes; let i=index;" [value]="genderTypes[i].id">
+                    <option [selected]=true></option>
+                    <option
+                      *ngFor="let gender of genderTypes; let i=index;"
+                      [value]="genderTypes[i].id"
+                    >
                       {{genderTypes[i].name}}
                     </option>
                   </select>
@@ -249,7 +252,6 @@
                 </div>
               </div>
             </div>
-
             <div class="form-row">
               <div class="col-md-6">
                 <label for="doctorsSelected">Doctors Selected</label>
@@ -276,6 +278,11 @@
                     </div>
 
                   </div>
+                  <div class="row" *ngIf="selectedDoctors.length == 0">
+                    <div class="col-md-8 no-doctors">
+                      None
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -300,6 +307,11 @@
                           Send Update
                         </label>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="allocatedDoctors.length == 0">
+                    <div class="col-md-8 no-doctors">
+                      None
                     </div>
                   </div>
                 </div>
