@@ -16,8 +16,8 @@ namespace Fmas12d.Api.ViewModels
 
       AmhpUserName = model.AmhpUser?.DisplayName;
       DetailTypes = model.DetailTypes?.Select(d => new AssessmentDetailType(d)).ToList();
-      DoctorNamesAccepted = model.DoctorNamesAccepted;
-      DoctorNamesAllocated = model.DoctorNamesAllocated;
+      DoctorsSelected = model.DoctorNamesAccepted?.Select(d => new AssessmentViewDoctor(d)).ToList();
+      DoctorsAllocated = model.DoctorNamesAllocated?.Select(d => new AssessmentViewDoctor(d)).ToList();
       FullAddress = model.FullAddress;
       Id = model.Id;
       IsPlanned = model.IsPlanned;
@@ -31,8 +31,8 @@ namespace Fmas12d.Api.ViewModels
 
     public string AmhpUserName { get; set; }
     public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
-    public IList<string> DoctorNamesAccepted { get; set; }
-    public IList<string> DoctorNamesAllocated { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public string FullAddress { get; set; }
     public int Id { get; set; }
     public bool IsPlanned { get; set; }

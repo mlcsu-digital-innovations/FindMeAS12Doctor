@@ -115,23 +115,23 @@ namespace Fmas12d.Business.Models
       }
     }
 
-    public IList<string> DoctorNamesAccepted
+    public IList<User> DoctorNamesAccepted
     {
       get
       {
         return Doctors
           .Where(d => d.IsActive)
           .Where(d => d.StatusId == AssessmentDoctorStatus.SELECTED)
-          .Select(d => d.DoctorUser?.DisplayName)
+          .Select(d => d.DoctorUser)
           .ToList();
       }
     }
 
-    public IList<string> DoctorNamesAllocated
+    public IList<User> DoctorNamesAllocated
     {
       get
       {
-        return DoctorsAllocated?.Select(d => d.DisplayName)
+        return DoctorsAllocated?.Select(d => d)
                                ?.ToList();
       }
     }
