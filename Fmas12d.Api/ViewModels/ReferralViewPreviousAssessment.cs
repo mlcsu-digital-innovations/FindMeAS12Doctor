@@ -14,7 +14,7 @@ namespace Fmas12d.Api.ViewModels
       if (model == null) return;
 
       AmhpUserName = model.AmhpUser?.DisplayName;
-      DoctorNamesAllocated = model.DoctorNamesAllocated?.Select(d => new AssessmentViewDoctor(d)).ToList();
+      DoctorsAllocated = model.DoctorsAllocated?.Select(d => new AssessmentViewDoctor(d)).ToList();
       Id = model.Id;
       Postcode = model.Postcode;
       UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentType?.Name;
@@ -22,7 +22,7 @@ namespace Fmas12d.Api.ViewModels
 
     public string AmhpUserName { get; set; }
     public DateTimeOffset? CompletedTime { get; set; }
-    public IList<AssessmentViewDoctor> DoctorNamesAllocated { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public int Id { get; set; }
     public string Postcode { get; set; }
     public string UnsuccessfulAssessmentTypeName { get; set; }
