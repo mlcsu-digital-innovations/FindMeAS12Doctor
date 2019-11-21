@@ -17,6 +17,7 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
+import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 
 @Component({
   selector: 'app-assessment-edit',
@@ -25,7 +26,7 @@ import * as moment from 'moment';
 })
 export class AssessmentEditComponent implements OnInit {
 
-  allocatedDoctors: string[] = [];
+  allocatedDoctors: AssessmentUser[] = [];
   cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
@@ -46,7 +47,7 @@ export class AssessmentEditComponent implements OnInit {
   referralCreated: Date;
   referralId: number;
   selectedDetails: NameIdList[] = [];
-  selectedDoctors: string[] = [];
+  selectedDoctors: AssessmentUser[] = [];
   specialities: NameIdList[];
 
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
@@ -303,8 +304,8 @@ export class AssessmentEditComponent implements OnInit {
     this.minDate = this.ConvertToDateStruct(referral.currentAssessment.mustBeCompletedBy);
     this.SetDefaultDateTimeFields(referral.currentAssessment.mustBeCompletedBy);
 
-    this.selectedDoctors = ['Doctor Smith', 'Doctor Jones'];
-    this.allocatedDoctors = ['Doctor Livingstone'];
+    this.selectedDoctors = referral.currentAssessment.doctorsSelected;
+    this.allocatedDoctors = referral.currentAssessment.doctorsAllocated;
 
   }
 
@@ -341,8 +342,17 @@ export class AssessmentEditComponent implements OnInit {
     this.renderer.selectRootElement(fieldName).focus();
   }
 
-  UpdateReferral() {
-
+  ToggleAllocatedUpdate(id: number) {
+    const doctor = this.allocatedDoctors.find(sd => sd.id === id);
+    doctor.selected = !doctor.selected;
   }
 
+  ToggleSelectedUpdate(id: number) {
+    const doctor = this.selectedDoctors.find(sd => sd.id === id);
+    doctor.selected = !doctor.selected;
+  }
+
+  UpdateReferral() {
+    // ToDo: use service to update assessment details
+  }
 }

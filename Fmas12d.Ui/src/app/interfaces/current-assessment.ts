@@ -1,7 +1,9 @@
+import { AssessmentUser } from './assessment-user';
+
 export interface CurrentAssessment {
   amhpUserName: string;
-  doctorNamesAccepted: string[];
-  doctorNamesAllocated: string[];
+  doctorsAllocated: AssessmentUser[];
+  doctorsSelected: AssessmentUser[];
   fullAddress: string;
   id: number;
   isPlanned: boolean;

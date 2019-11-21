@@ -51,3 +51,8 @@ form {
 .doctor-name {
   margin-top: 10px;
 }
+
+.gmc-number {
+  font-size: 0.8em;
+  padding-left: 5px;
+}

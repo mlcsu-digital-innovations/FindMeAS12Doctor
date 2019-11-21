@@ -258,14 +258,16 @@
 
                     <div class="row">
                       <div class="col-md-8 doctor-name">
-                        {{doctor}}
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
                       </div>
                       <div class="col-md-4">
                         <label class="container mb-more-2">
                           <input
                             class="form-control"
                             type="checkbox"
-                            value=""
+                            checked = "doctor.selected == null ? true : doctor.selected"
+                            (change)=ToggleSelectedUpdate(doctor.id)
                           />
                           <span class="checkmark"></span>
                           Send Update
@@ -283,14 +285,16 @@
 
                     <div class="row">
                       <div class="col-md-8 doctor-name">
-                        {{doctor}}
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
                       </div>
                       <div class="col-md-4">
                         <label class="container mb-more-2">
                           <input
                             class="form-control"
                             type="checkbox"
-                            value=""
+                            checked = "doctor.selected == null ? true : doctor.selected"
+                            (change)=ToggleAllocatedUpdate(doctor.id)
                           />
                           <span class="checkmark"></span>
                           Send Update

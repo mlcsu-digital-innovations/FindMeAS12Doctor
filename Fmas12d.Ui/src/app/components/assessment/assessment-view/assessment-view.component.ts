@@ -105,8 +105,8 @@ export class AssessmentViewComponent implements OnInit {
 
   InitialiseForm(referral: ReferralView) {
     this.currentAssessmentForm.controls.amhpUserName.setValue(referral.currentAssessment.amhpUserName);
-    this.currentAssessmentForm.controls.doctorNamesAccepted.setValue(referral.currentAssessment.doctorNamesAccepted);
-    this.currentAssessmentForm.controls.doctorNamesAllocated.setValue(referral.currentAssessment.doctorNamesAllocated);
+    this.currentAssessmentForm.controls.doctorNamesAccepted.setValue(referral.currentAssessment.doctorsSelected);
+    this.currentAssessmentForm.controls.doctorNamesAllocated.setValue(referral.currentAssessment.doctorsAllocated);
     // this.currentAssessmentForm.controls.assessmentDetails.setValue(referral.currentAssessment.assessmentDetails);
     this.currentAssessmentForm.controls.fullAddress.setValue(referral.currentAssessment.fullAddress);
     this.currentAssessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
