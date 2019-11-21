@@ -469,3 +469,11 @@ a:hover {
 .page-link {
   color: #0dadb7;
 }
+
+.empty-table {
+  background-color: #ec5a3b;
+  color: #fff;
+  padding: 2px;
+  text-align: center;
+  width: 100%;
+}
