@@ -19,7 +19,7 @@ namespace Fmas12d.Business.Services
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
     {
-      await _userService.CheckUserIsAnAmhp(model.LeadAmhpUserId);
+      await _userService.CheckUserIsAnAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
 
       Entities.Referral entity = model.MapToEntity();
 

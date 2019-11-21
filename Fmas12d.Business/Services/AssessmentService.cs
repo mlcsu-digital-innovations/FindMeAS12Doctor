@@ -79,9 +79,10 @@ namespace Fmas12d.Business.Services
 
 
     private async Task<bool> AddAmhpToUserAssessmentNotifications(
-      int amhpUserId, Entities.Assessment entity)
+      Entities.Assessment entity,
+      int amhpUserId)
     {
-      await _userService.CheckUserIsAnAmhpById(amhpUserId);
+      await _userService.CheckUserIsAnAmhp(amhpUserId, "amhpUserId");
 
       if (entity.UserAssessmentNotifications == null)
       {
@@ -125,6 +126,35 @@ namespace Fmas12d.Business.Services
           AddAssessmentDetail(assessmentDetailTypeId, entity);
         }
       }
+    }
+
+    private async Task<bool> AddUserAssessmentNotificationsForDoctors(
+      Entities.Assessment entity,
+      IEnumerable<int> doctorUserIds, 
+      int notificationTextId
+    )
+    {
+      if (entity.UserAssessmentNotifications == null)
+      {
+        entity.UserAssessmentNotifications = new List<Entities.UserAssessmentNotification>();
+      }
+
+      foreach (int doctorId in doctorUserIds)
+      {
+        await _userService.CheckUserIsADoctor(doctorId, "userIds");
+
+        Entities.UserAssessmentNotification userAssessmentNotification =
+          new Entities.UserAssessmentNotification
+          {
+            IsActive = true,
+            NotificationTextId = notificationTextId,
+            UserId = doctorId
+          };
+        UpdateModified(userAssessmentNotification);
+        entity.UserAssessmentNotifications.Add(userAssessmentNotification);
+      }
+
+      return true;
     }
 
     private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
@@ -177,6 +207,12 @@ namespace Fmas12d.Business.Services
         UpdateModified(assessmentDoctor);
         entity.Doctors.Add(assessmentDoctor);
       }
+
+      await AddUserAssessmentNotificationsForDoctors(
+        entity, 
+        updateModel.UserIds, 
+        NotificationText.SELECTED_FOR_ASSESSMENT
+      );
 
       await _context.SaveChangesAsync();
 
@@ -334,7 +370,7 @@ namespace Fmas12d.Business.Services
       entity.Id = 0;
       entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
-      await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
+      await AddAmhpToUserAssessmentNotifications(entity, model.AmhpUserId);
       await AddLatitudeAndLongitude(model.Postcode, entity);
       _context.Add(entity);
 
@@ -682,7 +718,7 @@ namespace Fmas12d.Business.Services
 
             if (previousUserAssessmentNotification == null)
             {
-              await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
+              await AddAmhpToUserAssessmentNotifications(entity, model.AmhpUserId);
             }
             else
             {
