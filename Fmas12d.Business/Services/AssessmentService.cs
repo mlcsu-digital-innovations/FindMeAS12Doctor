@@ -535,6 +535,9 @@ namespace Fmas12d.Business.Services
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
                     .ThenInclude(u => u.UserSpecialities)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                    .ThenInclude(u => u.UserAssessmentNotifications)                    
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.PreferredDoctorGenderType)
@@ -576,6 +579,12 @@ namespace Fmas12d.Business.Services
                                           }).ToList()
                     },
                     DoctorUserId = d.DoctorUserId,
+                    HasAccepted = d.DoctorUser
+                      .UserAssessmentNotifications
+                      .Where(uan => uan.AssessmentId == id)
+                      .SingleOrDefault(uan => uan.NotificationTextId == 
+                        NotificationText.SELECTED_FOR_ASSESSMENT)
+                      .HasAccepted ?? false,
                     IsActive = d.IsActive,
                     StatusId = d.StatusId
                   }).ToList(),

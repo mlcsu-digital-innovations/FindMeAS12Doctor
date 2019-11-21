@@ -14,15 +14,17 @@ namespace Fmas12d.Api.ViewModels
       if (model == null) return;
 
       Distance = model.Distance;
-      GenderName = model.DoctorUser.GenderName;
+      GenderName = model.DoctorUser?.GenderName;
+      HasAccepted = model.HasAccepted;
       Id = model.DoctorUserId;
       IsAvailable = model.IsAvailable;
-      Name = model.DoctorUser.DisplayName;
-      SpecialityNames = model.DoctorUser.UserSpecialities.Select(us => us.Speciality.Name).ToList();
-      Type = model.DoctorUser.ProfileType.Name;
+      Name = model.DoctorUser?.DisplayName;
+      SpecialityNames = model.DoctorUser?.UserSpecialities.Select(us => us.Speciality.Name).ToList();
+      Type = model.DoctorUser?.ProfileType?.Name;
     }    
 
     public decimal? Distance { get; set; }
+    public bool HasAccepted { get; set; }
     public int Id { get; set; }
     public bool IsAvailable { get; set; }
     public string GenderName { get; set; }
