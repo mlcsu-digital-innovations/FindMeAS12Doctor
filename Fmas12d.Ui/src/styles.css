@@ -95,6 +95,8 @@ label {
   align-items: center;
   align-content: space-around;
   flex-wrap: nowrap;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .flex-container {

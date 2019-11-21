@@ -25,7 +25,7 @@
             Lead AMHP: <strong>{{referral.leadAmhp}}</strong>
           </div>
           <div class="flex-item">
-            Referral Status: <strong>{{referral.status}}</strong>
+            Referral Status: <strong>{{referral.statusName}}</strong>
           </div>
         </div>
         <div class="card-body">
@@ -112,22 +112,30 @@
             </div>
             <div class="form-row">
               <div class="col-md-6">
-                <label for="doctorNamesAccepted">Doctors Accepted</label>
-                <input
-                  class="form-control"
-                  formControlName="doctorNamesAccepted"
-                  id="doctorNamesAccepted"
-                  type="text"
-                />
+                <label for="doctorNamesAccepted">Doctors Selected</label>
+                <div class="doctor-list">
+                  <div *ngFor="let doctor of referral.currentAssessment.doctorsSelected;" class="doctor-row">
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="col-md-6">
                 <label for="doctorNamesAllocated">Doctors Allocated</label>
-                <input
-                  class="form-control"
-                  formControlName="doctorNamesAllocated"
-                  id="doctorNamesAllocated"
-                  type="text"
-                />
+                <div class="doctor-list">
+                  <div *ngFor="let doctor of referral.currentAssessment.doctorsAllocated;" class="doctor-row">
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-row mt-more-2">

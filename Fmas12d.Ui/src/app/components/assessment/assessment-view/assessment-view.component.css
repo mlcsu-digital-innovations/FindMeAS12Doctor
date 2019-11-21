@@ -65,3 +65,31 @@ th {
 .btn-spaced {
   margin-left: 10px;
 }
+
+.doctor-list {
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  display: flex;
+  flex-direction: column;
+  padding: .375rem .75rem;
+}
+
+.doctor-row {
+  background-color: #e1e1e1;
+  border-radius: 0.25rem;
+  color: #495057;
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-top: 5px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+.doctor-name {
+  margin-top: 10px;
+}
+
+.gmc-number {
+  font-size: 0.8em;
+  padding-left: 5px;
+}
