@@ -15,7 +15,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 @Component({
   selector: 'app-doctor-select',
   templateUrl: './doctor-select.component.html',
-  styleUrls: ['./doctor-select.component.css']
+  styleUrls: ['../doctor-styles.css']
 })
 export class DoctorSelectComponent implements OnInit {
 
@@ -31,10 +31,12 @@ export class DoctorSelectComponent implements OnInit {
   isAvailableDoctorSearching: boolean;
   isDoctorFieldsShown: boolean;
   isDoctorSearching: boolean;
+  isSavingSelection: boolean;
   page = 1;
   pageSize = 10;
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
+
 
   @ViewChild('cancelSelection', null) cancelSelectionTemplate;
 
@@ -62,7 +64,6 @@ export class DoctorSelectComponent implements OnInit {
               map((assessment: AssessmentAvailability) => {
                 this.assessmentId = assessment.id;
                 this.allDoctors = assessment.availableDoctors;
-                console.log(assessment);
                 this.DisplayDoctorsWithinSearchRadius(this.doctorDistance.value);
                 return assessment;
               })
@@ -73,7 +74,7 @@ export class DoctorSelectComponent implements OnInit {
 
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Referral Information'
+          message: 'Error Retrieving Assessment Information'
         });
 
         const emptyAssessment = {} as Assessment;
@@ -169,11 +170,35 @@ export class DoctorSelectComponent implements OnInit {
     }
   }
 
-  UpdateAssessment() {
-    // ToDo: use service to update the assessment with the selected doctors
-    console.log('Save details ...');
-    console.log(this.selectedDoctors);
-  }
+  UpdateSelectedDoctors() {
+    this.isSavingSelection = true;
+    const selectedDoctorIds: number[] = [];
+
+    this.selectedDoctors.forEach(doctor => {
+      selectedDoctorIds.push(doctor.id);
+    });
+
+    const userIds = {
+      UserIds: selectedDoctorIds
+    };
+
+    this.assessmentService.updateSelectedDoctors(this.assessmentId, userIds)
+      .subscribe(() => {
+        this.isSavingSelection = false;
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Assessment Updated'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.isSavingSelection = false;
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to update selected doctors!'
+        });
+      });
+    }
 
   UpdateAvailableDoctorList() {
     this.availableDoctors = this.filteredDoctorList.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
