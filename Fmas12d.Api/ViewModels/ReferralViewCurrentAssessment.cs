@@ -16,31 +16,31 @@ namespace Fmas12d.Api.ViewModels
 
       AmhpUserName = model.AmhpUser?.DisplayName;
       DetailTypes = model.DetailTypes?.Select(d => new AssessmentDetailType(d)).ToList();
-      DoctorNamesAccepted = model.DoctorNamesAccepted;
-      DoctorNamesAllocated = model.DoctorNamesAllocated;
+      DoctorsSelected = model.DoctorsSelected?.Select(d => new AssessmentViewDoctor(d)).ToList();
+      DoctorsAllocated = model.DoctorsAllocated?.Select(d => new AssessmentViewDoctor(d)).ToList();
       FullAddress = model.FullAddress;
       Id = model.Id;
       IsPlanned = model.IsPlanned;
       MeetingArrangementComment = model.MeetingArrangementComment;
       MustBeCompletedBy = model.MustBeCompletedBy;
       Postcode = model.Postcode;
-      PreferredDoctorGenderTypeName = model.PreferredDoctorGenderType?.Name;
+      PreferredDoctorGenderType = new IdNameDescription(model.PreferredDoctorGenderType);
       ScheduledTime = model.ScheduledTime;
-      SpecialityName = model.Speciality?.Name;
+      Speciality = new IdNameDescription(model.Speciality);
     }
 
     public string AmhpUserName { get; set; }
     public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
-    public IList<string> DoctorNamesAccepted { get; set; }
-    public IList<string> DoctorNamesAllocated { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public string FullAddress { get; set; }
     public int Id { get; set; }
     public bool IsPlanned { get; set; }
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset? MustBeCompletedBy { get; set; }
     public string Postcode { get; set; }
-    public string PreferredDoctorGenderTypeName { get; set; }
+    public IdNameDescription PreferredDoctorGenderType { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
-    public string SpecialityName { get; set; }
+    public IdNameDescription Speciality { get; set; }
   }
 }
