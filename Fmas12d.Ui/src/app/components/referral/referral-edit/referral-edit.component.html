@@ -189,7 +189,7 @@
                 </div>
               </div>
               <!-- Residential Postcode -->
-              <div class="form-row">
+              <div class="form-row" *ngIf="isPostcodeFieldShown">
                 <div class="col-lg-2 col-md-3 col-sm-6">
                   <label for="residentialPostcode">Residential Postcode</label>
                   <div class="input-group">
@@ -265,7 +265,7 @@
               </div>
             </div>
             <!-- CCG -->
-            <div class="form-row">
+            <div class="form-row" *ngIf="isCcgFieldShown">
               <div class="col-md-6">
                 <label for="ccg">Clinical Commissioning Group</label>
                 <div class="input-group">
