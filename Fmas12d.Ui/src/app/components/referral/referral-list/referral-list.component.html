@@ -137,13 +137,18 @@
                         <ngb-highlight [result]="referral.responsesReceived" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
-                      <span *ngIf="referral.responsesReceived == 0">0</span>
+                      <span class="zero-responses" *ngIf="referral.responsesReceived == 0">0</span>
                     </td>
                     <td class="text-center">
-                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
+                      <a
+                        href="/assessment/{{referral.currentAssessmentId}}/allocate-doctors"
+                        class="clickable"
+                        *ngIf="referral.doctorsAllocated > 0"
+                      >
                         <ngb-highlight [result]="referral.doctorsAllocated" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
+                      <span class="zero-responses" *ngIf="referral.doctorsAllocated == 0">0</span>
                     </td>
                   </tr>
                 </tbody>

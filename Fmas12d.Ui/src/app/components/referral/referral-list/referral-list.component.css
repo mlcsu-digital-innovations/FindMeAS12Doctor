@@ -78,3 +78,8 @@ th {
   color:#666;
   font-weight: 500;
 }
+
+.zero-responses {
+  color: #495057;
+  font-size: 1.2em;
+}
