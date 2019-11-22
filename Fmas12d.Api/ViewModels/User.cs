@@ -18,6 +18,7 @@ namespace Fmas12d.Api.ViewModels
       DisplayName = model.DisplayName;
       GenderTypeId = model.GenderTypeId;
       GenderName = model.GenderName;
+      Id = model.Id;
     }
 
     public string DisplayName { get; set; }

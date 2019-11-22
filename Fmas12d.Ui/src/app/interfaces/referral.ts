@@ -1,5 +1,5 @@
 import { Patient } from './patient';
-import { LeadAmhpUser } from './user';
+import { User } from './user';
 
 export interface Referral {
   createdAt: Date;
@@ -8,7 +8,7 @@ export interface Referral {
   assessments: any[];
   id: number;
   isPlannedAssessment: boolean;
-  leadAmhpUser: LeadAmhpUser;
+  leadAmhpUser: User;
   leadAmhpUserId: number;
   patient: Patient;
   patientId: number;
