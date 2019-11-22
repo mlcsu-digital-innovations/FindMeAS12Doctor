@@ -9,7 +9,7 @@ import { map, switchMap, catchError, tap, distinctUntilChanged, debounceTime } f
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
@@ -18,6 +18,8 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
 import { AssessmentUser } from 'src/app/interfaces/assessment-user';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
+import { Assessment } from 'src/app/interfaces/assessment';
 
 @Component({
   selector: 'app-assessment-edit',
@@ -26,6 +28,7 @@ import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 })
 export class AssessmentEditComponent implements OnInit {
 
+  assessmentId: number;
   allocatedDoctors: AssessmentUser[] = [];
   cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
@@ -54,6 +57,7 @@ export class AssessmentEditComponent implements OnInit {
 
   constructor(
     private amhpListService: AmhpListService,
+    private assessmentService: AssessmentService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
@@ -82,6 +86,7 @@ export class AssessmentEditComponent implements OnInit {
             .pipe(
               map(referral => {
                 console.log(referral);
+                this.assessmentId = referral.currentAssessment.id;
                 this.InitialiseForm(referral);
                 return referral;
               })
@@ -227,6 +232,10 @@ export class AssessmentEditComponent implements OnInit {
     );
   }
 
+  CreateJsonDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): string {
+    return `${datePart.year}-${datePart.month}-${datePart.day}T${timePart.hour}`;
+  }
+
   async Delay(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
@@ -273,8 +282,31 @@ export class AssessmentEditComponent implements OnInit {
     });
   }
 
+  FormatAddress(): string[] {
+
+    const addressLines: string[] = [];
+    const addressSplitByCommas = this.GetFormValue('fullAddress').split(',');
+
+    // can only store 4 lines of the address
+    for (let i = 0; i < 4; i++) {
+      if (addressSplitByCommas.length >= i &&
+          addressSplitByCommas[i] !== undefined &&
+          addressSplitByCommas[i].trim() !== this.assessmentPostcode.value) {
+            addressLines.push(addressSplitByCommas[i].trim());
+      } else {
+        addressLines.push(null);
+      }
+    }
+
+    return addressLines;
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
+  }
+
+  GetFormValue(fieldName: string) {
+    return this.assessmentForm.get(fieldName).value;
   }
 
   get assessmentPostcode() {
@@ -302,9 +334,12 @@ export class AssessmentEditComponent implements OnInit {
     this.FetchDropDownData();
 
     const assessment = referral.currentAssessment;
+    const amhpUser = assessment.amhpUser;
+
+    console.log(amhpUser);
 
     // AMHP User - mandatory field
-    const AmhpUser: TypeAheadResult = {id: 1, resultText: assessment.amhpUserName };
+    const AmhpUser: TypeAheadResult = {id: amhpUser.id, resultText: amhpUser.displayName};
     this.assessmentForm.controls.amhp.setValue(AmhpUser);
 
     this.assessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
@@ -374,5 +409,55 @@ export class AssessmentEditComponent implements OnInit {
 
   UpdateReferral() {
     // ToDo: use service to update assessment details
+
+    const updatedAssessment = {} as Assessment;
+
+    updatedAssessment.id = this.assessmentId;
+    updatedAssessment.postcode = this.GetFormValue('postCode');
+    updatedAssessment.amhpUserId = this.GetFormValue('amhp').id;
+
+    const specialityId = this.GetFormValue('speciality');
+    updatedAssessment.specialityId = specialityId === 0 ? null : specialityId;
+
+    const genderId = this.GetFormValue('preferredGender');
+    updatedAssessment.preferredDoctorGenderTypeId = genderId === 0 ? null : genderId;
+
+    const details: number[] = [];
+    this.selectedDetails.forEach(detail => {
+      details.push(detail.id);
+    });
+    updatedAssessment.detailTypeIds = details;
+
+    updatedAssessment.meetingArrangementComment = this.GetFormValue('meetingArrangementComment');
+
+    const completedDate = this.GetFormValue('toBeCompletedByDate');
+    const completedTime = this.GetFormValue('toBeCompletedByTime');
+    updatedAssessment.mustBeCompletedBy = this.CreateDateFromPickerObjects(completedDate, completedTime);
+
+    const addressLines = this.FormatAddress();
+    updatedAssessment.address1 = addressLines[0];
+    updatedAssessment.address2 = addressLines[1];
+    updatedAssessment.address3 = addressLines[2];
+    updatedAssessment.address4 = addressLines[3];
+
+    console.log(updatedAssessment);
+
+    this.assessmentService.updateAssessment(updatedAssessment).subscribe(
+      (result: Assessment) => {
+        this.toastService.displaySuccess({
+          message: 'Assessment Created'
+        });
+        this.assessmentId = result.id;
+      },
+      error => {
+        console.log(error);
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to update assessment! Please try again in a few moments'
+        });
+        return throwError(error);
+      }
+    );
+
   }
 }
