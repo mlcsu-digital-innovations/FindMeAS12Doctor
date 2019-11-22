@@ -99,43 +99,48 @@
                       </a>
                     </td>
                     <td class="text-center">
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
                         <ngb-highlight [result]="referral.numberOfAssessmentAttempts" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
                         <ngb-highlight [result]="referral.assessmentLocationPostcode" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
                         <ngb-highlight [result]="referral.specialityName" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
                         <ngb-highlight [result]="referral.timescale | date:'dd/MM/yyyy HH:mm'" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
                         <ngb-highlight [result]="referral.statusName" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td class="text-center">
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a
+                        href="/assessment/{{referral.currentAssessmentId}}/allocate-doctors"
+                        class="clickable"
+                        *ngIf="referral.responsesReceived > 0"
+                      >
                         <ngb-highlight [result]="referral.responsesReceived" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
+                      <span *ngIf="referral.responsesReceived == 0">0</span>
                     </td>
                     <td class="text-center">
-                      <a href="/assessment/edit/{{referral.referralId}}" class="clickable">
+                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
                         <ngb-highlight [result]="referral.doctorsAllocated" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
@@ -145,7 +150,7 @@
               </table>
             </div>
             <div class="form-row" style="text-align: center;">
-            <div class="col-md-12 empty-table" *ngIf="referralListService.total$.source._value === 0">
+            <div class="col-md-12 empty-table" *ngIf="!referralListService.loading$ && referralListService.total$.source._value === 0">
               There are currently no active referrals
             </div>
           </div>
@@ -167,6 +172,6 @@
   </div>
 </div>
 
-<!-- <app-delay-spinner *ngIf="referralListService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner> -->
+<app-delay-spinner *ngIf="referralListService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
