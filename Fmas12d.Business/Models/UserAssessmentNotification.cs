@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 
 namespace Fmas12d.Business.Models
 {
@@ -25,6 +26,7 @@ namespace Fmas12d.Business.Models
     public bool? HasAccepted { get; set; }
     public virtual NotificationText NotificationText { get; set; }
     public int NotificationTextId { get; set; }
+
     public DateTimeOffset? RespondedAt { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
@@ -33,6 +35,12 @@ namespace Fmas12d.Business.Models
     public bool IsDoctor { get { return User.IsDoctor; } }
     public string UserName { get { return User?.DisplayName; } }
 
-
+    public static Expression<Func<Data.Entities.UserAssessmentNotification, UserAssessmentNotification>> ProjectFromEntity
+    {
+      get
+      {
+        return entity => new UserAssessmentNotification(entity);
+      }
+    }
   }
 }

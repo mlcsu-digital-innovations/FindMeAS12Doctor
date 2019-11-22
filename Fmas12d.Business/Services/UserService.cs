@@ -18,6 +18,62 @@ namespace Fmas12d.Business.Services
     {
     }
 
+    private async Task<User> CheckUserIs(
+      int id,
+      string modelPropertyName,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      User user = await _context.Users
+                                .Include(u => u.ProfileType)
+                                .Where(u => u.Id == id)
+                                .WhereIsActiveOrActiveOnly(activeOnly)
+                                .AsNoTracking(asNoTracking)
+                                .Select(User.ProjectFromEntity)
+                                .SingleOrDefaultAsync();
+      if (user == null)
+      {
+        throw new ModelStateException(
+          modelPropertyName, 
+          $"A{(activeOnly ? "n active" : "")} User with an Id of {id} does not exist."
+        );
+      }
+
+      return user;
+    }    
+
+    public async Task<bool> CheckUserIsAnAmhp(
+      int id,
+      string modelPropertyName,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      User user = await CheckUserIs(id, modelPropertyName, asNoTracking, activeOnly);
+      if (!user.IsAmhp)
+      {
+        throw new ModelStateException(
+          modelPropertyName, 
+          $"The User with an Id of {id} must be an AMHP but is a {user.ProfileType.Name}.");
+      }
+      return true;
+    }
+
+    public async Task<bool> CheckUserIsADoctor(
+      int id,
+      string modelPropertyName,
+      bool asNoTracking = true, 
+      bool activeOnly = true)
+    {
+      User user = await CheckUserIs(id, modelPropertyName, asNoTracking, activeOnly);
+      if (!user.IsDoctor)
+      {
+        throw new ModelStateException(
+          modelPropertyName, 
+          $"The User with an Id of {id} must be a Doctor but is a {user.ProfileType.Name}.");
+      }
+      return true;      
+    }
+
     public async Task<IEnumerable<Models.User>> GetAllAsync(
       bool activeOnly)
     {
@@ -99,33 +155,6 @@ namespace Fmas12d.Business.Services
 
       return entity;
     }
-
-    public async Task<bool> CheckUserIsAnAmhpById(
-      int id,
-      bool asNoTracking = true,
-      bool activeOnly = true)
-    {
-      User user = await _context.Users
-                                .Include(u => u.ProfileType)
-                                .Where(u => u.Id == id)
-                                .Where(u => u.ProfileTypeId == Models.ProfileType.AMHP)
-                                .WhereIsActiveOrActiveOnly(activeOnly)
-                                .AsNoTracking(asNoTracking)
-                                .Select(User.ProjectFromEntity)
-                                .SingleOrDefaultAsync();
-      if (user == null)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", $"An {(activeOnly ? "active" : "inactive")} User with an Id of {id} " +
-          "does not exist.");
-      }
-      if (!user.IsAmhp)
-      {
-        throw new ModelStateException(
-          "AmhpUserId", 
-          $"The User with an Id of {id} must be an AMHP but is a {user.ProfileType.Name}.");
-      }
-      return true;
-    }    
+    
   }
 }
