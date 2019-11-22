@@ -45,15 +45,20 @@ export class AssessmentEditComponent implements OnInit {
   isPatientIdValidated: boolean;
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
+  navigationPage: string;
   pageSize: number;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralId: number;
+  reselectModal: NgbModalRef;
+  assessmentScheduledDate: NgbDateStruct;
+  assessmentScheduledTime: NgbTimeStruct;
   selectedDetails: NameIdList[] = [];
   selectedDoctors: AssessmentUser[] = [];
   specialities: NameIdList[];
 
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
+  @ViewChild('selectDoctors', null) selectDoctorTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -141,6 +146,13 @@ export class AssessmentEditComponent implements OnInit {
       ],
       speciality: [
       ],
+      scheduledDate: [
+        this.assessmentScheduledDate,
+        [
+          DatePickerFormat
+        ]
+      ],
+      scheduledTime: [this.assessmentScheduledTime],
       toBeCompletedByDate: [
         this.assessmentShouldBeCompletedByDate,
         [
@@ -149,6 +161,8 @@ export class AssessmentEditComponent implements OnInit {
       ],
       toBeCompletedByTime: [this.assessmentShouldBeCompletedByTime]
     });
+
+    this.navigationPage = '/referral';
   }
 
   AmhpSearch = (text$: Observable<string>) =>
@@ -317,6 +331,14 @@ export class AssessmentEditComponent implements OnInit {
     return this.assessmentForm.controls.preferredGender;
   }
 
+  get scheduledDateField() {
+    return this.assessmentForm.controls.scheduledDate;
+  }
+
+  get scheduledTimeField() {
+    return this.assessmentForm.controls.scheduledTime;
+  }
+
   get specialityField() {
     return this.assessmentForm.controls.speciality;
   }
@@ -336,8 +358,6 @@ export class AssessmentEditComponent implements OnInit {
     const assessment = referral.currentAssessment;
     const amhpUser = assessment.amhpUser;
 
-    console.log(amhpUser);
-
     // AMHP User - mandatory field
     const AmhpUser: TypeAheadResult = {id: amhpUser.id, resultText: amhpUser.displayName};
     this.assessmentForm.controls.amhp.setValue(AmhpUser);
@@ -355,6 +375,12 @@ export class AssessmentEditComponent implements OnInit {
     this.preferredGenderField.setValue(referral.currentAssessment.preferredDoctorGenderType.id);
     this.specialityField.setValue(referral.currentAssessment.speciality.id);
 
+    this.assessmentScheduledDate = this.ConvertToDateStruct(assessment.scheduledTime);
+    this.scheduledDateField.setValue(this.assessmentScheduledDate);
+
+    this.assessmentScheduledTime = this.ConvertToTimeStruct(assessment.scheduledTime);
+    this.scheduledTimeField.setValue(this.assessmentScheduledTime);
+
     referral.currentAssessment.detailTypes.forEach(detailType => {
       const detail = {id: detailType.id, name: detailType.name} as NameIdList;
       this.selectedDetails.push(detail);
@@ -371,6 +397,16 @@ export class AssessmentEditComponent implements OnInit {
     }
   }
 
+  OnCancelReselectAction(action: boolean) {
+    this.reselectModal.close();
+    if (action) {
+      this.navigationPage = `/assessment/${this.assessmentId}/select-doctors`;
+      this.UpdateReferral();
+    } else {
+      this.routerService.navigate([`/assessment/${this.assessmentId}/select-doctors`]);
+    }
+  }
+
   OnItemDeselect(item: any) {
     this.selectedDetails =
       this.selectedDetails.filter(obj => obj.id !== item.id);
@@ -382,6 +418,16 @@ export class AssessmentEditComponent implements OnInit {
 
   OpenLocationTab(): void {
     window.open(environment.locationEndpoint, '_blank');
+  }
+
+  ReselectDoctors() {
+    if (this.assessmentForm.dirty) {
+      this.reselectModal = this.modalService.open(this.selectDoctorTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigate([`/assessment/${this.assessmentId}/select-doctors`]);
+    }
   }
 
   SetDefaultDateTimeFields(defaultDatetIme: Date) {
@@ -434,6 +480,10 @@ export class AssessmentEditComponent implements OnInit {
     const completedTime = this.GetFormValue('toBeCompletedByTime');
     updatedAssessment.mustBeCompletedBy = this.CreateDateFromPickerObjects(completedDate, completedTime);
 
+    const scheduledDate = this.GetFormValue('scheduledDate');
+    const scheduledTime = this.GetFormValue('scheduledTime');
+    updatedAssessment.scheduledTime = this.CreateDateFromPickerObjects(scheduledDate, scheduledTime);
+
     const addressLines = this.FormatAddress();
     updatedAssessment.address1 = addressLines[0];
     updatedAssessment.address2 = addressLines[1];
@@ -445,9 +495,10 @@ export class AssessmentEditComponent implements OnInit {
     this.assessmentService.updateAssessment(updatedAssessment).subscribe(
       (result: Assessment) => {
         this.toastService.displaySuccess({
-          message: 'Assessment Created'
+          message: 'Assessment Updated'
         });
         this.assessmentId = result.id;
+        this.routerService.navigateByUrl(this.navigationPage);
       },
       error => {
         console.log(error);

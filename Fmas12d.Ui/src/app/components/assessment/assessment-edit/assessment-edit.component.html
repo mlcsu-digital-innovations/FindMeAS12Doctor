@@ -66,6 +66,30 @@
                 </div>
               </div>
             </div>
+            <!-- Planned assessment date / time -->
+            <div class="form-row" *ngIf="referral.currentAssessment.isPlanned">
+              <div class="col-md-6">
+                <label for="picker">Planned Assessment Date / Time</label>
+                <div class="row" name="plannedPicker">
+                  <div class="col-md-4">
+                    <input class="form-control" formControlName='scheduledDate'
+                      placeholder="dd/mm/yyyy" name="scheduledDate" [minDate]='minDate' ngbDatepicker
+                      #d="ngbDatepicker"
+                    />
+                  </div>
+                  <div class="col-md-1 padding-left-1">
+                    <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mlt-less-1 mt-less-5">
+                    <ngb-timepicker formControlName="scheduledTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- residential postcode -->
             <div class="form-row">
               <div class="col-md-2">
@@ -221,7 +245,7 @@
               </div>
             </div>
             <!-- To Be Completed By -->
-            <div class="form-row">
+            <div class="form-row" *ngIf="!referral.currentAssessment.isPlanned">
               <div class="col-md-6">
                 <label for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
@@ -265,7 +289,7 @@
                     </div>
                   </div>
                   <div class="row" *ngIf="selectedDoctors.length == 0">
-                    <div class="col-md-8 no-doctors">
+                    <div class="col-md-8 doctor-row">
                       None
                     </div>
                   </div>
@@ -284,7 +308,7 @@
                     </div>
                   </div>
                   <div class="row" *ngIf="allocatedDoctors.length == 0">
-                    <div class="col-md-8 no-doctors">
+                    <div class="col-md-8 doctor-row">
                       None
                     </div>
                   </div>
@@ -293,7 +317,7 @@
             </div>
             <div class="form-row mt-more-2">
               <div class="col-md-2 mb-2">
-                <button class="btn btn-primary btn-standard" type="button" (click)="UpdateReferral()">
+                <button class="btn btn-primary btn-standard" type="button" (click)="ReselectDoctors()">
                   <i class="fas fa-redo"></i>
                     Reselect Doctors
                 </button>
@@ -325,6 +349,15 @@
     [modalTitle]="'Cancel Update'"
     [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
     (actioned)="OnCancelModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #selectDoctors>
+  <app-cancel-action-modal
+    [modalTitle]="'Unsaved changes'"
+    [modalBody]="'Save update before reselecting doctors?'"
+    (actioned)="OnCancelReselectAction($event)"
   >
   </app-cancel-action-modal>
 </ng-template>
