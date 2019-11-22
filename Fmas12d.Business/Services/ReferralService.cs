@@ -19,7 +19,7 @@ namespace Fmas12d.Business.Services
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
     {
-      await _userService.CheckUserIsAnAmhpById(model.LeadAmhpUserId);
+      await _userService.CheckUserIsAnAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
 
       Entities.Referral entity = model.MapToEntity();
 
@@ -28,6 +28,7 @@ namespace Fmas12d.Business.Services
       entity.ReferralStatusId = ReferralStatus.NEW;
 
       UpdateModified(entity);
+      entity.CreatedByUserId = entity.ModifiedByUserId;      
 
       _context.Add(entity);
 

@@ -24,6 +24,7 @@ namespace Fmas12d.Business.Models
     public virtual User DoctorUser { get; set; }
     public int DoctorUserId { get; set; }
     public bool IsAvailable { get; set; }
+    public bool HasAccepted { get; set; }
     public virtual AssessmentDoctorStatus Status { get; set; }
     public int StatusId { get; set; }
 
