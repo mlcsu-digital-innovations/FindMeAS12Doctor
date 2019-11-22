@@ -35,11 +35,13 @@ export class ReferralEditComponent implements OnInit {
   hasGpSearchFailed: boolean;
   initialReferralDetails: ReferralEdit;
   isAmhpSearching: boolean;
+  isCcgFieldShown: boolean;
   isCcgSearching: boolean;
   isGpFieldsShown: boolean;
   isGpSearching: boolean;
   isPatientIdValidated: boolean;
   isPatientPostcodeValidated: boolean;
+  isPostcodeFieldShown: boolean;
   isSearchingForPatient: boolean;
   isSearchingForPostcode: boolean;
   modalResult: PatientSearchResult;
@@ -359,11 +361,21 @@ export class ReferralEditComponent implements OnInit {
       }
       : {
         id: referral.patientGpPracticeId,
-        resultText: referral.patientGpNameAndPostcode
+        resultText: referral.patientGpPracticeNameAndPostcode
       };
 
     this.gpPracticeField.setValue(gpPracticeValue);
     this.unknownGpPractice.setValue(gpPracticeValue.id === 0);
+
+    // only show the postcode field if GP practice is not known
+    this.isPostcodeFieldShown = referral.patientGpPracticeId === null ? true : false;
+
+    // only show the CCG field if both GP and Postcode are not known
+    this.isCcgFieldShown =
+      referral.patientResidentialPostcode === null &&
+      referral.patientGpPracticeId === null
+        ? true
+        : false;
 
     this.residentialPostcodeField.setValue(
       referral.patientResidentialPostcode === null
@@ -400,7 +412,6 @@ export class ReferralEditComponent implements OnInit {
       };
 
     this.amhpField.setValue(amhpUser);
-
   }
 
   IsPatientIdUnchanged(): boolean {
@@ -500,9 +511,11 @@ export class ReferralEditComponent implements OnInit {
     if (event.target.checked) {
       // set the field to unknown, show the postcode field and set focus
       this.gpPracticeField.setValue({id: 0, resultText: 'Unknown'});
+      this.isPostcodeFieldShown = true;
     } else {
       this.gpPracticeField.setValue(null, '');
       this.SetFieldFocus('#gpPractice');
+      this.isPostcodeFieldShown = false;
     }
   }
 
@@ -510,11 +523,12 @@ export class ReferralEditComponent implements OnInit {
     if (event.target.checked) {
       this.residentialPostcodeField.setValue('Unknown');
       this.residentialPostcodeField.disable();
+      this.isCcgFieldShown = true;
     } else {
       this.residentialPostcodeField.enable();
       this.residentialPostcodeField.setValue('');
       this.residentialPostcodeField.updateValueAndValidity();
-
+      this.isCcgFieldShown = false;
       this.SetFieldFocus('#residentialPostcode');
     }
   }
