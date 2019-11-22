@@ -4,7 +4,7 @@ export interface Assessment {
   address3?: string;
   address4?: string;
   amhpUserId: number;
-  assessmentDetails: number[];
+  detailTypeIds: number[];
   id: number;
   isPlanned: boolean;
   meetingArrangementComment?: string;
