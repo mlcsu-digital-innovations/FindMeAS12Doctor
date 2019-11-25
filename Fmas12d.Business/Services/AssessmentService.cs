@@ -337,7 +337,7 @@ namespace Fmas12d.Business.Services
       entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
       
-      await _userService.CheckUserIsAnAmhp(model.AmhpUserId, "amhpUserId");
+      await _userService.CheckIsAmhp(model.AmhpUserId, "amhpUserId");
       AddUserAssessmentNotification(
         entity, 
         model.AmhpUserId, 

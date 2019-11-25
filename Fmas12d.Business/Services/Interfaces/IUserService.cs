@@ -6,13 +6,13 @@ namespace Fmas12d.Business.Services
 {
   public interface IUserService : IServiceBaseNoAutoMapper
   {
-    Task<bool> CheckUserIsAnAmhp(
+    Task<bool> CheckIsAmhp(
       int id, 
       string modelPropertyName,
       bool asNoTracking = true, 
       bool activeOnly = true
     );
-    Task<bool> CheckUserIsADoctor(
+    Task<bool> CheckIsADoctor(
       int id, 
       string modelPropertyName,
       bool asNoTracking = true, 

@@ -30,6 +30,28 @@ namespace Fmas12d.Business.Services
       _gpPracticeService = gpPracticeService;
     }
 
+    public async Task<bool> CheckExists(
+      int id, 
+      string modelPropertyName, 
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      bool exists = await _context.Patients
+                              .Where(u => u.Id == id)
+                              .WhereIsActiveOrActiveOnly(activeOnly)
+                              .AsNoTracking(asNoTracking)
+                              .AnyAsync();
+      if (!exists)
+      {
+        throw new ModelStateException(
+          modelPropertyName, 
+          $"A{(activeOnly ? "n active" : "")} Patient with an Id of {id} does not exist."
+        );
+      }
+
+      return exists;
+    }
+
     public override async Task<Patient> CreateAsync(Patient model)
     {
       Entities.Patient entity = model.MapToEntity();
