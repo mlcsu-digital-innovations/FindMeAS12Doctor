@@ -66,19 +66,31 @@
                 </div>
               </div>
             </div>
+            <div class="form-row" *ngIf="amhpField.errors">
+                <div class="col-md-8 mb-2">
+                  <div class="invalid-field" *ngIf="amhpField.errors.MissingAmhpUser">
+                    * AMHP User is required
+                  </div>
+                </div>
+              </div>
             <!-- Planned assessment date / time -->
             <div class="form-row" *ngIf="referral.currentAssessment.isPlanned">
               <div class="col-md-6">
                 <label for="picker">Planned Assessment Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-4">
-                    <input class="form-control" formControlName='scheduledDate'
-                      placeholder="dd/mm/yyyy" name="scheduledDate" [minDate]='minDate' ngbDatepicker
-                      #d="ngbDatepicker"
+                    <input
+                      class="form-control"
+                      formControlName='scheduledDate'
+                      placeholder="dd/mm/yyyy"
+                      name="scheduledDate"
+                      [minDate]='minDate'
+                      ngbDatepicker
+                      #e="ngbDatepicker"
                     />
                   </div>
                   <div class="col-md-1 padding-left-1">
-                    <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()"
+                    <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="e.toggle()"
                       type="button">
                       <i class="far fa-calendar-alt"></i>
                     </button>
@@ -87,6 +99,14 @@
                   <div class="col-md-4 mlt-less-1 mt-less-5">
                     <ngb-timepicker formControlName="scheduledTime" [minuteStep]="5"></ngb-timepicker>
                   </div>
+                </div>
+              </div>
+            </div>
+            <!-- Planned Assessment Date / Time Errors-->
+            <div class="form-row" *ngIf="scheduledDateField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div class="invalid-field" *ngIf="scheduledDateField.errors.MissingDate || scheduledDateField.errors.MissingTime">
+                  <span>* Date / Time of assessment is required</span>
                 </div>
               </div>
             </div>
@@ -165,6 +185,9 @@
                 <div class="invalid-field" *ngIf="assessmentPostcode.errors.MissingPostcode">
                   <span>* Postcode must be provided</span>
                 </div>
+                <div class="invalid-field" *ngIf="assessmentPostcode.errors.MissingAddress">
+                    <span>* Address must be provided</span>
+                 </div>
               </div>
             </div>
             <div class="form-row">
@@ -300,6 +323,16 @@
                   <div class="col-md-4 mlt-less-1 mt-less-5">
                     <ngb-timepicker formControlName="toBeCompletedByTime" [minuteStep]="5"></ngb-timepicker>
                   </div>
+                </div>
+              </div>
+            </div>
+            <!-- Planned Assessment Date / Time Errors-->
+            <div class="form-row" *ngIf="scheduledDateField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div
+                  class="invalid-field"
+                  *ngIf="toBeCompletedByDateField.errors.MissingDate || toBeCompletedByTimeField.errors.MissingTime">
+                  <span>* Date / Time of assessment is required</span>
                 </div>
               </div>
             </div>

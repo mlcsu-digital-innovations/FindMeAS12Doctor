@@ -353,6 +353,10 @@ export class AssessmentEditComponent implements OnInit {
     return this.assessmentForm.get(fieldName).value;
   }
 
+  get amhpField() {
+    return this.assessmentForm.controls.amhp;
+  }
+
   get assessmentAddressField() {
     return this.assessmentForm.controls.assessmentAddress;
   }
@@ -386,6 +390,10 @@ export class AssessmentEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralView) {
+
+    this.minDate = this.ConvertToDateStruct(referral.createdAt);
+
+    console.log(this.minDate);
 
     this.FetchDropDownData();
 
@@ -490,7 +498,9 @@ export class AssessmentEditComponent implements OnInit {
   }
 
   UpdateReferral() {
-    // ToDo: use service to update assessment details
+    if (!this.ValidateAssessment()) {
+      return;
+    }
 
     const updatedAssessment = {} as Assessment;
 
@@ -530,8 +540,6 @@ export class AssessmentEditComponent implements OnInit {
     updatedAssessment.address3 = addressLines[2];
     updatedAssessment.address4 = addressLines[3];
 
-    console.log(updatedAssessment);
-
     this.assessmentService.updateAssessment(updatedAssessment).subscribe(
       (result: Assessment) => {
         this.toastService.displaySuccess({
@@ -550,5 +558,56 @@ export class AssessmentEditComponent implements OnInit {
       }
     );
 
+  }
+
+  ValidateAssessment(): boolean{
+
+    let formIsValid = true;
+
+    console.log('Validate Assessment');
+    console.log(this.amhpField.value);
+
+    if ( this.amhpField.value === null || this.amhpField.value === '' ) {
+      formIsValid = false;
+      this.amhpField.setErrors({MissingAmhpUser: true});
+    }
+
+    if ( this.isPlannedAssessment && this.scheduledDateField.value === null) {
+      formIsValid = false;
+      this.scheduledDateField.setErrors({MissingDate: true});
+    }
+
+    if ( this.isPlannedAssessment && this.scheduledTimeField.value === null) {
+      formIsValid = false;
+      this.scheduledDateField.setErrors({MissingTime: true});
+    }
+
+    if ( !this.isPlannedAssessment && this.toBeCompletedByDateField.value === null) {
+      formIsValid = false;
+      this.toBeCompletedByDateField.setErrors({MissingDate: true});
+    }
+
+    if ( !this.isPlannedAssessment && this.toBeCompletedByTimeField.value === null) {
+      formIsValid = false;
+      this.toBeCompletedByDateField.setErrors({MissingTime: true});
+    }
+
+    if ( this.assessmentPostcode.value === null || this.assessmentPostcode.value === '' ) {
+      formIsValid = false;
+      this.assessmentPostcode.setErrors({MissingPostcode: true});
+    }
+
+    if ( this.assessmentAddressField.value === null || this.assessmentAddressField.value === '' ) {
+      formIsValid = false;
+      this.assessmentPostcode.setErrors({MissingAddress: true});
+    }
+
+    this.toastService.displayWarning({
+      message: 'Please correct invalid fields'
+    });
+
+    console.log(this.assessmentPostcode.errors);
+
+    return formIsValid;
   }
 }
