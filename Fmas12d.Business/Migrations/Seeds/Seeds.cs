@@ -104,7 +104,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
     }
 
-    public void SeedTestAll()
+    public void SeedTestAll(bool noReferrals)
     {
       new OrganisationSeeder().SeedData();
       Context.SaveChanges();
@@ -118,9 +118,12 @@ namespace Fmas12d.Business.Migrations.Seeds
       new PatientSeeder().SeedData();
       Context.SaveChanges();
 
-      new ReferralSeeder().SeedData();
-      Context.SaveChanges();
-
+      if (!noReferrals)
+      {
+        new ReferralSeeder().SeedData();
+        Context.SaveChanges();
+      }    
+      
       new BankDetailsSeeder().SeedData();
       Context.SaveChanges();
 
@@ -140,7 +143,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
 
       new UserSpecialitiesSeeder().SeedData();
-      Context.SaveChanges();
+      Context.SaveChanges();  
     }
 
     public void RemoveSeedTestAll()

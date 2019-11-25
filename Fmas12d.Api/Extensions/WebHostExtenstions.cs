@@ -20,7 +20,8 @@ namespace Fmas12d.Api.Extensions
       AllNoGpPracticeOrCcgs = 5,
       RemoveAll = 6,
       RemoveAllNoGpPractice = 7,
-      RemoveAllNoGpPracticeOrCcgs = 8
+      RemoveAllNoGpPracticeOrCcgs = 8,
+      TestNoReferrals = 9
     }
 
     public static IWebHost SeedData(this IWebHost host, SeedType seedType)
@@ -49,8 +50,12 @@ namespace Fmas12d.Api.Extensions
           break;          
 
         case SeedType.Test:
-          new Seeds(context, config).SeedTestAll();
+          new Seeds(context, config).SeedTestAll(noReferrals: false);
           break;
+
+        case SeedType.TestNoReferrals:
+          new Seeds(context, config).SeedTestAll(noReferrals: true);
+          break;          
 
         case SeedType.RemoveAll:
           new Seeds(context, config).RemoveSeedAll(noGpPractices: false, noCcgs: false);
