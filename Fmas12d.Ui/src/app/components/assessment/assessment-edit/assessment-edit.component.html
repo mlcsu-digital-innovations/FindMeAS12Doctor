@@ -110,10 +110,11 @@
                     formControlName="postCode"
                     id="postCode"
                     type="text"
+                    oninput="this.value = this.value.toUpperCase()"
                   />
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2 mt-more-2">
                 <div class="button-container">
                   <button
                     type="button"
@@ -152,15 +153,35 @@
                 </div>
               </div>
             </div>
-            <div class="form-row">
+            <!-- Assessment Postcode Errors-->
+            <div class="form-row" *ngIf="assessmentPostcode.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div class="invalid-field" *ngIf="assessmentPostcode.errors.pattern">
+                  <span>Invalid Postcode Format</span>
+                </div>
+                <div class="invalid-field" *ngIf="assessmentPostcode.errors.NoResultsReturned">
+                  <span>No Matches Found</span>
+                </div>
+                <div class="invalid-field" *ngIf="assessmentPostcode.errors.MissingPostcode">
+                  <span>* Postcode must be provided</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="addressList.length > 0">
               <div class="col-md-8">
-                <label for="fullAddress">Assessment Address</label>
-                <input
-                  class="form-control"
-                  formControlName="fullAddress"
-                  id="fullAddress"
-                  type="text"
-                />
+                <label for="assessmentAddress">Assessment Address</label>
+                <select
+                  class="custom-select custom-select-lg mb-2 form-control"
+                  formControlName="assessmentAddress"
+                  #assessmentAddress
+                  id="assessmentAddress"
+                  appFocusOnShow
+                >
+                  <option disabled=true [selected]=true>Please Select Address</option>
+                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
+                    {{addressList[i].address}}
+                  </option>
+                </select>
               </div>
             </div>
             <div class="form-row">

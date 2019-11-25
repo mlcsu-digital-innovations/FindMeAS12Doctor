@@ -1,5 +1,9 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
+import { Assessment } from 'src/app/interfaces/assessment';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
+import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { environment } from 'src/environments/environment';
@@ -10,6 +14,7 @@ import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of, throwError } from 'rxjs';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
@@ -17,9 +22,6 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
-import { AssessmentUser } from 'src/app/interfaces/assessment-user';
-import { AssessmentService } from 'src/app/services/assessment/assessment.service';
-import { Assessment } from 'src/app/interfaces/assessment';
 
 @Component({
   selector: 'app-assessment-edit',
@@ -28,6 +30,7 @@ import { Assessment } from 'src/app/interfaces/assessment';
 })
 export class AssessmentEditComponent implements OnInit {
 
+  addressList: AddressResult[] = [];
   assessmentId: number;
   allocatedDoctors: AssessmentUser[] = [];
   cancelModal: NgbModalRef;
@@ -67,6 +70,7 @@ export class AssessmentEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
+    private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
@@ -128,7 +132,7 @@ export class AssessmentEditComponent implements OnInit {
       assessmentDetails: [
         ''
       ],
-      fullAddress: [
+      assessmentAddress: [
         {
           value: '',
           disabled: true
@@ -164,6 +168,30 @@ export class AssessmentEditComponent implements OnInit {
     });
 
     this.navigationPage = '/referral';
+  }
+
+  AddressSearch(): void {
+    this.addressList = [];
+    this.assessmentAddressField.setValue('');
+    this.isSearchingForPostcode = true;
+    this.assessmentAddressField.enable();
+
+    this.postcodeValidationService.searchPostcode(this.assessmentPostcode.value)
+      .subscribe(address => {
+        this.addressList.push(address);
+      }, (err) => {
+        this.isSearchingForPostcode = false;
+        this.toastService.displayError({
+          title: 'Search Error',
+          message: 'Error Retrieving Address Information'
+        });
+      }, () => {
+        this.isSearchingForPostcode = false;
+        // show an error if no matching addresses are returned
+        if (this.addressList.length === 0) {
+          this.assessmentPostcode.setErrors({ NoResultsReturned: true });
+        }
+      });
   }
 
   AmhpSearch = (text$: Observable<string>) =>
@@ -301,7 +329,7 @@ export class AssessmentEditComponent implements OnInit {
   FormatAddress(): string[] {
 
     const addressLines: string[] = [];
-    const addressSplitByCommas = this.GetFormValue('fullAddress').split(',');
+    const addressSplitByCommas = this.GetFormValue('assessmentAddress').split(',');
 
     // can only store 4 lines of the address
     for (let i = 0; i < 4; i++) {
@@ -323,6 +351,10 @@ export class AssessmentEditComponent implements OnInit {
 
   GetFormValue(fieldName: string) {
     return this.assessmentForm.get(fieldName).value;
+  }
+
+  get assessmentAddressField() {
+    return this.assessmentForm.controls.assessmentAddress;
   }
 
   get assessmentPostcode() {
@@ -365,7 +397,7 @@ export class AssessmentEditComponent implements OnInit {
     this.assessmentForm.controls.amhp.setValue(AmhpUser);
 
     this.assessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
-    this.assessmentForm.controls.fullAddress.setValue(referral.currentAssessment.fullAddress);
+    this.assessmentForm.controls.assessmentAddress.setValue(referral.currentAssessment.fullAddress);
     this.assessmentForm.controls.postCode.setValue(referral.currentAssessment.postcode);
 
     this.minDate = this.ConvertToDateStruct(referral.currentAssessment.mustBeCompletedBy);
