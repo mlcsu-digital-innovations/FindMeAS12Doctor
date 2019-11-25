@@ -119,7 +119,5 @@ export class AssessmentViewComponent implements OnInit {
     this.currentAssessmentForm.controls.specialityName.setValue(referral.currentAssessment.speciality.name);
     this.currentAssessmentForm.disable();
     this.referralId = referral.id;
-
-    console.log(referral);
   }
 }

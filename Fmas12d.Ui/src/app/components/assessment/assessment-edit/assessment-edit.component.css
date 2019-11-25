@@ -50,3 +50,18 @@ form {
   font-size: 0.8em;
   padding-left: 5px;
 }
+
+.current-address {
+  background-color: #ddd;
+  border-radius: .25rem;
+  border: 1px solid #ced4da;
+  color: #495057;
+  font-size: 1.2em;
+  font-weight: 600;
+  height: calc(1.5em + 1rem + 2px);
+  letter-spacing: 0.8px;
+  padding-bottom: .5rem;
+  padding-left: 1rem;
+  padding-top: .5rem;
+  width: 100%;
+}
