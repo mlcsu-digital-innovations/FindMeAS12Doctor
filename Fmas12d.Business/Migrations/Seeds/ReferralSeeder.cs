@@ -93,21 +93,15 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
         )
       };
@@ -158,21 +152,15 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
         ),
       };
@@ -221,21 +209,15 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
         ),
         _userAssessmentNotificationSeeder.Create(
@@ -345,15 +327,11 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(
-          hasAccepted: true,
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          respondedAt: _now,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE
         ),
         _userAssessmentNotificationSeeder.Create(

@@ -7,6 +7,7 @@ namespace Fmas12d.Business.Models
     public const int SELECTED_FOR_ASSESSMENT = 1;
     public const int ALLOCATED_TO_ASSESSMENT = 2;
     public const int ASSESSMENT_CANCELLED = 3;
+    public const int ASSESSMENT_UPDATED = 4;
     
     [MaxLength(2000)]
     [Required]

@@ -15,7 +15,7 @@ namespace Fmas12d.Api.ViewModels
 
       Distance = model.Distance;
       GenderName = model.DoctorUser?.GenderName;
-      HasAccepted = model.HasAccepted;
+      HasAccepted = model.HasAccepted ?? false;
       Id = model.DoctorUserId;
       IsAvailable = model.IsAvailable;
       Name = model.DoctorUser?.DisplayName;
