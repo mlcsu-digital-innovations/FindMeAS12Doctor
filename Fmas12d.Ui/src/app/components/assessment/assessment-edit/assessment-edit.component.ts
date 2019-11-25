@@ -43,6 +43,7 @@ export class AssessmentEditComponent implements OnInit {
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isPatientIdValidated: boolean;
+  isPlannedAssessment: boolean;
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
   navigationPage: string;
@@ -225,7 +226,8 @@ export class AssessmentEditComponent implements OnInit {
     // round up to the next 5 minute interval
     const start = moment(dateValue);
     const remainder = 5 - (start.minute() % 5);
-    const momentDate = moment(start).add(remainder, 'minutes');
+    const adjustment = remainder === 5 ? 0 : remainder;
+    const momentDate = moment(start).add(adjustment, 'minutes');
     const timeStruct = {} as NgbTimeStruct;
     timeStruct.hour = momentDate.hour();
     timeStruct.minute = momentDate.minutes();
@@ -381,6 +383,8 @@ export class AssessmentEditComponent implements OnInit {
     this.assessmentScheduledTime = this.ConvertToTimeStruct(assessment.scheduledTime);
     this.scheduledTimeField.setValue(this.assessmentScheduledTime);
 
+    this.isPlannedAssessment = referral.currentAssessment.isPlanned;
+
     referral.currentAssessment.detailTypes.forEach(detailType => {
       const detail = {id: detailType.id, name: detailType.name} as NameIdList;
       this.selectedDetails.push(detail);
@@ -476,13 +480,17 @@ export class AssessmentEditComponent implements OnInit {
 
     updatedAssessment.meetingArrangementComment = this.GetFormValue('meetingArrangementComment');
 
-    const completedDate = this.GetFormValue('toBeCompletedByDate');
-    const completedTime = this.GetFormValue('toBeCompletedByTime');
-    updatedAssessment.mustBeCompletedBy = this.CreateDateFromPickerObjects(completedDate, completedTime);
+    updatedAssessment.isPlanned = this.isPlannedAssessment;
 
-    const scheduledDate = this.GetFormValue('scheduledDate');
-    const scheduledTime = this.GetFormValue('scheduledTime');
-    updatedAssessment.scheduledTime = this.CreateDateFromPickerObjects(scheduledDate, scheduledTime);
+    if (this.isPlannedAssessment) {
+      const scheduledDate = this.GetFormValue('scheduledDate');
+      const scheduledTime = this.GetFormValue('scheduledTime');
+      updatedAssessment.scheduledTime = this.CreateDateFromPickerObjects(scheduledDate, scheduledTime);
+    } else {
+      const completedDate = this.GetFormValue('toBeCompletedByDate');
+      const completedTime = this.GetFormValue('toBeCompletedByTime');
+      updatedAssessment.mustBeCompletedBy = this.CreateDateFromPickerObjects(completedDate, completedTime);
+    }
 
     const addressLines = this.FormatAddress();
     updatedAssessment.address1 = addressLines[0];
