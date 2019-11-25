@@ -53,7 +53,8 @@ namespace Fmas12d.Business.Services
       }
       CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
         updateModel.Id, entity.Referral.ReferralStatusId);
-      CheckAllocatedDoctorsAreSelected(entity, updateModel.UserIds);
+      CheckDoctorsAreSelected(entity, updateModel.UserIds);
+      CheckDoctorsAreSelectedAndHaveAccepted(entity, updateModel.UserIds);
 
       UpdateModified(entity);
 
@@ -191,22 +192,42 @@ namespace Fmas12d.Business.Services
       };
     }
 
-    private void CheckAllocatedDoctorsAreSelected(
-      Entities.Assessment entity, IEnumerable<int> allocatedUserIds)
+    private void CheckDoctorsAreSelected(
+      Entities.Assessment entity, IEnumerable<int> doctorUserIds)
     {
       IEnumerable<int> selectedUserIds =
         entity.Doctors
+              .Where(d => d.IsActive)
               .Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED)
               .Select(ad => ad.DoctorUserId);
 
-      if (allocatedUserIds.Intersect(selectedUserIds).Count() != allocatedUserIds.Count())
+      if (doctorUserIds.Intersect(selectedUserIds).Count() != doctorUserIds.Count())
       {
         throw new ModelStateException("UserIds",
         "Only the following doctors id's are selected " +
         $"[{string.Join(",", selectedUserIds)}], " +
-        $"from the requested [{string.Join(",", allocatedUserIds)}]");
+        $"from the requested [{string.Join(",", doctorUserIds)}]");
       }
     }
+
+    private void CheckDoctorsAreSelectedAndHaveAccepted(
+      Entities.Assessment entity, IEnumerable<int> doctorUserIds)
+    {
+      IEnumerable<int> selectedUserIds =
+        entity.Doctors
+              .Where(d => d.IsActive)
+              .Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED)
+              .Where(d => d.HasAccepted ?? false)
+              .Select(ad => ad.DoctorUserId);
+
+      if (doctorUserIds.Intersect(selectedUserIds).Count() != doctorUserIds.Count())
+      {
+        throw new ModelStateException("UserIds",
+        "Only the following doctors id's are selected and have accepted " +
+        $"[{string.Join(",", selectedUserIds)}], " +
+        $"from the requested [{string.Join(",", doctorUserIds)}]");
+      }
+    }    
 
     private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
     {
