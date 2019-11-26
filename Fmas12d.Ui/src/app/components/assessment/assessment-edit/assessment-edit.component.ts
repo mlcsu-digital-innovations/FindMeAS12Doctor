@@ -95,7 +95,6 @@ export class AssessmentEditComponent implements OnInit {
           return this.referralService.getReferralView(+params.get('referralId'))
             .pipe(
               map(referral => {
-                console.log(referral);
                 this.assessmentId = referral.currentAssessment.id;
                 this.InitialiseForm(referral);
                 return referral;
@@ -392,9 +391,6 @@ export class AssessmentEditComponent implements OnInit {
   InitialiseForm(referral: ReferralView) {
 
     this.minDate = this.ConvertToDateStruct(referral.createdAt);
-
-    console.log(this.minDate);
-
     this.FetchDropDownData();
 
     const assessment = referral.currentAssessment;
@@ -564,9 +560,6 @@ export class AssessmentEditComponent implements OnInit {
 
     let formIsValid = true;
 
-    console.log('Validate Assessment');
-    console.log(this.amhpField.value);
-
     if ( this.amhpField.value === null || this.amhpField.value === '' ) {
       formIsValid = false;
       this.amhpField.setErrors({MissingAmhpUser: true});
@@ -602,11 +595,11 @@ export class AssessmentEditComponent implements OnInit {
       this.assessmentPostcode.setErrors({MissingAddress: true});
     }
 
-    this.toastService.displayWarning({
-      message: 'Please correct invalid fields'
-    });
-
-    console.log(this.assessmentPostcode.errors);
+    if (!formIsValid) {
+      this.toastService.displayWarning({
+        message: 'Please correct invalid fields'
+      });
+    }
 
     return formIsValid;
   }
