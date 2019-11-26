@@ -15,7 +15,8 @@ namespace Fmas12d.Api.ViewModels
       AmhpName = model.AmhpUserName;
       AvailableDoctors = 
         model.AvailableDoctors
-             .Select(ad => new AssessmentAvailableDoctorsAvailability(ad)).ToList();
+             .Select(ad => new AssessmentAvailableDoctorsAvailability(ad))
+             .ToList();
       LeadAmhpName = model.LeadAmhpName;
       PreferredDoctorGenderTypeName = model.PreferredDoctorGenderTypeName;
     }

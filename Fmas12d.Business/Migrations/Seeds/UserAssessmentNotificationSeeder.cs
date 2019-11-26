@@ -8,15 +8,13 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal UserAssessmentNotification Create(
       int notificationTextId,
       string userName,
-      bool? hasAccepted = null,
-      DateTimeOffset? respondedAt = null
+      DateTimeOffset? sentAt = null
     )
     {
       UserAssessmentNotification userAssessmentNotification = new UserAssessmentNotification
       {
-        HasAccepted = hasAccepted == null ? null : hasAccepted,
         NotificationTextId = notificationTextId,
-        RespondedAt = respondedAt == null ? null : respondedAt,
+        SentAt = sentAt == null ? null : sentAt,
         UserId = GetUserByDisplayName(userName).Id
       };
       PopulateActiveAndModifiedWithSystemUser(userAssessmentNotification);

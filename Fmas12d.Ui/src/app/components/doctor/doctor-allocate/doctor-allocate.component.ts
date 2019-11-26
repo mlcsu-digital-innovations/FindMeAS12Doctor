@@ -1,14 +1,16 @@
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Assessment } from 'src/app/interfaces/assessment';
+import { AssessmentSelected } from 'src/app/interfaces/assessment-selected';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
+import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Assessment } from 'src/app/interfaces/assessment';
-import { of, Observable } from 'rxjs';
-import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { of, Observable } from 'rxjs';
 import { RouterService } from 'src/app/services/router/router.service';
-import { ToastService } from 'src/app/services/toast/toast.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
+import { ToastService } from 'src/app/services/toast/toast.service';
+
 
 @Component({
   selector: 'app-doctor-allocate',
@@ -21,11 +23,15 @@ export class DoctorAllocateComponent implements OnInit {
   assessment$: Observable<Assessment | any>;
   assessmentId: number;
   cancelModal: NgbModalRef;
+  confirmModal: NgbModalRef;
   doctorForm: FormGroup;
+  isSavingAllocation: boolean;
   selectDoctor: FormGroup;
+  selectedDoctors: AvailableDoctor[] = [];
   unknownDoctorId: number;
 
   @ViewChild('cancelAssessment', null) cancelAssessmentTemplate;
+  @ViewChild('confirmSelection', null) confirmSelectionTemplate;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -46,10 +52,11 @@ export class DoctorAllocateComponent implements OnInit {
     this.assessment$ = this.route.paramMap.pipe(
       switchMap(
         (params: ParamMap) => {
-          return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
+          return this.assessmentService.getSelectedDoctors(+params.get('assessmentId'))
             .pipe(
-              map((assessment: Assessment) => {
+              map((assessment: AssessmentSelected) => {
                 this.assessmentId = assessment.id;
+                this.selectedDoctors = assessment.doctorsSelected;
                 return assessment;
               })
             );
@@ -68,6 +75,49 @@ export class DoctorAllocateComponent implements OnInit {
     );
   }
 
+  AllocatedDoctorsToAssessment() {
+
+    this.isSavingAllocation = true;
+
+    const allocatedDoctorIds: number[] = [];
+
+    this.allocatedDoctors.forEach(doctor => {
+      allocatedDoctorIds.push(doctor.id);
+    });
+
+    const userIds = {
+      UserIds: allocatedDoctorIds
+    };
+
+    this.assessmentService.updateAllocatedDoctors(this.assessmentId, userIds)
+      .subscribe(() => {
+        this.isSavingAllocation = false;
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Doctors Allocated'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.isSavingAllocation = false;
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to allocate doctors!'
+        });
+      });
+  }
+
+  AddSelectedDoctor(id: number) {
+    const doctorFromList = this.selectedDoctors.find(doctor => doctor.id === id);
+    const doctorAlreadySelected = this.allocatedDoctors.findIndex(doctor => doctor.id === id);
+
+    doctorFromList.isSelected = true;
+
+    if (doctorAlreadySelected === -1) {
+      this.allocatedDoctors.push(doctorFromList);
+    }
+  }
+
   Cancel() {
     if (this.allocatedDoctors.length > 0) {
       this.cancelModal = this.modalService.open(this.cancelAssessmentTemplate, {
@@ -78,6 +128,20 @@ export class DoctorAllocateComponent implements OnInit {
     }
   }
 
+  ConfirmAllocation() {
+    this.confirmModal = this.modalService.open(
+      this.confirmSelectionTemplate,
+      { size: 'lg' }
+    );
+  }
+
+  OnCancelConfirmAction(action: boolean) {
+    this.confirmModal.close();
+    if (action) {
+      this.AllocatedDoctorsToAssessment();
+    }
+  }
+
   OnCancelModalAction(action: boolean) {
     this.cancelModal.close();
     if (action) {
@@ -85,7 +149,23 @@ export class DoctorAllocateComponent implements OnInit {
     }
   }
 
-  UpdateAssessment() {
+  OnSort(event: any) {
+    if (event.direction === 'desc') {
+      this.selectedDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? -1 : 1);
+    } else {
+      this.selectedDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? 1 : -1);
+    }
+  }
 
+  RemoveSelectedDoctor(id: number) {
+    this.allocatedDoctors = this.allocatedDoctors.filter(doctor => doctor.id !== id);
+  }
+
+  ToggleSelection(id: number, event) {
+    if (event.target.checked === true) {
+      this.AddSelectedDoctor(id);
+    } else {
+      this.RemoveSelectedDoctor(id);
+    }
   }
 }

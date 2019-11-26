@@ -1,3 +1,30 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="appContent" side="end">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle>
+            <ion-item routerLink="/home" routerDirection="root">Home</ion-item>
+        </ion-menu-toggle>   
+        <ion-menu-toggle>
+          <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
+            AMHP Assessments
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item routerLink="/help" routerDirection="forward">
+            Help
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item (click)="logOff()">Log Off</ion-item>
+        </ion-menu-toggle>     
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="appContent"></ion-router-outlet>
 </ion-app>

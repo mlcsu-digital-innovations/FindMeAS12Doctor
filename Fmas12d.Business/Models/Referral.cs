@@ -134,9 +134,9 @@ namespace Fmas12d.Business.Models
       {
         return Assessments?.Where(e => e.IsActive)
                             .FirstOrDefault(e => e.IsCurrent)
-                            ?.UserAssessmentNotifications
-                            ?.Where(uen => uen.IsActive)
-                            .Count(uen => uen.RespondedAt != null) ?? 0;
+                            ?.Doctors
+                            ?.Where(d => d.IsActive)
+                            .Count(d => d.RespondedAt != null) ?? 0;
       }
     }
     public string SpecialityName

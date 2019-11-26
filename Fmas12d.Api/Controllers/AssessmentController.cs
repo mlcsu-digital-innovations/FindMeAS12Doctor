@@ -5,29 +5,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
-  [Route("api/[controller]")]  
+  [Route("api/[controller]")]
   [ApiController]
-  [Authorize(Policy="User")]
+  [Authorize(Policy = "User")]
   public class AssessmentController : ModelControllerNoAutoMapper
   {
-    private IAssessmentService Service { get { return _service as IAssessmentService; } }  
+    private IAssessmentService Service { get { return _service as IAssessmentService; } }
 
     public AssessmentController(IAssessmentService service) : base(service)
     {
-    }    
+    }
 
     [HttpGet]
-    [Route("{id:int}/availabledoctors")]
-    public async Task<ActionResult<ViewModels.AssessmentAvailableDoctors>> GetAvailableDoctors(
+    [Route("{id:int}/doctors/available")]
+    public async Task<ActionResult<ViewModels.AssessmentAvailableDoctors>> GetDoctorsAvailable(
       int id)
     {
       try
       {
-        Business.Models.Assessment businessModel = 
+        Business.Models.Assessment businessModel =
           await Service.GetAvailableDoctorsAsync(id, true, true);
 
         if (businessModel == null)
@@ -39,7 +38,7 @@ namespace Fmas12d.Api.Controllers
           ViewModels.AssessmentAvailableDoctors viewModel =
             new ViewModels.AssessmentAvailableDoctors(businessModel);
 
-          return Ok(viewModel);          
+          return Ok(viewModel);
         }
       }
       catch (Exception ex)
@@ -47,6 +46,34 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    [HttpGet]
+    [Route("{id:int}/doctors/selected")]
+    public async Task<ActionResult<ViewModels.AssessmentSelectedDoctors>> GetDoctorsSelected(
+      int id)
+    {
+      try
+      {
+        Business.Models.Assessment businessModel =
+          await Service.GetSelectedDoctorsAsync(id, true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.AssessmentSelectedDoctors viewModel =
+            new ViewModels.AssessmentSelectedDoctors(businessModel);
+
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    } 
 
     [HttpGet]
     [Route("")]
@@ -86,15 +113,14 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.Assessment businessModel =
-            await Service.GetByIdAsync(id, true);
+        Business.Models.Assessment businessModel = await Service.GetByIdAsync(id, true);
 
         if (businessModel == null)
         {
           return NoContent();
         }
         else
-        {
+        {          
           ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
           return Ok(viewModel);
         }
@@ -103,7 +129,59 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    } 
+    }
+
+    [HttpPost]
+    [Route("{id:int}/doctors/allocated")]
+    public async Task<ActionResult<ViewModels.AssessmentDoctorsPost>> PostDoctorsAllocated(
+      int id,
+      [FromBody] RequestModels.AssessmentDoctorsPost requestModel)
+    {
+      try
+      {
+        Business.Models.IAssessmentDoctorsUpdate businessModel =
+          new Business.Models.AssessmentDoctorsUpdate
+          {
+            Id = id
+          };
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel = await Service.AddAllocatedDoctors(businessModel);
+        ViewModels.AssessmentDoctorsPost viewModel =
+          new ViewModels.AssessmentDoctorsPost(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPost]
+    [Route("{id:int}/doctors/selected")]
+    public async Task<ActionResult<ViewModels.AssessmentDoctorsPost>> PostDoctorsSelected(
+      int id,
+      [FromBody] RequestModels.AssessmentDoctorsPost requestModel)
+    {
+      try
+      {
+        Business.Models.IAssessmentDoctorsUpdate businessModel =
+          new Business.Models.AssessmentDoctorsUpdate
+          {
+            Id = id
+          };
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel = await Service.AddSelectedDoctors(businessModel);
+        ViewModels.AssessmentDoctorsPost viewModel =
+          new ViewModels.AssessmentDoctorsPost(businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
 
     [HttpPost]
     [Route("emergency")]
@@ -137,7 +215,7 @@ namespace Fmas12d.Api.Controllers
       [FromBody] RequestModels.AssessmentPutPlanned requestModel)
     {
       return await Update(id, requestModel);
-    }    
+    }
 
     [HttpPut]
     [Route("{id:int}/outcome/failure")]
@@ -150,12 +228,12 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPut]
     [Route("{id:int}/outcome/success")]
-     public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeSuccess(
+    public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeSuccess(
       int id,
       [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
     {
       return await PutOutcome(id, requestModel);
-    }  
+    }
 
     private async Task<ActionResult<ViewModels.AssessmentPost>> Create(
       RequestModels.AssessmentPostPut requestModel)
@@ -173,8 +251,8 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }  
-    
+    }
+
     private async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcome(
       int id,
       RequestModels.AssessmentOutcomePut requestModel)
@@ -183,7 +261,7 @@ namespace Fmas12d.Api.Controllers
       {
         Business.Models.AssessmentOutcome businessModel = requestModel.MapToBusinessModel(id);
         businessModel = await Service.UpdateOutcomeAsync(businessModel);
-        ViewModels.AssessmentOutcomePut viewModel = 
+        ViewModels.AssessmentOutcomePut viewModel =
           new ViewModels.AssessmentOutcomePut(businessModel);
 
         return Ok(viewModel);
@@ -192,7 +270,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }       
+    }
 
     private async Task<ActionResult<ViewModels.AssessmentPut>> Update(
       int id,
@@ -212,6 +290,6 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }      
+    }
   }
 }

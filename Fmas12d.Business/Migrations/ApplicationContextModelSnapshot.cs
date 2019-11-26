@@ -422,6 +422,9 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("DoctorUserId")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("HasAccepted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -430,6 +433,9 @@ namespace Fmas12d.Business.Migrations
 
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("RespondedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
@@ -480,6 +486,9 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("DoctorUserId")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("HasAccepted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
@@ -491,6 +500,9 @@ namespace Fmas12d.Business.Migrations
 
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("RespondedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
@@ -3075,9 +3087,6 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("AssessmentId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("HasAccepted")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -3090,7 +3099,7 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("NotificationTextId")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("RespondedAt")
+                    b.Property<DateTimeOffset?>("SentAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("UserId")
@@ -3134,9 +3143,6 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool>("AuditSuccess")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("HasAccepted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
@@ -3152,7 +3158,7 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("NotificationTextId")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("RespondedAt")
+                    b.Property<DateTimeOffset?>("SentAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("UserId")

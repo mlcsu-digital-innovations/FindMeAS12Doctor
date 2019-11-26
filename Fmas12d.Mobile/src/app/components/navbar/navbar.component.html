@@ -1,12 +1,11 @@
 <ion-header>
-  <ion-toolbar>    
-    <ion-button slot="start" expand="block" fill="solid" size="large" color="connection">
-      <ion-icon name="wifi" slot="icon-only"></ion-icon>
-    </ion-button>
-    
-    <ion-button slot="end" fill="clear" expand="full" size="large"
-      routerLink="/help" routerDirection="forward">
-      <ion-icon name="menu" slot="icon-only"></ion-icon>
-    </ion-button>    
+  <ion-toolbar>        
+    <ion-title slot="start">
+      {{connection ? "Online" : "Offline"}}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>     
   </ion-toolbar>
 </ion-header>

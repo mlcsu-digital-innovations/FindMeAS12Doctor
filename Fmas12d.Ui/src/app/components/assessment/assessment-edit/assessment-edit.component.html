@@ -25,7 +25,7 @@
             Lead AMHP: <strong>{{referral.leadAmhp}}</strong>
           </div>
           <div class="flex-item">
-            Referral Status: <strong>{{referral.status}}</strong>
+            Referral Status: <strong>{{referral.statusName}}</strong>
           </div>
         </div>
         <div class="card-body">
@@ -209,8 +209,11 @@
                     #preferredGender
                     id="preferredGender"
                   >
-                    <!-- <option [selected]=true></option> -->
-                    <option *ngFor="let gender of genderTypes; let i=index;" [value]="genderTypes[i].id">
+                    <option [selected]=true></option>
+                    <option
+                      *ngFor="let gender of genderTypes; let i=index;"
+                      [value]="genderTypes[i].id"
+                    >
                       {{genderTypes[i].name}}
                     </option>
                   </select>
@@ -249,7 +252,6 @@
                 </div>
               </div>
             </div>
-
             <div class="form-row">
               <div class="col-md-6">
                 <label for="doctorsSelected">Doctors Selected</label>
@@ -258,14 +260,16 @@
 
                     <div class="row">
                       <div class="col-md-8 doctor-name">
-                        {{doctor}}
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
                       </div>
                       <div class="col-md-4">
                         <label class="container mb-more-2">
                           <input
                             class="form-control"
                             type="checkbox"
-                            value=""
+                            checked = "doctor.selected == null ? true : doctor.selected"
+                            (change)=ToggleSelectedUpdate(doctor.id)
                           />
                           <span class="checkmark"></span>
                           Send Update
@@ -273,6 +277,11 @@
                       </div>
                     </div>
 
+                  </div>
+                  <div class="row" *ngIf="selectedDoctors.length == 0">
+                    <div class="col-md-8 no-doctors">
+                      None
+                    </div>
                   </div>
                 </div>
               </div>
@@ -283,19 +292,26 @@
 
                     <div class="row">
                       <div class="col-md-8 doctor-name">
-                        {{doctor}}
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
                       </div>
                       <div class="col-md-4">
                         <label class="container mb-more-2">
                           <input
                             class="form-control"
                             type="checkbox"
-                            value=""
+                            checked = "doctor.selected == null ? true : doctor.selected"
+                            (change)=ToggleAllocatedUpdate(doctor.id)
                           />
                           <span class="checkmark"></span>
                           Send Update
                         </label>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="allocatedDoctors.length == 0">
+                    <div class="col-md-8 no-doctors">
+                      None
                     </div>
                   </div>
                 </div>

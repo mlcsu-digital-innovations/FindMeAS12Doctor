@@ -78,15 +78,19 @@
                 Doctors Selected:
               </div>
               <div class="col-md-4">
-                <!-- ToDo: loop through the list of selected doctors and display them -->
-                <span>None</span>
+                <div *ngFor="let selected of assessment.doctorsSelected">
+                  <span>{{selected.displayName}}</span>
+                  <span class="gmcnumber">GMC#{{selected.gmcNumber}}</span>
+                </div>
               </div>
               <div class="col-md-2 label">
                   Doctors Allocated:
                 </div>
                 <div class="col-md-3">
-                  <!-- ToDo: loop through the list of allocated doctors and display them -->
-                  <span>None</span>
+                  <div *ngFor="let allocated of assessment.doctorsAllocated">
+                    <span>{{allocated.displayName}}</span>
+                    <span class="gmcnumber">GMC#{{allocated.gmcNumber}}</span>
+                  </div>
                 </div>
             </div>
           </div>
@@ -204,7 +208,7 @@
                       {{availableDoctor.start | timeOnlyFormat}} - {{availableDoctor.end | timeOnlyFormat}}
                     </td>
                     <td class="text-center sm-col">
-                      {{availableDoctor.distance}}
+                      {{availableDoctor.distance | number: '1.1-1'}}
                     </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
 
@@ -221,16 +225,27 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="empty-table" *ngIf="availableDoctors.length == 0">
+                No available doctors found within search radius
+              </div>
             </div>
 
             <div class="form-row ml-more-2 mr-more-2">
-              <div class="col-md-2">
-                <ngb-pagination [collectionSize]="collectionSize" (pageChange)="PageChanged($event)" [(page)]="page"
+              <div class="col-md-2" >
+                <ngb-pagination
+                  *ngIf="availableDoctors.length > 0"
+                  [collectionSize]="collectionSize"
+                  (pageChange)="PageChanged($event)"
+                  [(page)]="page"
                   [pageSize]="pageSize">
                 </ngb-pagination>
               </div>
               <div class="col-md-4">
-                <select class="custom-select" formControlName="pageSize">
+                <select
+                  class="custom-select"
+                  formControlName="pageSize"
+                  *ngIf="availableDoctors.length > 0"
+                >
                   <option value="5">5 items per page</option>
                   <option value="10" selected=true>10 items per page</option>
                   <option value="20">20 items per page</option>
@@ -248,7 +263,7 @@
                 <button
                   type="button"
                   class="btn btn-primary btn-standard"
-                  (click)="UpdateAssessment()"
+                  (click)="UpdateSelectedDoctors()"
                   [disabled]="selectedDoctors.length === 0"
                 >
                   <i class="far fa-check-circle"></i>
@@ -261,6 +276,8 @@
       </div>
     </div>
   </div>
+
+<app-delay-spinner [delayMessage]="'Updating Selected Doctors'" *ngIf="isSavingSelection"></app-delay-spinner>
 
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>

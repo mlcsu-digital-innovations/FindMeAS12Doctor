@@ -9,7 +9,7 @@ namespace Fmas12d.Api.ViewModels
   {
     public AssessmentView()
     {}    
-    public AssessmentView(Business.Models.Assessment model)
+    public AssessmentView(Business.Models.Assessment model, bool ignoreSelectedDoctors = false)
     {
       Address1 = model.Address1;
       Address2 = model.Address2;
@@ -25,14 +25,20 @@ namespace Fmas12d.Api.ViewModels
       ReferralId = model.ReferralId;
       SpecialityName = model.SpecialityName;
 
-      if (model.DoctorsAllocated != null && model.DoctorsAllocated.Any())
+      if (model.DoctorsAllocated != null && 
+          model.DoctorsAllocated.Any())
       {
-        DoctorsAllocated = new Collection<AssessmentViewDoctor>();
-        foreach (var doctorAllocated in model.DoctorsAllocated.OrderBy(d => d.DisplayName))
-        {
-          DoctorsAllocated.Add(new AssessmentViewDoctor(doctorAllocated));
-        }
-      }      
+        DoctorsAllocated = model.DoctorsAllocated
+                                .Select(da => new AssessmentViewDoctor(da)).ToList();
+      }
+
+      if (!ignoreSelectedDoctors && 
+          model.DoctorsSelected != null && 
+          model.DoctorsSelected.Any())
+      {
+        DoctorsSelected = model.DoctorsSelected
+                               .Select(ds => new AssessmentViewDoctor(ds)).ToList();
+      }            
 
     }
 
@@ -42,6 +48,7 @@ namespace Fmas12d.Api.ViewModels
     public string Address4 { get; set; }
     public DateTimeOffset DateTime { get; set; }
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
+    public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
     public int Id { get; set; }
     public bool? IsSuccessful { get; set; }
     public string MeetingArrangementComment { get; set; }

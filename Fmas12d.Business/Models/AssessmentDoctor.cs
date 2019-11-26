@@ -1,29 +1,41 @@
-using Fmas12d.Data.Entities;
+using System;
 
 namespace Fmas12d.Business.Models
 {
   public class AssessmentDoctor : BaseModel
   {
-    public AssessmentDoctor() {}
-    public AssessmentDoctor(Data.Entities.AssessmentDoctor doctor) : base (doctor)
+    public AssessmentDoctor() { }
+    public AssessmentDoctor(Data.Entities.AssessmentDoctor entity) : base(entity)
     {
-      AttendanceConfirmedByUserId = doctor.Id;
-      // TODO AttendanceConfirmedByUser =
-      DoctorUser = doctor.DoctorUser == null ? null : new User(doctor.DoctorUser);
-      DoctorUserId = doctor.DoctorUserId;
+      if (entity == null) return;
+      
       // TODO Assessment =
-      AssessmentId = doctor.AssessmentId;
+      AssessmentId = entity.AssessmentId;      
+      AttendanceConfirmedByUserId = entity.Id;
+      // TODO AttendanceConfirmedByUser =
+      Distance = null;
+      DoctorUser = entity.DoctorUser == null ? null : new User(entity.DoctorUser);
+      DoctorUserId = entity.DoctorUserId;
+      HasAccepted = entity.HasAccepted;
+      RespondedAt = entity.RespondedAt;
       // TODO Status =
-      StatusId = doctor.StatusId;
-    }
-
-    public int? AttendanceConfirmedByUserId { get; set; }
-    public virtual User AttendanceConfirmedByUser { get; set; }
-    public virtual User DoctorUser { get; set; }
-    public int DoctorUserId { get; set; }
+      StatusId = entity.StatusId;
+    }    
     public virtual Assessment Assessment { get; set; }
     public int AssessmentId { get; set; }
+    public int? AttendanceConfirmedByUserId { get; set; }
+    public virtual User AttendanceConfirmedByUser { get; set; }
+    public decimal? Distance { get; set; }
+    public virtual User DoctorUser { get; set; }
+    public int DoctorUserId { get; set; }
+    public bool IsAvailable { get; set; }
+    public bool? HasAccepted { get; set; }
+    public DateTimeOffset? RespondedAt { get; set; }
     public virtual AssessmentDoctorStatus Status { get; set; }
     public int StatusId { get; set; }
+
+    public bool IsAllocated { get { return StatusId == AssessmentDoctorStatus.ALLOCATED; } }    
+    public bool IsSelected { get { return StatusId == AssessmentDoctorStatus.SELECTED; } }
+
   }
 }
