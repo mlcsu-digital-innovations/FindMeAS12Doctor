@@ -1,11 +1,10 @@
 .user-row {
   margin:4px;
-  background-color: #ddd;
   padding:2px;
 }
 
 .user-row:hover {
-  background-color: #d1d1d1;
+  background-color: #e7fcfd;
 }
 
 .user-name {

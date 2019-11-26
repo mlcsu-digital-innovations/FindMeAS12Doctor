@@ -8,7 +8,7 @@
           {{user.displayName}}
       </div>
       <div class="user-gmc">
-          {{user.gmcNumber}}
+          GMC# {{user.gmcNumber}}
       </div>
     </div>
     <div class="col-md-2" style="padding-top:6px;">
@@ -16,6 +16,7 @@
         type="button"
         class="btn btn-primary "
         (click)="selectAction(user)">
+        <i class="fas fa-check"></i>
         Select
       </button>
     </div>
@@ -26,6 +27,7 @@
     type="button"
     class="btn btn-cancel"
     (click)="cancelAction()">
+    <i class="far fa-times-circle"></i>
     Cancel
   </button>
 </div>

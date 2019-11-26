@@ -14,9 +14,6 @@ export class UnregisteredUserService {
 
   public SearchUnregisteredUsers(userName?: string, gmcNumber?: number): Observable<UnregisteredUser[] | any> {
 
-    console.log('searching - ' + userName);
-    console.log('searching - ' + gmcNumber);
-
     const dummyUser1: UnregisteredUser = {
       address: 'Hucknall Road, Nottingham',
       displayName: 'Bob',
