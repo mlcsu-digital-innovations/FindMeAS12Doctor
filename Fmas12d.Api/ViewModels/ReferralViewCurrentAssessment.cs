@@ -14,7 +14,7 @@ namespace Fmas12d.Api.ViewModels
     {
       if (model == null) return;
 
-      AmhpUserName = model.AmhpUser?.DisplayName;
+      AmhpUser = new UserSummary(model.AmhpUser);
       DetailTypes = model.DetailTypes?.Select(d => new AssessmentDetailType(d)).ToList();
       DoctorsSelected = model.DoctorsSelected?.Select(d => new AssessmentViewDoctor(d)).ToList();
       DoctorsAllocated = model.DoctorsAllocated?.Select(d => new AssessmentViewDoctor(d)).ToList();
@@ -29,7 +29,7 @@ namespace Fmas12d.Api.ViewModels
       Speciality = new IdNameDescription(model.Speciality);
     }
 
-    public string AmhpUserName { get; set; }
+    public UserSummary AmhpUser { get; set; }
     public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
     public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
