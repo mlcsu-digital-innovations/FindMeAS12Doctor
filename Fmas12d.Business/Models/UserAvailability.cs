@@ -24,8 +24,8 @@ namespace Fmas12d.Business.Models
 
     public int? ContactDetailId { get; set; }
     public DateTimeOffset End { get; set; }
-    public decimal? Latitude { get; set; }
-    public decimal? Longitude { get; set; }
+    public decimal Latitude { get; set; }
+    public decimal Longitude { get; set; }
     public string Postcode { get; set; }
     public DateTimeOffset Start { get; set; }
     public IUserAvailabilityStatus Status { get; set; }
@@ -39,8 +39,8 @@ namespace Fmas12d.Business.Models
 
       entity.ContactDetailId = ContactDetailId;
       entity.End = End;      
-      entity.Latitude = Latitude ?? 0;
-      entity.Longitude = Longitude ?? 0;
+      entity.Latitude = Latitude;
+      entity.Longitude = Longitude;
       entity.Postcode = Postcode;
       entity.Start = Start;
       entity.UserAvailabilityStatusId = StatusId;

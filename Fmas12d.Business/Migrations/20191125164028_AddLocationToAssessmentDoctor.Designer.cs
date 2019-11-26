@@ -4,14 +4,16 @@ using Fmas12d.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191125164028_AddLocationToAssessmentDoctor")]
+    partial class AddLocationToAssessmentDoctor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3121,7 +3123,7 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssessmentId");
+                    b.HasAlternateKey("AssessmentId", "NotificationTextId", "UserId");
 
                     b.HasIndex("ModifiedByUserId");
 

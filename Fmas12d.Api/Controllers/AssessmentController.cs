@@ -88,17 +88,22 @@ namespace Fmas12d.Api.Controllers
           businessModels = await Service.GetAllFilterByAmhpUserIdAsync(
             assessmentListSearch.AmhpUserId.Value, true, false);
         }
-
-        if (businessModels.Any())
+        else if (assessmentListSearch.DoctorUserId.HasValue)
         {
+          businessModels = await Service.GetAllFilterByDoctorUserIdAsync(
+            assessmentListSearch.DoctorUserId.Value, true, false);
+        }
+
+        if (businessModels == null || !businessModels.Any())
+        {
+          return NoContent();
+        }
+        else
+        {          
           IEnumerable<ViewModels.AssessmentList> viewModels =
             businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
 
           return Ok(viewModels);
-        }
-        else
-        {
-          return NoContent();
         }
       }
       catch (Exception ex)

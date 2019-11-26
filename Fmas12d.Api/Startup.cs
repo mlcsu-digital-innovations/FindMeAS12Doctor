@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
@@ -155,6 +153,7 @@ namespace Fmas12d.Api
 
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<ICcgService, CcgService>();
+      services.AddScoped<IContactDetailsService, ContactDetailsService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<ILocationDetailService, LocationDetailService>();

@@ -6,8 +6,8 @@ namespace Fmas12d.Business.Models
   {
     int? ContactDetailId { get; set; }
     DateTimeOffset End { get; set; }
-    decimal? Latitude { get; set; }
-    decimal? Longitude { get; set; }
+    decimal Latitude { get; set; }
+    decimal Longitude { get; set; }
     string Postcode { get; set; }
     DateTimeOffset Start { get; set; }
     IUserAvailabilityStatus Status { get; set; }
