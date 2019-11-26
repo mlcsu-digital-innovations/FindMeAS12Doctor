@@ -39,7 +39,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     )
     {
 
-      Models.Postcode postcodeModel = GetPostcodeDetails(postcode);
+      Models.Location postcodeModel = GetPostcodeDetails(postcode);
 
       Assessment assessment = new Assessment
       {
@@ -95,7 +95,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       base.DeleteSeeds();
     }
 
-    private Models.Postcode GetPostcodeDetails(string stringPostcode)
+    private Models.Location GetPostcodeDetails(string stringPostcode)
     {
       using HttpClient client = new HttpClient();
       string uri = $"https://api.postcodes.io/postcodes/{stringPostcode}";
@@ -104,7 +104,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       string content = response.Content.ReadAsStringAsync().Result;
       PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
 
-      Models.Postcode modelPostcode = new Models.Postcode(convertedResult);
+      Models.Location modelPostcode = new Models.Location(convertedResult);
       return modelPostcode;
     }    
   }

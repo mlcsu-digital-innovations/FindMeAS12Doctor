@@ -11,6 +11,8 @@ namespace Fmas12d.Api.ViewModels
     {}    
     public AssessmentView(Business.Models.Assessment model, bool ignoreSelectedDoctors = false)
     {
+      if (model == null) return;
+
       Address1 = model.Address1;
       Address2 = model.Address2;
       Address3 = model.Address3;

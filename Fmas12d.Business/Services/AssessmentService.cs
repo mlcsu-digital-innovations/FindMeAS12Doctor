@@ -133,7 +133,7 @@ namespace Fmas12d.Business.Services
 
     private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
     {
-      Models.Postcode postcodeModel = await
+      Models.Location postcodeModel = await
         _locationDetailService.GetPostcodeDetailsAsync(postcode);
 
       if (postcodeModel == null)
@@ -523,6 +523,8 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(d => d.AssessmentDetailType)
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.ContactDetail)                  
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.Speciality)
@@ -675,7 +677,7 @@ namespace Fmas12d.Business.Services
       }
       else
       {
-        Dictionary<int, Postcode> doctorPostcodes =
+        Dictionary<int, Location> doctorPostcodes =
           await _userAvailabilityService.GetDoctorsPostcodeAt(
             model.DoctorsSelected.Select(d => d.Id).ToList(),
             model.DateTime,
@@ -685,7 +687,7 @@ namespace Fmas12d.Business.Services
 
         foreach (AssessmentDoctor assessmentDoctor in model.Doctors.Where(d => d.IsSelected))
         {
-          Postcode doctorPostcode = doctorPostcodes.GetValueOrDefault(assessmentDoctor.DoctorUserId);
+          Location doctorPostcode = doctorPostcodes.GetValueOrDefault(assessmentDoctor.DoctorUserId);
           if (doctorPostcode == null)
           {
             assessmentDoctor.Distance = null;
@@ -856,7 +858,7 @@ namespace Fmas12d.Business.Services
       }
       else if (!string.IsNullOrWhiteSpace(model.Postcode))
       {
-        Postcode postcode = await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
+        Location postcode = await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
 
         if (postcode == null)
         {
@@ -866,7 +868,7 @@ namespace Fmas12d.Business.Services
         doctor.ContactDetailId = null;
         doctor.Latitude = postcode.Latitude;
         doctor.Longitude = postcode.Longitude;
-        doctor.Postcode = postcode.Code;
+        doctor.Postcode = postcode.Postcode;
       }
       else if (model.Latitude.HasValue && model.Longitude.HasValue)
       {

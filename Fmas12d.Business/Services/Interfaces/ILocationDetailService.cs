@@ -4,7 +4,7 @@ namespace Fmas12d.Business.Services
 {
   public interface ILocationDetailService : IServiceBaseNoAutoMapper
   {
-    Task<Models.Postcode> GetPostcodeDetailsAsync(string stringPostcode);
-    Task<Models.Postcode> GetPostcodeDetailsAsync(Models.Postcode modelPostcode);
+    Task<Models.Location> GetPostcodeDetailsAsync(string stringPostcode);
+    Task<Models.Location> GetPostcodeDetailsAsync(Models.Location modelPostcode);
   }
 }
