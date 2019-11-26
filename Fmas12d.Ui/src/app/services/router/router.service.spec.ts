@@ -1,8 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { RouterService } from './router.service';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, inject, ComponentFixture } from '@angular/core/testing';
 
 class MockRouter {
   // events = jasmine.createSpy('events');
@@ -17,16 +17,12 @@ class MockRouter {
   });
 }
 
-let router: Router;
-
 describe('RouterService', () => {
 
-  beforeAll(() => {
-    console.log('Create the service');
-    router = jasmine.createSpyObj('Router', ['events']);
-  });
+  const router: MockRouter = new MockRouter();
 
-  beforeEach(() => TestBed.configureTestingModule(
+  beforeEach(() => {
+    TestBed.configureTestingModule(
     {
       declarations: [
       ],
@@ -36,17 +32,17 @@ describe('RouterService', () => {
       providers: [
         {
           provide: Router,
-          useValue: MockRouter
+          useValue: router
         }
       ]
-    })
+    });
+
+  }
   );
 
-
-
-  it('should be created', () => {
-    const service: RouterService = TestBed.get(RouterService)(router);
-    console.log(service);
+  it('should be created', (() => {
+    const service: RouterService = TestBed.get(RouterService);
     expect(service).toBeTruthy();
-  });
+  }));
+
 });

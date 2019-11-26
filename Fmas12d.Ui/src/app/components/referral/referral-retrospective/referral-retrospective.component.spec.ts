@@ -1,48 +1,49 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ReferralCreateComponent } from './referral-create.component';
-import { Router } from '@angular/router';
+import { ReferralRetrospectiveComponent } from './referral-retrospective.component';
 import { RouterService } from 'src/app/services/router/router.service';
 import { SharedComponentsModule } from '../../shared-components.module';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
-describe('ReferralCreateComponent', () => {
-  let component: ReferralCreateComponent;
-  let fixture: ComponentFixture<ReferralCreateComponent>;
+
+
+describe('ReferralRetrospectiveComponent', () => {
+  let component: ReferralRetrospectiveComponent;
+  let fixture: ComponentFixture<ReferralRetrospectiveComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ReferralCreateComponent
-    ],
+        ReferralRetrospectiveComponent
+      ],
       imports: [
         HttpClientModule,
-        NgbModule,
-        ReactiveFormsModule,
         SharedComponentsModule
       ],
       providers: [
-        {
-          provide: OidcSecurityService,
-          useClass: OidcSecurityServiceStub
-        },
+        DecimalPipe,
+        ToastService,
         {
           provide: RouterService,
           useValue: {
             paramMap: of({referralId: 1})
           }
-        }
+        },
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        },
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReferralCreateComponent);
+    fixture = TestBed.createComponent(ReferralRetrospectiveComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

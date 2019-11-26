@@ -1,0 +1,419 @@
+<!-- standard navbar -->
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <em class="fas fa-clipboard-check fa-4x"></em>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Add Retrospective Referral</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="patientForm" novalidate>
+            <div class="form-row">
+              <div class="required-field col-md-2 mb-2 text-left">
+                <strong>Denotes required field.</strong>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label class="required-field" for="nhsNumber"
+                [ngClass]="{
+                  'required-field': !DisableIfFieldHasValue('alternativeIdentifier')
+                }">
+                  NHS Number
+                </label>
+                <input
+                  class="form-control"
+                  digitOnly
+                  formControlName="nhsNumber"
+                  id="nhsNumber"
+                  maxlength="10"
+                  type="text"
+                  [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')"
+                  [ngClass]="{
+                    'is-invalid': HasInvalidNHSNumber(),
+                    'is-valid': HasValidNHSNumber()
+                  }"
+                />
+              </div>
+              <div class="col-md-1 mb-more-2 centered">
+                <span class="or">Or</span>
+              </div>
+              <div class="col-md-4">
+                <label class="required-field" for="alternativeIdentifier"
+                  [ngClass]="{
+                    'required-field': !DisableIfFieldHasValue('nhsNumber')
+                  }">
+                  Alternative Identifier
+                </label>
+                <input
+                  class="form-control"
+                  formControlName="alternativeIdentifier"
+                  maxlength="200"
+                  type="text"
+                  [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
+                  [ngClass]="{
+                    'is-invalid': HasInvalidAlternativeIdentifier(),
+                    'is-valid': HasValidAlternativeIdentifier()
+                  }"
+                />
+              </div>
+              <div class="col-md-2 offset-md-1 mb-more">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  placement="right"
+                  ngbTooltip="Search for existing patients using these identifiers"
+                  [openDelay]="1000"
+                  [closeDelay]="500"
+                  tooltipClass="subtle-tooltip"
+                  [disabled]="
+                    DisablePatientValidationButtonIfFieldsAreInvalid() ||
+                    IsSearchingForPatient() ||
+                    existingPatientDetailsUsed
+                  "
+                  (click)="ValidatePatient()"
+                  [ngClass]="{ validating: IsSearchingForPatient() }"
+                  >
+                  <i class="fas fa-bolt"></i>
+                  {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                    *ngIf="IsSearchingForPatient()"></span>
+                </button>
+              </div>
+            </div>
+            <!-- Row for divs showing patient number validation errors -->
+            <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
+              <div class="col-md-3 mb-2 mt-less-1">
+                <div *ngIf="patient.nhsNumber.errors != null">
+                  <div *ngIf="patient.nhsNumber.errors.NhsNumberValidFormat" class="invalid-field">
+                    <span>Invalid NHS Number</span>
+                  </div>
+                  <div *ngIf="patient.nhsNumber.errors.InvalidPatientIdentifier" class="invalid-field">
+                    <span>* Invalid Patient Identifier</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-2 offset-md-1 reduced-top-margin">
+                <div *ngIf="patient.alternativeIdentifier.errors" class="invalid-field">
+                  <span>Invalid Alternative Identifier</span>
+                </div>
+              </div>
+            </div>
+            <!-- GP Practice -->
+            <div class="form-row" *ngIf="isGpFieldsShown">
+              <div class="col-md-8 mb-2">
+                <label class="required-field" for="gpPractice">GP Practice</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="gpPractice"
+                  #gpPractice
+                  [appDisableControl]="
+                    !IsPatientIdValidated() ||
+                    IsUnknownFieldChecked('unknownGpPractice')
+                  "
+                  [class.is-invalid]="hasGpSearchFailed"
+                  formControlName="gpPractice"
+                  [ngbTypeahead]="GpSearch"
+                  [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults"
+                />
+              </div>
+              <div class="col-md-2 mb-more-2">
+                <div class="checkmark-content">
+                  <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      value=""
+                      id="unknownGpPractice"
+                      formControlName="unknownGpPractice"
+                      (change)="ToggleGpPracticeUnknown($event)"
+                    />
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- GP Practice Errors-->
+            <div class="form-row" *ngIf="gpPracticeField.errors !== null">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
+                  <span>* GP practice, Postcode or CCG Required </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="isGpSearching || hasGpSearchFailed">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isGpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasGpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <!-- Residential Postcode -->
+            <div class="form-row" *ngIf="isResidentialPostcodeFieldShown">
+              <div class="col-md-3 mb-2">
+                <label class="required-field" for="residentialPostcode">Residential Postcode</label>
+                <input
+                  type="text"
+                  maxlength="8"
+                  minlength="6"
+                  formControlName="residentialPostcode"
+                  #residentialPostcode
+                  [appDisableControl]="
+                    !IsPatientIdValidated() ||
+                    IsUnknownFieldChecked('unknownResidentialPostcode')
+                  "
+                  id="residentialPostcode"
+                  oninput="this.value = this.value.toUpperCase()"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': HasInvalidPostcode(),
+                    'is-valid': HasValidPostcode()
+                  }"
+                />
+              </div>
+              <div class="col-md-2 mb-more-2">
+                <div class="checkmark-content">
+                  <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      [appDisableControl]="!IsPatientIdValidated()"
+                      value=""
+                      id="unknownResidentialPostcode"
+                      formControlName="unknownResidentialPostcode"
+                      (change)="ToggleResidentialPostcodeUnknown($event)"
+                    />
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-2 centered-div">
+                <div class="column-div">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    placement="right"
+                    ngbTooltip="Check that postcode is valid"
+                    [openDelay]="1000"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip"
+                    [disabled]="
+                      DisablePostcodeValidationButtonIfFieldIsInvalid() ||
+                      IsSearchingForPostcode() ||
+                      PostcodeIsUnknown() ||
+                      !IsPatientIdValidated()
+                    "
+                    (click)="ValidatePostcode()"
+                    [ngClass]="{ validating: IsSearchingForPostcode() }"
+                  >
+                    <i class="fas fa-bolt"></i>
+                    {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="IsSearchingForPostcode()"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Residential Postcode Errors-->
+            <div class="form-row" *ngIf="isResidentialPostcodeFieldShown">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div *ngIf="patient.residentialPostcode.errors" class="invalid-field">
+                  <span>{{ residentialPostcodeValidationMessage }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- CCG -->
+            <div class="form-row" *ngIf="isCcgFieldsShown">
+              <div class="col-md-8 mb-2">
+                <label class="required-field" for="ccg">Clinical Commissioning Group</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ccg"
+                  #ccg
+                  [appDisableControl]="
+                    !IsPatientIdValidated() ||
+                    IsUnknownFieldChecked('unknownCcg')
+                  "
+                  [class.is-invalid]="hasCcgSearchFailed"
+                  formControlName="ccg"
+                  [ngbTypeahead]="CcgSearch"
+                  [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults"
+                />
+              </div>
+              <div class="col-md-2 mb-more-2">
+                <div class="checkmark-content">
+                  <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      [appDisableControl]="!IsPatientIdValidated()"
+                      value=""
+                      id="unknownCcg"
+                      formControlName="unknownCcg"
+                      (change)="ToggleCcgUnknown($event)"
+                    />
+                    <span class="checkmark"></span>
+                    Unknown
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- CCG Errors-->
+            <div class="form-row" *ngIf="isCcgFieldsShown">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isCcgSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasCcgSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <!-- AMHP User -->
+            <div class="form-row" *ngIf="IsPatientIdValidated()">
+              <div class="col-md-8 mb-2">
+                <label class="required-field" for="amhp">Lead AMHP</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="amhp"
+                  #amhp
+                  [appDisableControl]="!IsPatientIdValidated()"
+                  [class.is-invalid]="hasAmhpSearchFailed"
+                  formControlName="amhp"
+                  [ngbTypeahead]="AmhpSearch"
+                  [resultFormatter]="FormatTypeAheadResults"
+                  [inputFormatter]="FormatTypeAheadResults"
+                />
+              </div>
+            </div>
+            <!-- AMHP User Errors-->
+            <div class="form-row">
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isAmhpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+              <div class="col-md-8 mb-2 mt-less-1" *ngIf="amhpField.errors != null">
+                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
+                  <span>* Invalid Lead AMHP </span>
+                </div>
+              </div>
+            </div>
+            <!-- Referral Date / Time -->
+            <div class="form-row" *ngIf="IsPatientIdValidated()">
+              <div class="col-md-6">
+                <label class="required-field" for="picker">Date / Time of Referral</label>
+                <div class="row" name="picker">
+                  <div class="col-md-4">
+                    <input
+                      class="form-control"
+                      formControlName='referralDate'
+                      placeholder="dd/mm/yyyy"
+                      name="referralDate"
+                      [maxDate]='maxDate'
+                      ngbDatepicker
+                      #d="ngbDatepicker"
+                    />
+                  </div>
+                  <div class="col-md-1 padding-left-1">
+                    <button
+                      id="calendarBtn"
+                      class="btn btn-outline-secondary calendar"
+                      (click)="d.toggle()"
+                      [disabled]="!IsPatientIdValidated()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1 at">@</div>
+                    <div class="col-md-4 mlt-less-1 mt-less-5">
+                      <ngb-timepicker
+                        formControlName="referralTime"
+                        [minuteStep]="5"
+                      >
+                      </ngb-timepicker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Date Format Errors-->
+              <div class="form-row" *ngIf="referralDateField.errors">
+                <div class="col-md-4 mb-2 reduced-top-margin">
+                  <div
+                    class="invalid-field"
+                    *ngIf="referralDateField.errors.DatePickerFormat"
+                  >
+                    <span>Invalid Date Format</span>
+                  </div>
+                <div
+                  class="invalid-field"
+                  *ngIf="referralDateField.errors.InvalidAssessmentDate"
+                >
+                  <span>* Date cannot be in the future</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-2 mb-2">
+                <span>&nbsp;</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-2 mb-2 offset-md-8 text-right">
+                <button class="btn btn-standard btn-cancel" type="button" (click)="CancelReferral()">
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+              </div>
+              <div class="col-md-2 mb-2 text-left">
+                <button class="btn btn-primary btn-standard" type="button" (click)="CreateReferral()">
+                  <i class="fas fa-check"></i>
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-delay-spinner *ngIf="isCreatingReferral" [delayMessage]="'Saving Referral'"></app-delay-spinner>
+
+<!-- patient results -->
+<ng-template #patientResults let-patientResult>
+  <app-patient-results-modal
+    [patientResult]="modalResult"
+    (actioned)="OnPatientModalAction($event)"
+  >
+  </app-patient-results-modal>
+</ng-template>
+
+<ng-template #cancelReferral>
+  <app-cancel-action-modal
+    [modalTitle]="'Cancel Referral'"
+    [modalBody]="'Do you wish to cancel this referral creation? All changes will be lost.'"
+    (actioned)="OnCancelModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+

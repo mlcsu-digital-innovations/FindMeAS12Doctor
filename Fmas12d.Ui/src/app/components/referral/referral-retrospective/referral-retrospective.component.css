@@ -1,0 +1,71 @@
+.column-div {
+  width: 100%;
+  height:100%;
+  position: relative;
+}
+
+.column-div span {
+  position: absolute;
+  bottom:20px;
+  left: 40%;
+  text-align: center;
+  font-weight: 500;
+  color: #666;
+}
+
+.column-div button {
+  position: absolute;
+  bottom:12px;
+  left: 10%;
+}
+
+.column-div button .spinner-border {
+  position: absolute;
+  left: 5px;
+  bottom: 10px;
+  color: #eee;
+  padding-right: 5px;
+}
+
+.row-title {
+  color: #3396ff;
+  font-weight: 600;
+}
+
+.row-value {
+  color: #666;
+  font-weight: 600;
+}
+
+.current-referral {
+  background-color:#f00;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding:5px;
+  margin-bottom: 10px;
+}
+
+button.less-padding {
+  bottom:2px !important;
+}
+
+form {
+  margin:20px;
+}
+
+.validating {
+  min-width: 150px;
+}
+
+.form-row {
+  margin-top: 10px;
+  align-items: flex-end;
+}
+
+.required-field::after {
+  content: " *";
+  color: red;
+}

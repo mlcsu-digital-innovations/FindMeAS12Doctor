@@ -161,6 +161,12 @@ label {
   border-color: #0c9da7;
 }
 
+.at {
+  color: #666;
+  font-size:1.3em;
+  font-weight: 600;
+}
+
 /** modals **/
 
 .header-danger {
