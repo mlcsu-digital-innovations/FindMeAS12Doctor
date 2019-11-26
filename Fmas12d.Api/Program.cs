@@ -38,6 +38,11 @@ namespace Fmas12d.Api
             Log.Information("Seeding database with test data");
             host.SeedData(WebHostExtenstions.SeedType.Test);
           }
+          else if (args[0] == "/seedtestnoreferrals")
+          {
+            Log.Information("Seeding database with test data without referrals");
+            host.SeedData(WebHostExtenstions.SeedType.TestNoReferrals);
+          }          
           else if (args[0] == "/removeseed")
           {
             Log.Information("Removing all seed data from database");
@@ -73,6 +78,7 @@ namespace Fmas12d.Api
               "    /seednogppractice: Seed database without GP practice data or Test data" + Environment.NewLine +
               "    /seednogppracticeorccg Seed database without GP practice or CCG data or Test data" + Environment.NewLine +
               "    /seedtest: Seed database with Test data" + Environment.NewLine +
+              "    /seedtestnoreferrals: Seed database with Test data without Referrals" + Environment.NewLine +
               "  Removing Seeds:" + Environment.NewLine +
               "    /removeseed: Remove all seed data from database" + Environment.NewLine +
               "    /removeseedexceptgppractice: Remove all seed data except GP practices from database" + Environment.NewLine +
