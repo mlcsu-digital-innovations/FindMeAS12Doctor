@@ -78,20 +78,26 @@ namespace Fmas12d.Api.Controllers
     [HttpGet]
     [Route("")]
     public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
-      RequestModels.AssessmentListSearch assessmentListSearch)
+      RequestModels.AssessmentListSearch requestModel)
     {
       try
       {
         IEnumerable<Business.Models.Assessment> businessModels = null;
-        if (assessmentListSearch.AmhpUserId.HasValue)
+        if (requestModel.AmhpUserId.HasValue)
         {
           businessModels = await Service.GetAllFilterByAmhpUserIdAsync(
-            assessmentListSearch.AmhpUserId.Value, true, false);
+            requestModel.AmhpUserId.Value, 
+            requestModel.Scheduled ?? false,
+            true, 
+            true);
         }
-        else if (assessmentListSearch.DoctorUserId.HasValue)
+        else if (requestModel.DoctorUserId.HasValue)
         {
           businessModels = await Service.GetAllFilterByDoctorUserIdAsync(
-            assessmentListSearch.DoctorUserId.Value, true, false);
+            requestModel.DoctorUserId.Value,
+            requestModel.Scheduled ?? false,
+            true, 
+            true);
         }
 
         if (businessModels == null || !businessModels.Any())

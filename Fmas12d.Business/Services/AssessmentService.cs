@@ -446,41 +446,66 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    public async Task<IEnumerable<Models.Assessment>> GetAllFilterByAmhpUserIdAsync(
+    public async Task<IEnumerable<Assessment>> GetAllFilterByAmhpUserIdAsync(
       int amhpUserId,
+      bool isScheduled,
       bool asNoTracking,
       bool activeOnly)
     {
+      IQueryable<Entities.Assessment> query = _context
+        .Assessments
+        .Include(a => a.Referral)
+        .Where(a => a.AmhpUserId == amhpUserId)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking);
 
-      List<Entities.Assessment> entities =
-        await _context.Assessments
-                      .Where(e => e.AmhpUserId == amhpUserId)
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .AsNoTracking(asNoTracking)
-                      .ToListAsync();
+      if (isScheduled)
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId == 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }
+      else
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId != 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }
 
-      IEnumerable<Models.Assessment> models =
-        entities.Select(e => new Models.Assessment(e)).ToList();
+      IEnumerable<Assessment> models = await query
+        .Select(a => new Assessment(a, true))
+        .ToListAsync();
 
       return models;
     }
 
-    public async Task<IEnumerable<Models.Assessment>> GetAllFilterByDoctorUserIdAsync(
+    public async Task<IEnumerable<Assessment>> GetAllFilterByDoctorUserIdAsync(
       int doctorUserId,
+      bool isScheduled,
       bool asNoTracking,
       bool activeOnly)
     {
 
-      List<Entities.Assessment> entities =
-        await _context.Assessments
-                      .Include(a => a.Doctors)
-                      .Where(a => a.Doctors.Any(d => d.DoctorUserId == doctorUserId))
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .AsNoTracking(asNoTracking)
-                      .ToListAsync();
+      IQueryable<Entities.Assessment> query = _context
+        .Assessments
+        .Include(a => a.Doctors)
+        .Include(a => a.Referral)
+        .Where(a => a.Doctors.Any(d => d.DoctorUserId == doctorUserId))
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking);        
 
-      IEnumerable<Models.Assessment> models =
-        entities.Select(e => new Models.Assessment(e)).ToList();
+      if (isScheduled)
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId == 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }
+      else
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId != 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }              
+
+      IEnumerable<Assessment> models = await query
+        .Select(a => new Assessment(a, true))
+        .ToListAsync();
 
       return models;
     }
