@@ -17,24 +17,12 @@ form {
 .table-referral-list {
   background-color:#6AB0ED;
   font-size: smaller;
+  margin: 10px;
 }
 
-.table-referral-list td:nth-child(n+5) {
-  background-color:#EDA76A;
-}
-
-.table-referral-list th:nth-child(n-5) {
-  background-color:#2891ED;
-  color: white;
-}
-
-.table-referral-list th:nth-child(n+5) {
-  background-color:#ED8428;
-  color: white;
-}
-
-.table-referral-list td a {
-  font-weight: bold;
+.table-referral-list th {
+  background-color: #0dadb7;
+  color: #fff;
 }
 
 th[sortable] {
@@ -66,30 +54,28 @@ th {
   margin-left: 10px;
 }
 
-.doctor-list {
-  border-radius: 0.25rem;
-  border: 1px solid #ced4da;
-  display: flex;
-  flex-direction: column;
-  padding: .375rem .75rem;
-}
-
-.doctor-row {
-  background-color: #e1e1e1;
-  border-radius: 0.25rem;
-  color: #495057;
-  font-size: 1.2em;
-  font-weight: 600;
-  margin-top: 5px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-}
-
-.doctor-name {
-  margin-top: 10px;
-}
-
 .gmc-number {
   font-size: 0.8em;
   padding-left: 5px;
+}
+
+.read-only {
+  background-color: #ddd;
+  border-radius: .25rem;
+  border: 1px solid #ced4da;
+  color: #495057;
+  font-size: 1.2em;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  min-height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+}
+
+.no-previous{
+  background-color: #ec5a3b;
+  color: #fff;
+  margin: 10px;
+  padding: .375rem .75rem;
+  text-align: center;
+  width: 100%;
 }
