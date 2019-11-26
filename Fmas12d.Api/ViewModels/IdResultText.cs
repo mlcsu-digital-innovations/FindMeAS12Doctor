@@ -26,7 +26,7 @@ namespace Fmas12d.Api.ViewModels
         return model => new IdResultText()
         {
           Id = model.Id,
-          ResultText = ($"{model.DisplayName} - {model.GmcNumber}") 
+          ResultText = ($"{model.DisplayName}{(model.GmcNumber == null ? "" : " - " + model.GmcNumber)}") 
         };
       }
     }     
