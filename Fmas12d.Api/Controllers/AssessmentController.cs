@@ -214,15 +214,6 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
-    [Route("{id:int}/planned")]
-    public async Task<ActionResult<ViewModels.AssessmentPut>> PutPlanned(
-      int id,
-      [FromBody] RequestModels.AssessmentPutPlanned requestModel)
-    {
-      return await Update(id, requestModel);
-    }
-
-    [HttpPut]
     [Route("{id:int}/outcome/failure")]
     public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeFailure(
       int id,
@@ -238,6 +229,32 @@ namespace Fmas12d.Api.Controllers
       [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
     {
       return await PutOutcome(id, requestModel);
+    }
+
+    [HttpPut]
+    [Route("{id:int}/planned")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutPlanned(
+      int id,
+      [FromBody] RequestModels.AssessmentPutPlanned requestModel)
+    {
+      return await Update(id, requestModel);
+    }    
+
+    [HttpPut]
+    [Route("{id:int}/schedule")]
+    public async Task<ActionResult> PutSchedule(
+      int id
+    )
+    {
+      try
+      {
+        await Service.Schedule(id);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
     }
 
     private async Task<ActionResult<ViewModels.AssessmentPost>> Create(

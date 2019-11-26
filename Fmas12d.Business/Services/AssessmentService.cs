@@ -681,6 +681,45 @@ namespace Fmas12d.Business.Services
       }
     }
 
+    public async Task<bool> Schedule(int id)
+    {
+      Entities.Assessment entity = await _context
+        .Assessments
+        .Include(a => a.Referral)
+        .Include(a => a.Doctors)
+        .Where(a => a.Id == id)
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(false)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"An active Assessment with an id of {id} could not be found.");
+      }
+
+      if (entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESCHEDULING &&
+          entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_COMPLETE)
+      {
+        throw new ModelStateException("id",
+          $"An active Assessment with an id of {id} cannot be scheduled because " +
+          $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be " +
+          $"{ReferralStatus.AWAITING_RESCHEDULING} or {ReferralStatus.RESPONSES_COMPLETE}");
+      }
+
+      if (!entity.Doctors.Any(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED))
+      {
+        throw new ModelStateException("id",
+          $"An active Assessment with an id of {id} cannot be scheduled because it needs " +
+           "to have at least one allocated doctor");
+      }
+
+      entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
+      UpdateModified(entity.Referral);
+      await _context.SaveChangesAsync();
+
+      return true; 
+    }
 
     private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
     {
@@ -811,7 +850,6 @@ namespace Fmas12d.Business.Services
         doctor.Longitude = model.Longitude.Value;
         doctor.Postcode = null;
       }
-
       UpdateModified(doctor);
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.AWAITING_RESPONSES)
@@ -825,6 +863,7 @@ namespace Fmas12d.Business.Services
           entity.Referral.ReferralStatusId = ReferralStatus.RESPONSES_PARTIAL;
         }
       }
+      UpdateModified(entity.Referral);
 
       //TODO - WHAT TO DO IF ALLOCATED DOCTOR DECLINES AFTER ACCEPTANCE???
 
@@ -969,7 +1008,6 @@ namespace Fmas12d.Business.Services
         return model;
       }
     }
-
 
   }
 }

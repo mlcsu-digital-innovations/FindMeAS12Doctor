@@ -16,8 +16,9 @@ namespace Fmas12d.Business.Services
     Task<Assessment> GetAvailableDoctorsAsync(int id, bool asNoTracking, bool activeOnly);
     Task<Assessment> GetByIdAsync(int id, bool activeOnly);    
     Task<Assessment> GetSelectedDoctorsAsync(int id, bool asNoTracking, bool activeOnly);
+    Task<bool> Schedule(int id);
     Task<AssessmentDoctor> UpdateAssessmentDoctorAcceptance(AssessmentDoctor businessModel);
     Task<AssessmentUpdate> UpdateAsync(AssessmentUpdate model);
-    Task<AssessmentOutcome> UpdateOutcomeAsync(AssessmentOutcome model);
+    Task<AssessmentOutcome> UpdateOutcomeAsync(AssessmentOutcome model);    
   }
 }
