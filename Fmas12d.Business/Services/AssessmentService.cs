@@ -53,7 +53,8 @@ namespace Fmas12d.Business.Services
       }
       CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
         updateModel.Id, entity.Referral.ReferralStatusId);
-      CheckAllocatedDoctorsAreSelected(entity, updateModel.UserIds);
+      CheckDoctorsAreSelected(entity, updateModel.UserIds);
+      CheckDoctorsAreSelectedAndHaveAccepted(entity, updateModel.UserIds);
 
       UpdateModified(entity);
 
@@ -63,6 +64,8 @@ namespace Fmas12d.Business.Services
           entity.Doctors.Single(d => d.DoctorUserId == userId);
         assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
         UpdateModified(assessmentDoctor);
+
+        AddUserAssessmentNotification(entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
       }
 
       await _context.SaveChangesAsync();
@@ -74,31 +77,6 @@ namespace Fmas12d.Business.Services
                                 .Select(d => d.DoctorUserId)
                                 .ToList()
       };
-    }
-
-
-
-    private async Task<bool> AddAmhpToUserAssessmentNotifications(
-      int amhpUserId, Entities.Assessment entity)
-    {
-      await _userService.CheckUserIsAnAmhpById(amhpUserId);
-
-      if (entity.UserAssessmentNotifications == null)
-      {
-        entity.UserAssessmentNotifications = new List<Entities.UserAssessmentNotification>();
-      }
-
-      Entities.UserAssessmentNotification userAssessmentNotification =
-        new Entities.UserAssessmentNotification
-        {
-          IsActive = true,
-          NotificationTextId = Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          UserId = amhpUserId
-        };
-      UpdateModified(userAssessmentNotification);
-      entity.UserAssessmentNotifications.Add(userAssessmentNotification);
-
-      return true;
     }
 
     private void AddAssessmentDetail(int assessmentDetailTypeId, Entities.Assessment entity)
@@ -126,6 +104,29 @@ namespace Fmas12d.Business.Services
         }
       }
     }
+
+    private void AddUserAssessmentNotification(
+      Entities.Assessment entity,
+      int userId,
+      int notificationTextId)
+    {
+      
+      if (entity.UserAssessmentNotifications == null)
+      {
+        entity.UserAssessmentNotifications = new List<Entities.UserAssessmentNotification>();
+      }
+
+      Entities.UserAssessmentNotification userAssessmentNotification =
+        new Entities.UserAssessmentNotification
+        {
+          IsActive = true,
+          NotificationTextId = notificationTextId,
+          UserId = userId
+        };
+
+      UpdateModified(userAssessmentNotification);
+      entity.UserAssessmentNotifications.Add(userAssessmentNotification);
+    }    
 
     private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
     {
@@ -176,6 +177,8 @@ namespace Fmas12d.Business.Services
         };
         UpdateModified(assessmentDoctor);
         entity.Doctors.Add(assessmentDoctor);
+
+        AddUserAssessmentNotification(entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
       }
 
       await _context.SaveChangesAsync();
@@ -189,22 +192,42 @@ namespace Fmas12d.Business.Services
       };
     }
 
-    private void CheckAllocatedDoctorsAreSelected(
-      Entities.Assessment entity, IEnumerable<int> allocatedUserIds)
+    private void CheckDoctorsAreSelected(
+      Entities.Assessment entity, IEnumerable<int> doctorUserIds)
     {
       IEnumerable<int> selectedUserIds =
         entity.Doctors
+              .Where(d => d.IsActive)
               .Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED)
               .Select(ad => ad.DoctorUserId);
 
-      if (allocatedUserIds.Intersect(selectedUserIds).Count() != allocatedUserIds.Count())
+      if (doctorUserIds.Intersect(selectedUserIds).Count() != doctorUserIds.Count())
       {
         throw new ModelStateException("UserIds",
         "Only the following doctors id's are selected " +
         $"[{string.Join(",", selectedUserIds)}], " +
-        $"from the requested [{string.Join(",", allocatedUserIds)}]");
+        $"from the requested [{string.Join(",", doctorUserIds)}]");
       }
     }
+
+    private void CheckDoctorsAreSelectedAndHaveAccepted(
+      Entities.Assessment entity, IEnumerable<int> doctorUserIds)
+    {
+      IEnumerable<int> selectedUserIds =
+        entity.Doctors
+              .Where(d => d.IsActive)
+              .Where(d => d.StatusId == Models.AssessmentDoctorStatus.SELECTED)
+              .Where(d => d.HasAccepted ?? false)
+              .Select(ad => ad.DoctorUserId);
+
+      if (doctorUserIds.Intersect(selectedUserIds).Count() != doctorUserIds.Count())
+      {
+        throw new ModelStateException("UserIds",
+        "Only the following doctors id's are selected and have accepted " +
+        $"[{string.Join(",", selectedUserIds)}], " +
+        $"from the requested [{string.Join(",", doctorUserIds)}]");
+      }
+    }    
 
     private void CheckAssessmentCanBeUpdated(Entities.Assessment entity)
     {
@@ -334,7 +357,13 @@ namespace Fmas12d.Business.Services
       entity.Id = 0;
       entity.IsActive = true;
       AddAssessmentDetails(model.DetailTypeIds, entity);
-      await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
+      
+      await _userService.CheckIsAmhp(model.AmhpUserId, "amhpUserId");
+      AddUserAssessmentNotification(
+        entity, 
+        model.AmhpUserId, 
+        NotificationText.ALLOCATED_TO_ASSESSMENT
+      );
       await AddLatitudeAndLongitude(model.Postcode, entity);
       _context.Add(entity);
 
@@ -498,7 +527,7 @@ namespace Fmas12d.Business.Services
                     .ThenInclude(u => u.ProfileType)
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
-                    .ThenInclude(u => u.UserSpecialities)
+                    .ThenInclude(u => u.UserSpecialities)                
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.PreferredDoctorGenderType)
@@ -540,6 +569,7 @@ namespace Fmas12d.Business.Services
                                           }).ToList()
                     },
                     DoctorUserId = d.DoctorUserId,
+                    HasAccepted = d.HasAccepted,
                     IsActive = d.IsActive,
                     StatusId = d.StatusId
                   }).ToList(),
@@ -649,69 +679,12 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    private async Task<bool> UpdateAmhpUserAssessmentNotification(
-      AssessmentUpdate model, Entities.Assessment entity)
-    {
-      if (entity.HasUserAssessmentNotifications)
-      {
-        Entities.UserAssessmentNotification currentUserAssessmentNotification =
-          entity.UserAssessmentNotifications
-                .Where(u => u.IsActive)
-                .SingleOrDefault(u => u.UserId == entity.AmhpUserId);
-
-        if (currentUserAssessmentNotification == null)
-        {
-          throw new EntityNotLoadedException(
-            "Assessment",
-            model.Id,
-            "UserAssessmentNotification.User.ProfileType of AMHP",
-            Models.ProfileType.AMHP);
-        }
-        else
-        {
-
-          UpdateModified(currentUserAssessmentNotification);
-
-          if (entity.AmhpUserId != model.AmhpUserId)
-          {
-            currentUserAssessmentNotification.IsActive = false;
-
-            Entities.UserAssessmentNotification previousUserAssessmentNotification =
-              entity.UserAssessmentNotifications
-                    .SingleOrDefault(u => u.UserId == model.AmhpUserId);
-
-            if (previousUserAssessmentNotification == null)
-            {
-              await AddAmhpToUserAssessmentNotifications(model.AmhpUserId, entity);
-            }
-            else
-            {
-              previousUserAssessmentNotification.HasAccepted = null;
-              previousUserAssessmentNotification.IsActive = true;
-              previousUserAssessmentNotification.RespondedAt = null;
-              UpdateModified(previousUserAssessmentNotification);
-            }
-          }
-        }
-      }
-      else
-      {
-        throw new EntityNotLoadedException(
-          "Assessment",
-          model.Id,
-          "UserAssessmentNotification.User.ProfileType of AMHP",
-          Models.ProfileType.AMHP);
-      }
-      return true;
-    }
-
     public async Task<AssessmentUpdate> UpdateAsync(AssessmentUpdate model)
     {
 
       Entities.Assessment entity = _context.Assessments
                                            .Include(a => a.Details)
-                                           .Include(a => a.UserAssessmentNotifications)
-                                            .ThenInclude(a => a.User)
+                                           .Include(a => a.Doctors)
                                            .Where(a => a.Id == model.Id)
                                            .AsNoTracking(false)
                                            .WhereIsActiveOrActiveOnly(true)
@@ -725,14 +698,20 @@ namespace Fmas12d.Business.Services
           $"An active Assessment with an id of {model.Id} could not be found.");
       }
 
-      UpdateAssessmentDetails(model, entity);
-      await UpdateAmhpUserAssessmentNotification(model, entity);
-
+      UpdateAssessmentDetails(model, entity);      
       model.MapToEntity(entity);
-
       UpdateModified(entity);
 
-      await _context.SaveChangesAsync();
+      AddUserAssessmentNotification(entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
+      {
+        AddUserAssessmentNotification(
+          entity, 
+          assessmentDoctor.DoctorUserId, 
+          NotificationText.ASSESSMENT_UPDATED);
+      }
+
+      await _context.SaveChangesAsync();      
 
       model = _context.Assessments
                       .Include(e => e.Details)

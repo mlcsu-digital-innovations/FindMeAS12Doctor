@@ -165,6 +165,7 @@ namespace Fmas12d.Api
       services.AddScoped<ISpecialityService, SpecialityService>();
       services.AddScoped<IUnsuccessfulAssessmentTypeService, UnsuccessfulAssessmentTypeService>();
       services.AddScoped<IUserAvailabilityService, UserAvailabilityService>();
+      services.AddScoped<IUserNotificationService, UserNotificationService>();
       services.AddScoped<IUserService, UserService>();
 
       // services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();

@@ -7,8 +7,7 @@ namespace Fmas12d.Api.RequestModels
       Business.Models.ReferralCreate model = new Business.Models.ReferralCreate()
       {
         CreatedAt = CreatedAt,
-        CreatedByUserId = (int)CreatedByUserId,
-        PatientId = (int)PatientId,
+        PatientId = PatientId.Value,
         LeadAmhpUserId = LeadAmhpUserId
       };
       return model;

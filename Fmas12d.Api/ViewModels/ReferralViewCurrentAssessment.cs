@@ -24,9 +24,9 @@ namespace Fmas12d.Api.ViewModels
       MeetingArrangementComment = model.MeetingArrangementComment;
       MustBeCompletedBy = model.MustBeCompletedBy;
       Postcode = model.Postcode;
-      PreferredDoctorGenderTypeName = model.PreferredDoctorGenderType?.Name;
+      PreferredDoctorGenderType = new IdNameDescription(model.PreferredDoctorGenderType);
       ScheduledTime = model.ScheduledTime;
-      SpecialityName = model.Speciality?.Name;
+      Speciality = new IdNameDescription(model.Speciality);
     }
 
     public string AmhpUserName { get; set; }
@@ -39,8 +39,8 @@ namespace Fmas12d.Api.ViewModels
     public string MeetingArrangementComment { get; set; }
     public DateTimeOffset? MustBeCompletedBy { get; set; }
     public string Postcode { get; set; }
-    public string PreferredDoctorGenderTypeName { get; set; }
+    public IdNameDescription PreferredDoctorGenderType { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
-    public string SpecialityName { get; set; }
+    public IdNameDescription Speciality { get; set; }
   }
 }

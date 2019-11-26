@@ -546,12 +546,11 @@ export class AssessmentCreateComponent implements OnInit {
     assessment.address3 = addressLines[2];
     assessment.address4 = addressLines[3];
 
-    assessment.assessmentDetails = [];
+    assessment.detailTypeIds = [];
 
     this.selectedDetails.forEach(detail => {
-      assessment.assessmentDetails.push(detail.id);
+      assessment.detailTypeIds.push(detail.id);
     });
-
     this.PostAssessment(assessment);
   }
 

@@ -115,8 +115,8 @@ export class AssessmentViewComponent implements OnInit {
 
     this.currentAssessmentForm.controls.mustBeCompletedBy.setValue(mustBeCompletedBy);
     this.currentAssessmentForm.controls.postCode.setValue(referral.currentAssessment.postcode);
-    this.currentAssessmentForm.controls.preferredDoctorGenderTypeName.setValue(referral.currentAssessment.preferredDoctorGenderTypeName);
-    this.currentAssessmentForm.controls.specialityName.setValue(referral.currentAssessment.specialityName);
+    this.currentAssessmentForm.controls.preferredDoctorGenderTypeName.setValue(referral.currentAssessment.preferredDoctorGenderType.name);
+    this.currentAssessmentForm.controls.specialityName.setValue(referral.currentAssessment.speciality.name);
     this.currentAssessmentForm.disable();
     this.referralId = referral.id;
 

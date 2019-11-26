@@ -113,15 +113,14 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.Assessment businessModel =
-            await Service.GetByIdAsync(id, true);
+        Business.Models.Assessment businessModel = await Service.GetByIdAsync(id, true);
 
         if (businessModel == null)
         {
           return NoContent();
         }
         else
-        {
+        {          
           ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
           return Ok(viewModel);
         }

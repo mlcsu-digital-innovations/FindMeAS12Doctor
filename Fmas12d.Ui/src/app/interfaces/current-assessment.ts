@@ -1,7 +1,9 @@
 import { AssessmentUser } from './assessment-user';
+import { NameIdDescription } from './name-id-description';
 
 export interface CurrentAssessment {
   amhpUserName: string;
+  detailTypes: NameIdDescription[];
   doctorsAllocated: AssessmentUser[];
   doctorsSelected: AssessmentUser[];
   fullAddress: string;
@@ -10,7 +12,7 @@ export interface CurrentAssessment {
   meetingArrangementComment: string;
   mustBeCompletedBy?: Date;
   postcode: string;
-  preferredDoctorGenderTypeName: string;
+  preferredDoctorGenderType: NameIdDescription;
   scheduledTime?: Date;
-  specialityName: string;
+  speciality: NameIdDescription;
 }

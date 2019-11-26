@@ -9,7 +9,6 @@ namespace Fmas12d.Api.RequestModels
     // nullable ints [Required] for foreign keys - enable model validation ?
     public DateTimeOffset CreatedAt { get; set; }
     public virtual UserPut CreatedByUser { get; set; }
-    [Required]
     public int? CreatedByUserId { get; set; }
     public virtual IList<Assessment> Assessments { get; set; }
     public virtual Patient Patient { get; set; }

@@ -101,42 +101,6 @@ export class AssessmentEditComponent implements OnInit {
       })
     );
 
-    // get the list of specialities for the dropdown
-    this.nameIdListService.GetListData('speciality')
-      .subscribe(specialities => {
-        this.specialities = specialities;
-      },
-        (err) => {
-          this.toastService.displayError({
-            title: 'Error',
-            message: 'Error Retrieving Speciality Data'
-          });
-        });
-
-    // get the list of genders for the dropdown
-    this.nameIdListService.GetListData('gendertype')
-    .subscribe(genders => {
-      this.genderTypes = genders;
-    },
-      (err) => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Error Retrieving Gender Data'
-        });
-      });
-
-    // get the list of risks for the dropdown
-    this.nameIdListService.GetListData('assessmentdetailtype')
-      .subscribe(details => {
-        this.assessmentDetails = details;
-      },
-      (err) => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Error Retrieving Assessment Risks'
-      });
-    });
-
     this.assessmentForm = this.formBuilder.group({
       amhp: [
         ''
@@ -169,10 +133,8 @@ export class AssessmentEditComponent implements OnInit {
         ''
       ],
       preferredGender: [
-
       ],
       speciality: [
-        ''
       ],
       toBeCompletedByDate: [
         this.assessmentShouldBeCompletedByDate,
@@ -273,12 +235,58 @@ export class AssessmentEditComponent implements OnInit {
     return this.assessmentForm.controls[fieldName].disabled;
   }
 
+  FetchDropDownData() {
+    // get the list of specialities for the dropdown
+    this.nameIdListService.GetListData('speciality')
+      .subscribe(specialities => {
+        this.specialities = specialities;
+      },
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving Speciality Data'
+          });
+        });
+
+    // get the list of genders for the dropdown
+    this.nameIdListService.GetListData('gendertype')
+    .subscribe(genders => {
+      this.genderTypes = genders;
+    },
+      (err) => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error Retrieving Gender Data'
+        });
+      });
+
+    // get the list of risks for the dropdown
+    this.nameIdListService.GetListData('assessmentdetailtype')
+      .subscribe(details => {
+        this.assessmentDetails = details;
+      },
+      (err) => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error Retrieving Assessment Risks'
+      });
+    });
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
   }
 
   get assessmentPostcode() {
     return this.assessmentForm.controls.postCode;
+  }
+
+  get preferredGenderField() {
+    return this.assessmentForm.controls.preferredGender;
+  }
+
+  get specialityField() {
+    return this.assessmentForm.controls.speciality;
   }
 
   get toBeCompletedByDateField() {
@@ -290,6 +298,8 @@ export class AssessmentEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralView) {
+
+    this.FetchDropDownData();
 
     const assessment = referral.currentAssessment;
 
@@ -306,6 +316,16 @@ export class AssessmentEditComponent implements OnInit {
 
     this.selectedDoctors = referral.currentAssessment.doctorsSelected;
     this.allocatedDoctors = referral.currentAssessment.doctorsAllocated;
+
+    this.preferredGenderField.setValue(referral.currentAssessment.preferredDoctorGenderType.id);
+    this.specialityField.setValue(referral.currentAssessment.speciality.id);
+
+    referral.currentAssessment.detailTypes.forEach(detailType => {
+      const detail = {id: detailType.id, name: detailType.name} as NameIdList;
+      this.selectedDetails.push(detail);
+    });
+
+    this.assessmentForm.controls.assessmentDetails.setValue(this.selectedDetails);
 
   }
 
