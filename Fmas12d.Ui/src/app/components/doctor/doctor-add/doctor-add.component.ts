@@ -96,13 +96,10 @@ export class DoctorAddComponent implements OnInit {
             message: 'Error Retrieving Gender Data'
           });
         });
-
-    this.OnChanges();
   }
 
   AddressSearch(): void {
     this.addressList = [];
-    // this.unregisteredPostcodeField.setValue('');
     this.isPostcodeSearching = true;
 
     this.postcodeValidationService.searchPostcode(this.unregisteredPostcodeField.value)
@@ -227,12 +224,6 @@ export class DoctorAddComponent implements OnInit {
     );
   }
 
-  OnChanges(): void {
-    // this.registeredDoctorField.valueChanges.subscribe(val => {
-    //   console.log(typeof val);
-    // });
-  }
-
   OnCancelModalAction(action: boolean) {
     this.cancelModal.close();
     if (action) {
@@ -241,6 +232,7 @@ export class DoctorAddComponent implements OnInit {
   }
 
   OnCancelUnregisteredUser() {
+    this.isUnregisteredSearchComplete = false;
     this.multipleUsersModal.close();
   }
 
@@ -285,6 +277,10 @@ export class DoctorAddComponent implements OnInit {
   }
 
   SearchUnregisteredDoctor() {
+
+    if (this.unregisteredUserField.value === '' && this.unregisteredGmcNumberField.value === '') {
+      return;
+    }
 
     this.ResetAllFields();
 
@@ -360,5 +356,4 @@ export class DoctorAddComponent implements OnInit {
         });
       });
   }
-
 }
