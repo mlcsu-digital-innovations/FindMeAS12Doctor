@@ -5,6 +5,12 @@ namespace Fmas12d.Business.Services
 {
   public interface IPatientService : IServiceBaseNoAutoMapper
   {
+    Task<bool> CheckExists(
+      int id, 
+      string modelPropertyName,
+      bool asNoTracking = true, 
+      bool activeOnly = true
+    );    
     Task<Patient> CreateAsync(Patient model);
     Task<Patient> GetByAlternativeIdentifier(
       string alternativeIdentifier, 

@@ -10,16 +10,23 @@ namespace Fmas12d.Business.Services
 {
   public class ReferralService : ServiceBaseNoAutoMapper<Entities.Referral>, IReferralService
   {
+    private readonly IPatientService _patientService;
     private readonly IUserService _userService;
-    public ReferralService(ApplicationContext context, IUserService userService)
+    public ReferralService(
+      ApplicationContext context, 
+      IUserService userService, 
+      IPatientService patientService
+    )
       : base(context)
     {
-      this._userService = userService;
+      this._patientService = patientService;
+      this._userService = userService;      
     }
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
     {
-      await _userService.CheckUserIsAnAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+      await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+      await _patientService.CheckExists(model.PatientId, "patientId");
 
       Entities.Referral entity = model.MapToEntity();
 

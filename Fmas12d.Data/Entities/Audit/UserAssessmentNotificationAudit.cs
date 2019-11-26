@@ -8,9 +8,8 @@ namespace Fmas12d.Data.Entities
     BaseAudit, IUserAssessmentNotification
   {
     public int AssessmentId { get; set; }
-    public bool? HasAccepted { get; set; }
     public int NotificationTextId { get; set; }
-    public DateTimeOffset? RespondedAt { get; set; }
+    public DateTimeOffset? SentAt { get; set; }
     public int UserId { get; set; }
   }
 }

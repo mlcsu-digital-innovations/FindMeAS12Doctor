@@ -42,7 +42,7 @@ namespace Fmas12d.Business.Services
       return user;
     }    
 
-    public async Task<bool> CheckUserIsAnAmhp(
+    public async Task<bool> CheckIsAmhp(
       int id,
       string modelPropertyName,
       bool asNoTracking = true,
@@ -58,7 +58,7 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
-    public async Task<bool> CheckUserIsADoctor(
+    public async Task<bool> CheckIsADoctor(
       int id,
       string modelPropertyName,
       bool asNoTracking = true, 

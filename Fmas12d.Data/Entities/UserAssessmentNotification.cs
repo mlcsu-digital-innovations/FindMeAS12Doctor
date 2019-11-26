@@ -7,10 +7,9 @@ namespace Fmas12d.Data.Entities
   {
     public virtual Assessment Assessment { get; set; }
     public int AssessmentId { get; set; }
-    public bool? HasAccepted { get; set; }
     public virtual NotificationText NotificationText { get; set; }
     public int NotificationTextId { get; set; }
-    public DateTimeOffset? RespondedAt { get; set; }
+    public DateTimeOffset? SentAt { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
   }
