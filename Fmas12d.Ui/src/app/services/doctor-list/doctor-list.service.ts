@@ -16,7 +16,9 @@ export class DoctorListService {
     if (searchTerm === '' || searchTerm.length < 3) {
       return of([]);
     }
-    const options = { params: new HttpParams().set('doctorname', searchTerm) };
+
+    const paramName: string = isNaN(+searchTerm) ? 'doctorname' : 'gmcnumber';
+    const options = { params: new HttpParams().set(paramName, searchTerm) };
 
     return this.httpClient.get(
       environment.apiEndpoint + '/user/search', options

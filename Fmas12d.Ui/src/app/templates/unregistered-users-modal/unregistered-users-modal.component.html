@@ -1,0 +1,31 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title" >Multiple Unregistered Doctors Have Been Found</h4>
+</div>
+<div class="modal-body">
+  <div class="row user-row" *ngFor="let user of unregisteredUsers">
+    <div class="col-md-10">
+      <div class="user-name">
+          {{user.displayName}}
+      </div>
+      <div class="user-gmc">
+          {{user.gmcNumber}}
+      </div>
+    </div>
+    <div class="col-md-2" style="padding-top:6px;">
+      <button
+        type="button"
+        class="btn btn-primary "
+        (click)="selectAction(user)">
+        Select
+      </button>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-cancel"
+    (click)="cancelAction()">
+    Cancel
+  </button>
+</div>

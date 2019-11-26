@@ -2,12 +2,14 @@ import { CancelActionModalComponent } from './cancel-action-modal/cancel-action-
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PatientResultsModalComponent } from './patient-results-modal/patient-results-modal.component';
+import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unregistered-users-modal.component';
 
 
 @NgModule({
   declarations: [
     CancelActionModalComponent,
-    PatientResultsModalComponent
+    PatientResultsModalComponent,
+    UnregisteredUsersModalComponent
   ],
   imports: [
     CommonModule
@@ -15,7 +17,8 @@ import { PatientResultsModalComponent } from './patient-results-modal/patient-re
   providers: [],
   exports: [
     CancelActionModalComponent,
-    PatientResultsModalComponent
+    PatientResultsModalComponent,
+    UnregisteredUsersModalComponent
   ]
 })
 export class TemplateModule {}

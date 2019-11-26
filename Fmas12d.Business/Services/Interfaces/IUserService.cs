@@ -22,6 +22,8 @@ namespace Fmas12d.Business.Services
     Task<IEnumerable<Models.User>> GetAllByAmhpName(
       string amhpName, bool asNoTracking = true, bool activeOnly = true);
     Task<IEnumerable<Models.User>> GetAllByDoctorName(
-      string doctorName, bool asNoTracking = true, bool activeOnly = true);    
+      string doctorName, bool asNoTracking = true, bool activeOnly = true);
+    Task<IEnumerable<Models.User>> GetAllByGmcNumber(
+      int gmcNumber, bool asNoTracking = true, bool activeOnly = true);
   }
 }

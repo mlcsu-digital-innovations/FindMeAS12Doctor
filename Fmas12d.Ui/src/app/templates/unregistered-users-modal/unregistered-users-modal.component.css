@@ -1,0 +1,19 @@
+.user-row {
+  margin:4px;
+  background-color: #ddd;
+  padding:2px;
+}
+
+.user-row:hover {
+  background-color: #d1d1d1;
+}
+
+.user-name {
+  color: #777;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+
+.user-gmc {
+  color: #777;
+}
