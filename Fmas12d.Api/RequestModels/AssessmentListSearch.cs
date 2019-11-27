@@ -8,13 +8,16 @@ namespace Fmas12d.Api.RequestModels
     [Range(1, int.MaxValue)]
     public int? AmhpUserId { get; set; }
 
+    [Range(1, int.MaxValue)]
+    public int? DoctorUserId { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-      if (!AmhpUserId.HasValue)
+      if (!AmhpUserId.HasValue && !DoctorUserId.HasValue)
       {
         yield return new ValidationResult(
-            "The AmhpUserId field is required.",
-            new[] { "AmhpUserId" });
+            "The AmhpUserId or DoctorUserId field is required.",
+            new[] { "AmhpUserId", "DoctorUserId" });
       }
     }
   }

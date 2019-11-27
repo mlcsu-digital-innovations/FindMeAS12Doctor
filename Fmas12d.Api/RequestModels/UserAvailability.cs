@@ -14,10 +14,12 @@ namespace Fmas12d.Api.RequestModels
 
     internal virtual Business.Models.UserAvailability MapToBusinessModel(int userId)
     {
-      _model = new Business.Models.UserAvailability();
-      _model.End = End.Value;
-      _model.UserId = userId;
-      _model.Start = Start.Value;
+      _model = new Business.Models.UserAvailability
+      {
+        End = End.Value,
+        Start = Start.Value,
+        UserId = userId    
+      };
       return _model;
     }
   }

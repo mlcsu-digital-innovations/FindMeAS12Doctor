@@ -13,12 +13,15 @@ namespace Fmas12d.Business.Services
   public class UserAvailabilityService : ServiceBaseNoAutoMapper<Entities.UserAvailability>,
     IUserAvailabilityService
   {
+    private readonly IContactDetailsService _contactDetailsService;
     private readonly ILocationDetailService _locationDetailService;
     public UserAvailabilityService(
       ApplicationContext context,
+      IContactDetailsService contactDetailsService,
       ILocationDetailService locationDetailService)
       : base(context)
     {
+      _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
     }
 
@@ -30,13 +33,7 @@ namespace Fmas12d.Business.Services
     public async Task<IUserAvailability> Create(IUserAvailability model)
     {
 
-      if (CheckLatitudeLongitude(model) &&
-          !model.Latitude.HasValue &&
-          !model.Longitude.HasValue)
-      {
-        await SetLatitudeLongitude(model);
-      }
-
+      await SetLatitudeLongitude(model);
       await CheckForOverlappingAvailability(model);
 
       Entities.UserAvailability entity = new Entities.UserAvailability();
@@ -95,11 +92,13 @@ namespace Fmas12d.Business.Services
                     ScheduledTime = da.Assessment.ScheduledTime
                   })
                   .ToList(),
+                ContactDetailId = entity.ContactDetailId,
                 End = entity.End,
                 GenderName = entity.User.GenderType.Name,
                 Latitude = entity.Latitude,
                 Longitude = entity.Longitude,
-                Name = entity.User.DisplayName,                
+                Name = entity.User.DisplayName,
+                Postcode = entity.Postcode,      
                 SpecialityNames = 
                   entity.User.UserSpecialities.Select(s => s.Speciality.Name).ToList(),
                 Start = entity.Start,
@@ -157,30 +156,6 @@ namespace Fmas12d.Business.Services
     }
 
     /// <summary>
-    /// Check that both latitude and longitude are set if one is
-    /// </summary>
-    private bool CheckLatitudeLongitude(IUserAvailability model)
-    {
-      if (model.Latitude.HasValue)
-      {
-        if (!model.Longitude.HasValue)
-        {
-          throw new ModelStateException("Longitude",
-            "The field longitude must have a value if latitude is provided.");
-        }
-      }
-      else
-      {
-        if (model.Longitude.HasValue)
-        {
-          throw new ModelStateException("Latitude",
-            "The field latitude must have a value if longitude is provided.");
-        }
-      }
-      return true;
-    }
-
-    /// <summary>
     /// Gets the latitude and longitude from either the postcode or contact details
     /// </summary>
     private async Task<bool> SetLatitudeLongitude(IUserAvailability model)
@@ -196,12 +171,9 @@ namespace Fmas12d.Business.Services
       }
       else if (model.ContactDetailId.HasValue)
       {
-        // TODO Move this to a separate contact detail service
-        Entities.ContactDetail contactDetail = await _context.ContactDetails
-          .Where(c => c.IsActive)
-          .Where(c => c.Id == model.ContactDetailId)
-          .SingleOrDefaultAsync();
-
+        ContactDetail contactDetail = await _contactDetailsService.Get(
+          model.ContactDetailId.Value, model.UserId, true, true
+        );
         if (contactDetail == null)
         {
           throw new ModelStateException("ContactDetailId",

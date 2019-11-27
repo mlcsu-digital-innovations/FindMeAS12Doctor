@@ -290,14 +290,6 @@ namespace Fmas12d.Business
           userAssessmentClaim.UserId
         });
 
-      modelBuilder.Entity<UserAssessmentNotification>()
-        .HasAlternateKey(userAssessmentNotification => new
-        {
-          userAssessmentNotification.AssessmentId,
-          userAssessmentNotification.NotificationTextId,
-          userAssessmentNotification.UserId
-        });
-
       modelBuilder.Entity<UserSpeciality>()
         .HasAlternateKey(userSpeciality => new
         {

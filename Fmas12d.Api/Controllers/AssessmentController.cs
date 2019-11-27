@@ -88,17 +88,22 @@ namespace Fmas12d.Api.Controllers
           businessModels = await Service.GetAllFilterByAmhpUserIdAsync(
             assessmentListSearch.AmhpUserId.Value, true, false);
         }
-
-        if (businessModels.Any())
+        else if (assessmentListSearch.DoctorUserId.HasValue)
         {
+          businessModels = await Service.GetAllFilterByDoctorUserIdAsync(
+            assessmentListSearch.DoctorUserId.Value, true, false);
+        }
+
+        if (businessModels == null || !businessModels.Any())
+        {
+          return NoContent();
+        }
+        else
+        {          
           IEnumerable<ViewModels.AssessmentList> viewModels =
             businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
 
           return Ok(viewModels);
-        }
-        else
-        {
-          return NoContent();
         }
       }
       catch (Exception ex)
@@ -209,15 +214,6 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
-    [Route("{id:int}/planned")]
-    public async Task<ActionResult<ViewModels.AssessmentPut>> PutPlanned(
-      int id,
-      [FromBody] RequestModels.AssessmentPutPlanned requestModel)
-    {
-      return await Update(id, requestModel);
-    }
-
-    [HttpPut]
     [Route("{id:int}/outcome/failure")]
     public async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcomeFailure(
       int id,
@@ -233,6 +229,32 @@ namespace Fmas12d.Api.Controllers
       [FromBody] RequestModels.AssessmentOutcomeSuccessPut requestModel)
     {
       return await PutOutcome(id, requestModel);
+    }
+
+    [HttpPut]
+    [Route("{id:int}/planned")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutPlanned(
+      int id,
+      [FromBody] RequestModels.AssessmentPutPlanned requestModel)
+    {
+      return await Update(id, requestModel);
+    }    
+
+    [HttpPut]
+    [Route("{id:int}/schedule")]
+    public async Task<ActionResult> PutSchedule(
+      int id
+    )
+    {
+      try
+      {
+        await Service.Schedule(id);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
     }
 
     private async Task<ActionResult<ViewModels.AssessmentPost>> Create(
