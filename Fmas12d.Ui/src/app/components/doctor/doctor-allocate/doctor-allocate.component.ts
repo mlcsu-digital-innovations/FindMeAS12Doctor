@@ -11,6 +11,7 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
+
 @Component({
   selector: 'app-doctor-allocate',
   templateUrl: './doctor-allocate.component.html',

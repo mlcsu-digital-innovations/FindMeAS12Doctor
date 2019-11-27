@@ -23,14 +23,19 @@ namespace Fmas12d.Api.Controllers
     public async Task<ActionResult<IEnumerable<ViewModels.IdResultText>>> GetSearch(
       [FromQuery] RequestModels.UserSearch search)
     {
-      IEnumerable<Business.Models.User> models;
+      IEnumerable<Business.Models.User> models = null;
+
       if (search.IsByAmhpName)
       {
         models = await Service.GetAllByAmhpName(search.AmhpName, activeOnly: false);
       }
-      else
+      else if (search.IsByDoctorName)
       {
         models = await Service.GetAllByDoctorName(search.DoctorName, activeOnly: false);
+      }
+      else if (search.IsByGmcNumber)
+      {
+        models = await Service.GetAllByGmcNumber(search.GmcNumber, activeOnly: false);
       }
 
       if (models.Any())

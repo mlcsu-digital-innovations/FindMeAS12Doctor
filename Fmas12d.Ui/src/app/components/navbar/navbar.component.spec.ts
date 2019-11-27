@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
-
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavbarComponent } from './navbar.component';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -8,7 +9,16 @@ describe('NavbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavbarComponent ]
+      declarations:
+      [
+        NavbarComponent
+      ],
+      providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        }
+      ]
     })
     .compileComponents();
   }));

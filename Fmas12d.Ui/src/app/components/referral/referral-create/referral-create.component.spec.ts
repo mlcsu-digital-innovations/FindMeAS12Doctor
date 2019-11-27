@@ -1,7 +1,9 @@
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
-import { HttpClientModule } from 'src/app/components/assessment/assessment-view/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReferralCreateComponent } from './referral-create.component';
 import { Router } from '@angular/router';
@@ -24,6 +26,10 @@ describe('ReferralCreateComponent', () => {
         SharedComponentsModule
       ],
       providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        },
         {
           provide: RouterService,
           useValue: {

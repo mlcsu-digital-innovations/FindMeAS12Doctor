@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GpPracticeListService } from '../../../services/gp-practice-list/gp-practice-list.service';
 import { map } from 'rxjs/operators';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from '../../../helpers/nhs-number.validator';
 import { Patient } from '../../../interfaces/patient';
 import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
@@ -24,6 +24,8 @@ import { throwError, Observable, of, empty } from 'rxjs';
 import { ToastService } from '../../../services/toast/toast.service';
 import { TypeAheadResult } from '../../../interfaces/typeahead-result';
 import { UNKNOWN_CCG, UNKNOWN_GP_PRACTICE, UNKNOWN_POSTCODE } from '../../../constants/Constants';
+import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-referral-create',
@@ -49,6 +51,7 @@ export class ReferralCreateComponent implements OnInit {
   isResidentialPostcodeFieldShown: boolean;
   isSearchingForPatient: boolean;
   isSearchingForPostcode: boolean;
+  maxDate: NgbDateStruct;
   modalResult: PatientSearchResult;
   myForm: FormGroup;
   patientDetails: Patient;
@@ -113,8 +116,20 @@ export class ReferralCreateComponent implements OnInit {
       unknownResidentialPostcode: false,
       ccg: [''],
       unknownCcg: false,
-      amhp: ['']
+      amhp: [''],
+      retrospectiveReferral: false,
+      scheduledDate: [
+        '',
+        [
+          DatePickerFormat
+        ]
+      ],
+      scheduledTime: ['']
     });
+
+    this.maxDate = this.ConvertToDateStruct(new Date());
+    this.scheduledDateField.setValue(this.ConvertToDateStruct(new Date()));
+    this.scheduledTimeField.setValue(this.ConvertToTimeStruct(new Date()));
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
@@ -183,6 +198,43 @@ export class ReferralCreateComponent implements OnInit {
     this.routerService.navigate(['/referral']);
   }
 
+  ConvertToDateStruct(dateValue: Date): NgbDateStruct {
+
+    const momentDate = moment(dateValue);
+    const dateStruct = {} as NgbDateStruct;
+    dateStruct.day = momentDate.date();
+    dateStruct.month = momentDate.month() + 1;
+    dateStruct.year = momentDate.year();
+
+    return dateStruct;
+  }
+
+  ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
+
+    // round up to the next 5 minute interval
+    const start = moment(dateValue);
+    const remainder = 5 - (start.minute() % 5);
+    const momentDate = moment(start).add(remainder, 'minutes');
+    const timeStruct = {} as NgbTimeStruct;
+    timeStruct.hour = momentDate.hour();
+    timeStruct.minute = momentDate.minutes();
+    timeStruct.second = momentDate.seconds();
+
+    return timeStruct;
+  }
+
+  CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
+    return new Date(
+      datePart.year,
+      datePart.month - 1,
+      datePart.day,
+      timePart.hour,
+      timePart.minute,
+      timePart.second,
+      0
+    );
+  }
+
   CreatePatient() {
 
     this.patientDetails.nhsNumber =
@@ -225,6 +277,7 @@ export class ReferralCreateComponent implements OnInit {
 
     if (!this.HasValidGpOrPostcodeOrCcg()) {
       this.isGpFieldsShown = true;
+      this.Delay(200);
       this.gpPracticeField.enable();
       this.gpPracticeField.setErrors({ InvalidGpPostcodeCcg: true });
       canContinue = false;
@@ -233,6 +286,15 @@ export class ReferralCreateComponent implements OnInit {
     if (!this.HasValidLeadAmhp()) {
       this.amhpField.setErrors({ InvalidAmhp: true });
       canContinue = false;
+    }
+
+    if (this.retrospectiveReferralField.value === true) {
+      const scheduledDate = this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value);
+
+      if (scheduledDate > new Date()) {
+        this.scheduledDateField.setErrors({ FutureDate: true});
+        canContinue = false;
+      }
     }
 
     if (canContinue) {
@@ -303,56 +365,68 @@ export class ReferralCreateComponent implements OnInit {
     this.SetFieldFocus('#nhsNumber');
   }
 
-  get nhsNumber(): string {
-    return this.patientForm.controls.nhsNumber.value;
-  }
-
   get alternativeIdentifier(): string {
     return this.patientForm.controls.alternativeIdentifier.value;
-  }
-
-  get gpPractice(): TypeAheadResult {
-    return this.patientForm.controls.gpPractice.value;
-  }
-
-  get ccg(): TypeAheadResult {
-    return this.patientForm.controls.ccg.value;
-  }
-
-  get amhpUser(): TypeAheadResult {
-    return this.patientForm.controls.amhp.value;
-  }
-
-  get residentialPostcode(): string {
-    return this.patientForm.controls.residentialPostcode.value;
-  }
-
-  get patient() {
-    return this.patientForm.controls;
-  }
-
-  get nhsNumberField() {
-    return this.patientForm.controls.nhsNumber;
-  }
-
-  get residentialPostcodeField() {
-    return this.patientForm.controls.residentialPostcode;
   }
 
   get alternativeIdentifierField() {
     return this.patientForm.controls.alternativeIdentifier;
   }
 
-  get gpPracticeField() {
-    return this.patientForm.controls.gpPractice;
+  get amhpField() {
+    return this.patientForm.controls.amhp;
+  }
+
+  get amhpUser(): TypeAheadResult {
+    return this.patientForm.controls.amhp.value;
+  }
+
+  get ccg(): TypeAheadResult {
+    return this.patientForm.controls.ccg.value;
   }
 
   get ccgField() {
     return this.patientForm.controls.ccg;
   }
 
-  get amhpField() {
-    return this.patientForm.controls.amhp;
+  get gpPractice(): TypeAheadResult {
+    return this.patientForm.controls.gpPractice.value;
+  }
+
+  get gpPracticeField() {
+    return this.patientForm.controls.gpPractice;
+  }
+
+  get nhsNumber(): string {
+    return this.patientForm.controls.nhsNumber.value;
+  }
+
+  get nhsNumberField() {
+    return this.patientForm.controls.nhsNumber;
+  }
+
+  get patient() {
+    return this.patientForm.controls;
+  }
+
+  get residentialPostcode(): string {
+    return this.patientForm.controls.residentialPostcode.value;
+  }
+
+  get residentialPostcodeField() {
+    return this.patientForm.controls.residentialPostcode;
+  }
+
+  get retrospectiveReferralField() {
+    return this.patientForm.controls.retrospectiveReferral;
+  }
+
+  get scheduledDateField() {
+    return this.patientForm.controls.scheduledDate;
+  }
+
+  get scheduledTimeField() {
+    return this.patientForm.controls.scheduledTime;
   }
 
   get unknownCcgField() {
@@ -546,6 +620,13 @@ export class ReferralCreateComponent implements OnInit {
     referral.leadAmhpUserId = this.amhpUser.id;
     referral.patientId = this.patientDetails.id;
 
+    if (this.retrospectiveReferralField.value === true) {
+      referral.createdAt = this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value);
+    } else {
+      referral.createdAt = new Date();
+    }
+
+
     this.referralService.createReferral(referral).subscribe(
       (result: Referral) => {
         this.toastService.displaySuccess({
@@ -637,6 +718,10 @@ export class ReferralCreateComponent implements OnInit {
       this.SetFieldFocus('#residentialPostcode');
       this.isPatientPostcodeValidated = false;
     }
+  }
+
+  ToggleRetrospectiveReferral(event: any) {
+
   }
 
   async UseExistingPatient() {

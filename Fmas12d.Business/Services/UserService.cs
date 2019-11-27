@@ -109,6 +109,22 @@ namespace Fmas12d.Business.Services
         doctorName, Models.ProfileType.DOCTOR, asNoTracking, activeOnly);
     }
 
+    public async Task<IEnumerable<Models.User>> GetAllByGmcNumber(
+      int gmcNumber,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+       IEnumerable<Models.User> models = await _context.Users
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(u => u.GmcNumber.ToString().Contains(gmcNumber.ToString()))
+        .Where(u => u.ProfileTypeId == Models.ProfileType.DOCTOR)
+        .AsNoTracking(asNoTracking)
+        .Select(User.ProjectFromEntity)
+        .ToListAsync();
+
+      return models;
+    }
+
     private async Task<IEnumerable<Models.User>> GetAllByNameAndProfileTypeId(
       string name,
       int profileTypeId,
@@ -130,6 +146,22 @@ namespace Fmas12d.Business.Services
       int entityId,
       bool asNoTracking,
       bool activeOnly)
+    {
+      Entities.User entity = await
+        _context.Users
+                .Include(u => u.GenderType)
+                .Include(u => u.ProfileType)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking)
+                .SingleOrDefaultAsync(user => user.Id == entityId);
+
+      return entity;
+    }
+
+    public async Task<Entities.User> GetEntityDetailsByIdAsync(
+      int entityId,
+      bool asNoTracking,
+      bool activeOnly) 
     {
       Entities.User entity = await
         _context.Users

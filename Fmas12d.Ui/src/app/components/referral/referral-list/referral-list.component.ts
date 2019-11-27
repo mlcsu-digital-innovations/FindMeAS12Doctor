@@ -37,7 +37,6 @@ export class ReferralListComponent {
     this.referralList$.subscribe(
       result => {
         this.noOfReferralsInList = result.length;
-        console.log(result);
       },
       error => {
         this.toastService.displayError({

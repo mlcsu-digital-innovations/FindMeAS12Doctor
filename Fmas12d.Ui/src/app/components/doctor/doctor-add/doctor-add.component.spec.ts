@@ -1,19 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DelaySpinnerComponent } from './delay-spinner.component';
 
-describe('DelaySpinnerComponent', () => {
-  let component: DelaySpinnerComponent;
-  let fixture: ComponentFixture<DelaySpinnerComponent>;
+import { DoctorAddComponent } from './doctor-add.component';
+
+describe('DoctorAddComponent', () => {
+  let component: DoctorAddComponent;
+  let fixture: ComponentFixture<DoctorAddComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DelaySpinnerComponent ]
+      declarations: [ DoctorAddComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DelaySpinnerComponent);
+    fixture = TestBed.createComponent(DoctorAddComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
