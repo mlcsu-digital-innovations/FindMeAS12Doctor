@@ -69,4 +69,13 @@ form {
   content: " *";
   color: red;
 }
- 
+
+/* .form-row {
+  border: 1px solid #f00;
+} */
+
+.checkmark-content {
+  bottom: 0;
+  margin-left: 0;
+  position: relative;
+}
