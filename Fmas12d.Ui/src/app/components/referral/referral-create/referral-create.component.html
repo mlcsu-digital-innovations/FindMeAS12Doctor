@@ -326,7 +326,6 @@
                       id="retrospectiveReferral"
                       formControlName="retrospectiveReferral"
                       #retrospectiveReferral
-                      (change)="ToggleRetrospectiveReferral($event)"
                       [appDisableControl]="!IsPatientIdValidated()"
                     />
                     <span class="checkmark"></span>
@@ -353,9 +352,9 @@
                   <div class="col-md-5">
                     <input
                       class="form-control"
-                      formControlName='scheduledDate'
+                      formControlName='referralDate'
                       placeholder="dd/mm/yyyy"
-                      name="scheduledDate"
+                      name="referraldDate"
                       [maxDate]='maxDate'
                       ngbDatepicker
                       #s="ngbDatepicker"/>
@@ -370,32 +369,32 @@
                   </div>
                   <div class="col-md-1 at">@</div>
                     <div class="col-md-4 mt-less-5 ml-less-2">
-                      <ngb-timepicker formControlName="scheduledTime" [minuteStep]="5"></ngb-timepicker>
+                      <ngb-timepicker formControlName="referralTime" [minuteStep]="5"></ngb-timepicker>
                     </div>
                 </div>
               </div>
             </div>
             <!-- Date Format Errors-->
-            <div class="form-row" *ngIf="retrospectiveReferral.checked && scheduledDateField.errors">
+            <div class="form-row" *ngIf="retrospectiveReferral.checked && referralDateField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
                 <div
                   class="invalid-field"
-                  *ngIf="scheduledDateField.errors && scheduledDateField.errors.DatePickerFormat"
+                  *ngIf="referralDateField.errors && referralDateField.errors.DatePickerFormat"
                 >
                   <span>Invalid Date Format</span>
                 </div>
                 <div
                   class="invalid-field"
-                  *ngIf="scheduledDateField.errors && scheduledDateField.errors.FutureDate"
+                  *ngIf="referralDateField.errors && referralDateField.errors.FutureDate"
                 >
                   <span>* A retrospective referral cannot be in the future</span>
                 </div>
                 <div
-                class="invalid-field"
-                *ngIf="scheduledDateField.errors && scheduledDateField.errors.MissingDate"
-              >
-                <span>* A referral date / time must be provided</span>
-              </div>
+                  class="invalid-field"
+                  *ngIf="referralDateField.errors && referralDateField.errors.MissingDate"
+                >
+                  <span>* A referral date / time must be provided</span>
+                </div>
               </div>
             </div>
             <div class="form-row">
