@@ -95,6 +95,8 @@ label {
   align-items: center;
   align-content: space-around;
   flex-wrap: nowrap;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .flex-container {
@@ -157,6 +159,12 @@ label {
 .btn-primary:hover {
   background-color: #0a868f;
   border-color: #0c9da7;
+}
+
+.at {
+  color: #666;
+  font-size:1.3em;
+  font-weight: 600;
 }
 
 /** modals **/

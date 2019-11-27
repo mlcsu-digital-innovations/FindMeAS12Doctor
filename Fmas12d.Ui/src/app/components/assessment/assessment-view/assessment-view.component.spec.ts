@@ -1,8 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-list/node_modules/src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
 import { AssessmentViewComponent } from './assessment-view.component';
-import { HttpClientModule } from 'src/app/components/assessment/assessment-create/node_modules/@angular/common/http';
-import { of } from 'src/app/components/assessment/assessment-create/node_modules/rxjs';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { of } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 import { RouterService } from 'src/app/services/router/router.service';
 import { SharedComponentsModule } from '../../shared-components.module';
 
@@ -20,6 +22,10 @@ describe('AssessmentViewComponent', () => {
         SharedComponentsModule
       ],
       providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        },
         {
           provide: ActivatedRoute,
           useValue: {

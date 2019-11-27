@@ -52,7 +52,7 @@ export class ReferralService {
     newReferral.referralStatusId = ReferralStatus.NewReferral;
 
     // ToDo: sort the time offset !
-    newReferral.createdAt = new Date();
+    newReferral.createdAt = null ? new Date() : newReferral.createdAt;
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 

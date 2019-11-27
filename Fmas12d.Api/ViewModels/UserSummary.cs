@@ -6,10 +6,9 @@ namespace Fmas12d.Api.ViewModels
   {
     public UserSummary() { }
 
-    public UserSummary(string displayName, int id)
-    {
-      DisplayName = displayName;
-      Id = id;
+    public UserSummary(Business.Models.User model) {
+      DisplayName = model.DisplayName;
+      Id = model.Id;
     }
 
     public string DisplayName { get; set; }

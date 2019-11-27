@@ -1,4 +1,4 @@
-export interface LeadAmhpUser {
+export interface User {
   displayName: string;
   id: number;
 }

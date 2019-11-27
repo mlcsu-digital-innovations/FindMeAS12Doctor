@@ -1,8 +1,9 @@
 import { AssessmentUser } from './assessment-user';
 import { NameIdDescription } from './name-id-description';
+import { User } from './user';
 
 export interface CurrentAssessment {
-  amhpUserName: string;
+  amhpUser: User;
   detailTypes: NameIdDescription[];
   doctorsAllocated: AssessmentUser[];
   doctorsSelected: AssessmentUser[];

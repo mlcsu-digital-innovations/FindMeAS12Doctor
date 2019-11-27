@@ -12,7 +12,7 @@ namespace Fmas12d.Api.ViewModels
       CreatedAt = model.CreatedAt;
       DefaultToBeCompletedBy = model.DefaultToBeCompletedBy;
       Id = model.Id;
-      LeadAmhpUser = new UserSummary(model.LeadAmhpUser.DisplayName, model.LeadAmhpUserId);
+      LeadAmhpUser = new UserSummary(model.LeadAmhpUser);
       Patient = new PatientSummary(model);
       StatusName = model.StatusName;
     }

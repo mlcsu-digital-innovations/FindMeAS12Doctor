@@ -1,5 +1,9 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AddressResult } from 'src/app/interfaces/address-result';
 import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
+import { Assessment } from 'src/app/interfaces/assessment';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
+import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { environment } from 'src/environments/environment';
@@ -9,7 +13,8 @@ import { map, switchMap, catchError, tap, distinctUntilChanged, debounceTime } f
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
@@ -17,7 +22,6 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
-import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 
 @Component({
   selector: 'app-assessment-edit',
@@ -26,6 +30,8 @@ import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 })
 export class AssessmentEditComponent implements OnInit {
 
+  addressList: AddressResult[] = [];
+  assessmentId: number;
   allocatedDoctors: AssessmentUser[] = [];
   cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
@@ -40,23 +46,31 @@ export class AssessmentEditComponent implements OnInit {
   hasAmhpSearchFailed: boolean;
   isAmhpSearching: boolean;
   isPatientIdValidated: boolean;
+  isPlannedAssessment: boolean;
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
+  navigationPage: string;
   pageSize: number;
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralId: number;
+  reselectModal: NgbModalRef;
+  assessmentScheduledDate: NgbDateStruct;
+  assessmentScheduledTime: NgbTimeStruct;
   selectedDetails: NameIdList[] = [];
   selectedDoctors: AssessmentUser[] = [];
   specialities: NameIdList[];
 
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
+  @ViewChild('selectDoctors', null) selectDoctorTemplate;
 
   constructor(
     private amhpListService: AmhpListService,
+    private assessmentService: AssessmentService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
+    private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
@@ -81,7 +95,7 @@ export class AssessmentEditComponent implements OnInit {
           return this.referralService.getReferralView(+params.get('referralId'))
             .pipe(
               map(referral => {
-                console.log(referral);
+                this.assessmentId = referral.currentAssessment.id;
                 this.InitialiseForm(referral);
                 return referral;
               })
@@ -117,7 +131,7 @@ export class AssessmentEditComponent implements OnInit {
       assessmentDetails: [
         ''
       ],
-      fullAddress: [
+      assessmentAddress: [
         {
           value: '',
           disabled: true
@@ -136,6 +150,13 @@ export class AssessmentEditComponent implements OnInit {
       ],
       speciality: [
       ],
+      scheduledDate: [
+        this.assessmentScheduledDate,
+        [
+          DatePickerFormat
+        ]
+      ],
+      scheduledTime: [this.assessmentScheduledTime],
       toBeCompletedByDate: [
         this.assessmentShouldBeCompletedByDate,
         [
@@ -144,6 +165,32 @@ export class AssessmentEditComponent implements OnInit {
       ],
       toBeCompletedByTime: [this.assessmentShouldBeCompletedByTime]
     });
+
+    this.navigationPage = '/referral';
+  }
+
+  AddressSearch(): void {
+    this.addressList = [];
+    this.assessmentAddressField.setValue('');
+    this.isSearchingForPostcode = true;
+    this.assessmentAddressField.enable();
+
+    this.postcodeValidationService.searchPostcode(this.assessmentPostcode.value)
+      .subscribe(address => {
+        this.addressList.push(address);
+      }, (err) => {
+        this.isSearchingForPostcode = false;
+        this.toastService.displayError({
+          title: 'Search Error',
+          message: 'Error Retrieving Address Information'
+        });
+      }, () => {
+        this.isSearchingForPostcode = false;
+        // show an error if no matching addresses are returned
+        if (this.addressList.length === 0) {
+          this.assessmentPostcode.setErrors({ NoResultsReturned: true });
+        }
+      });
   }
 
   AmhpSearch = (text$: Observable<string>) =>
@@ -206,7 +253,8 @@ export class AssessmentEditComponent implements OnInit {
     // round up to the next 5 minute interval
     const start = moment(dateValue);
     const remainder = 5 - (start.minute() % 5);
-    const momentDate = moment(start).add(remainder, 'minutes');
+    const adjustment = remainder === 5 ? 0 : remainder;
+    const momentDate = moment(start).add(adjustment, 'minutes');
     const timeStruct = {} as NgbTimeStruct;
     timeStruct.hour = momentDate.hour();
     timeStruct.minute = momentDate.minutes();
@@ -225,6 +273,10 @@ export class AssessmentEditComponent implements OnInit {
       timePart.second,
       0
     );
+  }
+
+  CreateJsonDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): string {
+    return `${datePart.year}-${datePart.month}-${datePart.day}T${timePart.hour}`;
   }
 
   async Delay(milliseconds: number) {
@@ -273,8 +325,39 @@ export class AssessmentEditComponent implements OnInit {
     });
   }
 
+  FormatAddress(): string[] {
+
+    const addressLines: string[] = [];
+    const addressSplitByCommas = this.GetFormValue('assessmentAddress').split(',');
+
+    // can only store 4 lines of the address
+    for (let i = 0; i < 4; i++) {
+      if (addressSplitByCommas.length >= i &&
+          addressSplitByCommas[i] !== undefined &&
+          addressSplitByCommas[i].trim() !== this.assessmentPostcode.value) {
+            addressLines.push(addressSplitByCommas[i].trim());
+      } else {
+        addressLines.push(null);
+      }
+    }
+
+    return addressLines;
+  }
+
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
+  }
+
+  GetFormValue(fieldName: string) {
+    return this.assessmentForm.get(fieldName).value;
+  }
+
+  get amhpField() {
+    return this.assessmentForm.controls.amhp;
+  }
+
+  get assessmentAddressField() {
+    return this.assessmentForm.controls.assessmentAddress;
   }
 
   get assessmentPostcode() {
@@ -283,6 +366,14 @@ export class AssessmentEditComponent implements OnInit {
 
   get preferredGenderField() {
     return this.assessmentForm.controls.preferredGender;
+  }
+
+  get scheduledDateField() {
+    return this.assessmentForm.controls.scheduledDate;
+  }
+
+  get scheduledTimeField() {
+    return this.assessmentForm.controls.scheduledTime;
   }
 
   get specialityField() {
@@ -299,16 +390,18 @@ export class AssessmentEditComponent implements OnInit {
 
   InitialiseForm(referral: ReferralView) {
 
+    this.minDate = this.ConvertToDateStruct(referral.createdAt);
     this.FetchDropDownData();
 
     const assessment = referral.currentAssessment;
+    const amhpUser = assessment.amhpUser;
 
     // AMHP User - mandatory field
-    const AmhpUser: TypeAheadResult = {id: 1, resultText: assessment.amhpUserName };
+    const AmhpUser: TypeAheadResult = {id: amhpUser.id, resultText: amhpUser.displayName};
     this.assessmentForm.controls.amhp.setValue(AmhpUser);
 
     this.assessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
-    this.assessmentForm.controls.fullAddress.setValue(referral.currentAssessment.fullAddress);
+    this.assessmentForm.controls.assessmentAddress.setValue(referral.currentAssessment.fullAddress);
     this.assessmentForm.controls.postCode.setValue(referral.currentAssessment.postcode);
 
     this.minDate = this.ConvertToDateStruct(referral.currentAssessment.mustBeCompletedBy);
@@ -319,6 +412,14 @@ export class AssessmentEditComponent implements OnInit {
 
     this.preferredGenderField.setValue(referral.currentAssessment.preferredDoctorGenderType.id);
     this.specialityField.setValue(referral.currentAssessment.speciality.id);
+
+    this.assessmentScheduledDate = this.ConvertToDateStruct(assessment.scheduledTime);
+    this.scheduledDateField.setValue(this.assessmentScheduledDate);
+
+    this.assessmentScheduledTime = this.ConvertToTimeStruct(assessment.scheduledTime);
+    this.scheduledTimeField.setValue(this.assessmentScheduledTime);
+
+    this.isPlannedAssessment = referral.currentAssessment.isPlanned;
 
     referral.currentAssessment.detailTypes.forEach(detailType => {
       const detail = {id: detailType.id, name: detailType.name} as NameIdList;
@@ -336,6 +437,16 @@ export class AssessmentEditComponent implements OnInit {
     }
   }
 
+  OnCancelReselectAction(action: boolean) {
+    this.reselectModal.close();
+    if (action) {
+      this.navigationPage = `/assessment/${this.assessmentId}/select-doctors`;
+      this.UpdateReferral();
+    } else {
+      this.routerService.navigate([`/assessment/${this.assessmentId}/select-doctors`]);
+    }
+  }
+
   OnItemDeselect(item: any) {
     this.selectedDetails =
       this.selectedDetails.filter(obj => obj.id !== item.id);
@@ -347,6 +458,16 @@ export class AssessmentEditComponent implements OnInit {
 
   OpenLocationTab(): void {
     window.open(environment.locationEndpoint, '_blank');
+  }
+
+  ReselectDoctors() {
+    if (this.assessmentForm.dirty) {
+      this.reselectModal = this.modalService.open(this.selectDoctorTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.routerService.navigate([`/assessment/${this.assessmentId}/select-doctors`]);
+    }
   }
 
   SetDefaultDateTimeFields(defaultDatetIme: Date) {
@@ -373,6 +494,113 @@ export class AssessmentEditComponent implements OnInit {
   }
 
   UpdateReferral() {
-    // ToDo: use service to update assessment details
+    if (!this.ValidateAssessment()) {
+      return;
+    }
+
+    const updatedAssessment = {} as Assessment;
+
+    updatedAssessment.id = this.assessmentId;
+    updatedAssessment.postcode = this.GetFormValue('postCode');
+    updatedAssessment.amhpUserId = this.GetFormValue('amhp').id;
+
+    const specialityId = this.GetFormValue('speciality');
+    updatedAssessment.specialityId = specialityId === 0 ? null : specialityId;
+
+    const genderId = this.GetFormValue('preferredGender');
+    updatedAssessment.preferredDoctorGenderTypeId = genderId === 0 ? null : genderId;
+
+    const details: number[] = [];
+    this.selectedDetails.forEach(detail => {
+      details.push(detail.id);
+    });
+    updatedAssessment.detailTypeIds = details;
+
+    updatedAssessment.meetingArrangementComment = this.GetFormValue('meetingArrangementComment');
+
+    updatedAssessment.isPlanned = this.isPlannedAssessment;
+
+    if (this.isPlannedAssessment) {
+      const scheduledDate = this.GetFormValue('scheduledDate');
+      const scheduledTime = this.GetFormValue('scheduledTime');
+      updatedAssessment.scheduledTime = this.CreateDateFromPickerObjects(scheduledDate, scheduledTime);
+    } else {
+      const completedDate = this.GetFormValue('toBeCompletedByDate');
+      const completedTime = this.GetFormValue('toBeCompletedByTime');
+      updatedAssessment.mustBeCompletedBy = this.CreateDateFromPickerObjects(completedDate, completedTime);
+    }
+
+    const addressLines = this.FormatAddress();
+    updatedAssessment.address1 = addressLines[0];
+    updatedAssessment.address2 = addressLines[1];
+    updatedAssessment.address3 = addressLines[2];
+    updatedAssessment.address4 = addressLines[3];
+
+    this.assessmentService.updateAssessment(updatedAssessment).subscribe(
+      (result: Assessment) => {
+        this.toastService.displaySuccess({
+          message: 'Assessment Updated'
+        });
+        this.assessmentId = result.id;
+        this.routerService.navigateByUrl(this.navigationPage);
+      },
+      error => {
+        console.log(error);
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to update assessment! Please try again in a few moments'
+        });
+        return throwError(error);
+      }
+    );
+
+  }
+
+  ValidateAssessment(): boolean{
+
+    let formIsValid = true;
+
+    if ( this.amhpField.value === null || this.amhpField.value === '' ) {
+      formIsValid = false;
+      this.amhpField.setErrors({MissingAmhpUser: true});
+    }
+
+    if ( this.isPlannedAssessment && this.scheduledDateField.value === null) {
+      formIsValid = false;
+      this.scheduledDateField.setErrors({MissingDate: true});
+    }
+
+    if ( this.isPlannedAssessment && this.scheduledTimeField.value === null) {
+      formIsValid = false;
+      this.scheduledDateField.setErrors({MissingTime: true});
+    }
+
+    if ( !this.isPlannedAssessment && this.toBeCompletedByDateField.value === null) {
+      formIsValid = false;
+      this.toBeCompletedByDateField.setErrors({MissingDate: true});
+    }
+
+    if ( !this.isPlannedAssessment && this.toBeCompletedByTimeField.value === null) {
+      formIsValid = false;
+      this.toBeCompletedByDateField.setErrors({MissingTime: true});
+    }
+
+    if ( this.assessmentPostcode.value === null || this.assessmentPostcode.value === '' ) {
+      formIsValid = false;
+      this.assessmentPostcode.setErrors({MissingPostcode: true});
+    }
+
+    if ( this.assessmentAddressField.value === null || this.assessmentAddressField.value === '' ) {
+      formIsValid = false;
+      this.assessmentPostcode.setErrors({MissingAddress: true});
+    }
+
+    if (!formIsValid) {
+      this.toastService.displayWarning({
+        message: 'Please correct invalid fields'
+      });
+    }
+
+    return formIsValid;
   }
 }

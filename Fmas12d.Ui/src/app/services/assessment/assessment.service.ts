@@ -24,7 +24,25 @@ export class AssessmentService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post(
-      environment.apiEndpoint + '/assessment' + assessmentType,
+      `${environment.apiEndpoint}/assessment/${assessmentType}`,
+      assessment,
+      { headers }
+    );
+  }
+
+  public updateAssessment(assessment: Assessment) {
+
+    let assessmentType = '';
+    if (assessment.isPlanned) {
+      assessmentType = '/planned';
+    } else {
+      assessmentType = '/emergency';
+    }
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/assessment/${assessment.id}${assessmentType}`,
       assessment,
       { headers }
     );

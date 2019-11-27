@@ -20,7 +20,6 @@ export class RouterService {
         console.log('current Url = ' + this.currentUrl);
         console.log('');
       }
-
     });
   }
 

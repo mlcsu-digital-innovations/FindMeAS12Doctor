@@ -9,7 +9,7 @@ import { Assessment } from 'src/app/interfaces/assessment';
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { LeadAmhpUser } from 'src/app/interfaces/user';
+import { User } from 'src/app/interfaces/user';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -113,7 +113,7 @@ export class AssessmentCreateComponent implements OnInit {
 
         const emptyReferral = {} as Referral;
         emptyReferral.patient = {} as Patient;
-        emptyReferral.leadAmhpUser = {} as LeadAmhpUser;
+        emptyReferral.leadAmhpUser = {} as User;
 
         return of(emptyReferral);
       })
