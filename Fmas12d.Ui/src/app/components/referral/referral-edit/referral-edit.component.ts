@@ -3,7 +3,7 @@ import { CcgListService } from 'src/app/services/ccg-list/ccg-list.service';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GpPracticeListService } from 'src/app/services/gp-practice-list/gp-practice-list.service';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NhsNumberValidFormat } from 'src/app/helpers/nhs-number.validator';
 import { Observable, of, throwError } from 'rxjs';
 import { ParamMap, ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
-import { PostcodeRegex } from 'src/app/constants/Constants';
+import { PostcodeRegex, UNKNOWN_POSTCODE } from 'src/app/constants/Constants';
 import { PostcodeSearchResult } from 'src/app/interfaces/postcode-search-result';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
@@ -21,6 +21,9 @@ import { ReferralService } from 'src/app/services/referral/referral.service';
 import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
+import * as moment from 'moment';
+import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 
 @Component({
   selector: 'app-referral-edit',
@@ -44,6 +47,7 @@ export class ReferralEditComponent implements OnInit {
   isPostcodeFieldShown: boolean;
   isSearchingForPatient: boolean;
   isSearchingForPostcode: boolean;
+  maxDate: NgbDateStruct;
   modalResult: PatientSearchResult;
   patientDetails: Patient;
   patientModal: NgbModalRef;
@@ -54,6 +58,8 @@ export class ReferralEditComponent implements OnInit {
   referralId: number;
   residentialPostcodeValidationMessage: string;
   updatedReferral: ReferralEdit;
+  unknownCcgId: number;
+  unknownGpPracticeId: number;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -74,6 +80,9 @@ export class ReferralEditComponent implements OnInit {
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
 
   ngOnInit() {
+
+    this.unknownCcgId = 0;
+    this.unknownGpPracticeId = 0;
 
     this.referral$ = this.route.paramMap.pipe(
       switchMap(
@@ -125,7 +134,15 @@ export class ReferralEditComponent implements OnInit {
       unknownResidentialPostcode: false,
       ccg: [''],
       unknownCcg: false,
-      amhp: ['']
+      amhp: [''],
+      retrospectiveReferral: false,
+      referralDate: [
+        '',
+        [
+          DatePickerFormat
+        ]
+      ],
+      referralTime: ['']
     });
 
     this.patientDetails = {} as Patient;
@@ -190,6 +207,48 @@ export class ReferralEditComponent implements OnInit {
     }
   }
 
+  ConvertToDateStruct(dateValue: Date): NgbDateStruct {
+
+    const momentDate = moment(dateValue);
+    const dateStruct = {} as NgbDateStruct;
+    dateStruct.day = momentDate.date();
+    dateStruct.month = momentDate.month() + 1;
+    dateStruct.year = momentDate.year();
+
+    return dateStruct;
+  }
+
+  ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
+
+    // round up to the next 5 minute interval
+    const start = moment(dateValue);
+    const remainder = 5 - (start.minute() % 5);
+    const momentDate = moment(start).add(remainder, 'minutes');
+    const timeStruct = {} as NgbTimeStruct;
+    timeStruct.hour = momentDate.hour();
+    timeStruct.minute = momentDate.minutes();
+    timeStruct.second = momentDate.seconds();
+
+    return timeStruct;
+  }
+
+  CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
+
+    if (datePart === null || timePart === null ) {
+      return;
+    }
+
+    return new Date(
+      datePart.year,
+      datePart.month - 1,
+      datePart.day,
+      timePart.hour,
+      timePart.minute,
+      timePart.second,
+      0
+    );
+  }
+
   async Delay(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
@@ -246,8 +305,20 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.amhp;
   }
 
+  get amhpUser(): TypeAheadResult {
+    return this.referralForm.controls.amhp.value;
+  }
+
+  get ccg(): TypeAheadResult {
+    return this.referralForm.controls.ccg.value;
+  }
+
   get ccgField() {
     return this.referralForm.controls.ccg;
+  }
+
+  get gpPractice(): TypeAheadResult {
+    return this.referralForm.controls.gpPractice.value;
   }
 
   get gpPracticeField() {
@@ -262,8 +333,24 @@ export class ReferralEditComponent implements OnInit {
     return this.referralForm.controls.nhsNumber;
   }
 
+  get referralDateField() {
+    return this.referralForm.controls.referralDate;
+  }
+
+  get referralTimeField() {
+    return this.referralForm.controls.referralTime;
+  }
+
+  get residentialPostcode(): string {
+    return this.referralForm.controls.residentialPostcode.value;
+  }
+
   get residentialPostcodeField() {
     return this.referralForm.controls.residentialPostcode;
+  }
+
+  get retrospectiveReferralField() {
+    return this.referralForm.controls.retrospectiveReferral;
   }
 
   get unknownCcg() {
@@ -331,11 +418,39 @@ export class ReferralEditComponent implements OnInit {
     );
   }
 
+
+  HasValidGpOrPostcodeOrCcg(): boolean {
+
+    // All 3 fields can be 'unknown' OR at least 1 field must be populated
+    if (this.gpPractice.id === this.unknownGpPracticeId &&
+      this.residentialPostcode === UNKNOWN_POSTCODE &&
+      this.ccg.id === this.unknownCcgId) {
+      return true;
+    }
+
+    return (
+      (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
+      (this.residentialPostcode !== '' && this.residentialPostcode !== UNKNOWN_POSTCODE) ||
+      (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
+    );
+  }
+
+  HasValidLeadAmhp(): boolean {
+    return this.amhpUser.id !== undefined;
+  }
+
   HasValidNHSNumber(): boolean {
     return (
       this.nhsNumberField.value !== '' &&
       this.nhsNumberField.value !== null &&
       this.nhsNumberField.errors === null
+    );
+  }
+
+  HasValidNhsNumberOrAlternativeIdentifier(): boolean {
+    return (
+      (this.HasValidNHSNumber() || this.HasValidAlternativeIdentifier()) &&
+      this.HasNoPatientIdErrors()
     );
   }
 
@@ -351,6 +466,9 @@ export class ReferralEditComponent implements OnInit {
     this.referralId = referral.id;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
     this.nhsNumberField.setValue(referral.patientNhsNumber);
+
+    this.referralDateField.setValue(this.ConvertToDateStruct(referral.createdAt));
+    this.referralTimeField.setValue(this.ConvertToTimeStruct(referral.createdAt));
 
     this.initialReferralDetails = referral;
 
@@ -534,7 +652,48 @@ export class ReferralEditComponent implements OnInit {
   }
 
   UpdateReferral() {
-    // ToDo: add the code for this
+
+    let canContinue: boolean;
+
+    // only continue if the referral is valid
+    if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
+      this.nhsNumberField.setErrors({ InvalidPatientIdentifier: true });
+      canContinue = false;
+    }
+
+    if (!this.HasValidGpOrPostcodeOrCcg()) {
+      this.isGpFieldsShown = true;
+      this.gpPracticeField.enable();
+      this.gpPracticeField.setErrors({ InvalidGpPostcodeCcg: true });
+      canContinue = false;
+    }
+
+    if (!this.HasValidLeadAmhp()) {
+      this.amhpField.setErrors({ InvalidAmhp: true });
+      canContinue = false;
+    }
+
+    if (this.retrospectiveReferralField.value === true) {
+      const referralDate = this.CreateDateFromPickerObjects(this.referralDateField.value, this.referralTimeField.value);
+
+      if (referralDate === undefined) {
+        this.referralDateField.setErrors({ MissingDate: true});
+        canContinue = false;
+      }
+
+      if (referralDate > new Date()) {
+        this.referralDateField.setErrors({ FutureDate: true});
+        canContinue = false;
+      }
+    }
+
+    if (canContinue === true) {
+      this.UpdateReferralDetails();
+    }
+  }
+
+  UpdateReferralDetails() {
+    // ToDo: Need a service / api call for the update
   }
 
   async UseExistingPatient() {

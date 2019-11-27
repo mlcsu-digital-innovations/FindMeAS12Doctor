@@ -14,3 +14,24 @@ form {
   margin-top:10px;
   align-items: flex-end;
 }
+
+.checkmark-content {
+  bottom: 0;
+  margin-left: 0;
+  position: relative;
+  padding-left: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.content-help {
+  align-self: center;
+  color: #0dadb7;
+  margin-left: -10px;
+}
+
+.not-full-width {
+  width: 80%;
+}

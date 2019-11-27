@@ -365,6 +365,87 @@
               </div>
             </div>
             <div class="form-row">
+              <div class="col-md-4 flex">
+                <div class="checkmark-content">
+                  <label class="container">
+                    <input
+                      class="form-control not-full-width"
+                      type="checkbox"
+                      value=""
+                      id="retrospectiveReferral"
+                      formControlName="retrospectiveReferral"
+                      #retrospectiveReferral
+                    />
+                    <span class="checkmark"></span>
+                    Update Referral Created Date / Time
+                  </label>
+                </div>
+                <div class="content-help">
+                  <i
+                    class="fas fa-question-circle"
+                    placement="right"
+                    ngbTooltip="Update the referral created date / time"
+                    [openDelay]="250"
+                    [closeDelay]="500"
+                    tooltipClass="subtle-tooltip">
+                  </i>
+                </div>
+              </div>
+            </div>
+            <!-- Referral date / time -->
+            <div class="form-row" *ngIf="retrospectiveReferral.checked">
+              <div class="col-md-6">
+                <label for="plannedPicker">Referral Date / Time</label>
+                <div class="row" name="plannedPicker">
+                  <div class="col-md-5">
+                    <input
+                      class="form-control"
+                      formControlName='referralDate'
+                      placeholder="dd/mm/yyyy"
+                      name="referralDate"
+                      [maxDate]='maxDate'
+                      ngbDatepicker
+                      #s="ngbDatepicker"/>
+                  </div>
+                  <div class="col-md-1 padding-left-1">
+                    <button
+                      class="btn btn-outline-secondary calendar"
+                      (click)="s.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mt-less-5 ml-less-2">
+                    <ngb-timepicker formControlName="referralTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Date Format Errors-->
+            <div class="form-row" *ngIf="retrospectiveReferral.checked && referralDateField.errors">
+              <div class="col-md-4 mb-2 reduced-top-margin">
+                <div
+                  class="invalid-field"
+                  *ngIf="referralDateField.errors && referralDateField.errors.DatePickerFormat"
+                >
+                  <span>Invalid Date Format</span>
+                </div>
+                <div
+                  class="invalid-field"
+                  *ngIf="referralDateField.errors && referralDateField.errors.FutureDate"
+                >
+                  <span>* A retrospective referral cannot be in the future</span>
+                </div>
+                <div
+                  class="invalid-field"
+                  *ngIf="referralDateField.errors && referralDateField.errors.MissingDate"
+                >
+                  <span>* A referral date / time must be provided</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
               <div class="col-md-2 mb-2 offset-md-8 text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="CancelEdit()">
                   <i class="far fa-times-circle"></i>
