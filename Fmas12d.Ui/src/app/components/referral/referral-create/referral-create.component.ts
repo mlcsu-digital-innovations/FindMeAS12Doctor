@@ -224,6 +224,11 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
+
+    if (datePart === null || timePart === null ) {
+      return;
+    }
+
     return new Date(
       datePart.year,
       datePart.month - 1,
@@ -277,7 +282,6 @@ export class ReferralCreateComponent implements OnInit {
 
     if (!this.HasValidGpOrPostcodeOrCcg()) {
       this.isGpFieldsShown = true;
-      this.Delay(200);
       this.gpPracticeField.enable();
       this.gpPracticeField.setErrors({ InvalidGpPostcodeCcg: true });
       canContinue = false;
@@ -290,6 +294,11 @@ export class ReferralCreateComponent implements OnInit {
 
     if (this.retrospectiveReferralField.value === true) {
       const scheduledDate = this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value);
+
+      if (scheduledDate === undefined) {
+        this.scheduledDateField.setErrors({ MissingDate: true});
+        canContinue = false;
+      }
 
       if (scheduledDate > new Date()) {
         this.scheduledDateField.setErrors({ FutureDate: true});
