@@ -107,7 +107,6 @@ export class DoctorAddComponent implements OnInit {
         this.addressList.push(address);
       }, (err) => {
         this.isPostcodeSearching = false;
-        console.log(this.addressList);
         this.toastService.displayError({
           title: 'Search Error',
           message: 'Error Retrieving Address Information'
