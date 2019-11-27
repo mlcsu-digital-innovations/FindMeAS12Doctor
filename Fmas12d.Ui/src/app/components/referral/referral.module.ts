@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { ReferralCreateComponent } from './referral-create/referral-create.component';
 import { ReferralEditComponent } from './referral-edit/referral-edit.component';
 import { ReferralListComponent } from './referral-list/referral-list.component';
-import { ReferralRetrospectiveComponent } from './referral-retrospective/referral-retrospective.component';
 import { ReferralRoutes } from './referral.routes';
 import { RouterModule } from '@angular/router';
 import { SharedComponentsModule } from '../shared-components.module';
@@ -12,8 +11,7 @@ import { SharedComponentsModule } from '../shared-components.module';
   declarations: [
     ReferralCreateComponent,
     ReferralEditComponent,
-    ReferralListComponent,
-    ReferralRetrospectiveComponent
+    ReferralListComponent
   ],
   imports: [
     CommonModule,
