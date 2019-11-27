@@ -1,6 +1,8 @@
 
-import { async, ComponentFixture, TestBed } from 'src/app/components/assessment/assessment-create/node_modules/@angular/core/testing';
 import { AssessmentListComponent } from './assessment-list.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 import { SharedComponentsModule } from '../../shared-components.module';
 
 describe('AssessmentListComponent', () => {
@@ -10,7 +12,13 @@ describe('AssessmentListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AssessmentListComponent ],
-      imports: [ SharedComponentsModule ]
+      imports: [ SharedComponentsModule ],
+      providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        }
+      ]
     })
     .compileComponents();
   }));

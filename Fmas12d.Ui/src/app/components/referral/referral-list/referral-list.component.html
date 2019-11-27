@@ -99,31 +99,56 @@
                       </a>
                     </td>
                     <td class="text-center">
-                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
+                      <a
+                        [routerLink]="referral.currentAssessmentId == null
+                          ? ['/assessment/new/',referral.referralId]
+                          : ['/assessment/edit', referral.currentAssessmentId]"
+                        class="clickable"
+                      >
                         <ngb-highlight [result]="referral.numberOfAssessmentAttempts" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
+                      <a
+                        [routerLink]="referral.currentAssessmentId == null
+                          ? ['/assessment/new/',referral.referralId]
+                          : ['/assessment/edit', referral.currentAssessmentId]"
+                        class="clickable"
+                      >
                         <ngb-highlight [result]="referral.assessmentLocationPostcode" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
+                      <a
+                        [routerLink]="referral.currentAssessmentId == null
+                          ? ['/assessment/new/',referral.referralId]
+                          : ['/assessment/edit', referral.currentAssessmentId]"
+                        class="clickable"
+                      >
                         <ngb-highlight [result]="referral.specialityName" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
+                      <a
+                        [routerLink]="referral.currentAssessmentId == null
+                          ? ['/assessment/new/',referral.referralId]
+                          : ['/assessment/edit', referral.currentAssessmentId]"
+                        class="clickable"
+                      >
                         <ngb-highlight [result]="referral.timescale | date:'dd/MM/yyyy HH:mm'" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     </td>
                     <td>
-                      <a href="/assessment/edit/{{referral.currentAssessmentId}}" class="clickable">
+                      <a
+                        [routerLink]="referral.currentAssessmentId == null
+                          ? ['/assessment/new/',referral.referralId]
+                          : ['/assessment/edit', referral.currentAssessmentId]"
+                        class="clickable"
+                      >
                         <ngb-highlight [result]="referral.statusName" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>

@@ -12,7 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let requestToForward = req;
 
-        console.log("*** intecept");
+        console.log("*** intercept");
 
         if (this.oidcSecurityService === undefined) {
             console.log("*** getting service");

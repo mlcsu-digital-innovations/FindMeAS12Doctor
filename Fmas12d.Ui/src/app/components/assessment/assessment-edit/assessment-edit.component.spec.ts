@@ -1,8 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AssessmentEditComponent } from './assessment-edit.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 import { RouterService } from 'src/app/services/router/router.service';
 import { SharedComponentsModule } from '../../shared-components.module';
 
@@ -31,7 +33,11 @@ describe('AssessmentEditComponent', () => {
          useValue: {
            paramMap: of({referralId: 1})
          }
-       }
+       },
+       {
+        provide: OidcSecurityService,
+        useClass: OidcSecurityServiceStub
+      },
       ]
     })
     .compileComponents();

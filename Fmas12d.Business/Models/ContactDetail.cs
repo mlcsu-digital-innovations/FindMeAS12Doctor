@@ -21,6 +21,7 @@ namespace Fmas12d.Business.Models
       EmailAddress = entity.EmailAddress;
       Latitude = entity.Latitude;
       Longitude = entity.Longitude;
+      Id = entity.Id;
       Postcode = entity.Postcode;
       TelephoneNumber = entity.TelephoneNumber;
       Town = entity.Town;

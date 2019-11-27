@@ -1,4 +1,6 @@
 import { AppComponent } from './app.component';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from './mocks/oidc-security-service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TestBed, async } from '@angular/core/testing';
 
@@ -11,6 +13,12 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        }
+      ]
     }).compileComponents();
   }));
 

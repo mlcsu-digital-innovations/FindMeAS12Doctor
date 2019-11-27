@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { of } from 'rxjs';
 import { SharedComponentsModule } from '../../shared-components.module';
 import { RouterService } from 'src/app/services/router/router.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { OidcSecurityServiceStub } from 'src/app/mocks/oidc-security-service.mock';
 
 describe('AssessmentCreateComponent', () => {
   let component: AssessmentCreateComponent;
@@ -20,13 +22,17 @@ describe('AssessmentCreateComponent', () => {
         SharedComponentsModule
        ],
        providers: [
-         {
-           provide: ActivatedRoute,
-           useValue: {
-             paramMap: of({referralId: 1})
-           }
-         },
-         {
+        {
+          provide: OidcSecurityService,
+          useClass: OidcSecurityServiceStub
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({referralId: 1})
+          }
+        },
+        {
           provide: RouterService,
           useValue: {
             paramMap: of({referralId: 1})
