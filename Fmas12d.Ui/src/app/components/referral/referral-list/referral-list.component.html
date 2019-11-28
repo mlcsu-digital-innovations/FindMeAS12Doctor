@@ -102,7 +102,7 @@
                       <a
                         [routerLink]="referral.currentAssessmentId == null
                           ? ['/assessment/new/',referral.referralId]
-                          : ['/assessment/edit', referral.currentAssessmentId]"
+                          : ['/assessment/view', referral.currentAssessmentId]"
                         class="clickable"
                       >
                         <ngb-highlight [result]="referral.numberOfAssessmentAttempts" [term]="referralListService.searchTerm">
@@ -113,7 +113,7 @@
                       <a
                         [routerLink]="referral.currentAssessmentId == null
                           ? ['/assessment/new/',referral.referralId]
-                          : ['/assessment/edit', referral.currentAssessmentId]"
+                          : ['/assessment/view', referral.currentAssessmentId]"
                         class="clickable"
                       >
                         <ngb-highlight [result]="referral.assessmentLocationPostcode" [term]="referralListService.searchTerm">
@@ -124,7 +124,7 @@
                       <a
                         [routerLink]="referral.currentAssessmentId == null
                           ? ['/assessment/new/',referral.referralId]
-                          : ['/assessment/edit', referral.currentAssessmentId]"
+                          : ['/assessment/view', referral.currentAssessmentId]"
                         class="clickable"
                       >
                         <ngb-highlight [result]="referral.specialityName" [term]="referralListService.searchTerm">
@@ -135,7 +135,7 @@
                       <a
                         [routerLink]="referral.currentAssessmentId == null
                           ? ['/assessment/new/',referral.referralId]
-                          : ['/assessment/edit', referral.currentAssessmentId]"
+                          : ['/assessment/view', referral.currentAssessmentId]"
                         class="clickable"
                       >
                         <ngb-highlight [result]="referral.timescale | date:'dd/MM/yyyy HH:mm'" [term]="referralListService.searchTerm">
@@ -146,7 +146,7 @@
                       <a
                         [routerLink]="referral.currentAssessmentId == null
                           ? ['/assessment/new/',referral.referralId]
-                          : ['/assessment/edit', referral.currentAssessmentId]"
+                          : ['/assessment/view', referral.currentAssessmentId]"
                         class="clickable"
                       >
                         <ngb-highlight [result]="referral.statusName" [term]="referralListService.searchTerm">
