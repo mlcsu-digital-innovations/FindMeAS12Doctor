@@ -7,9 +7,12 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
+// TODO CONVERT TO NO AUTO MAPPER
+
 namespace Fmas12d.Business.Services
 {
-  public abstract class SearchServiceBase<TBusinessModel, TEntity, TSearchModel> : ServiceBase<TBusinessModel, TEntity>
+  public abstract class SearchServiceBase<TBusinessModel, TEntity, TSearchModel> : 
+    ServiceBase<TBusinessModel, TEntity>
     where TBusinessModel : BaseModel
     where TEntity : BaseEntity
     where TSearchModel : BaseSearchModel

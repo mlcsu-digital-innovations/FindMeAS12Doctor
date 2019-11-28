@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public abstract class UserSearchService : GeneralSearchServiceBase, IModelGeneralSearchService<User>
+  public abstract class UserSearchService : 
+    GeneralSearchServiceBase, IModelGeneralSearchService<User>
   {
     private readonly int _profileType;
 
@@ -40,7 +41,7 @@ namespace Fmas12d.Business.Services
                     ResultText = user.DisplayName
                   })
                   .ToListAsync();
-
+                  
         return entities;
       }
     }

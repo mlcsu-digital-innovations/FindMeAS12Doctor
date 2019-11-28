@@ -62,7 +62,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         LONGITUDE_DOCTOR_MALE_1,
         START_DOCTOR_MALE_1,
         Models.UserAvailabilityStatus.AVAILABLE,
-        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+        UserSeeder.DISPLAY_NAME_DOCTOR_ND11
       );
 
     Add(
@@ -71,7 +71,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         LONGITUDE_DOCTOR_MALE_2,
         START_DOCTOR_MALE_2,
         Models.UserAvailabilityStatus.AVAILABLE,
-        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+        UserSeeder.DISPLAY_NAME_DOCTOR_ND11
       );
 
     Add(
@@ -80,7 +80,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         LONGITUDE_DOCTOR_MALE_3,
         START_DOCTOR_MALE_3,
         Models.UserAvailabilityStatus.AVAILABLE,
-        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+        UserSeeder.DISPLAY_NAME_DOCTOR_ND11
       );      
 
   

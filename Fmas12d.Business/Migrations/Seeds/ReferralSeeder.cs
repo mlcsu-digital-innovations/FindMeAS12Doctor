@@ -111,7 +111,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         ),
         _userAssessmentNotificationSeeder.Create(
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+          userName: UserSeeder.DISPLAY_NAME_DOCTOR_ND11
         )
       };      
 
@@ -124,7 +124,7 @@ namespace Fmas12d.Business.Migrations.Seeds
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE
           ),          
-          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_ND11,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE,
           postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE,
@@ -188,7 +188,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         ),
         _userAssessmentNotificationSeeder.Create(
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+          userName: UserSeeder.DISPLAY_NAME_DOCTOR_ND11
         ),
       };
 
@@ -214,7 +214,7 @@ namespace Fmas12d.Business.Migrations.Seeds
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE
           ),
-          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_ND11,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE,
           postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE,          
@@ -263,7 +263,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         ),
         _userAssessmentNotificationSeeder.Create(
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
-          userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+          userName: UserSeeder.DISPLAY_NAME_DOCTOR_ND11
         ),
         _userAssessmentNotificationSeeder.Create(
           notificationTextId: Models.NotificationText.ALLOCATED_TO_ASSESSMENT,
@@ -284,7 +284,7 @@ namespace Fmas12d.Business.Migrations.Seeds
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE
           ),
-          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_ND11,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE,
           postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE,          

@@ -150,7 +150,8 @@ namespace Fmas12d.Api
       });
 
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+      
+      services.AddScoped<IAppClaimsPrincipal, AppClaimsPrincipal>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IContactDetailsService, ContactDetailsService>();
@@ -169,10 +170,12 @@ namespace Fmas12d.Api
 
       // services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
 
-      services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
-      services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
-      services.AddScoped<IModelGeneralSearchService<UserAmhp>, UserAmhpSearchService>();
-      services.AddScoped<IModelGeneralSearchService<UserDoctor>, UserDoctorSearchService>();
+      // services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
+      // services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
+      // services.AddScoped<IModelGeneralSearchService<UserAmhp>, UserAmhpSearchService>();
+      // services.AddScoped<IModelGeneralSearchService<UserDoctor>, UserDoctorSearchService>();
+
+      services.AddHttpContextAccessor();
 
       services.AddCors(options =>
       {

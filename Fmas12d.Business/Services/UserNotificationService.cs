@@ -11,8 +11,10 @@ namespace Fmas12d.Business.Services
   public class UserNotificationService
    : ServiceBaseNoAutoMapper<Entities.UserAssessmentNotification>, IUserNotificationService
   {    
-    public UserNotificationService(ApplicationContext context)
-      : base(context)
+    public UserNotificationService(
+      ApplicationContext context,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
       
     }

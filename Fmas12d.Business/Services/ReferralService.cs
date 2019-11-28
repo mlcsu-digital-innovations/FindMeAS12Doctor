@@ -14,13 +14,14 @@ namespace Fmas12d.Business.Services
     private readonly IUserService _userService;
     public ReferralService(
       ApplicationContext context, 
-      IUserService userService, 
-      IPatientService patientService
+      IAppClaimsPrincipal appClaimsPrincipal,
+      IPatientService patientService,
+      IUserService userService
     )
-      : base(context)
+      : base(context, appClaimsPrincipal)
     {
-      this._patientService = patientService;
-      this._userService = userService;      
+      _patientService = patientService;     
+      _userService = userService;      
     }
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
@@ -34,8 +35,8 @@ namespace Fmas12d.Business.Services
       entity.IsActive = true;
       entity.ReferralStatusId = ReferralStatus.NEW;
 
-      UpdateModified(entity);
-      entity.CreatedByUserId = entity.ModifiedByUserId;      
+      await UpdateModified(entity);
+      entity.CreatedByUserId = entity.ModifiedByUserId;
 
       _context.Add(entity);
 

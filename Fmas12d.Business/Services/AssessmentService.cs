@@ -28,8 +28,9 @@ namespace Fmas12d.Business.Services
       ILocationDetailService locationDetailService,
       IReferralService referralService,
       IUserService userService,
-      IUserAvailabilityService userAvailabilityService)
-      : base(context)
+      IUserAvailabilityService userAvailabilityService,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
@@ -59,16 +60,17 @@ namespace Fmas12d.Business.Services
       CheckDoctorsAreSelected(entity, updateModel.UserIds);
       CheckDoctorsAreSelectedAndHaveAccepted(entity, updateModel.UserIds);
 
-      UpdateModified(entity);
+      await UpdateModified(entity);
 
       foreach (int userId in updateModel.UserIds)
       {
         Entities.AssessmentDoctor assessmentDoctor =
           entity.Doctors.Single(d => d.DoctorUserId == userId);
         assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
-        UpdateModified(assessmentDoctor);
+        await UpdateModified(assessmentDoctor);
 
-        AddUserAssessmentNotification(entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
+        await AddUserAssessmentNotification(
+          entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
       }
 
       await _context.SaveChangesAsync();
@@ -82,18 +84,23 @@ namespace Fmas12d.Business.Services
       };
     }
 
-    private void AddAssessmentDetail(int assessmentDetailTypeId, Entities.Assessment entity)
+    private async Task<bool> AddAssessmentDetail(
+      int assessmentDetailTypeId, 
+      Entities.Assessment entity
+    )
     {
       Entities.AssessmentDetail assessmentDetail = new Entities.AssessmentDetail()
       {
         AssessmentDetailTypeId = assessmentDetailTypeId,
         IsActive = true
       };
-      UpdateModified(assessmentDetail);
+      await UpdateModified(assessmentDetail);
       entity.Details.Add(assessmentDetail);
+      return true;
     }
 
-    private void AddAssessmentDetails(IList<int> detailTypeIds, Entities.Assessment entity)
+    private async Task<bool> AddAssessmentDetails(
+      IList<int> detailTypeIds, Entities.Assessment entity)
     {
       if (detailTypeIds != null && detailTypeIds.Any())
       {
@@ -103,12 +110,13 @@ namespace Fmas12d.Business.Services
         }
         foreach (int assessmentDetailTypeId in detailTypeIds)
         {
-          AddAssessmentDetail(assessmentDetailTypeId, entity);
+          await AddAssessmentDetail(assessmentDetailTypeId, entity);
         }
       }
+      return true;      
     }
 
-    private void AddUserAssessmentNotification(
+    private async Task<bool> AddUserAssessmentNotification(
       Entities.Assessment entity,
       int userId,
       int notificationTextId)
@@ -127,8 +135,9 @@ namespace Fmas12d.Business.Services
           UserId = userId
         };
 
-      UpdateModified(userAssessmentNotification);
+      await UpdateModified(userAssessmentNotification);
       entity.UserAssessmentNotifications.Add(userAssessmentNotification);
+      return true;
     }
 
     private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
@@ -168,7 +177,7 @@ namespace Fmas12d.Business.Services
       // GetAvailableDoctorsAsync we can use find here to obtain it directly from the context
       Entities.Assessment entity = await _context.Assessments.FindAsync(updateModel.Id);
       entity.Referral.ReferralStatusId = Models.ReferralStatus.AWAITING_RESPONSES;
-      UpdateModified(entity);
+      await UpdateModified(entity);
 
       foreach (int userId in updateModel.UserIds)
       {
@@ -186,10 +195,11 @@ namespace Fmas12d.Business.Services
           Postcode = availabilityDoctor.Postcode,
           StatusId = Models.AssessmentDoctorStatus.SELECTED,
         };
-        UpdateModified(assessmentDoctor);
+        await UpdateModified(assessmentDoctor);
         entity.Doctors.Add(assessmentDoctor);
 
-        AddUserAssessmentNotification(entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
+        await AddUserAssessmentNotification(
+          entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
       }
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.SELECTING_DOCTORS)
@@ -372,14 +382,14 @@ namespace Fmas12d.Business.Services
       model.MapToEntity(entity);
 
       entity.CcgId = await _referralService.GetCcgIdFromReferralPatient(model.ReferralId);
-      UpdateModified(entity);
+      await UpdateModified(entity);
       entity.CreatedByUserId = entity.ModifiedByUserId;
       entity.Id = 0;
       entity.IsActive = true;
-      AddAssessmentDetails(model.DetailTypeIds, entity);
+      await AddAssessmentDetails(model.DetailTypeIds, entity);
 
       await _userService.CheckIsAmhp(model.AmhpUserId, "amhpUserId");
-      AddUserAssessmentNotification(
+      await AddUserAssessmentNotification(
         entity,
         model.AmhpUserId,
         NotificationText.ALLOCATED_TO_ASSESSMENT
@@ -494,7 +504,7 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Referral)
         .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
         .WhereIsActiveOrActiveOnly(activeOnly)
-        .AsNoTracking(asNoTracking);        
+        .AsNoTracking(asNoTracking);
 
       if (referralStatusId.HasValue)
       {
@@ -759,19 +769,20 @@ namespace Fmas12d.Business.Services
       }
 
       entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
-      UpdateModified(entity.Referral);
+      await UpdateModified(entity.Referral);
       await _context.SaveChangesAsync();
 
       return true; 
     }
 
-    private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
+    private async Task<bool> UpdateAssessmentDetails(
+      AssessmentUpdate model, Entities.Assessment entity)
     {
       if (entity.HasDetails)
       {
         foreach (Entities.AssessmentDetail assessmentDetail in entity.Details)
         {
-          UpdateModified(assessmentDetail);
+          await UpdateModified(assessmentDetail);
           assessmentDetail.IsActive = false;
         }
       }
@@ -786,7 +797,7 @@ namespace Fmas12d.Business.Services
               entity.Details.SingleOrDefault(d => d.AssessmentDetailTypeId == detailTypeId);
             if (assessmentDetail == null)
             {
-              AddAssessmentDetail(detailTypeId, entity);
+              await AddAssessmentDetail(detailTypeId, entity);
             }
             else
             {
@@ -796,9 +807,10 @@ namespace Fmas12d.Business.Services
         }
         else
         {
-          AddAssessmentDetails(model.DetailTypeIds, entity);
+          await AddAssessmentDetails(model.DetailTypeIds, entity);
         }
       }
+      return true;
     }
 
     public async Task<AssessmentDoctor> UpdateAssessmentDoctorAcceptance(AssessmentDoctor model)
@@ -902,7 +914,7 @@ namespace Fmas12d.Business.Services
         doctor.Longitude
       );
 
-      UpdateModified(doctor);
+      await UpdateModified(doctor);
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.AWAITING_RESPONSES)
       {
@@ -915,7 +927,7 @@ namespace Fmas12d.Business.Services
           entity.Referral.ReferralStatusId = ReferralStatus.RESPONSES_PARTIAL;
         }
       }
-      UpdateModified(entity.Referral);
+      await UpdateModified(entity.Referral);
 
       //TODO - WHAT TO DO IF ALLOCATED DOCTOR DECLINES AFTER ACCEPTANCE???
 
@@ -943,14 +955,16 @@ namespace Fmas12d.Business.Services
           $"An active Assessment with an id of {model.Id} could not be found.");
       }
 
-      UpdateAssessmentDetails(model, entity);
+      await UpdateAssessmentDetails(model, entity);
       model.MapToEntity(entity);
-      UpdateModified(entity);
+      await UpdateModified(entity);
 
-      AddUserAssessmentNotification(entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      await AddUserAssessmentNotification(
+        entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+
       foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
       {
-        AddUserAssessmentNotification(
+        await AddUserAssessmentNotification(
           entity,
           assessmentDoctor.DoctorUserId,
           NotificationText.ASSESSMENT_UPDATED);
@@ -971,7 +985,9 @@ namespace Fmas12d.Business.Services
     /// <summary>
     /// Update the doctor statuses checking that the doctors are those expected
     /// </summary>
-    private void UpdateDoctorStatuses(AssessmentOutcome model, Entities.Assessment entity)
+    private async Task<bool> UpdateDoctorStatuses(
+      AssessmentOutcome model, Entities.Assessment entity
+    )
     {
       int[] attendingDoctorIds = model.AttendingDoctors.Select(d => d.Id).ToArray();
       Entities.AssessmentDoctor[] allocatedDoctors = entity.Doctors
@@ -998,8 +1014,9 @@ namespace Fmas12d.Business.Services
         assessmentDoctor.StatusId = assessmentOutcomeDoctor.Attended
           ? Models.AssessmentDoctorStatus.ATTENDED
           : Models.AssessmentDoctorStatus.NOT_ATTENDED;
-        UpdateModified(assessmentDoctor);
+        await UpdateModified(assessmentDoctor);
       }
+      return true;
     }
 
     public async Task<AssessmentOutcome> UpdateOutcomeAsync(AssessmentOutcome model)
@@ -1028,9 +1045,9 @@ namespace Fmas12d.Business.Services
 
         CheckAssessmentDoesNotAlreadyHaveAnOutcome(entity);
 
-        UpdateModified(entity);
+        await UpdateModified(entity);
 
-        UpdateDoctorStatuses(model, entity);
+        await UpdateDoctorStatuses(model, entity);
 
         entity.CompletedByUserId = entity.ModifiedByUserId;
         entity.CompletedTime = model.CompletedTime;

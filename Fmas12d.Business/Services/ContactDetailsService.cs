@@ -11,8 +11,10 @@ namespace Fmas12d.Business.Services
   public class ContactDetailsService :
     ServiceBaseNoAutoMapper<Entities.ContactDetail>, IContactDetailsService
   {
-    public ContactDetailsService(ApplicationContext context)
-      : base(context)
+    public ContactDetailsService(
+      ApplicationContext context,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
 
     }

@@ -8,10 +8,11 @@ using Fmas12d.Business.Extensions;
 using System.Linq;
 using Fmas12d.Business.Exceptions;
 
+// TODO CONVERT TO NO AUTOMAPPER
+
 namespace Fmas12d.Business.Services
 {
-  public class UserService
-: ServiceBase<User, Entities.User>, IModelService<User>, IUserService
+  public class UserService : ServiceBase<User, Entities.User>, IModelService<User>, IUserService
   {
     public UserService(ApplicationContext context, IMapper mapper)
       : base("User", context, mapper)
@@ -124,6 +125,21 @@ namespace Fmas12d.Business.Services
 
       return models;
     }
+
+    public async Task<User> GetByIdentityServerIdentifier(
+      string identityServerIdentifier,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+       User model = await _context.Users
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(u => u.IdentityServerIdentifier == identityServerIdentifier)
+        .AsNoTracking(asNoTracking)
+        .Select(User.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }    
 
     private async Task<IEnumerable<Models.User>> GetAllByNameAndProfileTypeId(
       string name,

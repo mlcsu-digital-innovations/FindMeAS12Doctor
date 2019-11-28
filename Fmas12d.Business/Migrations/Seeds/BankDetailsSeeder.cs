@@ -66,7 +66,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       bankDetail.CcgId = GetCcgByName(CcgSeeder.NORTH_STAFFORDSHIRE).Id;
       bankDetail.NameOnAccount = NAME_ON_ACCOUNT_DOCTOR_MALE;
       bankDetail.SortCode = SORT_CODE_DOCTOR_MALE_NORTH_STAFFORDSHIRE;
-      bankDetail.User = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_MALE);
+      bankDetail.User = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_DOCTOR_ND11);
       bankDetail.VsrNumber = VRS_NUMBER_DOCTOR_MALE_NORTH_STAFFORDSHIRE;
       PopulateActiveAndModifiedWithSystemUser(bankDetail);            
     }

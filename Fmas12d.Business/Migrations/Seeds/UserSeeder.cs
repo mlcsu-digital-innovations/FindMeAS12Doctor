@@ -11,17 +11,20 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DISPLAY_NAME_AMHP_MALE = "Amhp Male";
     internal const string DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     internal const string DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
-    internal const string DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
+    internal const string DISPLAY_NAME_DOCTOR_ND11 = "Doctor NeilDavies11";
     internal const string DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
     internal const string DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";    
     internal const string DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
     internal const string DISPLAY_NAME_FINANCE_MALE = "Finance Male";
     internal const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
-    internal const int GMCNUMBER_DOCTOR_MALE = 2222222;
+    internal const int GMCNUMBER_DOCTOR_ND11 = 2222222;
     internal const int GMCNUMBER_DOCTOR_ON_CALL = 3333333;
     internal const int GMCNUMBER_DOCTOR_PATIENTS_GP = 5555555;
     internal const int GMCNUMBER_DOCTOR_S12_APPROVED = 4444444;
-    internal const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = "bf673270-2538-4e59-9d26-5b4808fd9ef6";                          
+    internal const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = 
+      "bf673270-2538-4e59-9d26-5b4808fd9ef6";
+    internal const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_ND11 = 
+      "f52c4a24-4071-4cd8-a7be-9e6f27446aba";
 
     internal readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_S12_APPROVED =
       new DateTimeOffset(2025, 1, 1,
@@ -37,9 +40,10 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_MALE,
+        DISPLAY_NAME_DOCTOR_ND11,
         GetGenderTypeMale().Id,
-        gmcNumber: GMCNUMBER_DOCTOR_MALE
+        gmcNumber: GMCNUMBER_DOCTOR_ND11,
+        identityServerIdentifier: IDENTITY_SERVER_IDENTIFIER_DOCTOR_ND11
       );
     
       AddUpdateUserDoctorWithDefaults(
@@ -91,7 +95,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       string displayName,
       int genderTypeId,
       int profileTypeId,
-      int? organisationId = null)
+      int? organisationId = null,
+      string identityServerIdentifier = null)
     {
       User user;
       if ((user = Context.Users
@@ -105,7 +110,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       user.GenderTypeId = genderTypeId;                  
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = Guid.NewGuid().ToString();  
+      user.IdentityServerIdentifier = identityServerIdentifier ?? Guid.NewGuid().ToString();  
       user.OrganisationId = organisationId.HasValue ? 
                             (int)organisationId : 
                             GetOrganisationIdByName(OrganisationSeeder.NAME_1);
@@ -123,13 +128,15 @@ namespace Fmas12d.Business.Migrations.Seeds
       int genderTypeId,
       int? gmcNumber = null,
       int? section12ApprovalStatusId = null,
-      DateTimeOffset? section12ExpiryDate = null
+      DateTimeOffset? section12ExpiryDate = null,
+      string identityServerIdentifier = null
       )
     {
       User user = AddUpdateUserWithDefaults(
         displayName, 
         genderTypeId,
-        GetProfileTypeDoctor().Id);
+        GetProfileTypeDoctor().Id,
+        identityServerIdentifier: identityServerIdentifier);
 
       user.GmcNumber = gmcNumber;
       user.Section12ApprovalStatusId = section12ApprovalStatusId;

@@ -16,7 +16,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       AddOrUpdate(
         CcgSeeder.STOKE_ON_TRENT,
         Models.PaymentMethodType.CHEQUE,
-        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
+        UserSeeder.DISPLAY_NAME_DOCTOR_ND11
       );      
 
     }

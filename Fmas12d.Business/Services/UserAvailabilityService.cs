@@ -18,8 +18,9 @@ namespace Fmas12d.Business.Services
     public UserAvailabilityService(
       ApplicationContext context,
       IContactDetailsService contactDetailsService,
-      ILocationDetailService locationDetailService)
-      : base(context)
+      ILocationDetailService locationDetailService,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
@@ -39,7 +40,7 @@ namespace Fmas12d.Business.Services
       Entities.UserAvailability entity = new Entities.UserAvailability();
       model.MapToEntity(entity);
       entity.IsActive = true;
-      UpdateModified(entity);
+      await UpdateModified(entity);
 
       _context.Add(entity);
       await _context.SaveChangesAsync();

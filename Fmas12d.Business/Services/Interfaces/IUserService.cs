@@ -25,5 +25,7 @@ namespace Fmas12d.Business.Services
       string doctorName, bool asNoTracking = true, bool activeOnly = true);
     Task<IEnumerable<Models.User>> GetAllByGmcNumber(
       int gmcNumber, bool asNoTracking = true, bool activeOnly = true);
+    Task<User> GetByIdentityServerIdentifier(
+      string identityServerIdentifier, bool asNoTracking = true, bool activeOnly = true);
   }
 }
