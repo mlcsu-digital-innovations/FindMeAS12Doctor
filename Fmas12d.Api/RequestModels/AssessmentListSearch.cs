@@ -11,8 +11,12 @@ namespace Fmas12d.Api.RequestModels
     [Range(1, int.MaxValue)]
     public int? DoctorUserId { get; set; }
 
-    public bool? Scheduled { get; set; }
+    [Range(1, int.MaxValue)]
+    public int? DoctorStatusId { get; set; }
     
+    [Range(1, int.MaxValue)]
+    public int? ReferralStatusId { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
       if (!AmhpUserId.HasValue && !DoctorUserId.HasValue)

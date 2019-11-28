@@ -447,9 +447,9 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    public async Task<IEnumerable<Assessment>> GetAllFilterByAmhpUserIdAsync(
+    public async Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
       int amhpUserId,
-      bool isScheduled,
+      int? referralStatusId,
       bool asNoTracking,
       bool activeOnly)
     {
@@ -460,27 +460,30 @@ namespace Fmas12d.Business.Services
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);
 
-      if (isScheduled)
+      if (referralStatusId.HasValue)
       {
-        query = query.Where(a => a.Referral.ReferralStatusId == 
-          ReferralStatus.ASSESSMENT_SCHEDULED);
-      }
-      else
-      {
-        query = query.Where(a => a.Referral.ReferralStatusId != 
-          ReferralStatus.ASSESSMENT_SCHEDULED);
+        query = query.Where(a => a.Referral.ReferralStatusId == referralStatusId);
       }
 
       IEnumerable<Assessment> models = await query
-        .Select(a => new Assessment(a, true))
+        .Select(a => new Assessment {
+          Id = a.Id,
+          MustBeCompletedBy = a.MustBeCompletedBy,
+          Postcode = a.Postcode,
+          Referral = new Referral {
+            ReferralStatusId = a.Referral.ReferralStatusId
+          },
+          ScheduledTime = a.ScheduledTime
+        })
         .ToListAsync();
 
       return models;
     }
 
-    public async Task<IEnumerable<Assessment>> GetAllFilterByDoctorUserIdAsync(
+    public async Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(
       int doctorUserId,
-      bool isScheduled,
+      int? doctorStatusId,
+      int? referralStatusId,
       bool asNoTracking,
       bool activeOnly)
     {
@@ -489,23 +492,36 @@ namespace Fmas12d.Business.Services
         .Assessments
         .Include(a => a.Doctors)
         .Include(a => a.Referral)
-        .Where(a => a.Doctors.Any(d => d.DoctorUserId == doctorUserId))
+        .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);        
 
-      if (isScheduled)
+      if (referralStatusId.HasValue)
       {
-        query = query.Where(a => a.Referral.ReferralStatusId == 
-          ReferralStatus.ASSESSMENT_SCHEDULED);
+        query = query.Where(a => a.Referral.ReferralStatusId == referralStatusId);
       }
-      else
+      if (doctorStatusId.HasValue)
       {
-        query = query.Where(a => a.Referral.ReferralStatusId != 
-          ReferralStatus.ASSESSMENT_SCHEDULED);
+        query = query.Where(a => a.Doctors.Any(d => d.Status.Id == doctorStatusId));
       }              
 
       IEnumerable<Assessment> models = await query
-        .Select(a => new Assessment(a, true))
+        .Select(a => new Assessment {
+          Id = a.Id,
+          Doctors = a.Doctors
+                     .Where(d => d.DoctorUserId == doctorUserId)
+                     .Select(d => new AssessmentDoctor {                       
+                        HasAccepted = d.HasAccepted,
+                        StatusId = d.StatusId
+                     })
+                     .ToList(),
+          MustBeCompletedBy = a.MustBeCompletedBy,
+          Postcode = a.Postcode,
+          Referral = new Referral {
+            ReferralStatusId = a.Referral.ReferralStatusId
+          },
+          ScheduledTime = a.ScheduledTime
+        })
         .ToListAsync();
 
       return models;
