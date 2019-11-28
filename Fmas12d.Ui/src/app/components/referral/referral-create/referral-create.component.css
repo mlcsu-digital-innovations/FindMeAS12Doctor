@@ -79,3 +79,21 @@ form {
   margin-left: 0;
   position: relative;
 }
+
+.flex {
+  display: flex;
+}
+
+.content-help {
+  align-self: center;
+  color: #0dadb7;
+  margin-left: -10px;
+}
+
+.not-full-width {
+  width: 80%;
+}
+
+input[type="checkbox"]:disabled  {
+  background-color: #f00 !important;
+}

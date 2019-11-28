@@ -118,18 +118,18 @@ export class ReferralCreateComponent implements OnInit {
       unknownCcg: false,
       amhp: [''],
       retrospectiveReferral: false,
-      scheduledDate: [
+      referralDate: [
         '',
         [
           DatePickerFormat
         ]
       ],
-      scheduledTime: ['']
+      referralTime: ['']
     });
 
     this.maxDate = this.ConvertToDateStruct(new Date());
-    this.scheduledDateField.setValue(this.ConvertToDateStruct(new Date()));
-    this.scheduledTimeField.setValue(this.ConvertToTimeStruct(new Date()));
+    this.referralDateField.setValue(this.ConvertToDateStruct(new Date()));
+    this.referralTimeField.setValue(this.ConvertToTimeStruct(new Date()));
 
     this.patientDetails = {} as Patient;
     this.isPatientIdValidated = false;
@@ -224,6 +224,11 @@ export class ReferralCreateComponent implements OnInit {
   }
 
   CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
+
+    if (datePart === null || timePart === null ) {
+      return;
+    }
+
     return new Date(
       datePart.year,
       datePart.month - 1,
@@ -277,7 +282,6 @@ export class ReferralCreateComponent implements OnInit {
 
     if (!this.HasValidGpOrPostcodeOrCcg()) {
       this.isGpFieldsShown = true;
-      this.Delay(200);
       this.gpPracticeField.enable();
       this.gpPracticeField.setErrors({ InvalidGpPostcodeCcg: true });
       canContinue = false;
@@ -289,10 +293,15 @@ export class ReferralCreateComponent implements OnInit {
     }
 
     if (this.retrospectiveReferralField.value === true) {
-      const scheduledDate = this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value);
+      const referralDate = this.CreateDateFromPickerObjects(this.referralDateField.value, this.referralTimeField.value);
 
-      if (scheduledDate > new Date()) {
-        this.scheduledDateField.setErrors({ FutureDate: true});
+      if (referralDate === undefined) {
+        this.referralDateField.setErrors({ MissingDate: true});
+        canContinue = false;
+      }
+
+      if (referralDate > new Date()) {
+        this.referralDateField.setErrors({ FutureDate: true});
         canContinue = false;
       }
     }
@@ -421,12 +430,12 @@ export class ReferralCreateComponent implements OnInit {
     return this.patientForm.controls.retrospectiveReferral;
   }
 
-  get scheduledDateField() {
-    return this.patientForm.controls.scheduledDate;
+  get referralDateField() {
+    return this.patientForm.controls.referralDate;
   }
 
-  get scheduledTimeField() {
-    return this.patientForm.controls.scheduledTime;
+  get referralTimeField() {
+    return this.patientForm.controls.referralTime;
   }
 
   get unknownCcgField() {
@@ -621,7 +630,7 @@ export class ReferralCreateComponent implements OnInit {
     referral.patientId = this.patientDetails.id;
 
     if (this.retrospectiveReferralField.value === true) {
-      referral.createdAt = this.CreateDateFromPickerObjects(this.scheduledDateField.value, this.scheduledTimeField.value);
+      referral.createdAt = this.CreateDateFromPickerObjects(this.referralDateField.value, this.referralTimeField.value);
     } else {
       referral.createdAt = new Date();
     }
@@ -718,10 +727,6 @@ export class ReferralCreateComponent implements OnInit {
       this.SetFieldFocus('#residentialPostcode');
       this.isPatientPostcodeValidated = false;
     }
-  }
-
-  ToggleRetrospectiveReferral(event: any) {
-
   }
 
   async UseExistingPatient() {
