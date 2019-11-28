@@ -305,19 +305,39 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    private class PatientReferral
+    public async override Task<Patient> UpdateAsync(Patient model)
     {
-      public Patient Patient { get; set; }
-      public Referral Referral { get; set; }
+      await CheckForDuplicateNhsNumberAndAlternativeIdentifier(model);
 
-      public Patient Merge()
+      Entities.Patient entity = await _context
+        .Patients
+        .Where(p => p.Id == model.Id)
+        .WhereIsActiveOrActiveOnly(true)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
       {
-        if (Patient != null && Referral != null)
-        {
-          Patient.Referrals = new List<Referral>() { Referral };
-        }
-        return Patient;
+        throw new ModelStateException("id",
+        $"Unable to find an active patient with an id of {model.Id}");
       }
+
+      entity.AlternativeIdentifier = model.AlternativeIdentifier;
+      entity.CcgId = model.CcgId;
+      entity.GpPracticeId = model.GpPracticeId;
+      entity.NhsNumber = model.NhsNumber;
+      entity.ResidentialPostcode = model.ResidentialPostcode;      
+      UpdateModified(entity);
+
+      await PopulateCcgIdFromGpPracticeIdIfPresent(model, entity);      
+      await _context.SaveChangesAsync();
+
+      model = _context.Patients
+                      .Where(e => e.Id == entity.Id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(Patient.ProjectFromEntity)
+                      .Single();
+      return model;
     }
   }
 }

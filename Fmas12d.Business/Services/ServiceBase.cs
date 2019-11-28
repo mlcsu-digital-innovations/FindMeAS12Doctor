@@ -63,7 +63,7 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public async Task<TBusinessModel> UpdateAsync(
+    public virtual async Task<TBusinessModel> UpdateAsync(
       TBusinessModel model)
     {
       TEntity entity =
