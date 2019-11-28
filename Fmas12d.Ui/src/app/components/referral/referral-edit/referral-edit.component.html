@@ -466,6 +466,8 @@
   </div>
 </div>
 
+<app-delay-spinner *ngIf="isUpdatingReferral" [delayMessage]="'Updating Referral'"></app-delay-spinner>
+
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
 </ng-template>

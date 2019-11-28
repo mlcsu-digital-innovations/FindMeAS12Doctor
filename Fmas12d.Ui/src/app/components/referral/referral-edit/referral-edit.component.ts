@@ -1,6 +1,7 @@
 import { AmhpListService } from 'src/app/services/amhp-list/amhp-list.service';
 import { CcgListService } from 'src/app/services/ccg-list/ccg-list.service';
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GpPracticeListService } from 'src/app/services/gp-practice-list/gp-practice-list.service';
 import { NgbModalRef, NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -21,9 +22,8 @@ import { ReferralService } from 'src/app/services/referral/referral.service';
 import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
-import * as moment from 'moment';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-referral-edit',
@@ -47,6 +47,7 @@ export class ReferralEditComponent implements OnInit {
   isPostcodeFieldShown: boolean;
   isSearchingForPatient: boolean;
   isSearchingForPostcode: boolean;
+  isUpdatingReferral: boolean;
   maxDate: NgbDateStruct;
   modalResult: PatientSearchResult;
   patientDetails: Patient;
@@ -57,9 +58,9 @@ export class ReferralEditComponent implements OnInit {
   referralForm: FormGroup;
   referralId: number;
   residentialPostcodeValidationMessage: string;
-  updatedReferral: ReferralEdit;
   unknownCcgId: number;
   unknownGpPracticeId: number;
+  updatedReferral: ReferralEdit;
 
   constructor(
     private amhpListService: AmhpListService,
@@ -653,7 +654,7 @@ export class ReferralEditComponent implements OnInit {
 
   UpdateReferral() {
 
-    let canContinue: boolean;
+    let canContinue = true;
 
     // only continue if the referral is valid
     if (!this.HasValidNhsNumberOrAlternativeIdentifier()) {
@@ -694,6 +695,43 @@ export class ReferralEditComponent implements OnInit {
 
   UpdateReferralDetails() {
     // ToDo: Need a service / api call for the update
+    const referral = {} as Referral;
+    referral.id = this.referralId;
+    referral.createdAt = this.retrospectiveReferralField.value === true
+      ? this.CreateDateFromPickerObjects(this.referralDateField.value, this.referralTimeField.value)
+      : this.referralCreated;
+
+    referral.leadAmhpUserId = this.amhpUser.id;
+
+    const patient = {} as Patient;
+    patient.alternativeIdentifier = this.alternativeIdentifierField.value;
+    patient.nhsNumber = this.nhsNumberField.value;
+    patient.gpPracticeId = this.gpPractice.id;
+    patient.residentialPostcode = this.residentialPostcode;
+    patient.ccgId = this.ccg.id;
+
+    referral.patient = patient;
+
+    this.isUpdatingReferral = true;
+
+    this.referralService.updateReferral(referral).subscribe(
+      (result: Referral) => {
+        this.toastService.displaySuccess({
+          message: 'Referral Updated'
+        });
+        this.isUpdatingReferral = false;
+        // navigate to the create assessment page
+        this.routerService.navigate([`/referral/list`]);
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to update referral! Please try again in a few moments'
+        });
+        this.isUpdatingReferral = false;
+        return throwError(error);
+      }
+    );
   }
 
   async UseExistingPatient() {
