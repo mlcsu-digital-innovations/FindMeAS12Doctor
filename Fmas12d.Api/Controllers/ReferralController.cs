@@ -128,7 +128,8 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.ReferralCreate businessModel = requestModel.MapToBusinessModel();
+        Business.Models.ReferralCreate businessModel = new Business.Models.ReferralCreate();
+        requestModel.MapToBusinessModel(businessModel);
         Business.Models.Referral createdModel = await Service.CreateAsync(businessModel);
         ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(createdModel);
 
@@ -138,7 +139,27 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }     
+    }  
 
+    [HttpPost]
+    [Route("retrospective")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> PostRetrospective(
+      [FromBody] RequestModels.ReferralRetrospectivePost requestModel)
+    {
+      try
+      {
+        Business.Models.ReferralCreate businessModel = new Business.Models.ReferralCreate();
+        requestModel.MapToBusinessModel(businessModel);
+        Business.Models.Referral createdModel = 
+          await Service.CreateRetrospectiveAsync(businessModel);
+        ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(createdModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }         
   }
 }

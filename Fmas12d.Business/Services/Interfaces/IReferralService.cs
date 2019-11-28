@@ -7,6 +7,7 @@ namespace Fmas12d.Business.Services
   public interface IReferralService : IServiceBaseNoAutoMapper
   {
     Task<Referral> CreateAsync(ReferralCreate businessModel);
+    Task<Referral> CreateRetrospectiveAsync(ReferralCreate businessModel);
     Task<bool> Exists(int id, bool activeOnly = true);
     Task<Referral> GetAsync(int id, bool activeOnly = true, bool asNoTracking = true);
     Task<int?> GetCcgIdFromReferralPatient(int id);
@@ -16,7 +17,7 @@ namespace Fmas12d.Business.Services
       bool activeOnly = true, bool asNoTracking = true);
     Task<Referral> GetViewByIdAsync(
       int id, bool activeOnly = true, bool asNoTracking = true);
-    Task<bool> HasCurrentAssessment(int id);    
+    Task<bool> HasCurrentAssessment(int id);
     
   }
 }

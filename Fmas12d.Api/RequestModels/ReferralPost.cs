@@ -1,16 +1,18 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Fmas12d.Api.RequestModels
 {
-  public class ReferralPost : Referral
+  public class ReferralPost
   {
-    internal virtual Business.Models.ReferralCreate MapToBusinessModel()
+    internal virtual void MapToBusinessModel(Business.Models.ReferralCreate model)
     {
-      Business.Models.ReferralCreate model = new Business.Models.ReferralCreate()
-      {
-        CreatedAt = CreatedAt,
-        PatientId = PatientId.Value,
-        LeadAmhpUserId = LeadAmhpUserId
-      };
-      return model;
+      model.LeadAmhpUserId = LeadAmhpUserId.Value;
+      model.PatientId = PatientId.Value;
     }       
+
+    [Required]
+    public int? LeadAmhpUserId { get; set; }
+    [Required]
+    public int? PatientId { get; set; }
   }
 }

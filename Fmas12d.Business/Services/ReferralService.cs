@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using Fmas12d.Business.Exceptions;
 
 namespace Fmas12d.Business.Services
 {
@@ -25,8 +27,20 @@ namespace Fmas12d.Business.Services
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
     {
+      model.CreatedAt = DateTimeOffset.Now;
+      return await CreateRetrospectiveAsync(model);
+    }
+
+    public async Task<Referral> CreateRetrospectiveAsync(ReferralCreate model)
+    {
       await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
       await _patientService.CheckExists(model.PatientId, "patientId");
+
+      if (model.CreatedAt == default)
+      {
+        throw new ModelStateException("createdAt",
+        $"The createdAt field has an invalid value of {model.CreatedAt}");
+      }
 
       Entities.Referral entity = model.MapToEntity();
 
@@ -48,7 +62,7 @@ namespace Fmas12d.Business.Services
                       .Select(Referral.ProjectFromEntity)
                       .Single();
       return createdModel;
-    }
+    }    
 
     public async Task<bool> Exists(int id, bool activeOnly = true)
     {
