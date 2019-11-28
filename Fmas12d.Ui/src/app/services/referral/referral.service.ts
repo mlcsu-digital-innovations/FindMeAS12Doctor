@@ -2,7 +2,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, delay } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Referral } from '../../interfaces/referral';
 import { ReferralEdit } from 'src/app/interfaces/referralEdit';
 import { ReferralStatus } from '../../enums/ReferralStatus.enum';
@@ -61,5 +61,12 @@ export class ReferralService {
       newReferral,
       { headers }
     );
+  }
+
+  public updateReferral(referral: Referral) {
+
+    // ToDo: return the results of the actual api call
+    return of(referral)
+    .pipe(delay(2000));
   }
 }

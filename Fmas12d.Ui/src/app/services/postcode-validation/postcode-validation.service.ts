@@ -20,6 +20,14 @@ export class PostcodeValidationService {
 
   public searchPostcode(postcode: string): Observable<AddressResult> {
 
+    // format the supplied postcode so that it contains a space
+    postcode = postcode.trim();
+    if (postcode.indexOf(' ') === -1 && postcode.length > 3) {
+      const inwardCode = postcode.substr(postcode.length - 3, 3);
+      const outwardCode = postcode.substr(0, postcode.length - 3);
+      postcode = `${outwardCode} ${inwardCode}`;
+    }
+
     // Dummy data for postcode searching !!
 
     const addresses = from([
