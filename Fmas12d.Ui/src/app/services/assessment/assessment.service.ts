@@ -14,12 +14,9 @@ export class AssessmentService {
 
   public createAssessment(assessment: Assessment) {
 
-    let assessmentType = '';
-    if (assessment.isPlanned) {
-      assessmentType = '/planned';
-    } else {
-      assessmentType = '/emergency';
-    }
+    const assessmentType = assessment.isPlanned
+      ? 'planned'
+      : 'emergency';
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -32,12 +29,9 @@ export class AssessmentService {
 
   public updateAssessment(assessment: Assessment) {
 
-    let assessmentType = '';
-    if (assessment.isPlanned) {
-      assessmentType = '/planned';
-    } else {
-      assessmentType = '/emergency';
-    }
+    const assessmentType = assessment.isPlanned
+      ? 'planned'
+      : 'emergency';
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
