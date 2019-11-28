@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Fmas12d.Api.ViewModels
@@ -18,6 +17,8 @@ namespace Fmas12d.Api.ViewModels
       Address3 = model.Address3;
       Address4 = model.Address4;
       DateTime = model.DateTime;
+      DetailTypes = model.DetailTypes
+                         .Select(dt => new AssessmentDetailType(dt)).ToList();
       Id = model.Id;
       IsSuccessful = model.IsSuccessful;
       MeetingArrangementComment = model.MeetingArrangementComment;
@@ -49,6 +50,7 @@ namespace Fmas12d.Api.ViewModels
     public string Address3 { get; set; }
     public string Address4 { get; set; }
     public DateTimeOffset DateTime { get; set; }
+    public IList<AssessmentDetailType> DetailTypes { get; set; }
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
     public int Id { get; set; }

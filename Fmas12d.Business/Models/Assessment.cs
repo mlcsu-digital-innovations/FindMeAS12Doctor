@@ -111,7 +111,8 @@ namespace Fmas12d.Business.Models
       get
       {
         return Details?.Where(d => d.IsActive)
-                      .Select(d => d.AssessmentDetailType).ToList();
+                       .Select(d => d.AssessmentDetailType)
+                       .ToList();
       }
     }
 
