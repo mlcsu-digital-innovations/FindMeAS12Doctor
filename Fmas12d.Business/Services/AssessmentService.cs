@@ -133,7 +133,7 @@ namespace Fmas12d.Business.Services
 
     private async Task<bool> AddLatitudeAndLongitude(string postcode, Entities.Assessment entity)
     {
-      Models.Postcode postcodeModel = await
+      Models.Location postcodeModel = await
         _locationDetailService.GetPostcodeDetailsAsync(postcode);
 
       if (postcodeModel == null)
@@ -178,6 +178,7 @@ namespace Fmas12d.Business.Services
         Entities.AssessmentDoctor assessmentDoctor = new Entities.AssessmentDoctor()
         {
           ContactDetailId = availabilityDoctor.ContactDetailId,
+          Distance = availabilityDoctor.Distance,
           DoctorUserId = userId,
           IsActive = true,
           Latitude = availabilityDoctor.Latitude,
@@ -446,41 +447,66 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    public async Task<IEnumerable<Models.Assessment>> GetAllFilterByAmhpUserIdAsync(
+    public async Task<IEnumerable<Assessment>> GetAllFilterByAmhpUserIdAsync(
       int amhpUserId,
+      bool isScheduled,
       bool asNoTracking,
       bool activeOnly)
     {
+      IQueryable<Entities.Assessment> query = _context
+        .Assessments
+        .Include(a => a.Referral)
+        .Where(a => a.AmhpUserId == amhpUserId)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking);
 
-      List<Entities.Assessment> entities =
-        await _context.Assessments
-                      .Where(e => e.AmhpUserId == amhpUserId)
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .AsNoTracking(asNoTracking)
-                      .ToListAsync();
+      if (isScheduled)
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId == 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }
+      else
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId != 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }
 
-      IEnumerable<Models.Assessment> models =
-        entities.Select(e => new Models.Assessment(e)).ToList();
+      IEnumerable<Assessment> models = await query
+        .Select(a => new Assessment(a, true))
+        .ToListAsync();
 
       return models;
     }
 
-    public async Task<IEnumerable<Models.Assessment>> GetAllFilterByDoctorUserIdAsync(
+    public async Task<IEnumerable<Assessment>> GetAllFilterByDoctorUserIdAsync(
       int doctorUserId,
+      bool isScheduled,
       bool asNoTracking,
       bool activeOnly)
     {
 
-      List<Entities.Assessment> entities =
-        await _context.Assessments
-                      .Include(a => a.Doctors)
-                      .Where(a => a.Doctors.Any(d => d.DoctorUserId == doctorUserId))
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .AsNoTracking(asNoTracking)
-                      .ToListAsync();
+      IQueryable<Entities.Assessment> query = _context
+        .Assessments
+        .Include(a => a.Doctors)
+        .Include(a => a.Referral)
+        .Where(a => a.Doctors.Any(d => d.DoctorUserId == doctorUserId))
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking);        
 
-      IEnumerable<Models.Assessment> models =
-        entities.Select(e => new Models.Assessment(e)).ToList();
+      if (isScheduled)
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId == 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }
+      else
+      {
+        query = query.Where(a => a.Referral.ReferralStatusId != 
+          ReferralStatus.ASSESSMENT_SCHEDULED);
+      }              
+
+      IEnumerable<Assessment> models = await query
+        .Select(a => new Assessment(a, true))
+        .ToListAsync();
 
       return models;
     }
@@ -498,6 +524,8 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(d => d.AssessmentDetailType)
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.ContactDetail)                  
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.Speciality)
@@ -650,7 +678,7 @@ namespace Fmas12d.Business.Services
       }
       else
       {
-        Dictionary<int, Postcode> doctorPostcodes =
+        Dictionary<int, Location> doctorPostcodes =
           await _userAvailabilityService.GetDoctorsPostcodeAt(
             model.DoctorsSelected.Select(d => d.Id).ToList(),
             model.DateTime,
@@ -660,7 +688,7 @@ namespace Fmas12d.Business.Services
 
         foreach (AssessmentDoctor assessmentDoctor in model.Doctors.Where(d => d.IsSelected))
         {
-          Postcode doctorPostcode = doctorPostcodes.GetValueOrDefault(assessmentDoctor.DoctorUserId);
+          Location doctorPostcode = doctorPostcodes.GetValueOrDefault(assessmentDoctor.DoctorUserId);
           if (doctorPostcode == null)
           {
             assessmentDoctor.Distance = null;
@@ -831,7 +859,7 @@ namespace Fmas12d.Business.Services
       }
       else if (!string.IsNullOrWhiteSpace(model.Postcode))
       {
-        Postcode postcode = await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
+        Location postcode = await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
 
         if (postcode == null)
         {
@@ -841,7 +869,7 @@ namespace Fmas12d.Business.Services
         doctor.ContactDetailId = null;
         doctor.Latitude = postcode.Latitude;
         doctor.Longitude = postcode.Longitude;
-        doctor.Postcode = postcode.Code;
+        doctor.Postcode = postcode.Postcode;
       }
       else if (model.Latitude.HasValue && model.Longitude.HasValue)
       {
@@ -850,6 +878,14 @@ namespace Fmas12d.Business.Services
         doctor.Longitude = model.Longitude.Value;
         doctor.Postcode = null;
       }
+
+      doctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+        entity.Latitude,
+        entity.Longitude,
+        doctor.Latitude,
+        doctor.Longitude
+      );
+
       UpdateModified(doctor);
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.AWAITING_RESPONSES)

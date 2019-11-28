@@ -9,7 +9,7 @@ namespace Fmas12d.Api.ViewModels
       
       Description = model.Description;
       Id = model.Id;
-      Name = model.Description;
+      Name = model.Name;
     }
     public string Description { get; set; }
     public int Id { get; set; }

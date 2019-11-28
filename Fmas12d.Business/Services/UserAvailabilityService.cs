@@ -110,10 +110,10 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    public async Task<Dictionary<int, Postcode>> GetDoctorsPostcodeAt(
+    public async Task<Dictionary<int, Location>> GetDoctorsPostcodeAt(
       List<int> userIds, DateTimeOffset dateTime, bool asNoTracking, bool activeOnly)
     {
-      Dictionary<int, Postcode> doctorsPostcode = 
+      Dictionary<int, Location> doctorsPostcode = 
         await _context.UserAvailabilities
                       .Where(ua => ua.Start <= dateTime)
                       .Where(ua => ua.End >= dateTime)
@@ -124,8 +124,8 @@ namespace Fmas12d.Business.Services
                       .AsNoTracking(asNoTracking)
                       .ToDictionaryAsync(
                         ua => ua.UserId,
-                        ua => new Postcode(){
-                          Code = ua.Postcode,
+                        ua => new Location(){
+                          Postcode = ua.Postcode,
                           Latitude = ua.Latitude,
                           Longitude = ua.Longitude
                         }
@@ -162,7 +162,7 @@ namespace Fmas12d.Business.Services
     {
       if (!string.IsNullOrWhiteSpace(model.Postcode))
       {
-        Postcode postcodeModel =
+        Location postcodeModel =
           await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
 
         model.Latitude = postcodeModel.Latitude;
