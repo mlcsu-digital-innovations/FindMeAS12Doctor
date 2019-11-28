@@ -15,7 +15,7 @@ namespace Fmas12d.Business.Models
       AttendanceConfirmedByUserId = entity.Id;
       ContactDetail = new ContactDetail(entity.ContactDetail);
       ContactDetailId = entity.ContactDetailId;
-      Distance = null;
+      Distance = entity.Distance;
       DoctorUser = new User(entity.DoctorUser);
       DoctorUserId = entity.DoctorUserId;
       HasAccepted = entity.HasAccepted;

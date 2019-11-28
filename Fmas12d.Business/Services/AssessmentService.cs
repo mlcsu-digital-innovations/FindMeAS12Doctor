@@ -178,6 +178,7 @@ namespace Fmas12d.Business.Services
         Entities.AssessmentDoctor assessmentDoctor = new Entities.AssessmentDoctor()
         {
           ContactDetailId = availabilityDoctor.ContactDetailId,
+          Distance = availabilityDoctor.Distance,
           DoctorUserId = userId,
           IsActive = true,
           Latitude = availabilityDoctor.Latitude,
@@ -877,6 +878,14 @@ namespace Fmas12d.Business.Services
         doctor.Longitude = model.Longitude.Value;
         doctor.Postcode = null;
       }
+
+      doctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+        entity.Latitude,
+        entity.Longitude,
+        doctor.Latitude,
+        doctor.Longitude
+      );
+
       UpdateModified(doctor);
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.AWAITING_RESPONSES)

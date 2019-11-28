@@ -39,7 +39,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     )
     {
 
-      Models.Location postcodeModel = GetPostcodeDetails(postcode);
+      Models.Location location = GetPostcodeDetails(postcode);
 
       Assessment assessment = new Assessment
       {
@@ -60,8 +60,8 @@ namespace Fmas12d.Business.Migrations.Seeds
         Details = details,
         Doctors = doctors,
         IsSuccessful = isSuccessful == null ? null : isSuccessful,
-        Latitude = postcodeModel.Latitude,
-        Longitude = postcodeModel.Longitude,
+        Latitude = location.Latitude,
+        Longitude = location.Longitude,
         MeetingArrangementComment = meetingArrangementComment,
         MustBeCompletedBy = mustBeCompletedBy == null ? null : mustBeCompletedBy,
         NonPaymentLocationId =
