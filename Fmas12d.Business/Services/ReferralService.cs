@@ -15,14 +15,14 @@ namespace Fmas12d.Business.Services
     private readonly IPatientService _patientService;
     private readonly IUserService _userService;
     public ReferralService(
-      ApplicationContext context, 
-      IUserService userService, 
+      ApplicationContext context,
+      IUserService userService,
       IPatientService patientService
     )
       : base(context)
     {
       this._patientService = patientService;
-      this._userService = userService;      
+      this._userService = userService;
     }
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
@@ -49,20 +49,14 @@ namespace Fmas12d.Business.Services
       entity.ReferralStatusId = ReferralStatus.NEW;
 
       UpdateModified(entity);
-      entity.CreatedByUserId = entity.ModifiedByUserId;      
+      entity.CreatedByUserId = entity.ModifiedByUserId;
 
       _context.Add(entity);
 
       await _context.SaveChangesAsync();
 
-      Referral createdModel = _context.Referrals
-                      .Where(e => e.Id == entity.Id)
-                      .WhereIsActiveOrActiveOnly(true)
-                      .AsNoTracking(true)
-                      .Select(Referral.ProjectFromEntity)
-                      .Single();
-      return createdModel;
-    }    
+      return await GetAsync(entity.Id);
+    }
 
     public async Task<bool> Exists(int id, bool activeOnly = true)
     {
@@ -78,7 +72,7 @@ namespace Fmas12d.Business.Services
                                         .Where(r => r.Id == id)
                                         .WhereIsActiveOrActiveOnly(activeOnly)
                                         .AsNoTracking(asNoTracking)
-                                        .Select(Models.Referral.ProjectFromEntity)
+                                        .Select(Referral.ProjectFromEntity)
                                         .SingleOrDefaultAsync();
       return referral;
     }
@@ -180,5 +174,49 @@ namespace Fmas12d.Business.Services
 
       return model?.HasCurrentAssessment ?? false;
     }
+
+    public async Task<Referral> UpdateAsync(ReferralUpdate model)
+    {
+      return await UpdateAsyncInternal(model, false);
+    }
+
+    private async Task<Referral> UpdateAsyncInternal(ReferralUpdate model, bool isRetrospective)
+    {
+      await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+
+      Entities.Referral entity = await _context
+        .Referrals
+        .Where(r => r.Id == model.Id)
+        .WhereIsActiveOrActiveOnly(true)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+        $"Unable to find an active referral with an id of {model.Id}");
+      }
+
+      entity.LeadAmhpUserId = model.LeadAmhpUserId;
+      if (isRetrospective)
+      {
+        entity.CreatedAt = model.CreatedAt.Value;
+      }
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      return await GetAsync(model.Id);
+    }
+
+    public async Task<Referral> UpdateRetrospectiveAsync(ReferralUpdate model)
+    {
+      if (model.CreatedAt == default)
+      {
+        throw new ModelStateException("createdAt",
+        $"The createdAt field has an invalid value of {model.CreatedAt}");
+      }      
+      return await UpdateAsyncInternal(model, true);
+    }
+
   }
 }

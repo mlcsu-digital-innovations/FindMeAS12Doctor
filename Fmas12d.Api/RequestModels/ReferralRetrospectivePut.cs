@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ReferralRetrospectivePost : ReferralPost
+  public class ReferralRetrospectivePut : ReferralPut
   {
     internal override void MapToBusinessModel(Business.Models.ReferralUpdate model)
     {

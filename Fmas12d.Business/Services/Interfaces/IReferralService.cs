@@ -18,6 +18,7 @@ namespace Fmas12d.Business.Services
     Task<Referral> GetViewByIdAsync(
       int id, bool activeOnly = true, bool asNoTracking = true);
     Task<bool> HasCurrentAssessment(int id);
-    
+    Task<Referral> UpdateAsync(ReferralUpdate model);
+    Task<Referral> UpdateRetrospectiveAsync(ReferralUpdate model);
   }
 }
