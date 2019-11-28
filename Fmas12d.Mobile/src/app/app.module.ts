@@ -28,11 +28,11 @@ import { environment, ProtectedResourceMap } from 'src/environments/environment'
     MsalModule.forRoot({
       clientID: OAuthSettings.appId,
       authority: OAuthSettings.authority,
-      cacheLocation: "localStorage",
+      cacheLocation: 'localStorage',
       consentScopes: OAuthSettings.consentScopes,
       postLogoutRedirectUri: environment.postLogoutRedirectUrl,
       protectedResourceMap: ProtectedResourceMap,
-      redirectUri: environment.redirectUri     
+      redirectUri: environment.redirectUri
     })
   ],
   providers: [
@@ -40,8 +40,8 @@ import { environment, ProtectedResourceMap } from 'src/environments/environment'
     StatusBar,
     SplashScreen,
     { 
-      provide: RouteReuseStrategy, 
-      useClass: IonicRouteStrategy 
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
     },
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,11 +1,12 @@
 import { AmhpAssessmentList } from '../../models/amhp-assessment-list.model';
 import { AmhpAssessmentOutcome } from 'src/app/models/amhp-assessment-outcome.model';
+import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
 import { ApiService } from '../api/api.service';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { map, delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,17 @@ export class AmhpAssessmentService {
       `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`, 
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
+    .pipe(
+      map(result => this.assessmentListSort(result)),
+    );
+  }
+
+  public getRequests(doctorUserId: number): Observable<AmhpAssessmentRequest[]> {   
+    return (this.apiService.get(
+      `${environment.apiEndpoint}/assessment?doctorUserId=${doctorUserId}`, 
+      'AmhpUserList'
+    ) as Observable<AmhpAssessmentList[]>)
+    .pipe(delay(1000))
     .pipe(
       map(result => this.assessmentListSort(result)),
     );
