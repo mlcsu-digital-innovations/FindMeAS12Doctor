@@ -25,12 +25,12 @@ namespace Fmas12d.Business.Services
       throw new System.NotImplementedException();
     }
 
-    public async Task<Postcode> GetPostcodeDetailsAsync(Postcode modelPostcode)
+    public async Task<Location> GetPostcodeDetailsAsync(Location modelPostcode)
     {
-      return await GetPostcodeDetailsAsync(modelPostcode.Code);
+      return await GetPostcodeDetailsAsync(modelPostcode.Postcode);
     }
 
-    public async Task<Postcode> GetPostcodeDetailsAsync(string stringPostcode)
+    public async Task<Location> GetPostcodeDetailsAsync(string stringPostcode)
     {
       using HttpClient client = new HttpClient();
       string endpoint =
@@ -41,7 +41,7 @@ namespace Fmas12d.Business.Services
       string content = await response.Content.ReadAsStringAsync();
       PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
 
-      Postcode modelPostcode = new Postcode(convertedResult);
+      Location modelPostcode = new Location(convertedResult);
       return modelPostcode;
     }
   }

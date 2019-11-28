@@ -11,6 +11,8 @@ namespace Fmas12d.Data.Entities
     public virtual User AttendanceConfirmedByUser { get; set; }
     public int? ContactDetailId { get; set; }
     public virtual ContactDetail ContactDetail { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? Distance { get; set; }
     public virtual User DoctorUser { get; set; }
     public int DoctorUserId { get; set; }
     public bool? HasAccepted { get; set; }

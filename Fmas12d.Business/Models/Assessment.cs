@@ -25,12 +25,12 @@ namespace Fmas12d.Business.Models
       AmhpUserId = entity.AmhpUserId;
       Ccg = new Ccg(entity.Ccg);
       CcgId = entity.CcgId;
-      // TODO CompletedByUser = null;
+      CompletedByUser = new User(entity.CompletedByUser);
       CompletedByUserId = entity.CompletedByUserId;
       CompletedTime = entity.CompletedTime;
-      // TODO CompletionConfirmationByUser = null;
+      CompletionConfirmationByUser = new User(entity.CompletionConfirmationByUser);
       CompletionConfirmationByUserId = entity.CompletionConfirmationByUserId;
-      // TODO CreatedByUser = null;
+      CreatedByUser = new User(entity.CreatedByUser);
       CreatedByUserId = entity.CreatedByUserId;
       Details = entity.Details?.Select(d => new AssessmentDetail(d)).ToList();
       Doctors = entity.Doctors?.Select(d => new AssessmentDoctor(d)).ToList();
@@ -111,23 +111,24 @@ namespace Fmas12d.Business.Models
       get
       {
         return Details?.Where(d => d.IsActive)
-                      .Select(d => d.AssessmentDetailType).ToList();
+                       .Select(d => d.AssessmentDetailType)
+                       .ToList();
       }
     }
 
-    public IList<User> DoctorsAllocated
+    public IList<AssessmentDoctor> DoctorsAllocated
     {
       get
       {
-        return GetActiveDoctorsByAssessmentDoctorStatus(AssessmentDoctorStatus.ALLOCATED);
+        return GetAssessmentActiveDoctorsByStatus(AssessmentDoctorStatus.ALLOCATED);
       }
     }
 
-    public IList<User> DoctorsSelected
+    public IList<AssessmentDoctor> DoctorsSelected
     {
       get
       {
-        return GetActiveDoctorsByAssessmentDoctorStatus(AssessmentDoctorStatus.SELECTED);
+        return GetAssessmentActiveDoctorsByStatus(AssessmentDoctorStatus.SELECTED);
       }
     }
 
@@ -144,7 +145,9 @@ namespace Fmas12d.Business.Models
       }
     }
 
-    private IList<User> GetActiveDoctorsByAssessmentDoctorStatus(int assessmentDoctorStatusId)
+    private IList<AssessmentDoctor> GetAssessmentActiveDoctorsByStatus(
+      int assessmentDoctorStatusId
+    )
     {
       if (Doctors == null)
       {
@@ -155,7 +158,6 @@ namespace Fmas12d.Business.Models
         return Doctors
           .Where(d => d.IsActive)
           .Where(d => d.StatusId == assessmentDoctorStatusId)
-          .Select(u => u.DoctorUser)
           .ToList();
       }
     }

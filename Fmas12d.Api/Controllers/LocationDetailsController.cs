@@ -17,12 +17,12 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet("{postcode}")]
-    public async Task<ActionResult<ViewModels.Postcode>> Get(string postcode)
+    public async Task<ActionResult<ViewModels.Location>> Get(string postcode)
     {
       try
       {
-        Business.Models.Postcode businessModel = await Service.GetPostcodeDetailsAsync(postcode);
-        ViewModels.Postcode viewModel = new ViewModels.Postcode(businessModel);
+        Business.Models.Location businessModel = await Service.GetPostcodeDetailsAsync(postcode);
+        ViewModels.Location viewModel = new ViewModels.Location(businessModel);
 
         if (viewModel == null)
         {

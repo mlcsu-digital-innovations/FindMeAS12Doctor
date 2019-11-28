@@ -6,15 +6,20 @@ namespace Fmas12d.Business.Migrations.Seeds
   internal class ContactDetailsSeeder : SeederBase<ContactDetail>
   {
     #region Constants      
-    protected const string ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
-    protected const string ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
-    protected const string ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
-    protected const string EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@fmas12d.local";
-    protected const decimal LATITUDE_DOCTOR_FEMALE = 52.991581m;
-    protected const decimal LONGITUDE_DOCTOR_FEMALE = -2.167857m;
-    protected const string POSTCODE_DOCTOR_FEMALE = "ST4 1NF";
-    protected const int TELEPHONE_NUMBER_DOCTOR_FEMALE = 101;
-    protected const string TOWN_DOCTOR_FEMALE = "Doctor Female Town";
+    public const string ADDRESS1_DOCTOR_FEMALE = "Doctor Female Address 1";
+    public const string ADDRESS2_DOCTOR_FEMALE = "Doctor Female Address 2";
+    public const string ADDRESS3_DOCTOR_FEMALE = "Doctor Female Address 3";
+    public const string EMAIL_ADDRESS_DOCTOR_FEMALE = "doctor.female@fmas12d.local";
+    public const decimal LATITUDE_DOCTOR_FEMALE = 52.991581m;
+    public const decimal LONGITUDE_DOCTOR_FEMALE = -2.167857m;
+    public const string POSTCODE_DOCTOR_FEMALE = "ST4 1NF";
+    public const int TELEPHONE_NUMBER_DOCTOR_FEMALE = 101;
+    public const string TOWN_DOCTOR_FEMALE = "Doctor Female Town";
+
+
+    public const decimal LATITUDE_DOCTOR_MALE = 52.992566m;
+    public const decimal LONGITUDE_DOCTOR_MALE = -2.150226m;
+    public const string POSTCODE_DOCTOR_MALE = "ST4 3PE";    
     #endregion
 
     internal void SeedData()
