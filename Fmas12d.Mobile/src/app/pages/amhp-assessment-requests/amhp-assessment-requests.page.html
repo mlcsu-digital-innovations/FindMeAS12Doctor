@@ -32,16 +32,23 @@
             [routerLink]="['/amhp-assessment-request-response/', assessment.id]"
             routerDirection="forward"
           >
-            {{assessment.dateTime | date: "d MMM yy H:mm"}}
-            {{assessment.postcode}}
+            <ion-row style="width:100%;">
+              <ion-col>
+                  <ion-icon size="large" name="checkmark-circle-outline" *ngIf="assessment.doctorHasAccepted == true"></ion-icon>
+                  <ion-icon class="declined" size="large" name="close-circle" *ngIf="assessment.doctorHasAccepted == false"></ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                    <strong>{{assessment.postcode}}</strong>
+                </ion-row>
+                <ion-row>
+                    {{assessment.dateTime | date: "d MMM yy H:mm"}}
+                </ion-row>
+              </ion-col>
+            </ion-row>
           </ion-item>
         </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
-
-<ng-template #loading>
-  <!-- <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner> -->
-  <span>BINGO</span>
-</ng-template>

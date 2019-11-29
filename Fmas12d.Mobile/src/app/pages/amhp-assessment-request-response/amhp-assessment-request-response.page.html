@@ -1,9 +1,94 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>amhp-assessment-request-response</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-navbar></app-navbar>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-label class="assessment-list-last-updated">
+          <!-- Last Updated: {{assessmentRequestsLastUpdated | date: "dd/MM/yyyy
+          HH:mm:ss"}} -->
+        </ion-label>
+      </ion-col>
+    </ion-row>
 
+    <ion-row>
+      <ion-col>
+        &nbsp;
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-label offset="1">
+        <strong>Assessment Request</strong>
+      </ion-label>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        Postcode: <strong>{{assessmentRequest.postcode}}</strong>
+      </ion-col>        
+    </ion-row>
+    <ion-row>
+      <ion-col>
+      {{assessmentRequest.dateTime | date: "dd/MM/yyyy HH:mm"}}
+      </ion-col>        
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        Known Location {{assessmentRequest.doctorDetails.knownLocation.type}}
+      </ion-col>        
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        Distance of {{assessmentRequest.doctorDetails.distance | number:'.1-1'}} miles
+      </ion-col>        
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <span *ngFor="let detail of assessmentRequest.detailTypes">
+          {{detail.description}}
+        </span>
+      </ion-col>        
+    </ion-row>
+
+    <ion-row>
+        <ion-col>
+          &nbsp;
+        </ion-col>
+      </ion-row>
+
+    <ion-row>
+      <ion-col style="text-align: center;">
+        <ion-button color="primary">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          Accept
+        </ion-button>
+      </ion-col>
+      <ion-col style="text-align: center;">
+        <ion-button color="primary" (click)="declineRequest()">
+          <ion-icon name="close-circle-outline"></ion-icon>
+          Decline
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+      <!-- <ion-button fill="outline" color="primary">
+        <ion-icon name="arrow-back"></ion-icon>
+         Back
+      </ion-button>   -->
+      <ion-buttons slot="start">
+          <ion-back-button
+              [text]="buttonText"
+              [icon]="arrow-back">
+          </ion-back-button>
+        </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
+

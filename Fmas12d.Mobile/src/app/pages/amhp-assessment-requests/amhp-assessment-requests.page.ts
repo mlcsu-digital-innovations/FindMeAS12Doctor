@@ -3,7 +3,6 @@ import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-ass
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoadingController } from '@ionic/angular';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-amhp-assessment-requests',
@@ -32,13 +31,19 @@ export class AmhpAssessmentRequestsPage implements OnInit {
     request
       .subscribe(
         result => {
+          console.log(result);
           this.assessmentRequests = result;
-          this.loading.dismiss();
+          this.closeLoading();
         }, error => {
-          this.loading.dismiss();
+          this.closeLoading();
         }
       );
+  }
 
+  closeLoading() {
+    if (this.loading) {
+      this.loading.dismiss();
+    }
   }
 
   async showLoading() {

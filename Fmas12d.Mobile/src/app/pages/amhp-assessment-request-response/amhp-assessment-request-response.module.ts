@@ -1,5 +1,6 @@
 import { AmhpAssessmentRequestResponsePage } from './amhp-assessment-request-response.page';
 import { CommonModule } from '@angular/common';
+import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
@@ -15,6 +16,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
