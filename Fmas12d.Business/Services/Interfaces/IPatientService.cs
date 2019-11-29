@@ -12,12 +12,12 @@ namespace Fmas12d.Business.Services
       bool activeOnly = true
     );    
     Task<Patient> CreateAsync(Patient model);
-    Task<Patient> GetByAlternativeIdentifier(
+    Task<Patient> GetByAlternativeIdentifierAsync(
       string alternativeIdentifier, 
       bool asNoTracking = false, 
       bool activeOnly = false,
       bool onlyCurrentReferral = true);
-    Task<Patient> GetByNhsNumber(
+    Task<Patient> GetByNhsNumberAsync(
       long nhsNumber, 
       bool asNoTracking = false, 
       bool activeOnly = false,

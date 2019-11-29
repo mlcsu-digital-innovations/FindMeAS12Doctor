@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
-using Fmas12d.Business;
+﻿using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
+using Fmas12d.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
@@ -16,15 +14,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Serilog;
+using System;
+using System.Linq;
 
 namespace Fmas12d.Api
 {
   public class Startup
   {
-    private const string ENV_AZURE_DEVELOPMENT = "AzureDevelopment";
-    private const string ENV_DEVELOPMENT = "Development";
-    private const string ENV_DISABLEAUTHENTICATION = "DisableAuthentication";
-    private const string ENV_POSTMAN = "Postman";
+    internal const string ENV_AZURE_DEVELOPMENT = "AzureDevelopment";
+    internal const string ENV_DEVELOPMENT = "Development";
+    internal const string ENV_DISABLEAUTHENTICATION = "DisableAuthentication";
+    internal const string ENV_POSTMAN = "Postman";
 
     public Startup(IConfiguration configuration)
     {
@@ -148,9 +148,7 @@ namespace Fmas12d.Api
           options.EnableDetailedErrors();
         }
       });
-
-      services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-      
+     
       services.AddScoped<IAppClaimsPrincipal, AppClaimsPrincipal>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<ICcgService, CcgService>();
@@ -159,7 +157,7 @@ namespace Fmas12d.Api
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<ILocationDetailService, LocationDetailService>();
       services.AddScoped<IAssessmentService, AssessmentService>();
-      services.AddScoped<IModelService<ReferralStatus>, ReferralStatusService>();
+      services.AddScoped<IReferralStatusService, ReferralStatusService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
       services.AddScoped<ISpecialityService, SpecialityService>();
@@ -167,13 +165,6 @@ namespace Fmas12d.Api
       services.AddScoped<IUserAvailabilityService, UserAvailabilityService>();
       services.AddScoped<IUserNotificationService, UserNotificationService>();
       services.AddScoped<IUserService, UserService>();
-
-      // services.AddScoped<IModelSimpleSearchService<AvailableDoctor, Business.Models.SearchModels.AvailableDoctorSearch>, AvailableDoctorService>();
-
-      // services.AddScoped<IModelGeneralSearchService<Ccg>, CcgSearchService>();
-      // services.AddScoped<IModelGeneralSearchService<GpPractice>, GpPracticeSearchService>();
-      // services.AddScoped<IModelGeneralSearchService<UserAmhp>, UserAmhpSearchService>();
-      // services.AddScoped<IModelGeneralSearchService<UserDoctor>, UserDoctorSearchService>();
 
       services.AddHttpContextAccessor();
 
@@ -214,6 +205,7 @@ namespace Fmas12d.Api
       app.UseCors("AllowAnyOrigin");
       app.UseAuthentication();
       app.UseAuthorization();
+      app.UseUserClaims();
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();

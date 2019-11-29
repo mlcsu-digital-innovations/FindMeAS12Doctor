@@ -1,55 +1,38 @@
-using AutoMapper;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Fmas12d.Business.Models;
 using Entities = Fmas12d.Data.Entities;
+using Fmas12d.Business.Models;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
-
-// TODO CONVERT TO NO AUTOMAPPER
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
   public class GpPracticeService : 
-      ServiceBase<GpPractice, Entities.GpPractice>, 
+      ServiceBaseNoAutoMapper<Entities.GpPractice>, 
       IGpPracticeService,
       ISearchService
   {
     public GpPracticeService(
       ApplicationContext context,
-      IMapper mapper)
-      : base("GpPractice", context, mapper)
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
-    }
-
-    public async Task<IEnumerable<Models.GpPractice>> GetAllAsync(
-      bool activeOnly)
-    {
-
-      IEnumerable<Entities.GpPractice> entities =
-        await _context.GpPractices
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .ToListAsync();
-
-      IEnumerable<Models.GpPractice> models =
-        _mapper.Map<IEnumerable<Models.GpPractice>>(entities);
-
-      return models;
     }
 
     public async Task<int?> GetCcgIdById(int id)
     {
 
-      GpPractice gpPractice = await _context.GpPractices
-                                            .Where(g => g.Id == id)
-                                            .WhereIsActiveOrActiveOnly(true)
-                                            .AsNoTracking(true)
-                                            .Select(g => new GpPractice{
-                                              CcgId = g.CcgId
-                                            })
-                                            .SingleOrDefaultAsync();
+      GpPractice gpPractice = await _context
+        .GpPractices
+        .Where(g => g.Id == id)
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(true)
+        .Select(g => new GpPractice{
+          CcgId = g.CcgId
+        })
+        .SingleOrDefaultAsync();
 
       if (gpPractice == null)
       {
@@ -59,28 +42,6 @@ namespace Fmas12d.Business.Services
 
       return gpPractice.CcgId;
     }    
-
-    protected override async Task<Entities.GpPractice> GetEntityByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
-    {
-      return await GetEntityWithNoIncludesByIdAsync(entityId, asNoTracking, activeOnly);
-    }
-
-    protected override async Task<Entities.GpPractice> GetEntityWithNoIncludesByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
-    {
-      Entities.GpPractice entity = await
-        _context.GpPractices
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(gpPractice => gpPractice.Id == entityId);
-
-      return entity;
-    }
 
     public async Task<IEnumerable<IdResultText>> SearchAsync(
       string criteria,

@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public class ReferralService : ServiceBaseNoAutoMapper<Entities.Referral>, IReferralService
+  public class ReferralService : 
+    ServiceBaseNoAutoMapper<Entities.Referral>, 
+    IReferralService
   {
     private readonly IPatientService _patientService;
     private readonly IUserService _userService;
@@ -35,7 +37,7 @@ namespace Fmas12d.Business.Services
       entity.IsActive = true;
       entity.ReferralStatusId = ReferralStatus.NEW;
 
-      await UpdateModified(entity);
+      UpdateModified(entity);
       entity.CreatedByUserId = entity.ModifiedByUserId;
 
       _context.Add(entity);
@@ -86,7 +88,7 @@ namespace Fmas12d.Business.Services
     public async Task<Referral> GetEditByIdAsync(
       int id, bool activeOnly = true, bool asNoTracking = true)
     {
-      Models.Referral model =
+      Referral model =
         await _context.Referrals
                       .Include(r => r.LeadAmhpUser)
                       .Include(r => r.Patient)
@@ -106,7 +108,7 @@ namespace Fmas12d.Business.Services
     public async Task<IEnumerable<Referral>> GetListAsync(
       bool activeOnly = true, bool asNoTracking = true)
     {
-      IEnumerable<Models.Referral> models =
+      IEnumerable<Referral> models =
         await _context.Referrals
                       .Include(r => r.Assessments)
                         .ThenInclude(e => e.Speciality)

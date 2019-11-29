@@ -1,50 +1,40 @@
-using System;
-using System.Threading.Tasks;
-using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace Fmas12d.Business.Models
 {
   public class AppClaimsPrincipal : IAppClaimsPrincipal
   {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUserService _userService;
-
-    private const string CLAIM_AZURE_AD_IDENITIFER =
-      "http://schemas.microsoft.com/identity/claims/objectidentifier";
+    public const string CLAIM_USERID ="userId";
+    private readonly IHttpContextAccessor _httpContextAccessor;    
 
     public AppClaimsPrincipal(
-      IHttpContextAccessor httpContextAccessor,
-      IUserService userService
+      IHttpContextAccessor httpContextAccessor
     )
     {
       _httpContextAccessor = httpContextAccessor;
-      _userService = userService;
     }
-
-    public async Task<User> GetCurrentUserAsync()
+    public int GetUserId()
     {
-      string identityServerIdentifier = _httpContextAccessor
+      string userIdString = _httpContextAccessor
         ?.HttpContext
         ?.User
-        .FindFirst(c => c.Type == CLAIM_AZURE_AD_IDENITIFER)
-        ?.Value;
+        .FindFirst(c => c.Type == CLAIM_USERID)
+        ?.Value;      
 
-      if (identityServerIdentifier == null)
+      if (userIdString == null)
       {
-        throw new Exception($"Unable to find user claim {CLAIM_AZURE_AD_IDENITIFER}");
+        throw new Exception("Unable to find userId claim");
       }
 
-      User user = await _userService.GetByIdentityServerIdentifier(identityServerIdentifier);
-
-      if (user == null)
+      if (int.TryParse(userIdString, out int userId))
       {
-        throw new Exception(
-          "Unable to find an active user with an IdentityServerIdentifier of " +
-          $"{identityServerIdentifier}");
+        return userId;
       }
-
-      return user;
+      else
+      {
+        throw new Exception($"Invalid userId claim {userId}");
+      }
     }
   }
 }

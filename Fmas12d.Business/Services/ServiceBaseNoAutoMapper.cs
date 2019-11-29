@@ -30,17 +30,10 @@ namespace Fmas12d.Business.Services
       return await SetActiveStatus(id, false);
     }
 
-    /// <summary>
-    /// TODO: Get the current users sub claim
-    /// </summary>
-    protected async Task<bool> UpdateModified(IBaseEntity entity)
+    protected void UpdateModified(IBaseEntity entity)
     {
-      Models.User user = await _appClaimsPrincipal.GetCurrentUserAsync();
-
-      entity.ModifiedByUserId = user.Id;
+      entity.ModifiedByUserId = _appClaimsPrincipal.GetUserId();
       entity.ModifiedAt = DateTimeOffset.Now;
-
-      return true;
     }
 
     private async Task<int> SetActiveStatus(int id, bool isActivating)
@@ -62,7 +55,7 @@ namespace Fmas12d.Business.Services
       else
       {
         entity.IsActive = isActivating;
-        await UpdateModified(entity);
+        UpdateModified(entity);
         return await _context.SaveChangesAsync();
       }
     }

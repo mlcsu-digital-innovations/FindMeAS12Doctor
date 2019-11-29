@@ -4,99 +4,163 @@ using System;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class UserSeeder : SeederBase<User>
+  public class UserSeeder : SeederBase<User>
   {
     #region Constants
-    internal const string DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
-    internal const string DISPLAY_NAME_AMHP_MALE = "Amhp Male";
-    internal const string DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
-    internal const string DISPLAY_NAME_DOCTOR_PATIENTS_GP = "Doctor Patients GP";
-    internal const string DISPLAY_NAME_DOCTOR_ND11 = "Doctor NeilDavies11";
-    internal const string DISPLAY_NAME_DOCTOR_ON_CALL = "Doctor On Call";
-    internal const string DISPLAY_NAME_DOCTOR_S12_APPROVED = "Doctor 12 Approved";    
-    internal const string DISPLAY_NAME_FINANCE_FEMALE = "Finance Female";
-    internal const string DISPLAY_NAME_FINANCE_MALE = "Finance Male";
-    internal const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
-    internal const int GMCNUMBER_DOCTOR_ND11 = 2222222;
-    internal const int GMCNUMBER_DOCTOR_ON_CALL = 3333333;
-    internal const int GMCNUMBER_DOCTOR_PATIENTS_GP = 5555555;
-    internal const int GMCNUMBER_DOCTOR_S12_APPROVED = 4444444;
-    internal const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = 
-      "bf673270-2538-4e59-9d26-5b4808fd9ef6";
-    internal const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_ND11 = 
-      "f52c4a24-4071-4cd8-a7be-9e6f27446aba";
+    public const string DISPLAY_NAME_ADMIN = "Admin";
+    public const string DISPLAY_NAME_AMHP_FEMALE = "Amhp Female";
+    public const string DISPLAY_NAME_AMHP_MALE = "Amhp Male";
+    public const string DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
+    public const string DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
+    public const string DISPLAY_NAME_FINANCE = "Finance";
+    public const string DISPLAY_NAME_HELENCROSS = "Helen Cross";
+    public const string DISPLAY_NAME_JEHANDAVIDBEYERS = "Jehan-David Beyers";
+    public const string DISPLAY_NAME_MARKCARTER = "Mark Carter";
+    public const string DISPLAY_NAME_NEILDAVIES = "Neil Davies";
+    public const string DISPLAY_NAME_NEILDAVIESMLCSU = "Neil Davies (MLCSU)";
+    public const string DISPLAY_NAME_NEILEDAVIES = "Neil E Davies";
+    public const string DISPLAY_NAME_STEPHENHARLAND = "Stephen Harland";
 
-    internal readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_S12_APPROVED =
+    public const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
+    public const int GMCNUMBER_DOCTOR_MALE = 2222222;
+
+    public const string IDENTITY_SERVER_IDENTIFIER_ADMIN = 
+      "266269fe-4610-426f-9486-40ac96a41724";    
+    public const string IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE = 
+      "38ef55b9-41a8-4ffd-925c-84501246777f";
+    public const string IDENTITY_SERVER_IDENTIFIER_AMHP_MALE = 
+      "1d9a7af7-5dcf-4bbb-a0a9-397f27d72a57";      
+    public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE = 
+      "766fc494-f486-4642-aaaf-ae17a07903ac";
+    public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_MALE = 
+      "66b3eb3f-e4d0-48bf-aa53-df3f5bb1f455";
+    public const string IDENTITY_SERVER_IDENTIFIER_FINANCE =
+      "54406863-1d43-470e-8cd5-23596077bc08";
+    public const string IDENTITY_SERVER_IDENTIFIER_HELENCROSS = 
+      "efc945eb-ee1b-4ed1-9fac-269c145196c6";      
+    public const string IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS = 
+      "ac74d440-5901-4660-9ed7-3e579e248e2e";      
+    public const string IDENTITY_SERVER_IDENTIFIER_MARKCARTER = 
+      "903ec2b7-a3be-4e91-a8ef-e3f5292f44f1";      
+    public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIES = 
+      "f52c4a24-4071-4cd8-a7be-9e6f27446aba";      
+    public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU = 
+      "b1f8a2ca-48d3-4c05-aff9-4c343384190b";      
+    public const string IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES = 
+      "bb3712bb-d1ea-4bbf-8a0c-02a3dae26b1d";      
+    public const string IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND = 
+      "c37a5d2d-ffa0-47b7-9286-c4e252a65696";      
+    public const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = 
+      "bf673270-2538-4e59-9d26-5b4808fd9ef6";
+
+    public readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_MALE =
       new DateTimeOffset(2025, 1, 1,
                          0, 00, 00, 00, DateTimeOffset.Now.Offset);   
 
     #endregion
-    internal void SeedData()
+    public void SeedData()
     {
-      AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_FEMALE, 
-        GetGenderTypeFemale().Id,
-        gmcNumber: GMCNUMBER_DOCTOR_FEMALE
-      );
-
-      AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_ND11,
-        GetGenderTypeMale().Id,
-        gmcNumber: GMCNUMBER_DOCTOR_ND11,
-        identityServerIdentifier: IDENTITY_SERVER_IDENTIFIER_DOCTOR_ND11
-      );
-    
-      AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_ON_CALL, 
-        GetGenderTypeFemale().Id,
-        gmcNumber: GMCNUMBER_DOCTOR_ON_CALL
-      );
-
-      AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_S12_APPROVED,
-        GetGenderTypeMale().Id,
-        section12ApprovalStatusId: GetSection12ApprovalStatusApproved().Id,
-        section12ExpiryDate: SECTION_12_EXPIRY_DATE_DOCTOR_S12_APPROVED,
-        gmcNumber: GMCNUMBER_DOCTOR_S12_APPROVED
-      );
-
-      AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_PATIENTS_GP,
-        GetGenderTypeMale().Id,
-        gmcNumber: GMCNUMBER_DOCTOR_PATIENTS_GP
-      );
-
       AddUpdateUserWithDefaults(
-        DISPLAY_NAME_FINANCE_FEMALE,
+        DISPLAY_NAME_ADMIN,
         GetGenderTypeFemale().Id,
-        profileTypeId: GetProfileTypeFinance().Id
-      );     
-
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_FINANCE_MALE,
-        GetGenderTypeMale().Id,
-        profileTypeId: GetProfileTypeFinance().Id
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_ADMIN
       );
 
       AddUpdateUserWithDefaults(
         DISPLAY_NAME_AMHP_FEMALE, 
         GetGenderTypeFemale().Id, 
-        profileTypeId: GetProfileTypeAmhp().Id
+        GetProfileTypeAmhp().Id,
+        IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE
       );      
 
       AddUpdateUserWithDefaults(
         DISPLAY_NAME_AMHP_MALE, 
         GetGenderTypeMale().Id, 
-        profileTypeId: GetProfileTypeAmhp().Id
+        GetProfileTypeAmhp().Id,
+        IDENTITY_SERVER_IDENTIFIER_AMHP_MALE
+      );      
+
+      AddUpdateUserDoctorWithDefaults(
+        DISPLAY_NAME_DOCTOR_FEMALE, 
+        GetGenderTypeFemale().Id,
+        GMCNUMBER_DOCTOR_FEMALE,
+        IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE
       );
+
+      AddUpdateUserDoctorWithDefaults(
+        DISPLAY_NAME_DOCTOR_MALE,
+        GetGenderTypeMale().Id,
+        GMCNUMBER_DOCTOR_MALE,
+        IDENTITY_SERVER_IDENTIFIER_DOCTOR_MALE,
+        GetSection12ApprovalStatusApproved().Id,
+        SECTION_12_EXPIRY_DATE_DOCTOR_MALE        
+      );
+    
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_FINANCE,
+        GetGenderTypeFemale().Id,
+        GetProfileTypeFinance().Id,
+        IDENTITY_SERVER_IDENTIFIER_FINANCE
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_HELENCROSS,
+        GetGenderTypeFemale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_HELENCROSS
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_JEHANDAVIDBEYERS,
+        GetGenderTypeMale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_MARKCARTER,
+        GetGenderTypeMale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_MARKCARTER
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_NEILDAVIES,
+        GetGenderTypeMale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_NEILDAVIES
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_NEILDAVIESMLCSU,
+        GetGenderTypeMale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_NEILEDAVIES,
+        GetGenderTypeMale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES
+      );
+
+      AddUpdateUserWithDefaults(
+        DISPLAY_NAME_STEPHENHARLAND,
+        GetGenderTypeMale().Id,
+        GetProfileTypeAdmin().Id,
+        IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND
+      );                              
     }
 
     private User AddUpdateUserWithDefaults(
       string displayName,
       int genderTypeId,
       int profileTypeId,
-      int? organisationId = null,
-      string identityServerIdentifier = null)
+      string identityServerIdentifier,
+      int? organisationId = null
+    )
     {
       User user;
       if ((user = Context.Users
@@ -126,11 +190,11 @@ namespace Fmas12d.Business.Migrations.Seeds
     private User AddUpdateUserDoctorWithDefaults(
       string displayName,
       int genderTypeId,
-      int? gmcNumber = null,
+      int gmcNumber,
+      string identityServerIdentifier,      
       int? section12ApprovalStatusId = null,
-      DateTimeOffset? section12ExpiryDate = null,
-      string identityServerIdentifier = null
-      )
+      DateTimeOffset? section12ExpiryDate = null
+    )
     {
       User user = AddUpdateUserWithDefaults(
         displayName, 

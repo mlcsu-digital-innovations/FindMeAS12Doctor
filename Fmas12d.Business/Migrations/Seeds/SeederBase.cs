@@ -288,6 +288,11 @@ namespace Fmas12d.Business.Migrations.Seeds
           $"Cannot find a Profile Type with an id of {id} in ProfileTypes", ex);
       }
     }
+    protected ProfileType GetProfileTypeAdmin()
+    {
+      return GetProfileTypeById(Models.ProfileType.ADMIN);
+    }
+
     protected ProfileType GetProfileTypeAmhp()
     {
       return GetProfileTypeById(Models.ProfileType.AMHP);

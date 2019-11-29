@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
@@ -17,15 +17,15 @@ namespace Fmas12d.Business.Services
       : base(context, appClaimsPrincipal)
     { }
 
-    public async Task<IEnumerable<Models.NameDescription>> GetNameDescriptions(
+    public async Task<IEnumerable<NameDescription>> GetNameDescriptions(
       bool asNoTracking = true,
       bool activeOnly = true)
     {
-      IEnumerable<Models.NameDescription> models = await _context
+      IEnumerable<NameDescription> models = await _context
         .Set<TEntity>()
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
-        .Select(Models.NameDescription.ProjectFromEntity)
+        .Select(NameDescription.ProjectFromEntity)
         .ToListAsync();
 
       return models;

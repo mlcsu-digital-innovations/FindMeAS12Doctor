@@ -26,7 +26,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddOrUpdate(
-        UserSeeder.DISPLAY_NAME_DOCTOR_ND11,
+        UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
         START_DOCTOR_MALE,
         END_DOCTOR_MALE
       );

@@ -1,16 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Entities = Fmas12d.Data.Entities;
 using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
-using Entities = Fmas12d.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public class UserAvailabilityService : ServiceBaseNoAutoMapper<Entities.UserAvailability>,
+  public class UserAvailabilityService : 
+    ServiceBaseNoAutoMapper<Entities.UserAvailability>,
     IUserAvailabilityService
   {
     private readonly IContactDetailsService _contactDetailsService;
@@ -40,7 +41,7 @@ namespace Fmas12d.Business.Services
       Entities.UserAvailability entity = new Entities.UserAvailability();
       model.MapToEntity(entity);
       entity.IsActive = true;
-      await UpdateModified(entity);
+      UpdateModified(entity);
 
       _context.Add(entity);
       await _context.SaveChangesAsync();
