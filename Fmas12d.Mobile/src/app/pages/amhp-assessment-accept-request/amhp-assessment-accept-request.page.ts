@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-amhp-assessment-accept-request',
@@ -7,7 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AmhpAssessmentAcceptRequestPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { 
+    this.route.queryParams.subscribe(
+      params => {
+        if (this.router.getCurrentNavigation().extras.state) {
+          console.log(this.router.getCurrentNavigation().extras.state.assessment);
+        }
+      }
+    )
+  }
 
   ngOnInit() {
   }

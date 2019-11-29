@@ -47,7 +47,7 @@ const routes: Routes = [
   },
   {
     path: 'amhp-assessment-accept-request',
-    loadChildren: './pages.amhp-assessment-accept-request/amhp-assessment-accept-request.module' +
+    loadChildren: './pages/amhp-assessment-accept-request/amhp-assessment-accept-request.module' +
     '#AmhpAssessmentAcceptRequestPageModule'
   },
 

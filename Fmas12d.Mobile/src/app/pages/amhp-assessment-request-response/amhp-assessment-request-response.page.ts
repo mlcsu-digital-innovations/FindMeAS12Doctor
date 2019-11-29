@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { LoadingController, ToastController, NavController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
 import { AmhpAssessmentRequestDetails } from 'src/app/models/amhp-assessment-request-details.model';
 import { AmhpAssessmentSelectedDoctor } from 'src/app/models/amhp-assessment-selected-doctor.model';
@@ -23,6 +23,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     private loadingController: LoadingController,
     private navController: NavController,
     private route: ActivatedRoute,
+    private router: Router,
     private toastController: ToastController
   ) { }
 
@@ -54,6 +55,16 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
           this.closeLoading();
         }
       );
+  }
+
+  acceptRequest() {
+    const navigationExtras: NavigationExtras = {
+      state: {
+      assessment: this.assessmentRequest
+      }
+    };
+
+    this.router.navigate(['/amhp-assessment-accept-request'], navigationExtras);
   }
 
   closeLoading() {
