@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { map, delay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { DOCTORSTATUSSELECTED } from 'src/app/constants/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -28,9 +29,10 @@ export class AmhpAssessmentService {
     );
   }
 
-  public getRequests(doctorUserId: number): Observable<AmhpAssessmentRequest[]> {   
+  public getRequests(doctorUserId: number): Observable<AmhpAssessmentRequest[]> {
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment?doctorUserId=${doctorUserId}`, 
+      `${environment.apiEndpoint}/assessment?doctorUserId=${doctorUserId}
+      &doctorStatusId=${DOCTORSTATUSSELECTED}`,
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(delay(1000))
@@ -39,11 +41,16 @@ export class AmhpAssessmentService {
     );
   }
 
-  public getView(assessmentId: string): Observable<AmhpAssessmentView> {  
+  public getView(assessmentId: number): Observable<AmhpAssessmentView> {
     return this.apiService.get(
       `${environment.apiEndpoint}/assessment/${assessmentId}`,
       `AmhpUserView-${assessmentId}`
     ) as Observable<AmhpAssessmentView>;
+  }
+
+  public declineAssessmentRequest(assessmentId: number, doctorId: number) {
+    const url = `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorId}/declined`;
+    return this.apiService.put(url, null);
   }
 
   public putOutcome(
