@@ -1,4 +1,6 @@
 import { AmhpAssessmentViewDoctor } from './amhp-assessment-view-doctor.model';
+import { AmhpAssessmentSelectedDoctor } from './amhp-assessment-selected-doctor.model';
+import { DetailType } from './detail-type.model';
 
 export class AmhpAssessmentView {
   address1: string;
@@ -6,7 +8,9 @@ export class AmhpAssessmentView {
   address3: string;
   address4: string;
   dateTime: Date;
+  detailTypes: DetailType[];
   doctorsAllocated: AmhpAssessmentViewDoctor[];
+  doctorsSelected: AmhpAssessmentSelectedDoctor[];
   id: number;
   isSuccessful?: boolean;
   meetingArrangementComment: string;
