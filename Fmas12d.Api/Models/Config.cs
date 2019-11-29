@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Mep.Api.Models
+namespace Fmas12d.Api.Models
 {
 
   public class OIDCConfig

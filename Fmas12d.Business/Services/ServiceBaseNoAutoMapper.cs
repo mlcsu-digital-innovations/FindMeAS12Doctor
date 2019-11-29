@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Fmas12d.Business.Exceptions;
+using Fmas12d.Business.Models;
 using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Services
@@ -9,9 +10,14 @@ namespace Fmas12d.Business.Services
     where TEntity : BaseEntity
   {
     protected readonly ApplicationContext _context;
+    protected readonly IAppClaimsPrincipal _appClaimsPrincipal;
 
-    protected ServiceBaseNoAutoMapper(ApplicationContext context)
+    protected ServiceBaseNoAutoMapper(
+      ApplicationContext context,
+      IAppClaimsPrincipal appClaimsPrincipal
+    )
     {
+      _appClaimsPrincipal = appClaimsPrincipal;
       _context = context;
     }
 
@@ -24,12 +30,9 @@ namespace Fmas12d.Business.Services
       return await SetActiveStatus(id, false);
     }
 
-    /// <summary>
-    /// TODO: Get the current users sub claim
-    /// </summary>
     protected void UpdateModified(IBaseEntity entity)
     {
-      entity.ModifiedByUserId = 1;
+      entity.ModifiedByUserId = _appClaimsPrincipal.GetUserId();
       entity.ModifiedAt = DateTimeOffset.Now;
     }
 

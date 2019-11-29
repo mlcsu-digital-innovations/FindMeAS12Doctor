@@ -1,13 +1,13 @@
 using Entities = Fmas12d.Data.Entities;
 using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
+using Fmas12d.Business.Helpers;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System;
-using Fmas12d.Business.Helpers;
 
 namespace Fmas12d.Business.Services
 {
@@ -28,8 +28,9 @@ namespace Fmas12d.Business.Services
       ILocationDetailService locationDetailService,
       IReferralService referralService,
       IUserService userService,
-      IUserAvailabilityService userAvailabilityService)
-      : base(context)
+      IUserAvailabilityService userAvailabilityService,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
@@ -68,7 +69,8 @@ namespace Fmas12d.Business.Services
         assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
         UpdateModified(assessmentDoctor);
 
-        AddUserAssessmentNotification(entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
+        AddUserAssessmentNotification(
+          entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
       }
 
       await _context.SaveChangesAsync();
@@ -82,7 +84,10 @@ namespace Fmas12d.Business.Services
       };
     }
 
-    private void AddAssessmentDetail(int assessmentDetailTypeId, Entities.Assessment entity)
+    private void AddAssessmentDetail(
+      int assessmentDetailTypeId, 
+      Entities.Assessment entity
+    )
     {
       Entities.AssessmentDetail assessmentDetail = new Entities.AssessmentDetail()
       {
@@ -93,7 +98,8 @@ namespace Fmas12d.Business.Services
       entity.Details.Add(assessmentDetail);
     }
 
-    private void AddAssessmentDetails(IList<int> detailTypeIds, Entities.Assessment entity)
+    private void AddAssessmentDetails(
+      IList<int> detailTypeIds, Entities.Assessment entity)
     {
       if (detailTypeIds != null && detailTypeIds.Any())
       {
@@ -189,7 +195,8 @@ namespace Fmas12d.Business.Services
         UpdateModified(assessmentDoctor);
         entity.Doctors.Add(assessmentDoctor);
 
-        AddUserAssessmentNotification(entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
+        AddUserAssessmentNotification(
+          entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
       }
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.SELECTING_DOCTORS)
@@ -494,7 +501,7 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Referral)
         .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
         .WhereIsActiveOrActiveOnly(activeOnly)
-        .AsNoTracking(asNoTracking);        
+        .AsNoTracking(asNoTracking);
 
       if (referralStatusId.HasValue)
       {
@@ -765,7 +772,8 @@ namespace Fmas12d.Business.Services
       return true; 
     }
 
-    private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
+    private void UpdateAssessmentDetails(
+      AssessmentUpdate model, Entities.Assessment entity)
     {
       if (entity.HasDetails)
       {
@@ -947,7 +955,9 @@ namespace Fmas12d.Business.Services
       model.MapToEntity(entity);
       UpdateModified(entity);
 
-      AddUserAssessmentNotification(entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      AddUserAssessmentNotification(
+        entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+
       foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
       {
         AddUserAssessmentNotification(
@@ -971,7 +981,9 @@ namespace Fmas12d.Business.Services
     /// <summary>
     /// Update the doctor statuses checking that the doctors are those expected
     /// </summary>
-    private void UpdateDoctorStatuses(AssessmentOutcome model, Entities.Assessment entity)
+    private void UpdateDoctorStatuses(
+      AssessmentOutcome model, Entities.Assessment entity
+    )
     {
       int[] attendingDoctorIds = model.AttendingDoctors.Select(d => d.Id).ToArray();
       Entities.AssessmentDoctor[] allocatedDoctors = entity.Doctors

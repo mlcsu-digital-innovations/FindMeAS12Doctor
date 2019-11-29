@@ -9,7 +9,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     {
       AddOrUpdate(
         Models.Speciality.CHILD,
-        UserSeeder.DISPLAY_NAME_DOCTOR_S12_APPROVED
+        UserSeeder.DISPLAY_NAME_DOCTOR_MALE
       );
     }
 

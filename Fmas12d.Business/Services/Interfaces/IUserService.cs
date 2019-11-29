@@ -1,6 +1,6 @@
+using Fmas12d.Business.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fmas12d.Business.Models;
 
 namespace Fmas12d.Business.Services
 {
@@ -18,12 +18,13 @@ namespace Fmas12d.Business.Services
       bool asNoTracking = true, 
       bool activeOnly = true
     );
-    Task<IEnumerable<User>> GetAllAsync(bool activeOnly);
     Task<IEnumerable<Models.User>> GetAllByAmhpName(
       string amhpName, bool asNoTracking = true, bool activeOnly = true);
     Task<IEnumerable<Models.User>> GetAllByDoctorName(
       string doctorName, bool asNoTracking = true, bool activeOnly = true);
     Task<IEnumerable<Models.User>> GetAllByGmcNumber(
       int gmcNumber, bool asNoTracking = true, bool activeOnly = true);
+    Task<User> GetByIdentityServerIdentifierAsync(
+      string identityServerIdentifier, bool asNoTracking = true, bool activeOnly = true);
   }
 }

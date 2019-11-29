@@ -1,20 +1,22 @@
-using AutoMapper;
-using System.Threading.Tasks;
+using Entities = Fmas12d.Data.Entities;
+using Fmas12d.Business.Exceptions;
+using Fmas12d.Business.Extensions;
+using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Fmas12d.Business.Models;
-using Entities = Fmas12d.Data.Entities;
-using Fmas12d.Business.Extensions;
 using System.Linq;
-using Fmas12d.Business.Exceptions;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public class UserService
-: ServiceBase<User, Entities.User>, IModelService<User>, IUserService
+  public class UserService : 
+    ServiceBaseNoAutoMapper<Entities.User>, 
+    IUserService
   {
-    public UserService(ApplicationContext context, IMapper mapper)
-      : base("User", context, mapper)
+    public UserService(
+      ApplicationContext context,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     {
     }
 
@@ -74,23 +76,6 @@ namespace Fmas12d.Business.Services
       return true;      
     }
 
-    public async Task<IEnumerable<Models.User>> GetAllAsync(
-      bool activeOnly)
-    {
-
-      IEnumerable<Entities.User> entities =
-        await _context.Users
-                      .Include(u => u.GenderType)
-                      .Include(u => u.ProfileType)
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .ToListAsync();
-
-      IEnumerable<Models.User> models =
-        _mapper.Map<IEnumerable<Models.User>>(entities);
-
-      return models;
-    }
-
     public async Task<IEnumerable<Models.User>> GetAllByAmhpName(
       string amhpName,
       bool asNoTracking = true,
@@ -125,6 +110,21 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
+    public async Task<User> GetByIdentityServerIdentifierAsync(
+      string identityServerIdentifier,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+       User model = await _context.Users
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(u => u.IdentityServerIdentifier == identityServerIdentifier)
+        .AsNoTracking(asNoTracking)
+        .Select(User.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }    
+
     private async Task<IEnumerable<Models.User>> GetAllByNameAndProfileTypeId(
       string name,
       int profileTypeId,
@@ -141,52 +141,5 @@ namespace Fmas12d.Business.Services
 
       return models;
     }
-
-    protected override async Task<Entities.User> GetEntityByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
-    {
-      Entities.User entity = await
-        _context.Users
-                .Include(u => u.GenderType)
-                .Include(u => u.ProfileType)
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(user => user.Id == entityId);
-
-      return entity;
-    }
-
-    public async Task<Entities.User> GetEntityDetailsByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly) 
-    {
-      Entities.User entity = await
-        _context.Users
-                .Include(u => u.GenderType)
-                .Include(u => u.ProfileType)
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(user => user.Id == entityId);
-
-      return entity;
-    }
-
-    protected override async Task<Entities.User> GetEntityWithNoIncludesByIdAsync(
-      int entityId,
-      bool asNoTracking,
-      bool activeOnly)
-    {
-      Entities.User entity = await
-        _context.Users
-                .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(asNoTracking)
-                .SingleOrDefaultAsync(user => user.Id == entityId);
-
-      return entity;
-    }
-    
   }
 }

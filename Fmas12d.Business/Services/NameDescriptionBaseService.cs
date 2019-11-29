@@ -1,8 +1,9 @@
+using Fmas12d.Business.Extensions;
+using Fmas12d.Business.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fmas12d.Business.Extensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fmas12d.Business.Services
 {
@@ -10,19 +11,21 @@ namespace Fmas12d.Business.Services
     ServiceBaseNoAutoMapper<TEntity>, INameDescriptionBaseService 
       where TEntity : Data.Entities.NameDescription
   {
-    protected NameDescriptionBaseService(ApplicationContext context)
-      : base(context)
+    protected NameDescriptionBaseService(
+      ApplicationContext context,
+      IAppClaimsPrincipal appClaimsPrincipal)
+      : base(context, appClaimsPrincipal)
     { }
 
-    public async Task<IEnumerable<Models.NameDescription>> GetNameDescriptions(
+    public async Task<IEnumerable<NameDescription>> GetNameDescriptions(
       bool asNoTracking = true,
       bool activeOnly = true)
     {
-      IEnumerable<Models.NameDescription> models = await _context
+      IEnumerable<NameDescription> models = await _context
         .Set<TEntity>()
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
-        .Select(Models.NameDescription.ProjectFromEntity)
+        .Select(NameDescription.ProjectFromEntity)
         .ToListAsync();
 
       return models;

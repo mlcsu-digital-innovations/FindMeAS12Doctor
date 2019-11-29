@@ -3,21 +3,29 @@ using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class ProfileTypesSeeder : SeederBase<ProfileType>
+  public class ProfileTypesSeeder : SeederBase<ProfileType>
   {
-    #region
-    internal const string DESCRIPTION_AMHP = "AMHP Description";
-    internal const string DESCRIPTION_DOCTOR = "Doctor Description";
-    internal const string DESCRIPTION_FINANCE = "Finance Description";
-    internal const string DESCRIPTION_SYSTEM = "System Description";
-    internal const string NAME_AMHP = "AMHP";
-    internal const string NAME_DOCTOR = "Doctor";
-    internal const string NAME_FINANCE = "Finance";
-    internal const string NAME_SYSTEM = "System";      
+    #region Constants
+    public const string DESCRIPTION_ADMIN = "Admin Description";
+    public const string DESCRIPTION_AMHP = "AMHP Description";
+    public const string DESCRIPTION_DOCTOR = "Doctor Description";
+    public const string DESCRIPTION_FINANCE = "Finance Description";
+    public const string DESCRIPTION_SYSTEM = "System Description";
+    public const string NAME_ADMIN = "Admin";
+    public const string NAME_AMHP = "AMHP";
+    public const string NAME_DOCTOR = "Doctor";
+    public const string NAME_FINANCE = "Finance";
+    public const string NAME_SYSTEM = "System";      
     #endregion
 
-    internal void SeedData()
+    public void SeedData()
     {
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ProfileType.ADMIN,
+        NAME_ADMIN,
+        DESCRIPTION_ADMIN
+      );      
+
       AddOrUpdateNameDescriptionEntityById(
         Models.ProfileType.AMHP,
         NAME_AMHP,

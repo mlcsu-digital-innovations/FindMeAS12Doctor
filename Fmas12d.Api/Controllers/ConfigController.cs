@@ -1,12 +1,12 @@
-using System;
-using System.Threading.Tasks;
+using Fmas12d.Api.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using Mep.Api.Models;
+using System.Threading.Tasks;
 
 namespace Mep.Api.Controllers
 {
