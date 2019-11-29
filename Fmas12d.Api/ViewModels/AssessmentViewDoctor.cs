@@ -6,6 +6,7 @@ namespace Fmas12d.Api.ViewModels
     {
       DisplayName = model.DoctorUser.DisplayName;
       Distance = model.Distance;
+      DoctorId = model.DoctorUserId;
       GmcNumber = model.DoctorUser.GmcNumber;
       Id = model.Id;      
       KnownLocation = new Location(model.KnownLocation);
@@ -13,6 +14,7 @@ namespace Fmas12d.Api.ViewModels
 
     public string DisplayName { get; set; }
     public decimal? Distance { get; set; }
+    public int DoctorId { get; set; }
     public int? GmcNumber { get; set; }
     public int Id { get; set; }
     public Location KnownLocation { get; set; }

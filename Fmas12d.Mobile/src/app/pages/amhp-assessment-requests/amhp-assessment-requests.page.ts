@@ -31,7 +31,6 @@ export class AmhpAssessmentRequestsPage implements OnInit {
     request
       .subscribe(
         result => {
-          console.log(result);
           this.assessmentRequests = result;
           this.closeLoading();
         }, error => {

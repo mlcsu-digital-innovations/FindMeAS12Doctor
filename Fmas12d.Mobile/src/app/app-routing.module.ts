@@ -45,6 +45,12 @@ const routes: Routes = [
     loadChildren: './pages/amhp-assessment-request-response/amhp-assessment-request-response.module' +
     '#AmhpAssessmentRequestResponsePageModule'
   },
+  {
+    path: 'amhp-assessment-accept-request',
+    loadChildren: './pages.amhp-assessment-accept-request/amhp-assessment-accept-request.module' +
+    '#AmhpAssessmentAcceptRequestPageModule'
+  },
+
 
 ];
 
