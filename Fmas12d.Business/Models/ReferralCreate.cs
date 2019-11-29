@@ -11,13 +11,11 @@ namespace Fmas12d.Business.Models
       if (entity == null) return;
 
       CreatedAt = entity.CreatedAt;
-      CreatedByUserId = entity.CreatedByUserId;
       PatientId = entity.PatientId;
       LeadAmhpUserId = entity.LeadAmhpUserId;
     }
 
     public DateTimeOffset CreatedAt { get; set; }
-    public int CreatedByUserId { get; set; }
     public int PatientId { get; set; }
     public int LeadAmhpUserId { get; set; }
 
@@ -26,7 +24,6 @@ namespace Fmas12d.Business.Models
       Data.Entities.Referral entity = new Data.Entities.Referral()
       {
         CreatedAt = CreatedAt,
-        CreatedByUserId = CreatedByUserId,
         PatientId = PatientId,
         LeadAmhpUserId = LeadAmhpUserId
       };

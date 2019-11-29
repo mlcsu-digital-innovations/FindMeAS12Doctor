@@ -85,17 +85,18 @@ namespace Fmas12d.Api.Controllers
         IEnumerable<Business.Models.Assessment> businessModels = null;
         if (requestModel.AmhpUserId.HasValue)
         {
-          businessModels = await Service.GetAllFilterByAmhpUserIdAsync(
+          businessModels = await Service.GetListByAmhpUserIdAsync(
             requestModel.AmhpUserId.Value, 
-            requestModel.Scheduled ?? false,
+            requestModel.ReferralStatusId,
             true, 
             true);
         }
         else if (requestModel.DoctorUserId.HasValue)
         {
-          businessModels = await Service.GetAllFilterByDoctorUserIdAsync(
+          businessModels = await Service.GetListByDoctorUserIdAsync(
             requestModel.DoctorUserId.Value,
-            requestModel.Scheduled ?? false,
+            requestModel.DoctorStatusId,
+            requestModel.ReferralStatusId,
             true, 
             true);
         }
