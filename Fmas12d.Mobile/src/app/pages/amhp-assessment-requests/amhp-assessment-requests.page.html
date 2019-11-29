@@ -29,7 +29,7 @@
           <ion-item
             *ngFor="let assessment of assessmentRequests"
             detail="false"
-            [routerLink]="['/amhp-assessment-view/', assessment.id]"
+            [routerLink]="['/amhp-assessment-request-response/', assessment.id]"
             routerDirection="forward"
           >
             {{assessment.dateTime | date: "d MMM yy H:mm"}}

@@ -40,6 +40,12 @@ const routes: Routes = [
     loadChildren: './pages/amhp-assessment-requests/amhp-assessment-requests.module' +
     '#AmhpAssessmentRequestsPageModule'
   },
+  {
+    path: 'amhp-assessment-request-response/:id',
+    loadChildren: './pages/amhp-assessment-request-response/amhp-assessment-request-response.module' +
+    '#AmhpAssessmentRequestResponsePageModule'
+  },
+
 ];
 
 @NgModule({
