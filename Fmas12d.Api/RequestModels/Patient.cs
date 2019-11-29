@@ -7,8 +7,8 @@ namespace Fmas12d.Api.RequestModels
 {
   public abstract class Patient : IValidatableObject
   {
-    protected Patient() {}
-    
+    protected Patient() { }
+
     protected Patient(Business.Models.Patient model)
     {
       if (model == null) return;
@@ -31,17 +31,13 @@ namespace Fmas12d.Api.RequestModels
     [MaxLength(10)]
     public string ResidentialPostcode { get; set; }
 
-    internal virtual Business.Models.Patient MapToBusinessModel()
+    internal virtual void MapToBusinessModel(Business.Models.Patient model)
     {
-      Business.Models.Patient model = new Business.Models.Patient()
-      {
-        AlternativeIdentifier = AlternativeIdentifier,
-        CcgId = CcgId,
-        GpPracticeId = GpPracticeId,
-        NhsNumber = NhsNumber,
-        ResidentialPostcode = ResidentialPostcode
-      };
-      return model;
+      model.AlternativeIdentifier = AlternativeIdentifier;
+      model.CcgId = CcgId;
+      model.GpPracticeId = GpPracticeId;
+      model.NhsNumber = NhsNumber;
+      model.ResidentialPostcode = ResidentialPostcode;
     }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

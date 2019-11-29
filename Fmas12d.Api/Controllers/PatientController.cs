@@ -17,14 +17,15 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPost]
-    public virtual async Task<ActionResult<ViewModels.PatientPost>> Post(
+    public virtual async Task<ActionResult<ViewModels.Patient>> Post(
       [FromBody] RequestModels.PatientPost requestModel)
     {
       try
       {
-        Business.Models.Patient businessModel = requestModel.MapToBusinessModel();
+        Business.Models.Patient businessModel = new Business.Models.Patient();
+        requestModel.MapToBusinessModel(businessModel);
         businessModel = await Service.CreateAsync(businessModel);
-        ViewModels.PatientPost viewModel = new ViewModels.PatientPost(businessModel);
+        ViewModels.Patient viewModel = new ViewModels.Patient(businessModel);
 
         return Created(GetCreatedModelUri(viewModel.Id), viewModel);
       }
@@ -32,7 +33,29 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }    
+    }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    public virtual async Task<ActionResult<ViewModels.Patient>> Put(
+      int id,
+      [FromBody] RequestModels.PatientPut requestModel)
+    {
+      try
+      {
+        Business.Models.Patient businessModel = new Business.Models.Patient();
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel.Id = id;
+        businessModel = await Service.UpdateAsync(businessModel);
+        ViewModels.Patient viewModel = new ViewModels.Patient(businessModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }      
 
     [Route("search")]
     [HttpGet]

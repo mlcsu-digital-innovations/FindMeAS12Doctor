@@ -128,7 +128,8 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.ReferralCreate businessModel = requestModel.MapToBusinessModel();
+        Business.Models.ReferralCreate businessModel = new Business.Models.ReferralCreate();
+        requestModel.MapToBusinessModel(businessModel);
         Business.Models.Referral createdModel = await Service.CreateAsync(businessModel);
         ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(createdModel);
 
@@ -138,7 +139,72 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }     
+    }  
 
+    [HttpPost]
+    [Route("retrospective")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> PostRetrospective(
+      [FromBody] RequestModels.ReferralRetrospectivePost requestModel)
+    {
+      try
+      {
+        Business.Models.ReferralCreate businessModel = new Business.Models.ReferralCreate();
+        requestModel.MapToBusinessModel(businessModel);
+        Business.Models.Referral createdModel = 
+          await Service.CreateRetrospectiveAsync(businessModel);
+        ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(createdModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> Put(
+      int id,
+      [FromBody] RequestModels.ReferralPut requestModel)
+    {
+      try
+      {
+        Business.Models.ReferralUpdate businessModel = new Business.Models.ReferralUpdate();        
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel.Id = id;
+        Business.Models.Referral updateModel = await Service.UpdateAsync(businessModel);
+        ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(updateModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }  
+
+    [HttpPut]
+    [Route("{id:int}/retrospective")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> PutRetrospective(
+      int id,
+      [FromBody] RequestModels.ReferralRetrospectivePut requestModel)
+    {
+      try
+      {
+        Business.Models.ReferralUpdate businessModel = new Business.Models.ReferralUpdate();
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel.Id = id;
+        Business.Models.Referral updatedModel = 
+          await Service.UpdateRetrospectiveAsync(businessModel);
+        ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(updatedModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }          
   }
 }
