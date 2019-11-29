@@ -22,5 +22,6 @@ namespace Fmas12d.Business.Services
       bool asNoTracking = false, 
       bool activeOnly = false,
       bool onlyCurrentReferral = true);
+    Task<Patient> UpdateAsync(Patient model);
   }
 }

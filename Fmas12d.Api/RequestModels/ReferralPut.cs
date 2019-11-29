@@ -2,9 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class ReferralPut : Referral
+  public class ReferralPut
   {
     [Required]
-    public bool? IsActive { get; set; }
+    public int? LeadAmhpUserId { get; set; }
+
+    internal virtual void MapToBusinessModel(Business.Models.ReferralUpdate model)
+    {      
+      model.LeadAmhpUserId = LeadAmhpUserId.Value;
+    }    
   }
 }
