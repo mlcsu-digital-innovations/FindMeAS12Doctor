@@ -12,7 +12,10 @@ namespace Fmas12d.Api.Controllers
   
   public class LocationDetailsController : ModelControllerNoAutoMapper
   {
-    public LocationDetailsController(ILocationDetailService service) : base(service)
+    public LocationDetailsController(
+      ILocationDetailService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
 

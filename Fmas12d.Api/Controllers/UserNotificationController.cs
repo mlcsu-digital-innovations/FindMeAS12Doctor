@@ -14,8 +14,10 @@ namespace Fmas12d.Api.Controllers
   
   public class UserNotificationController : ModelControllerNoAutoMapper
   {
-    public UserNotificationController(IUserNotificationService service)
-      : base(service)
+    public UserNotificationController(
+      IUserClaimsService userClaimsService,
+      IUserNotificationService service)
+      : base(userClaimsService, service)
     {
     }
 

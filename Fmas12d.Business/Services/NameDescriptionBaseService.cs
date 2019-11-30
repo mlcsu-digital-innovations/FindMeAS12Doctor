@@ -13,8 +13,8 @@ namespace Fmas12d.Business.Services
   {
     protected NameDescriptionBaseService(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     { }
 
     public async Task<IEnumerable<NameDescription>> GetNameDescriptions(

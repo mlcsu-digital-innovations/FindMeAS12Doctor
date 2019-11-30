@@ -9,8 +9,10 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy="User")]
   public class GenderTypeController : IdNameDescriptionBaseController
   {
-    public GenderTypeController(IGenderTypeService service)
-      : base(service)
+    public GenderTypeController(
+      IUserClaimsService userClaimsService,
+      IGenderTypeService service)
+      : base(userClaimsService, service)
     {
     }
   }

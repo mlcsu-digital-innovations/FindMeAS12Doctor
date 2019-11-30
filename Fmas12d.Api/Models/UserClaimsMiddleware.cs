@@ -85,7 +85,7 @@ namespace Fmas12d.Models
 
             List<Claim> userIdClaim = new List<Claim>
           {
-            new Claim(AppClaimsPrincipal.CLAIM_USERID, userId.ToString())
+            new Claim(UserClaimsService.CLAIM_USERID, userId.ToString())
           };
 
             ClaimsIdentity appIdentity = new ClaimsIdentity(userIdClaim);

@@ -14,8 +14,10 @@ namespace Fmas12d.Api.Controllers
   public abstract class SearchBaseController<BusinessModel> : ModelControllerNoAutoMapper
       where BusinessModel : Business.Models.BaseModel
   {
-    protected SearchBaseController(ISearchService service) 
-      : base(service) 
+    protected SearchBaseController(      
+      IUserClaimsService userClaimsService,
+      ISearchService service      ) 
+      : base(userClaimsService, service)
     {
     }
     

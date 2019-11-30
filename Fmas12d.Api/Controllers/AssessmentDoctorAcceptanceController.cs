@@ -12,8 +12,10 @@ namespace Fmas12d.Api.Controllers
   
   public class AssessmentDoctorAcceptanceController : ModelControllerNoAutoMapper
   {
-    public AssessmentDoctorAcceptanceController(IAssessmentService service)
-      : base(service)
+    public AssessmentDoctorAcceptanceController(
+      IUserClaimsService userClaimsService,
+      IAssessmentService service)
+      : base(userClaimsService, service)
     {
     }
 

@@ -10,14 +10,14 @@ namespace Fmas12d.Business.Services
     where TEntity : BaseEntity
   {
     protected readonly ApplicationContext _context;
-    protected readonly IAppClaimsPrincipal _appClaimsPrincipal;
+    protected readonly IUserClaimsService _userClaimsService;
 
     protected ServiceBaseNoAutoMapper(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal
+      IUserClaimsService userClaimsService
     )
     {
-      _appClaimsPrincipal = appClaimsPrincipal;
+      _userClaimsService = userClaimsService;
       _context = context;
     }
 
@@ -32,7 +32,7 @@ namespace Fmas12d.Business.Services
 
     protected void UpdateModified(IBaseEntity entity)
     {
-      entity.ModifiedByUserId = _appClaimsPrincipal.GetUserId();
+      entity.ModifiedByUserId = _userClaimsService.GetUserId();
       entity.ModifiedAt = DateTimeOffset.Now;
     }
 

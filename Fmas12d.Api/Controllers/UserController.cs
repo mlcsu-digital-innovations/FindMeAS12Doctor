@@ -13,8 +13,10 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy="User")]
   public class UserController : ModelControllerNoAutoMapper
   {
-    public UserController(IUserService service)
-      : base(service)
+    public UserController(
+      IUserClaimsService userClaimsService,
+      IUserService service)
+      : base(userClaimsService, service)
     {
     }
 

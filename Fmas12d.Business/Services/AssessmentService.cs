@@ -29,8 +29,8 @@ namespace Fmas12d.Business.Services
       IReferralService referralService,
       IUserService userService,
       IUserAvailabilityService userAvailabilityService,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;

@@ -20,8 +20,8 @@ namespace Fmas12d.Business.Services
       ApplicationContext context,
       IContactDetailsService contactDetailsService,
       ILocationDetailService locationDetailService,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;

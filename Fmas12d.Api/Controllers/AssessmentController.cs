@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
@@ -16,7 +15,10 @@ namespace Fmas12d.Api.Controllers
   {
     private IAssessmentService Service { get { return _service as IAssessmentService; } }
 
-    public AssessmentController(IAssessmentService service) : base(service)
+    public AssessmentController(
+      IUserClaimsService userClaimsService,
+      IAssessmentService service) 
+      : base(userClaimsService, service)
     {
     }
 

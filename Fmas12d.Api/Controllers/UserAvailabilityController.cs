@@ -12,8 +12,10 @@ namespace Fmas12d.Api.Controllers
   
   public class UserAvailabilityController : ModelControllerNoAutoMapper
   {
-    public UserAvailabilityController(IUserAvailabilityService service)
-      : base(service)
+    public UserAvailabilityController(      
+      IUserAvailabilityService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
 

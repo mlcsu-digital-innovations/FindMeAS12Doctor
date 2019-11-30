@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace Fmas12d.Business.Models
+namespace Fmas12d.Business.Services
 {
-  public class AppClaimsPrincipal : IAppClaimsPrincipal
+  public class UserClaimsService : IUserClaimsService
   {
     public const string CLAIM_USERID ="userId";
     private readonly IHttpContextAccessor _httpContextAccessor;    
 
-    public AppClaimsPrincipal(
+    public UserClaimsService(
       IHttpContextAccessor httpContextAccessor
     )
     {
