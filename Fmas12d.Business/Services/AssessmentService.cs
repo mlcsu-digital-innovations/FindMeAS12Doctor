@@ -183,13 +183,13 @@ namespace Fmas12d.Business.Services
 
         Entities.AssessmentDoctor assessmentDoctor = new Entities.AssessmentDoctor()
         {
-          ContactDetailId = availabilityDoctor.ContactDetailId,
+          ContactDetailId = availabilityDoctor.Location.ContactDetailId,
           Distance = availabilityDoctor.Distance,
           DoctorUserId = userId,
           IsActive = true,
-          Latitude = availabilityDoctor.Latitude,
-          Longitude = availabilityDoctor.Longitude,
-          Postcode = availabilityDoctor.Postcode,
+          Latitude = availabilityDoctor.Location.Latitude,
+          Longitude = availabilityDoctor.Location.Longitude,
+          Postcode = availabilityDoctor.Location.Postcode,
           StatusId = Models.AssessmentDoctorStatus.SELECTED,
         };
         UpdateModified(assessmentDoctor);
@@ -437,7 +437,7 @@ namespace Fmas12d.Business.Services
       {
         Models.Assessment model = new Models.Assessment(entity);
 
-        model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
+        model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctorsAsync(
           model.DateTime, true, true);
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
@@ -445,8 +445,8 @@ namespace Fmas12d.Business.Services
           availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
             entity.Latitude,
             entity.Longitude,
-            availabilityDoctor.Latitude,
-            availabilityDoctor.Longitude
+            availabilityDoctor.Location.Latitude,
+            availabilityDoctor.Location.Longitude
           );
         }
 
@@ -702,7 +702,7 @@ namespace Fmas12d.Business.Services
       else
       {
         Dictionary<int, Location> doctorPostcodes =
-          await _userAvailabilityService.GetDoctorsPostcodeAt(
+          await _userAvailabilityService.GetDoctorsPostcodeAtAsync(
             model.DoctorsSelected.Select(d => d.Id).ToList(),
             model.DateTime,
             true,

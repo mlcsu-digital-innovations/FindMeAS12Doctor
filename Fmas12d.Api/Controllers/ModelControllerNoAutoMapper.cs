@@ -60,7 +60,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }
+    }    
 
     protected int GetUserId()
     {
@@ -73,20 +73,31 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessModelStateException(exception as Business.Exceptions.ModelStateException);
       }
-      else if (exception is Business.Exceptions.MissingSearchParameterException)
+      if (exception is Business.Exceptions.MissingSearchParameterException)
       {
+        Serilog.Log.Information(exception, exception.Message);
         return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
       }
-      else if (exception is Business.Exceptions.EntityNotFoundException)
+      if (exception is Business.Exceptions.EntityNotFoundException)
       {
+        Serilog.Log.Warning(exception, exception.Message);
         return StatusCode(StatusCodes.Status404NotFound, exception.Message);
       }
-      else if (exception is Business.Exceptions.SerilogException serilogEx)
+      if (exception is UnauthorizedAccessException)
+      {
+        Serilog.Log.Information(exception, exception.Message);
+        return StatusCode(StatusCodes.Status403Forbidden, exception.Message);
+      }      
+      if (exception is Business.Exceptions.SerilogException serilogEx)
       {
         Serilog.Log.Error(serilogEx, serilogEx.MessageTemplate, serilogEx.PropertyValues);
         if (exception is Business.Exceptions.AssessmentAlreadyHasOutcomeException ex)
         {
           return StatusCode(StatusCodes.Status409Conflict, ex.Message);
+        }
+        else
+        {
+          return StatusCode(StatusCodes.Status500InternalServerError, exception.Message);    
         }
       }
       

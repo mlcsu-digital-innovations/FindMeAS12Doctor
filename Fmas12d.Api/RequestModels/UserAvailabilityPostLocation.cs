@@ -14,8 +14,8 @@ namespace Fmas12d.Api.RequestModels
     internal override Business.Models.UserAvailability MapToBusinessModel(int userId)
     {
       base.MapToBusinessModel(userId);
-      _model.Latitude = Latitude.Value;
-      _model.Longitude = Longitude.Value;
+      _model.Location.Latitude = Latitude.Value;
+      _model.Location.Longitude = Longitude.Value;
       return _model;
     }
   }

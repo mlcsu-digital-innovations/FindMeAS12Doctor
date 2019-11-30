@@ -10,11 +10,8 @@ namespace Fmas12d.Business.Models
     {
       if (entity == null) return;
 
-      ContactDetailId = entity.ContactDetailId;
       End = entity.End;
-      Latitude = entity.Latitude;
-      Longitude = entity.Longitude;
-      Postcode = entity.Postcode;
+      Location = new Location(entity);
       Start = entity.Start;
       // TODO Status = ;
       StatusId = entity.UserAvailabilityStatusId;
@@ -22,11 +19,8 @@ namespace Fmas12d.Business.Models
       UserId = entity.UserId;
     }
 
-    public int? ContactDetailId { get; set; }
     public DateTimeOffset End { get; set; }
-    public decimal Latitude { get; set; }
-    public decimal Longitude { get; set; }
-    public string Postcode { get; set; }
+    public Location Location { get; set; }
     public DateTimeOffset Start { get; set; }
     public IUserAvailabilityStatus Status { get; set; }
     public int StatusId { get; set; }
@@ -37,11 +31,11 @@ namespace Fmas12d.Business.Models
     {
       if (entity == null) return;
 
-      entity.ContactDetailId = ContactDetailId;
+      entity.ContactDetailId = Location.ContactDetailId;
       entity.End = End;      
-      entity.Latitude = Latitude;
-      entity.Longitude = Longitude;
-      entity.Postcode = Postcode;
+      entity.Latitude = Location.Latitude;
+      entity.Longitude = Location.Longitude;
+      entity.Postcode = Location.Postcode;
       entity.Start = Start;
       entity.UserAvailabilityStatusId = StatusId;
       entity.UserId = UserId;
