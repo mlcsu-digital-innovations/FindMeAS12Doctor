@@ -33,6 +33,8 @@ namespace Fmas12d.Business.Helpers
       double miles = (c * r) / 1000 / 1.609344;
 
       miles = Math.Truncate(miles * 1000) / 1000;
+      // prevent test data from generating errors
+      miles = miles > 999 ? 999 : miles;
 
       return (decimal)miles;
     }
