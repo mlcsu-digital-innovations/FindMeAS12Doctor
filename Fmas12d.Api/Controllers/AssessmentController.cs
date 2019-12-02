@@ -79,47 +79,29 @@ namespace Fmas12d.Api.Controllers
     } 
 
     [HttpGet]
-    [Route("")]
+    [Route("list")]
     public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
       RequestModels.AssessmentListSearch requestModel)
     {
-      try
-      {
-        IEnumerable<Business.Models.Assessment> businessModels = null;
-        if (requestModel.AmhpUserId.HasValue)
-        {
-          businessModels = await Service.GetListByAmhpUserIdAsync(
-            requestModel.AmhpUserId.Value, 
-            requestModel.ReferralStatusId,
-            true, 
-            true);
-        }
-        else if (requestModel.DoctorUserId.HasValue)
-        {
-          businessModels = await Service.GetListByDoctorUserIdAsync(
-            requestModel.DoctorUserId.Value,
-            requestModel.DoctorStatusId,
-            requestModel.ReferralStatusId,
-            true, 
-            true);
-        }
+      return await GetListInternal(
+        GetUserId(), 
+        requestModel.DoctorStatusId, 
+        requestModel.ReferralStatusId
+      );
+    }
 
-        if (businessModels == null || !businessModels.Any())
-        {
-          return NoContent();
-        }
-        else
-        {          
-          IEnumerable<ViewModels.AssessmentList> viewModels =
-            businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
-
-          return Ok(viewModels);
-        }
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
+    [HttpGet]
+    [Route("list/{userId:int}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList(
+      int userId,
+      [FromQuery] RequestModels.AssessmentListSearch requestModel)
+    {
+      return await GetListInternal(
+        userId, 
+        requestModel.DoctorStatusId, 
+        requestModel.ReferralStatusId
+      );
     }
 
     [HttpGet]
@@ -283,6 +265,40 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
+    }
+
+    private async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetListInternal(
+      int userId, 
+      int? doctorStatusId, 
+      int? referralStatusId
+    )
+    {
+      try
+      {
+        IEnumerable<Business.Models.Assessment> businessModels = 
+        await Service.GetListByUserIdAsync(
+            userId,
+            doctorStatusId,
+            referralStatusId,
+            true, 
+            true);
+
+        if (businessModels == null || !businessModels.Any())
+        {
+          return NoContent();
+        }
+        else
+        {          
+          IEnumerable<ViewModels.AssessmentList> viewModels =
+            businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
+
+          return Ok(viewModels);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }      
     }
 
     private async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcome(

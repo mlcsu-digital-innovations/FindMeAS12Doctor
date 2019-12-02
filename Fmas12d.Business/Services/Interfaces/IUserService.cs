@@ -26,5 +26,6 @@ namespace Fmas12d.Business.Services
       int gmcNumber, bool asNoTracking = true, bool activeOnly = true);
     Task<User> GetByIdentityServerIdentifierAsync(
       string identityServerIdentifier, bool asNoTracking = true, bool activeOnly = true);
+    Task<int> GetByProfileTypeId(int userId, bool asNoTracking, bool activeOnly);
   }
 }

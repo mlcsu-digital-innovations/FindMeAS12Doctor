@@ -85,7 +85,7 @@ namespace Fmas12d.Business.Services
     }
 
     private void AddAssessmentDetail(
-      int assessmentDetailTypeId, 
+      int assessmentDetailTypeId,
       Entities.Assessment entity
     )
     {
@@ -454,7 +454,38 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    public async Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
+
+    public async Task<IEnumerable<Assessment>> GetListByUserIdAsync(
+      int userId,
+      int? doctorStatusId,
+      int? referralStatusId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      int userProfileTypeId = await _userService.GetByProfileTypeId(
+        userId,
+        asNoTracking,
+        activeOnly
+      );
+
+      return userProfileTypeId switch
+      {
+        0 => throw new ModelStateException("userId",
+              $"An active user with an id of {userId} cannot be found."),
+
+        ProfileType.AMHP => await GetListByAmhpUserIdAsync(
+          userId, referralStatusId, asNoTracking, activeOnly),
+
+        ProfileType.DOCTOR => await GetListByDoctorUserIdAsync(
+          userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
+
+        _ => throw new ModelStateException("userId",
+             "Assessments cannot be associated with a User that has a ProfileType of " +
+              $"{userProfileTypeId}."),
+      };
+    }
+
+    private async Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
       int amhpUserId,
       int? referralStatusId,
       bool asNoTracking,
@@ -473,11 +504,13 @@ namespace Fmas12d.Business.Services
       }
 
       IEnumerable<Assessment> models = await query
-        .Select(a => new Assessment {
+        .Select(a => new Assessment
+        {
           Id = a.Id,
           MustBeCompletedBy = a.MustBeCompletedBy,
           Postcode = a.Postcode,
-          Referral = new Referral {
+          Referral = new Referral
+          {
             ReferralStatusId = a.Referral.ReferralStatusId
           },
           ScheduledTime = a.ScheduledTime
@@ -487,7 +520,7 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    public async Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(
+    private async Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(
       int doctorUserId,
       int? doctorStatusId,
       int? referralStatusId,
@@ -510,21 +543,24 @@ namespace Fmas12d.Business.Services
       if (doctorStatusId.HasValue)
       {
         query = query.Where(a => a.Doctors.Any(d => d.Status.Id == doctorStatusId));
-      }              
+      }
 
       IEnumerable<Assessment> models = await query
-        .Select(a => new Assessment {
+        .Select(a => new Assessment
+        {
           Id = a.Id,
           Doctors = a.Doctors
                      .Where(d => d.DoctorUserId == doctorUserId)
-                     .Select(d => new AssessmentDoctor {                       
-                        HasAccepted = d.HasAccepted,
-                        StatusId = d.StatusId
+                     .Select(d => new AssessmentDoctor
+                     {
+                       HasAccepted = d.HasAccepted,
+                       StatusId = d.StatusId
                      })
                      .ToList(),
           MustBeCompletedBy = a.MustBeCompletedBy,
           Postcode = a.Postcode,
-          Referral = new Referral {
+          Referral = new Referral
+          {
             ReferralStatusId = a.Referral.ReferralStatusId
           },
           ScheduledTime = a.ScheduledTime
@@ -548,7 +584,7 @@ namespace Fmas12d.Business.Services
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
                 .Include(e => e.Doctors)
-                  .ThenInclude(d => d.ContactDetail)                  
+                  .ThenInclude(d => d.ContactDetail)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.Speciality)
@@ -769,7 +805,7 @@ namespace Fmas12d.Business.Services
       UpdateModified(entity.Referral);
       await _context.SaveChangesAsync();
 
-      return true; 
+      return true;
     }
 
     private void UpdateAssessmentDetails(
