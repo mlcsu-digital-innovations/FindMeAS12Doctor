@@ -22,16 +22,15 @@ export class AmhpAssessmentRequestsPage implements OnInit {
     private loadingController: LoadingController) { }
 
   ngOnInit() {
-    this.assessmentRequestsLastUpdated = new Date();
 
     const request = this.assessmentService.getRequests(4);
-
     this.showLoading();
 
     request
       .subscribe(
         result => {
           this.assessmentRequests = result;
+          this.assessmentRequestsLastUpdated = new Date();
           this.closeLoading();
         }, error => {
           this.closeLoading();

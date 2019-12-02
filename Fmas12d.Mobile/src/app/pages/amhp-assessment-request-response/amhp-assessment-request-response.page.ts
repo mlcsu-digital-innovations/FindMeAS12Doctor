@@ -74,13 +74,12 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
   }
 
   declineRequest() {
-    console.log('decline request');
 
     this.assessmentService.declineAssessmentRequest(this.assessmentId, this.assessmentRequest.doctorDetails.doctorId)
       .subscribe(
         result => {
           this.showSuccessToast('Request declined');
-          this.navController.back();
+          this.router.navigateByUrl('/amhp-assessment-requests');
         },
         error => {
           this.showErrorToast('Unable to decline request');
@@ -90,7 +89,8 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines'
+      spinner: 'lines',
+      duration: 5000
     });
     await this.loading.present();
   }
