@@ -19,6 +19,17 @@ export class AmhpAssessmentService {
     private apiService: ApiService
   ) { }
 
+  public acceptRequest(
+    assessmentId: number,
+    doctorUserId: number
+    ) {
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted`,
+      null
+    ));
+  }
+
   public acceptRequestByContactDetail(
     assessmentId: number,
     doctorUserId: number,
