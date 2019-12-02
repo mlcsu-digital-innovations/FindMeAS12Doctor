@@ -19,6 +19,20 @@ export class AmhpAssessmentService {
     private apiService: ApiService
   ) { }
 
+  public acceptRequestByContactDetail(
+    assessmentId: number,
+    doctorUserId: number,
+    contactDetailId: number
+    ) {
+
+    const contactDetailObject = {contactDetailId};
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted/contactDetail`,
+      contactDetailObject
+    ));
+  }
+
   public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {   
     return (this.apiService.get(
       `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`, 
