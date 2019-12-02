@@ -33,6 +33,35 @@ export class AmhpAssessmentService {
     ));
   }
 
+  public acceptRequestByCoordinates(
+    assessmentId: number,
+    doctorUserId: number,
+    latitude: number,
+    longitude: number,
+    ) {
+
+    const coordinateObject = {latitude, longitude};
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted/location`,
+      coordinateObject
+    ));
+  }
+
+  public acceptRequestByPostcode(
+    assessmentId: number,
+    doctorUserId: number,
+    postcode: string
+    ) {
+
+    const postcodeObject = {postcode};
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted/postcode`,
+      postcodeObject
+    ));
+  }
+
   public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {   
     return (this.apiService.get(
       `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`, 
