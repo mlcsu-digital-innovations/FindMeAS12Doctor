@@ -121,26 +121,26 @@ namespace Fmas12d.Business.Migrations.Seeds
           distance: Distance.CalculateDistanceAsCrowFlies(
             RESPONSES_PARTIAL_LATITUDE,
             RESPONSES_PARTIAL_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_WORK
           ),          
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE,
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_WORK,
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(
           distance: Distance.CalculateDistanceAsCrowFlies(
             RESPONSES_PARTIAL_LATITUDE,
             RESPONSES_PARTIAL_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK
           ),          
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,          
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE,
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_WORK,
           statusId: Models.AssessmentDoctorStatus.SELECTED
         )
       };
@@ -198,26 +198,26 @@ namespace Fmas12d.Business.Migrations.Seeds
           distance: Distance.CalculateDistanceAsCrowFlies(
             AWAITING_RESPONSES_LATITUDE,
             AWAITING_RESPONSES_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK
           ),
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,          
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE,          
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_WORK,          
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(          
           distance: Distance.CalculateDistanceAsCrowFlies(
             AWAITING_RESPONSES_LATITUDE,
             AWAITING_RESPONSES_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_WORK
           ),
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE,          
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_WORK,          
           statusId: Models.AssessmentDoctorStatus.SELECTED
         )
       };
@@ -281,26 +281,26 @@ namespace Fmas12d.Business.Migrations.Seeds
           distance: Distance.CalculateDistanceAsCrowFlies(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_WORK
           ),
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE,          
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_WORK,          
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(
           distance: Distance.CalculateDistanceAsCrowFlies(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK
           ),          
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE,          
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_WORK,          
           statusId: Models.AssessmentDoctorStatus.ALLOCATED
         )
       };
@@ -413,13 +413,13 @@ namespace Fmas12d.Business.Migrations.Seeds
           distance: Distance.CalculateDistanceAsCrowFlies(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
-            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE
+            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK
           ),          
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
-          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE,
-          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE,          
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_WORK,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_WORK,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_WORK,          
           statusId: Models.AssessmentDoctorStatus.ATTENDED
         )
       };
