@@ -14,6 +14,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { environment, ProtectedResourceMap } from 'src/environments/environment';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +37,7 @@ import { environment, ProtectedResourceMap } from 'src/environments/environment'
     })
   ],
   providers: [
+    Geolocation,
     Network,
     StatusBar,
     SplashScreen,
