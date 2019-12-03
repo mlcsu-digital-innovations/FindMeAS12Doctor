@@ -10,7 +10,7 @@ namespace Fmas12d.Api.RequestModels
     internal override Business.Models.UserAvailability MapToBusinessModel(int userId)
     {
       base.MapToBusinessModel(userId);
-      _model.Postcode = Postcode;
+      _model.Location.Postcode = Postcode;
       return _model;
     }
   }

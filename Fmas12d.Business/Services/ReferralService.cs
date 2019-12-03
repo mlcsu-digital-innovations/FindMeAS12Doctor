@@ -10,19 +10,22 @@ using Fmas12d.Business.Exceptions;
 
 namespace Fmas12d.Business.Services
 {
-  public class ReferralService : ServiceBaseNoAutoMapper<Entities.Referral>, IReferralService
+  public class ReferralService : 
+    ServiceBaseNoAutoMapper<Entities.Referral>, 
+    IReferralService
   {
     private readonly IPatientService _patientService;
     private readonly IUserService _userService;
     public ReferralService(
-      ApplicationContext context,
-      IUserService userService,
-      IPatientService patientService
+      ApplicationContext context, 
+      IUserClaimsService userClaimsService,
+      IPatientService patientService,
+      IUserService userService
     )
-      : base(context)
+      : base(context, userClaimsService)
     {
-      this._patientService = patientService;
-      this._userService = userService;
+      _patientService = patientService;     
+      _userService = userService;      
     }
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
@@ -93,7 +96,7 @@ namespace Fmas12d.Business.Services
     public async Task<Referral> GetEditByIdAsync(
       int id, bool activeOnly = true, bool asNoTracking = true)
     {
-      Models.Referral model =
+      Referral model =
         await _context.Referrals
                       .Include(r => r.LeadAmhpUser)
                       .Include(r => r.Patient)
@@ -113,7 +116,7 @@ namespace Fmas12d.Business.Services
     public async Task<IEnumerable<Referral>> GetListAsync(
       bool activeOnly = true, bool asNoTracking = true)
     {
-      IEnumerable<Models.Referral> models =
+      IEnumerable<Referral> models =
         await _context.Referrals
                       .Include(r => r.Assessments)
                         .ThenInclude(e => e.Speciality)

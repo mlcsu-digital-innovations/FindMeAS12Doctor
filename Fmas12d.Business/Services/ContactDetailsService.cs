@@ -1,9 +1,9 @@
-using System.Linq;
-using System.Threading.Tasks;
+using Entities = Fmas12d.Data.Entities;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
-using Entities = Fmas12d.Data.Entities;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
@@ -11,8 +11,10 @@ namespace Fmas12d.Business.Services
   public class ContactDetailsService :
     ServiceBaseNoAutoMapper<Entities.ContactDetail>, IContactDetailsService
   {
-    public ContactDetailsService(ApplicationContext context)
-      : base(context)
+    public ContactDetailsService(
+      ApplicationContext context,
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
 
     }

@@ -11,8 +11,10 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy="User")]
   public class PatientController : ModelControllerNoAutoMapper
   {
-    public PatientController(IPatientService service)
-      : base(service)
+    public PatientController(
+      IPatientService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
 
@@ -66,11 +68,11 @@ namespace Fmas12d.Api.Controllers
       if (search.IsByNhsNumber)
       {
 
-        model = await Service.GetByNhsNumber(search.NhsNumberAsLong);
+        model = await Service.GetByNhsNumberAsync(search.NhsNumberAsLong);
       }
       else
       {
-        model = await Service.GetByAlternativeIdentifier(search.AlternativeIdentifier);
+        model = await Service.GetByAlternativeIdentifierAsync(search.AlternativeIdentifier);
       }
 
       if (model == null)

@@ -10,8 +10,10 @@ namespace Fmas12d.Api.Controllers
   
   public class SpecialityController : IdNameDescriptionBaseController
   {
-    public SpecialityController(ISpecialityService service)
-      : base (service)
+    public SpecialityController(
+      ISpecialityService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
  }

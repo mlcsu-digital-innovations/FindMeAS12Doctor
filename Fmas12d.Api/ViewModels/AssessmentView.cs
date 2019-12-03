@@ -18,7 +18,7 @@ namespace Fmas12d.Api.ViewModels
       Address4 = model.Address4;
       DateTime = model.DateTime;
       DetailTypes = model.DetailTypes
-                         .Select(dt => new AssessmentDetailType(dt)).ToList();
+                         ?.Select(dt => new AssessmentDetailType(dt)).ToList();
       Id = model.Id;
       IsSuccessful = model.IsSuccessful;
       MeetingArrangementComment = model.MeetingArrangementComment;

@@ -47,6 +47,13 @@ namespace Fmas12d.Business.Migrations.Seeds
         $"DBCC CHECKIDENT('{tableName}', RESEED, {newReseedValue})");
     }
 
+    internal virtual void ResetModifiedByUserId()
+    {
+      string tableName = GetEntityTableName();
+      Context.Database.ExecuteSqlRaw(
+        $"UPDATE dbo.{tableName} SET ModifiedByUserId = 1");
+    }
+
     protected Ccg GetCcgByName(string CcgName)
     {
       try
@@ -288,6 +295,11 @@ namespace Fmas12d.Business.Migrations.Seeds
           $"Cannot find a Profile Type with an id of {id} in ProfileTypes", ex);
       }
     }
+    protected ProfileType GetProfileTypeAdmin()
+    {
+      return GetProfileTypeById(Models.ProfileType.ADMIN);
+    }
+
     protected ProfileType GetProfileTypeAmhp()
     {
       return GetProfileTypeById(Models.ProfileType.AMHP);

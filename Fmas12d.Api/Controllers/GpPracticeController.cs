@@ -10,8 +10,9 @@ namespace Fmas12d.Api.Controllers
   public class GpPracticeController : SearchBaseController<Business.Models.GpPractice>
   {
     public GpPracticeController(
-      IGpPracticeService service)
-      : base(service)
+      IGpPracticeService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     { }
 
   }

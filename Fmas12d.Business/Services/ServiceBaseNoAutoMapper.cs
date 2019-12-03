@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Fmas12d.Business.Exceptions;
+using Fmas12d.Business.Models;
 using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Services
@@ -9,9 +10,14 @@ namespace Fmas12d.Business.Services
     where TEntity : BaseEntity
   {
     protected readonly ApplicationContext _context;
+    protected readonly IUserClaimsService _userClaimsService;
 
-    protected ServiceBaseNoAutoMapper(ApplicationContext context)
+    protected ServiceBaseNoAutoMapper(
+      ApplicationContext context,
+      IUserClaimsService userClaimsService
+    )
     {
+      _userClaimsService = userClaimsService;
       _context = context;
     }
 
@@ -24,12 +30,12 @@ namespace Fmas12d.Business.Services
       return await SetActiveStatus(id, false);
     }
 
-    /// <summary>
-    /// TODO: Get the current users sub claim
-    /// </summary>
+    protected virtual void CheckUserCanSetActiveStatus(TEntity entity, int userId)
+    { }
+
     protected void UpdateModified(IBaseEntity entity)
     {
-      entity.ModifiedByUserId = 1;
+      entity.ModifiedByUserId = _userClaimsService.GetUserId();
       entity.ModifiedAt = DateTimeOffset.Now;
     }
 
@@ -43,18 +49,21 @@ namespace Fmas12d.Business.Services
         throw new ModelStateException("Id",
           $"A {typeof(TEntity).Name} with an id of {id} was not found.");
       }
-      else if (entity.IsActive == isActivating)
+      if (entity.IsActive == isActivating)
       {
         throw new ModelStateException("Id",
-          $"{typeof(TEntity).Name} with an id of {id} is already " + 
+          $"{typeof(TEntity).Name} with an id of {id} is already " +
           $"{(isActivating ? "active" : "inactive")}.");
       }
-      else
+
+      if (!_userClaimsService.IsUserAdmin())
       {
-        entity.IsActive = isActivating;
-        UpdateModified(entity);
-        return await _context.SaveChangesAsync();
+        CheckUserCanSetActiveStatus(entity, _userClaimsService.GetUserId());
       }
+      entity.IsActive = isActivating;
+      UpdateModified(entity);
+      return await _context.SaveChangesAsync();
+
     }
 
   }

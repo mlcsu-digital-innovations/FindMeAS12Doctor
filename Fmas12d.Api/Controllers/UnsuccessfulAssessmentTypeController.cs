@@ -10,8 +10,10 @@ namespace Fmas12d.Api.Controllers
   
   public class UnsuccessfulAssessmentTypeController : IdNameDescriptionBaseController
   {
-    public UnsuccessfulAssessmentTypeController(IUnsuccessfulAssessmentTypeService service)
-      : base(service)
+    public UnsuccessfulAssessmentTypeController(
+      IUnsuccessfulAssessmentTypeService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
   }

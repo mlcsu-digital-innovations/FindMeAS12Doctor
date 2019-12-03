@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -148,6 +149,8 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     public void RemoveSeedTestAll()
     {
+      ResetModifiedByUserIds();
+
       new UserSpecialitiesSeeder().DeleteSeeds();
       Context.SaveChanges();
 
@@ -191,6 +194,43 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
 
       new OrganisationSeeder().DeleteSeeds();
+      Context.SaveChanges();
+    }
+
+    private void ResetModifiedByUserIds()
+    {
+      new CcgSeeder().ResetModifiedByUserId();
+
+      new GpPracticeSeeder().ResetModifiedByUserId();
+
+      new ClaimStatusesSeeder().ResetModifiedByUserId();
+
+      new ContactDetailTypesSeeder().ResetModifiedByUserId();
+
+      new AssessmentDetailTypesSeeder().ResetModifiedByUserId();
+
+      new GenderTypesSeeder().ResetModifiedByUserId();
+
+      new NonPaymentLocationTypesSeeder().ResetModifiedByUserId();
+
+      new NotificationTextsSeeder().ResetModifiedByUserId();
+
+      new PaymentMethodTypesSeeder().ResetModifiedByUserId();
+
+      new PaymentRuleSetsSeeder().ResetModifiedByUserId();
+
+      new ProfileTypesSeeder().ResetModifiedByUserId();
+
+      new ReferralStatusesSeeder().ResetModifiedByUserId();
+
+      new Section12ApprovalStatusesSeeder().ResetModifiedByUserId();
+
+      new SpecialitiesSeeder().ResetModifiedByUserId();
+
+      new UnsuccessfulAssessmentTypesSeeder().ResetModifiedByUserId();
+
+      new UserAvailabilityStatusSeeder().ResetModifiedByUserId();
+
       Context.SaveChanges();
     }
   }

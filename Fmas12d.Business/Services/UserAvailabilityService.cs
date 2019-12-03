@@ -1,16 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Entities = Fmas12d.Data.Entities;
 using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
-using Entities = Fmas12d.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public class UserAvailabilityService : ServiceBaseNoAutoMapper<Entities.UserAvailability>,
+  public class UserAvailabilityService :
+    ServiceBaseNoAutoMapper<Entities.UserAvailability>,
     IUserAvailabilityService
   {
     private readonly IContactDetailsService _contactDetailsService;
@@ -18,8 +19,9 @@ namespace Fmas12d.Business.Services
     public UserAvailabilityService(
       ApplicationContext context,
       IContactDetailsService contactDetailsService,
-      ILocationDetailService locationDetailService)
-      : base(context)
+      ILocationDetailService locationDetailService,
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
@@ -30,11 +32,11 @@ namespace Fmas12d.Business.Services
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<IUserAvailability> Create(IUserAvailability model)
+    public async Task<IUserAvailability> CreateAsync(IUserAvailability model)
     {
 
-      await SetLatitudeLongitude(model);
-      await CheckForOverlappingAvailability(model);
+      await SetLatitudeLongitudeAsync(model);
+      await CheckForOverlappingAvailabilityAsync(model);
 
       Entities.UserAvailability entity = new Entities.UserAvailability();
       model.MapToEntity(entity);
@@ -53,21 +55,39 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctors(
+    public async Task<IEnumerable<IUserAvailability>> GetAsync(
+      int userId,
+      DateTimeOffset from,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      IEnumerable<IUserAvailability> models = await _context
+        .UserAvailabilities
+        .Where(ua => ua.UserId == userId)
+        .Where(ua => ua.End >= from)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserAvailability.ProjectFromEntity)
+        .ToListAsync();
+
+      return models;
+    }
+
+    public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(
       DateTimeOffset requiredDateTime,
       bool asNoTracking,
       bool activeOnly)
     {
-      IEnumerable<IUserAvailabilityDoctor> models = await 
+      IEnumerable<IUserAvailabilityDoctor> models = await
       _context.UserAvailabilities
               .Include(u => u.User)
                 .ThenInclude(u => u.DoctorAssessments)
               .Include(u => u.User)
                 .ThenInclude(u => u.ProfileType)
               .Include(u => u.User)
-                .ThenInclude(u => u.GenderType)                
+                .ThenInclude(u => u.GenderType)
               .Include(u => u.User)
-                .ThenInclude(u => u.UserSpecialities) 
+                .ThenInclude(u => u.UserSpecialities)
                   .ThenInclude(us => us.Speciality)
               .Where(u => u.Start <= requiredDateTime)
               .Where(u => u.End >= requiredDateTime)
@@ -92,14 +112,17 @@ namespace Fmas12d.Business.Services
                     ScheduledTime = da.Assessment.ScheduledTime
                   })
                   .ToList(),
-                ContactDetailId = entity.ContactDetailId,
+                
                 End = entity.End,
+                Location = new Location{
+                  ContactDetailId = entity.ContactDetailId,
+                  Latitude = entity.Latitude,
+                  Longitude = entity.Longitude,
+                  Postcode = entity.Postcode
+                },
                 GenderName = entity.User.GenderType.Name,
-                Latitude = entity.Latitude,
-                Longitude = entity.Longitude,
                 Name = entity.User.DisplayName,
-                Postcode = entity.Postcode,      
-                SpecialityNames = 
+                SpecialityNames =
                   entity.User.UserSpecialities.Select(s => s.Speciality.Name).ToList(),
                 Start = entity.Start,
                 Type = entity.User.ProfileType.Name,
@@ -110,10 +133,10 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    public async Task<Dictionary<int, Location>> GetDoctorsPostcodeAt(
+    public async Task<Dictionary<int, Location>> GetDoctorsPostcodeAtAsync(
       List<int> userIds, DateTimeOffset dateTime, bool asNoTracking, bool activeOnly)
     {
-      Dictionary<int, Location> doctorsPostcode = 
+      Dictionary<int, Location> doctorsPostcode =
         await _context.UserAvailabilities
                       .Where(ua => ua.Start <= dateTime)
                       .Where(ua => ua.End >= dateTime)
@@ -124,17 +147,36 @@ namespace Fmas12d.Business.Services
                       .AsNoTracking(asNoTracking)
                       .ToDictionaryAsync(
                         ua => ua.UserId,
-                        ua => new Location(){
+                        ua => new Location()
+                        {
                           Postcode = ua.Postcode,
                           Latitude = ua.Latitude,
                           Longitude = ua.Longitude
                         }
                       );
 
-      return doctorsPostcode;                      
-    }    
+      return doctorsPostcode;
+    }
 
-    private async Task<bool> CheckForOverlappingAvailability(IUserAvailability model)
+    protected override void CheckUserCanSetActiveStatus(
+      Entities.UserAvailability entity, 
+      int userId
+    )
+    {
+      if (entity == null)
+      {
+        throw new Exception("Unable to CheckUserCanSetActiveStatus because the entity is null");
+      }
+      if (entity.UserId != userId)
+      {
+        throw new UnauthorizedAccessException(
+          $"User Id {userId} cannot update the active status of the UserAvailability Id " +
+          $"{entity.Id} because its associated with User Id {entity.UserId}."
+        );
+      }
+    }
+
+    private async Task<bool> CheckForOverlappingAvailabilityAsync(IUserAvailability model)
     {
       IEnumerable<int> existingAvailabilitiesIds =
         await _context.UserAvailabilities
@@ -158,36 +200,32 @@ namespace Fmas12d.Business.Services
     /// <summary>
     /// Gets the latitude and longitude from either the postcode or contact details
     /// </summary>
-    private async Task<bool> SetLatitudeLongitude(IUserAvailability model)
+    private async Task<bool> SetLatitudeLongitudeAsync(IUserAvailability model)
     {
-      if (!string.IsNullOrWhiteSpace(model.Postcode))
+      if (model.Location.HasPostcode)
       {
-        Location postcodeModel =
-          await _locationDetailService.GetPostcodeDetailsAsync(model.Postcode);
-
-        model.Latitude = postcodeModel.Latitude;
-        model.Longitude = postcodeModel.Longitude;
-
+        model.Location =
+          await _locationDetailService.GetPostcodeDetailsAsync(model.Location.Postcode);
       }
-      else if (model.ContactDetailId.HasValue)
+      else if (model.Location.HasContactDetailId)
       {
         ContactDetail contactDetail = await _contactDetailsService.Get(
-          model.ContactDetailId.Value, model.UserId, true, true
+          model.Location.ContactDetailId.Value, model.UserId, true, true
         );
         if (contactDetail == null)
         {
           throw new ModelStateException("ContactDetailId",
-            $"There is no active ContactDetail with an Id of {model.ContactDetailId}");
+            $"There is no active ContactDetail with an Id of {model.Location.ContactDetailId}");
         }
         if (contactDetail.UserId != model.UserId)
         {
           throw new ModelStateException("ContactDetailId",
             $"A User with an id of {model.UserId} does not have an active " +
-            $"ContactDetailId of {model.ContactDetailId}");
+            $"ContactDetailId of {model.Location.ContactDetailId}");
         }
-
-        model.Latitude = contactDetail.Latitude;
-        model.Longitude = contactDetail.Longitude;
+        model.Location.ContactDetail = contactDetail;
+        model.Location.Latitude = contactDetail.Latitude;
+        model.Location.Longitude = contactDetail.Longitude;
       }
 
       return true;

@@ -9,17 +9,13 @@ namespace Fmas12d.Business.Services
     Task<IAssessmentDoctorsUpdate> AddAllocatedDoctors(IAssessmentDoctorsUpdate model);
     Task<IAssessmentDoctorsUpdate> AddSelectedDoctors(IAssessmentDoctorsUpdate model);
     Task<AssessmentCreate> CreateAsync(AssessmentCreate model);
-    Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
-      int amhpUserId, 
-      int? referralStatusId, 
-      bool asNoTracking, 
-      bool activeOnly);
-    Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(      
-      int doctorUserId,      
+    Task<IEnumerable<Assessment>> GetListByUserIdAsync(
+      int userId,
       int? doctorStatusId,
       int? referralStatusId, 
       bool asNoTracking, 
-      bool activeOnly);
+      bool activeOnly
+    );
     Task<Assessment> GetAvailableDoctorsAsync(int id, bool asNoTracking, bool activeOnly);
     Task<Assessment> GetByIdAsync(int id, bool activeOnly);    
     Task<Assessment> GetSelectedDoctorsAsync(int id, bool asNoTracking, bool activeOnly);

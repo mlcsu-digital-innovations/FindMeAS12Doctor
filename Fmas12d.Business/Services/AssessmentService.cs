@@ -1,13 +1,13 @@
 using Entities = Fmas12d.Data.Entities;
 using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
+using Fmas12d.Business.Helpers;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System;
-using Fmas12d.Business.Helpers;
 
 namespace Fmas12d.Business.Services
 {
@@ -28,8 +28,9 @@ namespace Fmas12d.Business.Services
       ILocationDetailService locationDetailService,
       IReferralService referralService,
       IUserService userService,
-      IUserAvailabilityService userAvailabilityService)
-      : base(context)
+      IUserAvailabilityService userAvailabilityService,
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
@@ -68,7 +69,8 @@ namespace Fmas12d.Business.Services
         assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
         UpdateModified(assessmentDoctor);
 
-        AddUserAssessmentNotification(entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
+        AddUserAssessmentNotification(
+          entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
       }
 
       await _context.SaveChangesAsync();
@@ -82,7 +84,10 @@ namespace Fmas12d.Business.Services
       };
     }
 
-    private void AddAssessmentDetail(int assessmentDetailTypeId, Entities.Assessment entity)
+    private void AddAssessmentDetail(
+      int assessmentDetailTypeId,
+      Entities.Assessment entity
+    )
     {
       Entities.AssessmentDetail assessmentDetail = new Entities.AssessmentDetail()
       {
@@ -93,7 +98,8 @@ namespace Fmas12d.Business.Services
       entity.Details.Add(assessmentDetail);
     }
 
-    private void AddAssessmentDetails(IList<int> detailTypeIds, Entities.Assessment entity)
+    private void AddAssessmentDetails(
+      IList<int> detailTypeIds, Entities.Assessment entity)
     {
       if (detailTypeIds != null && detailTypeIds.Any())
       {
@@ -177,19 +183,20 @@ namespace Fmas12d.Business.Services
 
         Entities.AssessmentDoctor assessmentDoctor = new Entities.AssessmentDoctor()
         {
-          ContactDetailId = availabilityDoctor.ContactDetailId,
+          ContactDetailId = availabilityDoctor.Location.ContactDetailId,
           Distance = availabilityDoctor.Distance,
           DoctorUserId = userId,
           IsActive = true,
-          Latitude = availabilityDoctor.Latitude,
-          Longitude = availabilityDoctor.Longitude,
-          Postcode = availabilityDoctor.Postcode,
+          Latitude = availabilityDoctor.Location.Latitude,
+          Longitude = availabilityDoctor.Location.Longitude,
+          Postcode = availabilityDoctor.Location.Postcode,
           StatusId = Models.AssessmentDoctorStatus.SELECTED,
         };
         UpdateModified(assessmentDoctor);
         entity.Doctors.Add(assessmentDoctor);
 
-        AddUserAssessmentNotification(entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
+        AddUserAssessmentNotification(
+          entity, userId, NotificationText.SELECTED_FOR_ASSESSMENT);
       }
 
       if (entity.Referral.ReferralStatusId == ReferralStatus.SELECTING_DOCTORS)
@@ -430,7 +437,7 @@ namespace Fmas12d.Business.Services
       {
         Models.Assessment model = new Models.Assessment(entity);
 
-        model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctors(
+        model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctorsAsync(
           model.DateTime, true, true);
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
@@ -438,8 +445,8 @@ namespace Fmas12d.Business.Services
           availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
             entity.Latitude,
             entity.Longitude,
-            availabilityDoctor.Latitude,
-            availabilityDoctor.Longitude
+            availabilityDoctor.Location.Latitude,
+            availabilityDoctor.Location.Longitude
           );
         }
 
@@ -447,7 +454,38 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    public async Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
+
+    public async Task<IEnumerable<Assessment>> GetListByUserIdAsync(
+      int userId,
+      int? doctorStatusId,
+      int? referralStatusId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      int userProfileTypeId = await _userService.GetByProfileTypeId(
+        userId,
+        asNoTracking,
+        activeOnly
+      );
+
+      return userProfileTypeId switch
+      {
+        0 => throw new ModelStateException("userId",
+              $"An active user with an id of {userId} cannot be found."),
+
+        ProfileType.AMHP => await GetListByAmhpUserIdAsync(
+          userId, referralStatusId, asNoTracking, activeOnly),
+
+        ProfileType.DOCTOR => await GetListByDoctorUserIdAsync(
+          userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
+
+        _ => throw new ModelStateException("userId",
+             "Assessments cannot be associated with a User that has a ProfileType of " +
+              $"{userProfileTypeId}."),
+      };
+    }
+
+    private async Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
       int amhpUserId,
       int? referralStatusId,
       bool asNoTracking,
@@ -466,11 +504,13 @@ namespace Fmas12d.Business.Services
       }
 
       IEnumerable<Assessment> models = await query
-        .Select(a => new Assessment {
+        .Select(a => new Assessment
+        {
           Id = a.Id,
           MustBeCompletedBy = a.MustBeCompletedBy,
           Postcode = a.Postcode,
-          Referral = new Referral {
+          Referral = new Referral
+          {
             ReferralStatusId = a.Referral.ReferralStatusId
           },
           ScheduledTime = a.ScheduledTime
@@ -480,7 +520,7 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
-    public async Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(
+    private async Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(
       int doctorUserId,
       int? doctorStatusId,
       int? referralStatusId,
@@ -494,7 +534,7 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Referral)
         .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
         .WhereIsActiveOrActiveOnly(activeOnly)
-        .AsNoTracking(asNoTracking);        
+        .AsNoTracking(asNoTracking);
 
       if (referralStatusId.HasValue)
       {
@@ -503,21 +543,24 @@ namespace Fmas12d.Business.Services
       if (doctorStatusId.HasValue)
       {
         query = query.Where(a => a.Doctors.Any(d => d.Status.Id == doctorStatusId));
-      }              
+      }
 
       IEnumerable<Assessment> models = await query
-        .Select(a => new Assessment {
+        .Select(a => new Assessment
+        {
           Id = a.Id,
           Doctors = a.Doctors
                      .Where(d => d.DoctorUserId == doctorUserId)
-                     .Select(d => new AssessmentDoctor {                       
-                        HasAccepted = d.HasAccepted,
-                        StatusId = d.StatusId
+                     .Select(d => new AssessmentDoctor
+                     {
+                       HasAccepted = d.HasAccepted,
+                       StatusId = d.StatusId
                      })
                      .ToList(),
           MustBeCompletedBy = a.MustBeCompletedBy,
           Postcode = a.Postcode,
-          Referral = new Referral {
+          Referral = new Referral
+          {
             ReferralStatusId = a.Referral.ReferralStatusId
           },
           ScheduledTime = a.ScheduledTime
@@ -541,7 +584,7 @@ namespace Fmas12d.Business.Services
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
                 .Include(e => e.Doctors)
-                  .ThenInclude(d => d.ContactDetail)                  
+                  .ThenInclude(d => d.ContactDetail)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.Speciality)
@@ -695,7 +738,7 @@ namespace Fmas12d.Business.Services
       else
       {
         Dictionary<int, Location> doctorPostcodes =
-          await _userAvailabilityService.GetDoctorsPostcodeAt(
+          await _userAvailabilityService.GetDoctorsPostcodeAtAsync(
             model.DoctorsSelected.Select(d => d.Id).ToList(),
             model.DateTime,
             true,
@@ -762,10 +805,11 @@ namespace Fmas12d.Business.Services
       UpdateModified(entity.Referral);
       await _context.SaveChangesAsync();
 
-      return true; 
+      return true;
     }
 
-    private void UpdateAssessmentDetails(AssessmentUpdate model, Entities.Assessment entity)
+    private void UpdateAssessmentDetails(
+      AssessmentUpdate model, Entities.Assessment entity)
     {
       if (entity.HasDetails)
       {
@@ -947,7 +991,9 @@ namespace Fmas12d.Business.Services
       model.MapToEntity(entity);
       UpdateModified(entity);
 
-      AddUserAssessmentNotification(entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      AddUserAssessmentNotification(
+        entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+
       foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
       {
         AddUserAssessmentNotification(
@@ -971,7 +1017,9 @@ namespace Fmas12d.Business.Services
     /// <summary>
     /// Update the doctor statuses checking that the doctors are those expected
     /// </summary>
-    private void UpdateDoctorStatuses(AssessmentOutcome model, Entities.Assessment entity)
+    private void UpdateDoctorStatuses(
+      AssessmentOutcome model, Entities.Assessment entity
+    )
     {
       int[] attendingDoctorIds = model.AttendingDoctors.Select(d => d.Id).ToArray();
       Entities.AssessmentDoctor[] allocatedDoctors = entity.Doctors

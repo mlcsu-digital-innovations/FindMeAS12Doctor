@@ -1,9 +1,9 @@
 namespace Fmas12d.Api.ViewModels
 {
-  public class ContactDetail
+  public class ContactDetail : BaseViewModel
   {
     public ContactDetail() { }
-    public ContactDetail(Business.Models.ContactDetail model)
+    public ContactDetail(Business.Models.ContactDetail model) : base(model)
     {
       if (model == null) return;
 

@@ -17,6 +17,7 @@ namespace Fmas12d.Api.RequestModels
       _model = new Business.Models.UserAvailability
       {
         End = End.Value,
+        Location = new Business.Models.Location(),
         Start = Start.Value,
         UserId = userId    
       };
