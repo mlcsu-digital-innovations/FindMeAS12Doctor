@@ -571,8 +571,10 @@ namespace Fmas12d.Business.Services
     }
 
     public async Task<Models.Assessment> GetByIdAsync(
-      int id,
-      bool activeOnly)
+      int id,      
+      bool activeOnly,
+      bool asNoTracking
+    )
     {
       Entities.Assessment entity = await
         _context.Assessments
@@ -592,10 +594,24 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(u => u.User)
                     .ThenInclude(u => u.ProfileType)
                 .WhereIsActiveOrActiveOnly(activeOnly)
-                .AsNoTracking(true)
+                .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
       Models.Assessment model = new Models.Assessment(entity);
+
+      return model;
+    }
+
+    public async Task<Assessment> GetByIdForUserAsync(
+      int id, 
+      int userId,
+      bool asNoTracking, 
+      bool activeOnly
+    )
+    {
+      Assessment model = await GetByIdAsync(id, activeOnly, asNoTracking);
+      // TODO Refactor if too slow
+      model.Doctors = model.Doctors.Where(d => d.DoctorUserId == userId).ToList();
 
       return model;
     }
