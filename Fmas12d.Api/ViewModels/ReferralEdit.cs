@@ -18,6 +18,7 @@ namespace Fmas12d.Api.ViewModels
       PatientCcgName = model.Patient?.Ccg?.Name;
       PatientGpPracticeNameAndPostcode = model.PatientGpPracticeNameAndPostcode;
       PatientGpPracticeId = model.Patient?.GpPracticeId;
+      PatientId = model.Patient?.Id;
       PatientNhsNumber = model.Patient?.NhsNumber;
       PatientResidentialPostcode = model.Patient?.ResidentialPostcode;
       StatusName = model.StatusName;
@@ -32,6 +33,7 @@ namespace Fmas12d.Api.ViewModels
     public string PatientCcgName {get; set;}
     public string PatientGpPracticeNameAndPostcode {get; set;}
     public int? PatientGpPracticeId { get; set; }
+    public int? PatientId { get; set; }
     public long? PatientNhsNumber { get; set; }
     public string PatientResidentialPostcode { get; set; }
     public string StatusName { get; set; }

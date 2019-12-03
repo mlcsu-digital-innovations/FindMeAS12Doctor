@@ -24,6 +24,7 @@ import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } f
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
+import { PatientService } from 'src/app/services/patient/patient.service';
 
 @Component({
   selector: 'app-referral-edit',
@@ -68,6 +69,7 @@ export class ReferralEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private gpPracticeListService: GpPracticeListService,
     private modalService: NgbModal,
+    private patientService: PatientService,
     private patientSearchService: PatientSearchService,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
@@ -411,6 +413,41 @@ export class ReferralEditComponent implements OnInit {
     );
   }
 
+  HasPatientBeenUpdated(): boolean {
+
+    let isUpdated = false;
+
+    if (this.initialReferralDetails.patientAlternativeIdentifier !==
+        this.alternativeIdentifierField.value) {
+      isUpdated = true;
+    }
+
+    if (this.initialReferralDetails.patientNhsNumber !== this.nhsNumberField.value) {
+      isUpdated = true;
+    }
+
+    if ((this.initialReferralDetails.patientCcgId === null
+      ? 0
+      : this.initialReferralDetails.patientCcgId) !== this.ccgField.value.id) {
+        isUpdated = true;
+    }
+
+    if ((this.initialReferralDetails.patientGpPracticeId === null
+      ? 0
+      : this.initialReferralDetails.patientGpPracticeId) !== this.gpPracticeField.value.id) {
+        isUpdated = true;
+    }
+
+    if ((this.initialReferralDetails.patientResidentialPostcode === null
+        ? 'Unknown'
+        : this.initialReferralDetails.patientResidentialPostcode)
+          !== this.residentialPostcodeField.value) {
+      isUpdated = true;
+    }
+
+    return isUpdated;
+  }
+
   HasValidAlternativeIdentifier(): boolean {
     return (
       this.alternativeIdentifierField.value !== '' &&
@@ -463,6 +500,7 @@ export class ReferralEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralEdit) {
+    console.log(referral);
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
@@ -652,6 +690,34 @@ export class ReferralEditComponent implements OnInit {
     }
   }
 
+  UpdatePatient() {
+    const patient = {} as Patient;
+    patient.alternativeIdentifier = this.alternativeIdentifierField.value;
+    patient.nhsNumber = this.nhsNumberField.value;
+    patient.gpPracticeId = this.gpPractice.id;
+    patient.residentialPostcode = this.residentialPostcode;
+    patient.ccgId = this.ccg.id;
+
+    this.patientService.updatePatient(patient).subscribe(
+      (result: Referral) => {
+        this.toastService.displaySuccess({
+          message: 'Referral Updated'
+        });
+        this.isUpdatingReferral = false;
+        this.routerService.navigate([`/referral/list`]);
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to update referral! Please try again in a few moments'
+        });
+        this.isUpdatingReferral = false;
+        return throwError(error);
+      }
+    );
+
+  }
+
   UpdateReferral() {
 
     let canContinue = true;
@@ -703,25 +769,26 @@ export class ReferralEditComponent implements OnInit {
 
     referral.leadAmhpUserId = this.amhpUser.id;
 
-    const patient = {} as Patient;
-    patient.alternativeIdentifier = this.alternativeIdentifierField.value;
-    patient.nhsNumber = this.nhsNumberField.value;
-    patient.gpPracticeId = this.gpPractice.id;
-    patient.residentialPostcode = this.residentialPostcode;
-    patient.ccgId = this.ccg.id;
-
-    referral.patient = patient;
-
     this.isUpdatingReferral = true;
 
-    this.referralService.updateReferral(referral).subscribe(
+    let serviceCall: Observable<object> = this.referralService.updateReferral(referral);
+
+    if (this.retrospectiveReferralField.value === true) {
+      serviceCall = this.referralService.updateRetrospectiveReferral(referral);
+    }
+
+    serviceCall.subscribe(
       (result: Referral) => {
         this.toastService.displaySuccess({
           message: 'Referral Updated'
         });
-        this.isUpdatingReferral = false;
-        // navigate to the create assessment page
-        this.routerService.navigate([`/referral/list`]);
+
+        if (this.HasPatientBeenUpdated()) {
+          this.UpdatePatient();
+        } else {
+          this.isUpdatingReferral = false;
+          this.routerService.navigate([`/referral/list`]);
+        }
       },
       error => {
         this.toastService.displayError({
@@ -732,6 +799,8 @@ export class ReferralEditComponent implements OnInit {
         return throwError(error);
       }
     );
+
+
   }
 
   async UseExistingPatient() {

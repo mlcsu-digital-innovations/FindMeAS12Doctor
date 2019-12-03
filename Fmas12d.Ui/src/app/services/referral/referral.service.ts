@@ -65,8 +65,23 @@ export class ReferralService {
 
   public updateReferral(referral: Referral) {
 
-    // ToDo: return the results of the actual api call
-    return of(referral)
-    .pipe(delay(2000));
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/referral/${referral.id}`,
+      referral,
+      { headers }
+    );
+  }
+
+  public updateRetrospectiveReferral(referral: Referral) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/referral/${referral.id}/retrospective`,
+      referral,
+      { headers }
+    );
   }
 }
