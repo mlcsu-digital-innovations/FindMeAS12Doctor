@@ -22,8 +22,12 @@ export class AmhpAssessmentRequestsPage implements OnInit {
     private loadingController: LoadingController) { }
 
   ngOnInit() {
+  }
 
-    const request = this.assessmentService.getRequests(4);
+  ionViewDidEnter() {
+    // load data each time the page is shown
+    // this may be changed if offline data is to be used
+    const request = this.assessmentService.getRequests();
     this.showLoading();
 
     request
