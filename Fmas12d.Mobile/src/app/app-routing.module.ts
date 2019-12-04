@@ -50,10 +50,21 @@ const routes: Routes = [
     loadChildren: './pages/amhp-assessment-accept-request/amhp-assessment-accept-request.module' +
     '#AmhpAssessmentAcceptRequestPageModule'
   },
-  { 
-    path: 'doctor-availability-view', 
+  {
+    path: 'doctor-availability-view',
     loadChildren: './pages/doctor-availability-view/doctor-availability-view.module' +
     '#DoctorAvailabilityViewPageModule' },
+  {
+    path: 'doctor-availability-add',
+    loadChildren: './pages/doctor-availability-add/doctor-availability-add.module' + 
+    '#DoctorAvailabilityAddPageModule'
+  },
+  {
+    path: 'doctor-availability-edit',
+    loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' + 
+    '#DoctorAvailabilityEditPageModule'
+  },
+
 
 
 
