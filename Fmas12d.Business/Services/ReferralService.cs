@@ -18,11 +18,11 @@ namespace Fmas12d.Business.Services
     private readonly IUserService _userService;
     public ReferralService(
       ApplicationContext context, 
-      IAppClaimsPrincipal appClaimsPrincipal,
+      IUserClaimsService userClaimsService,
       IPatientService patientService,
       IUserService userService
     )
-      : base(context, appClaimsPrincipal)
+      : base(context, userClaimsService)
     {
       _patientService = patientService;     
       _userService = userService;      

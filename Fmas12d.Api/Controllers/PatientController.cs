@@ -11,8 +11,10 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy="User")]
   public class PatientController : ModelControllerNoAutoMapper
   {
-    public PatientController(IPatientService service)
-      : base(service)
+    public PatientController(
+      IPatientService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
 

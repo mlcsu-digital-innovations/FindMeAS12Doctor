@@ -14,6 +14,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { environment, ProtectedResourceMap } from 'src/environments/environment';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,20 +29,21 @@ import { environment, ProtectedResourceMap } from 'src/environments/environment'
     MsalModule.forRoot({
       clientID: OAuthSettings.appId,
       authority: OAuthSettings.authority,
-      cacheLocation: "localStorage",
+      cacheLocation: 'localStorage',
       consentScopes: OAuthSettings.consentScopes,
       postLogoutRedirectUri: environment.postLogoutRedirectUrl,
       protectedResourceMap: ProtectedResourceMap,
-      redirectUri: environment.redirectUri     
+      redirectUri: environment.redirectUri
     })
   ],
   providers: [
+    Geolocation,
     Network,
     StatusBar,
     SplashScreen,
     { 
-      provide: RouteReuseStrategy, 
-      useClass: IonicRouteStrategy 
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
     },
     {
       provide: HTTP_INTERCEPTORS,

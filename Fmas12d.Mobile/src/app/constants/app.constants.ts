@@ -1,0 +1,2 @@
+export const DOCTORSTATUSSELECTED = 1;
+export const DOCTORSTATUSACCEPTED = 2;

@@ -1,4 +1,5 @@
 using Fmas12d.Api.RequestModels;
+using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,10 @@ namespace Fmas12d.Api.Controllers
   
   public abstract class IdNameDescriptionBaseController : ModelControllerNoAutoMapper
   {
-    protected IdNameDescriptionBaseController(INameDescriptionBaseService service)
-      : base(service)
+    protected IdNameDescriptionBaseController(
+      IUserClaimsService userClaimsService,
+      INameDescriptionBaseService service)
+      : base(userClaimsService, service)
     {
     }
 

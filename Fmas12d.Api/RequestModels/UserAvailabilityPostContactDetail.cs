@@ -10,7 +10,7 @@ namespace Fmas12d.Api.RequestModels
     internal override Business.Models.UserAvailability MapToBusinessModel(int userId)
     {
       base.MapToBusinessModel(userId);
-      _model.ContactDetailId = ContactDetailId.Value;
+      _model.Location.ContactDetailId = ContactDetailId.Value;
       return _model;
     }    
   }

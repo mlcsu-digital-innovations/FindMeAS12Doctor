@@ -7,7 +7,7 @@ namespace Fmas12d.Business.Models
   public class ContactDetail : BaseModel
   {
     public ContactDetail() {}
-    public ContactDetail(Data.Entities.ContactDetail entity)
+    public ContactDetail(Data.Entities.ContactDetail entity) : base(entity)
     {
       if (entity == null) return;
 
@@ -27,6 +27,7 @@ namespace Fmas12d.Business.Models
       Town = entity.Town;
       User = new User(entity.User);
       UserId = entity.UserId;
+
     }
 
     [MaxLength(200)]

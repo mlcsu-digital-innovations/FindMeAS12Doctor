@@ -1,26 +1,30 @@
+using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  [Authorize(Policy="User")]
-  
+  [Authorize(Policy = "User")]
+
   public abstract class ModelControllerNoAutoMapper : ControllerBase
   {
+    private readonly IUserClaimsService _userClaimsService;
     protected readonly IServiceBaseNoAutoMapper _service;
 
     protected ModelControllerNoAutoMapper(
+        IUserClaimsService userClaimsService,
         IServiceBaseNoAutoMapper service
     )
     {
+      _userClaimsService = userClaimsService;
       _service = service;
     }
 
@@ -56,39 +60,49 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
+    }    
+
+    protected int GetUserId()
+    {
+      return _userClaimsService.GetUserId();
     }
 
     protected ActionResult ProcessException(Exception exception)
     {
-      if (exception is Business.Exceptions.SerilogException serilogEx)
-      {
-        Log.Error(serilogEx, serilogEx.MessageTemplate, serilogEx.PropertyValues);
-        if (exception is Business.Exceptions.AssessmentAlreadyHasOutcomeException ex)
-        {
-          return StatusCode(StatusCodes.Status409Conflict, ex.Message);
-        }
-      }
-      else
-      {
-        Log.Error(exception, exception.Message);
-      }
-
       if (exception is Business.Exceptions.ModelStateException)
       {
         return ProcessModelStateException(exception as Business.Exceptions.ModelStateException);
       }
-      else if (exception is Business.Exceptions.MissingSearchParameterException)
+      if (exception is Business.Exceptions.MissingSearchParameterException)
       {
+        Serilog.Log.Information(exception, exception.Message);
         return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
       }
-      else if (exception is Business.Exceptions.EntityNotFoundException)
+      if (exception is Business.Exceptions.EntityNotFoundException)
       {
+        Serilog.Log.Warning(exception, exception.Message);
         return StatusCode(StatusCodes.Status404NotFound, exception.Message);
       }
-      else
+      if (exception is UnauthorizedAccessException)
       {
-        return StatusCode(StatusCodes.Status500InternalServerError, exception.Message);
+        Serilog.Log.Information(exception, exception.Message);
+        return StatusCode(StatusCodes.Status403Forbidden, exception.Message);
+      }      
+      if (exception is Business.Exceptions.SerilogException serilogEx)
+      {
+        Serilog.Log.Error(serilogEx, serilogEx.MessageTemplate, serilogEx.PropertyValues);
+        if (exception is Business.Exceptions.AssessmentAlreadyHasOutcomeException ex)
+        {
+          return StatusCode(StatusCodes.Status409Conflict, ex.Message);
+        }
+        else
+        {
+          return StatusCode(StatusCodes.Status500InternalServerError, exception.Message);    
+        }
       }
+      
+      Serilog.Log.Error(exception, exception.Message);
+      return StatusCode(StatusCodes.Status500InternalServerError, exception.Message);
     }
 
     protected ActionResult ProcessModelStateException(

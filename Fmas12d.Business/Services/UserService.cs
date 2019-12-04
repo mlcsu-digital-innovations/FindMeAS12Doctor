@@ -15,8 +15,8 @@ namespace Fmas12d.Business.Services
   {
     public UserService(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
     }
 
@@ -113,7 +113,8 @@ namespace Fmas12d.Business.Services
     public async Task<User> GetByIdentityServerIdentifierAsync(
       string identityServerIdentifier,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true
+    )
     {
        User model = await _context.Users
         .WhereIsActiveOrActiveOnly(activeOnly)
@@ -123,7 +124,24 @@ namespace Fmas12d.Business.Services
         .SingleOrDefaultAsync();
 
       return model;
-    }    
+    }
+
+    public async Task<int> GetByProfileTypeId(
+      int id,
+      bool asNoTracking,
+      bool activeOnly
+    )      
+    {
+      int profileTypeId = await _context
+        .Users
+        .Where(u => u.Id == id)
+        .AsNoTracking(asNoTracking)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Select(u => u.ProfileTypeId)
+        .SingleOrDefaultAsync();
+
+      return profileTypeId;
+    }
 
     private async Task<IEnumerable<Models.User>> GetAllByNameAndProfileTypeId(
       string name,

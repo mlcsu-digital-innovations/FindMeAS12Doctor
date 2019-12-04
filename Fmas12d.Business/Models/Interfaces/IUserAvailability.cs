@@ -4,11 +4,8 @@ namespace Fmas12d.Business.Models
 {
   public interface IUserAvailability : IBaseModel
   {
-    int? ContactDetailId { get; set; }
     DateTimeOffset End { get; set; }
-    decimal Latitude { get; set; }
-    decimal Longitude { get; set; }
-    string Postcode { get; set; }
+    Location Location { get; set; }
     DateTimeOffset Start { get; set; }
     IUserAvailabilityStatus Status { get; set; }
     int StatusId { get; set; }

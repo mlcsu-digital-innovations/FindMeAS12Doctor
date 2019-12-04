@@ -1,11 +1,13 @@
 import { AmhpAssessmentList } from '../../models/amhp-assessment-list.model';
 import { AmhpAssessmentOutcome } from 'src/app/models/amhp-assessment-outcome.model';
+import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
 import { ApiService } from '../api/api.service';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { map, delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { DOCTORSTATUSSELECTED } from 'src/app/constants/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +19,58 @@ export class AmhpAssessmentService {
     private apiService: ApiService
   ) { }
 
-  public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {   
+  public acceptRequest(
+    assessmentId: number
+    ) {
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted`,
+      null
+    ));
+  }
+
+  public acceptRequestByContactDetail(
+    assessmentId: number,
+    contactDetailId: number
+    ) {
+
+    const contactDetailObject = {contactDetailId};
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted/contactDetail`,
+      contactDetailObject
+    ));
+  }
+
+  public acceptRequestByCoordinates(
+    assessmentId: number,
+    latitude: number,
+    longitude: number,
+    ) {
+
+    const coordinateObject = {latitude, longitude};
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted/location`,
+      coordinateObject
+    ));
+  }
+
+  public acceptRequestByPostcode(
+    assessmentId: number,
+    postcode: string
+    ) {
+
+    const postcodeObject = {postcode};
+
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted/postcode`,
+      postcodeObject
+    ));
+  }
+
+  public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`, 
+      `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`,
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(
@@ -27,11 +78,27 @@ export class AmhpAssessmentService {
     );
   }
 
-  public getView(assessmentId: string): Observable<AmhpAssessmentView> {  
+  public getRequests(): Observable<AmhpAssessmentRequest[]> {
+    return (this.apiService.get(
+      `${environment.apiEndpoint}/assessment/list?doctorStatusId=${DOCTORSTATUSSELECTED}`,
+      'AmhpUserList'
+    ) as Observable<AmhpAssessmentList[]>)
+    .pipe(delay(1000))
+    .pipe(
+      map(result => this.assessmentListSort(result)),
+    );
+  }
+
+  public getView(assessmentId: number): Observable<AmhpAssessmentView> {
     return this.apiService.get(
-      `${environment.apiEndpoint}/assessment/${assessmentId}`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}/user`,
       `AmhpUserView-${assessmentId}`
     ) as Observable<AmhpAssessmentView>;
+  }
+
+  public declineAssessmentRequest(assessmentId: number) {
+    const url = `${environment.apiEndpoint}/assessment/${assessmentId}/declined`;
+    return this.apiService.put(url, null);
   }
 
   public putOutcome(

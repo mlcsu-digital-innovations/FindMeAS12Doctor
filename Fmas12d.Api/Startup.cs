@@ -149,10 +149,11 @@ namespace Fmas12d.Api
         }
       });
      
-      services.AddScoped<IAppClaimsPrincipal, AppClaimsPrincipal>();
+      services.AddScoped<IUserClaimsService, UserClaimsService>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<ICcgService, CcgService>();
       services.AddScoped<IContactDetailsService, ContactDetailsService>();
+      services.AddScoped<IContactDetailTypeService, ContactDetailTypeService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<ILocationDetailService, LocationDetailService>();

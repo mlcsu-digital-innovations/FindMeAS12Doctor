@@ -9,8 +9,8 @@ namespace Fmas12d.Business.Services
   {
     public ReferralStatusService(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
     }
   }

@@ -21,7 +21,7 @@ export class AmhpAssessmentViewPage implements OnInit {
 
   ngOnInit() {
     this.assessmentLastUpdated = new Date();
-    let assessmentId = this.route.snapshot.paramMap.get('id');
+    const assessmentId = +this.route.snapshot.paramMap.get('id');
 
     if (assessmentId) {
       this.assessmentService.getView(assessmentId)
@@ -32,6 +32,6 @@ export class AmhpAssessmentViewPage implements OnInit {
 
   public updateAssessment(): void {
     this.assessmentService.storeView(this.assessmentView);
-    this.navCtrl.navigateForward("amhp-assessment-outcome");
+    this.navCtrl.navigateForward('amhp-assessment-outcome');
   }
 }

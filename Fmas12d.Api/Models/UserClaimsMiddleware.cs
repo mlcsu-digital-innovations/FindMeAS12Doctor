@@ -64,9 +64,11 @@ namespace Fmas12d.Models
           }
           else
           {
-            string cacheKey = $"_Claim_UserId_{identityServerIdentifier}";
+            string cacheUserIdKey = $"_Claim_UserId_{identityServerIdentifier}";
+            string cacheProfileTypeIdKey = $"_Claim_ProfileTypeId_{identityServerIdentifier}";
 
-            if (!memoryCache.TryGetValue(cacheKey, out int userId))
+            if (!memoryCache.TryGetValue(cacheUserIdKey, out int userId) ||
+                !memoryCache.TryGetValue(cacheProfileTypeIdKey, out int profileTypeId))
             {
               User user = await userService.GetByIdentityServerIdentifierAsync(
                 identityServerIdentifier
@@ -79,16 +81,20 @@ namespace Fmas12d.Models
                 return;
               }
 
+              profileTypeId = user.ProfileTypeId;
               userId = user.Id;
-              memoryCache.Set(cacheKey, userId, new TimeSpan(30, 0, 0));
+
+              memoryCache.Set(cacheUserIdKey, userId, new TimeSpan(30, 0, 0));
+              memoryCache.Set(cacheProfileTypeIdKey, profileTypeId, new TimeSpan(30, 0, 0));
             }
 
-            List<Claim> userIdClaim = new List<Claim>
-          {
-            new Claim(AppClaimsPrincipal.CLAIM_USERID, userId.ToString())
-          };
+            List<Claim> userClaims = new List<Claim>
+            {
+              new Claim(UserClaimsService.CLAIM_PROFILETYPEID, profileTypeId.ToString()),
+              new Claim(UserClaimsService.CLAIM_USERID, userId.ToString())
+            };
 
-            ClaimsIdentity appIdentity = new ClaimsIdentity(userIdClaim);
+            ClaimsIdentity appIdentity = new ClaimsIdentity(userClaims);
             httpContext.User.AddIdentity(appIdentity);
           }
         }

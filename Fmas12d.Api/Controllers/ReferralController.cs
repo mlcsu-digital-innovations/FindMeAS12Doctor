@@ -13,8 +13,10 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy="User")]
   public class ReferralController : ModelControllerNoAutoMapper
   {
-    public ReferralController(IReferralService service)
-      : base(service)
+    public ReferralController(
+      IReferralService service,
+      IUserClaimsService userClaimsService)
+      : base(userClaimsService, service)
     {
     }
 

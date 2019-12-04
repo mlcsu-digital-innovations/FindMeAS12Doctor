@@ -6,8 +6,8 @@ namespace Fmas12d.Business.Models
 {
   public class NameDescription : BaseModel, INameDescription
   {
-    protected NameDescription() {}
-    protected NameDescription(Data.Entities.NameDescription entity) : base(entity)
+    public NameDescription() {}
+    public NameDescription(Data.Entities.NameDescription entity) : base(entity)
     {
       if (entity == null) return;
       

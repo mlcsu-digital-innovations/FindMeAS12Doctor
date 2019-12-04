@@ -8,8 +8,8 @@ namespace Fmas12d.Business.Services
   {
     public AssessmentDetailTypeService(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
     }
   }
