@@ -1,0 +1,74 @@
+<app-navbar></app-navbar>
+
+<ion-content>
+
+  <ion-row>
+    <ion-col>
+        <span class="list-title green">
+          <ion-icon class="green" name="checkmark-circle"></ion-icon>
+          Available
+        </span>
+    </ion-col>
+  </ion-row>
+  <ion-row >
+    <ion-list>
+      <ion-item class="item green-item" *ngFor="let item of availableList"
+        detail="false"
+        [routerLink]="['/doctor-availability-edit/', item.id]"
+        routerDirection="forward"
+      >
+      {{item.startDateTime | date: 'dd MMM yy'}} 
+      {{item.startDateTime | date: 'HH:mm'}} to 
+      {{item.endDateTime | date: 'HH:mm'}}   
+      {{item.locationDetails}}
+
+      </ion-item>
+    </ion-list>
+
+  </ion-row>
+
+  <ion-row>
+
+  </ion-row>
+
+  <ion-row>
+      <ion-col>
+          <span class="list-title red">
+            <ion-icon class="red" name="close-circle"></ion-icon>
+            Unavailable
+          </span>
+      </ion-col>
+  
+    </ion-row>
+    <ion-row >
+      <ion-list>
+        <ion-item class="item red-item" *ngFor="let item of unavailableList"
+          detail="false"
+          [routerLink]="['/doctor-availability-edit/', item.id]"
+          routerDirection="forward"
+        >
+        {{item.startDateTime | date: 'dd MMM yy'}} 
+        {{item.startDateTime | date: 'HH:mm'}} to 
+        {{item.endDateTime | date: 'HH:mm'}}   
+        {{item.locationDetails}}
+  
+        </ion-item>
+      </ion-list>
+  
+    </ion-row>
+
+    <ion-fab 
+      vertical="bottom"
+      horizontal="end"
+      slot="fixed"
+    >
+      <ion-fab-button size="small">
+        <ion-icon 
+          name="add" 
+          [routerLink]="['/doctor-availability-add/']"
+          routerDirection="forward"
+        >
+        </ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+</ion-content>
