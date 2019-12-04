@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastController, NavController } from '@ionic/angular';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ContactDetailService } from 'src/app/services/contact-details/contact-detail.service';
+import { NameId } from 'src/app/interfaces/name-id.interface';
 
 @Component({
   selector: 'app-amhp-assessment-accept-request',
@@ -16,9 +18,11 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
   public currentLocationId: number;
   public latitude: number;
   public longitude: number;
+  public contactDetails: NameId[] = [];
 
   constructor(
     private assessmentService: AmhpAssessmentService,
+    private contactDetailService: ContactDetailService,
     private geolocation: Geolocation,
     private navController: NavController,
     private route: ActivatedRoute,
@@ -28,8 +32,8 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
     this.route.queryParams.subscribe(
       params => {
         if (this.router.getCurrentNavigation().extras.state) {
-          console.log(this.router.getCurrentNavigation().extras.state.assessment);
           this.assessmentRequest = this.router.getCurrentNavigation().extras.state.assessment;
+          this.getContactDetails();
         } else {
           this.assessmentRequest = new AmhpAssessmentRequestDetails();
           // show an error page !
@@ -39,7 +43,6 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
   }
 
   ngOnInit() {
-    // ToDo: Get users stored locations from a service
 
   }
 
@@ -55,8 +58,7 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
       this.longitude === undefined
     ) {
       this.assessmentService.acceptRequest(
-        this.assessmentRequest.id,
-        this.assessmentRequest.doctorDetails.doctorId
+        this.assessmentRequest.id
       )
       .subscribe(
         result => {
@@ -71,7 +73,6 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
     if (this.currentLocationId) {
       this.assessmentService.acceptRequestByContactDetail(
         this.assessmentRequest.id,
-        this.assessmentRequest.doctorDetails.doctorId,
         this.currentLocationId
       )
       .subscribe(
@@ -87,7 +88,6 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
     if (this.latitude && this.longitude) {
       this.assessmentService.acceptRequestByCoordinates(
         this.assessmentRequest.id,
-        this.assessmentRequest.doctorDetails.doctorId,
         this.latitude,
         this.longitude
       )
@@ -109,11 +109,28 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
     this.longitude = undefined;
   }
 
+  getContactDetails() {
+    this.contactDetailService.getContactDetailsForAssessment(this.assessmentRequest.id)
+      .subscribe(
+        result => {
+          if (result !== null) {
+            result.forEach(contact => {
+              this.contactDetails.push({id: contact.contactDetails[0].id, name: contact.name});
+            });
+          }
+        }, error => {
+          this.showErrorToast('Unable to retrieve contact details for user');
+        }
+      );
+  }
+
   getCoordinates() {
     this.geolocation.getCurrentPosition().then(resp => {
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
       this.currentLocationId = undefined;
+    }, error => {
+      this.showErrorToast('Unable to obtain current location for user');
     });
   }
 
