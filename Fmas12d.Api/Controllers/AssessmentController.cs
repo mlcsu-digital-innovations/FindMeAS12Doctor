@@ -110,7 +110,7 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.Assessment businessModel = await Service.GetByIdAsync(id, true);
+        Business.Models.Assessment businessModel = await Service.GetByIdAsync(id, true, true);
 
         if (businessModel == null)
         {
@@ -127,6 +127,31 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    [HttpGet]
+    [Route("{id:int}/user")]
+    public async Task<ActionResult<ViewModels.AssessmentView>> GetViewForUser(int id)
+    {
+      try
+      {
+        Business.Models.Assessment businessModel = 
+          await Service.GetByIdForUserAsync(id, GetUserId(), true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {          
+          ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
 
     [HttpPost]
     [Route("{id:int}/doctors/allocated")]
