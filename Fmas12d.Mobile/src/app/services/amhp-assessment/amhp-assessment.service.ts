@@ -20,33 +20,29 @@ export class AmhpAssessmentService {
   ) { }
 
   public acceptRequest(
-    assessmentId: number,
-    doctorUserId: number
+    assessmentId: number
     ) {
 
     return (this.apiService.put(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted`,
       null
     ));
   }
 
   public acceptRequestByContactDetail(
     assessmentId: number,
-    doctorUserId: number,
     contactDetailId: number
     ) {
 
     const contactDetailObject = {contactDetailId};
-
     return (this.apiService.put(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted/contactDetail`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted/contactDetail`,
       contactDetailObject
     ));
   }
 
   public acceptRequestByCoordinates(
     assessmentId: number,
-    doctorUserId: number,
     latitude: number,
     longitude: number,
     ) {
@@ -54,28 +50,27 @@ export class AmhpAssessmentService {
     const coordinateObject = {latitude, longitude};
 
     return (this.apiService.put(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted/location`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted/location`,
       coordinateObject
     ));
   }
 
   public acceptRequestByPostcode(
     assessmentId: number,
-    doctorUserId: number,
     postcode: string
     ) {
 
     const postcodeObject = {postcode};
 
     return (this.apiService.put(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorUserId}/accepted/postcode`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}/accepted/postcode`,
       postcodeObject
     ));
   }
 
-  public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {   
+  public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`, 
+      `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`,
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(
@@ -83,10 +78,9 @@ export class AmhpAssessmentService {
     );
   }
 
-  public getRequests(doctorUserId: number): Observable<AmhpAssessmentRequest[]> {
+  public getRequests(): Observable<AmhpAssessmentRequest[]> {
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment?doctorUserId=${doctorUserId}
-      &doctorStatusId=${DOCTORSTATUSSELECTED}`,
+      `${environment.apiEndpoint}/assessment/list?doctorStatusId=${DOCTORSTATUSSELECTED}`,
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(delay(1000))
@@ -97,13 +91,13 @@ export class AmhpAssessmentService {
 
   public getView(assessmentId: number): Observable<AmhpAssessmentView> {
     return this.apiService.get(
-      `${environment.apiEndpoint}/assessment/${assessmentId}`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}/user`,
       `AmhpUserView-${assessmentId}`
     ) as Observable<AmhpAssessmentView>;
   }
 
-  public declineAssessmentRequest(assessmentId: number, doctorId: number) {
-    const url = `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/${doctorId}/declined`;
+  public declineAssessmentRequest(assessmentId: number) {
+    const url = `${environment.apiEndpoint}/assessment/${assessmentId}/declined`;
     return this.apiService.put(url, null);
   }
 
