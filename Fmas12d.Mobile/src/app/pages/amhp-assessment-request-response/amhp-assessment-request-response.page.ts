@@ -40,18 +40,16 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     request
       .subscribe(
         (result: AmhpAssessmentView) => {
-          console.log(result);
           this.assessmentRequest.dateTime = result.dateTime;
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
-          this.assessmentRequest.doctorDetails =
-            result.doctorsSelected.find(doctor => doctor.doctorId === 4);
 
-          console.log(this.assessmentRequest);
+          this.assessmentRequest.doctorDetails = result.doctorsSelected[0];
 
           this.closeLoading();
         }, error => {
+          this.showErrorToast('Unable to retrieve assessment details');
           this.closeLoading();
         }
       );
@@ -75,7 +73,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
 
   declineRequest() {
 
-    this.assessmentService.declineAssessmentRequest(this.assessmentId, this.assessmentRequest.doctorDetails.doctorId)
+    this.assessmentService.declineAssessmentRequest(this.assessmentId)
       .subscribe(
         result => {
           this.showSuccessToast('Request declined');

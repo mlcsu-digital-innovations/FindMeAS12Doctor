@@ -29,12 +29,11 @@
         </ion-label>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="contactDetails.length > 0">
       <ion-item>
         <ion-label>Update Current Location</ion-label>
         <ion-select [(ngModel)]="currentLocationId" (ionChange)="contactChanged()">
-          <ion-select-option value="1">Work</ion-select-option>
-          <ion-select-option value="2">Home</ion-select-option>
+          <ion-select-option *ngFor="let contact of contactDetails" value={{contact.id}}>{{contact.name}}</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-row>
