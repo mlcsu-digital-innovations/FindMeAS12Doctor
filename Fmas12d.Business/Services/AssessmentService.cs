@@ -17,7 +17,6 @@ namespace Fmas12d.Business.Services
     IServiceBaseNoAutoMapper,
     IAssessmentService
   {
-    private readonly IConfiguration _config;
     private readonly IContactDetailsService _contactDetailsService;
     private readonly ILocationDetailService _locationDetailService;
     private readonly IReferralService _referralService;
@@ -26,7 +25,6 @@ namespace Fmas12d.Business.Services
 
     public AssessmentService(
       ApplicationContext context,
-      IConfiguration config,
       IContactDetailsService contactDetailsService,
       ILocationDetailService locationDetailService,
       IReferralService referralService,
@@ -36,7 +34,6 @@ namespace Fmas12d.Business.Services
     )
       : base(context, userClaimsService)
     {
-      _config = config;
       _contactDetailsService = contactDetailsService;
       _locationDetailService = locationDetailService;
       _referralService = referralService;
@@ -78,8 +75,6 @@ namespace Fmas12d.Business.Services
 
       CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
         id, entity.Referral.ReferralStatusId);
-
-      CheckDoctorIsNotAlreadyAllocatedToAnOverlappingAssessment(userId, entity);
 
       UpdateModified(entity);
 
@@ -968,38 +963,7 @@ namespace Fmas12d.Business.Services
         $"[{string.Join(",", selectedUserIds)}], " +
         $"from the requested [{string.Join(",", doctorUserIds)}]");
       }
-    }
-
-    private void CheckDoctorIsNotAlreadyAllocatedToAnOverlappingAssessment(
-      int userId,
-      Entities.Assessment entity
-    )
-    {
-      DateTimeOffset assessmentTime = (entity.MustBeCompletedBy ?? entity.ScheduledTime).Value;
-      DateTimeOffset overlapEnd = assessmentTime.AddMinutes(
-        _config.GetValue("AllowableMinutesBeforeOverlapAfterAssessmentStartTime", 180));
-      DateTimeOffset overlapStart = assessmentTime.AddMinutes(
-        -1 * _config.GetValue("AllowableMinutesBeforeOverlapAfterAssessmentStartTime", 180));
-      
-      IEnumerable<int> assessmentIds = _context
-        .Assessments
-        .Include(a => a.Doctors)
-        .Where(a => a.Doctors.Any(d => d.DoctorUserId == userId && 
-                                       d.StatusId == AssessmentDoctorStatus.ALLOCATED))
-        .Where(a => (a.ScheduledTime ?? a.MustBeCompletedBy).Value >= overlapStart ||
-                  (a.ScheduledTime ?? a.MustBeCompletedBy).Value <= overlapEnd)
-        .Select(a => a.Id)
-        .ToList();
-
-      if (assessmentIds.Any())
-      {
-        throw new ModelStateException("userId",
-        $"User Id {userId} cannot be allocated to Assessment Id {entity.Id} because the User is " +
-        $"already allocated to the following Assessments {string.Join(",", assessmentIds)} " +
-        $"before {overlapStart} or after {overlapEnd}");
-      }
-
-    }    
+    } 
 
     private void CheckAssessmentCanBeUpdated(
       Entities.Assessment entity
