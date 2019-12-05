@@ -8,6 +8,8 @@ namespace Fmas12d.Api.ViewModels
       Distance = model.Distance;
       DoctorId = model.DoctorUserId;
       GmcNumber = model.DoctorUser.GmcNumber;
+      HasAccepted = model.HasAccepted ?? false;
+      HasResponded = model.RespondedAt == null ? false : true;
       Id = model.Id;      
       KnownLocation = new Location(model.KnownLocation);
     }
@@ -16,6 +18,8 @@ namespace Fmas12d.Api.ViewModels
     public decimal? Distance { get; set; }
     public int DoctorId { get; set; }
     public int? GmcNumber { get; set; }
+    public bool HasAccepted { get; set; }
+    public bool HasResponded { get; set; }
     public int Id { get; set; }
     public Location KnownLocation { get; set; }
   }
