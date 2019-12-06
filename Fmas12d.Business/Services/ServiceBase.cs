@@ -1,18 +1,17 @@
 using System;
 using System.Threading.Tasks;
 using Fmas12d.Business.Exceptions;
-using Fmas12d.Business.Models;
 using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Services
 {
-  public abstract class ServiceBaseNoAutoMapper<TEntity> : IServiceBaseNoAutoMapper
+  public abstract class ServiceBase<TEntity> : IServiceBase
     where TEntity : BaseEntity
   {
     protected readonly ApplicationContext _context;
     protected readonly IUserClaimsService _userClaimsService;
 
-    protected ServiceBaseNoAutoMapper(
+    protected ServiceBase(
       ApplicationContext context,
       IUserClaimsService userClaimsService
     )

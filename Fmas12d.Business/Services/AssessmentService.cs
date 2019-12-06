@@ -4,7 +4,6 @@ using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Helpers;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,8 +12,8 @@ using System.Linq;
 namespace Fmas12d.Business.Services
 {
   public class AssessmentService :
-    ServiceBaseNoAutoMapper<Entities.Referral>,
-    IServiceBaseNoAutoMapper,
+    ServiceBase<Entities.Assessment>,
+    IServiceBase,
     IAssessmentService
   {
     private readonly IContactDetailsService _contactDetailsService;

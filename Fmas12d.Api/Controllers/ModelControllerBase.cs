@@ -17,11 +17,11 @@ namespace Fmas12d.Api.Controllers
   public abstract class ModelControllerBase : ControllerBase
   {
     private readonly IUserClaimsService _userClaimsService;
-    protected readonly IServiceBaseNoAutoMapper _service;
+    protected readonly IServiceBase _service;
 
     protected ModelControllerBase(
         IUserClaimsService userClaimsService,
-        IServiceBaseNoAutoMapper service
+        IServiceBase service
     )
     {
       _userClaimsService = userClaimsService;

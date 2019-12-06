@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IUserService : IServiceBaseNoAutoMapper
+  public interface IUserService : IServiceBase
   {
     Task<User> CheckIsAmhpAsync(
       int id, 

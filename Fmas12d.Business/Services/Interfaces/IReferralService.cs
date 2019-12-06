@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IReferralService : IServiceBaseNoAutoMapper
+  public interface IReferralService : IServiceBase
   {
     Task<Referral> CreateAsync(ReferralCreate businessModel);
     Task<Referral> CreateRetrospectiveAsync(ReferralCreate businessModel);

@@ -11,7 +11,7 @@ using Fmas12d.Business.Exceptions;
 namespace Fmas12d.Business.Services
 {
   public class ReferralService : 
-    ServiceBaseNoAutoMapper<Entities.Referral>, 
+    ServiceBase<Entities.Referral>, 
     IReferralService
   {
     private readonly IPatientService _patientService;

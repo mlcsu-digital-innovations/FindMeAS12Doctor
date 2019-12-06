@@ -14,7 +14,7 @@ namespace Fmas12d.Api.Controllers
   {
     protected ModelControllerDeletePatchBase(
         IUserClaimsService userClaimsService,
-        IServiceBaseNoAutoMapper service
+        IServiceBase service
     ) : base(userClaimsService, service)
     {
     }
