@@ -56,12 +56,12 @@ const routes: Routes = [
     '#DoctorAvailabilityViewPageModule' },
   {
     path: 'doctor-availability-add',
-    loadChildren: './pages/doctor-availability-add/doctor-availability-add.module' + 
+    loadChildren: './pages/doctor-availability-add/doctor-availability-add.module' +
     '#DoctorAvailabilityAddPageModule'
   },
   {
-    path: 'doctor-availability-edit',
-    loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' + 
+    path: 'doctor-availability-edit/:id',
+    loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' +
     '#DoctorAvailabilityEditPageModule'
   },
 
