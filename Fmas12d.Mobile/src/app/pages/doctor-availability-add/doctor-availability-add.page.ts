@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactDetailService } from 'src/app/services/contact-details/contact-detail.service';
-import { NavController, ToastController } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NameId } from 'src/app/interfaces/name-id.interface';
+import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
+import { Router } from '@angular/router';
+import { ToastController, NavController } from '@ionic/angular';
+import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
+import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 
 @Component({
   selector: 'app-doctor-availability-add',
@@ -12,23 +15,24 @@ import { NameId } from 'src/app/interfaces/name-id.interface';
 export class DoctorAvailabilityAddPage implements OnInit {
 
   public available = true;
-  public endDateTime: string;
-  public minDate: string;
-  public maxDate: string;
   public contactDetails: NameId[] = [];
+  public dateErrorText: string;
+  public endDateTime: string;
+  public hasDateError: boolean;
   public intendedLocationId: number;
+  public maxDate: string;
+  public minDate: string;
   public postcode: string;
   public startDateTime: string;
-  public hasDateError: boolean;
-  public dateErrorText: string;
   public validPostcode: boolean;
 
   constructor(
     private contactDetailService: ContactDetailService,
-    // private navController: NavController,
-    // private route: ActivatedRoute,
-    // private router: Router,
-    private toastController: ToastController
+    private postcodeValidationService: PostcodeValidationService,
+    private navController: NavController,
+    private router: Router,
+    private toastController: ToastController,
+    private userAvailabilityService: UserAvailabilityService
   ) { }
 
   ngOnInit() {
@@ -43,8 +47,9 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.getContactDetails();
   }
 
-  locationChanged() {
-    console.log('contact changed');
+  availabilityChange() {
+    this.intendedLocationId = undefined;
+    this.postcode = undefined;
   }
 
   datesChanged() {
@@ -66,12 +71,10 @@ export class DoctorAvailabilityAddPage implements OnInit {
     }
 
     if (this.available === true) {
-      if ( !this.validPostcode || this.intendedLocationId === 0) {
+      if ( !this.validPostcode && this.intendedLocationId === undefined) {
         dataValid = false;
       }
     }
-
-    
     return dataValid;
   }
 
@@ -81,7 +84,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
         result => {
           if (result !== null) {
             result.forEach(contact => {
-              this.contactDetails.push({id: contact.id, name: contact.name});
+              this.contactDetails.push({id: contact.contactDetails[0].id, name: contact.name});
             });
           }
         }, error => {
@@ -90,8 +93,29 @@ export class DoctorAvailabilityAddPage implements OnInit {
       );
   }
 
+  postcodeChanged() {
+    this.intendedLocationId = undefined;
+    this.validPostcode = false;
+  }
+
   saveAvailability() {
-    console.log('saving');
+    const userAvailability = {} as UserAvailability;
+
+    userAvailability.contactDetailId = this.intendedLocationId;
+    userAvailability.postcode = this.postcode;
+    userAvailability.start = new Date(this.startDateTime);
+    userAvailability.end = new Date(this.endDateTime);
+    userAvailability.isAvailable = this.available;
+
+    this.userAvailabilityService.postUserAvailability(userAvailability)
+    .subscribe(
+      result => {
+        this.showSuccessToast('Availability saved');
+        this.navController.back();
+      }, error => {
+        this.showErrorToast('Unable to save availability for user');
+      }
+    );
   }
 
   showErrorToast(msg: string) {
@@ -114,6 +138,18 @@ export class DoctorAvailabilityAddPage implements OnInit {
 
   validatePostcode() {
     console.log('validating postcode');
+    this.validPostcode = true;
+
+    this.postcodeValidationService.getPostcodeDetails(this.postcode)
+      .subscribe(
+        result => {
+          console.log(result);
+        }, error => {
+          this.showErrorToast('Unable to validate postcode');
+          this.validPostcode = false;
+        }
+      );
+
   }
 
 }

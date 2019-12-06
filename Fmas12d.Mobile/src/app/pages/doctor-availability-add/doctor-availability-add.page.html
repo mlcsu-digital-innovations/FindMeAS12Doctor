@@ -5,8 +5,15 @@
   <ion-grid>
     <ion-row>
       <ion-item>
-        <ion-toggle color="primary" [(ngModel)]="available"></ion-toggle>
-        <ion-label class="available-label">{{available == true ? 'Available' : 'Unavailable'}}</ion-label>
+        <ion-toggle 
+          color="primary" 
+          [(ngModel)]="available"
+          (ionChange)="availabilityChange()"  
+        >
+        </ion-toggle>
+        <ion-label 
+          class="available-label">{{available == true ? 'Available' : 'Unavailable'}}
+        </ion-label>
       </ion-item>
     </ion-row>
 
@@ -71,7 +78,7 @@
     <ion-row *ngIf="available">
       <ion-item style="width:100%;">
       <ion-label>Location</ion-label>
-      <ion-select [(ngModel)]="intendedLocationId" (ionChange)="locationChanged()">
+      <ion-select [(ngModel)]="intendedLocationId">
         <ion-select-option *ngFor="let contact of contactDetails" value={{contact.id}}>{{contact.name}}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -84,7 +91,10 @@
           minlength="6"
           maxlength="8"
           name="postcode"
+          autocapitalize="on"
+          debounce=500
           [(ngModel)]="postcode"
+          (ionChange)="postcodeChanged()"
           pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})"
         ></ion-input>
         <ion-button
