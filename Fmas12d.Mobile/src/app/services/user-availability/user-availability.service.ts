@@ -68,8 +68,6 @@ export class UserAvailabilityService {
 
   public putUserAvailability(userAvailability: UserAvailability) {
 
-    console.log(userAvailability);
-
     const putAvailability = {} as UserAvailabilityPut;
 
     putAvailability.start = userAvailability.start;

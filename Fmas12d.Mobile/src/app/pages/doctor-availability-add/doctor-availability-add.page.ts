@@ -133,7 +133,6 @@ export class DoctorAvailabilityAddPage implements OnInit {
   }
 
   validatePostcode() {
-    console.log('validating postcode');
     this.validPostcode = true;
 
     this.postcodeValidationService.getPostcodeDetails(this.userAvailability.location.postcode)
