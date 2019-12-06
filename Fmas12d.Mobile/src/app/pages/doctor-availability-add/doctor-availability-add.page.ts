@@ -4,7 +4,7 @@ import { NameId } from 'src/app/interfaces/name-id.interface';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Router } from '@angular/router';
 import { ToastController, NavController } from '@ionic/angular';
-import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
+import { UserAvailability, Location } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 
 @Component({
@@ -19,12 +19,10 @@ export class DoctorAvailabilityAddPage implements OnInit {
   public dateErrorText: string;
   public endDateTime: string;
   public hasDateError: boolean;
-  public intendedLocationId: number;
   public maxDate: string;
   public minDate: string;
-  public postcode: string;
-  public startDateTime: string;
   public validPostcode: boolean;
+  public userAvailability: UserAvailability;
 
   constructor(
     private contactDetailService: ContactDetailService,
@@ -36,27 +34,32 @@ export class DoctorAvailabilityAddPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.userAvailability = {} as UserAvailability;
+    this.userAvailability.location = {} as Location;
+
     let now = new Date();
     this.minDate = new Date().toISOString();
     this.maxDate = new Date(now.setMonth(now.getMonth() + 6)).toISOString();
 
     now = new Date();
-    this.startDateTime = new Date().toISOString();
-    this.endDateTime = new Date(now.setHours(now.getHours() + 8)).toISOString();
+    this.userAvailability.start = now.toISOString();
+    this.userAvailability.end = new Date(now.setHours(now.getHours() + 8)).toISOString();
 
     this.getContactDetails();
   }
 
   availabilityChange() {
-    this.intendedLocationId = undefined;
-    this.postcode = undefined;
+    this.userAvailability.location.contactDetailId = undefined;
+    this.userAvailability.postcode = undefined;
+    this.userAvailability.isAvailable = this.available;
   }
 
   datesChanged() {
     this.hasDateError = false;
     this.dateErrorText = '';
 
-    if ( this.startDateTime > this.endDateTime ) {
+    if ( this.userAvailability.start > this.userAvailability.end ) {
       this.hasDateError = true;
       this.dateErrorText = 'Invalid start / end dates';
     }
@@ -71,7 +74,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
     }
 
     if (this.available === true) {
-      if ( !this.validPostcode && this.intendedLocationId === undefined) {
+      if ( !this.validPostcode && this.userAvailability.location.contactDetailId === undefined) {
         dataValid = false;
       }
     }
@@ -94,26 +97,19 @@ export class DoctorAvailabilityAddPage implements OnInit {
   }
 
   postcodeChanged() {
-    this.intendedLocationId = undefined;
+    this.userAvailability.location.contactDetailId = undefined;
     this.validPostcode = false;
   }
 
   saveAvailability() {
-    const userAvailability = {} as UserAvailability;
 
-    userAvailability.contactDetailId = this.intendedLocationId;
-    userAvailability.postcode = this.postcode;
-    userAvailability.start = new Date(this.startDateTime);
-    userAvailability.end = new Date(this.endDateTime);
-    userAvailability.isAvailable = this.available;
-
-    this.userAvailabilityService.postUserAvailability(userAvailability)
+    this.userAvailabilityService.postUserAvailability(this.userAvailability)
     .subscribe(
       result => {
         this.showSuccessToast('Availability saved');
         this.navController.back();
       }, error => {
-        this.showErrorToast('Unable to save availability for user');
+        this.showErrorToast(`Unable to save availability for user. ${error.error.title}` );
       }
     );
   }
@@ -140,7 +136,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
     console.log('validating postcode');
     this.validPostcode = true;
 
-    this.postcodeValidationService.getPostcodeDetails(this.postcode)
+    this.postcodeValidationService.getPostcodeDetails(this.userAvailability.location.postcode)
       .subscribe(
         result => {
           console.log(result);

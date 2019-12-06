@@ -14,14 +14,24 @@
     <ion-list>
       <ion-item class="item green-item" *ngFor="let item of availableList"
         detail="false"
-        [routerLink]="['/doctor-availability-edit/', item.id]"
-        routerDirection="forward"
+        (click)="editAvailability(item)"
       >
-      {{item.startDateTime | date: 'dd MMM yy'}} 
-      {{item.startDateTime | date: 'HH:mm'}} to 
-      {{item.endDateTime | date: 'HH:mm'}}   
-      {{item.locationDetails}}
-
+        <ion-grid>
+          <ion-row>
+            {{item.start | date: 'dd MMM yy'}} 
+            {{item.start | date: 'HH:mm'}} to 
+            {{item.end | date: 'dd MMM yy'}}
+            {{item.end | date: 'HH:mm'}} 
+          </ion-row>
+          <ion-row class="location">
+            <span *ngIf="item.location.type === 'ContactDetail'">
+              {{item.location.contactDetailTypeName}}
+            </span>
+            <span *ngIf="item.location.type === 'Postcode'">
+              {{item.location.postcode}}
+            </span>
+          </ion-row>
+        </ion-grid>
       </ion-item>
     </ion-list>
 
@@ -42,15 +52,27 @@
     </ion-row>
     <ion-row >
       <ion-list>
-        <ion-item class="item red-item" *ngFor="let item of unavailableList"
+        <ion-item class="item red-item" 
+          *ngFor="let item of unavailableList"
           detail="false"
-          [routerLink]="['/doctor-availability-edit/', item.id]"
-          routerDirection="forward"
+          (click)="editAvailability(item)"
         >
-        {{item.startDateTime | date: 'dd MMM yy'}} 
-        {{item.startDateTime | date: 'HH:mm'}} to 
-        {{item.endDateTime | date: 'HH:mm'}}   
-        {{item.locationDetails}}
+          <ion-grid>
+            <ion-row>
+              {{item.start | date: 'dd MMM yy'}} 
+              {{item.start | date: 'HH:mm'}} to 
+              {{item.end | date: 'dd MMM yy'}}
+              {{item.end | date: 'HH:mm'}} 
+            </ion-row>
+            <ion-row class="location">
+              <span *ngIf="item.location.type === 'ContactDetail'">
+                {{item.location.contactDetailTypeName}}
+              </span>
+              <span *ngIf="item.location.type === 'Postcode'">
+                {{item.location.postcode}}
+              </span>
+            </ion-row>
+          </ion-grid>
   
         </ion-item>
       </ion-list>

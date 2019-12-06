@@ -1,11 +1,19 @@
 export interface UserAvailability {
-  end: Date;
+  contactDetailId?: number;
+  end: Date | string;
   id: number;
   isAvailable: boolean;
-  locationDetails?: string;
-  start: Date;
-  contactDetailId?: number;
+  location: Location;
   postcode?: string;
+  start: Date | string;
+  statusId: number;
+}
+
+export interface Location {
+  contactDetailId?: number;
+  contactDetailTypeName?: string;
   latitude?: number;
   longitude?: number;
+  postcode?: string;
+  type: string;
 }
