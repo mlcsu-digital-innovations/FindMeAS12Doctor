@@ -14,12 +14,12 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy = "User")]
 
-  public abstract class ModelControllerNoAutoMapper : ControllerBase
+  public abstract class ModelControllerBase : ControllerBase
   {
     private readonly IUserClaimsService _userClaimsService;
     protected readonly IServiceBaseNoAutoMapper _service;
 
-    protected ModelControllerNoAutoMapper(
+    protected ModelControllerBase(
         IUserClaimsService userClaimsService,
         IServiceBaseNoAutoMapper service
     )
@@ -28,39 +28,11 @@ namespace Fmas12d.Api.Controllers
       _service = service;
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> Delete(int id)
-    {
-      try
-      {
-        await _service.DeactivateAsync(id);
-        return Ok();
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
-    }
-
     protected string GetCreatedModelUri(int id)
     {
       return $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}" +
              $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/view/{id}";
-    }
-
-    [HttpPatch("{id:int}")]
-    public async Task<ActionResult> Patch(int id)
-    {
-      try
-      {
-        await _service.ActivateAsync(id);
-        return Ok();
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
-    }    
+    } 
 
     protected int GetUserId()
     {

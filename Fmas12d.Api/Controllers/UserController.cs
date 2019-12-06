@@ -11,7 +11,7 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy="User")]
-  public class UserController : ModelControllerNoAutoMapper
+  public class UserController : ModelControllerDeletePatchBase
   {
     public UserController(
       IUserClaimsService userClaimsService,

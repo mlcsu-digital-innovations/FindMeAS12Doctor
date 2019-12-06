@@ -11,7 +11,7 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy="User")]
-  public class ReferralController : ModelControllerNoAutoMapper
+  public class ReferralController : ModelControllerDeletePatchBase
   {
     public ReferralController(
       IReferralService service,

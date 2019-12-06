@@ -11,7 +11,7 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy = "User")]
-  public class AssessmentController : ModelControllerNoAutoMapper
+  public class AssessmentController : ModelControllerDeletePatchBase
   {
     private IAssessmentService Service { get { return _service as IAssessmentService; } }
 

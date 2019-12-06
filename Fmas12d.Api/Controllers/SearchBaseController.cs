@@ -11,7 +11,7 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy="User")]
-  public abstract class SearchBaseController<BusinessModel> : ModelControllerNoAutoMapper
+  public abstract class SearchBaseController<BusinessModel> : ModelControllerDeletePatchBase
       where BusinessModel : Business.Models.BaseModel
   {
     protected SearchBaseController(      

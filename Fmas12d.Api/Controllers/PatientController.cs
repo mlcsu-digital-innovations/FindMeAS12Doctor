@@ -9,7 +9,7 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy="User")]
-  public class PatientController : ModelControllerNoAutoMapper
+  public class PatientController : ModelControllerDeletePatchBase
   {
     public PatientController(
       IPatientService service,

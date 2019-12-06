@@ -12,7 +12,7 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy="User")]
   
-  public class UserNotificationController : ModelControllerNoAutoMapper
+  public class UserNotificationController : ModelControllerDeletePatchBase
   {
     public UserNotificationController(
       IUserClaimsService userClaimsService,
