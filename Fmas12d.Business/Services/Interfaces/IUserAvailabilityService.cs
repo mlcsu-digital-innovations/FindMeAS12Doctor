@@ -21,6 +21,7 @@ namespace Fmas12d.Business.Services
       List<int> userIds, 
       DateTimeOffset dateTime, 
       bool asNoTracking,
-      bool activeOnly);    
+      bool activeOnly);
+    Task<IUserAvailability> UpdateAsync(IUserAvailability businessModel);
   }
 }
