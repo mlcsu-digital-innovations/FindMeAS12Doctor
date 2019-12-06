@@ -167,7 +167,7 @@ namespace Fmas12d.Api.Controllers
             Id = id
           };
         requestModel.MapToBusinessModel(businessModel);
-        businessModel = await Service.AddAllocatedDoctors(businessModel);
+        businessModel = await Service.AddAllocatedDoctorsAsync(businessModel);
         ViewModels.AssessmentDoctorsPost viewModel =
           new ViewModels.AssessmentDoctorsPost(businessModel);
 
@@ -178,6 +178,24 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    [HttpPost]
+    [Route("{id:int}/doctors/allocated/direct")]
+    public async Task<ActionResult> PostDoctorAllocatedDirect(
+      int id,
+      [FromBody] RequestModels.AssessmentDoctorsPostDirect requestModel
+    )
+    {
+      try
+      {
+        await Service.AddAllocatedDoctorDirectAsync(id, requestModel.UserId.Value);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
 
     [HttpPost]
     [Route("{id:int}/doctors/selected")]
@@ -193,7 +211,7 @@ namespace Fmas12d.Api.Controllers
             Id = id
           };
         requestModel.MapToBusinessModel(businessModel);
-        businessModel = await Service.AddSelectedDoctors(businessModel);
+        businessModel = await Service.AddSelectedDoctorsAsync(businessModel);
         ViewModels.AssessmentDoctorsPost viewModel =
           new ViewModels.AssessmentDoctorsPost(businessModel);
 

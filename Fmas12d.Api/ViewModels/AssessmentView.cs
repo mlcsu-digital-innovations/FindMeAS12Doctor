@@ -16,6 +16,9 @@ namespace Fmas12d.Api.ViewModels
       Address2 = model.Address2;
       Address3 = model.Address3;
       Address4 = model.Address4;
+      CanUpdateOutcome = 
+        model.IsSuccessful == null && 
+        model.Referral.ReferralStatusId == Business.Models.ReferralStatus.ASSESSMENT_SCHEDULED;
       DateTime = model.DateTime;
       DetailTypes = model.DetailTypes
                          ?.Select(dt => new AssessmentDetailType(dt)).ToList();
@@ -49,6 +52,7 @@ namespace Fmas12d.Api.ViewModels
     public string Address2 { get; set; }
     public string Address3 { get; set; }
     public string Address4 { get; set; }
+    public bool CanUpdateOutcome { get; set; }
     public DateTimeOffset DateTime { get; set; }
     public IList<AssessmentDetailType> DetailTypes { get; set; }
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
