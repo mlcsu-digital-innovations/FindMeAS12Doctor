@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
 import { NetworkService, ConnectionStatus } from '../network/network.service';
-import { Observable, from, of } from 'rxjs';
+import { Observable, from, of, throwError } from 'rxjs';
 import { OfflineManagerService } from '../offline-manager/offline-manager.service';
 import { StorageService } from '../storage/storage.service';
 import { tap, map, catchError } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
-            throw new Error(error);
+            return throwError(error);
           }),
           map(result => result),
           tap(result => this.storageService.storeApiRequestData(storageKey, result)
@@ -47,7 +47,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
-            throw new Error(error);
+            return throwError(error);
           }
         )
       );
@@ -62,7 +62,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
-            throw new Error(error);
+            return throwError(error);
           }
         )
       );
