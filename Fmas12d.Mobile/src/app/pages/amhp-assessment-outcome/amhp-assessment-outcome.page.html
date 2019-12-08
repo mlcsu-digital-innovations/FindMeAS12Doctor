@@ -3,8 +3,14 @@
 <ion-content>
   <ion-grid>
     <ion-row>
+      <ion-label class="page-title">
+        AMHP Assessment Update
+      </ion-label>
+    </ion-row>
+
+    <ion-row>
       <ion-col>
-        <ion-label class="assessment-last-updated">
+        <ion-label>
           Last Updated: {{assessmentLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
         </ion-label>
       </ion-col>
@@ -12,70 +18,71 @@
 
     <ion-row>
       <ion-col>
-        <ion-item>
-          <ion-label><strong>Referral Id: </strong>{{assessmentView ? assessmentView.referralId : ""}}</ion-label>
-        </ion-item>
+        &nbsp;
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-item>
-          <ion-label>
-            <strong>Patient Id: </strong>{{assessmentView ? assessmentView.patientIdentifier : ""}}
-          </ion-label>
-        </ion-item>
+        Referral Id: <strong>{{assessmentView ? assessmentView.referralId : ""}}</strong>      
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>               
+        Patient Id: <strong>{{assessmentView ? assessmentView.patientIdentifier : ""}}</strong>               
+      </ion-col>
+    </ion-row>   
+
+    <ion-row>
+      <ion-col>        
+        <ion-select 
+          interface="action-sheet" 
+          placeholder="Assessment Status"
+          [(ngModel)]="assessmentStatusId">
+          <ion-select-option 
+            *ngFor="let assessmentStatus of assessmentStatusList"
+            [value]="assessmentStatus.id">
+            <ion-label>{{assessmentStatus.name}}</ion-label>
+          </ion-select-option>           
+        </ion-select>        
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        <ion-item>
-          <ion-label><strong>Assessment Successful?</strong></ion-label>
-          <ion-toggle [(ngModel)]="assessmentSuccessful"></ion-toggle> 
-        </ion-item>
+        &nbsp;
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="!assessmentSuccessful">
-      <ion-col>
-        <ion-item>
-          <ion-select 
-            class="unsuccessful-assessment-type" 
-            interface="action-sheet" 
-            placeholder="Unsuccessful Assessment Type"
-            [(ngModel)]="unsuccessfulAssessmentTypeId">
-            <ion-select-option 
-              *ngFor="let unsuccessfulAssessmentType of unsuccessfulAssessmentTypeList"
-              [value]="unsuccessfulAssessmentType.id">
-              <ion-label>{{unsuccessfulAssessmentType.name}}</ion-label>
-            </ion-select-option>           
-          </ion-select>
-        </ion-item>
-      </ion-col>
+    <ion-row>
+      <ion-label offset="1">
+        <strong>Confirm attending doctors</strong>
+      </ion-label>
     </ion-row>
 
     <ion-row *ngIf="assessmentView?.doctorsAllocated?.length > 0">
       <ion-col>
-        <ion-list>
-          <ion-list-header>Confirm attending doctors</ion-list-header>
-          <div *ngFor="let doctor of assessmentView.doctorsAllocated">
-            <ion-item>
-              <ion-label><strong>{{doctor.displayName}}</strong></ion-label>
-              <ion-toggle [(ngModel)]="doctor.attended"></ion-toggle>              
-            </ion-item>
-            <ion-item>
-              <ion-label><strong>GMC number: </strong>{{doctor.gmcNumber}}</ion-label>
-            </ion-item>            
+        <ion-list>         
+          <div *ngFor="let doctor of assessmentView.doctorsAllocated">           
+            <ion-row style="width:100%">
+              <ion-col size="9">
+                <ion-row><strong>{{doctor.displayName}}</strong></ion-row>
+                <ion-row>GMC number: <strong>{{doctor.gmcNumber}}</strong></ion-row>
+              </ion-col>
+              <ion-col>
+                <ion-toggle [(ngModel)]="doctor.attended"></ion-toggle>  
+              </ion-col>
+            </ion-row>
           </div>
           
         </ion-list>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="assessmentSuccessful || unsuccessfulAssessmentTypeId">
-      <ion-col offset="5">
-        <ion-icon name="save" (click)="confirmSave()"></ion-icon>
+    <ion-row *ngIf="assessmentStatusId >= 0">
+      <ion-col>
+        <ion-button expand="block" color="primary" (click)="confirmSave()">Save</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
