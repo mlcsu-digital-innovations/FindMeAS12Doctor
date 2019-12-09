@@ -72,6 +72,25 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
+    public async Task<IUserAvailability> GetAtAsync(
+      int userId,
+      DateTimeOffset at,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      IUserAvailability model = await _context
+        .UserAvailabilities
+        .Where(ua => ua.UserId == userId)
+        .Where(ua => ua.End >= at)
+        .Where(ua => ua.Start <= at)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserAvailability.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }    
+
     public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(
       DateTimeOffset requiredDateTime,
       bool asNoTracking,
@@ -256,7 +275,7 @@ namespace Fmas12d.Business.Services
       }
       else if (model.Location.HasContactDetailId)
       {
-        ContactDetail contactDetail = await _contactDetailsService.Get(
+        ContactDetail contactDetail = await _contactDetailsService.GetByIdAndUserIdAsync(
           model.Location.ContactDetailId.Value, model.UserId, true, true
         );
         if (contactDetail == null)
