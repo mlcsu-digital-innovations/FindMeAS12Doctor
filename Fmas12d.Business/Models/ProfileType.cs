@@ -9,6 +9,7 @@ namespace Fmas12d.Business.Models
     public const int DOCTOR = 3;
     public const int FINANCE = 4;
     public const int ADMIN = 5;
+    public const int UNREGISTERED = 6;
 
     public ProfileType() {}
     public ProfileType(Data.Entities.ProfileType entity) : base(entity)

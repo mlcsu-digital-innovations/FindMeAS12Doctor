@@ -370,7 +370,7 @@ namespace Fmas12d.Business.Services
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
-      Models.Assessment model = new Models.Assessment(entity);
+      Assessment model = new Assessment(entity);
 
       return model;
     }
@@ -1160,6 +1160,7 @@ namespace Fmas12d.Business.Services
       IQueryable<Entities.Assessment> query = _context
         .Assessments
         .Include(a => a.Doctors)
+          .ThenInclude(d => d.DoctorUser)
         .Include(a => a.Referral)
         .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
         .WhereIsActiveOrActiveOnly(activeOnly)
