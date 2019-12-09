@@ -10,22 +10,22 @@ using Fmas12d.Business.Exceptions;
 
 namespace Fmas12d.Business.Services
 {
-  public class ReferralService : 
-    ServiceBase<Entities.Referral>, 
+  public class ReferralService :
+    ServiceBase<Entities.Referral>,
     IReferralService
   {
     private readonly IPatientService _patientService;
     private readonly IUserService _userService;
     public ReferralService(
-      ApplicationContext context, 
+      ApplicationContext context,
       IUserClaimsService userClaimsService,
       IPatientService patientService,
       IUserService userService
     )
       : base(context, userClaimsService)
     {
-      _patientService = patientService;     
-      _userService = userService;      
+      _patientService = patientService;
+      _userService = userService;
     }
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
@@ -69,7 +69,11 @@ namespace Fmas12d.Business.Services
                            .AnyAsync();
     }
 
-    public async Task<Referral> GetAsync(int id, bool activeOnly = true, bool asNoTracking = true)
+    public async Task<Referral> GetAsync(
+      int id,
+      bool activeOnly = true,
+      bool asNoTracking = true
+    )
     {
       Referral referral = await _context.Referrals
                                         .Where(r => r.Id == id)
@@ -114,23 +118,53 @@ namespace Fmas12d.Business.Services
     }
 
     public async Task<IEnumerable<Referral>> GetListAsync(
-      bool activeOnly = true, bool asNoTracking = true)
+      bool activeOnly = true,
+      bool asNoTracking = true
+    )
     {
+      return await GetListAsync(null, null, activeOnly, asNoTracking);
+    }
+
+    public async Task<IEnumerable<Referral>> GetListAsync(
+      List<int> excludeStatusIds,
+      List<int> includeStatusIds,      
+      bool activeOnly = true,
+      bool asNoTracking = true
+    )
+    {
+
+      IQueryable<Entities.Referral> query =
+        _context.Referrals
+                .Include(r => r.Assessments)
+                  .ThenInclude(e => e.Speciality)
+                .Include(r => r.Assessments)
+                  .ThenInclude(e => e.UserAssessmentNotifications)
+                .Include(r => r.Assessments)
+                  .ThenInclude(e => e.Doctors)
+                .Include(r => r.Patient)
+                .Include(r => r.ReferralStatus)
+                .Include(r => r.LeadAmhpUser)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking);
+
+      if (includeStatusIds != null && includeStatusIds.Any())
+      {
+        includeStatusIds.ForEach(includeStatusId =>
+          query = query.Where(r => r.ReferralStatusId == includeStatusId)
+        );
+      }
+
+      if (excludeStatusIds != null && excludeStatusIds.Any())
+      {
+        excludeStatusIds.ForEach(excludeStatusId =>
+          query = query.Where(r => r.ReferralStatusId != excludeStatusId)
+        );
+      }
+
       IEnumerable<Referral> models =
-        await _context.Referrals
-                      .Include(r => r.Assessments)
-                        .ThenInclude(e => e.Speciality)
-                      .Include(r => r.Assessments)
-                        .ThenInclude(e => e.UserAssessmentNotifications)
-                      .Include(r => r.Assessments)
-                        .ThenInclude(e => e.Doctors)
-                      .Include(r => r.Patient)
-                      .Include(r => r.ReferralStatus)
-                      .Include(r => r.LeadAmhpUser)
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .AsNoTracking(asNoTracking)
-                      .Select(r => new Referral(r, false))
-                      .ToListAsync();
+        await query
+              .Select(r => new Referral(r, false))
+              .ToListAsync();
 
       return models;
     }
@@ -217,7 +251,7 @@ namespace Fmas12d.Business.Services
       {
         throw new ModelStateException("createdAt",
         $"The createdAt field has an invalid value of {model.CreatedAt}");
-      }      
+      }
       return await UpdateAsyncInternal(model, true);
     }
 

@@ -10,7 +10,7 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  [Authorize(Policy="User")]
+  [Authorize(Policy = "User")]
   public class ReferralController : ModelControllerDeletePatchBase
   {
     public ReferralController(
@@ -50,27 +50,21 @@ namespace Fmas12d.Api.Controllers
     [Route("list")]
     public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetList()
     {
-      try
-      {
-        IEnumerable<Business.Models.Referral> businessModels = await Service.GetListAsync(true);
+      return await GetListInternal(null, null);
+    }
 
-        if (businessModels == null || !businessModels.Any())
-        {
-          return NoContent();
-        }
-        else
-        {
-          IEnumerable<ViewModels.ReferralList> viewModels =
-              businessModels.Select(ViewModels.ReferralList.ProjectFromModel).ToList();
+    [HttpGet]
+    [Route("list/closed")]
+    public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetListClosed()
+    {
+      return await GetListInternal(null, new List<int>{ Business.Models.ReferralStatus.CLOSED });
+    }
 
-          return Ok(viewModels);
-
-        }
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
+    [HttpGet]
+    [Route("list/open")]
+    public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetListOpen()
+    {
+      return await GetListInternal(new List<int>{ Business.Models.ReferralStatus.CLOSED }, null);
     }
 
     [HttpGet]
@@ -113,7 +107,7 @@ namespace Fmas12d.Api.Controllers
         }
         else
         {
-          ViewModels.ReferralViewSummary viewModel = 
+          ViewModels.ReferralViewSummary viewModel =
             new ViewModels.ReferralViewSummary(businessModel);
           return Ok(viewModel);
         }
@@ -141,7 +135,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }  
+    }
 
     [HttpPost]
     [Route("retrospective")]
@@ -152,7 +146,7 @@ namespace Fmas12d.Api.Controllers
       {
         Business.Models.ReferralCreate businessModel = new Business.Models.ReferralCreate();
         requestModel.MapToBusinessModel(businessModel);
-        Business.Models.Referral createdModel = 
+        Business.Models.Referral createdModel =
           await Service.CreateRetrospectiveAsync(businessModel);
         ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(createdModel);
 
@@ -172,7 +166,7 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.ReferralUpdate businessModel = new Business.Models.ReferralUpdate();        
+        Business.Models.ReferralUpdate businessModel = new Business.Models.ReferralUpdate();
         requestModel.MapToBusinessModel(businessModel);
         businessModel.Id = id;
         Business.Models.Referral updateModel = await Service.UpdateAsync(businessModel);
@@ -184,7 +178,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }  
+    }
 
     [HttpPut]
     [Route("{id:int}/retrospective")]
@@ -197,7 +191,7 @@ namespace Fmas12d.Api.Controllers
         Business.Models.ReferralUpdate businessModel = new Business.Models.ReferralUpdate();
         requestModel.MapToBusinessModel(businessModel);
         businessModel.Id = id;
-        Business.Models.Referral updatedModel = 
+        Business.Models.Referral updatedModel =
           await Service.UpdateRetrospectiveAsync(businessModel);
         ViewModels.ReferralPost viewModel = new ViewModels.ReferralPost(updatedModel);
 
@@ -207,6 +201,35 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }          
+    }
+
+    private async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetListInternal(
+      List<int> excludeStatusIds,
+      List<int> includeStatusIds
+    )
+    {
+      try
+      {
+        IEnumerable<Business.Models.Referral> businessModels =
+          await Service.GetListAsync(excludeStatusIds, includeStatusIds, true, true);
+
+        if (businessModels == null || !businessModels.Any())
+        {
+          return NoContent();
+        }
+        else
+        {
+          IEnumerable<ViewModels.ReferralList> viewModels =
+              businessModels.Select(ViewModels.ReferralList.ProjectFromModel).ToList();
+
+          return Ok(viewModels);
+
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
   }
 }
