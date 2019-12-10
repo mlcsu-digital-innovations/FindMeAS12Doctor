@@ -531,7 +531,6 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Doctors)
         .Where(a => a.Id == id)
         .WhereIsActiveOrActiveOnly(true)
-        .AsNoTracking(false)
         .SingleOrDefaultAsync();
 
       if (entity == null)
@@ -541,12 +540,18 @@ namespace Fmas12d.Business.Services
       }
 
       if (entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESCHEDULING &&
+          entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESPONSES &&
+          entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_PARTIAL &&
           entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_COMPLETE)
       {
         throw new ModelStateException("id",
           $"An active Assessment with an id of {id} cannot be scheduled because " +
-          $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be " +
-          $"{ReferralStatus.AWAITING_RESCHEDULING} or {ReferralStatus.RESPONSES_COMPLETE}");
+          $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be in [" +
+          $"{ReferralStatus.AWAITING_RESCHEDULING}," +
+          $"{ReferralStatus.AWAITING_RESPONSES}," +
+          $"{ReferralStatus.RESPONSES_PARTIAL}," +
+          $"{ReferralStatus.RESPONSES_COMPLETE}]."
+        );
       }
 
       if (!entity.Doctors.Any(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED))
@@ -554,6 +559,18 @@ namespace Fmas12d.Business.Services
         throw new ModelStateException("id",
           $"An active Assessment with an id of {id} cannot be scheduled because it needs " +
            "to have at least one allocated doctor");
+      }
+
+      foreach(Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
+      {
+        if (assessmentDoctor.StatusId != AssessmentDoctorStatus.ALLOCATED)
+        {
+          AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.NOT_ALLOCATED_TO_ASSESSMENT
+          );
+        }
       }
 
       entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
@@ -795,57 +812,6 @@ namespace Fmas12d.Business.Services
 
         return model;
       }
-    }
-
-    private async Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsInternalAsync(
-      IAssessmentDoctorsUpdate updateModel,
-      bool performDoctorsSelectedChecks
-    )
-    {
-      Entities.Assessment entity = await _context
-        .Assessments
-        .Include(a => a.Doctors)
-        .Include(a => a.Referral)
-        .WhereIsActiveOrActiveOnly(true)
-        .Where(a => a.Id == updateModel.Id)
-        .SingleOrDefaultAsync();
-
-      if (entity == null)
-      {
-        throw new ModelStateException("Id",
-          $"An active Assessment with an id of {updateModel.Id} was not found.");
-      }
-      CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
-        updateModel.Id, entity.Referral.ReferralStatusId);
-
-      if (performDoctorsSelectedChecks)
-      {
-        CheckDoctorsAreSelected(entity, updateModel.UserIds);
-        CheckDoctorsAreSelectedAndHaveAccepted(entity, updateModel.UserIds);
-      }
-
-      UpdateModified(entity);
-
-      foreach (int userId in updateModel.UserIds)
-      {
-        Entities.AssessmentDoctor assessmentDoctor =
-          entity.Doctors.Single(d => d.DoctorUserId == userId);
-        assessmentDoctor.StatusId = AssessmentDoctorStatus.ALLOCATED;
-        UpdateModified(assessmentDoctor);
-
-        AddUserAssessmentNotification(
-          entity, userId, NotificationText.ALLOCATED_TO_ASSESSMENT);
-      }
-
-      await _context.SaveChangesAsync();
-
-      return new AssessmentDoctorsUpdate()
-      {
-        Id = entity.Id,
-        UserIds = entity.Doctors.Where(d => d.StatusId == AssessmentDoctorStatus.ALLOCATED)
-                                .Select(d => d.DoctorUserId)
-                                .ToList()
-      };
     }
 
     private void AddAssessmentDetail(
