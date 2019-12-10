@@ -1,3 +1,13 @@
+.form-control.is-invalid{
+  background-image: none;
+  padding-right: 0.5em;
+}
+
+.form-control.is-valid{
+  background-image: none;
+  padding-right: 0.5em;
+}
+
 .column-div {
   width: 100%;
   height:100%;
