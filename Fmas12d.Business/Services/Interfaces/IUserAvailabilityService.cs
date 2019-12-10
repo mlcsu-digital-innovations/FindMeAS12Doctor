@@ -5,7 +5,7 @@ using System;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IUserAvailabilityService : IServiceBaseNoAutoMapper
+  public interface IUserAvailabilityService : IServiceBase
   {
     Task<IUserAvailability> CreateAsync(IUserAvailability model);
     Task<IEnumerable<IUserAvailability>> GetAsync(

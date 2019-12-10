@@ -1,6 +1,6 @@
 namespace Fmas12d.Business.Services
 {
-  public interface IReferralStatusService : IServiceBaseNoAutoMapper
+  public interface IReferralStatusService : IServiceBase
   {
   }
 }

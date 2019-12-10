@@ -10,7 +10,7 @@ namespace Fmas12d.Business.Services
 {
 
   public class PatientService
-    : ServiceBaseNoAutoMapper<Entities.Patient>,
+    : ServiceBase<Entities.Patient>,
       IPatientService
   {
     private readonly IGpPracticeService _gpPracticeService;

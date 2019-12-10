@@ -10,7 +10,7 @@ using System.Linq;
 namespace Fmas12d.Business.Services
 {
   public class CcgService :
-    ServiceBaseNoAutoMapper<Entities.Ccg>,
+    ServiceBase<Entities.Ccg>,
     ICcgService,
     ISearchService
   {

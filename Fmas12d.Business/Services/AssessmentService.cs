@@ -4,7 +4,6 @@ using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Helpers;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,8 +12,8 @@ using System.Linq;
 namespace Fmas12d.Business.Services
 {
   public class AssessmentService :
-    ServiceBaseNoAutoMapper<Entities.Referral>,
-    IServiceBaseNoAutoMapper,
+    ServiceBase<Entities.Assessment>,
+    IServiceBase,
     IAssessmentService
   {
     private readonly IContactDetailsService _contactDetailsService;
@@ -379,7 +378,7 @@ namespace Fmas12d.Business.Services
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
-      Models.Assessment model = new Models.Assessment(entity);
+      Assessment model = new Assessment(entity);
 
       return model;
     }
@@ -540,7 +539,6 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Doctors)
         .Where(a => a.Id == id)
         .WhereIsActiveOrActiveOnly(true)
-        .AsNoTracking(false)
         .SingleOrDefaultAsync();
 
       if (entity == null)
@@ -550,12 +548,18 @@ namespace Fmas12d.Business.Services
       }
 
       if (entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESCHEDULING &&
+          entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESPONSES &&
+          entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_PARTIAL &&
           entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_COMPLETE)
       {
         throw new ModelStateException("id",
           $"An active Assessment with an id of {id} cannot be scheduled because " +
-          $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be " +
-          $"{ReferralStatus.AWAITING_RESCHEDULING} or {ReferralStatus.RESPONSES_COMPLETE}");
+          $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be in [" +
+          $"{ReferralStatus.AWAITING_RESCHEDULING}," +
+          $"{ReferralStatus.AWAITING_RESPONSES}," +
+          $"{ReferralStatus.RESPONSES_PARTIAL}," +
+          $"{ReferralStatus.RESPONSES_COMPLETE}]."
+        );
       }
 
       if (!entity.Doctors.Any(d => d.StatusId == Models.AssessmentDoctorStatus.ALLOCATED))
@@ -563,6 +567,18 @@ namespace Fmas12d.Business.Services
         throw new ModelStateException("id",
           $"An active Assessment with an id of {id} cannot be scheduled because it needs " +
            "to have at least one allocated doctor");
+      }
+
+      foreach(Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
+      {
+        if (assessmentDoctor.StatusId != AssessmentDoctorStatus.ALLOCATED)
+        {
+          AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.NOT_ALLOCATED_TO_ASSESSMENT
+          );
+        }
       }
 
       entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
@@ -1246,6 +1262,7 @@ namespace Fmas12d.Business.Services
       IQueryable<Entities.Assessment> query = _context
         .Assessments
         .Include(a => a.Doctors)
+          .ThenInclude(d => d.DoctorUser)
         .Include(a => a.Referral)
         .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
         .WhereIsActiveOrActiveOnly(activeOnly)

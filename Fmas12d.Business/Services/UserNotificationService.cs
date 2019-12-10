@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Fmas12d.Business.Services
 {
   public class UserNotificationService
-   : ServiceBaseNoAutoMapper<Entities.UserAssessmentNotification>, IUserNotificationService
+   : ServiceBase<Entities.UserAssessmentNotification>, IUserNotificationService
   {    
     public UserNotificationService(
       ApplicationContext context,

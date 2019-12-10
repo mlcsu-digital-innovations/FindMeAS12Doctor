@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Fmas12d.Business.Services
 {
   public class UserAvailabilityService :
-    ServiceBaseNoAutoMapper<Entities.UserAvailability>,
+    ServiceBase<Entities.UserAvailability>,
     IUserAvailabilityService
   {
     private readonly IContactDetailsService _contactDetailsService;

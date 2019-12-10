@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Fmas12d.Business.Services
 {
   public class UserService : 
-    ServiceBaseNoAutoMapper<Entities.User>, 
+    ServiceBase<Entities.User>, 
     IUserService
   {
     public UserService(
