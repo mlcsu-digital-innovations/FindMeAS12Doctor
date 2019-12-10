@@ -13,6 +13,11 @@ namespace Fmas12d.Business.Services
       DateTimeOffset from,
       bool asNoTracking,
       bool activeOnly);
+    Task<IUserAvailability> GetAtAsync(
+      int userId,
+      DateTimeOffset at,
+      bool asNoTracking,
+      bool activeOnly);      
     Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(
       DateTimeOffset requiredDateTime,
       bool asNoTracking,
