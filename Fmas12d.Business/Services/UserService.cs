@@ -15,12 +15,111 @@ namespace Fmas12d.Business.Services
   {
     public UserService(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
     }
 
-    private async Task<User> CheckUserIs(
+    public async Task<User> CheckIsAmhpAsync(
+      int id,
+      string modelPropertyName,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      User user = await CheckUserIsAsync(id, modelPropertyName, asNoTracking, activeOnly);
+      if (!user.IsAmhp)
+      {
+        throw new ModelStateException(
+          modelPropertyName, 
+          $"The User with an Id of {id} must be an AMHP but is a {user.ProfileType.Name}.");
+      }
+      return user;
+    }
+
+    public async Task<User> CheckIsADoctorAsync(
+      int id,
+      string modelPropertyName,
+      bool asNoTracking = true, 
+      bool activeOnly = true)
+    {
+      User user = await CheckUserIsAsync(id, modelPropertyName, asNoTracking, activeOnly);
+      if (!user.IsDoctor)
+      {
+        throw new ModelStateException(
+          modelPropertyName, 
+          $"The User with an Id of {id} must be a Doctor but is a {user.ProfileType.Name}.");
+      }
+      return user;
+    }
+
+    public async Task<IEnumerable<User>> GetAllByAmhpNameAsync(
+      string amhpName,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      return await GetAllByNameAndProfileTypeIdAsync(
+        amhpName, Models.ProfileType.AMHP, asNoTracking, activeOnly);
+    }
+
+    public async Task<IEnumerable<User>> GetAllByDoctorNameAsync(
+      string doctorName,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+      return await GetAllByNameAndProfileTypeIdAsync(
+        doctorName, Models.ProfileType.DOCTOR, asNoTracking, activeOnly);
+    }
+
+    public async Task<IEnumerable<User>> GetAllByGmcNumberAsync(
+      int gmcNumber,
+      bool asNoTracking = true,
+      bool activeOnly = true)
+    {
+       IEnumerable<Models.User> models = await _context.Users
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(u => u.GmcNumber.ToString().Contains(gmcNumber.ToString()))
+        .Where(u => u.ProfileTypeId == Models.ProfileType.DOCTOR)
+        .AsNoTracking(asNoTracking)
+        .Select(User.ProjectFromEntity)
+        .ToListAsync();
+
+      return models;
+    }
+
+    public async Task<User> GetByIdentityServerIdentifierAsync(
+      string identityServerIdentifier,
+      bool asNoTracking = true,
+      bool activeOnly = true
+    )
+    {
+       User model = await _context.Users
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Where(u => u.IdentityServerIdentifier == identityServerIdentifier)
+        .AsNoTracking(asNoTracking)
+        .Select(User.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }
+
+    public async Task<int> GetByProfileTypeIdAsync(
+      int id,
+      bool asNoTracking,
+      bool activeOnly
+    )      
+    {
+      int profileTypeId = await _context
+        .Users
+        .Where(u => u.Id == id)
+        .AsNoTracking(asNoTracking)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .Select(u => u.ProfileTypeId)
+        .SingleOrDefaultAsync();
+
+      return profileTypeId;
+    }
+
+    private async Task<User> CheckUserIsAsync(
       int id,
       string modelPropertyName,
       bool asNoTracking = true,
@@ -44,88 +143,8 @@ namespace Fmas12d.Business.Services
       return user;
     }    
 
-    public async Task<bool> CheckIsAmhp(
-      int id,
-      string modelPropertyName,
-      bool asNoTracking = true,
-      bool activeOnly = true)
-    {
-      User user = await CheckUserIs(id, modelPropertyName, asNoTracking, activeOnly);
-      if (!user.IsAmhp)
-      {
-        throw new ModelStateException(
-          modelPropertyName, 
-          $"The User with an Id of {id} must be an AMHP but is a {user.ProfileType.Name}.");
-      }
-      return true;
-    }
 
-    public async Task<bool> CheckIsADoctor(
-      int id,
-      string modelPropertyName,
-      bool asNoTracking = true, 
-      bool activeOnly = true)
-    {
-      User user = await CheckUserIs(id, modelPropertyName, asNoTracking, activeOnly);
-      if (!user.IsDoctor)
-      {
-        throw new ModelStateException(
-          modelPropertyName, 
-          $"The User with an Id of {id} must be a Doctor but is a {user.ProfileType.Name}.");
-      }
-      return true;      
-    }
-
-    public async Task<IEnumerable<Models.User>> GetAllByAmhpName(
-      string amhpName,
-      bool asNoTracking = true,
-      bool activeOnly = true)
-    {
-      return await GetAllByNameAndProfileTypeId(
-        amhpName, Models.ProfileType.AMHP, asNoTracking, activeOnly);
-    }
-
-    public async Task<IEnumerable<Models.User>> GetAllByDoctorName(
-      string doctorName,
-      bool asNoTracking = true,
-      bool activeOnly = true)
-    {
-      return await GetAllByNameAndProfileTypeId(
-        doctorName, Models.ProfileType.DOCTOR, asNoTracking, activeOnly);
-    }
-
-    public async Task<IEnumerable<Models.User>> GetAllByGmcNumber(
-      int gmcNumber,
-      bool asNoTracking = true,
-      bool activeOnly = true)
-    {
-       IEnumerable<Models.User> models = await _context.Users
-        .WhereIsActiveOrActiveOnly(activeOnly)
-        .Where(u => u.GmcNumber.ToString().Contains(gmcNumber.ToString()))
-        .Where(u => u.ProfileTypeId == Models.ProfileType.DOCTOR)
-        .AsNoTracking(asNoTracking)
-        .Select(User.ProjectFromEntity)
-        .ToListAsync();
-
-      return models;
-    }
-
-    public async Task<User> GetByIdentityServerIdentifierAsync(
-      string identityServerIdentifier,
-      bool asNoTracking = true,
-      bool activeOnly = true)
-    {
-       User model = await _context.Users
-        .WhereIsActiveOrActiveOnly(activeOnly)
-        .Where(u => u.IdentityServerIdentifier == identityServerIdentifier)
-        .AsNoTracking(asNoTracking)
-        .Select(User.ProjectFromEntity)
-        .SingleOrDefaultAsync();
-
-      return model;
-    }    
-
-    private async Task<IEnumerable<Models.User>> GetAllByNameAndProfileTypeId(
+    private async Task<IEnumerable<User>> GetAllByNameAndProfileTypeIdAsync(
       string name,
       int profileTypeId,
       bool asNoTracking = true,

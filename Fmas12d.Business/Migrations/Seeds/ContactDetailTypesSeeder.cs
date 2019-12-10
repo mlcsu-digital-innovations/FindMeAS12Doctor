@@ -4,13 +4,30 @@ namespace Fmas12d.Business.Migrations.Seeds
 {
   internal class ContactDetailTypesSeeder : SeederBase<ContactDetailType>
   {
-    #region Constants      
+    #region Constants
+    protected const string DESCRIPTION_BASE = "Base Description";
+    protected const string DESCRIPTION_HOME = "Home Description";
+    protected const string DESCRIPTION_WORK = "Work Description";    
+    protected const string NAME_BASE = "Base";
+    protected const string NAME_HOME = "Home";
     protected const string NAME_WORK = "Work";
-    protected const string DESCRIPTION_WORK = "Work Description";
+    
     #endregion
 
     internal void SeedData()
     {
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ContactDetailType.BASE,
+        NAME_BASE,
+        DESCRIPTION_BASE
+      );
+
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ContactDetailType.HOME,
+        NAME_HOME,
+        DESCRIPTION_HOME
+      );
+
       AddOrUpdateNameDescriptionEntityById(
         Models.ContactDetailType.WORK,
         NAME_WORK,

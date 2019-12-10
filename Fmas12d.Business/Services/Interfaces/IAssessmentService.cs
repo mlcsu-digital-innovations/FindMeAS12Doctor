@@ -6,22 +6,20 @@ namespace Fmas12d.Business.Services
 {
   public interface IAssessmentService : IServiceBaseNoAutoMapper
   {
-    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctors(IAssessmentDoctorsUpdate model);
-    Task<IAssessmentDoctorsUpdate> AddSelectedDoctors(IAssessmentDoctorsUpdate model);
+    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsAsync(IAssessmentDoctorsUpdate model);
+    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(int id, int userId);
+    Task<IAssessmentDoctorsUpdate> AddSelectedDoctorsAsync(IAssessmentDoctorsUpdate model);
     Task<AssessmentCreate> CreateAsync(AssessmentCreate model);
-    Task<IEnumerable<Assessment>> GetListByAmhpUserIdAsync(
-      int amhpUserId, 
-      int? referralStatusId, 
-      bool asNoTracking, 
-      bool activeOnly);
-    Task<IEnumerable<Assessment>> GetListByDoctorUserIdAsync(      
-      int doctorUserId,      
+    Task<IEnumerable<Assessment>> GetListByUserIdAsync(
+      int userId,
       int? doctorStatusId,
       int? referralStatusId, 
       bool asNoTracking, 
-      bool activeOnly);
+      bool activeOnly
+    );
     Task<Assessment> GetAvailableDoctorsAsync(int id, bool asNoTracking, bool activeOnly);
-    Task<Assessment> GetByIdAsync(int id, bool activeOnly);    
+    Task<Assessment> GetByIdAsync(int id, bool activeOnly, bool asNoTracking);    
+    Task<Assessment> GetByIdForUserAsync(int id, int userId, bool asNoTracking, bool activeOnly);
     Task<Assessment> GetSelectedDoctorsAsync(int id, bool asNoTracking, bool activeOnly);
     Task<bool> Schedule(int id);
     Task<AssessmentDoctor> UpdateAssessmentDoctorAcceptance(AssessmentDoctor businessModel);

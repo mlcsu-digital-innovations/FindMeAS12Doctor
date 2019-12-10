@@ -10,8 +10,10 @@ namespace Fmas12d.Api.Controllers
   
   public class AssessmentDetailTypeController : IdNameDescriptionBaseController
   {
-    public AssessmentDetailTypeController( IAssessmentDetailTypeService service)
-      : base(service)
+    public AssessmentDetailTypeController(
+      IUserClaimsService userClaimsService,
+      IAssessmentDetailTypeService service)
+      : base(userClaimsService, service)
     {
     }
   }

@@ -15,8 +15,8 @@ namespace Fmas12d.Business.Services
     ISearchService
   {
     public CcgService(ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
     }
 

@@ -13,8 +13,10 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy="User")]
   public class UserController : ModelControllerNoAutoMapper
   {
-    public UserController(IUserService service)
-      : base(service)
+    public UserController(
+      IUserClaimsService userClaimsService,
+      IUserService service)
+      : base(userClaimsService, service)
     {
     }
 
@@ -27,15 +29,15 @@ namespace Fmas12d.Api.Controllers
 
       if (search.IsByAmhpName)
       {
-        models = await Service.GetAllByAmhpName(search.AmhpName, activeOnly: false);
+        models = await Service.GetAllByAmhpNameAsync(search.AmhpName, activeOnly: false);
       }
       else if (search.IsByDoctorName)
       {
-        models = await Service.GetAllByDoctorName(search.DoctorName, activeOnly: false);
+        models = await Service.GetAllByDoctorNameAsync(search.DoctorName, activeOnly: false);
       }
       else if (search.IsByGmcNumber)
       {
-        models = await Service.GetAllByGmcNumber(search.GmcNumber, activeOnly: false);
+        models = await Service.GetAllByGmcNumberAsync(search.GmcNumber, activeOnly: false);
       }
 
       if (models.Any())

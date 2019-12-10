@@ -47,6 +47,13 @@ namespace Fmas12d.Business.Migrations.Seeds
         $"DBCC CHECKIDENT('{tableName}', RESEED, {newReseedValue})");
     }
 
+    internal virtual void ResetModifiedByUserId()
+    {
+      string tableName = GetEntityTableName();
+      Context.Database.ExecuteSqlRaw(
+        $"UPDATE dbo.{tableName} SET ModifiedByUserId = 1");
+    }
+
     protected Ccg GetCcgByName(string CcgName)
     {
       try

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace Fmas12d.Api.Controllers
 {
   [Route("api/[controller]")]
@@ -16,7 +15,10 @@ namespace Fmas12d.Api.Controllers
   {
     private IAssessmentService Service { get { return _service as IAssessmentService; } }
 
-    public AssessmentController(IAssessmentService service) : base(service)
+    public AssessmentController(
+      IUserClaimsService userClaimsService,
+      IAssessmentService service) 
+      : base(userClaimsService, service)
     {
     }
 
@@ -77,47 +79,29 @@ namespace Fmas12d.Api.Controllers
     } 
 
     [HttpGet]
-    [Route("")]
+    [Route("list")]
     public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList([FromQuery]
       RequestModels.AssessmentListSearch requestModel)
     {
-      try
-      {
-        IEnumerable<Business.Models.Assessment> businessModels = null;
-        if (requestModel.AmhpUserId.HasValue)
-        {
-          businessModels = await Service.GetListByAmhpUserIdAsync(
-            requestModel.AmhpUserId.Value, 
-            requestModel.ReferralStatusId,
-            true, 
-            true);
-        }
-        else if (requestModel.DoctorUserId.HasValue)
-        {
-          businessModels = await Service.GetListByDoctorUserIdAsync(
-            requestModel.DoctorUserId.Value,
-            requestModel.DoctorStatusId,
-            requestModel.ReferralStatusId,
-            true, 
-            true);
-        }
+      return await GetListInternal(
+        GetUserId(), 
+        requestModel.DoctorStatusId, 
+        requestModel.ReferralStatusId
+      );
+    }
 
-        if (businessModels == null || !businessModels.Any())
-        {
-          return NoContent();
-        }
-        else
-        {          
-          IEnumerable<ViewModels.AssessmentList> viewModels =
-            businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
-
-          return Ok(viewModels);
-        }
-      }
-      catch (Exception ex)
-      {
-        return ProcessException(ex);
-      }
+    [HttpGet]
+    [Route("list/{userId:int}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetList(
+      int userId,
+      [FromQuery] RequestModels.AssessmentListSearch requestModel)
+    {
+      return await GetListInternal(
+        userId, 
+        requestModel.DoctorStatusId, 
+        requestModel.ReferralStatusId
+      );
     }
 
     [HttpGet]
@@ -126,7 +110,7 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.Assessment businessModel = await Service.GetByIdAsync(id, true);
+        Business.Models.Assessment businessModel = await Service.GetByIdAsync(id, true, true);
 
         if (businessModel == null)
         {
@@ -144,6 +128,31 @@ namespace Fmas12d.Api.Controllers
       }
     }
 
+    [HttpGet]
+    [Route("{id:int}/user")]
+    public async Task<ActionResult<ViewModels.AssessmentView>> GetViewForUser(int id)
+    {
+      try
+      {
+        Business.Models.Assessment businessModel = 
+          await Service.GetByIdForUserAsync(id, GetUserId(), true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {          
+          ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
+
     [HttpPost]
     [Route("{id:int}/doctors/allocated")]
     public async Task<ActionResult<ViewModels.AssessmentDoctorsPost>> PostDoctorsAllocated(
@@ -158,7 +167,7 @@ namespace Fmas12d.Api.Controllers
             Id = id
           };
         requestModel.MapToBusinessModel(businessModel);
-        businessModel = await Service.AddAllocatedDoctors(businessModel);
+        businessModel = await Service.AddAllocatedDoctorsAsync(businessModel);
         ViewModels.AssessmentDoctorsPost viewModel =
           new ViewModels.AssessmentDoctorsPost(businessModel);
 
@@ -169,6 +178,24 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    [HttpPost]
+    [Route("{id:int}/doctors/allocated/direct")]
+    public async Task<ActionResult> PostDoctorAllocatedDirect(
+      int id,
+      [FromBody] RequestModels.AssessmentDoctorsPostDirect requestModel
+    )
+    {
+      try
+      {
+        await Service.AddAllocatedDoctorDirectAsync(id, requestModel.UserId.Value);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
 
     [HttpPost]
     [Route("{id:int}/doctors/selected")]
@@ -184,7 +211,7 @@ namespace Fmas12d.Api.Controllers
             Id = id
           };
         requestModel.MapToBusinessModel(businessModel);
-        businessModel = await Service.AddSelectedDoctors(businessModel);
+        businessModel = await Service.AddSelectedDoctorsAsync(businessModel);
         ViewModels.AssessmentDoctorsPost viewModel =
           new ViewModels.AssessmentDoctorsPost(businessModel);
 
@@ -281,6 +308,40 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
+    }
+
+    private async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetListInternal(
+      int userId, 
+      int? doctorStatusId, 
+      int? referralStatusId
+    )
+    {
+      try
+      {
+        IEnumerable<Business.Models.Assessment> businessModels = 
+        await Service.GetListByUserIdAsync(
+            userId,
+            doctorStatusId,
+            referralStatusId,
+            true, 
+            true);
+
+        if (businessModels == null || !businessModels.Any())
+        {
+          return NoContent();
+        }
+        else
+        {          
+          IEnumerable<ViewModels.AssessmentList> viewModels =
+            businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
+
+          return Ok(viewModels);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }      
     }
 
     private async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcome(

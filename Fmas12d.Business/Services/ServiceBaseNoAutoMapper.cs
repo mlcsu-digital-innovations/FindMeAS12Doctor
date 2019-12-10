@@ -10,14 +10,14 @@ namespace Fmas12d.Business.Services
     where TEntity : BaseEntity
   {
     protected readonly ApplicationContext _context;
-    protected readonly IAppClaimsPrincipal _appClaimsPrincipal;
+    protected readonly IUserClaimsService _userClaimsService;
 
     protected ServiceBaseNoAutoMapper(
       ApplicationContext context,
-      IAppClaimsPrincipal appClaimsPrincipal
+      IUserClaimsService userClaimsService
     )
     {
-      _appClaimsPrincipal = appClaimsPrincipal;
+      _userClaimsService = userClaimsService;
       _context = context;
     }
 
@@ -30,9 +30,12 @@ namespace Fmas12d.Business.Services
       return await SetActiveStatus(id, false);
     }
 
+    protected virtual void CheckUserCanSetActiveStatus(TEntity entity, int userId)
+    { }
+
     protected void UpdateModified(IBaseEntity entity)
     {
-      entity.ModifiedByUserId = _appClaimsPrincipal.GetUserId();
+      entity.ModifiedByUserId = _userClaimsService.GetUserId();
       entity.ModifiedAt = DateTimeOffset.Now;
     }
 
@@ -46,18 +49,21 @@ namespace Fmas12d.Business.Services
         throw new ModelStateException("Id",
           $"A {typeof(TEntity).Name} with an id of {id} was not found.");
       }
-      else if (entity.IsActive == isActivating)
+      if (entity.IsActive == isActivating)
       {
         throw new ModelStateException("Id",
-          $"{typeof(TEntity).Name} with an id of {id} is already " + 
+          $"{typeof(TEntity).Name} with an id of {id} is already " +
           $"{(isActivating ? "active" : "inactive")}.");
       }
-      else
+
+      if (!_userClaimsService.IsUserAdmin())
       {
-        entity.IsActive = isActivating;
-        UpdateModified(entity);
-        return await _context.SaveChangesAsync();
+        CheckUserCanSetActiveStatus(entity, _userClaimsService.GetUserId());
       }
+      entity.IsActive = isActivating;
+      UpdateModified(entity);
+      return await _context.SaveChangesAsync();
+
     }
 
   }

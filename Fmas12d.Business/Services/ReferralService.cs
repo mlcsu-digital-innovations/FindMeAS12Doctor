@@ -18,11 +18,11 @@ namespace Fmas12d.Business.Services
     private readonly IUserService _userService;
     public ReferralService(
       ApplicationContext context, 
-      IAppClaimsPrincipal appClaimsPrincipal,
+      IUserClaimsService userClaimsService,
       IPatientService patientService,
       IUserService userService
     )
-      : base(context, appClaimsPrincipal)
+      : base(context, userClaimsService)
     {
       _patientService = patientService;     
       _userService = userService;      
@@ -36,7 +36,7 @@ namespace Fmas12d.Business.Services
 
     public async Task<Referral> CreateRetrospectiveAsync(ReferralCreate model)
     {
-      await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+      await _userService.CheckIsAmhpAsync(model.LeadAmhpUserId, "leadAmhpUserId");
       await _patientService.CheckExists(model.PatientId, "patientId");
 
       if (model.CreatedAt == default)
@@ -185,7 +185,7 @@ namespace Fmas12d.Business.Services
 
     private async Task<Referral> UpdateAsyncInternal(ReferralUpdate model, bool isRetrospective)
     {
-      await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+      await _userService.CheckIsAmhpAsync(model.LeadAmhpUserId, "leadAmhpUserId");
 
       Entities.Referral entity = await _context
         .Referrals

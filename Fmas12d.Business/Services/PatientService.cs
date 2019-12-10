@@ -18,8 +18,8 @@ namespace Fmas12d.Business.Services
     public PatientService(
       ApplicationContext context,
       IGpPracticeService gpPracticeService,
-      IAppClaimsPrincipal appClaimsPrincipal)
-      : base(context, appClaimsPrincipal)
+      IUserClaimsService userClaimsService)
+      : base(context, userClaimsService)
     {
       _gpPracticeService = gpPracticeService;
     }
