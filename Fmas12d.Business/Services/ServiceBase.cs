@@ -1,7 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Fmas12d.Business.Exceptions;
 using Fmas12d.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
@@ -27,6 +28,29 @@ namespace Fmas12d.Business.Services
     public async Task<int> DeactivateAsync(int id)
     {
       return await SetActiveStatus(id, false);
+    }
+
+    protected void AddUserAssessmentNotification(
+      Assessment entity,
+      int userId,
+      int notificationTextId)
+    {
+
+      if (entity.UserAssessmentNotifications == null)
+      {
+        entity.UserAssessmentNotifications = new List<UserAssessmentNotification>();
+      }
+
+      UserAssessmentNotification userAssessmentNotification =
+        new UserAssessmentNotification
+        {
+          IsActive = true,
+          NotificationTextId = notificationTextId,
+          UserId = userId
+        };
+
+      UpdateModified(userAssessmentNotification);
+      entity.UserAssessmentNotifications.Add(userAssessmentNotification);
     }
 
     protected virtual void CheckUserCanSetActiveStatus(TEntity entity, int userId)

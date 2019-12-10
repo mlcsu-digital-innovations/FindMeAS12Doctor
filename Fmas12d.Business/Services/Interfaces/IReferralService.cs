@@ -6,6 +6,8 @@ namespace Fmas12d.Business.Services
 {
   public interface IReferralService : IServiceBase
   {
+    Task<bool> CloseAsync(int id);
+    Task<bool> CloseForceAsync(int id);    
     Task<Referral> CreateAsync(ReferralCreate businessModel);
     Task<Referral> CreateRetrospectiveAsync(ReferralCreate businessModel);
     Task<bool> Exists(int id, bool activeOnly = true);

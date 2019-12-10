@@ -880,29 +880,6 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    private void AddUserAssessmentNotification(
-      Entities.Assessment entity,
-      int userId,
-      int notificationTextId)
-    {
-
-      if (entity.UserAssessmentNotifications == null)
-      {
-        entity.UserAssessmentNotifications = new List<Entities.UserAssessmentNotification>();
-      }
-
-      Entities.UserAssessmentNotification userAssessmentNotification =
-        new Entities.UserAssessmentNotification
-        {
-          IsActive = true,
-          NotificationTextId = notificationTextId,
-          UserId = userId
-        };
-
-      UpdateModified(userAssessmentNotification);
-      entity.UserAssessmentNotifications.Add(userAssessmentNotification);
-    }
-
     private async Task<bool> AddLatitudeAndLongitudeAsync(
       string postcode,
       Entities.Assessment entity

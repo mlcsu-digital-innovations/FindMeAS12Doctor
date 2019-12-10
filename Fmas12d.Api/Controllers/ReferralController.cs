@@ -181,6 +181,41 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
+    [Route("{id:int}/close")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> PutClose(
+      int id
+    )
+    {
+      try
+      {
+        await Service.CloseAsync(id);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPut]
+    [Route("{id:int}/close/force")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> PutCloseForce(
+      int id
+    )
+    {
+      try
+      {
+        await Service.CloseForceAsync(id);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+
+    [HttpPut]
     [Route("{id:int}/retrospective")]
     public virtual async Task<ActionResult<ViewModels.Referral>> PutRetrospective(
       int id,
