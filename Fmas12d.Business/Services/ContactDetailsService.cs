@@ -4,6 +4,7 @@ using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Fmas12d.Business.Exceptions;
 
 namespace Fmas12d.Business.Services
 {
@@ -19,7 +20,7 @@ namespace Fmas12d.Business.Services
 
     }
 
-    public async Task<ContactDetail> Get(
+    public async Task<ContactDetail> GetByIdAndUserIdAsync(
       int id,
       int userId,
       bool asNoTracking,
@@ -36,5 +37,45 @@ namespace Fmas12d.Business.Services
 
       return contactDetail;
     }
+
+    public async Task<ContactDetail> GetBaseContactDetailTypeForCcgUserAsync(
+      int ccgId,
+      int userId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      ContactDetail contactDetail = await GetByContactDetailTypeCcgUserAsync(
+        ContactDetailType.BASE,
+        ccgId,
+        userId,
+        asNoTracking,
+        activeOnly
+      );
+      if (contactDetail == null)
+      {
+        throw new ContactDetailBaseMissingForCcgUserException(ccgId, userId);
+      }
+      return contactDetail;
+    }
+
+    private async Task<ContactDetail> GetByContactDetailTypeCcgUserAsync(
+      int contactDetailTypeId,
+      int ccgId,
+      int userId,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      ContactDetail contactDetail = await _context
+        .ContactDetails
+        .Where(c => c.CcgId == ccgId)
+        .Where(c => c.ContactDetailTypeId == contactDetailTypeId)        
+        .Where(c => c.UserId == userId)
+        .WhereIsActiveOrActiveOnly(activeOnly)        
+        .AsNoTracking(asNoTracking)
+        .Select(ContactDetail.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return contactDetail;
+    }    
   }
 }
