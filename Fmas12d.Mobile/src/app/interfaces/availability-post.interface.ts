@@ -1,4 +1,4 @@
-import { Location } from './user-availability.interface';
+import { Location } from './location.interface';
 
 export interface UserAvailabilityPost extends Location {
   end: Date | string;
