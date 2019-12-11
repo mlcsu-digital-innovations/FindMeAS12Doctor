@@ -500,6 +500,7 @@ export class ReferralEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralEdit) {
+    console.log(referral);
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
@@ -693,14 +694,30 @@ export class ReferralEditComponent implements OnInit {
     const patient = {} as Patient;
     patient.alternativeIdentifier = this.alternativeIdentifierField.value;
     patient.nhsNumber = this.nhsNumberField.value;
-    patient.gpPracticeId = this.gpPractice.id;
-    patient.residentialPostcode = this.residentialPostcode;
-    patient.ccgId = this.ccg.id;
+    patient.id = this.initialReferralDetails.patientId;
+
+    // only send updated values
+    patient.gpPracticeId =
+      this.gpPractice.id === this.initialReferralDetails.patientGpPracticeId ||
+      this.gpPractice.id === 0
+        ? null
+        : this.gpPractice.id;
+
+    patient.residentialPostcode =
+      this.residentialPostcode === this.initialReferralDetails.patientResidentialPostcode
+        ? null
+        : this.residentialPostcode;
+
+    patient.ccgId =
+      this.ccg.id === this.initialReferralDetails.patientCcgId ||
+      this.ccg.id === 0
+        ? null
+        : this.ccg.id;
 
     this.patientService.updatePatient(patient).subscribe(
       (result: Referral) => {
         this.toastService.displaySuccess({
-          message: 'Referral Updated'
+          message: 'Patient Updated'
         });
         this.isUpdatingReferral = false;
         this.routerService.navigate([`/referral/list`]);
@@ -708,7 +725,7 @@ export class ReferralEditComponent implements OnInit {
       error => {
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to update referral! Please try again in a few moments'
+          message: 'Unable to update patient details! Please try again in a few moments'
         });
         this.isUpdatingReferral = false;
         return throwError(error);
@@ -899,7 +916,7 @@ export class ReferralEditComponent implements OnInit {
       .subscribe(
         (result: PostcodeSearchResult) => {
           this.isSearchingForPostcode = false;
-          if (result.code === null) {
+          if (result.postcode === null) {
             this.residentialPostcodeValidationMessage =
               'Unable to validate postcode';
             this.residentialPostcodeField.setErrors({
@@ -908,12 +925,12 @@ export class ReferralEditComponent implements OnInit {
             this.SetFieldFocus('#residentialPostcode');
           } else {
             this.residentialPostcodeField.setErrors(null);
-            this.patientDetails.residentialPostcode = result.code;
+            this.patientDetails.residentialPostcode = result.postcode;
             this.isPatientPostcodeValidated = true;
             this.residentialPostcodeField.updateValueAndValidity();
             this.toastService.displaySuccess({
               title: 'Postcode Validation',
-              message: `${result.code} is a valid postcode`
+              message: `${result.postcode} is a valid postcode`
             });
           }
         },
