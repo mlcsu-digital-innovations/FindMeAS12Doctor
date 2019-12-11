@@ -1,3 +1,4 @@
+import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 import { Component, OnInit } from '@angular/core';
 import { ContactDetailService } from 'src/app/services/contact-details/contact-detail.service';
 import { NameId } from 'src/app/interfaces/name-id.interface';
@@ -6,7 +7,6 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
-import { AVAILABLE } from 'src/app/constants/app.constants';
 
 @Component({
   selector: 'app-doctor-availability-edit',
@@ -21,6 +21,7 @@ export class DoctorAvailabilityEditPage implements OnInit {
   public hasDateError: boolean;
   public maxDate: string;
   public minDate: string;
+  public postcode: string;
   public userAvailability: UserAvailability;
   public validPostcode: boolean;
 
@@ -36,11 +37,12 @@ export class DoctorAvailabilityEditPage implements OnInit {
     this.route.queryParams.subscribe(
       params => {
         if (this.router.getCurrentNavigation().extras.state) {
-          this.userAvailability = this.router.getCurrentNavigation().extras.state.availability;
 
+          this.userAvailability = this.router.getCurrentNavigation().extras.state.availability;
+          this.postcode = this.userAvailability.location.postcode;
           this.available = this.userAvailability.statusId === AVAILABLE;
         } else {
-          // show an error page !
+          this.showErrorToast('Unable to retrieve existing availability');
         }
       }
     );
@@ -56,6 +58,7 @@ export class DoctorAvailabilityEditPage implements OnInit {
   availabilityChange() {
     this.userAvailability.location.contactDetailId = undefined;
     this.userAvailability.location.postcode = undefined;
+    this.userAvailability.statusId = this.available ? AVAILABLE : UNAVAILABLE;
   }
 
   datesChanged() {
@@ -138,10 +141,10 @@ export class DoctorAvailabilityEditPage implements OnInit {
   validatePostcode() {
     this.validPostcode = true;
 
-    this.postcodeValidationService.getPostcodeDetails(this.userAvailability.location.postcode)
+    this.postcodeValidationService.getPostcodeDetails(this.postcode)
       .subscribe(
         result => {
-          console.log(result);
+          this.userAvailability.location.postcode = result.postcode;
         }, error => {
           this.showErrorToast('Unable to validate postcode');
           this.validPostcode = false;

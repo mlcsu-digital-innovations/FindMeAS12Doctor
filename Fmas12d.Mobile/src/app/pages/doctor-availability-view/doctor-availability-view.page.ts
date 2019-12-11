@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
-import { stringify } from 'querystring';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { ToastController } from '@ionic/angular';
 import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
@@ -32,13 +31,14 @@ export class DoctorAvailabilityViewPage implements OnInit {
       availability: item
       }
     };
+
     this.router.navigate([`/doctor-availability-edit/${item.id}`], navigationExtras);
   }
 
   ionViewDidEnter() {
     this.userAvailabilityService.getListForUser()
     .subscribe(
-      result => {
+      (result: UserAvailability[]) => {
         this.availableList = result.filter(item => item.statusId === AVAILABLE);
         this.unavailableList = result.filter(item => item.statusId === UNAVAILABLE);
       }, error => {

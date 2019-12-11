@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactDetailService } from 'src/app/services/contact-details/contact-detail.service';
+import { Location } from 'src/app/interfaces/location.interface';
 import { NameId } from 'src/app/interfaces/name-id.interface';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
-import { Router } from '@angular/router';
 import { ToastController, NavController } from '@ionic/angular';
-import { UserAvailability, Location } from 'src/app/interfaces/user-availability.interface';
+import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 
 @Component({
@@ -28,7 +28,6 @@ export class DoctorAvailabilityAddPage implements OnInit {
     private contactDetailService: ContactDetailService,
     private postcodeValidationService: PostcodeValidationService,
     private navController: NavController,
-    private router: Router,
     private toastController: ToastController,
     private userAvailabilityService: UserAvailabilityService
   ) { }
@@ -51,8 +50,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
 
   availabilityChange() {
     this.userAvailability.location.contactDetailId = undefined;
-    this.userAvailability.postcode = undefined;
-    this.userAvailability.isAvailable = this.available;
+    this.userAvailability.location.postcode = undefined;
   }
 
   datesChanged() {
@@ -60,8 +58,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.dateErrorText = '';
 
     if ( this.userAvailability.start > this.userAvailability.end ) {
-      this.hasDateError = true;
-      this.dateErrorText = 'Invalid start / end dates';
+      this.userAvailability.end = this.userAvailability.start;
     }
   }
 
@@ -108,25 +105,31 @@ export class DoctorAvailabilityAddPage implements OnInit {
       result => {
         this.showSuccessToast('Availability saved');
         this.navController.back();
-      }, error => {
-        this.showErrorToast(`Unable to save availability for user. ${error.error.title}` );
+      }, err => {
+
+        let errorDetail = '';
+        if (err.error.errors.Start.length > 0) {
+          errorDetail = err.error.errors.Start[0];
+        }
+
+        this.showErrorToast(`Unable to save availability for user. ${errorDetail}` );
       }
     );
   }
 
   showErrorToast(msg: string) {
-    this.showToast(msg, 'danger', 'Error!');
+    this.showToast(msg, 'danger', 'Error!', 5000);
   }
   showSuccessToast(msg: string) {
     this.showToast(msg, 'success', 'Success');
   }
 
-  async showToast(msg: string, colour: string, hdr: string) {
+  async showToast(msg: string, colour: string, hdr: string, dur?: number) {
     const toast = await this.toastController.create({
       message: msg,
       header: hdr,
       color: colour,
-      duration: 2000,
+      duration: dur ? dur : 2000,
       position: 'top'
     });
     await toast.present();
@@ -144,7 +147,6 @@ export class DoctorAvailabilityAddPage implements OnInit {
           this.validPostcode = false;
         }
       );
-
   }
 
 }
