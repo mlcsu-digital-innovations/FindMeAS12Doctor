@@ -17,6 +17,8 @@ namespace Fmas12d.Api.ViewModels
     public int Id { get; set; }
     public DateTimeOffset Start { get; set; }
 
+    public int StatusId { get; set; }
+
     internal virtual void MapFromBuinessModel(IUserAvailability model)
     {
       if (model == null) return;
@@ -25,6 +27,7 @@ namespace Fmas12d.Api.ViewModels
       Location = new Location(model.Location);
       Id = model.Id;
       Start = model.Start;
+      StatusId = model.StatusId;
     }
 
     public static Func<IUserAvailability, UserAvailability> ProjectFromModel
