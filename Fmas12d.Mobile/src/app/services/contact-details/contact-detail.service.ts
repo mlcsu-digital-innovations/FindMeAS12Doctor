@@ -25,4 +25,11 @@ export class ContactDetailService {
       null
     ));
   }
+
+  public getContactDetailsForUser() {
+    return (this.apiService.get(
+      `${environment.apiEndpoint}/contactdetailtype`,
+      null
+    ));
+  }
 }

@@ -26,10 +26,23 @@ namespace Fmas12d.Business.Services
     {
       IEnumerable<ContactDetailType> models = await _context
         .ContactDetailTypes
+        .Include(cdt => cdt.ContactDetails)
         .Where(cd => cd.ContactDetails.Any(cd => cd.UserId == userId))
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
-        .Select(cd => new ContactDetailType(cd))
+        .Select(cd => new ContactDetailType {
+          ContactDetails = cd.ContactDetails
+            .Where(cd => cd.UserId == userId)
+            .Select(cd => new ContactDetail(cd))
+            .ToList(),
+          Description = cd.Description,
+          Id = cd.Id,
+          IsActive = cd.IsActive,
+          ModifiedAt = cd.ModifiedAt,
+          ModifiedByUser = new User(cd.ModifiedByUser),
+          ModifiedByUserId = cd.ModifiedByUserId,
+          Name = cd.Name          
+        })
         .ToListAsync();
 
       return models;    
