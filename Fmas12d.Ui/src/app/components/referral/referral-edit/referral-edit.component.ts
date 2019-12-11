@@ -500,7 +500,6 @@ export class ReferralEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralEdit) {
-    console.log(referral);
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
@@ -704,7 +703,8 @@ export class ReferralEditComponent implements OnInit {
         : this.gpPractice.id;
 
     patient.residentialPostcode =
-      this.residentialPostcode === this.initialReferralDetails.patientResidentialPostcode
+      this.residentialPostcode === this.initialReferralDetails.patientResidentialPostcode ||
+      this.residentialPostcode === 'Unknown'
         ? null
         : this.residentialPostcode;
 
