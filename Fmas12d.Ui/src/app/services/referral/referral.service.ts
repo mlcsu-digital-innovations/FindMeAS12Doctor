@@ -14,6 +14,20 @@ import { ReferralView } from 'src/app/interfaces/referral-view';
 export class ReferralService {
   constructor(private httpClient: HttpClient) {}
 
+  public closeReferral(referralId: number, force?: boolean) {
+
+    let endpoint = `${environment.apiEndpoint}/referral/${referralId}/close`;
+
+    if ( force === true ) {
+      endpoint += '/force';
+    }
+
+    return this.httpClient.put(
+      endpoint,
+      null
+    );
+  }
+
   public getReferralSummary(referralId: number): Observable<Referral> {
     return this.httpClient.get(
       environment.apiEndpoint + `/referral/view/${referralId}/summary`
