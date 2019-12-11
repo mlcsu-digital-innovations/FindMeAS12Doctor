@@ -16,6 +16,7 @@ namespace Fmas12d.Api.ViewModels
       PatientIdentifier = model.PatientIdentifier;
       PreviousAssessments = model.PreviousAssessments
         ?.Select(p => new ReferralViewPreviousAssessment(p)).ToList();
+      ReferralStatusId = model.ReferralStatusId;
       StatusName = model.StatusName;
     }
 
@@ -24,6 +25,7 @@ namespace Fmas12d.Api.ViewModels
     public string LeadAmhp { get; set; }
     public string PatientIdentifier { get; set; }
     public IEnumerable<ReferralViewPreviousAssessment> PreviousAssessments { get; set; }
+    public int ReferralStatusId { get; set; }
     public string StatusName { get; set; }
   }
 }
