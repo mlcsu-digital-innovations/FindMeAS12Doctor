@@ -885,6 +885,10 @@ export class ReferralCreateComponent implements OnInit {
           } else {
             this.patientDetails.residentialPostcode = result.postcode;
             this.isPatientPostcodeValidated = true;
+            this.toastService.displaySuccess({
+              title: 'Postcode Validation',
+              message: `${result.postcode} is a valid postcode`
+            });            
           }
         },
         error => {

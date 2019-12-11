@@ -10,7 +10,7 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy="User")]
   
-  public class AssessmentDoctorAcceptanceController : ModelControllerNoAutoMapper
+  public class AssessmentDoctorAcceptanceController : ModelControllerBase
   {
     public AssessmentDoctorAcceptanceController(
       IUserClaimsService userClaimsService,

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IPatientService : IServiceBaseNoAutoMapper
+  public interface IPatientService : IServiceBase
   {
     Task<bool> CheckExists(
       int id, 

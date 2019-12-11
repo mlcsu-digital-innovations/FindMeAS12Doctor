@@ -18,7 +18,7 @@ namespace Fmas12d.Api.ViewModels
       Address4 = model.Address4;
       CanUpdateOutcome = 
         model.IsSuccessful == null && 
-        model.Referral.ReferralStatusId == Business.Models.ReferralStatus.ASSESSMENT_SCHEDULED;
+        model.Referral?.ReferralStatusId == Business.Models.ReferralStatus.ASSESSMENT_SCHEDULED;
       DateTime = model.DateTime;
       DetailTypes = model.DetailTypes
                          ?.Select(dt => new AssessmentDetailType(dt)).ToList();

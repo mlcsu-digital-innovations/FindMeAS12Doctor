@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IAssessmentService : IServiceBaseNoAutoMapper
+  public interface IAssessmentService : IServiceBase
   {
     Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsAsync(IAssessmentDoctorsUpdate model);
     Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(int id, int userId);

@@ -10,7 +10,7 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy="User")]
   
-  public class LocationDetailsController : ModelControllerNoAutoMapper
+  public class LocationDetailsController : ModelControllerDeletePatchBase
   {
     public LocationDetailsController(
       ILocationDetailService service,

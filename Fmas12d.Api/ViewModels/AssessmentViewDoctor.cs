@@ -11,6 +11,8 @@ namespace Fmas12d.Api.ViewModels
       HasAccepted = model.HasAccepted ?? false;
       HasResponded = model.RespondedAt == null ? false : true;
       Id = model.Id;      
+      IsRegistered = model.IsRegistered;
+      IsS12 = model.IsS12;
       KnownLocation = new Location(model.KnownLocation);
     }
 
@@ -20,6 +22,8 @@ namespace Fmas12d.Api.ViewModels
     public int? GmcNumber { get; set; }
     public bool HasAccepted { get; set; }
     public bool HasResponded { get; set; }
+    public bool? IsRegistered { get; set; }
+    public bool? IsS12 { get; set; }
     public int Id { get; set; }
     public Location KnownLocation { get; set; }
   }

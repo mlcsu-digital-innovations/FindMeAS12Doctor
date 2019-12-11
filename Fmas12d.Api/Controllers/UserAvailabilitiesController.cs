@@ -12,7 +12,7 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy="User")]
   
-  public class UserAvailabilitiesController : ModelControllerNoAutoMapper
+  public class UserAvailabilitiesController : ModelControllerDeletePatchBase
   {
     public UserAvailabilitiesController(
       IUserAvailabilityService service,
