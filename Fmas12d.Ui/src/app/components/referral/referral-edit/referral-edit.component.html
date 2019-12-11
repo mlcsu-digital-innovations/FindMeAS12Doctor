@@ -28,240 +28,139 @@
 
         <div class="card-body">
           <form [formGroup]="referralForm" novalidate>
-              <div class="form-row">
-                <div class="col-md-4">
-                  <label for="nhsNumber">NHS Number</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <button
-                        [disabled]="DisableIfParentIsDisabled('nhsNumber')"
-                        type="button"
-                        class="btn btn-trash"
-                        (click)="ClearField('nhsNumber')"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      digitOnly
-                      maxlength="10"
-                      formControlName="nhsNumber"
-                      id="nhsNumber"
-                      class="form-control"
-                      [ngClass]="{
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="nhsNumber">NHS Number</label>
+                <div class="input-group">
+                  <input type="search" digitOnly maxlength="10" formControlName="nhsNumber" id="nhsNumber"
+                    class="form-control" [ngClass]="{
                         'is-invalid': HasInvalidNHSNumber(),
                         'is-valid': HasValidNHSNumber()
-                      }"
-                    />
-                    </div>
-                  </div>
-                <div class="col-md-1 mb-more-2 centered">
-                  <span class="or">Or</span>
+                      }" />
                 </div>
-                <div class="col-md-4">
-                  <label for="alternativeIdentifier">Alternative Identifier</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <button
-                        [disabled]="DisableIfParentIsDisabled('alternativeIdentifier')"
-                        type="button"
-                        class="btn btn-trash"
-                        (click)="ClearField('alternativeIdentifier')"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <input
-                      [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
-                      [ngClass]="{
+              </div>
+              <div class="col-md-1 mb-more-2 centered">
+                <span class="or">Or</span>
+              </div>
+              <div class="col-md-4">
+                <label for="alternativeIdentifier">Alternative Identifier</label>
+                <div class="input-group">
+                  <input [appDisableControl]="DisableIfFieldHasValue('nhsNumber')" [ngClass]="{
                         'is-invalid': HasInvalidAlternativeIdentifier(),
                         'is-valid': HasValidAlternativeIdentifier()
-                      }"
-                      class="form-control"
-                      formControlName="alternativeIdentifier"
-                      id="alternativeIdentifier"
-                      maxlength="200"
-                      type="text"
-                    />
-                  </div>
+                      }" class="form-control" formControlName="alternativeIdentifier" id="alternativeIdentifier"
+                    maxlength="200" type="search" />
                 </div>
-                <div class="col-md-2 mb-more">
-                    <button
-                      (click)="ValidatePatient()"
-                      [closeDelay]="500"
-                      [disabled]="
+              </div>
+              <div class="col-md-2 mb-more">
+                <button (click)="ValidatePatient()" [closeDelay]="500" [disabled]="
                       IsPatientIdUnchanged() ||
                       DisablePatientValidationButtonIfFieldsAreInvalid() ||
                       IsSearchingForPatient()
-                      "
-                      [openDelay]="1000"
-                      [ngClass]="{ validating: IsSearchingForPatient() }"
-                      class="btn btn-primary"
-                      ngbTooltip="Search for existing patients using these identifiers"
-                      placement="right"
-                      tooltipClass="subtle-tooltip"
-                      type="button"
-                      >
-                      <i class="fas fa-bolt"></i>
-                      {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
-                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                        *ngIf="IsSearchingForPatient()"></span>
-                    </button>
-                  </div>
+                      " [openDelay]="1000" [ngClass]="{ validating: IsSearchingForPatient() }" class="btn btn-primary"
+                  ngbTooltip="Search for existing patients using these identifiers" placement="right"
+                  tooltipClass="subtle-tooltip" type="button">
+                  <i class="fas fa-bolt"></i>
+                  {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                    *ngIf="IsSearchingForPatient()"></span>
+                </button>
               </div>
-              <!-- Row for divs showing patient number validation errors -->
-              <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
-                <div class="col-md-4 mb-2">
-                  <div *ngIf="nhsNumberField.errors != null">
-                    <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
-                      <span>Invalid NHS Number</span>
-                    </div>
-                    <div *ngIf="nhsNumberField.errors.InvalidPatientIdentifier" class="invalid-field">
-                      <span>* Invalid Patient Identifier</span>
-                    </div>
+            </div>
+            <!-- Row for divs showing patient number validation errors -->
+            <div class="form-row" *ngIf="!HasNoPatientIdErrors()">
+              <div class="col-md-4 mb-2">
+                <div *ngIf="nhsNumberField.errors != null">
+                  <div *ngIf="nhsNumberField.errors.NhsNumberValidFormat" class="invalid-field">
+                    <span>Invalid NHS Number</span>
                   </div>
-                </div>
-                <div class="col-md-3 mb-2 offset-md-1">
-                  <div *ngIf="alternativeIdentifierField.errors" class="invalid-field">
-                    <span>Invalid Alternative Identifier</span>
+                  <div *ngIf="nhsNumberField.errors.InvalidPatientIdentifier" class="invalid-field">
+                    <span>* Invalid Patient Identifier</span>
                   </div>
                 </div>
               </div>
-              <!-- GP Practice -->
-              <div class="form-row">
-                <div class="col-md-6">
-                  <label for="gpPractice">GP Practice</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <button
-                        [disabled]="DisableIfParentIsDisabled('gpPractice')"
-                        type="button"
-                        class="btn btn-trash"
-                        (click)="ClearField('gpPractice')"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <input
-                      #gpPractice
-                      [appDisableControl]="
+              <div class="col-md-3 mb-2 offset-md-1">
+                <div *ngIf="alternativeIdentifierField.errors" class="invalid-field">
+                  <span>Invalid Alternative Identifier</span>
+                </div>
+              </div>
+            </div>
+            <!-- GP Practice -->
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="gpPractice">GP Practice</label>
+                <div class="input-group">
+                  <input #gpPractice [appDisableControl]="
                       IsUnknownFieldChecked('unknownGpPractice')
-                      "
-                      [class.is-invalid]="hasGpSearchFailed"
-                      [inputFormatter]="FormatTypeAheadResults"
-                      [ngbTypeahead]="GpSearch"
-                      [resultFormatter]="FormatTypeAheadResults"
-                      class="form-control"
-                      formControlName="gpPractice"
-                      id="gpPractice"
-                      type="text"
-                    />
-                  </div>
-                </div>
-                <div class="col-md-2 mb-more">
-                  <label class="container">
-                    <input
-                      (change)="ToggleGpPracticeUnknown($event)"
-                      class="form-control bottom"
-                      formControlName="unknownGpPractice"
-                      id="unknownGpPractice"
-                      type="checkbox"
-                      value=""
-                    />
-                    <span class="checkmark"></span>
-                    Unknown
-                  </label>
+                      " [class.is-invalid]="hasGpSearchFailed" [inputFormatter]="FormatTypeAheadResults"
+                    [ngbTypeahead]="GpSearch" [resultFormatter]="FormatTypeAheadResults" class="form-control"
+                    formControlName="gpPractice" id="gpPractice" type="search" />
                 </div>
               </div>
-              <!-- GP Practice Errors-->
-              <div class="form-row" *ngIf="gpPracticeField.errors">
-                <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
-                  <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
-                    <span>* GP practice, Postcode or CCG Required </span>
-                  </div>
-                </div>
-                <div class="col-md-8 mb-2">
-                  <span *ngIf="isGpSearching">searching...</span>
-                  <div class="invalid-field" *ngIf="hasGpSearchFailed">
-                    Sorry, suggestions could not be loaded.
-                  </div>
+              <div class="col-md-2 mb-more">
+                <label class="container">
+                  <input (change)="ToggleGpPracticeUnknown($event)" class="form-control bottom"
+                    formControlName="unknownGpPractice" id="unknownGpPractice" type="checkbox" value="" />
+                  <span class="checkmark"></span>
+                  Unknown
+                </label>
+              </div>
+            </div>
+            <!-- GP Practice Errors-->
+            <div class="form-row" *ngIf="gpPracticeField.errors">
+              <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
+                <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
+                  <span>* GP practice, Postcode or CCG Required </span>
                 </div>
               </div>
-              <!-- Residential Postcode -->
-              <div class="form-row" *ngIf="isPostcodeFieldShown">
-                <div class="col-lg-2 col-md-3 col-sm-6">
-                  <label for="residentialPostcode">Residential Postcode</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <button
-                        [disabled]="DisableIfParentIsDisabled('residentialPostcode')"
-                        type="button"
-                        class="btn btn-trash"
-                        (click)="ClearField('residentialPostcode')"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      maxlength="8"
-                      minlength="6"
-                      formControlName="residentialPostcode"
-                      #residentialPostcode
-                      id="residentialPostcode"
-                      oninput="this.value = this.value.toUpperCase()"
-                      class="form-control"
-                      [ngClass]="{
+              <div class="col-md-8 mb-2">
+                <span *ngIf="isGpSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasGpSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
+              </div>
+            </div>
+            <!-- Residential Postcode -->
+            <div class="form-row" *ngIf="isPostcodeFieldShown">
+              <div class="col-lg-2 col-md-3 col-sm-6">
+                <label for="residentialPostcode">Residential Postcode</label>
+                <div class="input-group">
+                  <input type="search" maxlength="8" minlength="6" formControlName="residentialPostcode"
+                    #residentialPostcode id="residentialPostcode" oninput="this.value = this.value.toUpperCase()"
+                    class="form-control" [ngClass]="{
                         'is-invalid': HasInvalidPostcode(),
                         'is-valid': HasValidPostcode()
-                      }"
-                    />
-                    </div>
-                </div>
-                <div class="col-md-2 mb-more">
-                  <label class="container">
-                    <input
-                      class="form-control"
-                      type="checkbox"
-                      value=""
-                      id="unknownResidentialPostcode"
-                      formControlName="unknownResidentialPostcode"
-                      (change)="ToggleResidentialPostcodeUnknown($event)"
-                    />
-                    <span class="checkmark"></span>
-                    Unknown
-                  </label>
-                </div>
-                <div class="col-md-2 mb-more">
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    placement="right"
-                    ngbTooltip="Check that postcode is valid"
-                    [openDelay]="1000"
-                    [closeDelay]="500"
-                    tooltipClass="subtle-tooltip"
-                    [disabled]="
-                      DisablePostcodeValidationButtonIfFieldIsInvalid() ||
-                      IsSearchingForPostcode()
-                    "
-                    (click)="ValidatePostcode()"
-                    [ngClass]="{ validating: IsSearchingForPostcode() }"
-                  >
-                    <i class="fas fa-bolt"></i>
-                    {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                      *ngIf="IsSearchingForPostcode()"></span>
-                  </button>
+                      }" />
                 </div>
               </div>
-              <!-- Residential Postcode Errors-->
-              <div class="form-row" *ngIf="residentialPostcodeField.errors">
-                <div class="col-md-4 mb-2">
-                  <div class="invalid-field">
-                    <span>{{ residentialPostcodeValidationMessage }}</span>
-                  </div>
+              <div class="col-md-2 mb-more">
+                <label class="container">
+                  <input class="form-control" type="checkbox" value="" id="unknownResidentialPostcode"
+                    formControlName="unknownResidentialPostcode" (change)="ToggleResidentialPostcodeUnknown($event)" />
+                  <span class="checkmark"></span>
+                  Unknown
+                </label>
+              </div>
+              <div class="col-md-2 mb-more">
+                <button type="button" class="btn btn-primary" placement="right"
+                  ngbTooltip="Check that postcode is valid" [openDelay]="1000" [closeDelay]="500"
+                  tooltipClass="subtle-tooltip" [disabled]="
+                      DisablePostcodeValidationButtonIfFieldIsInvalid() ||
+                      IsSearchingForPostcode()
+                    " (click)="ValidatePostcode()" [ngClass]="{ validating: IsSearchingForPostcode() }">
+                  <i class="fas fa-bolt"></i>
+                  {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                    *ngIf="IsSearchingForPostcode()"></span>
+                </button>
+              </div>
+            </div>
+            <!-- Residential Postcode Errors-->
+            <div class="form-row" *ngIf="residentialPostcodeField.errors">
+              <div class="col-md-4 mb-2">
+                <div class="invalid-field">
+                  <span>{{ residentialPostcodeValidationMessage }}</span>
+                </div>
               </div>
             </div>
             <!-- CCG -->
@@ -269,42 +168,16 @@
               <div class="col-md-6">
                 <label for="ccg">Clinical Commissioning Group</label>
                 <div class="input-group">
-                  <div class="input-group-prepend">
-                      <button
-                        [disabled]="DisableIfParentIsDisabled('ccg')"
-                        type="button"
-                        class="btn btn-trash"
-                        (click)="ClearField('ccg')"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </button>
-                  </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="ccg"
-                    #ccg
-                    [appDisableControl]="
+                  <input type="search" class="form-control" id="ccg" #ccg [appDisableControl]="
                       IsUnknownFieldChecked('unknownCcg')
-                    "
-                    [class.is-invalid]="hasCcgSearchFailed"
-                    formControlName="ccg"
-                    [ngbTypeahead]="CcgSearch"
-                    [resultFormatter]="FormatTypeAheadResults"
-                    [inputFormatter]="FormatTypeAheadResults"
-                  />
+                    " [class.is-invalid]="hasCcgSearchFailed" formControlName="ccg" [ngbTypeahead]="CcgSearch"
+                    [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
                 </div>
               </div>
               <div class="col-md-2 mb-more">
                 <label class="container">
-                  <input
-                    class="form-control"
-                    type="checkbox"
-                    value=""
-                    id="unknownCcg"
-                    formControlName="unknownCcg"
-                    (change)="ToggleCcgUnknown($event)"
-                  />
+                  <input class="form-control" type="checkbox" value="" id="unknownCcg" formControlName="unknownCcg"
+                    (change)="ToggleCcgUnknown($event)" />
                   <span class="checkmark"></span>
                   Unknown
                 </label>
@@ -324,27 +197,9 @@
               <div class="col-md-6">
                 <label for="amhp">Lead AMHP</label>
                 <div class="input-group">
-                  <div class="input-group-prepend">
-                    <button
-                      [disabled]="DisableIfParentIsDisabled('amhp')"
-                      type="button"
-                      class="btn btn-trash"
-                      (click)="ClearField('amhp')"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="amhp"
-                    #amhp
-                    [class.is-invalid]="hasAmhpSearchFailed"
-                    formControlName="amhp"
-                    [ngbTypeahead]="AmhpSearch"
-                    [resultFormatter]="FormatTypeAheadResults"
-                    [inputFormatter]="FormatTypeAheadResults"
-                  />
+                  <input type="search" class="form-control" id="amhp" #amhp [class.is-invalid]="hasAmhpSearchFailed"
+                    formControlName="amhp" [ngbTypeahead]="AmhpSearch" [resultFormatter]="FormatTypeAheadResults"
+                    [inputFormatter]="FormatTypeAheadResults" />
                 </div>
               </div>
             </div>
@@ -368,25 +223,15 @@
               <div class="col-md-4 flex">
                 <div class="checkmark-content">
                   <label class="container">
-                    <input
-                      class="form-control not-full-width"
-                      type="checkbox"
-                      value=""
-                      id="retrospectiveReferral"
-                      formControlName="retrospectiveReferral"
-                      #retrospectiveReferral
-                    />
+                    <input class="form-control not-full-width" type="checkbox" value="" id="retrospectiveReferral"
+                      formControlName="retrospectiveReferral" #retrospectiveReferral />
                     <span class="checkmark"></span>
                     Update Referral Created Date / Time
                   </label>
                 </div>
                 <div class="content-help">
-                  <i
-                    class="fas fa-question-circle"
-                    placement="right"
-                    ngbTooltip="Update the referral created date / time"
-                    [openDelay]="250"
-                    [closeDelay]="500"
+                  <i class="fas fa-question-circle" placement="right"
+                    ngbTooltip="Update the referral created date / time" [openDelay]="250" [closeDelay]="500"
                     tooltipClass="subtle-tooltip">
                   </i>
                 </div>
@@ -398,20 +243,11 @@
                 <label for="plannedPicker">Referral Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-5">
-                    <input
-                      class="form-control"
-                      formControlName='referralDate'
-                      placeholder="dd/mm/yyyy"
-                      name="referralDate"
-                      [maxDate]='maxDate'
-                      ngbDatepicker
-                      #s="ngbDatepicker"/>
+                    <input class="form-control" formControlName='referralDate' placeholder="dd/mm/yyyy"
+                      name="referralDate" [maxDate]='maxDate' ngbDatepicker #s="ngbDatepicker" />
                   </div>
                   <div class="col-md-1 padding-left-1">
-                    <button
-                      class="btn btn-outline-secondary calendar"
-                      (click)="s.toggle()"
-                      type="button">
+                    <button class="btn btn-outline-secondary calendar" (click)="s.toggle()" type="button">
                       <i class="far fa-calendar-alt"></i>
                     </button>
                   </div>
@@ -425,22 +261,14 @@
             <!-- Date Format Errors-->
             <div class="form-row" *ngIf="retrospectiveReferral.checked && referralDateField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div
-                  class="invalid-field"
-                  *ngIf="referralDateField.errors && referralDateField.errors.DatePickerFormat"
-                >
+                <div class="invalid-field"
+                  *ngIf="referralDateField.errors && referralDateField.errors.DatePickerFormat">
                   <span>Invalid Date Format</span>
                 </div>
-                <div
-                  class="invalid-field"
-                  *ngIf="referralDateField.errors && referralDateField.errors.FutureDate"
-                >
+                <div class="invalid-field" *ngIf="referralDateField.errors && referralDateField.errors.FutureDate">
                   <span>* A retrospective referral cannot be in the future</span>
                 </div>
-                <div
-                  class="invalid-field"
-                  *ngIf="referralDateField.errors && referralDateField.errors.MissingDate"
-                >
+                <div class="invalid-field" *ngIf="referralDateField.errors && referralDateField.errors.MissingDate">
                   <span>* A referral date / time must be provided</span>
                 </div>
               </div>
@@ -479,11 +307,9 @@
 </ng-template>
 
 <ng-template #cancelUpdate>
-  <app-cancel-action-modal
-    [modalTitle]="'Cancel Update'"
+  <app-cancel-action-modal [modalTitle]="'Cancel Update'"
     [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
-    (actioned)="OnCancelModalAction($event)"
-  >
+    (actioned)="OnCancelModalAction($event)">
   </app-cancel-action-modal>
 </ng-template>
 
