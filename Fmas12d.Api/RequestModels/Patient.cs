@@ -44,12 +44,6 @@ namespace Fmas12d.Api.RequestModels
     {
       if (NhsNumber.HasValue)
       {
-        if (AlternativeIdentifier != null)
-        {
-          yield return new ValidationResult(
-              "The AlternativeIdentifier field should not be provided when the NhsNumber field is provided.",
-              new[] { "AlternativeIdentifier" });
-        }
         if (!Business.Helpers.NhsNumber.IsValid((long)NhsNumber))
         {
           yield return new ValidationResult(
@@ -77,15 +71,7 @@ namespace Fmas12d.Api.RequestModels
         }
       }
 
-      if (!GpPracticeId.HasValue &&
-          string.IsNullOrWhiteSpace(ResidentialPostcode) &&
-          !CcgId.HasValue)
-      {
-        yield return new ValidationResult(
-            "At least one of the CcgId, GpPractice or ResidentialPostcode fields must be provided.",
-            new[] { "CcgId", "GpPracticeId", "ResidentialPostcode" });
-      }
-      else if (GpPracticeId.HasValue &&
+      if (GpPracticeId.HasValue &&
                !string.IsNullOrWhiteSpace(ResidentialPostcode) &&
                CcgId.HasValue)
       {

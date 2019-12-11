@@ -157,7 +157,8 @@ namespace Fmas12d.Business.Services
             $"patient with an NhsNumber of {model.NhsNumber} already exists.");
         }
       }
-      else
+      
+      if (!string.IsNullOrWhiteSpace(model.AlternativeIdentifier))
       {
         Entities.Patient patient = await _context
           .Patients
