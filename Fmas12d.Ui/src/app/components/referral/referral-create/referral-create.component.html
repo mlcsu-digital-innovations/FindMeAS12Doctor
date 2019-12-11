@@ -18,7 +18,7 @@
         <div class="card-body">
           <form [formGroup]="patientForm" novalidate>
             <div class="form-row">
-              <div class="required-field col-md-2 mb-2 text-left">
+              <div class="required-field col-md-3 mb-3 text-left">
                 <strong>Denotes required field.</strong>
               </div>
             </div>
@@ -36,7 +36,7 @@
                   formControlName="nhsNumber"
                   id="nhsNumber"
                   maxlength="10"
-                  type="text"
+                  type="search"
                   [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')"
                   [ngClass]="{
                     'is-invalid': HasInvalidNHSNumber(),
@@ -58,7 +58,7 @@
                   class="form-control"
                   formControlName="alternativeIdentifier"
                   maxlength="200"
-                  type="text"
+                  type="search"
                   [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
                   [ngClass]="{
                     'is-invalid': HasInvalidAlternativeIdentifier(),
@@ -113,7 +113,7 @@
               <div class="col-md-8 mb-2">
                 <label class="required-field" for="gpPractice">GP Practice</label>
                 <input
-                  type="text"
+                  type="search"
                   class="form-control"
                   id="gpPractice"
                   #gpPractice
@@ -166,7 +166,7 @@
               <div class="col-md-3 mb-2">
                 <label class="required-field" for="residentialPostcode">Residential Postcode</label>
                 <input
-                  type="text"
+                  type="search"
                   maxlength="8"
                   minlength="6"
                   formControlName="residentialPostcode"
@@ -241,7 +241,7 @@
               <div class="col-md-8 mb-2">
                 <label class="required-field" for="ccg">Clinical Commissioning Group</label>
                 <input
-                  type="text"
+                  type="search"
                   class="form-control"
                   id="ccg"
                   #ccg
@@ -288,7 +288,7 @@
               <div class="col-md-8 mb-2">
                 <label class="required-field" for="amhp">Lead AMHP</label>
                 <input
-                  type="text"
+                  type="search"
                   class="form-control"
                   id="amhp"
                   #amhp
@@ -337,7 +337,7 @@
                     class="fas fa-question-circle"
                     placement="right"
                     ngbTooltip="Add a referral for an earlier date / time"
-                    [openDelay]="250"
+                    [openDelay]="100"
                     [closeDelay]="500"
                     tooltipClass="subtle-tooltip">
                   </i>

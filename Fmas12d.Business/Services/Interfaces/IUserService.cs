@@ -4,28 +4,28 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IUserService : IServiceBaseNoAutoMapper
+  public interface IUserService : IServiceBase
   {
-    Task<bool> CheckIsAmhp(
+    Task<User> CheckIsAmhpAsync(
       int id, 
       string modelPropertyName,
       bool asNoTracking = true, 
       bool activeOnly = true
     );
-    Task<bool> CheckIsADoctor(
+    Task<User> CheckIsADoctorAsync(
       int id, 
       string modelPropertyName,
       bool asNoTracking = true, 
       bool activeOnly = true
     );
-    Task<IEnumerable<Models.User>> GetAllByAmhpName(
+    Task<IEnumerable<Models.User>> GetAllByAmhpNameAsync(
       string amhpName, bool asNoTracking = true, bool activeOnly = true);
-    Task<IEnumerable<Models.User>> GetAllByDoctorName(
+    Task<IEnumerable<Models.User>> GetAllByDoctorNameAsync(
       string doctorName, bool asNoTracking = true, bool activeOnly = true);
-    Task<IEnumerable<Models.User>> GetAllByGmcNumber(
+    Task<IEnumerable<Models.User>> GetAllByGmcNumberAsync(
       int gmcNumber, bool asNoTracking = true, bool activeOnly = true);
     Task<User> GetByIdentityServerIdentifierAsync(
       string identityServerIdentifier, bool asNoTracking = true, bool activeOnly = true);
-    Task<int> GetByProfileTypeId(int userId, bool asNoTracking, bool activeOnly);
+    Task<int> GetByProfileTypeIdAsync(int userId, bool asNoTracking, bool activeOnly);
   }
 }

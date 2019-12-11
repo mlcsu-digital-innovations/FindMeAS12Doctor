@@ -11,11 +11,13 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string DESCRIPTION_DOCTOR = "Doctor Description";
     public const string DESCRIPTION_FINANCE = "Finance Description";
     public const string DESCRIPTION_SYSTEM = "System Description";
+    public const string DESCRIPTION_UNREGISTERED = "Unregistered Description";
     public const string NAME_ADMIN = "Admin";
     public const string NAME_AMHP = "AMHP";
     public const string NAME_DOCTOR = "Doctor";
     public const string NAME_FINANCE = "Finance";
-    public const string NAME_SYSTEM = "System";      
+    public const string NAME_SYSTEM = "System";
+    public const string NAME_UNREGISTERED = "Unregistered";
     #endregion
 
     public void SeedData()
@@ -42,6 +44,12 @@ namespace Fmas12d.Business.Migrations.Seeds
         Models.ProfileType.FINANCE,
         NAME_FINANCE,
         DESCRIPTION_FINANCE
+      );
+
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ProfileType.UNREGISTERED,
+        NAME_UNREGISTERED,
+        DESCRIPTION_UNREGISTERED
       );
 
       SaveChangesWithIdentity();

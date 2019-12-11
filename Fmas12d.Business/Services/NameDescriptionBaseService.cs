@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Fmas12d.Business.Services
 {
   public abstract class NameDescriptionBaseService<TEntity> : 
-    ServiceBaseNoAutoMapper<TEntity>, INameDescriptionBaseService 
+    ServiceBase<TEntity>, INameDescriptionBaseService 
       where TEntity : Data.Entities.NameDescription
   {
     protected NameDescriptionBaseService(

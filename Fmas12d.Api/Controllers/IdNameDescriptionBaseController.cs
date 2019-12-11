@@ -13,7 +13,7 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy="User")]
   
-  public abstract class IdNameDescriptionBaseController : ModelControllerNoAutoMapper
+  public abstract class IdNameDescriptionBaseController : ModelControllerDeletePatchBase
   {
     protected IdNameDescriptionBaseController(
       IUserClaimsService userClaimsService,

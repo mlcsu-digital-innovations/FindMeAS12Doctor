@@ -11,7 +11,7 @@ namespace Fmas12d.Api.Controllers
   [Route("api/[controller]")]
   [ApiController]
   [Authorize(Policy="User")]
-  public class UserController : ModelControllerNoAutoMapper
+  public class UserController : ModelControllerDeletePatchBase
   {
     public UserController(
       IUserClaimsService userClaimsService,
@@ -29,15 +29,15 @@ namespace Fmas12d.Api.Controllers
 
       if (search.IsByAmhpName)
       {
-        models = await Service.GetAllByAmhpName(search.AmhpName, activeOnly: false);
+        models = await Service.GetAllByAmhpNameAsync(search.AmhpName, activeOnly: false);
       }
       else if (search.IsByDoctorName)
       {
-        models = await Service.GetAllByDoctorName(search.DoctorName, activeOnly: false);
+        models = await Service.GetAllByDoctorNameAsync(search.DoctorName, activeOnly: false);
       }
       else if (search.IsByGmcNumber)
       {
-        models = await Service.GetAllByGmcNumber(search.GmcNumber, activeOnly: false);
+        models = await Service.GetAllByGmcNumberAsync(search.GmcNumber, activeOnly: false);
       }
 
       if (models.Any())

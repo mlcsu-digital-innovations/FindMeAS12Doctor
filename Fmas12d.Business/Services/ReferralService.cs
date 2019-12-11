@@ -10,22 +10,74 @@ using Fmas12d.Business.Exceptions;
 
 namespace Fmas12d.Business.Services
 {
-  public class ReferralService : 
-    ServiceBaseNoAutoMapper<Entities.Referral>, 
+  public class ReferralService :
+    ServiceBase<Entities.Referral>,
     IReferralService
   {
     private readonly IPatientService _patientService;
     private readonly IUserService _userService;
     public ReferralService(
-      ApplicationContext context, 
-      IUserClaimsService userClaimsService,
+      ApplicationContext context,
       IPatientService patientService,
+      IUserClaimsService userClaimsService,
       IUserService userService
     )
       : base(context, userClaimsService)
     {
-      _patientService = patientService;     
-      _userService = userService;      
+      _patientService = patientService;
+      _userService = userService;
+    }
+
+    public async Task<bool> CloseAsync(int id)
+    {
+      Entities.Referral entity = await GetForCloseAsync(id);
+
+      if (entity.ReferralStatusId != ReferralStatus.AWAITING_REVIEW &&
+          entity.ReferralStatusId != ReferralStatus.OPEN)
+      {
+        throw new ModelStateException(
+          "id",
+          $"The Referral Id {id} cannot be closed because it has a Status Id of " +
+          $"{entity.ReferralStatusId} and requires a Status Id of [" +
+          $"{ReferralStatus.AWAITING_REVIEW}, {ReferralStatus.OPEN}]."
+        );
+      }
+
+      entity.ReferralStatusId = ReferralStatus.CLOSED;
+      await _context.SaveChangesAsync();
+
+      return true;
+    }
+
+    public async Task<bool> CloseForceAsync(int id)
+    {
+      Entities.Referral entity = await GetForCloseAsync(id);
+
+      foreach (Entities.Assessment assessment in entity.Assessments
+                                                       .Where(a => a.IsSuccessful == null)
+                                                       .Where(a => a.IsActive))
+      {
+        AddUserAssessmentNotification(
+          assessment,
+          assessment.AmhpUserId,
+          NotificationText.ASSESSMENT_CANCELLED
+        );
+
+        foreach (Entities.AssessmentDoctor assessmentDoctor in assessment.Doctors
+                                                                         .Where(a => a.IsActive))
+        {
+          AddUserAssessmentNotification(
+            assessment,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_CANCELLED
+          );
+        }
+      }
+
+      entity.ReferralStatusId = ReferralStatus.CLOSED;
+      await _context.SaveChangesAsync();
+
+      return true;
     }
 
     public async Task<Referral> CreateAsync(ReferralCreate model)
@@ -36,7 +88,7 @@ namespace Fmas12d.Business.Services
 
     public async Task<Referral> CreateRetrospectiveAsync(ReferralCreate model)
     {
-      await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+      await _userService.CheckIsAmhpAsync(model.LeadAmhpUserId, "leadAmhpUserId");
       await _patientService.CheckExists(model.PatientId, "patientId");
 
       if (model.CreatedAt == default)
@@ -69,7 +121,11 @@ namespace Fmas12d.Business.Services
                            .AnyAsync();
     }
 
-    public async Task<Referral> GetAsync(int id, bool activeOnly = true, bool asNoTracking = true)
+    public async Task<Referral> GetAsync(
+      int id,
+      bool activeOnly = true,
+      bool asNoTracking = true
+    )
     {
       Referral referral = await _context.Referrals
                                         .Where(r => r.Id == id)
@@ -114,23 +170,53 @@ namespace Fmas12d.Business.Services
     }
 
     public async Task<IEnumerable<Referral>> GetListAsync(
-      bool activeOnly = true, bool asNoTracking = true)
+      bool activeOnly = true,
+      bool asNoTracking = true
+    )
     {
+      return await GetListAsync(null, null, activeOnly, asNoTracking);
+    }
+
+    public async Task<IEnumerable<Referral>> GetListAsync(
+      List<int> excludeStatusIds,
+      List<int> includeStatusIds,
+      bool activeOnly = true,
+      bool asNoTracking = true
+    )
+    {
+
+      IQueryable<Entities.Referral> query =
+        _context.Referrals
+                .Include(r => r.Assessments)
+                  .ThenInclude(e => e.Speciality)
+                .Include(r => r.Assessments)
+                  .ThenInclude(e => e.UserAssessmentNotifications)
+                .Include(r => r.Assessments)
+                  .ThenInclude(e => e.Doctors)
+                .Include(r => r.Patient)
+                .Include(r => r.ReferralStatus)
+                .Include(r => r.LeadAmhpUser)
+                .WhereIsActiveOrActiveOnly(activeOnly)
+                .AsNoTracking(asNoTracking);
+
+      if (includeStatusIds != null && includeStatusIds.Any())
+      {
+        includeStatusIds.ForEach(includeStatusId =>
+          query = query.Where(r => r.ReferralStatusId == includeStatusId)
+        );
+      }
+
+      if (excludeStatusIds != null && excludeStatusIds.Any())
+      {
+        excludeStatusIds.ForEach(excludeStatusId =>
+          query = query.Where(r => r.ReferralStatusId != excludeStatusId)
+        );
+      }
+
       IEnumerable<Referral> models =
-        await _context.Referrals
-                      .Include(r => r.Assessments)
-                        .ThenInclude(e => e.Speciality)
-                      .Include(r => r.Assessments)
-                        .ThenInclude(e => e.UserAssessmentNotifications)
-                      .Include(r => r.Assessments)
-                        .ThenInclude(e => e.Doctors)
-                      .Include(r => r.Patient)
-                      .Include(r => r.ReferralStatus)
-                      .Include(r => r.LeadAmhpUser)
-                      .WhereIsActiveOrActiveOnly(activeOnly)
-                      .AsNoTracking(asNoTracking)
-                      .Select(r => new Referral(r, false))
-                      .ToListAsync();
+        await query
+              .Select(r => new Referral(r, false))
+              .ToListAsync();
 
       return models;
     }
@@ -183,9 +269,44 @@ namespace Fmas12d.Business.Services
       return await UpdateAsyncInternal(model, false);
     }
 
+    public async Task<Referral> UpdateRetrospectiveAsync(ReferralUpdate model)
+    {
+      if (model.CreatedAt == default)
+      {
+        throw new ModelStateException("createdAt",
+        $"The createdAt field has an invalid value of {model.CreatedAt}");
+      }
+      return await UpdateAsyncInternal(model, true);
+    }
+
+    private async Task<Entities.Referral> GetForCloseAsync(int id)
+    {
+      Entities.Referral entity = await _context
+        .Referrals
+        .Include(r => r.Assessments)
+          .ThenInclude(a => a.Doctors)
+        .Where(r => r.Id == id)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id", $"Unable to find a referral with an id of {id}");
+      }
+
+      if (entity.ReferralStatusId == ReferralStatus.CLOSED)
+      {
+        throw new ModelStateException(
+          "id", 
+          $"Unable to close the referral with an id of {id} because it is already closed."
+        );
+      }      
+
+      return entity;
+    }
+
     private async Task<Referral> UpdateAsyncInternal(ReferralUpdate model, bool isRetrospective)
     {
-      await _userService.CheckIsAmhp(model.LeadAmhpUserId, "leadAmhpUserId");
+      await _userService.CheckIsAmhpAsync(model.LeadAmhpUserId, "leadAmhpUserId");
 
       Entities.Referral entity = await _context
         .Referrals
@@ -211,15 +332,6 @@ namespace Fmas12d.Business.Services
       return await GetAsync(model.Id);
     }
 
-    public async Task<Referral> UpdateRetrospectiveAsync(ReferralUpdate model)
-    {
-      if (model.CreatedAt == default)
-      {
-        throw new ModelStateException("createdAt",
-        $"The createdAt field has an invalid value of {model.CreatedAt}");
-      }      
-      return await UpdateAsyncInternal(model, true);
-    }
 
   }
 }

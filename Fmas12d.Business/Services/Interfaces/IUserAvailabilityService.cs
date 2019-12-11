@@ -5,7 +5,7 @@ using System;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IUserAvailabilityService : IServiceBaseNoAutoMapper
+  public interface IUserAvailabilityService : IServiceBase
   {
     Task<IUserAvailability> CreateAsync(IUserAvailability model);
     Task<IEnumerable<IUserAvailability>> GetAsync(
@@ -13,6 +13,11 @@ namespace Fmas12d.Business.Services
       DateTimeOffset from,
       bool asNoTracking,
       bool activeOnly);
+    Task<IUserAvailability> GetAtAsync(
+      int userId,
+      DateTimeOffset at,
+      bool asNoTracking,
+      bool activeOnly);      
     Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(
       DateTimeOffset requiredDateTime,
       bool asNoTracking,
@@ -21,6 +26,7 @@ namespace Fmas12d.Business.Services
       List<int> userIds, 
       DateTimeOffset dateTime, 
       bool asNoTracking,
-      bool activeOnly);    
+      bool activeOnly);
+    Task<IUserAvailability> UpdateAsync(IUserAvailability businessModel);
   }
 }

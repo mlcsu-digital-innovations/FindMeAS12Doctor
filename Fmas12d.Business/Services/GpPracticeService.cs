@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Fmas12d.Business.Services
 {
   public class GpPracticeService : 
-      ServiceBaseNoAutoMapper<Entities.GpPractice>, 
+      ServiceBase<Entities.GpPractice>, 
       IGpPracticeService,
       ISearchService
   {

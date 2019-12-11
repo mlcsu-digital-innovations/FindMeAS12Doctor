@@ -874,7 +874,7 @@ export class ReferralCreateComponent implements OnInit {
         (result: PostcodeSearchResult) => {
           this.isSearchingForPostcode = false;
 
-          if (result.code == null) {
+          if (result.postcode == null) {
             this.residentialPostcodeField.setErrors(null);
             this.residentialPostcodeValidationMessage =
               'Unable to validate postcode';
@@ -883,8 +883,12 @@ export class ReferralCreateComponent implements OnInit {
             });
             this.SetFieldFocus('#residentialPostcode');
           } else {
-            this.patientDetails.residentialPostcode = result.code;
+            this.patientDetails.residentialPostcode = result.postcode;
             this.isPatientPostcodeValidated = true;
+            this.toastService.displaySuccess({
+              title: 'Postcode Validation',
+              message: `${result.postcode} is a valid postcode`
+            });            
           }
         },
         error => {

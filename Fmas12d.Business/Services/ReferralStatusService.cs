@@ -4,7 +4,7 @@ using Fmas12d.Business.Models;
 namespace Fmas12d.Business.Services
 {
   public class ReferralStatusService
-    : ServiceBaseNoAutoMapper<Entities.ReferralStatus>,
+    : ServiceBase<Entities.ReferralStatus>,
       IReferralStatusService
   {
     public ReferralStatusService(

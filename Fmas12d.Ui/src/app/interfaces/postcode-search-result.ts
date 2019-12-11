@@ -1,5 +1,5 @@
 export interface PostcodeSearchResult {
-  code?: string;
+  postcode?: string;
   latitude?: number;
   longitude?: number;
 }

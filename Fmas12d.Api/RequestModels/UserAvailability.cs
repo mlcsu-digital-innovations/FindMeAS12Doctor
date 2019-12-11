@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class UserAvailability
+  public class UserAvailability : IValidatableObject
   {
     protected Business.Models.UserAvailability _model;
 
@@ -19,9 +20,20 @@ namespace Fmas12d.Api.RequestModels
         End = End.Value,
         Location = new Business.Models.Location(),
         Start = Start.Value,
-        UserId = userId    
+        UserId = userId
       };
       return _model;
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+      if (Start >= End)
+      {
+        yield return new ValidationResult(
+            "The start field must be before the end field.",
+            new[] { "Start" }
+        );
+      }      
     }
   }
 }

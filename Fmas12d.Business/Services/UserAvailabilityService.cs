@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Fmas12d.Business.Services
 {
   public class UserAvailabilityService :
-    ServiceBaseNoAutoMapper<Entities.UserAvailability>,
+    ServiceBase<Entities.UserAvailability>,
     IUserAvailabilityService
   {
     private readonly IContactDetailsService _contactDetailsService;
@@ -34,7 +34,6 @@ namespace Fmas12d.Business.Services
     /// <returns></returns>
     public async Task<IUserAvailability> CreateAsync(IUserAvailability model)
     {
-
       await SetLatitudeLongitudeAsync(model);
       await CheckForOverlappingAvailabilityAsync(model);
 
@@ -72,6 +71,25 @@ namespace Fmas12d.Business.Services
 
       return models;
     }
+
+    public async Task<IUserAvailability> GetAtAsync(
+      int userId,
+      DateTimeOffset at,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      IUserAvailability model = await _context
+        .UserAvailabilities
+        .Where(ua => ua.UserId == userId)
+        .Where(ua => ua.End >= at)
+        .Where(ua => ua.Start <= at)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserAvailability.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }    
 
     public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(
       DateTimeOffset requiredDateTime,
@@ -112,9 +130,10 @@ namespace Fmas12d.Business.Services
                     ScheduledTime = da.Assessment.ScheduledTime
                   })
                   .ToList(),
-                
+
                 End = entity.End,
-                Location = new Location{
+                Location = new Location
+                {
                   ContactDetailId = entity.ContactDetailId,
                   Latitude = entity.Latitude,
                   Longitude = entity.Longitude,
@@ -158,8 +177,39 @@ namespace Fmas12d.Business.Services
       return doctorsPostcode;
     }
 
+    public async Task<IUserAvailability> UpdateAsync(IUserAvailability model)
+    {
+      await SetLatitudeLongitudeAsync(model);
+      await CheckForOverlappingAvailabilityAsync(model, model.Id);
+
+      Entities.UserAvailability entity = _context
+        .UserAvailabilities
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(false)
+        .SingleOrDefault(ua => ua.Id == model.Id);
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"Unable to find a UserAvailability with an Id of {model.Id}");
+      }
+
+      model.MapToEntity(entity);
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = await _context.UserAvailabilities
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(UserAvailability.ProjectFromEntity)
+                      .SingleAsync();
+
+      return model;
+    }
+
     protected override void CheckUserCanSetActiveStatus(
-      Entities.UserAvailability entity, 
+      Entities.UserAvailability entity,
       int userId
     )
     {
@@ -176,16 +226,27 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    private async Task<bool> CheckForOverlappingAvailabilityAsync(IUserAvailability model)
+    private async Task<bool> CheckForOverlappingAvailabilityAsync(
+      IUserAvailability model,
+      int? currentUserAvailabilityId
+    )
     {
-      IEnumerable<int> existingAvailabilitiesIds =
-        await _context.UserAvailabilities
-                      .Where(u => u.IsActive)
-                      .Where(u => model.UserId == u.UserId)
-                      .Where(u => model.Start <= u.End)
-                      .Where(u => model.End >= u.Start)
-                      .Select(u => u.Id)
-                      .ToListAsync();
+      IQueryable<Entities.UserAvailability> query =
+        _context.UserAvailabilities
+                .Where(u => model.UserId == u.UserId)
+                .Where(u => model.Start <= u.End)
+                .Where(u => model.End >= u.Start)
+                .WhereIsActiveOrActiveOnly(true)
+                .AsNoTracking(true);
+
+      if (currentUserAvailabilityId.HasValue)
+      {
+        query = query.Where(ua => ua.Id != currentUserAvailabilityId.Value);
+      }
+
+      IEnumerable<int> existingAvailabilitiesIds = await query
+        .Select(u => u.Id)
+        .ToListAsync();
 
       if (existingAvailabilitiesIds.Count() > 0)
       {
@@ -195,6 +256,11 @@ namespace Fmas12d.Business.Services
           $"UserAvailabilities Ids [{string.Join(",", existingAvailabilitiesIds)}]");
       }
       return true;
+    }
+
+    private async Task<bool> CheckForOverlappingAvailabilityAsync(IUserAvailability model)
+    {
+      return await CheckForOverlappingAvailabilityAsync(model, null);
     }
 
     /// <summary>
@@ -209,13 +275,14 @@ namespace Fmas12d.Business.Services
       }
       else if (model.Location.HasContactDetailId)
       {
-        ContactDetail contactDetail = await _contactDetailsService.Get(
+        ContactDetail contactDetail = await _contactDetailsService.GetByIdAndUserIdAsync(
           model.Location.ContactDetailId.Value, model.UserId, true, true
         );
         if (contactDetail == null)
         {
           throw new ModelStateException("ContactDetailId",
-            $"There is no active ContactDetail with an Id of {model.Location.ContactDetailId}");
+            $"Unable to find a ContactDetail Id of {model.Location.ContactDetailId} for User Id " +
+            $"{model.UserId}.");
         }
         if (contactDetail.UserId != model.UserId)
         {

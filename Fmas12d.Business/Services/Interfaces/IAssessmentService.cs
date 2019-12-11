@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface IAssessmentService : IServiceBaseNoAutoMapper
+  public interface IAssessmentService : IServiceBase
   {
-    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctors(IAssessmentDoctorsUpdate model);
-    Task<IAssessmentDoctorsUpdate> AddSelectedDoctors(IAssessmentDoctorsUpdate model);
+    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsAsync(IAssessmentDoctorsUpdate model);
+    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(int id, int userId);
+    Task<IAssessmentDoctorsUpdate> AddSelectedDoctorsAsync(IAssessmentDoctorsUpdate model);
     Task<AssessmentCreate> CreateAsync(AssessmentCreate model);
     Task<IEnumerable<Assessment>> GetListByUserIdAsync(
       int userId,

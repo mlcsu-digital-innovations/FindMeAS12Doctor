@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Services
 {
-  public interface INameDescriptionBaseService : IServiceBaseNoAutoMapper
+  public interface INameDescriptionBaseService : IServiceBase
   {
     Task<IEnumerable<Models.NameDescription>> GetNameDescriptions(bool asNoTracking = true, bool activeOnly = true);
   }
