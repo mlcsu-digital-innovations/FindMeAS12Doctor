@@ -63,17 +63,11 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="!displayDoctors">
+    <ion-row *ngIf="!displayDoctors && assessmentView?.canUpdateOutcome">
       <ion-col>
         <strong>No doctors allocated or selected</strong>
       </ion-col>
-    </ion-row>
-
-    <ion-row *ngIf="displayDoctors">
-      <ion-col>
-        &nbsp;
-      </ion-col>
-    </ion-row>
+    </ion-row>   
 
     <ion-row *ngIf="displayDoctors">
       <ion-label offset="1">
@@ -84,21 +78,18 @@
     <ion-row *ngIf="displayDoctors">
       <ion-col>    
         <ion-text *ngFor="let doctor of assessmentView?.doctorsAllocated">         
-          {{doctor.displayName}}
+          {{doctor.displayName}} 
+          <br />
           <ion-icon class="outstanding" size="small" name="help-circle" 
             *ngIf="!doctor.hasResponded">
           </ion-icon>
+          ({{doctor.isRegistered ? "Reg" : "not Reg"}}, 
+          {{doctor.isS12 ? "S12" : "not S12"}}) {{doctor.distance | number : '1.1-1'}} miles          
           <br />
         </ion-text>   
         <ion-text *ngIf="!assessmentView?.doctorsAllocated">none</ion-text>                
       </ion-col>
-    </ion-row>
-
-    <ion-row *ngIf="displayDoctors && !assessmentView?.canUpdateOutcome">
-      <ion-col>
-        &nbsp;
-      </ion-col>
-    </ion-row>
+    </ion-row>    
 
     <ion-row *ngIf="displayDoctors && !assessmentView?.canUpdateOutcome">
       <ion-label offset="1">
@@ -109,19 +100,16 @@
     <ion-row *ngIf="displayDoctors && !assessmentView?.canUpdateOutcome">
       <ion-col>                
         <ion-text *ngFor="let doctor of assessmentView?.doctorsSelected">          
-          {{doctor.displayName}} {{doctor.distance}} miles
+          {{doctor.displayName}} 
+          <br />
           <ion-icon class="outstanding" size="small" name="help-circle" 
             *ngIf="!doctor.hasResponded">
           </ion-icon>
+          ({{doctor.isRegistered ? "Reg" : "not Reg"}}, 
+          {{doctor.isS12 ? "S12" : "not S12"}}) {{doctor.distance | number : '1.1-1'}} miles          
           <br />
         </ion-text>   
         <ion-text *ngIf="!assessmentView?.doctorsSelected">none</ion-text>                
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        &nbsp;
       </ion-col>
     </ion-row>
 
@@ -131,12 +119,30 @@
       </ion-col>
     </ion-row>    
 
-    <ion-row>
+    <ion-row *ngIf="assessmentView?.isSuccessful === true || assessmentView?.isSuccessful === false">
       <ion-col>
-        <ion-button 
-          *ngIf="assessmentView?.canUpdateOutcome             
-            && assessmentView?.isSuccessful===null             
-            && assessmentView?.doctorsAllocated?.length > 0"
+        &nbsp;
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.isSuccessful === true || assessmentView?.isSuccessful === false">
+      <ion-col>        
+        Assessment was 
+        <strong>
+          {{assessmentView?.isSuccessful ? "successful" : "unsuccessful"}}
+        </strong>                          
+      </ion-col>
+    </ion-row>   
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>
+        &nbsp;
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>
+        <ion-button           
           expand="block" 
           color="warning" 
           (click)="this.updateAssessment()">
