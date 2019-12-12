@@ -417,10 +417,6 @@ export class ReferralEditComponent implements OnInit {
 
   HasPatientBeenUpdated(): boolean {
 
-    console.log('HasPatientBeenUpdated?');
-    console.log(this.initialReferralDetails.patientCcgId);
-    console.log(this.ccgField.value.id);
-
     let isUpdated = false;
 
     if (this.initialReferralDetails.patientAlternativeIdentifier !==
