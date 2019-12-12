@@ -287,7 +287,8 @@ export class ReferralEditComponent implements OnInit {
   DisablePostcodeValidationButtonIfFieldIsInvalid(): boolean {
     return (
       this.residentialPostcodeField.value === '' ||
-      this.residentialPostcodeField.errors !== null ||
+      (this.residentialPostcodeField.errors !== null &&
+      !this.residentialPostcodeField.getError('NotValidated')) ||
       this.unknownResidentialPostcode.value === true
     );
   }
@@ -402,7 +403,8 @@ export class ReferralEditComponent implements OnInit {
   HasInvalidPostcode(): boolean {
     return (
       this.residentialPostcodeField.value !== '' &&
-      this.residentialPostcodeField.errors !== null
+      this.residentialPostcodeField.errors !== null &&
+      !this.residentialPostcodeField.getError('NotValidated')
     );
   }
 
@@ -414,6 +416,10 @@ export class ReferralEditComponent implements OnInit {
   }
 
   HasPatientBeenUpdated(): boolean {
+
+    console.log('HasPatientBeenUpdated?');
+    console.log(this.initialReferralDetails.patientCcgId);
+    console.log(this.ccgField.value.id);
 
     let isUpdated = false;
 
@@ -529,9 +535,7 @@ export class ReferralEditComponent implements OnInit {
     // only show the CCG field if both GP and Postcode are not known
     this.isCcgFieldShown =
       referral.patientResidentialPostcode === null &&
-      referral.patientGpPracticeId === null
-        ? true
-        : false;
+      referral.patientGpPracticeId === null;
 
     this.residentialPostcodeField.setValue(
       referral.patientResidentialPostcode === null
@@ -627,6 +631,7 @@ export class ReferralEditComponent implements OnInit {
     });
 
     this.residentialPostcodeField.valueChanges.subscribe(val => {
+      this.isPatientPostcodeValidated = false;
       if (val !== 'Unknown' && val !== null) {
         this.unknownResidentialPostcode.setValue(false);
       }
@@ -768,6 +773,15 @@ export class ReferralEditComponent implements OnInit {
         this.referralDateField.setErrors({ FutureDate: true});
         canContinue = false;
       }
+    }
+
+    if (this.residentialPostcodeField.value !== 'Unknown' &&
+        this.isPatientPostcodeValidated === false &&
+        this.residentialPostcodeField.value !==
+          this.initialReferralDetails.patientResidentialPostcode) {
+      this.residentialPostcodeField.setErrors({ NotValidated: true});
+      this.residentialPostcodeValidationMessage = 'Postcode has not been validated';
+      canContinue = false;
     }
 
     if (canContinue === true) {
@@ -924,23 +938,24 @@ export class ReferralEditComponent implements OnInit {
             });
             this.SetFieldFocus('#residentialPostcode');
           } else {
-            this.residentialPostcodeField.setErrors(null);
-            this.patientDetails.residentialPostcode = result.postcode;
-            this.isPatientPostcodeValidated = true;
-            this.residentialPostcodeField.updateValueAndValidity();
-            this.toastService.displaySuccess({
-              title: 'Postcode Validation',
-              message: `${result.postcode} is a valid postcode`
-            });
+              this.residentialPostcodeField.setErrors(null);
+              this.patientDetails.residentialPostcode = result.postcode;
+
+              this.residentialPostcodeField.updateValueAndValidity();
+              this.toastService.displaySuccess({
+                title: 'Postcode Validation',
+                message: `${result.postcode} is a valid postcode`
+              });
+              this.isPatientPostcodeValidated = true;
           }
         },
-        error => {
+        err => {
           this.isSearchingForPostcode = false;
-          this.toastService.displayError({
-            title: 'Server Error',
-            message: 'Unable to validate residential postcode ! Please try again in a few moments'
+          this.toastService.displayWarning({
+            title: 'Validation Error',
+            message: err.error.errors.postcode
           });
-          return throwError(error);
+          return throwError(err);
         }
       );
   }
