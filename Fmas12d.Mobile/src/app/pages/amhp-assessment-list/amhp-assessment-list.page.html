@@ -2,6 +2,10 @@
 
 <ion-content>
 
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
+  </ion-refresher>
+
   <ion-grid>
 
     <ion-row>

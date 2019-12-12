@@ -21,6 +21,11 @@ export class AmhpAssessmentListPage implements OnInit {
     ) { }
 
   ngOnInit() {        
+    this.refreshPage();
+  }
+
+
+  refreshPage($event?: any) {
     const request = this.assessmentService.getList();
     this.showLoading();
 
@@ -31,14 +36,22 @@ export class AmhpAssessmentListPage implements OnInit {
       this.assessmentListUnscheduled = result
         .filter(assessment => assessment.referralStatusId < REFERRALSTATUSASSESSMENTSCHEDULED);
       this.closeLoading();
+      this.closeRefreshing($event);
     }, error => {
       this.closeLoading();
-    });
-  }
+      this.closeRefreshing($event);
+    });    
+  }  
 
   closeLoading() {
     if (this.loading) {
       this.loading.dismiss();
+    }
+  }
+
+  closeRefreshing($event?: any) {
+    if ($event) {
+      $event.target.complete();
     }
   }
 
