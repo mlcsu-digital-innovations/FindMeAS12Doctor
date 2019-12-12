@@ -1,20 +1,23 @@
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AddressResult } from 'src/app/interfaces/address-result';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { debounceTime, tap, catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { DoctorDetails } from 'src/app/interfaces/doctor-details';
 import { DoctorListService } from 'src/app/services/doctor-list/doctor-list.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from 'rxjs';
-import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserDetails } from 'src/app/interfaces/user-details';
-import { UserDetailsService } from 'src/app/services/user/user-details.service';
-import { RouterService } from 'src/app/services/router/router.service';
-import { UnregisteredUserService } from 'src/app/services/unregistered-user/unregistered-user.service';
-import { UnregisteredUser } from 'src/app/interfaces/unregistered-user';
-import { PostcodeRegex } from 'src/app/constants/Constants';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
-import { AddressResult } from 'src/app/interfaces/address-result';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
+import { PostcodeRegex } from 'src/app/constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
+import { RouterService } from 'src/app/services/router/router.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
+import { UnregisteredUser } from 'src/app/interfaces/unregistered-user';
+import { UnregisteredUserService } from 'src/app/services/unregistered-user/unregistered-user.service';
+import { UserDetails } from 'src/app/interfaces/user-details';
+import { UserDetailsService } from 'src/app/services/user/user-details.service';
 
 @Component({
   selector: 'app-doctor-add',
@@ -24,6 +27,7 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 export class DoctorAddComponent implements OnInit {
 
   addressList: AddressResult[] = [];
+  assessmentId: number;
   cancelModal: NgbModalRef;
   genderTypes: NameIdList[];
   hasDoctorSearchFailed: boolean;
@@ -44,12 +48,14 @@ export class DoctorAddComponent implements OnInit {
   @ViewChild('unregisteredUserResults', { static: true }) unregisteredUserResults;
 
   constructor(
+    private assessmentService: AssessmentService,
     private doctorListService: DoctorListService,
     private formBuilder: FormBuilder,
     private nameIdListService: NameIdListService,
     private modalService: NgbModal,
     private postcodeValidationService: PostcodeValidationService,
     private renderer: Renderer2,
+    private route: ActivatedRoute,
     private routerService: RouterService,
     private toastService: ToastService,
     private unregisteredUserService: UnregisteredUserService,
@@ -57,6 +63,12 @@ export class DoctorAddComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.route.paramMap.subscribe(
+      (paramMap: ParamMap) => {
+        this.assessmentId = +paramMap.get('assessmentId');
+      });
+
     this.registeredDoctorForm = this.formBuilder.group({
       registeredName: ['']
     });
@@ -122,7 +134,21 @@ export class DoctorAddComponent implements OnInit {
 
   AllocateRegisteredDoctor() {
     // ToDo: use a service to allocate the registered doctor
+    console.log(this.registeredDoctorDetails);
+    this.assessmentService
+      .allocateDoctorDirectly(this.assessmentId, this.registeredDoctorDetails.id)
+      .subscribe(userDetails => {
+
+    },
+      (err) => {
+        console.log(err);
+        this.toastService.displayError({
+          title: 'Error',
+          message: err.error.title
+        });
+      });
   }
+
 
   Cancel() {
     // if either form has been changed then ask the user for confirmation
@@ -343,10 +369,18 @@ export class DoctorAddComponent implements OnInit {
   }
 
   ValidateRegisteredDoctor() {
-    this.userDetailsService.GetUserDetails(this.registeredDoctorField.value.id)
-    .subscribe(userDetails => {
-      this.registeredDoctorDetails = userDetails;
-      this.hasRegisteredDoctorDetails = true;
+    this.userDetailsService.GetDoctorDetails(this.registeredDoctorField.value.id)
+    .subscribe(doctorDetails => {
+
+      if (doctorDetails === null ) {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to retrieve doctor details'
+        });
+      } else {
+        // this.registeredDoctorDetails = doctorDetails;
+        this.hasRegisteredDoctorDetails = true;
+      }
     },
       (err) => {
         this.toastService.displayError({
