@@ -58,7 +58,6 @@ export class DoctorAllocateComponent implements OnInit {
           return this.assessmentService.getSelectedDoctors(+params.get('assessmentId'))
             .pipe(
               map((assessment: AssessmentSelected) => {
-                console.log(assessment);
                 this.assessmentId = assessment.id;
                 this.selectedDoctors = assessment.doctorsSelected;
                 return assessment;
