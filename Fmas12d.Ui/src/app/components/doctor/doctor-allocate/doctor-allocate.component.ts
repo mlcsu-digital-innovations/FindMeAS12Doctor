@@ -20,18 +20,21 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 export class DoctorAllocateComponent implements OnInit {
 
   allocatedDoctors: AvailableDoctor[] = [];
+  allocationModal: NgbModalRef;
   assessment$: Observable<Assessment | any>;
   assessmentId: number;
   cancelModal: NgbModalRef;
   confirmModal: NgbModalRef;
   doctorForm: FormGroup;
   isSavingAllocation: boolean;
+  isSchedulingAssessment: boolean;
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
   unknownDoctorId: number;
 
   @ViewChild('cancelAssessment', null) cancelAssessmentTemplate;
   @ViewChild('confirmSelection', null) confirmSelectionTemplate;
+  @ViewChild('confirmAllocation', null) confirmAllocationTemplate;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -55,6 +58,7 @@ export class DoctorAllocateComponent implements OnInit {
           return this.assessmentService.getSelectedDoctors(+params.get('assessmentId'))
             .pipe(
               map((assessment: AssessmentSelected) => {
+                console.log(assessment);
                 this.assessmentId = assessment.id;
                 this.selectedDoctors = assessment.doctorsSelected;
                 return assessment;
@@ -72,6 +76,13 @@ export class DoctorAllocateComponent implements OnInit {
         const emptyAssessment = {} as Assessment;
         return of(emptyAssessment);
       })
+    );
+  }
+
+  AllDoctorsAllocated() {
+    this.allocationModal = this.modalService.open(
+      this.confirmAllocationTemplate,
+      { size: 'lg' }
     );
   }
 
@@ -133,6 +144,30 @@ export class DoctorAllocateComponent implements OnInit {
       this.confirmSelectionTemplate,
       { size: 'lg' }
     );
+  }
+
+  OnAllocationAction(action: boolean) {
+
+    this.allocationModal.close();
+    if (action === true) {
+      this.isSchedulingAssessment = true;
+      this.assessmentService.scheduleAssessment(this.assessmentId)
+      .subscribe(() => {
+        this.isSchedulingAssessment = false;
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Assessment Scheduled'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.isSchedulingAssessment = false;
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to schedule assessment'
+        });
+      });
+    }
   }
 
   OnCancelConfirmAction(action: boolean) {
