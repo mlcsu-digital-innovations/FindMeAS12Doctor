@@ -42,6 +42,14 @@ export class AssessmentService {
     );
   }
 
+  public scheduleAssessment(assessmentId: number) {
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/schedule`,
+      null
+    );
+  }
+
   public getAvailableDoctors(assessmentId: number) {
 
     return this.httpClient.get(
