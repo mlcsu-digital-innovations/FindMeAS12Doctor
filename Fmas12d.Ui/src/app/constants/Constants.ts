@@ -7,3 +7,6 @@ export const UNKNOWN = 'Unknown';
 
 export const SHORT_DATE_TIME = 'MMM Do YYYY, HH:mm';
 export const TIME_ONLY = 'HH:mm';
+
+export const ASSESSMENT_SCHEDULED = 6;
+export const CLOSED = 9;
