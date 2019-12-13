@@ -36,7 +36,7 @@ export class AssessmentService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.put(
-      `${environment.apiEndpoint}/assessment/${assessment.id}${assessmentType}`,
+      `${environment.apiEndpoint}/assessment/${assessment.id}/${assessmentType}`,
       assessment,
       { headers }
     );
