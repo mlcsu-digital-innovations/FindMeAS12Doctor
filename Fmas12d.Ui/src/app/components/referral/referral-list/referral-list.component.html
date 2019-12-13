@@ -155,7 +155,9 @@
                     </td>
                     <td class="text-center">
                       <a
-                        href="/assessment/{{referral.currentAssessmentId}}/allocate-doctors"
+                        [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
+                        ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
+                        : ['/assessment/view/', referral.referralId]"
                         class="clickable"
                         *ngIf="referral.responsesReceived > 0"
                       >
@@ -166,7 +168,9 @@
                     </td>
                     <td class="text-center">
                       <a
-                        href="/assessment/{{referral.currentAssessmentId}}/allocate-doctors"
+                        [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
+                        ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
+                        : ['/assessment/view/', referral.referralId]"
                         class="clickable"
                         *ngIf="referral.doctorsAllocated > 0"
                       >
