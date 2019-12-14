@@ -19,7 +19,7 @@ namespace Fmas12d.Business.Models
       if (entity == null) return;
 
       ContactDetailId = entity.ContactDetailId;
-      ContactDetail = new ContactDetail(entity.ContactDetail);
+      ContactDetail = new ContactDetail(entity.ContactDetail, false);
       Latitude = entity.Latitude;
       Longitude = entity.Longitude;
       Postcode = entity.Postcode;

@@ -14,7 +14,7 @@ namespace Fmas12d.Business.Models
     {
       if (entity == null) return;
 
-      ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd)).ToList();
+      ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd, false)).ToList();
     }
 
     public virtual IList<ContactDetail> ContactDetails { get; set; }
