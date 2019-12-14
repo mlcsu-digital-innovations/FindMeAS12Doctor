@@ -88,7 +88,7 @@ export class ReferralListService {
     });
 
 
-    let endpoint = environment.apiEndpoint + '/referral/list';
+    let endpoint = environment.apiEndpoint + '/referral/list/open';
     this.http.get<ReferralList[]>(endpoint).subscribe(
       (data: ReferralList[]) => {
         this._rawReferralList = data;

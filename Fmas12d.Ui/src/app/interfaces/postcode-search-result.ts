@@ -1,5 +1,8 @@
 export interface PostcodeSearchResult {
-  postcode?: string;
+  contactDetailId?: number;
+  contactDetailTypeName?: string;
   latitude?: number;
   longitude?: number;
+  postcode?: string;
+  type?: string;
 }
