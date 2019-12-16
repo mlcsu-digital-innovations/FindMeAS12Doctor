@@ -530,7 +530,8 @@ namespace Fmas12d.Business.Services
     }
 
     public async Task<bool> Schedule(
-      int id
+      int id,
+      DateTimeOffset scheduledTime
     )
     {
       Entities.Assessment entity = await _context
@@ -581,6 +582,7 @@ namespace Fmas12d.Business.Services
         }
       }
 
+      entity.ScheduledTime = scheduledTime;
       entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
       UpdateModified(entity.Referral);
       await _context.SaveChangesAsync();
