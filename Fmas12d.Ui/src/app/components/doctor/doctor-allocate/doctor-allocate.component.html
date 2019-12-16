@@ -120,8 +120,8 @@
                       {{selectedDoctor.type}}
                     </td>
                     <td>
-                      <span *ngFor="let speciality of selectedDoctor.specialityName">
-                        {{speciality}},
+                      <span *ngFor="let speciality of selectedDoctor.specialityNames; let isLast=last">
+                        {{speciality}}{{isLast ? '' : ", "}}
                       </span>
                     </td>
                     <td class="text-center sm-col">
