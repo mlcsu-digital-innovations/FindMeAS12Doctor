@@ -475,8 +475,10 @@ namespace Fmas12d.Business.Services
                     },
                     DoctorUserId = d.DoctorUserId,
                     Distance = d.Distance,
-                    HasAccepted = d.HasAccepted,
+                    HasAccepted = d.HasAccepted,                    
                     IsActive = d.IsActive,
+                    IsAvailable = true,
+                    RespondedAt = d.RespondedAt,
                     StatusId = d.StatusId
                   }).ToList(),
                   Id = a.Id,

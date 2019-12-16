@@ -16,6 +16,7 @@ namespace Fmas12d.Api.ViewModels
       Distance = model.Distance;
       GenderName = model.DoctorUser?.GenderName;
       HasAccepted = model.HasAccepted ?? false;
+      HasResponded = model.RespondedAt == null ? false : true;
       Id = model.DoctorUserId;
       IsAvailable = model.IsAvailable;
       Name = model.DoctorUser?.DisplayName;
@@ -25,6 +26,7 @@ namespace Fmas12d.Api.ViewModels
 
     public decimal? Distance { get; set; }
     public bool HasAccepted { get; set; }
+    public bool HasResponded { get; set; }
     public int Id { get; set; }
     public bool IsAvailable { get; set; }
     public string GenderName { get; set; }
