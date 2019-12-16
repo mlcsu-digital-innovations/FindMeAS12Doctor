@@ -35,7 +35,24 @@ namespace Fmas12d.Api.Controllers
         ViewModels.User viewModel = new ViewModels.User(model);        
         return Ok(viewModel);
       }
-    }    
+    }  
+
+    [Route("{id:int}")]
+    [HttpGet]
+    public async Task<ActionResult<ViewModels.User>> Get(int id)
+    {
+      Business.Models.User model = await Service.GetAsync(id, true, true);
+      
+      if (model == null)
+      {
+        return NoContent();    
+      }
+      else
+      {
+        ViewModels.User viewModel = new ViewModels.User(model);        
+        return Ok(viewModel);
+      }
+    }        
 
     [Route("search")]
     [HttpGet]
