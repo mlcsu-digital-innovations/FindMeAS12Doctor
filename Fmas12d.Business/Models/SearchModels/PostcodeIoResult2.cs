@@ -2,6 +2,7 @@ namespace Fmas12d.Business.Models.SearchModels
 {
     public class PostcodeIoResult
     {
+        public string Error {get; set;}
         public int Status {get; set;}
         public Result Result {get; set;}
     }

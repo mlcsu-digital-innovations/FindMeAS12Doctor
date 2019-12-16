@@ -3,8 +3,14 @@
 <ion-content>
   <ion-grid>
     <ion-row>
+      <ion-label class="page-title">
+        AMHP Assessment
+      </ion-label>
+    </ion-row>
+
+    <ion-row>
       <ion-col>
-        <ion-label class="assessment-view-last-updated">
+        <ion-label>
           Last Updated: {{assessmentLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
         </ion-label>
       </ion-col>
@@ -12,84 +18,131 @@
 
     <ion-row>
       <ion-col>
-        <ion-item>
-          <ion-label><strong>Referral Id:</strong> {{assessmentView?.referralId}}</ion-label>
-        </ion-item>
+        &nbsp;
       </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label><strong>Patient Id:</strong> {{assessmentView?.patientIdentifier}}</ion-label>
-        </ion-item>
+      <ion-col>        
+        Referral Id: <strong>{{assessmentView?.referralId}}</strong>       
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>      
+        Patient Id: <strong>{{assessmentView?.patientIdentifier}}</strong>
       </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label>{{assessmentView?.dateTime | date: "d MMMM yyyy H:mm"}}</ion-label>
-        </ion-item>
+      <ion-col>       
+        {{assessmentView?.dateTime | date: "d MMMM yyyy H:mm"}}       
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>       
+        Assessment Speciality:
+        <ion-text class="ion-text-wrap">
+          <strong>{{assessmentView?.specialityName}}</strong>
+        </ion-text>               
       </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label>
-            <strong>Assessment Speciality: </strong> 
-            <ion-text class="ion-text-wrap">{{assessmentView?.specialityName}}</ion-text>
-          </ion-label>
-        </ion-item>
+      <ion-col>        
+          {{assessmentView?.address1}}
+          <br *ngIf="assessmentView?.address1?.length > 0" />
+          {{assessmentView?.address2}}
+          <br *ngIf="assessmentView?.address2?.length > 0" />
+          {{assessmentView?.address3}}
+          <br *ngIf="assessmentView?.address3?.length > 0" />             
+          {{assessmentView?.address4}}
+          <br *ngIf="assessmentView?.address4?.length > 0" />
+          <strong>{{assessmentView?.postcode}}</strong>      
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row *ngIf="!displayDoctors && assessmentView?.canUpdateOutcome">
       <ion-col>
-        <ion-item class="item item-text-wrap">
-          <ion-label>
-            {{assessmentView?.address1}}
-            <br *ngIf="assessmentView?.address1?.length > 0" />
-            {{assessmentView?.address2}}
-            <br *ngIf="assessmentView?.address2?.length > 0" />
-            {{assessmentView?.address3}}
-            <br *ngIf="assessmentView?.address3?.length > 0" />             
-            {{assessmentView?.address4}}
-            <br *ngIf="assessmentView?.address4?.length > 0" />
-            {{assessmentView?.postcode}}
-          </ion-label>
-        </ion-item>
+        <strong>No doctors allocated or selected</strong>
       </ion-col>
+    </ion-row>   
+
+    <ion-row *ngIf="displayDoctors">
+      <ion-label offset="1">
+        <strong>Allocated doctors</strong>
+      </ion-label>
     </ion-row>
 
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label>
-            <ion-text *ngFor="let doctor of assessmentView?.doctorsAllocated">
-              {{doctor.displayName}}<br />
-            </ion-text>
-          </ion-label>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-item class="item item-text-wrap">
-          {{assessmentView?.meetingArrangementComment}}
-        </ion-item>
+    <ion-row *ngIf="displayDoctors">
+      <ion-col>    
+        <ion-text *ngFor="let doctor of assessmentView?.doctorsAllocated">         
+          {{doctor.displayName}} 
+          <br />
+          <ion-icon class="outstanding" size="small" name="help-circle" 
+            *ngIf="!doctor.hasResponded">
+          </ion-icon>
+          ({{doctor.isRegistered ? "Reg" : "not Reg"}}, 
+          {{doctor.isS12 ? "S12" : "not S12"}}) {{doctor.distance | number : '1.1-1'}} miles          
+          <br />
+        </ion-text>   
+        <ion-text *ngIf="!assessmentView?.doctorsAllocated">none</ion-text>                
       </ion-col>
     </ion-row>    
 
-    <ion-row>
+    <ion-row *ngIf="displayDoctors && !assessmentView?.canUpdateOutcome">
+      <ion-label offset="1">
+        <strong>Selected doctors</strong>
+      </ion-label>
+    </ion-row>
+
+    <ion-row *ngIf="displayDoctors && !assessmentView?.canUpdateOutcome">
+      <ion-col>                
+        <ion-text *ngFor="let doctor of assessmentView?.doctorsSelected">          
+          {{doctor.displayName}} 
+          <br />
+          <ion-icon class="outstanding" size="small" name="help-circle" 
+            *ngIf="!doctor.hasResponded">
+          </ion-icon>
+          ({{doctor.isRegistered ? "Reg" : "not Reg"}}, 
+          {{doctor.isS12 ? "S12" : "not S12"}}) {{doctor.distance | number : '1.1-1'}} miles          
+          <br />
+        </ion-text>   
+        <ion-text *ngIf="!assessmentView?.doctorsSelected">none</ion-text>                
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>        
+        {{assessmentView?.meetingArrangementComment}}        
+      </ion-col>
+    </ion-row>    
+
+    <ion-row *ngIf="assessmentView?.isSuccessful === true || assessmentView?.isSuccessful === false">
       <ion-col>
-        <ion-button 
-          *ngIf="assessmentView 
-            && assessmentView.isSuccessful===null 
-            && assessmentView.doctorsAllocated
-            && assessmentView.doctorsAllocated.length > 0"
+        &nbsp;
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.isSuccessful === true || assessmentView?.isSuccessful === false">
+      <ion-col>        
+        Assessment was 
+        <strong>
+          {{assessmentView?.isSuccessful ? "successful" : "unsuccessful"}}
+        </strong>                          
+      </ion-col>
+    </ion-row>   
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>
+        &nbsp;
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="assessmentView?.canUpdateOutcome">
+      <ion-col>
+        <ion-button           
           expand="block" 
           color="warning" 
           (click)="this.updateAssessment()">

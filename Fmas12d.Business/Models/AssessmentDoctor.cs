@@ -13,7 +13,7 @@ namespace Fmas12d.Business.Models
       AssessmentId = entity.AssessmentId;
       AttendanceConfirmedByUser = new User(entity.AttendanceConfirmedByUser);
       AttendanceConfirmedByUserId = entity.Id;
-      ContactDetail = new ContactDetail(entity.ContactDetail);
+      ContactDetail = new ContactDetail(entity.ContactDetail, false);
       ContactDetailId = entity.ContactDetailId;
       Distance = entity.Distance;
       DoctorUser = new User(entity.DoctorUser);

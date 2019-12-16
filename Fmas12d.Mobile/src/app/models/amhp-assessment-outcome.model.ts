@@ -1,7 +1,8 @@
+import { AmhpAssessmentOutcomeDoctor } from './amhp-assessment-outcome-doctor.model';
 import { AmhpAssessmentViewDoctor } from './amhp-assessment-view-doctor.model';
 
 export class AmhpAssessmentOutcome {
-  attendingDoctors: AmhpAssessmentViewDoctor[];
+  attendingDoctors: AmhpAssessmentOutcomeDoctor[];
   completedTime?: Date;
   assessmentId: number;
   unsuccessfulAssessmentTypeId?: number;
@@ -11,8 +12,9 @@ export class AmhpAssessmentOutcome {
     attendingDoctors?: AmhpAssessmentViewDoctor[],
     assessmentId?: number,
     unsuccessfulAssessmentTypeId?: number) {
-    if (attendingDoctors) {
-      this.attendingDoctors = attendingDoctors;
+    if (attendingDoctors) {           
+      this.attendingDoctors = attendingDoctors.map((doctor: AmhpAssessmentViewDoctor) => 
+        new AmhpAssessmentOutcomeDoctor(true, doctor.doctorId));
     }
 
     if (assessmentId) {

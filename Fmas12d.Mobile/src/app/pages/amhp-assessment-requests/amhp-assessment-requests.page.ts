@@ -25,6 +25,10 @@ export class AmhpAssessmentRequestsPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.refreshPage();
+  }
+
+  refreshPage($event?: any) {
     // load data each time the page is shown
     // this may be changed if offline data is to be used
     const request = this.assessmentService.getRequests();
@@ -36,8 +40,10 @@ export class AmhpAssessmentRequestsPage implements OnInit {
           this.assessmentRequests = result;
           this.assessmentRequestsLastUpdated = new Date();
           this.closeLoading();
+          this.closeRefreshing($event);
         }, error => {
           this.closeLoading();
+          this.closeRefreshing($event);
         }
       );
   }
@@ -45,6 +51,12 @@ export class AmhpAssessmentRequestsPage implements OnInit {
   closeLoading() {
     if (this.loading) {
       this.loading.dismiss();
+    }
+  }
+
+  closeRefreshing($event?: any) {
+    if ($event) {
+      $event.target.complete();
     }
   }
 

@@ -278,12 +278,13 @@ namespace Fmas12d.Api.Controllers
     [HttpPut]
     [Route("{id:int}/schedule")]
     public async Task<ActionResult> PutSchedule(
-      int id
+      int id,
+      [FromBody] RequestModels.AssessmentPutSchedule requestModel
     )
     {
       try
       {
-        await Service.Schedule(id);
+        await Service.Schedule(id, requestModel.ScheduledTime.Value);
         return Ok();
       }
       catch (Exception ex)

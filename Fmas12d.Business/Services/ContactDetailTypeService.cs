@@ -33,7 +33,7 @@ namespace Fmas12d.Business.Services
         .Select(cd => new ContactDetailType {
           ContactDetails = cd.ContactDetails
             .Where(cd => cd.UserId == userId)
-            .Select(cd => new ContactDetail(cd))
+            .Select(cd => new ContactDetail(cd, false))
             .ToList(),
           Description = cd.Description,
           Id = cd.Id,
@@ -68,7 +68,7 @@ namespace Fmas12d.Business.Services
           ContactDetails = cd.ContactDetails
             .Where(cd => cd.UserId == userId)
             .Where(cd => cd.Ccg.Assessments.Any(a => a.Id == assessmentId))
-            .Select(cd => new ContactDetail(cd))
+            .Select(cd => new ContactDetail(cd, false))
             .ToList(),
           Description = cd.Description,
           Id = cd.Id,

@@ -10,3 +10,5 @@ export const TIME_ONLY = 'HH:mm';
 
 export const ASSESSMENT_SCHEDULED = 6;
 export const CLOSED = 9;
+export const REFERRAL_STATUS_AWAITING_REVIEW = 8;
+export const REFERRAL_STATUS_OPEN = 10;
