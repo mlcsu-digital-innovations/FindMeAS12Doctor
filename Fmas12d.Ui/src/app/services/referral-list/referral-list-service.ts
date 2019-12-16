@@ -36,23 +36,26 @@ function sort(referralList: ReferralList[], column: string, direction: string): 
 }
 
 function matches(referral: ReferralList, term: string, pipe: PipeTransform) {
-  return pipe.transform(referral.referralId).includes(term)
+  let termLowerCase = term.toLowerCase();
+  return pipe.transform(referral.referralId).includes(termLowerCase)
     || (referral.patientIdentifier &&
-      referral.patientIdentifier.toLowerCase().includes(term.toLowerCase()))
+        referral.patientIdentifier.toLowerCase().includes(termLowerCase))
     || (referral.leadAmhp &&
-      referral.leadAmhp.toLowerCase().includes(term.toLowerCase()))
+        referral.leadAmhp.toLowerCase().includes(termLowerCase))
     || (referral.numberOfAssessmentAttempts &&
-      pipe.transform(referral.numberOfAssessmentAttempts).includes(term))
+        pipe.transform(referral.numberOfAssessmentAttempts).includes(termLowerCase))
+    || (referral.assessmentLocationPostcode &&
+        referral.assessmentLocationPostcode.toLowerCase().includes(termLowerCase))  
     || (referral.specialityName &&
-      referral.specialityName.toLowerCase().includes(term.toLowerCase()))
+        referral.specialityName.toLowerCase().includes(termLowerCase))
     || (referral.timescale &&
-      pipe.transform(referral.timescale).includes(term.toLowerCase()))
+        referral.timescale.toString().toLowerCase().includes(termLowerCase))
     || (referral.statusName &&
-      referral.statusName.toLowerCase().includes(term.toLowerCase()))
+        referral.statusName.toLowerCase().includes(termLowerCase))
     || (referral.responsesReceived &&
-      pipe.transform(referral.responsesReceived).includes(term))
+        pipe.transform(referral.responsesReceived).includes(termLowerCase))
     || (referral.doctorsAllocated &&
-      pipe.transform(referral.doctorsAllocated).includes(term));
+        pipe.transform(referral.doctorsAllocated).includes(termLowerCase));
 }
 
 @Injectable()
