@@ -824,57 +824,6 @@ namespace Fmas12d.Business.Services
       }
     }
 
-    private async Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsInternalAsync(
-      IAssessmentDoctorsUpdate updateModel,
-      bool performDoctorsSelectedChecks
-    )
-    {
-      Entities.Assessment entity = await _context
-        .Assessments
-        .Include(a => a.Doctors)
-        .Include(a => a.Referral)
-        .WhereIsActiveOrActiveOnly(true)
-        .Where(a => a.Id == updateModel.Id)
-        .SingleOrDefaultAsync();
-
-      if (entity == null)
-      {
-        throw new ModelStateException("Id",
-          $"An active Assessment with an id of {updateModel.Id} was not found.");
-      }
-      CheckAssessmentHasCorrectReferralStatusToAddAllocatedDoctors(
-        updateModel.Id, entity.Referral.ReferralStatusId);
-
-      if (performDoctorsSelectedChecks)
-      {
-        CheckDoctorsAreSelected(entity, updateModel.UserIds);
-        CheckDoctorsAreSelectedAndHaveAccepted(entity, updateModel.UserIds);
-      }
-
-      UpdateModified(entity);
-
-      foreach (int userId in updateModel.UserIds)
-      {
-        Entities.AssessmentDoctor assessmentDoctor =
-          entity.Doctors.Single(d => d.DoctorUserId == userId);
-        assessmentDoctor.StatusId = Models.AssessmentDoctorStatus.ALLOCATED;
-        UpdateModified(assessmentDoctor);
-
-        AddUserAssessmentNotification(
-          entity, userId, Models.NotificationText.ALLOCATED_TO_ASSESSMENT);
-      }
-
-      await _context.SaveChangesAsync();
-
-      return new AssessmentDoctorsUpdate()
-      {
-        Id = entity.Id,
-        UserIds = entity.Doctors.Where(d => d.StatusId == Models.AssessmentDoctorStatus.ALLOCATED)
-                                .Select(d => d.DoctorUserId)
-                                .ToList()
-      };
-    }
-
     private void AddAssessmentDetail(
        int assessmentDetailTypeId,
        Entities.Assessment entity

@@ -370,8 +370,10 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.AssessmentUpdate businessModel = new Business.Models.AssessmentUpdate();
-        businessModel.Id = id;
+        Business.Models.AssessmentUpdate businessModel = new Business.Models.AssessmentUpdate
+        {
+          Id = id
+        };
         requestModel.MapToBusinessModel(businessModel);
         businessModel = await Service.UpdateAsync(businessModel);
         ViewModels.AssessmentPut viewModel = new ViewModels.AssessmentPut(businessModel);

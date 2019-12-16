@@ -11,11 +11,13 @@ namespace Fmas12d.Api.RequestModels
     public int GmcNumber {get; set;}
     public bool IsByAmhpName { get { return !string.IsNullOrWhiteSpace(AmhpName); } }
     public bool IsByDoctorName { get { return !string.IsNullOrWhiteSpace(DoctorName);} }
-    public bool IsByGmcNumber { get { return GmcNumber != default(int); } }
+    public bool IsByGmcNumber { get { return GmcNumber != default; } }
 
     public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-      if (string.IsNullOrWhiteSpace(AmhpName) && string.IsNullOrWhiteSpace(DoctorName) && GmcNumber == default(int))
+      if (string.IsNullOrWhiteSpace(AmhpName) && 
+          string.IsNullOrWhiteSpace(DoctorName) && 
+          GmcNumber == default)
       {
         yield return new ValidationResult(
             "At least one search criteria must be non null.",

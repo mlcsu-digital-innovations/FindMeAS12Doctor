@@ -16,14 +16,12 @@ namespace Mep.Api.Controllers
   {
 
     private readonly IConfiguration _configuration;
-    private readonly IWebHostEnvironment _env;
     private OidcWellKnown _wellKnown;
     private JwtKs _jwtKs;
 
-    public ConfigController(IConfiguration config, IWebHostEnvironment env)
+    public ConfigController(IConfiguration config)
     {
       _configuration = config;
-      _env = env;
     }
 
     private async Task<OidcWellKnown> GetWellKnownAsync()
@@ -54,7 +52,7 @@ namespace Mep.Api.Controllers
       {
         using HttpClient client = new HttpClient();
         OidcWellKnown wellKnown = await GetWellKnownAsync();
-        client.BaseAddress = new Uri(wellKnown.jwks_uri);
+        client.BaseAddress = new Uri(wellKnown.Jwks_uri);
         client.DefaultRequestHeaders.Clear();
         client.DefaultRequestHeaders.Accept.Add(
           new MediaTypeWithQualityHeaderValue("application/json"));
@@ -77,7 +75,7 @@ namespace Mep.Api.Controllers
       string protocol = Request.IsHttps ? "https://" : "http://";
       string jwks_uri = $"{protocol}{Request.Host.ToUriComponent()}/api/config/discovery/keys";
       var wellKnown = await GetWellKnownAsync();
-      wellKnown.jwks_uri = jwks_uri;
+      wellKnown.Jwks_uri = jwks_uri;
       return wellKnown;
     }
 
@@ -93,7 +91,7 @@ namespace Mep.Api.Controllers
       OIDCConfig config = new OIDCConfig();
 
       string protocol = Request.IsHttps ? "https://" : "http://";
-      config.stsServer = $"{protocol}{Request.Host.ToUriComponent()}/api/config";
+      config.StsServer = $"{protocol}{Request.Host.ToUriComponent()}/api/config";
 
       return config;
     }
