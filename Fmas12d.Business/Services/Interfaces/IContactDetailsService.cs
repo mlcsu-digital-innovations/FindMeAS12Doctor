@@ -3,8 +3,7 @@ using Fmas12d.Business.Models;
 
 public interface IContactDetailsService
 {
-  Task<ContactDetail> GetBaseContactDetailTypeForCcgUserAsync(
-    int ccgId,
+  Task<ContactDetail> GetBaseContactDetailTypeForUserAsync(
     int userId, 
     bool asNoTracking, 
     bool activeOnly
