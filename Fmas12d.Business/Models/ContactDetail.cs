@@ -7,7 +7,10 @@ namespace Fmas12d.Business.Models
   public class ContactDetail : BaseModel
   {
     public ContactDetail() {}
-    public ContactDetail(Data.Entities.ContactDetail entity) : base(entity)
+    public ContactDetail(
+      Data.Entities.ContactDetail entity,
+      bool includeUser
+    ) : base(entity)
     {
       if (entity == null) return;
 
@@ -25,9 +28,8 @@ namespace Fmas12d.Business.Models
       Postcode = entity.Postcode;
       TelephoneNumber = entity.TelephoneNumber;
       Town = entity.Town;
-      User = new User(entity.User);
+      if (includeUser) User = new User(entity.User);
       UserId = entity.UserId;
-
     }
 
     [MaxLength(200)]
@@ -56,7 +58,7 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        return entity => new ContactDetail(entity);
+        return entity => new ContactDetail(entity, false);
       }
     }
 
