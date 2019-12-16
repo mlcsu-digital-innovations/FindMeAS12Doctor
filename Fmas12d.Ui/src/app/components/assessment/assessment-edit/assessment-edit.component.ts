@@ -428,6 +428,9 @@ export class AssessmentEditComponent implements OnInit {
 
     this.assessmentForm.controls.assessmentDetails.setValue(this.selectedDetails);
 
+    // initialise all as selected
+    this.selectedDoctors.forEach(doctor => doctor.selected = true);
+    this.allocatedDoctors.forEach(doctor => doctor.selected = true);
   }
 
   OnCancelModalAction(action: boolean) {
@@ -486,6 +489,10 @@ export class AssessmentEditComponent implements OnInit {
   ToggleAllocatedUpdate(id: number) {
     const doctor = this.allocatedDoctors.find(sd => sd.id === id);
     doctor.selected = !doctor.selected;
+  }
+
+  ToggleSelectedDoctor(index: number) {
+    this.selectedDoctors[index].selected = !this.selectedDoctors[index].selected;
   }
 
   ToggleSelectedUpdate(id: number) {
