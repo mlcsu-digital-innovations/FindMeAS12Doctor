@@ -947,7 +947,7 @@ namespace Fmas12d.Business.Services
     {
       IUserAvailability userAvailability = await _userAvailabilityService.GetAtAsync(
         assessmentDoctor.DoctorUserId,
-        (entity.MustBeCompletedBy ?? entity.ScheduledTime).Value,
+        (entity.ScheduledTime ?? entity.MustBeCompletedBy).Value,
         true,
         true
       );
