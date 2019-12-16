@@ -29,7 +29,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new ClaimStatusesSeeder().SeedData();
 
-      new ContactDetailTypesSeeder().SeedData();
+      new ContactDetailTypesSeeder().SeedData();      
 
       new AssessmentDetailTypesSeeder().SeedData();
 
@@ -131,6 +131,9 @@ namespace Fmas12d.Business.Migrations.Seeds
       new ContactDetailsSeeder().SeedData();
       Context.SaveChanges();
 
+      new ContactDetailCcgsSeeder().SeedData();
+      Context.SaveChanges();
+
       new NonPaymentLocationsSeeder().SeedData();
       Context.SaveChanges();
 
@@ -168,6 +171,9 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new ContactDetailsSeeder().DeleteSeeds();
       Context.SaveChanges();
+
+      new ContactDetailCcgsSeeder().DeleteSeeds();
+      Context.SaveChanges();      
 
       new BankDetailsSeeder().DeleteSeeds();
       Context.SaveChanges();

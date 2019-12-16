@@ -9,7 +9,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string ADDRESS1_DOCTOR_FEMALE_HOME = "2 Field Close";
     public const string ADDRESS2_DOCTOR_FEMALE_HOME = "Baldwin's Gate";
     public const string ADDRESS3_DOCTOR_FEMALE_HOME = null;
-    public const string EMAIL_ADDRESS_DOCTOR_FEMALE_HOME = "doctor.FEMALE_HOME@fieldclose.com";
+    public const string EMAIL_ADDRESS_DOCTOR_FEMALE_HOME = "doctorfemale_home@fieldclose.com";
     public const decimal LATITUDE_DOCTOR_FEMALE_HOME = 52.958159m;
     public const decimal LONGITUDE_DOCTOR_FEMALE_HOME = -2.306840m;
     public const string POSTCODE_DOCTOR_FEMALE_HOME = "ST5 5DJ";
@@ -19,7 +19,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string ADDRESS1_DOCTOR_FEMALE_BASE = "5 Hide Street";
     public const string ADDRESS2_DOCTOR_FEMALE_BASE = null;
     public const string ADDRESS3_DOCTOR_FEMALE_BASE = null;
-    public const string EMAIL_ADDRESS_DOCTOR_FEMALE_BASE = "doctor.FEMALE_BASE@hidestreet.com";
+    public const string EMAIL_ADDRESS_DOCTOR_FEMALE_BASE = "doctorfemale_base@hidestreet.com";
     public const decimal LATITUDE_DOCTOR_FEMALE_BASE = 53.003440m;
     public const decimal LONGITUDE_DOCTOR_FEMALE_BASE = -2.186513m;
     public const string POSTCODE_DOCTOR_FEMALE_BASE = "ST4 1NF";
@@ -29,7 +29,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string ADDRESS1_DOCTOR_MALE_HOME = "5 Hartley Close";
     public const string ADDRESS2_DOCTOR_MALE_HOME = null;
     public const string ADDRESS3_DOCTOR_MALE_HOME = null;
-    public const string EMAIL_ADDRESS_DOCTOR_MALE_HOME = "doctor.MALE_HOME@hartleyclose.com";
+    public const string EMAIL_ADDRESS_DOCTOR_MALE_HOME = "doctormale_home@hartleyclose.com";
     public const decimal LATITUDE_DOCTOR_MALE_HOME = 52.905948m;
     public const decimal LONGITUDE_DOCTOR_MALE_HOME = -2.159811m;
     public const string POSTCODE_DOCTOR_MALE_HOME = "ST15 0WB";
@@ -39,7 +39,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string ADDRESS1_DOCTOR_MALE_BASE = "Hartley House";
     public const string ADDRESS2_DOCTOR_MALE_BASE = "Unit 21-22";
     public const string ADDRESS3_DOCTOR_MALE_BASE = "Galveston Grove";
-    public const string EMAIL_ADDRESS_DOCTOR_MALE_BASE = "doctor.MALE_BASE@hartleyhouse.com";
+    public const string EMAIL_ADDRESS_DOCTOR_MALE_BASE = "doctormale_base@hartleyhouse.com";
     public const decimal LATITUDE_DOCTOR_MALE_BASE = 52.992566m;
     public const decimal LONGITUDE_DOCTOR_MALE_BASE = -2.150226m;
     public const string POSTCODE_DOCTOR_MALE_BASE = "ST4 3PE";

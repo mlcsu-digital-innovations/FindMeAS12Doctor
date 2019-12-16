@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
-  internal class ContactDetailsCcgSeeder : SeederBase<ContactDetailCcg>
+  internal class ContactDetailCcgsSeeder : SeederBase<ContactDetailCcg>
   {
     #region Constants      
     public const string EMAIL_ADDRESS_DOCTOR_MALE_BASE_NORTH_STAFFORDSHIRE = 
