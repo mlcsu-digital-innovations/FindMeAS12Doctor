@@ -8,11 +8,15 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_ALLOCATED = "Allocated Description";    
     internal const string DESCRIPTION_ATTENDED = "Attended Description";            
     internal const string DESCRIPTION_SELECTED = "Selected Description";
-    internal const string DESCRIPTION_NOT_ATTENDED = "Not Attended Description";
+    internal const string DESCRIPTION_NOT_ALLOCATED = "Not Allocated Description";
+    internal const string DESCRIPTION_NOT_ATTENDED = "Not Attended Description";    
+    internal const string DESCRIPTION_REMOVED = "Removed Description";
     internal const string NAME_ALLOCATED = "Allocated";
     internal const string NAME_ATTENDED = "Attended";
     internal const string NAME_SELECTED = "Selected";
-    internal const string NAME_NOT_ATTENDED = "Not Attended";
+    internal const string NAME_NOT_ALLOCATED = "Not Allocated";
+    internal const string NAME_NOT_ATTENDED = "Not Attended";    
+    internal const string NAME_REMOVED = "Removed";
 
     #endregion
 
@@ -37,11 +41,22 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddOrUpdateNameDescriptionEntityById(
+        Models.AssessmentDoctorStatus.NOT_ALLOCATED,
+        NAME_NOT_ALLOCATED,
+        DESCRIPTION_NOT_ALLOCATED
+      );      
+
+      AddOrUpdateNameDescriptionEntityById(
         Models.AssessmentDoctorStatus.NOT_ATTENDED,
         NAME_NOT_ATTENDED,
         DESCRIPTION_NOT_ATTENDED
       );
 
+      AddOrUpdateNameDescriptionEntityById(
+        Models.AssessmentDoctorStatus.REMOVED,
+        NAME_REMOVED,
+        DESCRIPTION_REMOVED
+      );      
       SaveChangesWithIdentity();
     }
   }

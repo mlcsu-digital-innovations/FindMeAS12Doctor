@@ -17,7 +17,7 @@ namespace Fmas12d.Api.Controllers
 
     public AssessmentController(
       IUserClaimsService userClaimsService,
-      IAssessmentService service) 
+      IAssessmentService service)
       : base(userClaimsService, service)
     {
     }
@@ -76,7 +76,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    } 
+    }
 
     [HttpGet]
     [Route("list")]
@@ -84,8 +84,8 @@ namespace Fmas12d.Api.Controllers
       RequestModels.AssessmentListSearch requestModel)
     {
       return await GetListInternal(
-        GetUserId(), 
-        requestModel.DoctorStatusId, 
+        GetUserId(),
+        requestModel.DoctorStatusId,
         requestModel.ReferralStatusId
       );
     }
@@ -98,8 +98,8 @@ namespace Fmas12d.Api.Controllers
       [FromQuery] RequestModels.AssessmentListSearch requestModel)
     {
       return await GetListInternal(
-        userId, 
-        requestModel.DoctorStatusId, 
+        userId,
+        requestModel.DoctorStatusId,
         requestModel.ReferralStatusId
       );
     }
@@ -117,7 +117,7 @@ namespace Fmas12d.Api.Controllers
           return NoContent();
         }
         else
-        {          
+        {
           ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
           return Ok(viewModel);
         }
@@ -134,7 +134,7 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.Assessment businessModel = 
+        Business.Models.Assessment businessModel =
           await Service.GetByIdForUserAsync(id, GetUserId(), true, true);
 
         if (businessModel == null)
@@ -142,7 +142,7 @@ namespace Fmas12d.Api.Controllers
           return NoContent();
         }
         else
-        {          
+        {
           ViewModels.AssessmentView viewModel = new ViewModels.AssessmentView(businessModel);
           return Ok(viewModel);
         }
@@ -151,7 +151,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }    
+    }
 
     [HttpPost]
     [Route("{id:int}/doctors/allocated")]
@@ -195,7 +195,7 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
-    }    
+    }
 
     [HttpPost]
     [Route("{id:int}/doctors/selected")]
@@ -240,6 +240,31 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
+    [Route("{id:int}/doctors/remove")]
+    public async Task<ActionResult> PutDoctorRemove(
+      int id,
+      [FromBody] RequestModels.AssessmentDoctorsRemovePut requestModel)
+    {
+      try
+      {
+        Business.Models.IAssessmentDoctorsRemove businessModel =
+          new Business.Models.AssessmentDoctorsRemove
+        {
+          Id = id
+        };
+        requestModel.MapToBusinessModel(businessModel);
+        await Service.RemoveDoctorsAsync(businessModel);
+
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+
+    [HttpPut]
     [Route("{id:int}/emergency")]
     public async Task<ActionResult<ViewModels.AssessmentPut>> PutEmergency(
       int id,
@@ -273,7 +298,7 @@ namespace Fmas12d.Api.Controllers
       [FromBody] RequestModels.AssessmentPutPlanned requestModel)
     {
       return await Update(id, requestModel);
-    }    
+    }
 
     [HttpPut]
     [Route("{id:int}/schedule")]
@@ -312,19 +337,19 @@ namespace Fmas12d.Api.Controllers
     }
 
     private async Task<ActionResult<IEnumerable<ViewModels.AssessmentList>>> GetListInternal(
-      int userId, 
-      int? doctorStatusId, 
+      int userId,
+      int? doctorStatusId,
       int? referralStatusId
     )
     {
       try
       {
-        IEnumerable<Business.Models.Assessment> businessModels = 
+        IEnumerable<Business.Models.Assessment> businessModels =
         await Service.GetListByUserIdAsync(
             userId,
             doctorStatusId,
             referralStatusId,
-            true, 
+            true,
             true);
 
         if (businessModels == null || !businessModels.Any())
@@ -332,7 +357,7 @@ namespace Fmas12d.Api.Controllers
           return NoContent();
         }
         else
-        {          
+        {
           IEnumerable<ViewModels.AssessmentList> viewModels =
             businessModels.Select(ViewModels.AssessmentList.ProjectFromModel).ToList();
 
@@ -342,7 +367,7 @@ namespace Fmas12d.Api.Controllers
       catch (Exception ex)
       {
         return ProcessException(ex);
-      }      
+      }
     }
 
     private async Task<ActionResult<ViewModels.AssessmentOutcomePut>> PutOutcome(
