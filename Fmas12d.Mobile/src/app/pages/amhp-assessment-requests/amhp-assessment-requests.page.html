@@ -3,6 +3,10 @@
 <ion-content>
   <ion-grid>
 
+    <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+      <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
+    </ion-refresher>
+
     <ion-row>
       <ion-label class="page-title">
         <strong>Assessment Requests</strong>

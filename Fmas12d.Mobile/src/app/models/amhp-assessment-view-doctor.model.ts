@@ -1,8 +1,5 @@
-export class AmhpAssessmentViewDoctor {
-  attended?: boolean;
-  displayName: string;
-  gmcNumber?: number;
-  id: number;
+import { AmhpAssessmentSelectedDoctor } from './amhp-assessment-selected-doctor.model';
 
-  constructor() { }
+export class AmhpAssessmentViewDoctor extends AmhpAssessmentSelectedDoctor {
+  attended?: boolean;
 }  
