@@ -14,10 +14,10 @@ namespace Fmas12d.Business.Migrations.Seeds
       "doctormale.base@stoke_on_trent";
     public const string EMAIL_ADDRESS_DOCTOR_MALE_HOME_STOKE_ON_TRENT = 
       "doctormale.home@stoke_on_trent";            
-    public const long TELEPHONE_NUMBER_DOCTOR_MALE_BASE_NORTH_STAFFORDSHIRE = 07886111111;
-    public const long TELEPHONE_NUMBER_DOCTOR_MALE_HOME_NORTH_STAFFORDSHIRE = 07886222222;
-    public const long TELEPHONE_NUMBER_DOCTOR_MALE_BASE_STOKE_ON_TRENT = 07886333333;
-    public const long TELEPHONE_NUMBER_DOCTOR_MALE_HOME_STOKE_ON_TRENT = 07886444444;
+    public const string TELEPHONE_NUMBER_DOCTOR_MALE_BASE_NORTH_STAFFORDSHIRE = "07886111111";
+    public const string TELEPHONE_NUMBER_DOCTOR_MALE_HOME_NORTH_STAFFORDSHIRE = "07886222222";
+    public const string TELEPHONE_NUMBER_DOCTOR_MALE_BASE_STOKE_ON_TRENT = "07886333333";
+    public const string TELEPHONE_NUMBER_DOCTOR_MALE_HOME_STOKE_ON_TRENT = "07886444444";
 
     #endregion
 
@@ -60,7 +60,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       string ccgName,
       int contactDetailTypeId,
       string emailAddress,
-      long? telephoneNumber,
+      string telephoneNumber,
       string userDisplayName
     )
     {

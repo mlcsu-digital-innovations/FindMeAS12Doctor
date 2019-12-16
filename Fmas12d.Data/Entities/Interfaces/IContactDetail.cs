@@ -10,7 +10,7 @@
     decimal Latitude { get; set; }
     decimal Longitude { get; set; }
     string Postcode { get; set; }
-    long? TelephoneNumber { get; set; }
+    string TelephoneNumber { get; set; }
     string Town { get; set; }
     int UserId { get; set; }
   }

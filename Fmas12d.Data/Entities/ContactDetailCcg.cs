@@ -10,7 +10,7 @@ namespace Fmas12d.Data.Entities
     public int ContactDetailTypeId { get; set; }
     [MaxLength(100)]
     public string EmailAddress { get; set; }
-    public long? TelephoneNumber { get; set; }
+    public string TelephoneNumber { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
   }

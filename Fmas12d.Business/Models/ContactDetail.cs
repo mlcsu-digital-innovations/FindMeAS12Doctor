@@ -47,7 +47,7 @@ namespace Fmas12d.Business.Models
     public decimal Longitude { get; set; }
     [MaxLength(10)]
     public string Postcode { get; set; }
-    public long? TelephoneNumber { get; set; }
+    public string TelephoneNumber { get; set; }
     public string Town { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }

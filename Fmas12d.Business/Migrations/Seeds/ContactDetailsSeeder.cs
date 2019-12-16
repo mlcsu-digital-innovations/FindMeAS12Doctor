@@ -13,7 +13,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const decimal LATITUDE_DOCTOR_FEMALE_HOME = 52.958159m;
     public const decimal LONGITUDE_DOCTOR_FEMALE_HOME = -2.306840m;
     public const string POSTCODE_DOCTOR_FEMALE_HOME = "ST5 5DJ";
-    public const int TELEPHONE_NUMBER_DOCTOR_FEMALE_HOME = 01782444444;
+    public const string TELEPHONE_NUMBER_DOCTOR_FEMALE_HOME = "01782444444";
     public const string TOWN_DOCTOR_FEMALE_HOME = "Newcastle";
 
     public const string ADDRESS1_DOCTOR_FEMALE_BASE = "5 Hide Street";
@@ -23,7 +23,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const decimal LATITUDE_DOCTOR_FEMALE_BASE = 53.003440m;
     public const decimal LONGITUDE_DOCTOR_FEMALE_BASE = -2.186513m;
     public const string POSTCODE_DOCTOR_FEMALE_BASE = "ST4 1NF";
-    public const int TELEPHONE_NUMBER_DOCTOR_FEMALE_BASE = 01782111111;
+    public const string TELEPHONE_NUMBER_DOCTOR_FEMALE_BASE = "01782111111";
     public const string TOWN_DOCTOR_FEMALE_BASE = "Stoke-on-Trent";
 
     public const string ADDRESS1_DOCTOR_MALE_HOME = "5 Hartley Close";
@@ -33,7 +33,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const decimal LATITUDE_DOCTOR_MALE_HOME = 52.905948m;
     public const decimal LONGITUDE_DOCTOR_MALE_HOME = -2.159811m;
     public const string POSTCODE_DOCTOR_MALE_HOME = "ST15 0WB";
-    public const int TELEPHONE_NUMBER_DOCTOR_MALE_HOME = 01782222222;
+    public const string TELEPHONE_NUMBER_DOCTOR_MALE_HOME = "01782222222";
     public const string TOWN_DOCTOR_MALE_HOME = "Stone";   
 
     public const string ADDRESS1_DOCTOR_MALE_BASE = "Hartley House";
@@ -43,7 +43,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const decimal LATITUDE_DOCTOR_MALE_BASE = 52.992566m;
     public const decimal LONGITUDE_DOCTOR_MALE_BASE = -2.150226m;
     public const string POSTCODE_DOCTOR_MALE_BASE = "ST4 3PE";
-    public const int TELEPHONE_NUMBER_DOCTOR_MALE_BASE = 01782333333;
+    public const string TELEPHONE_NUMBER_DOCTOR_MALE_BASE = "01782333333";
     public const string TOWN_DOCTOR_MALE_BASE = "Stoke-on-Trent";   
     #endregion
 
@@ -117,7 +117,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       decimal latitude,
       decimal longitude,
       string postcode,
-      long? telephoneNumber,
+      string telephoneNumber,
       string town,
       string userDisplayName
     )

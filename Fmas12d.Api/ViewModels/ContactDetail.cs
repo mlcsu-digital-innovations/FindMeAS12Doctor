@@ -34,7 +34,7 @@ namespace Fmas12d.Api.ViewModels
     public decimal Latitude { get; set; }
     public decimal Longitude { get; set; }
     public string Postcode { get; set; }
-    public long? TelephoneNumber { get; set; }
+    public string TelephoneNumber { get; set; }
     public string Town { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
