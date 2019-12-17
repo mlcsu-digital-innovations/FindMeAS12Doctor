@@ -1,0 +1,70 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> Doctor Allocation Complete</h4>
+</div>
+<div class="modal-body" *ngIf="isPlanned">
+  <h5 >
+   Please confirm that all doctors have now been allocated and the assessment can be scheduled.
+  </h5>
+</div>
+<div class="modal-body" *ngIf="!isPlanned">
+  <h5 >
+   Please specify the assessment date / time and click confirm to schedule the assessment.
+  </h5>
+  <form novalidate>
+  <div class="form-row">
+    <div class="col-md-8">
+      <label for="picker">Assessment Date / Time</label>
+      <div class="row" name="picker">
+        <div class="col-md-6">
+            <input
+              class="form-control"
+              placeholder="dd/mm/yyyy"
+              name="toBeCompletedByDate"
+              [minDate]='minDate'
+              [(ngModel)]="scheduledDate"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+        </div>
+        <div class="col-md-1 padding-left-1">
+            <button
+              id="calendarBtn"
+              class="btn btn-outline-secondary calendar"
+              (click)="d.toggle()"
+              type="button">
+              <i class="far fa-calendar-alt"></i>
+            </button>
+        </div>
+        <div class="col-md-1 at">@</div>
+        <div class="col-md-4 mlt-less-1 mt-less-5">
+            <ngb-timepicker [minuteStep]="5"></ngb-timepicker>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Format Errors-->
+  <div class="form-row">
+    <div class="col-md-4 mb-2 reduced-top-margin">
+      <div
+        class="invalid-field"
+      >
+        <span>Invalid Date Format</span>
+      </div>
+      <div
+        class="invalid-field"
+      >
+        <span>* Date is earlier than the referral creation date</span>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-cancel" (click)="modalAction(false)">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" (click)="modalAction(true)">
+    Confirm
+  </button>
+</div>

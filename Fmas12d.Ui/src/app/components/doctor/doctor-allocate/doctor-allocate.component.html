@@ -210,20 +210,19 @@
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
 
+<ng-template #allocationModal>
+  <app-allocation-complete-modal
+  [isPlanned]=assessment.isPlanned
+  (actioned)="OnAllocationAction($event)"
+  >
+  </app-allocation-complete-modal>
+</ng-template>
+
 <ng-template #confirmSelection>
   <app-cancel-action-modal
     [modalTitle]="'Allocate the Selected Doctors'"
     [modalBody]="'Please confirm that you wish to allocate these doctors to the assessment.'"
     (actioned)="OnCancelConfirmAction($event)"
-  >
-  </app-cancel-action-modal>
-</ng-template>
-
-<ng-template #confirmAllocation>
-  <app-cancel-action-modal
-    [modalTitle]="'Confirm Doctor Allocation'"
-    [modalBody]="'Please confirm that all doctors have now been allocated to the assessment.'"
-    (actioned)="OnAllocationAction($event)"
   >
   </app-cancel-action-modal>
 </ng-template>

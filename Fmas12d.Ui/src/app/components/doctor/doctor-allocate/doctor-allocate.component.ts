@@ -1,4 +1,5 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AllocationConfirmation } from 'src/app/interfaces/allocation-confirmation';
 import { Assessment } from 'src/app/interfaces/assessment';
 import { AssessmentSelected } from 'src/app/interfaces/assessment-selected';
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
@@ -22,6 +23,7 @@ export class DoctorAllocateComponent implements OnInit {
   allocatedDoctors: AvailableDoctor[] = [];
   allocationModal: NgbModalRef;
   assessment$: Observable<Assessment | any>;
+  assessment: AssessmentSelected;
   assessmentId: number;
   cancelModal: NgbModalRef;
   confirmModal: NgbModalRef;
@@ -34,7 +36,7 @@ export class DoctorAllocateComponent implements OnInit {
 
   @ViewChild('cancelAssessment', null) cancelAssessmentTemplate;
   @ViewChild('confirmSelection', null) confirmSelectionTemplate;
-  @ViewChild('confirmAllocation', null) confirmAllocationTemplate;
+  @ViewChild('allocationModal', null) confirmAllocationTemplate;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -59,7 +61,9 @@ export class DoctorAllocateComponent implements OnInit {
             .pipe(
               map((assessment: AssessmentSelected) => {
                 this.assessmentId = assessment.id;
+                this.assessment = assessment;
                 this.selectedDoctors = assessment.doctorsSelected;
+                console.log(this.assessment);
                 return assessment;
               })
             );
@@ -145,10 +149,15 @@ export class DoctorAllocateComponent implements OnInit {
     );
   }
 
-  OnAllocationAction(action: boolean) {
+  OnAllocationAction(confirmation: AllocationConfirmation) {
+
+    console.log(confirmation);
 
     this.allocationModal.close();
-    if (action === true) {
+
+    return;
+
+    if (confirmation.confirmed === true) {
       this.isSchedulingAssessment = true;
       this.assessmentService.scheduleAssessment(this.assessmentId)
       .subscribe(() => {
