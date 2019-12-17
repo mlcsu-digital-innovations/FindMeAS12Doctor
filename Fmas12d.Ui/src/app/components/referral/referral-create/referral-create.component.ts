@@ -703,11 +703,16 @@ export class ReferralCreateComponent implements OnInit {
       // set the field to unknown, show the postcode field and set focus
       this.SetGpPracticeField(this.unknownGpPracticeId, UNKNOWN_GP_PRACTICE);
       this.isResidentialPostcodeFieldShown = true;
+      this.SetResidentialPostcodeField('');
+      this.unknownPostcodeField.setValue(false);
       this.SetFieldFocus('#residentialPostcode');
     } else {
       this.SetGpPracticeField(null, '');
       this.SetResidentialPostcodeField('');
       this.isResidentialPostcodeFieldShown = false;
+      this.SetCcgField(null, '');
+      this.isCcgFieldsShown = false;
+      this.isPatientPostcodeValidated = false;
       this.SetFieldFocus('#gpPractice');
     }
   }
@@ -717,15 +722,17 @@ export class ReferralCreateComponent implements OnInit {
       // set the field to unknown, show the CCG field and set focus
       this.SetResidentialPostcodeField(UNKNOWN);
       this.isCcgFieldsShown = true;
-      this.SetFieldFocus('#ccg');
       this.isPatientPostcodeValidated = true;
+      this.SetCcgField(null, '');
+      this.unknownCcgField.setValue(false);
+      this.SetFieldFocus('#ccg');
     } else {
       this.SetResidentialPostcodeField('');
       this.SetCcgField(null, '');
       this.unknownCcgField.setValue(false);
       this.isCcgFieldsShown = false;
-      this.SetFieldFocus('#residentialPostcode');
       this.isPatientPostcodeValidated = false;
+      this.SetFieldFocus('#residentialPostcode');
     }
   }
 
