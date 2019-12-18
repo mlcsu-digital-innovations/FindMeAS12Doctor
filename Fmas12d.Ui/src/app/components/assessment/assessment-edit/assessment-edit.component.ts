@@ -30,7 +30,7 @@ import * as moment from 'moment';
 })
 export class AssessmentEditComponent implements OnInit {
 
-  addressList: AddressResult[] = [];
+  addressList: string[] = [];
   assessmentId: number;
   allocatedDoctors: AssessmentUser[] = [];
   cancelModal: NgbModalRef;
@@ -176,8 +176,9 @@ export class AssessmentEditComponent implements OnInit {
     this.assessmentAddressField.enable();
 
     this.postcodeValidationService.searchPostcode(this.assessmentPostcode.value)
-      .subscribe(address => {
-        this.addressList.push(address);
+      .subscribe(result => {
+        console.log(result);
+        this.addressList = result.addresses;
       }, (err) => {
         this.isSearchingForPostcode = false;
         this.toastService.displayError({
@@ -332,7 +333,7 @@ export class AssessmentEditComponent implements OnInit {
 
     // can only store 4 lines of the address
     for (let i = 0; i < 4; i++) {
-      if (addressSplitByCommas.length >= i &&
+      if (addressSplitByCommas.length - 1 >= i &&
           addressSplitByCommas[i] !== undefined &&
           addressSplitByCommas[i].trim() !== this.assessmentPostcode.value) {
             addressLines.push(addressSplitByCommas[i].trim());
@@ -389,6 +390,8 @@ export class AssessmentEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralView) {
+
+    console.log(referral);
 
     this.minDate = this.ConvertToDateStruct(referral.createdAt);
     this.FetchDropDownData();

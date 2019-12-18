@@ -33,7 +33,6 @@ namespace Fmas12d.Api.ViewModels
       }
 
       return addressList.ToArray();
-
     }
   }
 }
