@@ -16,23 +16,16 @@
       </ion-col>
     </ion-row>
 
+    <ion-card>
+      <ion-card-header color="primary">
+        Referral Id: <strong>{{assessmentView ? assessmentView.referralId : ""}}</strong>
+      </ion-card-header>
+      <ion-card-content>
     <ion-row>
       <ion-col>
-        &nbsp;
+        Patient Id: <strong>{{assessmentView ? assessmentView.patientIdentifier : ""}}</strong>
       </ion-col>
     </ion-row>
-
-    <ion-row>
-      <ion-col>
-        Referral Id: <strong>{{assessmentView ? assessmentView.referralId : ""}}</strong>      
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>               
-        Patient Id: <strong>{{assessmentView ? assessmentView.patientIdentifier : ""}}</strong>               
-      </ion-col>
-    </ion-row>   
 
     <ion-row>
       <ion-col>        
@@ -85,5 +78,7 @@
         <ion-button expand="block" color="primary" (click)="confirmSave()">Save</ion-button>
       </ion-col>
     </ion-row>
+  </ion-card-content>
+</ion-card>
   </ion-grid>
 </ion-content>
