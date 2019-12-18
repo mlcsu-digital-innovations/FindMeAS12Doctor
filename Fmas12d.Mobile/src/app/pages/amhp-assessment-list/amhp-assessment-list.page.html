@@ -10,7 +10,7 @@
 
     <ion-row>
       <ion-label class="page-title">
-        <strong>AMHP Assessments</strong>
+        <strong><ion-icon name="list"></ion-icon> AMHP Assessments</strong>
       </ion-label>
     </ion-row>
 
@@ -22,19 +22,10 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col>
-        &nbsp;
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-label offset="1">
+    <ion-card>
+      <ion-card-header color="primary">
         <strong>Scheduled Assessments</strong>
-      </ion-label>
-    </ion-row>
-
-    <ion-row>
+      </ion-card-header>
       <ion-col>    
         <ion-list>
           <ion-item *ngFor="let assessment of assessmentListScheduled"
@@ -65,15 +56,12 @@
           </ion-item>
         </ion-list>        
       </ion-col>
-    </ion-row>
+    </ion-card>
 
-    <ion-row>
-      <ion-label offset="1">
+    <ion-card>
+      <ion-card-header color="primary">
         <strong>Unscheduled Assessments</strong>
-      </ion-label>
-    </ion-row>
-
-    <ion-row>
+      </ion-card-header>
       <ion-col>    
         <ion-list>
           <ion-item *ngFor="let assessment of assessmentListUnscheduled"
@@ -104,8 +92,6 @@
           </ion-item>
         </ion-list>        
       </ion-col>
-    </ion-row>
-
+    </ion-card>
   </ion-grid>
-
 </ion-content>
