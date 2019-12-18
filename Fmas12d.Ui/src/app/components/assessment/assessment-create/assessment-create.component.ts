@@ -192,6 +192,8 @@ export class AssessmentCreateComponent implements OnInit {
     this.assessmentAddressField.setValue('');
     this.isSearchingForPostcode = true;
 
+    this.FormatPostcode();
+
     this.postcodeValidationService.searchPostcode(this.assessmentPostcodeField.value)
       .subscribe(address => {
         this.addressList = address.addresses;
@@ -315,6 +317,16 @@ export class AssessmentCreateComponent implements OnInit {
     }
 
     return addressLines;
+  }
+
+  FormatPostcode() {
+    let postcode = this.assessmentPostcodeField.value.trim();
+    if (postcode.indexOf(' ') === -1 && postcode.length > 3) {
+      const inwardCode = postcode.substr(postcode.length - 3, 3);
+      const outwardCode = postcode.substr(0, postcode.length - 3);
+      postcode = `${outwardCode} ${inwardCode}`;
+    }
+    this.assessmentPostcodeField.setValue(postcode);
   }
 
   FormatTypeAheadResults(value: any): string {

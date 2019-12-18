@@ -175,9 +175,10 @@ export class AssessmentEditComponent implements OnInit {
     this.isSearchingForPostcode = true;
     this.assessmentAddressField.enable();
 
+    this.FormatPostcode();
+
     this.postcodeValidationService.searchPostcode(this.assessmentPostcode.value)
       .subscribe(result => {
-        console.log(result);
         this.addressList = result.addresses;
       }, (err) => {
         this.isSearchingForPostcode = false;
@@ -343,6 +344,16 @@ export class AssessmentEditComponent implements OnInit {
     }
 
     return addressLines;
+  }
+
+  FormatPostcode() {
+    let postcode = this.assessmentPostcode.value.trim();
+    if (postcode.indexOf(' ') === -1 && postcode.length > 3) {
+      const inwardCode = postcode.substr(postcode.length - 3, 3);
+      const outwardCode = postcode.substr(0, postcode.length - 3);
+      postcode = `${outwardCode} ${inwardCode}`;
+    }
+    this.assessmentPostcode.setValue(postcode);
   }
 
   FormatTypeAheadResults(value: any): string {
