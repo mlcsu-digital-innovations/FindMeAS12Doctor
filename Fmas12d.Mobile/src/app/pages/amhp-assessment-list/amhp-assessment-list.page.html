@@ -43,13 +43,13 @@
             routerDirection="forward">
             <ion-row style="width:100%">
               <ion-col>
-                  <ion-icon class="accepted" size="large" name="checkmark-circle" 
+                  <ion-icon color="success" size="large" name="checkmark-circle" 
                     *ngIf="assessment.doctorHasAccepted === true">
                   </ion-icon>
-                  <ion-icon class="outstanding" size="large" name="help-circle" 
+                  <ion-icon color="warning" size="large" name="help-circle" 
                     *ngIf="assessment.doctorHasAccepted === null">
                   </ion-icon>
-                  <ion-icon class="declined" size="large" name="close-circle" 
+                  <ion-icon color="danger" size="large" name="close-circle" 
                     *ngIf="assessment.doctorHasAccepted === false">
                   </ion-icon>
               </ion-col>
@@ -82,13 +82,13 @@
             routerDirection="forward">
             <ion-row style="width:100%">
               <ion-col>
-                <ion-icon class="accepted" size="large" name="checkmark-circle" 
+                <ion-icon color="success" size="large" name="checkmark-circle" 
                   *ngIf="assessment.doctorHasAccepted === true">
                 </ion-icon>
-                <ion-icon class="outstanding" size="large" name="help-circle" 
+                <ion-icon color="warning" size="large" name="help-circle" 
                   *ngIf="assessment.doctorHasAccepted === null">
                 </ion-icon>
-                <ion-icon class="declined" size="large" name="close-circle" 
+                <ion-icon color="danger" size="large" name="close-circle" 
                   *ngIf="assessment.doctorHasAccepted === false">
                 </ion-icon>
               </ion-col>

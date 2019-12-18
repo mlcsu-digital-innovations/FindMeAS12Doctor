@@ -80,7 +80,7 @@
         <ion-text *ngFor="let doctor of assessmentView?.doctorsAllocated">         
           {{doctor.displayName}} 
           <br />
-          <ion-icon class="outstanding" size="small" name="help-circle" 
+          <ion-icon color="warning" size="small" name="help-circle" 
             *ngIf="!doctor.hasResponded">
           </ion-icon>
           ({{doctor.isRegistered ? "Reg" : "not Reg"}}, 
@@ -102,7 +102,7 @@
         <ion-text *ngFor="let doctor of assessmentView?.doctorsSelected">          
           {{doctor.displayName}} 
           <br />
-          <ion-icon class="outstanding" size="small" name="help-circle" 
+          <ion-icon color="warning" size="small" name="help-circle" 
             *ngIf="!doctor.hasResponded">
           </ion-icon>
           ({{doctor.isRegistered ? "Reg" : "not Reg"}}, 
