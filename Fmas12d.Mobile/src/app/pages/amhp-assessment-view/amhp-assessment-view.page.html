@@ -16,18 +16,12 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col>
-        &nbsp;
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>        
+    <ion-card>
+      <ion-card-header color="primary">        
         Referral Id: <strong>{{assessmentView?.referralId}}</strong>       
-      </ion-col>
-    </ion-row>
-
+      </ion-card-header>
+    
+      <ion-card-content>
     <ion-row *ngIf="assessmentView?.canUpdateOutcome">
       <ion-col>      
         Patient Id: <strong>{{assessmentView?.patientIdentifier}}</strong>
@@ -150,6 +144,7 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
+  </ion-card-content>
+  </ion-card>
   </ion-grid>
 </ion-content>
