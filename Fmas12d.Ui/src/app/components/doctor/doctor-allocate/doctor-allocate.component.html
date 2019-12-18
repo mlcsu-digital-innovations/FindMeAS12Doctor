@@ -171,7 +171,6 @@
                 </button>
               </div>
             </div>
-
             <div class="form-row ml-more-2 mr-more-2">
               <div class="col-md-2">
               </div>
@@ -210,9 +209,9 @@
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
 
-<ng-template #allocationModal>
+<ng-template #allocationModal let-minDate=assessment.dateTime>
   <app-allocation-complete-modal
-  [isPlanned]=assessment.isPlanned
+  [isPlanned]='assessment.isPlanned'
   (actioned)="OnAllocationAction($event)"
   >
   </app-allocation-complete-modal>
