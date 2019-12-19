@@ -19,4 +19,15 @@ export class PatientService {
       { headers }
     );
   }
+
+  public updatePatient(patient: Patient ) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/patient/${patient.id}`,
+      patient,
+      { headers }
+    );
+  }
 }

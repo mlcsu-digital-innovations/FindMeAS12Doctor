@@ -1,7 +1,9 @@
+using Fmas12d.Api;
 using Fmas12d.Api.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mep.Api.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("[controller]")]
   [ApiController]
   public class ConfigController : ControllerBase
   {
@@ -18,12 +20,12 @@ namespace Mep.Api.Controllers
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _env;
     private OidcWellKnown _wellKnown;
-    private JwtKs _jwtKs;
+    private JwtKs _jwtKs;    
 
     public ConfigController(IConfiguration config, IWebHostEnvironment env)
     {
-      _configuration = config;
       _env = env;
+      _configuration = config;
     }
 
     private async Task<OidcWellKnown> GetWellKnownAsync()
@@ -54,7 +56,7 @@ namespace Mep.Api.Controllers
       {
         using HttpClient client = new HttpClient();
         OidcWellKnown wellKnown = await GetWellKnownAsync();
-        client.BaseAddress = new Uri(wellKnown.jwks_uri);
+        client.BaseAddress = new Uri(wellKnown.Jwks_uri);
         client.DefaultRequestHeaders.Clear();
         client.DefaultRequestHeaders.Accept.Add(
           new MediaTypeWithQualityHeaderValue("application/json"));
@@ -75,9 +77,16 @@ namespace Mep.Api.Controllers
     public async Task<ActionResult<OidcWellKnown>> WellKnownAsync()
     {
       string protocol = Request.IsHttps ? "https://" : "http://";
-      string jwks_uri = $"{protocol}{Request.Host.ToUriComponent()}/api/config/discovery/keys";
+
+      string apiPath = "";
+      if (_env.IsEnvironment(Startup.ENV_AIMES_UAT))
+      {
+        apiPath = "/api";
+      }
+
+      string jwks_uri = $"{protocol}{Request.Host.ToUriComponent()}{apiPath}/config/discovery/keys";
       var wellKnown = await GetWellKnownAsync();
-      wellKnown.jwks_uri = jwks_uri;
+      wellKnown.Jwks_uri = jwks_uri;
       return wellKnown;
     }
 
@@ -91,9 +100,16 @@ namespace Mep.Api.Controllers
     public ActionResult<OIDCConfig> ConfigurationAsync()
     {
       OIDCConfig config = new OIDCConfig();
+      
+      string apiPath = "";
+      if (_env.IsEnvironment(Startup.ENV_AIMES_UAT))
+      {
+        apiPath = "/api";
+      }
 
       string protocol = Request.IsHttps ? "https://" : "http://";
-      config.stsServer = $"{protocol}{Request.Host.ToUriComponent()}/api/config";
+      config.StsServer = $"{protocol}{Request.Host.ToUriComponent()}{apiPath}/config";
+      config.Env = _env.EnvironmentName;
 
       return config;
     }

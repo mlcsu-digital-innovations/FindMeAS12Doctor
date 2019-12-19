@@ -19,6 +19,8 @@ namespace Fmas12d.Data.Entities
     public virtual IList<Assessment> CompletionConfirmationAssessments { get; set; }
     [InverseProperty("User")]
     public virtual IList<ContactDetail> ContactDetails { get; set; }
+    [InverseProperty("User")]
+    public virtual IList<ContactDetailCcg> ContactDetailCcgs { get; set; }    
     [InverseProperty("CreatedByUser")]
     public virtual IList<Assessment> CreatedAssessments { get; set; }
     [MaxLength(256)]

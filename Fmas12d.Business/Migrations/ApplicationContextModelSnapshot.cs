@@ -979,9 +979,6 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int>("CcgId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ContactDetailTypeId")
                         .HasColumnType("int");
 
@@ -1008,8 +1005,8 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("TelephoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("TelephoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Town")
                         .HasColumnType("nvarchar(max)");
@@ -1019,9 +1016,7 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("CcgId", "ContactDetailTypeId", "UserId");
-
-                    b.HasIndex("ContactDetailTypeId");
+                    b.HasAlternateKey("ContactDetailTypeId", "UserId");
 
                     b.HasIndex("ModifiedByUserId");
 
@@ -1097,8 +1092,8 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<int?>("TelephoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("TelephoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Town")
                         .HasColumnType("nvarchar(max)");
@@ -1109,6 +1104,106 @@ namespace Fmas12d.Business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("ContactDetailsAudit");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailCcg", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContactDetailTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TelephoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("CcgId", "ContactDetailTypeId", "UserId");
+
+                    b.HasIndex("ContactDetailTypeId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ContactDetailCcgs");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailCcgAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CcgId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContactDetailTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TelephoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("ContactDetailCcgAudits");
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailType", b =>
@@ -3716,12 +3811,6 @@ namespace Fmas12d.Business.Migrations
 
             modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetail", b =>
                 {
-                    b.HasOne("Fmas12d.Data.Entities.Ccg", "Ccg")
-                        .WithMany("ContactDetails")
-                        .HasForeignKey("CcgId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Fmas12d.Data.Entities.ContactDetailType", "ContactDetailType")
                         .WithMany("ContactDetails")
                         .HasForeignKey("ContactDetailTypeId")
@@ -3736,6 +3825,33 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasOne("Fmas12d.Data.Entities.User", "User")
                         .WithMany("ContactDetails")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailCcg", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.Ccg", "Ccg")
+                        .WithMany("ContactDetailCcgs")
+                        .HasForeignKey("CcgId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.ContactDetailType", "ContactDetailType")
+                        .WithMany()
+                        .HasForeignKey("ContactDetailTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.User", "User")
+                        .WithMany("ContactDetailCcgs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

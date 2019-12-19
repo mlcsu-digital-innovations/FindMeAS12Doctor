@@ -68,9 +68,9 @@ export class AmhpAssessmentService {
     ));
   }
 
-  public getList(amhpUserId: number): Observable<AmhpAssessmentList[]> {
+  public getList(): Observable<AmhpAssessmentList[]> {
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment?amhpUserId=${amhpUserId}`,
+      `${environment.apiEndpoint}/assessment/list`,
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(

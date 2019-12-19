@@ -7,10 +7,8 @@ namespace Fmas12d.Business.Migrations.Seeds
     #region Constants
     protected const string DESCRIPTION_BASE = "Base Description";
     protected const string DESCRIPTION_HOME = "Home Description";
-    protected const string DESCRIPTION_WORK = "Work Description";    
     protected const string NAME_BASE = "Base";
     protected const string NAME_HOME = "Home";
-    protected const string NAME_WORK = "Work";
     
     #endregion
 
@@ -26,12 +24,6 @@ namespace Fmas12d.Business.Migrations.Seeds
         Models.ContactDetailType.HOME,
         NAME_HOME,
         DESCRIPTION_HOME
-      );
-
-      AddOrUpdateNameDescriptionEntityById(
-        Models.ContactDetailType.WORK,
-        NAME_WORK,
-        DESCRIPTION_WORK
       );
 
       SaveChangesWithIdentity();

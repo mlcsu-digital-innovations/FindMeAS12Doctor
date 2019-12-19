@@ -13,7 +13,7 @@ import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
-import { PostcodeRegex, UNKNOWN_POSTCODE } from 'src/app/constants/Constants';
+import { PostcodeRegex, UNKNOWN } from 'src/app/constants/Constants';
 import { PostcodeSearchResult } from 'src/app/interfaces/postcode-search-result';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
@@ -24,6 +24,7 @@ import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } f
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { TypeAheadResult } from 'src/app/interfaces/typeahead-result';
 import * as moment from 'moment';
+import { PatientService } from 'src/app/services/patient/patient.service';
 
 @Component({
   selector: 'app-referral-edit',
@@ -68,6 +69,7 @@ export class ReferralEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private gpPracticeListService: GpPracticeListService,
     private modalService: NgbModal,
+    private patientService: PatientService,
     private patientSearchService: PatientSearchService,
     private postcodeValidationService: PostcodeValidationService,
     private referralService: ReferralService,
@@ -285,7 +287,8 @@ export class ReferralEditComponent implements OnInit {
   DisablePostcodeValidationButtonIfFieldIsInvalid(): boolean {
     return (
       this.residentialPostcodeField.value === '' ||
-      this.residentialPostcodeField.errors !== null ||
+      (this.residentialPostcodeField.errors !== null &&
+      !this.residentialPostcodeField.getError('NotValidated')) ||
       this.unknownResidentialPostcode.value === true
     );
   }
@@ -400,7 +403,8 @@ export class ReferralEditComponent implements OnInit {
   HasInvalidPostcode(): boolean {
     return (
       this.residentialPostcodeField.value !== '' &&
-      this.residentialPostcodeField.errors !== null
+      this.residentialPostcodeField.errors !== null &&
+      !this.residentialPostcodeField.getError('NotValidated')
     );
   }
 
@@ -409,6 +413,41 @@ export class ReferralEditComponent implements OnInit {
       this.nhsNumberField.errors === null &&
       this.alternativeIdentifierField.errors === null
     );
+  }
+
+  HasPatientBeenUpdated(): boolean {
+
+    let isUpdated = false;
+
+    if (this.initialReferralDetails.patientAlternativeIdentifier !==
+        this.alternativeIdentifierField.value) {
+      isUpdated = true;
+    }
+
+    if (this.initialReferralDetails.patientNhsNumber !== this.nhsNumberField.value) {
+      isUpdated = true;
+    }
+
+    if ((this.initialReferralDetails.patientCcgId === null
+      ? 0
+      : this.initialReferralDetails.patientCcgId) !== this.ccgField.value.id) {
+        isUpdated = true;
+    }
+
+    if ((this.initialReferralDetails.patientGpPracticeId === null
+      ? 0
+      : this.initialReferralDetails.patientGpPracticeId) !== this.gpPracticeField.value.id) {
+        isUpdated = true;
+    }
+
+    if ((this.initialReferralDetails.patientResidentialPostcode === null
+        ? 'Unknown'
+        : this.initialReferralDetails.patientResidentialPostcode)
+          !== this.residentialPostcodeField.value) {
+      isUpdated = true;
+    }
+
+    return isUpdated;
   }
 
   HasValidAlternativeIdentifier(): boolean {
@@ -424,14 +463,14 @@ export class ReferralEditComponent implements OnInit {
 
     // All 3 fields can be 'unknown' OR at least 1 field must be populated
     if (this.gpPractice.id === this.unknownGpPracticeId &&
-      this.residentialPostcode === UNKNOWN_POSTCODE &&
+      this.residentialPostcode === UNKNOWN &&
       this.ccg.id === this.unknownCcgId) {
       return true;
     }
 
     return (
       (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
-      (this.residentialPostcode !== '' && this.residentialPostcode !== UNKNOWN_POSTCODE) ||
+      (this.residentialPostcode !== '' && this.residentialPostcode !== UNKNOWN) ||
       (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
     );
   }
@@ -492,9 +531,7 @@ export class ReferralEditComponent implements OnInit {
     // only show the CCG field if both GP and Postcode are not known
     this.isCcgFieldShown =
       referral.patientResidentialPostcode === null &&
-      referral.patientGpPracticeId === null
-        ? true
-        : false;
+      referral.patientGpPracticeId === null;
 
     this.residentialPostcodeField.setValue(
       referral.patientResidentialPostcode === null
@@ -590,6 +627,7 @@ export class ReferralEditComponent implements OnInit {
     });
 
     this.residentialPostcodeField.valueChanges.subscribe(val => {
+      this.isPatientPostcodeValidated = false;
       if (val !== 'Unknown' && val !== null) {
         this.unknownResidentialPostcode.setValue(false);
       }
@@ -652,6 +690,51 @@ export class ReferralEditComponent implements OnInit {
     }
   }
 
+  UpdatePatient() {
+    const patient = {} as Patient;
+    patient.alternativeIdentifier = this.alternativeIdentifierField.value;
+    patient.nhsNumber = this.nhsNumberField.value;
+    patient.id = this.initialReferralDetails.patientId;
+
+    // only send updated values
+    patient.gpPracticeId =
+      this.gpPractice.id === this.initialReferralDetails.patientGpPracticeId ||
+      this.gpPractice.id === 0
+        ? null
+        : this.gpPractice.id;
+
+    patient.residentialPostcode =
+      this.residentialPostcode === this.initialReferralDetails.patientResidentialPostcode ||
+      this.residentialPostcode === 'Unknown'
+        ? null
+        : this.residentialPostcode;
+
+    patient.ccgId =
+      this.ccg.id === this.initialReferralDetails.patientCcgId ||
+      this.ccg.id === 0
+        ? null
+        : this.ccg.id;
+
+    this.patientService.updatePatient(patient).subscribe(
+      (result: Referral) => {
+        this.toastService.displaySuccess({
+          message: 'Patient Updated'
+        });
+        this.isUpdatingReferral = false;
+        this.routerService.navigate([`/referral/list`]);
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to update patient details! Please try again in a few moments'
+        });
+        this.isUpdatingReferral = false;
+        return throwError(error);
+      }
+    );
+
+  }
+
   UpdateReferral() {
 
     let canContinue = true;
@@ -688,6 +771,15 @@ export class ReferralEditComponent implements OnInit {
       }
     }
 
+    if (this.residentialPostcodeField.value !== 'Unknown' &&
+        this.isPatientPostcodeValidated === false &&
+        this.residentialPostcodeField.value !==
+          this.initialReferralDetails.patientResidentialPostcode) {
+      this.residentialPostcodeField.setErrors({ NotValidated: true});
+      this.residentialPostcodeValidationMessage = 'Postcode has not been validated';
+      canContinue = false;
+    }
+
     if (canContinue === true) {
       this.UpdateReferralDetails();
     }
@@ -703,25 +795,26 @@ export class ReferralEditComponent implements OnInit {
 
     referral.leadAmhpUserId = this.amhpUser.id;
 
-    const patient = {} as Patient;
-    patient.alternativeIdentifier = this.alternativeIdentifierField.value;
-    patient.nhsNumber = this.nhsNumberField.value;
-    patient.gpPracticeId = this.gpPractice.id;
-    patient.residentialPostcode = this.residentialPostcode;
-    patient.ccgId = this.ccg.id;
-
-    referral.patient = patient;
-
     this.isUpdatingReferral = true;
 
-    this.referralService.updateReferral(referral).subscribe(
+    let serviceCall: Observable<object> = this.referralService.updateReferral(referral);
+
+    if (this.retrospectiveReferralField.value === true) {
+      serviceCall = this.referralService.updateRetrospectiveReferral(referral);
+    }
+
+    serviceCall.subscribe(
       (result: Referral) => {
         this.toastService.displaySuccess({
           message: 'Referral Updated'
         });
-        this.isUpdatingReferral = false;
-        // navigate to the create assessment page
-        this.routerService.navigate([`/referral/list`]);
+
+        if (this.HasPatientBeenUpdated()) {
+          this.UpdatePatient();
+        } else {
+          this.isUpdatingReferral = false;
+          this.routerService.navigate([`/referral/list`]);
+        }
       },
       error => {
         this.toastService.displayError({
@@ -732,6 +825,8 @@ export class ReferralEditComponent implements OnInit {
         return throwError(error);
       }
     );
+
+
   }
 
   async UseExistingPatient() {
@@ -839,23 +934,24 @@ export class ReferralEditComponent implements OnInit {
             });
             this.SetFieldFocus('#residentialPostcode');
           } else {
-            this.residentialPostcodeField.setErrors(null);
-            this.patientDetails.residentialPostcode = result.postcode;
-            this.isPatientPostcodeValidated = true;
-            this.residentialPostcodeField.updateValueAndValidity();
-            this.toastService.displaySuccess({
-              title: 'Postcode Validation',
-              message: `${result.postcode} is a valid postcode`
-            });
+              this.residentialPostcodeField.setErrors(null);
+              this.patientDetails.residentialPostcode = result.postcode;
+
+              this.residentialPostcodeField.updateValueAndValidity();
+              this.toastService.displaySuccess({
+                title: 'Postcode Validation',
+                message: `${result.postcode} is a valid postcode`
+              });
+              this.isPatientPostcodeValidated = true;
           }
         },
-        error => {
+        err => {
           this.isSearchingForPostcode = false;
-          this.toastService.displayError({
-            title: 'Server Error',
-            message: 'Unable to validate residential postcode ! Please try again in a few moments'
+          this.toastService.displayWarning({
+            title: 'Validation Error',
+            message: err.error.errors.postcode
           });
-          return throwError(error);
+          return throwError(err);
         }
       );
   }

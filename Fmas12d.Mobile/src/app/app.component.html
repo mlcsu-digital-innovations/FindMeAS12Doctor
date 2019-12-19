@@ -1,38 +1,42 @@
 <ion-app>
   <ion-menu contentId="appContent" side="end">
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-title>Menu</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <ion-list>
         <ion-menu-toggle>
-            <ion-item routerLink="/home" routerDirection="root">Home</ion-item>
+          <ion-item routerLink="/home" routerDirection="root">
+            <ion-icon name="home"></ion-icon> Home
+          </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-item routerLink="/amhp-assessment-requests" routerDirection="forward">
-            Assessment Requests
+            <ion-icon name="list"></ion-icon> Assessment Requests
           </ion-item>
-        </ion-menu-toggle>   
+        </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
-            AMHP Assessments
+            <ion-icon name="folder-open"></ion-icon> AMHP Assessments
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-item routerLink="/doctor-availability-view" routerDirection="forward">
-            Availability
-          </ion-item>
-        </ion-menu-toggle> 
-        <ion-menu-toggle>
-          <ion-item routerLink="/help" routerDirection="forward">
-            Help
+            <ion-icon name="search"></ion-icon> Availability
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
-          <ion-item (click)="logOff()">Log Off</ion-item>
-        </ion-menu-toggle>     
+          <ion-item routerLink="/help" routerDirection="forward">
+            <ion-icon name="help"></ion-icon> Help
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item (click)="logOff()">
+            <ion-icon name="exit"></ion-icon> Log Off
+          </ion-item>
+        </ion-menu-toggle>
       </ion-list>
     </ion-content>
   </ion-menu>

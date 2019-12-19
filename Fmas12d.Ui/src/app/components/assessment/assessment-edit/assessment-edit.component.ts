@@ -30,7 +30,7 @@ import * as moment from 'moment';
 })
 export class AssessmentEditComponent implements OnInit {
 
-  addressList: AddressResult[] = [];
+  addressList: string[] = [];
   assessmentId: number;
   allocatedDoctors: AssessmentUser[] = [];
   cancelModal: NgbModalRef;
@@ -175,9 +175,11 @@ export class AssessmentEditComponent implements OnInit {
     this.isSearchingForPostcode = true;
     this.assessmentAddressField.enable();
 
+    this.FormatPostcode();
+
     this.postcodeValidationService.searchPostcode(this.assessmentPostcode.value)
-      .subscribe(address => {
-        this.addressList.push(address);
+      .subscribe(result => {
+        this.addressList = result.addresses;
       }, (err) => {
         this.isSearchingForPostcode = false;
         this.toastService.displayError({
@@ -332,7 +334,7 @@ export class AssessmentEditComponent implements OnInit {
 
     // can only store 4 lines of the address
     for (let i = 0; i < 4; i++) {
-      if (addressSplitByCommas.length >= i &&
+      if (addressSplitByCommas.length - 1 >= i &&
           addressSplitByCommas[i] !== undefined &&
           addressSplitByCommas[i].trim() !== this.assessmentPostcode.value) {
             addressLines.push(addressSplitByCommas[i].trim());
@@ -342,6 +344,16 @@ export class AssessmentEditComponent implements OnInit {
     }
 
     return addressLines;
+  }
+
+  FormatPostcode() {
+    let postcode = this.assessmentPostcode.value.trim();
+    if (postcode.indexOf(' ') === -1 && postcode.length > 3) {
+      const inwardCode = postcode.substr(postcode.length - 3, 3);
+      const outwardCode = postcode.substr(0, postcode.length - 3);
+      postcode = `${outwardCode} ${inwardCode}`;
+    }
+    this.assessmentPostcode.setValue(postcode);
   }
 
   FormatTypeAheadResults(value: any): string {
@@ -389,6 +401,8 @@ export class AssessmentEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralView) {
+
+    console.log(referral);
 
     this.minDate = this.ConvertToDateStruct(referral.createdAt);
     this.FetchDropDownData();

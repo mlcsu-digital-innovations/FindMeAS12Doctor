@@ -1,3 +1,13 @@
+.form-control.is-invalid{
+  background-image: none;
+  padding-right: 0.5em;
+}
+
+.form-control.is-valid{
+  background-image: none;
+  padding-right: 0.5em;
+}
+
 button.less-padding {
   bottom:2px !important;
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fmas12d.Api.Controllers
 {
-  [Route("api/assessment")]
+  [Route("assessment")]
   [ApiController]
   [Authorize(Policy="User")]
   

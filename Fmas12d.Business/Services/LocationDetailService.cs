@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System;
+using Fmas12d.Business.Exceptions;
 
 namespace Fmas12d.Business.Services
 {
@@ -32,6 +34,8 @@ namespace Fmas12d.Business.Services
 
     public async Task<Location> GetPostcodeDetailsAsync(string stringPostcode)
     {
+      PostcodeIoResult convertedResult = null;
+
       using HttpClient client = new HttpClient();
       string endpoint =
         _configuration.GetValue("PostcodesIoEndpoint", "https://api.postcodes.io/postcodes/");
@@ -39,10 +43,46 @@ namespace Fmas12d.Business.Services
 
       using HttpResponseMessage response = await client.GetAsync(uri);
       string content = await response.Content.ReadAsStringAsync();
-      PostcodeIoResult convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
+      try {
+        convertedResult = JsonConvert.DeserializeObject<PostcodeIoResult>(content);
+        Location modelPostcode = new Location(convertedResult);
+        return modelPostcode;
+      }
+      catch {
+        throw new ModelStateException("postcode",
+          $"{convertedResult.Error} {stringPostcode}");
+      }
+    }
 
-      Location modelPostcode = new Location(convertedResult);
-      return modelPostcode;
+    public async Task<PostcodeIoSearchResult> SearchPostcodeAsync(string stringPostcode)
+    {
+      PostcodeIoSearchResult convertedResult = null;
+
+      using HttpClient client = new HttpClient();
+      string endpoint =
+        _configuration.GetValue("AddressSearchEndpoint", "https://api.getaddress.io/find/");
+
+      string apiKey = _configuration.GetValue("AddressSearchApiKey", "");
+
+      string uri = $"{endpoint}{stringPostcode}?api-key={apiKey}&sort=true";
+
+      using HttpResponseMessage response = await client.GetAsync(uri);
+
+      if (response.IsSuccessStatusCode){
+        string content = await response.Content.ReadAsStringAsync();
+        try {
+          convertedResult = JsonConvert.DeserializeObject<PostcodeIoSearchResult>(content);
+          return convertedResult;
+        }
+        catch {
+          throw new ModelStateException("postcode",
+            $"Error searching {stringPostcode}");
+        }
+      } else {
+        throw new ModelStateException("postcode", "boom");
+      }
+
+
     }
   }
 }

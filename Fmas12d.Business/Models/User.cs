@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace Fmas12d.Business.Models
 {
@@ -15,11 +16,11 @@ namespace Fmas12d.Business.Models
       // TODO BankDetails
       // TODO CompletedAssessments
       // TODO CompletionConfirmationAssessments
-      // TODO ContactDetails
+      ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd, false)).ToList();
       // TODO CreatedAssessments
       DisplayName = entity.DisplayName;
       // TODO DoctorStatuses
-      // TODO GenderType
+      GenderType = new GenderType(entity.GenderType);
       GenderTypeId = entity.GenderTypeId;
       GmcNumber = entity.GmcNumber;
       HasReadTermsAndConditions = entity.HasReadTermsAndConditions;
@@ -34,7 +35,10 @@ namespace Fmas12d.Business.Models
       // TODO Section12ApprovalStatus
       Section12ApprovalStatusId = entity.Section12ApprovalStatusId;
       Section12ExpiryDate = entity.Section12ExpiryDate;
-      // TODO UserSpecialities
+      UserSpecialities = entity
+        .UserSpecialities
+        ?.Select(us => new UserSpeciality(us, false))
+        .ToList();
       // TODO UserAssessmentClaims
       // TODO UserAssessmentClaimSelections
       // TODO UserAssessmentNotification
@@ -77,6 +81,8 @@ namespace Fmas12d.Business.Models
 
     public bool IsDoctor { get { return ProfileType?.IsDoctor ?? false; } }
 
+    public string ProfileTypeName { get { return ProfileType?.Name; } }
+
     // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
     // for this to work with .ThenInclude()
     public static Expression<Func<Data.Entities.User, User>> ProjectFromEntity
@@ -86,5 +92,12 @@ namespace Fmas12d.Business.Models
         return userEntity => new User(userEntity);
       }
     }
+
+    public ContactDetail GetContactDetailTypeBase()
+    {
+      return ContactDetails
+        .SingleOrDefault(cd => cd.ContactDetailTypeId == ContactDetailType.BASE);
+    }
+
   }
 }

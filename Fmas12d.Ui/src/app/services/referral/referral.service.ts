@@ -14,6 +14,20 @@ import { ReferralView } from 'src/app/interfaces/referral-view';
 export class ReferralService {
   constructor(private httpClient: HttpClient) {}
 
+  public closeReferral(referralId: number, force?: boolean) {
+
+    let endpoint = `${environment.apiEndpoint}/referral/${referralId}/close`;
+
+    if ( force === true ) {
+      endpoint += '/force';
+    }
+
+    return this.httpClient.put(
+      endpoint,
+      null
+    );
+  }
+
   public getReferralSummary(referralId: number): Observable<Referral> {
     return this.httpClient.get(
       environment.apiEndpoint + `/referral/view/${referralId}/summary`
@@ -65,8 +79,23 @@ export class ReferralService {
 
   public updateReferral(referral: Referral) {
 
-    // ToDo: return the results of the actual api call
-    return of(referral)
-    .pipe(delay(2000));
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/referral/${referral.id}`,
+      referral,
+      { headers }
+    );
+  }
+
+  public updateRetrospectiveReferral(referral: Referral) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/referral/${referral.id}/retrospective`,
+      referral,
+      { headers }
+    );
   }
 }
