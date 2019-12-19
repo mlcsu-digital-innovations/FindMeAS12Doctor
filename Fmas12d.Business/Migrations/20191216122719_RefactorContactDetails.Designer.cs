@@ -4,14 +4,16 @@ using Fmas12d.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191216122719_RefactorContactDetails")]
+    partial class RefactorContactDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -979,6 +981,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
+                    b.Property<int?>("CcgId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ContactDetailTypeId")
                         .HasColumnType("int");
 
@@ -1005,8 +1010,8 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Town")
                         .HasColumnType("nvarchar(max)");
@@ -1017,6 +1022,8 @@ namespace Fmas12d.Business.Migrations
                     b.HasKey("Id");
 
                     b.HasAlternateKey("ContactDetailTypeId", "UserId");
+
+                    b.HasIndex("CcgId");
 
                     b.HasIndex("ModifiedByUserId");
 
@@ -1092,8 +1099,8 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Town")
                         .HasColumnType("nvarchar(max)");
@@ -1132,8 +1139,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1195,8 +1202,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -3811,6 +3818,10 @@ namespace Fmas12d.Business.Migrations
 
             modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetail", b =>
                 {
+                    b.HasOne("Fmas12d.Data.Entities.Ccg", null)
+                        .WithMany("ContactDetails")
+                        .HasForeignKey("CcgId");
+
                     b.HasOne("Fmas12d.Data.Entities.ContactDetailType", "ContactDetailType")
                         .WithMany("ContactDetails")
                         .HasForeignKey("ContactDetailTypeId")
@@ -3833,7 +3844,7 @@ namespace Fmas12d.Business.Migrations
             modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailCcg", b =>
                 {
                     b.HasOne("Fmas12d.Data.Entities.Ccg", "Ccg")
-                        .WithMany("ContactDetailCcgs")
+                        .WithMany()
                         .HasForeignKey("CcgId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

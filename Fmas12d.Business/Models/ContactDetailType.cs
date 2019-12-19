@@ -7,7 +7,6 @@ namespace Fmas12d.Business.Models
   {
     public const int BASE = 1;
     public const int HOME = 2;
-    public const int WORK = 3;    
 
     public ContactDetailType() { }
     public ContactDetailType(Data.Entities.ContactDetailType entity) : base(entity)

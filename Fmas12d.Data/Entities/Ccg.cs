@@ -7,7 +7,7 @@ namespace Fmas12d.Data.Entities
   public partial class Ccg : BaseEntity, ICcg
   {
     public virtual IList<BankDetail> BankDetails { get; set; }
-    public virtual IList<ContactDetail> ContactDetails { get; set; }
+    public virtual IList<ContactDetailCcg> ContactDetailCcgs { get; set; }
     public int CostCentre { get; set; }
     public virtual IList<Assessment> Assessments { get; set; }
     [Column(TypeName = "decimal(18,2)")]

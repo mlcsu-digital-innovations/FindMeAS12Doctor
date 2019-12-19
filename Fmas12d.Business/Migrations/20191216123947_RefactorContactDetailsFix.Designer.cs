@@ -4,14 +4,16 @@ using Fmas12d.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191216123947_RefactorContactDetailsFix")]
+    partial class RefactorContactDetailsFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1005,8 +1007,8 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Town")
                         .HasColumnType("nvarchar(max)");
@@ -1092,8 +1094,8 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Town")
                         .HasColumnType("nvarchar(max)");
@@ -1132,8 +1134,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1195,8 +1197,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("TelephoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

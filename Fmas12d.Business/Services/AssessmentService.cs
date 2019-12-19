@@ -92,7 +92,7 @@ namespace Fmas12d.Business.Services
 
       if (!await AddDoctorAvailabilityToAssessmentDoctorIfAvailableAsync(assessmentDoctor, entity))
       {
-        await AddDoctorBaseContactDetailToAssessmentDoctorForAssessmentCcgAsync(
+        await AddDoctorBaseContactDetailToAssessmentDoctorAsync(
           assessmentDoctor, 
           entity
         );
@@ -936,14 +936,13 @@ namespace Fmas12d.Business.Services
       return false;
     }
 
-    private async Task<bool> AddDoctorBaseContactDetailToAssessmentDoctorForAssessmentCcgAsync(
+    private async Task<bool> AddDoctorBaseContactDetailToAssessmentDoctorAsync(
       Entities.AssessmentDoctor assessmentDoctor,
       Entities.Assessment assessment
     )
     {
       ContactDetail contactDetail = await 
-       _contactDetailsService.GetBaseContactDetailTypeForCcgUserAsync(
-         assessment.CcgId.Value,
+       _contactDetailsService.GetBaseContactDetailTypeForUserAsync(
          assessmentDoctor.DoctorUserId,
          true,
          true
