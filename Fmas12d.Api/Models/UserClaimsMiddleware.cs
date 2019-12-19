@@ -40,8 +40,7 @@ namespace Fmas12d.Models
       if (httpContext.User != null)
       {
         if (!httpContext.User.Identity.IsAuthenticated &&
-            (_environment.IsEnvironment(Startup.ENV_POSTMAN) ||
-             _environment.IsEnvironment(Startup.ENV_DISABLEAUTHENTICATION)))
+            (_environment.IsEnvironment(Startup.ENV_DISABLEAUTHENTICATION)))
         {
           SpoofSystemAdminUserForDevelopmentWithNoAuthentication(httpContext);
           isSpoofingSystemAdmin = true;
@@ -59,7 +58,9 @@ namespace Fmas12d.Models
           if (identityServerIdentifier == null)
           {
             httpContext.Response.StatusCode = 400;
-            await httpContext.Response.WriteAsync("Missing User Claim");
+            await httpContext.Response.WriteAsync(
+              $"Missing User Claim {CLAIM_AZURE_AD_IDENITIFER}"
+            );
             return;
           }
           else
@@ -77,15 +78,17 @@ namespace Fmas12d.Models
               if (user == null)
               {
                 httpContext.Response.StatusCode = 401;
-                await httpContext.Response.WriteAsync("Invalid User Claim");
+                await httpContext.Response.WriteAsync(
+                  $"Invalid User Claim {identityServerIdentifier}"
+                );
                 return;
               }
 
               profileTypeId = user.ProfileTypeId;
               userId = user.Id;
 
-              memoryCache.Set(cacheUserIdKey, userId, new TimeSpan(30, 0, 0));
-              memoryCache.Set(cacheProfileTypeIdKey, profileTypeId, new TimeSpan(30, 0, 0));
+              memoryCache.Set(cacheUserIdKey, userId, new TimeSpan(0, 30, 0));
+              memoryCache.Set(cacheProfileTypeIdKey, profileTypeId, new TimeSpan(0, 30, 0));
             }
 
             List<Claim> userClaims = new List<Claim>

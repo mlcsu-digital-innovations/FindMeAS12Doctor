@@ -9,6 +9,7 @@ export interface ReferralEdit {
   patientCcgName: number;
   patientGpPracticeId: number;
   patientGpPracticeNameAndPostcode: number;
+  patientId: number;
   patientNhsNumber: number;
   patientResidentialPostcode: string;
   statusName: string;

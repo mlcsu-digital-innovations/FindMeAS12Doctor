@@ -32,7 +32,7 @@ import * as moment from 'moment';
 export class AssessmentCreateComponent implements OnInit {
 
   addresses$: Observable<any>;
-  addressList: AddressResult[];
+  addressList: string[];
   cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
@@ -192,9 +192,11 @@ export class AssessmentCreateComponent implements OnInit {
     this.assessmentAddressField.setValue('');
     this.isSearchingForPostcode = true;
 
+    this.FormatPostcode();
+
     this.postcodeValidationService.searchPostcode(this.assessmentPostcodeField.value)
       .subscribe(address => {
-        this.addressList.push(address);
+        this.addressList = address.addresses;
       }, (err) => {
         this.isSearchingForPostcode = false;
         this.toastService.displayError({
@@ -306,7 +308,7 @@ export class AssessmentCreateComponent implements OnInit {
 
     // can only store 4 lines of the address
     for (let i = 0; i < 4; i++) {
-      if (addressSplitByCommas.length >= i &&
+      if (addressSplitByCommas.length - 1 >= i &&
           addressSplitByCommas[i].trim() !== this.assessmentPostcodeField.value) {
             addressLines.push(addressSplitByCommas[i].trim());
       } else {
@@ -315,6 +317,16 @@ export class AssessmentCreateComponent implements OnInit {
     }
 
     return addressLines;
+  }
+
+  FormatPostcode() {
+    let postcode = this.assessmentPostcodeField.value.trim();
+    if (postcode.indexOf(' ') === -1 && postcode.length > 3) {
+      const inwardCode = postcode.substr(postcode.length - 3, 3);
+      const outwardCode = postcode.substr(0, postcode.length - 3);
+      postcode = `${outwardCode} ${inwardCode}`;
+    }
+    this.assessmentPostcodeField.setValue(postcode);
   }
 
   FormatTypeAheadResults(value: any): string {

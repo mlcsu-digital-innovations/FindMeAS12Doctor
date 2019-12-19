@@ -85,7 +85,10 @@
           <form [formGroup]="doctorForm" novalidate>
 
             <div class="form-row" style="margin:10px; padding-top:10px; overflow: auto;">
-              <table class="table table-bordered table-sm table-referral-list">
+              <table
+                class="table table-bordered table-sm table-referral-list"
+                *ngIf="assessment.doctorsSelected != null && assessment.doctorsSelected.length > 0"
+              >
                 <thead>
                   <tr>
                     <th class="text-center" scope="col" sortable="doctorName" (sort)="OnSort($event)">
@@ -103,6 +106,12 @@
                     <th class="text-center sm-col" scope="col" sortable="distanceFromAssessment" (sort)="OnSort($event)">
                       Distance (miles)
                     </th>
+                    <th class="text-center" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
+                      Responded
+                    </th>                      
+                    <th class="text-center" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
+                      Accepted
+                    </th>                    
                     <th class="text-center" scope="col">
                       Allocate
                     </th>
@@ -120,16 +129,23 @@
                       {{selectedDoctor.type}}
                     </td>
                     <td>
-                      <span *ngFor="let speciality of selectedDoctor.specialityName">
-                        {{speciality}},
+                      <span *ngFor="let speciality of selectedDoctor.specialityNames; let isLast=last">
+                        {{speciality}}{{isLast ? '' : ", "}}
                       </span>
                     </td>
                     <td class="text-center sm-col">
                       {{selectedDoctor.distance | number: '1.1-1'}}
                     </td>
+                    <td  class="text-center sm-col">
+                      {{selectedDoctor.hasResponded ? "Yes" : "No"}}
+                    </td>                       
+                    <td  class="text-center sm-col">
+                      {{selectedDoctor.hasResponded ? (selectedDoctor.hasAccepted ? "Yes" : "No") : ""}}
+                    </td>                    
                     <td class="checkmark-content text-center sm-col" style="position: relative">
-
-                      <label class="container">
+                      
+                      <label class="container"
+                              *ngIf="selectedDoctor.hasAccepted">
                         <input
                           class=""
                           type="checkbox"
@@ -146,10 +162,25 @@
                 class="empty-table"
                 *ngIf="assessment.doctorsSelected == null || assessment.doctorsSelected.length == 0"
               >
-                No doctors have been selected for this assessment!
+                There are no selected doctors for this assessment!
               </div>
             </div>
 
+            <div
+              class="form-row ml-more-2 mr-more-2 mb-more-2"
+              *ngIf="assessment.doctorsAllocated && assessment.doctorsAllocated.length > 0">
+              <div class="col-md-6 offset-md-6 text-right">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="AllDoctorsAllocated()"
+                  [disabled]="allocatedDoctors.length > 0"
+                >
+                <i class="fas fa-check-double"></i>
+                All Doctors Allocated
+                </button>
+              </div>
+            </div>
             <div class="form-row ml-more-2 mr-more-2">
               <div class="col-md-2">
               </div>
@@ -182,9 +213,18 @@
   </div>
 
 <app-delay-spinner [delayMessage]="'Allocating Doctors'" *ngIf="isSavingAllocation"></app-delay-spinner>
+<app-delay-spinner [delayMessage]="'Scheduling Assessment'" *ngIf="isSchedulingAssessment"></app-delay-spinner>
 
 <ng-template #loading>
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
+</ng-template>
+
+<ng-template #allocationModal let-minDate let-isPlanned>
+  <app-allocation-complete-modal
+  [isPlanned]=assessment.isPlanned
+  (actioned)="OnAllocationAction($event)"
+  >
+  </app-allocation-complete-modal>
 </ng-template>
 
 <ng-template #confirmSelection>

@@ -15,6 +15,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       "Assessment updated description";
     internal const string DESCRIPTION_NOT_ALLOCATED_TO_ASSESSMENT =
       "Not allocated to assessment description";
+    internal const string DESCRIPTION_REMOVED_FROM_ASSESSMENT =
+      "Removed from assessment description";          
     internal const string DESCRIPTION_SELECTED_FOR_ASSESSMENT =
       "Selected for assessment description";    
 
@@ -26,6 +28,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       "Assessment {0} at {1} updated template";
     internal const string MESSAGE_TEMPLATE_NOT_ALLOCATED_TO_ASSESSMENT =
       "Not allocated to assessment {0} at {1} template";
+    internal const string MESSAGE_TEMPLATE_REMOVED_FROM_ASSESSMENT =
+      "Removed from assessment {0} at {1} template";
     internal const string MESSAGE_TEMPLATE_SELECTED_FOR_ASSESSMENT =
       "Selected for assessment {0} at {1} template";      
 
@@ -33,6 +37,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string NAME_ASSESSMENT_CANCELLED = "Assessment Cancelled";      
     internal const string NAME_ASSESSMENT_UPDATED = "Assessment Updated";
     internal const string NAME_NOT_ALLOCATED_TO_ASSESSMENT = "Not allocated to assessment";
+    internal const string NAME_REMOVED_FROM_ASSESSMENT = "Removed from assessment";
     internal const string NAME_SELECTED_FOR_ASSESSMENT = "Selected for assessment";    
     #endregion
 
@@ -72,6 +77,13 @@ namespace Fmas12d.Business.Migrations.Seeds
         DESCRIPTION_NOT_ALLOCATED_TO_ASSESSMENT,
         MESSAGE_TEMPLATE_NOT_ALLOCATED_TO_ASSESSMENT
       );  
+
+      AddOrUpdate(
+        Models.NotificationText.REMOVED_FROM_ASSESSMENT,
+        NAME_REMOVED_FROM_ASSESSMENT,
+        DESCRIPTION_REMOVED_FROM_ASSESSMENT,
+        MESSAGE_TEMPLATE_REMOVED_FROM_ASSESSMENT
+      );        
 
       SaveChangesWithIdentity();
     }

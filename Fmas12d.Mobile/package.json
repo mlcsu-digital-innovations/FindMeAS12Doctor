@@ -5,7 +5,8 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "build": "ng build",
-    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Mobile",
+    "build:aimes-uat": "del-cli ../Deployment/AimesUat/Fmas12d.Mobile --force && ng build --configuration=aimes-uat && cpy ./deployment/web.config ../Deployment/AimesUat/Fmas12d.Mobile",
+    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Mobile",    
     "e2e": "ng e2e",
     "ionic": "ionic",
     "lint": "ng lint",

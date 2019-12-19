@@ -15,6 +15,7 @@ namespace Fmas12d.Api
       {
         Log.Information("Starting web host");
         IWebHost host = CreateWebHostBuilder(args).Build();
+        bool IsOkToStart = false;
 
         if (args.Length > 0)
         {
@@ -42,7 +43,7 @@ namespace Fmas12d.Api
           {
             Log.Information("Seeding database with test data without referrals");
             host.SeedData(WebHostExtenstions.SeedType.TestNoReferrals);
-          }          
+          }
           else if (args[0] == "/removeseed")
           {
             Log.Information("Removing all seed data from database");
@@ -63,14 +64,8 @@ namespace Fmas12d.Api
             Log.Information("Removing test data from database");
             host.SeedData(WebHostExtenstions.SeedType.RemoveTest);
           }
-          else
+          else if (args[0] != "/help" || args[0] != "/h")
           {
-            if (args[0] != "/help" || args[0] != "/h")
-            {
-              Log.Warning(
-                "Unknown argument {CommandLineArgument}",
-                args[0]);
-            }
             Console.WriteLine(
               "Available arguments:" + Environment.NewLine +
               "  Adding Seeds:" + Environment.NewLine +
@@ -86,8 +81,17 @@ namespace Fmas12d.Api
               "    /removeseedtest: Remove Test data from database"
             );
           }
+          else
+          {
+            IsOkToStart = true;
+          }
         }
         else
+        {
+          IsOkToStart = true;
+        }
+
+        if (IsOkToStart)
         {
           Log.Information("Running web host");
           host.Run();

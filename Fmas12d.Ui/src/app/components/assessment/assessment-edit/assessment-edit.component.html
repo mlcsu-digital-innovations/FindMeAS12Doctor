@@ -34,25 +34,8 @@
               <div class="col-md-8">
                 <label for="amhp">AMHP</label>
                 <div class="input-group">
-                  <div class="input-group-prepend">
-                    <button
-                      [disabled]="DisableIfParentIsDisabled('amhp')"
-                      type="button"
-                      class="btn btn-trash"
-                      (click)="ClearField('amhp')"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="amhp"
-                    #amhp
-                    [class.is-invalid]="hasAmhpSearchFailed"
-                    formControlName="amhp"
-                    [ngbTypeahead]="AmhpSearch"
-                    [resultFormatter]="FormatTypeAheadResults"
+                  <input type="search" class="form-control" id="amhp" #amhp [class.is-invalid]="hasAmhpSearchFailed"
+                    formControlName="amhp" [ngbTypeahead]="AmhpSearch" [resultFormatter]="FormatTypeAheadResults"
                     [inputFormatter]="FormatTypeAheadResults" />
                 </div>
               </div>
@@ -67,27 +50,20 @@
               </div>
             </div>
             <div class="form-row" *ngIf="amhpField.errors">
-                <div class="col-md-8 mb-2">
-                  <div class="invalid-field" *ngIf="amhpField.errors.MissingAmhpUser">
-                    * AMHP User is required
-                  </div>
+              <div class="col-md-8 mb-2">
+                <div class="invalid-field" *ngIf="amhpField.errors.MissingAmhpUser">
+                  * AMHP User is required
                 </div>
               </div>
+            </div>
             <!-- Planned assessment date / time -->
             <div class="form-row" *ngIf="referral.currentAssessment.isPlanned">
               <div class="col-md-6">
                 <label for="picker">Planned Assessment Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-4">
-                    <input
-                      class="form-control"
-                      formControlName='scheduledDate'
-                      placeholder="dd/mm/yyyy"
-                      name="scheduledDate"
-                      [minDate]='minDate'
-                      ngbDatepicker
-                      #e="ngbDatepicker"
-                    />
+                    <input class="form-control" formControlName='scheduledDate' placeholder="dd/mm/yyyy"
+                      name="scheduledDate" [minDate]='minDate' ngbDatepicker #e="ngbDatepicker" />
                   </div>
                   <div class="col-md-1 padding-left-1">
                     <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="e.toggle()"
@@ -105,7 +81,8 @@
             <!-- Planned Assessment Date / Time Errors-->
             <div class="form-row" *ngIf="scheduledDateField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div class="invalid-field" *ngIf="scheduledDateField.errors.MissingDate || scheduledDateField.errors.MissingTime">
+                <div class="invalid-field"
+                  *ngIf="scheduledDateField.errors.MissingDate || scheduledDateField.errors.MissingTime">
                   <span>* Date / Time of assessment is required</span>
                 </div>
               </div>
@@ -115,58 +92,25 @@
               <div class="col-md-2">
                 <label for="postCode">Post Code</label>
                 <div class="input-group">
-                  <div class="input-group-prepend">
-                    <button
-                      [disabled]="DisableIfParentIsDisabled('postCode')"
-                      type="button"
-                      class="btn btn-trash"
-                      (click)="ClearField('postCode')"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                  <input
-                    class="form-control"
-                    formControlName="postCode"
-                    id="postCode"
-                    type="text"
-                    oninput="this.value = this.value.toUpperCase()"
-                  />
+                  <input class="form-control" formControlName="postCode" id="postCode" type="search"
+                    oninput="this.value = this.value.toUpperCase()" />
                 </div>
               </div>
               <div class="col-md-2 mt-more-2">
                 <div class="button-container">
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-assessment mb-more-1"
-                    placement="top"
-                    ngbTooltip="Search for addresses"
-                    [openDelay]="1000"
-                    [closeDelay]="500"
-                    tooltipClass="subtle-tooltip"
-                    (click)="AddressSearch()"
-                    [disabled]="assessmentPostcode.value == '' || assessmentPostcode.errors != null"
-                  >
+                  <button type="button" class="btn btn-primary btn-assessment mb-more-1" placement="top"
+                    ngbTooltip="Search for addresses" [openDelay]="1000" [closeDelay]="500"
+                    tooltipClass="subtle-tooltip" (click)="AddressSearch()"
+                    [disabled]="assessmentPostcode.value == '' || assessmentPostcode.errors != null">
                     <i class="fas fa-search-location"></i>
                     {{ isSearchingForPostcode ? "Searching" : "Find" }}
-                    <span
-                      class="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                      *ngIf="isSearchingForPostcode"
-                    >
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="isSearchingForPostcode">
                     </span>
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-assessment btn-spaced mb-more-1"
-                    placement="top"
-                    ngbTooltip="Locate an address using an external web site"
-                    [openDelay]="1000"
-                    [closeDelay]="500"
-                    tooltipClass="subtle-tooltip"
-                    (click)="OpenLocationTab()"
-                  >
+                  <button type="button" class="btn btn-primary btn-assessment btn-spaced mb-more-1" placement="top"
+                    ngbTooltip="Locate an address using an external web site" [openDelay]="1000" [closeDelay]="500"
+                    tooltipClass="subtle-tooltip" (click)="OpenLocationTab()">
                     <i class="far fa-map"></i>
                     Locate
                   </button>
@@ -186,29 +130,24 @@
                   <span>* Postcode must be provided</span>
                 </div>
                 <div class="invalid-field" *ngIf="assessmentPostcode.errors.MissingAddress">
-                    <span>* Address must be provided</span>
-                 </div>
+                  <span>* Address must be provided</span>
+                </div>
               </div>
             </div>
             <div class="form-row">
               <div class="col-md-8" *ngIf="addressList.length == 0">
                 <label>Assessment Address</label>
                 <div class="current-address">
-                    {{referral.currentAssessment.fullAddress}}
+                  {{referral.currentAssessment.fullAddress}}
                 </div>
               </div>
               <div class="col-md-8" *ngIf="addressList.length > 0">
                 <label for="assessmentAddress">Assessment Address</label>
-                <select
-                  class="custom-select custom-select-lg mb-2 form-control"
-                  formControlName="assessmentAddress"
-                  #assessmentAddress
-                  id="assessmentAddress"
-                  appFocusOnShow
-                >
+                <select class="custom-select custom-select-lg mb-2 form-control" formControlName="assessmentAddress"
+                  #assessmentAddress id="assessmentAddress" appFocusOnShow>
                   <option disabled=true [selected]=true>Please Select Address</option>
-                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
-                    {{addressList[i].address}}
+                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i]">
+                    {{addressList[i]}}
                   </option>
                 </select>
               </div>
@@ -216,11 +155,8 @@
             <div class="form-row">
               <div class="col-md-8">
                 <label for="meetingArrangementComment">Additional Location Details</label>
-                <textarea
-                  class="form-control"
-                  formControlName="meetingArrangementComment"
-                  id="meetingArrangementComment"
-                >
+                <textarea class="form-control" formControlName="meetingArrangementComment"
+                  id="meetingArrangementComment">
                 </textarea>
               </div>
             </div>
@@ -228,13 +164,8 @@
             <div class="form-row">
               <div class="col-md-8 mb-2">
                 <label for="assessmentDetails">Further Information / Risks</label>
-                <ng-multiselect-dropdown
-                  formControlName="assessmentDetails"
-                  [settings]="dropdownSettings"
-                  [data]="assessmentDetails"
-                  (onSelect)="OnItemSelect($event)"
-                  (onDeSelect)="OnItemDeselect($event)"
-                >
+                <ng-multiselect-dropdown formControlName="assessmentDetails" [settings]="dropdownSettings"
+                  [data]="assessmentDetails" (onSelect)="OnItemSelect($event)" (onDeSelect)="OnItemDeselect($event)">
                 </ng-multiselect-dropdown>
               </div>
             </div>
@@ -243,21 +174,8 @@
               <div class="col-md-4">
                 <label for="specialityName">Speciality</label>
                 <div class="input-group">
-                  <div class="input-group-prepend select-trash">
-                    <button
-                      type="button"
-                      class="btn btn-trash"
-                      (click)="ClearField('speciality')"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                  <select
-                    class="custom-select custom-select-lg mb-2 form-control"
-                    formControlName="speciality"
-                    #speciality
-                    id="speciality"
-                  >
+                  <select class="custom-select custom-select-lg mb-2 form-control" formControlName="speciality"
+                    #speciality id="speciality">
                     <option [selected]=true></option>
                     <option *ngFor="let speciality of specialities; let i=index" [value]="specialities[i].id">
                       {{specialities[i].name}}
@@ -268,26 +186,10 @@
               <div class="col-md-4">
                 <label for="preferredDoctorGenderTypeName">Preferred Doctor Gender</label>
                 <div class="input-group">
-                  <div class="input-group-prepend select-trash">
-                    <button
-                      type="button"
-                      class="btn btn-trash"
-                      (click)="ClearSelect('preferredGender')"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                  <select
-                    class="custom-select custom-select-lg mb-2 form-control"
-                    formControlName="preferredGender"
-                    #preferredGender
-                    id="preferredGender"
-                  >
+                  <select class="custom-select custom-select-lg mb-2 form-control" formControlName="preferredGender"
+                    #preferredGender id="preferredGender">
                     <option [selected]=true></option>
-                    <option
-                      *ngFor="let gender of genderTypes; let i=index;"
-                      [value]="genderTypes[i].id"
-                    >
+                    <option *ngFor="let gender of genderTypes; let i=index;" [value]="genderTypes[i].id">
                       {{genderTypes[i].name}}
                     </option>
                   </select>
@@ -300,21 +202,11 @@
                 <label for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
                   <div class="col-md-4">
-                    <input
-                      class="form-control"
-                      formControlName='toBeCompletedByDate'
-                      placeholder="dd/mm/yyyy"
-                      name="toBeCompletedByDate"
-                      [minDate]='minDate'
-                      ngbDatepicker
-                      #d="ngbDatepicker"
-                    />
+                    <input class="form-control" formControlName='toBeCompletedByDate' placeholder="dd/mm/yyyy"
+                      name="toBeCompletedByDate" [minDate]='minDate' ngbDatepicker #d="ngbDatepicker" />
                   </div>
                   <div class="col-md-1 padding-left-1">
-                    <button
-                      id="calendarBtn"
-                      class="btn btn-outline-secondary calendar"
-                      (click)="d.toggle()"
+                    <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()"
                       type="button">
                       <i class="far fa-calendar-alt"></i>
                     </button>
@@ -329,8 +221,7 @@
             <!-- Planned Assessment Date / Time Errors-->
             <div class="form-row" *ngIf="scheduledDateField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div
-                  class="invalid-field"
+                <div class="invalid-field"
                   *ngIf="toBeCompletedByDateField.errors.MissingDate || toBeCompletedByTimeField.errors.MissingTime">
                   <span>* Date / Time of assessment is required</span>
                 </div>
@@ -379,7 +270,7 @@
               <div class="col-md-2 mb-2">
                 <button class="btn btn-primary btn-standard" type="button" (click)="ReselectDoctors()">
                   <i class="fas fa-redo"></i>
-                    Reselect Doctors
+                    Select Doctors
                 </button>
               </div>
               <div class="col-md-2 mb-2 offset-md-8 text-right">
@@ -405,22 +296,16 @@
 </ng-template>
 
 <ng-template #cancelUpdate>
-  <app-cancel-action-modal
-    [modalTitle]="'Cancel Update'"
+  <app-cancel-action-modal [modalTitle]="'Cancel Update'"
     [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
-    (actioned)="OnCancelModalAction($event)"
-  >
+    (actioned)="OnCancelModalAction($event)">
   </app-cancel-action-modal>
 </ng-template>
 
 <ng-template #selectDoctors>
-  <app-cancel-action-modal
-    [modalTitle]="'Unsaved changes'"
-    [modalBody]="'Save update before reselecting doctors?'"
-    (actioned)="OnCancelReselectAction($event)"
-  >
+  <app-cancel-action-modal [modalTitle]="'Unsaved changes'" [modalBody]="'Save update before reselecting doctors?'"
+    (actioned)="OnCancelReselectAction($event)">
   </app-cancel-action-modal>
 </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
-

@@ -25,6 +25,10 @@ label {
   font-size: 1.2em;
 }
 
+.primary {
+  color: #0db3bf;
+}
+
 .form-control:focus{
   color: #666;
 }

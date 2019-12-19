@@ -7,6 +7,7 @@ export class AmhpAssessmentView {
   address2: string;
   address3: string;
   address4: string;
+  canUpdateOutcome: boolean;
   dateTime: Date;
   detailTypes: DetailType[];
   doctorsAllocated: AmhpAssessmentViewDoctor[];
@@ -16,7 +17,7 @@ export class AmhpAssessmentView {
   meetingArrangementComment: string;
   patientIdentifier: string;
   postcode: string;
-  referralId: string;
+  referralId: string;  
   specialityName: string;
 
   constructor() { }

@@ -2,7 +2,8 @@ import { ActivatedRoute } from '@angular/router'
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service'
 import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-amhp-assessment-view',
@@ -12,22 +13,59 @@ import { NavController } from '@ionic/angular';
 export class AmhpAssessmentViewPage implements OnInit {
   public assessmentLastUpdated: Date;
   public assessmentView: AmhpAssessmentView;
+  public displayDoctors: boolean;
+  private loading: HTMLIonLoadingElement;  
 
   constructor(
     private route: ActivatedRoute,
     private assessmentService: AmhpAssessmentService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private loadingController: LoadingController,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
-    this.assessmentLastUpdated = new Date();
+    this.displayDoctors = false;    
     const assessmentId = +this.route.snapshot.paramMap.get('id');
 
     if (assessmentId) {
-      this.assessmentService.getView(assessmentId)
-        .subscribe(data => this.assessmentView = data);
+      const request = this.assessmentService.getView(assessmentId);
+      this.showLoading();
+
+      request.subscribe((result: AmhpAssessmentView) => {
+        this.assessmentLastUpdated = new Date();
+        this.assessmentView = result;
+
+        if (this.assessmentView.doctorsAllocated && this.assessmentView.doctorsAllocated.length > 0 || 
+          this.assessmentView.doctorsSelected && this.assessmentView.doctorsSelected.length > 0)
+        {
+          this.displayDoctors = true;
+        }
+        
+        this.closeLoading();
+      }, error => {        
+        this.closeLoading();
+        this.toastService.displayError({
+          message: "Unable to retrieve assessment details"
+        });
+      });
     }
 
+  }
+
+  closeLoading() {
+    if (this.loading) {
+      this.loading.dismiss();
+    }
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines',
+      duration: 5000
+    });
+    await this.loading.present();
   }
 
   public updateAssessment(): void {

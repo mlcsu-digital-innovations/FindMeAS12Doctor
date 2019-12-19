@@ -104,7 +104,7 @@ namespace Fmas12d.Business.Models
     public string AmhpUserName { get { return AmhpUser?.DisplayName; } }
 
     public DateTimeOffset DateTime
-    { get { return MustBeCompletedBy ?? ScheduledTime ?? default; } }
+    { get { return ScheduledTime ?? MustBeCompletedBy ?? default; } }
 
     public virtual IList<AssessmentDetailType> DetailTypes
     {

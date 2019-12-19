@@ -73,7 +73,7 @@ export class AppModule {
 
       const config: OpenIdConfiguration = {
         auto_userinfo: false,
-        client_id: "c898ea46-4e6e-4e55-b53b-8ae61c825507",
+        client_id: "9a667831-799d-4a8a-bce2-c168424cdabe",
         forbidden_route: "/forbidden",
         history_cleanup_off: true,
         iss_validation_off: true,
@@ -88,7 +88,7 @@ export class AppModule {
         silent_renew: false,
         silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,
         start_checksession: true,
-        stsServer: 'https://login.microsoftonline.com/df7baf74-a29e-4c5e-abee-0f073b7a5b91/',
+        stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
         trigger_authorization_result_event: true,
         unauthorized_route: '/unauthorized',
       };
@@ -97,7 +97,7 @@ export class AppModule {
 
       this.oidcSecurityService.setCustomRequestParameters(
         {
-          'resource': 'c898ea46-4e6e-4e55-b53b-8ae61c825507',
+          'resource': '9a667831-799d-4a8a-bce2-c168424cdabe',
           'response_mode': 'fragment'
         }
       );
