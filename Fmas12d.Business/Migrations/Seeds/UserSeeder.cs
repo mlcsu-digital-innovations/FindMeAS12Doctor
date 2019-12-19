@@ -13,13 +13,13 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     public const string DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
     public const string DISPLAY_NAME_FINANCE = "Finance";
-    public const string DISPLAY_NAME_HELENCROSS = "Helen Cross";
-    public const string DISPLAY_NAME_JEHANDAVIDBEYERS = "Jehan-David Beyers";
-    public const string DISPLAY_NAME_MARKCARTER = "Mark Carter";
-    public const string DISPLAY_NAME_NEILDAVIES = "Neil Davies";
-    public const string DISPLAY_NAME_NEILDAVIESMLCSU = "Neil Davies (MLCSU)";
-    public const string DISPLAY_NAME_NEILEDAVIES = "Neil E Davies";
-    public const string DISPLAY_NAME_STEPHENHARLAND = "Stephen Harland";
+    // public const string DISPLAY_NAME_HELENCROSS = "Helen Cross";
+    // public const string DISPLAY_NAME_JEHANDAVIDBEYERS = "Jehan-David Beyers";
+    // public const string DISPLAY_NAME_MARKCARTER = "Mark Carter";
+    // public const string DISPLAY_NAME_NEILDAVIES = "Neil Davies";
+    // public const string DISPLAY_NAME_NEILDAVIESMLCSU = "Neil Davies (MLCSU)";
+    // public const string DISPLAY_NAME_NEILEDAVIES = "Neil E Davies";
+    // public const string DISPLAY_NAME_STEPHENHARLAND = "Stephen Harland";
 
     public const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
     public const int GMCNUMBER_DOCTOR_MALE = 2222222;
@@ -36,20 +36,20 @@ namespace Fmas12d.Business.Migrations.Seeds
       "d5f1594d-cdee-4961-ab2b-dd70228c9611";
     public const string IDENTITY_SERVER_IDENTIFIER_FINANCE =
       "e2d78f4e-4a0c-4289-aafd-31a1d5928411";
-    public const string IDENTITY_SERVER_IDENTIFIER_HELENCROSS = 
-      "efc945eb-ee1b-4ed1-9fac-269c145196c6";      
-    public const string IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS = 
-      "ac74d440-5901-4660-9ed7-3e579e248e2e";      
-    public const string IDENTITY_SERVER_IDENTIFIER_MARKCARTER = 
-      "903ec2b7-a3be-4e91-a8ef-e3f5292f44f1";      
-    public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIES = 
-      "f52c4a24-4071-4cd8-a7be-9e6f27446aba";      
-    public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU = 
-      "b1f8a2ca-48d3-4c05-aff9-4c343384190b";      
-    public const string IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES = 
-      "bb3712bb-d1ea-4bbf-8a0c-02a3dae26b1d";      
-    public const string IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND = 
-      "c37a5d2d-ffa0-47b7-9286-c4e252a65696";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_HELENCROSS = 
+    //   "efc945eb-ee1b-4ed1-9fac-269c145196c6";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS = 
+    //   "ac74d440-5901-4660-9ed7-3e579e248e2e";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_MARKCARTER = 
+    //   "903ec2b7-a3be-4e91-a8ef-e3f5292f44f1";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIES = 
+    //   "f52c4a24-4071-4cd8-a7be-9e6f27446aba";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU = 
+    //   "b1f8a2ca-48d3-4c05-aff9-4c343384190b";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES = 
+    //   "bb3712bb-d1ea-4bbf-8a0c-02a3dae26b1d";      
+    // public const string IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND = 
+    //   "c37a5d2d-ffa0-47b7-9286-c4e252a65696";      
     public const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = 
       "bf673270-2538-4e59-9d26-5b4808fd9ef6";
 
@@ -104,54 +104,54 @@ namespace Fmas12d.Business.Migrations.Seeds
         IDENTITY_SERVER_IDENTIFIER_FINANCE
       );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_HELENCROSS,
-        GetGenderTypeFemale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_HELENCROSS
-      );
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_HELENCROSS,
+      //   GetGenderTypeFemale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_HELENCROSS
+      // );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_JEHANDAVIDBEYERS,
-        GetGenderTypeMale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS
-      );
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_JEHANDAVIDBEYERS,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS
+      // );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_MARKCARTER,
-        GetGenderTypeMale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_MARKCARTER
-      );
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_MARKCARTER,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_MARKCARTER
+      // );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_NEILDAVIES,
-        GetGenderTypeMale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_NEILDAVIES
-      );
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_NEILDAVIES,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_NEILDAVIES
+      // );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_NEILDAVIESMLCSU,
-        GetGenderTypeMale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU
-      );
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_NEILDAVIESMLCSU,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU
+      // );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_NEILEDAVIES,
-        GetGenderTypeMale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES
-      );
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_NEILEDAVIES,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES
+      // );
 
-      AddUpdateUserWithDefaults(
-        DISPLAY_NAME_STEPHENHARLAND,
-        GetGenderTypeMale().Id,
-        GetProfileTypeAdmin().Id,
-        IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND
-      );                              
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_STEPHENHARLAND,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND
+      // );                              
     }
 
     private User AddUpdateUserWithDefaults(
