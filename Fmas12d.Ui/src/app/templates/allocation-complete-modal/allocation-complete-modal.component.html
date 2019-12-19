@@ -19,11 +19,12 @@
             <input
               class="form-control"
               placeholder="dd/mm/yyyy"
-              name="toBeCompletedByDate"
+              name="scheduledDate"
               [minDate]='minimumDate'
               [(ngModel)]="scheduledDate"
               ngbDatepicker
               #d="ngbDatepicker"
+              (select)="dateChanged()"
             />
         </div>
         <div class="col-md-1 padding-left-1">
@@ -37,24 +38,19 @@
         </div>
         <div class="col-md-1 at">@</div>
         <div class="col-md-4 mlt-less-1 mt-less-5">
-            <ngb-timepicker [minuteStep]="5"></ngb-timepicker>
+            <ngb-timepicker [minuteStep]="5" [(ngModel)]="scheduledTime" name="scheduledTime"></ngb-timepicker>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Date Format Errors-->
-  <div class="form-row">
+  <div class="form-row" *ngIf="dateError != ''">
     <div class="col-md-4 mb-2 reduced-top-margin">
       <div
         class="invalid-field"
       >
-        <span>Invalid Date Format</span>
-      </div>
-      <div
-        class="invalid-field"
-      >
-        <span>* Date is earlier than the referral creation date</span>
+        <span>{{dateError}}</span>
       </div>
     </div>
   </div>

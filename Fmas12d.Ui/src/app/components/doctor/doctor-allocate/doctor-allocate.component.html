@@ -85,7 +85,10 @@
           <form [formGroup]="doctorForm" novalidate>
 
             <div class="form-row" style="margin:10px; padding-top:10px; overflow: auto;">
-              <table class="table table-bordered table-sm table-referral-list">
+              <table
+                class="table table-bordered table-sm table-referral-list"
+                *ngIf="assessment.doctorsSelected != null && assessment.doctorsSelected.length > 0"
+              >
                 <thead>
                   <tr>
                     <th class="text-center" scope="col" sortable="doctorName" (sort)="OnSort($event)">
@@ -152,7 +155,7 @@
                 class="empty-table"
                 *ngIf="assessment.doctorsSelected == null || assessment.doctorsSelected.length == 0"
               >
-                No doctors have been selected for this assessment!
+                There are no selected doctors for this assessment!
               </div>
             </div>
 
@@ -209,10 +212,11 @@
   <app-delay-spinner [delayMessage]="'Retrieving assessment data'"></app-delay-spinner>
 </ng-template>
 
-<ng-template #allocationModal let-minDate=assessment.dateTime>
+<ng-template #allocationModal let-minDate let-isPlanned>
   <app-allocation-complete-modal
-  [isPlanned]='assessment.isPlanned'
+  [isPlanned]=assessment.isPlanned
   (actioned)="OnAllocationAction($event)"
+  [minDate]=assessment.dateTime
   >
   </app-allocation-complete-modal>
 </ng-template>

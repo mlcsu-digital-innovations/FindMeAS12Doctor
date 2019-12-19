@@ -1,5 +1,5 @@
 import { AllocationConfirmation } from 'src/app/interfaces/allocation-confirmation';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
@@ -8,11 +8,12 @@ import * as moment from 'moment';
   templateUrl: './allocation-complete-modal.component.html',
   styleUrls: ['./allocation-complete-modal.component.css']
 })
-export class AllocationCompleteModalComponent {
+export class AllocationCompleteModalComponent implements OnInit {
 
-  public scheduledDate: Date;
-  public scheduledTime: Date;
+  public scheduledDate: NgbDateStruct;
+  public scheduledTime: NgbTimeStruct;
   public minimumDate: NgbDateStruct;
+  public dateError: string = '';
 
   @Input()
   minDate: any;
@@ -22,18 +23,16 @@ export class AllocationCompleteModalComponent {
 
   @Output() actioned = new EventEmitter<AllocationConfirmation>();
 
-  constructor() {
-    console.log(this.minDate);
+  ngOnInit() {
     this.minimumDate = this.ConvertToDateStruct(this.minDate);
-    console.log(this.minimumDate);
+    this.scheduledDate = this.ConvertToDateStruct(new Date());
+    this.scheduledTime = this.ConvertToTimeStruct(new Date());
+
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
 
-    console.log(dateValue);
-
     const momentDate = moment(dateValue);
-    console.log(momentDate);
     const dateStruct = {} as NgbDateStruct;
     dateStruct.day = momentDate.date();
     dateStruct.month = momentDate.month() + 1;
@@ -64,15 +63,38 @@ export class AllocationCompleteModalComponent {
       datePart.day,
       timePart.hour,
       timePart.minute,
-      timePart.second,
+      0,
       0
     );
   }
 
+
   modalAction(action: boolean) {
-    console.log(this.scheduledDate);
-    console.log(this.scheduledTime);
-    this.actioned.emit({confirmed: action, scheduledDate: null});
+
+    const selectedDate = this.CreateDateFromPickerObjects(this.scheduledDate, this.scheduledTime);
+    this.dateError = '';
+
+    if (isNaN(selectedDate.getTime())) {
+      this.dateError = 'Invalid Date Format';
+    } else {
+      const possibleDate = this.minDate;
+      possibleDate.setHours(this.minDate.getHours() - 3);
+
+      if (selectedDate < possibleDate) {
+        this.dateError = 'Date / Time is too early';
+      }
+    }
+
+    if (this.dateError !== '') {
+      return;
+    }
+
+    this.actioned.emit(
+      {
+        confirmed: action,
+        scheduledDate: selectedDate
+      }
+    );
   }
 
 }
