@@ -21,10 +21,10 @@ namespace Fmas12d.Api
 {
   public class Startup
   {
+    internal const string ENV_AIMES_UAT = "AimesUat";
     internal const string ENV_AZURE_DEVELOPMENT = "AzureDevelopment";
     internal const string ENV_DEVELOPMENT = "Development";
     internal const string ENV_DISABLEAUTHENTICATION = "DisableAuthentication";
-    internal const string ENV_POSTMAN = "Postman";
 
     public Startup(IConfiguration configuration)
     {
@@ -41,10 +41,10 @@ namespace Fmas12d.Api
       bool IsDevelopment =
         aspNetCoreEnvironment == ENV_AZURE_DEVELOPMENT ||
         aspNetCoreEnvironment == ENV_DEVELOPMENT ||
-        aspNetCoreEnvironment == ENV_DISABLEAUTHENTICATION ||
-        aspNetCoreEnvironment == ENV_POSTMAN;
+        aspNetCoreEnvironment == ENV_DISABLEAUTHENTICATION;
 
-      if (aspNetCoreEnvironment == ENV_DISABLEAUTHENTICATION) {
+      if (aspNetCoreEnvironment == ENV_DISABLEAUTHENTICATION)
+      {
         services.AddSingleton<IPolicyEvaluator, DisableAuthenticationPolicyEvaluator>();
       }
 
@@ -67,51 +67,58 @@ namespace Fmas12d.Api
         options =>
       {
 
+        options.AddPolicy("Admin", policy =>
+          policy.RequireClaim(
+            UserClaimsService.CLAIM_PROFILETYPEID,
+            ProfileType.ADMIN.ToString(),
+            ProfileType.SYSTEM.ToString()
+          )
+        );
 
-        // POSTMAN doesn't get the correct audience using the oauth2 endpoint
-        // so until it does we'll have to fudge the User policy
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == ENV_POSTMAN)
-        {
+        options.AddPolicy("AMHP", policy =>
+          policy.RequireClaim(
+            UserClaimsService.CLAIM_PROFILETYPEID,
+            ProfileType.ADMIN.ToString(),
+            ProfileType.AMHP.ToString(),
+            ProfileType.SYSTEM.ToString()
+          )
+        );
 
-          options.AddPolicy("Admin", policy =>
-            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+        options.AddPolicy("Doctor", policy =>
+          policy.RequireClaim(
+            UserClaimsService.CLAIM_PROFILETYPEID,
+            ProfileType.ADMIN.ToString(),
+            ProfileType.DOCTOR.ToString(),
+            ProfileType.SYSTEM.ToString()
+          )
+        );
 
-          options.AddPolicy("AMHP", policy =>
-            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+        options.AddPolicy("Finance", policy =>
+          policy.RequireClaim(
+            UserClaimsService.CLAIM_PROFILETYPEID,
+            ProfileType.ADMIN.ToString(),
+            ProfileType.FINANCE.ToString(),
+            ProfileType.SYSTEM.ToString()
+          )
+        );
 
-          options.AddPolicy("Doctor", policy =>
-            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
+        options.AddPolicy("SystemAdmin", policy =>
+          policy.RequireClaim(
+            UserClaimsService.CLAIM_PROFILETYPEID,
+            ProfileType.SYSTEM.ToString()
+          )
+        );
 
-          options.AddPolicy("Finance", policy =>
-            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
-
-          options.AddPolicy("SystemAdmin", policy =>
-            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
-
-          options.AddPolicy("User", policy =>
-            policy.RequireClaim("aud", "c898ea46-4e6e-4e55-b53b-8ae61c825507"));
-        }
-        else
-        {
-          options.AddPolicy("Admin", policy =>
-            policy.RequireClaim("JobTitle", "Admin", "SystemAdmin"));
-
-          options.AddPolicy("AMHP", policy =>
-          policy.RequireClaim("JobTitle", "Admin", "AMHP", "SystemAdmin"));
-
-          options.AddPolicy("Doctor", policy =>
-            policy.RequireClaim("JobTitle", "Admin", "Doctor", "SystemAdmin"));
-
-          options.AddPolicy("Finance", policy =>
-            policy.RequireClaim("JobTitle", "Admin", "Finance", "SystemAdmin"));
-
-          options.AddPolicy("SystemAdmin", policy =>
-            policy.RequireClaim("JobTitle", "SystemAdmin"));
-
-          options.AddPolicy("User", policy =>
-            policy.RequireClaim("JobTitle", "Admin", "AMHP", "Doctor", "Finance", "SystemAdmin"));
-        }
-
+        options.AddPolicy("User", policy =>
+          policy.RequireClaim(
+            UserClaimsService.CLAIM_PROFILETYPEID,
+            ProfileType.ADMIN.ToString(),
+            ProfileType.AMHP.ToString(),
+            ProfileType.DOCTOR.ToString(),
+            ProfileType.FINANCE.ToString(),
+            ProfileType.SYSTEM.ToString()
+          )
+        );
       });
 
       services.AddMvc()
@@ -148,7 +155,7 @@ namespace Fmas12d.Api
           options.EnableDetailedErrors();
         }
       });
-     
+
       services.AddScoped<IUserClaimsService, UserClaimsService>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<ICcgService, CcgService>();
@@ -187,8 +194,7 @@ namespace Fmas12d.Api
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       if (env.IsDevelopment() ||
-          env.IsEnvironment(ENV_AZURE_DEVELOPMENT) ||
-          env.IsEnvironment(ENV_POSTMAN))
+          env.IsEnvironment(ENV_AZURE_DEVELOPMENT))
       {
         app.UseDeveloperExceptionPage();
         IdentityModelEventSource.ShowPII = true;
@@ -203,10 +209,10 @@ namespace Fmas12d.Api
       app.UseSerilogRequestLogging();
       app.UseHttpsRedirection();
       app.UseRouting();
-      app.UseCors("AllowAnyOrigin");
+      app.UseCors("AllowAnyOrigin");      
       app.UseAuthentication();
-      app.UseAuthorization();
-      app.UseUserClaims();
+      app.UseUserClaims();      
+      app.UseAuthorization();            
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
