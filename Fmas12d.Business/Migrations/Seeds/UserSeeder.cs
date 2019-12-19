@@ -25,17 +25,17 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const int GMCNUMBER_DOCTOR_MALE = 2222222;
 
     public const string IDENTITY_SERVER_IDENTIFIER_ADMIN = 
-      "266269fe-4610-426f-9486-40ac96a41724";    
+      "977f7610-4048-4a7f-ae8f-47ff0f33a59b";    
     public const string IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE = 
-      "38ef55b9-41a8-4ffd-925c-84501246777f";
+      "1635d415-69a8-45e3-8449-1112924beccf";
     public const string IDENTITY_SERVER_IDENTIFIER_AMHP_MALE = 
-      "1d9a7af7-5dcf-4bbb-a0a9-397f27d72a57";      
+      "da5b9a7b-5a63-499e-a694-fe8286ae9d9f";      
     public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE = 
-      "766fc494-f486-4642-aaaf-ae17a07903ac";
+      "7eb68d85-7df7-4a47-8320-55be73644fa8";
     public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_MALE = 
-      "66b3eb3f-e4d0-48bf-aa53-df3f5bb1f455";
+      "d5f1594d-cdee-4961-ab2b-dd70228c9611";
     public const string IDENTITY_SERVER_IDENTIFIER_FINANCE =
-      "54406863-1d43-470e-8cd5-23596077bc08";
+      "e2d78f4e-4a0c-4289-aafd-31a1d5928411";
     public const string IDENTITY_SERVER_IDENTIFIER_HELENCROSS = 
       "efc945eb-ee1b-4ed1-9fac-269c145196c6";      
     public const string IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS = 
