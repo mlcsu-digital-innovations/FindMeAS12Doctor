@@ -103,7 +103,7 @@ export class DoctorSelectComponent implements OnInit {
         size: 'lg'
       });
     } else {
-      this.routerService.navigatePrevious();
+      this.routerService.navigate([`assessment/edit/${this.assessmentId}`]);
     }
   }
 

@@ -5,5 +5,7 @@ export const UNKNOWN = 'Unknown';
 export const SHORT_DATE_TIME = 'MMM Do YYYY, HH:mm';
 export const TIME_ONLY = 'HH:mm';
 
+export const REFERRAL_STATUS_ASSESSMENT_SCHEDULED = 6;
 export const REFERRAL_STATUS_AWAITING_REVIEW = 8;
+export const REFERRAL_STATUS_CLOSED = 9;
 export const REFERRAL_STATUS_OPEN = 10;

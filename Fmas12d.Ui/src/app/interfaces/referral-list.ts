@@ -6,6 +6,7 @@ export interface ReferralList {
   patientIdentifier: string;
   patientId: number;
   referralId: number;
+  referralStatusId: number;
   responsesReceived: number;
   specialityName: string;
   statusName: string;
