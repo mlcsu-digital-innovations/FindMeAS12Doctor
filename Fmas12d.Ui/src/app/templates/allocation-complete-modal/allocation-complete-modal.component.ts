@@ -13,10 +13,10 @@ export class AllocationCompleteModalComponent implements OnInit {
   public scheduledDate: NgbDateStruct;
   public scheduledTime: NgbTimeStruct;
   public minimumDate: NgbDateStruct;
-  public dateError: string = '';
+  public dateError = '';
 
   @Input()
-  minDate: any;
+  minDate: Date;
 
   @Input()
   isPlanned: boolean;
@@ -24,10 +24,9 @@ export class AllocationCompleteModalComponent implements OnInit {
   @Output() actioned = new EventEmitter<AllocationConfirmation>();
 
   ngOnInit() {
-    this.minimumDate = this.ConvertToDateStruct(this.minDate);
+    this.minimumDate = this.ConvertToDateStruct(new Date());
     this.scheduledDate = this.ConvertToDateStruct(new Date());
     this.scheduledTime = this.ConvertToTimeStruct(new Date());
-
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
@@ -77,15 +76,15 @@ export class AllocationCompleteModalComponent implements OnInit {
     if (isNaN(selectedDate.getTime())) {
       this.dateError = 'Invalid Date Format';
     } else {
-      const possibleDate = this.minDate;
-      possibleDate.setHours(this.minDate.getHours() - 3);
+      const nowDate = new Date();
+      nowDate.setHours(nowDate.getMinutes() - 5);
 
-      if (selectedDate < possibleDate) {
-        this.dateError = 'Date / Time is too early';
+      if (selectedDate < nowDate) {
+        this.dateError = 'Assessment Date / Time cannot be in the past';
       }
     }
 
-    if (this.dateError !== '') {
+    if (this.dateError !== '' && action === true) {
       return;
     }
 

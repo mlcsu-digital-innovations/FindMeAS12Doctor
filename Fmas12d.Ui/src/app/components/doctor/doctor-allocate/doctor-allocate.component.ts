@@ -63,7 +63,6 @@ export class DoctorAllocateComponent implements OnInit {
                 this.assessmentId = assessment.id;
                 this.assessment = assessment;
                 this.selectedDoctors = assessment.doctorsSelected;
-                console.log(this.assessment);
                 return assessment;
               })
             );
@@ -151,15 +150,11 @@ export class DoctorAllocateComponent implements OnInit {
 
   OnAllocationAction(confirmation: AllocationConfirmation) {
 
-    console.log(confirmation);
-
     this.allocationModal.close();
-
-    return;
 
     if (confirmation.confirmed === true) {
       this.isSchedulingAssessment = true;
-      this.assessmentService.scheduleAssessment(this.assessmentId)
+      this.assessmentService.scheduleAssessment(this.assessmentId, confirmation.scheduledDate)
       .subscribe(() => {
         this.isSchedulingAssessment = false;
         this.toastService.displaySuccess({

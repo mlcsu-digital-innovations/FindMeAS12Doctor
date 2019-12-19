@@ -42,11 +42,11 @@ export class AssessmentService {
     );
   }
 
-  public scheduleAssessment(assessmentId: number) {
+  public scheduleAssessment(assessmentId: number, scheduledTime: Date) {
 
     return this.httpClient.put(
       `${environment.apiEndpoint}/assessment/${assessmentId}/schedule`,
-      null
+      {scheduledTime}
     );
   }
 
