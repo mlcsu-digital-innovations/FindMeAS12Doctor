@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mep.Api.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("[controller]")]
   [ApiController]
   public class ConfigController : ControllerBase
   {
