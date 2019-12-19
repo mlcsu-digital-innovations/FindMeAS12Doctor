@@ -1,111 +1,84 @@
 <app-navbar></app-navbar>
 
 <ion-content>
-
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
   </ion-refresher>
-
   <ion-grid>
-
-    <ion-row>
-      <ion-label class="page-title">
-        <strong>AMHP Assessments</strong>
-      </ion-label>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-label>
-          Last Updated: {{assessmentListLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}
-        </ion-label>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        &nbsp;
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-label offset="1">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>AMHP Assessments</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-item>
+      <ion-label>Last Updated:</ion-label>
+      <ion-label>{{assessmentListLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</ion-label>
+    </ion-item>
+    <ion-card>
+      <ion-card-header color="primary">
         <strong>Scheduled Assessments</strong>
-      </ion-label>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>    
+      </ion-card-header>
+      <ion-col>
         <ion-list>
-          <ion-item *ngFor="let assessment of assessmentListScheduled"
-            detail="false" 
-            [routerLink]="['/amhp-assessment-view/', assessment.id]"  
-            routerDirection="forward">
+          <ion-item *ngFor="let assessment of assessmentListScheduled" detail="false"
+            [routerLink]="['/amhp-assessment-view/', assessment.id]" routerDirection="forward">
             <ion-row style="width:100%">
               <ion-col>
-                  <ion-icon class="accepted" size="large" name="checkmark-circle" 
-                    *ngIf="assessment.doctorHasAccepted === true">
-                  </ion-icon>
-                  <ion-icon class="outstanding" size="large" name="help-circle" 
-                    *ngIf="assessment.doctorHasAccepted === null">
-                  </ion-icon>
-                  <ion-icon class="declined" size="large" name="close-circle" 
-                    *ngIf="assessment.doctorHasAccepted === false">
-                  </ion-icon>
-              </ion-col>
-              <ion-col size="10">
-                <ion-row>
-                    <strong>{{assessment.postcode}}</strong>
-                </ion-row>
-                <ion-row>
-                    {{assessment.dateTime | date: "d MMM yy H:mm"}}
-                </ion-row>
-              </ion-col>
-            </ion-row>
-          </ion-item>
-        </ion-list>        
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-label offset="1">
-        <strong>Unscheduled Assessments</strong>
-      </ion-label>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>    
-        <ion-list>
-          <ion-item *ngFor="let assessment of assessmentListUnscheduled"
-            detail="false" 
-            [routerLink]="['/amhp-assessment-view/', assessment.id]"  
-            routerDirection="forward">
-            <ion-row style="width:100%">
-              <ion-col>
-                <ion-icon class="accepted" size="large" name="checkmark-circle" 
+                <ion-icon color="success" size="large" name="checkmark-circle"
                   *ngIf="assessment.doctorHasAccepted === true">
                 </ion-icon>
-                <ion-icon class="outstanding" size="large" name="help-circle" 
-                  *ngIf="assessment.doctorHasAccepted === null">
+                <ion-icon color="warning" size="large" name="help-circle" 
+                *ngIf="assessment.doctorHasAccepted === null">
                 </ion-icon>
-                <ion-icon class="declined" size="large" name="close-circle" 
+                <ion-icon color="danger" size="large" name="close-circle"
                   *ngIf="assessment.doctorHasAccepted === false">
                 </ion-icon>
               </ion-col>
               <ion-col size="10">
                 <ion-row>
-                    <strong>{{assessment.postcode}}</strong>
+                  <strong>{{assessment.postcode}}</strong>
                 </ion-row>
                 <ion-row>
-                    {{assessment.dateTime | date: "d MMM yy H:mm"}}
+                  {{assessment.dateTime | date: "d MMM yy H:mm"}}
                 </ion-row>
               </ion-col>
             </ion-row>
           </ion-item>
-        </ion-list>        
+        </ion-list>
       </ion-col>
-    </ion-row>
-
+    </ion-card>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Unscheduled Assessments</strong>
+      </ion-card-header>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let assessment of assessmentListUnscheduled" detail="false"
+            [routerLink]="['/amhp-assessment-view/', assessment.id]" routerDirection="forward">
+            <ion-row style="width:100%">
+              <ion-col>
+                <ion-icon color="success" size="large" name="checkmark-circle"
+                  *ngIf="assessment.doctorHasAccepted === true">
+                </ion-icon>
+                <ion-icon color="warning" size="large" name="help-circle" 
+                *ngIf="assessment.doctorHasAccepted === null">
+                </ion-icon>
+                <ion-icon color="danger" size="large" name="close-circle"
+                  *ngIf="assessment.doctorHasAccepted === false">
+                </ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                  <strong>{{assessment.postcode}}</strong>
+                </ion-row>
+                <ion-row>
+                  {{assessment.dateTime | date: "d MMM yy H:mm"}}
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-card>
   </ion-grid>
-
 </ion-content>

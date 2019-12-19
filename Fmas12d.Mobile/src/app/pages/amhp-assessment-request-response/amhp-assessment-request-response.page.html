@@ -2,67 +2,64 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row>
-      <ion-label class="page-title">
-        Assessment Request
-      </ion-label>
-    </ion-row>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Assessment Request</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-card>
+      <ion-card-header color="primary">
 
-    <ion-row>
-      <ion-col>
-        Postcode: <strong>{{assessmentRequest.postcode}}</strong>
-      </ion-col>        
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        Date / Time: <strong>{{assessmentRequest.dateTime | date: "dd/MM/yyyy HH:mm"}}</strong>
-      </ion-col>        
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        Known Location {{assessmentRequest.doctorDetails.knownLocation.type}}
-      </ion-col>        
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        Distance of <strong>{{assessmentRequest.doctorDetails.distance | number:'.1-1'}}</strong> miles
-      </ion-col>        
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        Notes:
-        <span *ngFor="let detail of assessmentRequest.detailTypes">
-          {{detail.description}}
-        </span>
-      </ion-col>        
-    </ion-row>
-
-    <ion-row>
-        <ion-col>
-          &nbsp;
-        </ion-col>
-      </ion-row>
-
-    <ion-row>
-      <ion-col style="text-align: center;">
-        <ion-button 
-          color="primary"
-          (click)="acceptRequest()"
-        >
-          <ion-icon name="checkmark-circle-outline"></ion-icon>
-          Accept
-        </ion-button>
-      </ion-col>
-      <ion-col style="text-align: center;">
-        <ion-button color="primary" (click)="declineRequest()">
-          <ion-icon name="close-circle-outline"></ion-icon>
-          Decline
-        </ion-button>
-      </ion-col>
-    </ion-row>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <ion-col>
+            Postcode: <strong>{{assessmentRequest.postcode}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Date / Time: <strong>{{assessmentRequest.dateTime | date: "dd/MM/yyyy HH:mm"}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Known Location {{assessmentRequest.doctorDetails.knownLocation.type}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Distance of <strong>{{assessmentRequest.doctorDetails.distance | number:'.1-1'}}</strong> miles
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Notes:
+            <span *ngFor="let detail of assessmentRequest.detailTypes">
+              {{detail.description}}
+            </span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            &nbsp;
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col style="text-align: center;">
+            <ion-button color="primary" (click)="acceptRequest()">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              Accept
+            </ion-button>
+          </ion-col>
+          <ion-col style="text-align: center;">
+            <ion-button color="primary" (click)="declineRequest()">
+              <ion-icon name="close-circle-outline"></ion-icon>
+              Decline
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
   </ion-grid>
 </ion-content>
-

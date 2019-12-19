@@ -1,10 +1,11 @@
-import { Component, QueryList, ViewChildren, ViewChild } from '@angular/core';
-import { Observable, throwError, Subscription } from 'rxjs';
+import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { REFERRAL_STATUS_CLOSED, REFERRAL_STATUS_ASSESSMENT_SCHEDULED } from 'src/app/constants/Constants';
 import { ReferralList } from '../../../interfaces/referral-list';
 import { ReferralListService } from '../../../services/referral-list/referral-list-service';
 import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
 import { ToastService } from '../../../services/toast/toast.service';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   providers: [ReferralListService],
@@ -12,7 +13,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
   styleUrls: ['./referral-list.component.css'],
   templateUrl: './referral-list.component.html'
 })
-export class ReferralListComponent {
+export class ReferralListComponent implements OnInit {
 
   error: any;
   noOfReferralsInList: number;
@@ -45,6 +46,11 @@ export class ReferralListComponent {
         });
       }
     );
+  }
+
+  CanDoctorsBeAllocated(referralStatusId: number): boolean {
+    return referralStatusId !== REFERRAL_STATUS_CLOSED &&
+          referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED;
   }
 
   onSort({ column, direction }: SortEvent) {

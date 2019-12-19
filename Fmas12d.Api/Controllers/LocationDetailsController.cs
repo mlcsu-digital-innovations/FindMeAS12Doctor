@@ -8,8 +8,8 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("[controller]")]
   [ApiController]
-  [Authorize(Policy="User")]
-  
+  [Authorize(Policy = "User")]
+
   public class LocationDetailsController : ModelControllerDeletePatchBase
   {
     public LocationDetailsController(
@@ -40,6 +40,33 @@ namespace Fmas12d.Api.Controllers
       {
         return ProcessException(ex);
       }
+    }
+
+    [Route("search")]
+    [HttpGet]
+    public async Task<ActionResult<string>> SearchPostcode([FromQuery] string postcode)
+    {
+      try
+      {
+        Business.Models.SearchModels.PostcodeIoSearchResult businessModel =
+          await Service.SearchPostcodeAsync(postcode);
+        ViewModels.AddressSearchResult viewModel =
+          new ViewModels.AddressSearchResult(businessModel);
+
+        if (viewModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+
     }
 
     private ILocationDetailService Service { get { return _service as ILocationDetailService; } }

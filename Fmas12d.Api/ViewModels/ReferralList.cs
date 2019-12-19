@@ -12,6 +12,7 @@ namespace Fmas12d.Api.ViewModels
     public string PatientIdentifier { get; set; }
     public int PatientId { get; set; }
     public int ReferralId { get; set; }
+    public int ReferralStatusId { get; set; }
     public int ResponsesReceived { get; set; }
     public string SpecialityName { get; set; }
     public string StatusName { get; set; }
@@ -31,6 +32,7 @@ namespace Fmas12d.Api.ViewModels
           PatientId = referral.PatientId,
           PatientIdentifier = referral.PatientIdentifier,
           ReferralId = referral.Id,
+          ReferralStatusId = referral.ReferralStatusId,
           ResponsesReceived = referral.ResponsesReceived,
           SpecialityName = referral.SpecialityName,
           StatusName = referral.StatusName,

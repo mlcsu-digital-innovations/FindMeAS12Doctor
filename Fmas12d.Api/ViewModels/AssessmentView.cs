@@ -23,6 +23,7 @@ namespace Fmas12d.Api.ViewModels
       DetailTypes = model.DetailTypes
                          ?.Select(dt => new AssessmentDetailType(dt)).ToList();
       Id = model.Id;
+      IsPlanned = model.IsPlanned;
       IsSuccessful = model.IsSuccessful;
       MeetingArrangementComment = model.MeetingArrangementComment;
       PatientIdentifier = model.PatientIdentifier;
@@ -58,6 +59,7 @@ namespace Fmas12d.Api.ViewModels
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
     public int Id { get; set; }
+    public bool IsPlanned { get; set; }
     public bool? IsSuccessful { get; set; }
     public string MeetingArrangementComment { get; set; }
     public string PatientIdentifier { get; set; }    
