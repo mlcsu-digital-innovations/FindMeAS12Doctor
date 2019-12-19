@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'https://localhost:5001/api',
+  apiEndpoint: 'https://localhost:5001',
   redirectUri: 'http://localhost:8100/home',
   postLogoutRedirectUrl: 'http://localhost:8100/login'
 };

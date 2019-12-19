@@ -474,8 +474,11 @@ namespace Fmas12d.Business.Services
                                           }).ToList()
                     },
                     DoctorUserId = d.DoctorUserId,
-                    HasAccepted = d.HasAccepted,
+                    Distance = d.Distance,
+                    HasAccepted = d.HasAccepted,                    
                     IsActive = d.IsActive,
+                    IsAvailable = true,
+                    RespondedAt = d.RespondedAt,
                     StatusId = d.StatusId
                   }).ToList(),
                   Id = a.Id,
@@ -510,41 +513,7 @@ namespace Fmas12d.Business.Services
                 })
                 .SingleOrDefaultAsync(u => u.Id == id);
 
-      if (model == null)
-      {
-        return null;
-      }
-      else
-      {
-        Dictionary<int, Location> doctorPostcodes =
-          await _userAvailabilityService.GetDoctorsPostcodeAtAsync(
-            model.DoctorsSelected.Select(d => d.Id).ToList(),
-            model.DateTime,
-            true,
-            true
-          );
-
-        foreach (AssessmentDoctor assessmentDoctor in model.Doctors.Where(d => d.IsSelected))
-        {
-          Location doctorPostcode = doctorPostcodes.GetValueOrDefault(assessmentDoctor.DoctorUserId);
-          if (doctorPostcode == null)
-          {
-            assessmentDoctor.Distance = null;
-            assessmentDoctor.IsAvailable = false;
-          }
-          else
-          {
-            assessmentDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
-              model.Latitude,
-              model.Longitude,
-              doctorPostcode.Latitude,
-              doctorPostcode.Longitude
-            );
-            assessmentDoctor.IsAvailable = true;
-          }
-        }
-        return model;
-      }
+      return model;
     }
 
     public async Task<bool> RemoveDoctorsAsync(IAssessmentDoctorsRemove model)
@@ -595,17 +564,17 @@ namespace Fmas12d.Business.Services
             $"Assessment Id {model.Id} is not associated with the user id {userId} an therefore." +
             "the doctor cannot be removed.");
         }
-        
+
         assessmentDoctor.HasAccepted = null;
         assessmentDoctor.RespondedAt = null;
         assessmentDoctor.StatusId = AssessmentDoctorStatus.REMOVED;
         UpdateModified(assessmentDoctor);
 
-          AddUserAssessmentNotification(
-            entity,
-            assessmentDoctor.DoctorUserId,
-            NotificationText.REMOVED_FROM_ASSESSMENT
-          );        
+        AddUserAssessmentNotification(
+          entity,
+          assessmentDoctor.DoctorUserId,
+          NotificationText.REMOVED_FROM_ASSESSMENT
+        );
       }
 
       await _context.SaveChangesAsync();
@@ -947,7 +916,7 @@ namespace Fmas12d.Business.Services
     {
       IUserAvailability userAvailability = await _userAvailabilityService.GetAtAsync(
         assessmentDoctor.DoctorUserId,
-        (entity.MustBeCompletedBy ?? entity.ScheduledTime).Value,
+        (entity.ScheduledTime ?? entity.MustBeCompletedBy).Value,
         true,
         true
       );

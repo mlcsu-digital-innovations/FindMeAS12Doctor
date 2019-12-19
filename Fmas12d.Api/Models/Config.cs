@@ -7,7 +7,7 @@ namespace Fmas12d.Api.Models
   {
 
     public OIDCConfig() { _additionalLoginParameters = new Dictionary<string, string>(); }
-
+    public string Env { get; set; }
     public string StsServer { get; set; }
     public string Redirect_url { get; set; }
     public string Client_id { get; set; }

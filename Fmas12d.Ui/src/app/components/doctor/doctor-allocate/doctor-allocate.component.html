@@ -106,9 +106,12 @@
                     <th class="text-center sm-col" scope="col" sortable="distanceFromAssessment" (sort)="OnSort($event)">
                       Distance (miles)
                     </th>
-                    <th class="text-center sm-col" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
+                      Responded
+                    </th>                      
+                    <th class="text-center" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
                       Accepted
-                    </th>
+                    </th>                    
                     <th class="text-center" scope="col">
                       Allocate
                     </th>
@@ -126,19 +129,23 @@
                       {{selectedDoctor.type}}
                     </td>
                     <td>
-                      <span *ngFor="let speciality of selectedDoctor.specialityName">
-                        {{speciality}},
+                      <span *ngFor="let speciality of selectedDoctor.specialityNames; let isLast=last">
+                        {{speciality}}{{isLast ? '' : ", "}}
                       </span>
                     </td>
                     <td class="text-center sm-col">
                       {{selectedDoctor.distance | number: '1.1-1'}}
                     </td>
-                    <td class="text-center sm-col">
-                      <i class="fas fa-check primary" *ngIf="selectedDoctor.hasAccepted"></i>
-                    </td>
+                    <td  class="text-center sm-col">
+                      {{selectedDoctor.hasResponded ? "Yes" : "No"}}
+                    </td>                       
+                    <td  class="text-center sm-col">
+                      {{selectedDoctor.hasResponded ? (selectedDoctor.hasAccepted ? "Yes" : "No") : ""}}
+                    </td>                    
                     <td class="checkmark-content text-center sm-col" style="position: relative">
-
-                      <label class="container" *ngIf="selectedDoctor.hasAccepted">
+                      
+                      <label class="container"
+                              *ngIf="selectedDoctor.hasAccepted">
                         <input
                           class=""
                           type="checkbox"

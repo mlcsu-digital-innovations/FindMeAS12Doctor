@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fmas12d.Api.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("[controller]")]
   [ApiController]
   [Authorize(Policy = "User")]
 
