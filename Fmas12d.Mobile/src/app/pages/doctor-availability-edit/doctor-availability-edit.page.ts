@@ -50,8 +50,16 @@ export class DoctorAvailabilityEditPage implements OnInit {
 
   ngOnInit() {
     const now = new Date();
-    this.minDate = new Date().toISOString();
-    this.maxDate = new Date(now.setMonth(now.getMonth() + 6)).toISOString();
+
+    const min = new Date();
+    min.setHours(0, 0, 0, 0);
+
+    const max = new Date(now.setMonth(now.getMonth() + 6));
+    max.setHours(23, 55, 0, 0);
+
+    this.minDate = min.toISOString();
+    this.maxDate = max.toISOString();
+
     this.getContactDetails();
   }
 
