@@ -53,5 +53,36 @@ namespace Fmas12d.Business.Services
           $"{convertedResult.Error} {stringPostcode}");
       }
     }
+
+    public async Task<PostcodeIoSearchResult> SearchPostcodeAsync(string stringPostcode)
+    {
+      PostcodeIoSearchResult convertedResult = null;
+
+      using HttpClient client = new HttpClient();
+      string endpoint =
+        _configuration.GetValue("AddressSearchEndpoint", "https://api.getaddress.io/find/");
+
+      string apiKey = _configuration.GetValue("AddressSearchApiKey", "");
+
+      string uri = $"{endpoint}{stringPostcode}?api-key={apiKey}&sort=true";
+
+      using HttpResponseMessage response = await client.GetAsync(uri);
+
+      if (response.IsSuccessStatusCode){
+        string content = await response.Content.ReadAsStringAsync();
+        try {
+          convertedResult = JsonConvert.DeserializeObject<PostcodeIoSearchResult>(content);
+          return convertedResult;
+        }
+        catch {
+          throw new ModelStateException("postcode",
+            $"Error searching {stringPostcode}");
+        }
+      } else {
+        throw new ModelStateException("postcode", "boom");
+      }
+
+
+    }
   }
 }

@@ -71,6 +71,8 @@ namespace Fmas12d.Business
     public virtual DbSet<ClaimStatusAudit> ClaimStatusAudits { get; set; }
     public virtual DbSet<ContactDetail> ContactDetails { get; set; }
     public virtual DbSet<ContactDetailAudit> ContactDetailAudits { get; set; }
+    public virtual DbSet<ContactDetailCcg> ContactDetailCcgs { get; set; }
+    public virtual DbSet<ContactDetailCcgAudit> ContactDetailCcgAudits { get; set; }
     public virtual DbSet<ContactDetailType> ContactDetailTypes { get; set; }
     public virtual DbSet<ContactDetailTypeAudit> ContactDetailTypeAudits { get; set; }
     public virtual DbSet<UserAvailability> UserAvailabilities { get; set; }
@@ -249,10 +251,17 @@ namespace Fmas12d.Business
       modelBuilder.Entity<ContactDetail>()
         .HasAlternateKey(contextDetail => new
         {
-          contextDetail.CcgId,
           contextDetail.ContactDetailTypeId,
           contextDetail.UserId
         });
+
+      modelBuilder.Entity<ContactDetailCcg>()
+        .HasAlternateKey(contextDetail => new
+        {
+          contextDetail.CcgId,
+          contextDetail.ContactDetailTypeId,
+          contextDetail.UserId
+        });        
 
       modelBuilder.Entity<AssessmentDetail>()
         .HasAlternateKey(assessmentDetail => new

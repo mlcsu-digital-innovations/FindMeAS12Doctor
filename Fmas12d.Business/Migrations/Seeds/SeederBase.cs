@@ -109,11 +109,6 @@ namespace Fmas12d.Business.Migrations.Seeds
       }
     }
 
-    protected ContactDetailType GetContactDetailTypeWork()
-    {
-      return GetContactDetailTypeById(Models.ContactDetailType.WORK);
-    }
-
     protected AssessmentDetailType GetAssessmentDetailTypeByName(string name)
     {
       try

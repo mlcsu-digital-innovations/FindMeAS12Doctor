@@ -23,7 +23,7 @@ namespace Fmas12d.Data.Entities
     public decimal Longitude { get; set; }
     [MaxLength(10)]
     public string Postcode { get; set; }
-    public int? TelephoneNumber { get; set; }
+    public string TelephoneNumber { get; set; }
     public string Town { get; set; }
     public int UserId { get; set; }
   }

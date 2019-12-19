@@ -38,36 +38,32 @@ namespace Fmas12d.Business.Services
       return contactDetail;
     }
 
-    public async Task<ContactDetail> GetBaseContactDetailTypeForCcgUserAsync(
-      int ccgId,
+    public async Task<ContactDetail> GetBaseContactDetailTypeForUserAsync(
       int userId,
       bool asNoTracking,
       bool activeOnly)
     {
-      ContactDetail contactDetail = await GetByContactDetailTypeCcgUserAsync(
+      ContactDetail contactDetail = await GetByContactDetailTypeUserAsync(
         ContactDetailType.BASE,
-        ccgId,
         userId,
         asNoTracking,
         activeOnly
       );
       if (contactDetail == null)
       {
-        throw new ContactDetailBaseMissingForCcgUserException(ccgId, userId);
+        throw new ContactDetailBaseMissingForUserException(userId);
       }
       return contactDetail;
     }
 
-    private async Task<ContactDetail> GetByContactDetailTypeCcgUserAsync(
+    private async Task<ContactDetail> GetByContactDetailTypeUserAsync(
       int contactDetailTypeId,
-      int ccgId,
       int userId,
       bool asNoTracking,
       bool activeOnly)
     {
       ContactDetail contactDetail = await _context
         .ContactDetails
-        .Where(c => c.CcgId == ccgId)
         .Where(c => c.ContactDetailTypeId == contactDetailTypeId)        
         .Where(c => c.UserId == userId)
         .WhereIsActiveOrActiveOnly(activeOnly)        

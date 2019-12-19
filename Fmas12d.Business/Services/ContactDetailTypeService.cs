@@ -45,7 +45,7 @@ namespace Fmas12d.Business.Services
         })
         .ToListAsync();
 
-      return models;    
+      return models;
     }
 
     public async Task<IEnumerable<ContactDetailType>> GetAsync(
@@ -59,15 +59,11 @@ namespace Fmas12d.Business.Services
         .ContactDetailTypes        
         .Include(cdt => cdt.ContactDetails)
         .Where(cdt => cdt.ContactDetails.Any(cd => cd.UserId == userId))
-        .Where(cdt => cdt.ContactDetails
-                         .Any(cd => cd.Ccg.Assessments
-                                          .Any(a => a.Id == assessmentId)))
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
         .Select(cd => new ContactDetailType {
           ContactDetails = cd.ContactDetails
             .Where(cd => cd.UserId == userId)
-            .Where(cd => cd.Ccg.Assessments.Any(a => a.Id == assessmentId))
             .Select(cd => new ContactDetail(cd, false))
             .ToList(),
           Description = cd.Description,
@@ -76,7 +72,7 @@ namespace Fmas12d.Business.Services
           ModifiedAt = cd.ModifiedAt,
           ModifiedByUser = new User(cd.ModifiedByUser),
           ModifiedByUserId = cd.ModifiedByUserId,
-          Name = cd.Name          
+          Name = cd.Name
         })
         .ToListAsync();
 

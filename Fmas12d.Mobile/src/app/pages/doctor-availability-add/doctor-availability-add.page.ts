@@ -6,6 +6,7 @@ import { PostcodeValidationService } from 'src/app/services/postcode-validation/
 import { ToastController, NavController } from '@ionic/angular';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
+import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 
 @Component({
   selector: 'app-doctor-availability-add',
@@ -38,10 +39,19 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.userAvailability.location = {} as Location;
 
     let now = new Date();
-    this.minDate = new Date().toISOString();
-    this.maxDate = new Date(now.setMonth(now.getMonth() + 6)).toISOString();
+
+    const min = new Date();
+    min.setHours(0, 0, 0, 0);
+
+    const max = new Date(now.setMonth(now.getMonth() + 6));
+    max.setHours(23, 55, 0, 0);
+
+    this.minDate = min.toISOString();
+    this.maxDate = max.toISOString();
 
     now = new Date();
+    now.setMinutes(now.getMinutes() - now.getMinutes() % 5, 0, 0);
+
     this.userAvailability.start = now.toISOString();
     this.userAvailability.end = new Date(now.setHours(now.getHours() + 8)).toISOString();
 
@@ -51,6 +61,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
   availabilityChange() {
     this.userAvailability.location.contactDetailId = undefined;
     this.userAvailability.location.postcode = undefined;
+    this.userAvailability.statusId = this.available ? AVAILABLE : UNAVAILABLE;
   }
 
   datesChanged() {
@@ -107,6 +118,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
         this.navController.back();
       }, err => {
 
+        console.log(err);
         let errorDetail = '';
         if (err.error.errors.Start.length > 0) {
           errorDetail = err.error.errors.Start[0];

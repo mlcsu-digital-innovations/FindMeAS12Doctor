@@ -17,8 +17,6 @@ namespace Fmas12d.Business.Models
       Address1 = entity.Address1;
       Address2 = entity.Address2;
       Address3 = entity.Address3;
-      Ccg = new Ccg(entity.Ccg);
-      CcgId = entity.CcgId;
       ContactDetailType = new ContactDetailType(entity.ContactDetailType);
       ContactDetailTypeId = entity.ContactDetailTypeId;
       EmailAddress = entity.EmailAddress;
@@ -49,7 +47,7 @@ namespace Fmas12d.Business.Models
     public decimal Longitude { get; set; }
     [MaxLength(10)]
     public string Postcode { get; set; }
-    public int? TelephoneNumber { get; set; }
+    public string TelephoneNumber { get; set; }
     public string Town { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
@@ -58,7 +56,7 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        return entity => new ContactDetail(entity, false);
+        return entity => new ContactDetail(entity, true);
       }
     }
 

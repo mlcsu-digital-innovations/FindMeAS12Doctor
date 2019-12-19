@@ -13,7 +13,7 @@ import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
-import { PostcodeRegex, UNKNOWN_POSTCODE } from 'src/app/constants/Constants';
+import { PostcodeRegex, UNKNOWN } from 'src/app/constants/Constants';
 import { PostcodeSearchResult } from 'src/app/interfaces/postcode-search-result';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
@@ -463,14 +463,14 @@ export class ReferralEditComponent implements OnInit {
 
     // All 3 fields can be 'unknown' OR at least 1 field must be populated
     if (this.gpPractice.id === this.unknownGpPracticeId &&
-      this.residentialPostcode === UNKNOWN_POSTCODE &&
+      this.residentialPostcode === UNKNOWN &&
       this.ccg.id === this.unknownCcgId) {
       return true;
     }
 
     return (
       (this.gpPractice.id !== undefined && this.gpPractice.id !== this.unknownGpPracticeId) ||
-      (this.residentialPostcode !== '' && this.residentialPostcode !== UNKNOWN_POSTCODE) ||
+      (this.residentialPostcode !== '' && this.residentialPostcode !== UNKNOWN) ||
       (this.ccg.id !== undefined && this.ccg.id !== this.unknownCcgId)
     );
   }
