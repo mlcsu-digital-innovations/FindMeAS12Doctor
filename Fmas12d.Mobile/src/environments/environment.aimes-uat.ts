@@ -3,12 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  apiEndpoint: 'https://localhost:5001',
-  defaultAssessmentCompletedInHours: 3,
-  locationEndpoint: 'https://www.google.com/maps/@52.9856552,-2.8707448,7z',
-  oidc_redirect_url: "http://localhost:4200/",
-  production: false,  
+  production: true,
+  apiEndpoint: 'https://findmeans12doctor.co.uk/api',
+  redirectUri: 'https://findmeans12doctor.co.uk/home',
+  postLogoutRedirectUrl: 'https://findmeans12doctor.co.uk/login'
 };
+
+export const ProtectedResourceMap: [string, string[]][] = 
+[  
+  [ "https://findmeans12doctor.co.uk", ["User.Read", "offline_access"] ] 
+];
 
 /*
  * For easier debugging in development mode, you can import the following file
@@ -17,4 +21,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

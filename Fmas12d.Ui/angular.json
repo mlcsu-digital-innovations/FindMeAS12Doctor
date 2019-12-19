@@ -20,9 +20,8 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/web.config"
+              "src/favicon.png",
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
@@ -58,6 +57,15 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "aimes-uat": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.aimes-uat.ts"
+                }
+              ],
+              "outputPath": "../Deployment/AimesUat/Fmas12d.Ui"
             },
             "azure-development": {
               "fileReplacements": [
@@ -95,7 +103,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/favicon.ico",
+              "src/favicon.png",
               "src/assets"
             ],
             "styles": [
