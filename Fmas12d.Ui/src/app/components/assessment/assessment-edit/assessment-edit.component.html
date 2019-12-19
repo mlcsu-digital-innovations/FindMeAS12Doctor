@@ -146,8 +146,8 @@
                 <select class="custom-select custom-select-lg mb-2 form-control" formControlName="assessmentAddress"
                   #assessmentAddress id="assessmentAddress" appFocusOnShow>
                   <option disabled=true [selected]=true>Please Select Address</option>
-                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
-                    {{addressList[i].address}}
+                  <option *ngFor="let address of addressList; let i=index" [value]="addressList[i]">
+                    {{addressList[i]}}
                   </option>
                 </select>
               </div>
