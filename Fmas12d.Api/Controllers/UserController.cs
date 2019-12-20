@@ -54,6 +54,23 @@ namespace Fmas12d.Api.Controllers
       }
     }        
 
+    [Route("identifier/{id}")]
+    [HttpGet]
+    public async Task<ActionResult<ViewModels.User>> Get(string id)
+    {
+      Business.Models.User model = await Service.GetByIdentityServerIdentifierAsync(id, true, true);
+      
+      if (model == null)
+      {
+        return NoContent();    
+      }
+      else
+      {
+        ViewModels.User viewModel = new ViewModels.User(model);        
+        return Ok(viewModel);
+      }
+    } 
+
     [Route("search")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ViewModels.IdResultText>>> GetSearch(
