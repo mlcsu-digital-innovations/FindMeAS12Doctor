@@ -1,11 +1,10 @@
 <app-navbar></app-navbar>
 
 <ion-content>
-
   <ion-grid>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Availability</ion-title>
+        <ion-title>Availability Add</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-card>
@@ -20,11 +19,9 @@
             </ion-label>
           </ion-item>
         </ion-row>
-
         <ion-row>
           &nbsp;
         </ion-row>
-
         <ion-list>
           <ion-item>
             <ion-label>Start Date</ion-label>
@@ -51,26 +48,14 @@
             </ion-datetime>
           </ion-item>
         </ion-list>
-
         <ion-row *ngIf="hasDateError">
           <span class="date-error">
             * {{dateErrorText}}
           </span>
         </ion-row>
-
         <ion-row>
           &nbsp;
         </ion-row>
-
-        <!-- <ion-row *ngIf="available">
-      <ion-item style="width:100%;">
-      <ion-label>Location</ion-label>
-      <ion-select [(ngModel)]="userAvailability.location.contactDetailId">
-        <ion-select-option *ngFor="let contact of contactDetails" value={{contact.id}}>{{contact.name}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    </ion-row> -->
-
         <ion-row *ngIf="available">
           <ion-item style="width:100%;">
             <ion-input placeholder="Postcode" minlength="6" maxlength="8" name="postcode" autocapitalize="on"
@@ -82,22 +67,13 @@
             </ion-button>
           </ion-item>
         </ion-row>
-
       </ion-card-content>
     </ion-card>
-
-
-
-
-
-
   </ion-grid>
-
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small" (click)="saveAvailability()" [disabled]="!isDataValid()">
       <ion-icon name="checkmark">
       </ion-icon>
     </ion-fab-button>
   </ion-fab>
-
 </ion-content>
