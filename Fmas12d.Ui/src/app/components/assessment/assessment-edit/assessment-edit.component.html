@@ -233,24 +233,24 @@
                 <div class="doctor-list">
                   <div *ngFor="let doctor of selectedDoctors; let i=index" class="doctor-row">
                     <div class="row">
-                      <div
-                        class="col-md-8 doctor-name"
-                        [ngClass]="{'unselected' : !doctor.selected}"
-                      >
-                        {{doctor.displayName}}
-                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
-                      </div>
-                      <div class="col-md-4 text-right">
-                        <label class="container">
+                      <div class="col-md-10">
+                        <label class="container" >
                           <input
                             class="form-control"
                             type="checkbox"
                             [attr.id]="'selected' + i"
-                            [checked]="doctor.selected"
+                            [checked]="!doctor.selected"
                             (change)="ToggleSelectedDoctor(i)"
                           />
-                          <span class="checkmark"></span>.
+                          <span class="checkmark"></span>
                         </label>
+                        <div
+                          class="col-md-8 doctor-name"
+                          [ngClass]="{'unselected' : !doctor.selected}"
+                        >
+                          {{doctor.displayName}}
+                          <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -267,9 +267,24 @@
                   <div *ngFor="let doctor of allocatedDoctors; let i=index" class="doctor-row">
 
                     <div class="row">
-                      <div class="col-md-8 doctor-name">
-                        {{doctor.displayName}}
-                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                      <div class="col-md-10">
+                        <label class="container" >
+                          <input
+                            class="form-control"
+                            type="checkbox"
+                            [attr.id]="'selected' + i"
+                            [checked]="!doctor.selected"
+                            (change)="ToggleAllocatedDoctor(i)"
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                        <div
+                          class="col-md-8 doctor-name"
+                          [ngClass]="{'unselected' : !doctor.selected}"
+                        >
+                          {{doctor.displayName}}
+                          <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -293,7 +308,7 @@
                   <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
-                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="UpdateReferral()">
+                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="CheckAssessmentValidity()">
                   <i class="fas fa-check"></i>
                   Save
                 </button>
@@ -314,6 +329,13 @@
   <app-cancel-action-modal [modalTitle]="'Cancel Update'"
     [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
     (actioned)="OnCancelModalAction($event)">
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #removeDoctors>
+  <app-cancel-action-modal [modalTitle]="'Confirm Doctor Removal'"
+    [modalBody]="'Please confirm that you wish to remove highlighted doctors from the assessment.'"
+    (actioned)="OnRemoveDoctorsAction($event)">
   </app-cancel-action-modal>
 </ng-template>
 
