@@ -90,4 +90,19 @@ export class AssessmentService {
     );
   }
 
+  public allocateDoctorDirectly(assessmentId: number, userId: number) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    const user = {
+      userId
+    };
+
+    return this.httpClient.post(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/allocated/direct`,
+      user,
+      { headers }
+    );
+  }
+
 }

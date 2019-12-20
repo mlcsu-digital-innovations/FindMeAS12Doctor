@@ -71,7 +71,7 @@
                   type="text"
                   disabled=true
                   class="form-control"
-                  value={{registeredDoctorDetails.type}}
+                  value={{registeredDoctorDetails.profileTypeName}}
                 />
               </div>
               <div class="col-md-4">
@@ -80,7 +80,7 @@
                   type="text"
                   disabled=true
                   class="form-control"
-                  value={{registeredDoctorDetails.gender}}
+                  value={{registeredDoctorDetails.genderName}}
                 />
               </div>
             </div>
@@ -92,15 +92,28 @@
                   type="text"
                   disabled=true
                   class="form-control"
-                  value={{registeredDoctorDetails.telephone}}
+                  value={{registeredDoctorDetails.contactDetailBase.telephoneNumber}}
                 />
               </div>
               <div class="col-md-4">
                 <label>Specialities</label>
                 <div class="input-div">
-                  <div *ngFor="let speciality of registeredDoctorDetails.specialities">
+                  <div *ngFor="let speciality of registeredDoctorDetails.userSpecialityNames">
                     {{speciality}}
                   </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label>Section 12 Approved</label>
+                <div class="input-div">
+                  <i
+                    class="fas fa-check-circle"
+                    *ngIf="registeredDoctorDetails.section12ApprovalStatusId !== null">
+                  </i>
+                  <i
+                   class="fas fa-times-circle"
+                    *ngIf="registeredDoctorDetails.section12ApprovalStatusId == null">
+                  </i>
                 </div>
               </div>
             </div>
@@ -120,7 +133,7 @@
           </form>
 
            <!-- form for unregistered doctors -->
-           <form [formGroup]="unregisteredDoctorForm" class="form-style" novalidate>
+           <!-- <form [formGroup]="unregisteredDoctorForm" class="form-style" novalidate>
 
             <div class="form-row">
               <span class="form-title">Add unregistered doctor</span>
@@ -335,7 +348,7 @@
                 </button>
               </div>
             </div>
-          </form>
+          </form> -->
 
           <div class="row">
             <div class="col-md-12 text-right">
