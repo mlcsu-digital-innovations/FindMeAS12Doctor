@@ -2,6 +2,17 @@
   <ion-grid>    
     <ion-row>
       <ion-col>
+        <ion-input placeholder="Email address" [(ngModel)]="email"></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-input placeholder="Password" type="password" [(ngModel)]="password"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
         <ion-button (click)="login()" expand="full">
           Log On
         </ion-button>

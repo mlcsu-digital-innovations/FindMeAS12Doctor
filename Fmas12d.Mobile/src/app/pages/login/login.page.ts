@@ -7,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
- 
+  public email: string;
+  public password: string;
+
   constructor(
     private authService: AuthService
     ) { }
@@ -17,7 +19,12 @@ export class LoginPage implements OnInit {
   }
 
   public login(): void {
-    this.authService.signIn();
+    //this.authService.signIn();
+    this.authService.login(this.email, this.password).subscribe(data => {
+      console.log(data);
+    }, error => {
+      console.log(error);
+    }); 
   }  
   
 }

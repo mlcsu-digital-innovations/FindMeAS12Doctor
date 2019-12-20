@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
-import { OAuthSettings } from 'src/oauth';
 import { Subscription, Observable, from } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ export class AuthService {
   private subscription: Subscription;
 
   constructor(
+    private apiService: ApiService,
     private msalService: MsalService,    
     private broadcastService: BroadcastService,
     private storageService: StorageService
@@ -35,5 +36,13 @@ export class AuthService {
     if(this.subscription) {
       this.subscription.unsubscribe();      
     }
+  }
+
+  public login(email: string, password: string): Observable<any> {
+    return this.apiService.login(email, password);           
+  }
+
+  public logout() {
+
   }
 }
