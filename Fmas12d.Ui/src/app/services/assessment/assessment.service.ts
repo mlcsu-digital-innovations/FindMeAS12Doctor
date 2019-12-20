@@ -1,9 +1,8 @@
-import { environment } from 'src/environments/environment';
 import { Assessment } from 'src/app/interfaces/assessment';
+import { environment } from 'src/environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { AssessmentAvailability } from 'src/app/interfaces/assessment-availability';
 
 @Injectable({
   providedIn: 'root'
@@ -27,29 +26,6 @@ export class AssessmentService {
     );
   }
 
-  public updateAssessment(assessment: Assessment) {
-
-    const assessmentType = assessment.isPlanned
-      ? 'planned'
-      : 'emergency';
-
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    return this.httpClient.put(
-      `${environment.apiEndpoint}/assessment/${assessment.id}/${assessmentType}`,
-      assessment,
-      { headers }
-    );
-  }
-
-  public scheduleAssessment(assessmentId: number, scheduledTime: Date) {
-
-    return this.httpClient.put(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/schedule`,
-      {scheduledTime}
-    );
-  }
-
   public getAvailableDoctors(assessmentId: number) {
 
     return this.httpClient.get(
@@ -68,6 +44,21 @@ export class AssessmentService {
     );
   }
 
+  public removeDoctors(assessmentId: number, userIds: number[]) {
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/remove`,
+      {userIds}
+    );
+  }
+
+  public scheduleAssessment(assessmentId: number, scheduledTime: Date) {
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/schedule`,
+      {scheduledTime}
+    );
+  }
+
   public updateAllocatedDoctors(assessmentId: number, userIds: any) {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -75,6 +66,21 @@ export class AssessmentService {
     return this.httpClient.post(
       `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/allocated`,
       userIds,
+      { headers }
+    );
+  }
+
+  public updateAssessment(assessment: Assessment) {
+
+    const assessmentType = assessment.isPlanned
+      ? 'planned'
+      : 'emergency';
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/assessment/${assessment.id}/${assessmentType}`,
+      assessment,
       { headers }
     );
   }
@@ -89,5 +95,4 @@ export class AssessmentService {
       { headers }
     );
   }
-
 }
