@@ -134,11 +134,14 @@ export class DoctorAddComponent implements OnInit {
 
   AllocateRegisteredDoctor() {
     // ToDo: use a service to allocate the registered doctor
-    console.log(this.registeredDoctorDetails);
     this.assessmentService
       .allocateDoctorDirectly(this.assessmentId, this.registeredDoctorDetails.id)
       .subscribe(userDetails => {
-
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Doctor Allocated'
+        });
+        this.routerService.navigatePrevious();
     },
       (err) => {
         console.log(err);
@@ -370,7 +373,7 @@ export class DoctorAddComponent implements OnInit {
 
   ValidateRegisteredDoctor() {
     this.userDetailsService.GetDoctorDetails(this.registeredDoctorField.value.id)
-    .subscribe(doctorDetails => {
+    .subscribe((doctorDetails: UserDetails) => {
 
       if (doctorDetails === null ) {
         this.toastService.displayError({
@@ -378,7 +381,7 @@ export class DoctorAddComponent implements OnInit {
           message: 'Unable to retrieve doctor details'
         });
       } else {
-        // this.registeredDoctorDetails = doctorDetails;
+        this.registeredDoctorDetails = doctorDetails;
         this.hasRegisteredDoctorDetails = true;
       }
     },

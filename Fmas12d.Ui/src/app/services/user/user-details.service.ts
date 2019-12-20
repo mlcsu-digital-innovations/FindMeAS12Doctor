@@ -10,7 +10,7 @@ export class UserDetailsService {
 
   public GetDoctorDetails(doctorId: number) {
     return this.httpClient.get(
-      environment.apiEndpoint + '/user/search', null
+      `${environment.apiEndpoint}/user/${doctorId}`
     );
   }
 }

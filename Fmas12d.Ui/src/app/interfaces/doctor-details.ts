@@ -1,8 +1,8 @@
 export interface DoctorDetails {
   displayName: string;
   id: number;
-  gender: string;
-  type: string;
+  genderName: string;
+  profileTypeName: string;
   telephone: string;
   specialities: string[];
   gmcNumber: number;
