@@ -16,6 +16,8 @@ import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstr
 import { Observable, of, throwError } from 'rxjs';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
+import { REFERRAL_STATUS_ASSESSMENT_SCHEDULED, REFERRAL_STATUS_AWAITING_RESCHEDULING } from 'src/app/constants/Constants';
+import { REFERRAL_STATUS_CLOSED } from 'src/app/constants/Constants';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
 import { RouterService } from 'src/app/services/router/router.service';
@@ -31,19 +33,22 @@ import * as moment from 'moment';
 export class AssessmentEditComponent implements OnInit {
 
   addressList: string[] = [];
-  assessmentId: number;
   allocatedDoctors: AssessmentUser[] = [];
+  assessmentDetails: NameIdList[] = [];
+  assessmentForm: FormGroup;
+  assessmentId: number;
+  assessmentScheduledDate: NgbDateStruct;
+  assessmentScheduledTime: NgbTimeStruct;
+  assessmentShouldBeCompletedByDate: NgbDateStruct;
+  assessmentShouldBeCompletedByTime: NgbTimeStruct;
   cancelModal: NgbModalRef;
   defaultCompletionDate: NgbDateStruct;
   defaultCompletionTime: NgbTimeStruct;
   dropdownSettings: IDropdownSettings;
-  assessmentForm: FormGroup;
-  assessmentDetails: NameIdList[] = [];
-  assessmentShouldBeCompletedByDate: NgbDateStruct;
-  assessmentShouldBeCompletedByTime: NgbTimeStruct;
   genderSelected: number;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
+  isAllowedToRemove: boolean;
   isAmhpSearching: boolean;
   isPatientIdValidated: boolean;
   isPlannedAssessment: boolean;
@@ -54,14 +59,15 @@ export class AssessmentEditComponent implements OnInit {
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralId: number;
+  removeModal: NgbModalRef;
   reselectModal: NgbModalRef;
-  assessmentScheduledDate: NgbDateStruct;
-  assessmentScheduledTime: NgbTimeStruct;
   selectedDetails: NameIdList[] = [];
   selectedDoctors: AssessmentUser[] = [];
   specialities: NameIdList[];
+  unwantedDoctorList: number[] = [];
 
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
+  @ViewChild('removeDoctors', null) removeDoctorTemplate;
   @ViewChild('selectDoctors', null) selectDoctorTemplate;
 
   constructor(
@@ -222,6 +228,14 @@ export class AssessmentEditComponent implements OnInit {
     }
   }
 
+  CheckAssessmentValidity() {
+    if (!this.ValidateAssessment()) {
+      return;
+    }
+
+    this.ConfirmUnwantedDoctors();
+  }
+
   ClearField(fieldName: string) {
     if (this.assessmentForm.contains(fieldName)) {
       this.assessmentForm.controls[fieldName].setValue('');
@@ -237,6 +251,32 @@ export class AssessmentEditComponent implements OnInit {
 
       this.genderSelected = 0;
     }
+  }
+
+  ConfirmUnwantedDoctors() {
+
+    this.unwantedDoctorList = [];
+
+    this.selectedDoctors.forEach(doctor => {
+      if (!doctor.selected) {
+        this.unwantedDoctorList.push(doctor.doctorId);
+      }
+    });
+
+    this.allocatedDoctors.forEach(doctor => {
+      if (!doctor.selected) {
+        this.unwantedDoctorList.push(doctor.doctorId);
+      }
+    });
+
+    if (this.unwantedDoctorList.length > 0 ) {
+      this.removeModal = this.modalService.open(this.removeDoctorTemplate, {
+        size: 'lg'
+      });
+    } else {
+      this.UpdateReferral();
+    }
+
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
@@ -402,8 +442,6 @@ export class AssessmentEditComponent implements OnInit {
 
   InitialiseForm(referral: ReferralView) {
 
-    console.log(referral);
-
     this.minDate = this.ConvertToDateStruct(referral.createdAt);
     this.FetchDropDownData();
 
@@ -442,6 +480,13 @@ export class AssessmentEditComponent implements OnInit {
 
     this.assessmentForm.controls.assessmentDetails.setValue(this.selectedDetails);
 
+    this.isAllowedToRemove =
+      referral.referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
+      referral.referralStatusId !== REFERRAL_STATUS_CLOSED;
+
+    // initialise all as selected
+    this.selectedDoctors.forEach(doctor => doctor.selected = true);
+    this.allocatedDoctors.forEach(doctor => doctor.selected = true);
   }
 
   OnCancelModalAction(action: boolean) {
@@ -474,6 +519,33 @@ export class AssessmentEditComponent implements OnInit {
     window.open(environment.locationEndpoint, '_blank');
   }
 
+  OnRemoveDoctorsAction(action: boolean) {
+    this.removeModal.close();
+    if (action) {
+      this.RemoveUnwantedDoctors();
+    }
+  }
+
+  RemoveUnwantedDoctors() {
+    this.assessmentService.removeDoctors(this.assessmentId, this.unwantedDoctorList).subscribe(
+      result => {
+        this.toastService.displaySuccess({
+          message: 'Doctors Removed'
+        });
+        this.UpdateReferral();
+      },
+      error => {
+        console.log(error);
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to remove doctors from assessment! Please try again in a few moments'
+        });
+        return throwError(error);
+      }
+    );
+
+  }
+
   ReselectDoctors() {
     if (this.assessmentForm.dirty) {
       this.reselectModal = this.modalService.open(this.selectDoctorTemplate, {
@@ -502,15 +574,20 @@ export class AssessmentEditComponent implements OnInit {
     doctor.selected = !doctor.selected;
   }
 
+  ToggleAllocatedDoctor(index: number) {
+    this.allocatedDoctors[index].selected = !this.allocatedDoctors[index].selected;
+  }
+
+  ToggleSelectedDoctor(index: number) {
+    this.selectedDoctors[index].selected = !this.selectedDoctors[index].selected;
+  }
+
   ToggleSelectedUpdate(id: number) {
     const doctor = this.selectedDoctors.find(sd => sd.id === id);
     doctor.selected = !doctor.selected;
   }
 
   UpdateReferral() {
-    if (!this.ValidateAssessment()) {
-      return;
-    }
 
     const updatedAssessment = {} as Assessment;
 
