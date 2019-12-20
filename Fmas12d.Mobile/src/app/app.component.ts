@@ -7,6 +7,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './services/storage/storage.service';
+import * as jwt_decode from 'jwt-decode';
+import { UserDetailsService } from './services/user-details/user-details.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +24,8 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private storageService: StorageService    
+    private storageService: StorageService,
+    private userDetailsService: UserDetailsService
   ) {
     this.initializeApp();
   }
@@ -33,31 +36,47 @@ export class AppComponent {
       this.splashScreen.hide();
 
       this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
-        if (status == ConnectionStatus.Online) {
+        if (status === ConnectionStatus.Online) {
           this.offlineManager.checkForEvents().subscribe();
         }
-      });   
-      
-      this.broadcastService.subscribe("msal:loginFailure", (payload) => {
+      });
+
+      this.broadcastService.subscribe('msal:loginFailure', (payload) => {
+        console.log('loginFailure');
         console.log(payload);
       });
-        
-      this.broadcastService.subscribe("msal:loginSuccess", (payload) => {   
+
+      this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
+        console.log('loginSuccess');
         console.log(payload);
+        const decodedToken = jwt_decode(payload._token);
+
+        console.log(decodedToken.oid);
+        // query the users details
+        this.userDetailsService.getUserDetails(decodedToken.oid)
+        .subscribe(result => {
+          console.log(result);
+        },
+          err => {
+            console.log(err);
+        });
+
         this.storageService.storeAccessToken(payload.token);
       });
-  
-      this.broadcastService.subscribe("msal:acquireTokenSuccess", (payload) => {
-        console.log(payload);        
-      });
-      
-      this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
+
+      this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
+        console.log('acquireTokenSuccess');
         console.log(payload);
-      });  
+      });
+
+      this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
+        console.log('acquireTokenFailure');
+        console.log(payload);
+      });
     });
   }
 
   public logOff(): void {
-    this.authService.signOut();    
+    this.authService.signOut();
   }
 }

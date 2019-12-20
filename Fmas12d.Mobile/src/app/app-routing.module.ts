@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { MsalGuard } from '@azure/msal-angular/dist/msal-guard.service';
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'home',
+    canActivate: [MsalGuard],
     loadChildren: () => import('./pages/home/home.module')
       .then(m => m.HomePageModule)
   },
