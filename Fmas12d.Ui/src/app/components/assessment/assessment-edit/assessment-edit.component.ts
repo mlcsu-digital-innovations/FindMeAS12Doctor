@@ -16,6 +16,8 @@ import { NgbDateStruct, NgbTimeStruct, NgbModalRef, NgbModal } from '@ng-bootstr
 import { Observable, of, throwError } from 'rxjs';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
+import { REFERRAL_STATUS_ASSESSMENT_SCHEDULED, REFERRAL_STATUS_AWAITING_RESCHEDULING } from 'src/app/constants/Constants';
+import { REFERRAL_STATUS_CLOSED } from 'src/app/constants/Constants';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
 import { RouterService } from 'src/app/services/router/router.service';
@@ -46,6 +48,7 @@ export class AssessmentEditComponent implements OnInit {
   genderSelected: number;
   genderTypes: NameIdList[];
   hasAmhpSearchFailed: boolean;
+  isAllowedToRemove: boolean;
   isAmhpSearching: boolean;
   isPatientIdValidated: boolean;
   isPlannedAssessment: boolean;
@@ -476,6 +479,10 @@ export class AssessmentEditComponent implements OnInit {
     });
 
     this.assessmentForm.controls.assessmentDetails.setValue(this.selectedDetails);
+
+    this.isAllowedToRemove =
+      referral.referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
+      referral.referralStatusId !== REFERRAL_STATUS_CLOSED;
 
     // initialise all as selected
     this.selectedDoctors.forEach(doctor => doctor.selected = true);

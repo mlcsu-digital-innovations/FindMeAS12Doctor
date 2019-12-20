@@ -234,7 +234,7 @@
                   <div *ngFor="let doctor of selectedDoctors; let i=index" class="doctor-row">
                     <div class="row">
                       <div class="col-md-10">
-                        <label class="container" >
+                        <label class="container" *ngIf="isAllowedToRemove">
                           <input
                             class="form-control"
                             type="checkbox"
@@ -268,7 +268,7 @@
 
                     <div class="row">
                       <div class="col-md-10">
-                        <label class="container" >
+                        <label class="container" *ngIf="isAllowedToRemove">
                           <input
                             class="form-control"
                             type="checkbox"
