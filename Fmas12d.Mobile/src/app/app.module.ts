@@ -8,7 +8,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
-import { Network } from '@ionic-native/network/ngx'
+import { Network } from '@ionic-native/network/ngx';
 import { NgModule } from '@angular/core';
 import { OAuthSettings } from '../oauth';
 import { RequestInterceptor } from './models/request-interceptor.model';
@@ -22,7 +22,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   ],
   entryComponents: [],
   imports: [
-    AppRoutingModule, 
+    AppRoutingModule,
     BrowserModule,
     ComponentsModule,
     HttpClientModule,
@@ -43,7 +43,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
     Network,
     StatusBar,
     SplashScreen,
-    { 
+    {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
     },

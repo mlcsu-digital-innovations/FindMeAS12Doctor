@@ -114,6 +114,7 @@ namespace Fmas12d.Business.Services
 
       return model;
     }
+
     public async Task<User> GetByIdentityServerIdentifierAsync(
       string identityServerIdentifier,
       bool asNoTracking = true,
@@ -121,6 +122,11 @@ namespace Fmas12d.Business.Services
     )
     {
       User model = await _context.Users
+        .Include(u => u.ContactDetails)
+        .Include(u => u.GenderType)
+        .Include(u => u.ProfileType)
+        .Include(u => u.UserSpecialities)
+          .ThenInclude(us => us.Speciality)
        .WhereIsActiveOrActiveOnly(activeOnly)
        .Where(u => u.IdentityServerIdentifier == identityServerIdentifier)
        .AsNoTracking(asNoTracking)

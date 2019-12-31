@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './services/storage/storage.service';
 import * as jwt_decode from 'jwt-decode';
+import { UserDetailsService } from './services/user-details/user-details.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storageService: StorageService,
+    private userDetailsService: UserDetailsService
   ) {
   }
 
@@ -42,15 +44,30 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
+        console.log('loginFailure');
         console.log(payload);
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
+        console.log('loginSuccess');
         console.log(payload);
+        const decodedToken = jwt_decode(payload._token);
+
+        console.log(decodedToken.oid);
+        // query the users details
+        this.userDetailsService.getUserDetails(decodedToken.oid)
+        .subscribe(result => {
+          console.log(result);
+        },
+          err => {
+            console.log(err);
+        });
+
         this.storageService.storeAccessToken(payload.token);
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
+        console.log('acquireTokenSuccess');
         console.log(payload);
       });
 

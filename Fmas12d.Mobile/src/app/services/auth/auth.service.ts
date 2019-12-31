@@ -15,7 +15,7 @@ export class AuthService implements OnDestroy {
     private broadcastService: BroadcastService,
     private storageService: StorageService
     ) {
-    this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
+    this.subscription = this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
       console.log(payload);
     });
   }
