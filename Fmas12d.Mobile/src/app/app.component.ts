@@ -35,8 +35,6 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      console.log('platform ready');
-
       this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
         if (status === ConnectionStatus.Online) {
           this.offlineManager.checkForEvents().subscribe();
