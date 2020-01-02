@@ -349,7 +349,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDetail> assessmentDetails = new List<AssessmentDetail> {
         new AssessmentDetail() {
           AssessmentDetailTypeId = GetAssessmentDetailTypeByName(
-              AssessmentDetailTypesSeeder.NAME_AGRESSIVE_NEIGHBOUR).Id,
+              AssessmentDetailTypesSeeder.NAME_POLICE_PRESENT).Id,
           IsActive = true
         }
       };
