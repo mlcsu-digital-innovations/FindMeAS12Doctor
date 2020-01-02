@@ -1,4 +1,13 @@
-<app-navbar></app-navbar>
+<ion-header>
+  <ion-toolbar color="primary">        
+    <ion-title slot="start">
+      {{connection ? "Online" : "Offline"}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>     
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
   <ion-card>
