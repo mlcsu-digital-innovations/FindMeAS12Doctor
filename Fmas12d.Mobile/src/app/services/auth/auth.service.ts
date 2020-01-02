@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { MSAdal, AuthenticationContext, AuthenticationResult } from '@ionic-native/ms-adal/ngx';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
-import { Subscription, Observable, from } from 'rxjs';
+import { OAuthSettings } from 'src/oauth';
 import { StorageService } from '../storage/storage.service';
-import { ApiService } from '../api/api.service';
+import { Subscription, Observable, from } from 'rxjs';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +12,12 @@ import { ApiService } from '../api/api.service';
 export class AuthService {
   private subscription: Subscription;
 
-  constructor(
-    private apiService: ApiService,
-    private msalService: MsalService,    
+  constructor(    
     private broadcastService: BroadcastService,
-    private storageService: StorageService
+    private msAdal: MSAdal,
+    private msalService: MsalService,    
+    private storageService: StorageService,
+    private toastService: ToastService
     ) 
   {
     this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
@@ -22,11 +25,11 @@ export class AuthService {
     });    
   }
 
-  public signIn(): void {
+  public loginMsal(): void {
     this.msalService.loginRedirect();  
   }
   
-  public signOut(): void {
+  public logoutMsal(): void {
     this.msalService.logout();
     this.storageService.clearAccessToken();
   }     
@@ -37,12 +40,29 @@ export class AuthService {
       this.subscription.unsubscribe();      
     }
   }
+  
+  public loginMsAdal(): Observable<string> {
+    let authContext: AuthenticationContext = this.msAdal
+      .createAuthenticationContext(OAuthSettings.authority);        
 
-  public login(email: string, password: string): Observable<any> {
-    return this.apiService.login(email, password);           
+    return from(authContext.acquireTokenAsync(
+        OAuthSettings.appId, 
+        OAuthSettings.appId, 
+        OAuthSettings.redirectUrl,
+        null, 
+        null, 
+        null
+      ).then((authResponse: AuthenticationResult) => {  
+        this.storageService.storeAccessToken(authResponse.accessToken);      
+        return authResponse.accessToken;
+      }, error => {        
+        this.toastService.displayError({ message: error });
+        throw Promise.reject("Failed to authenticate: " + error);
+      }));
   }
 
-  public logout() {
-
+  public logoutMsAdal() {
+    this.storageService.clearAccessToken();    
+    this.toastService.displayMessage({ message: "You have logged out of Find Me An S12 Doctor" });
   }
 }

@@ -1,5 +1,6 @@
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { Platform, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -7,24 +8,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  public email: string;
-  public password: string;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,   
+    private navCtrl: NavController,
+    private platform: Platform
     ) { }
 
   ngOnInit() {
-   
+      
   }
 
-  public login(): void {
-    //this.authService.signIn();
-    this.authService.login(this.email, this.password).subscribe(data => {
-      console.log(data);
-    }, error => {
-      console.log(error);
-    }); 
+  public login(): void {    
+    if (this.platform.is("cordova")) {
+      this.authService.loginMsAdal().subscribe(result => {}, error => {
+        this.navCtrl.navigateRoot("login");
+      });
+    }
+    else {
+      this.authService.loginMsal();
+    }
+    this.navCtrl.navigateRoot("home");
   }  
   
 }

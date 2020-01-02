@@ -5,22 +5,21 @@ import { NetworkService, ConnectionStatus } from '../network/network.service';
 import { Observable, from, of, throwError } from 'rxjs';
 import { OfflineManagerService } from '../offline-manager/offline-manager.service';
 import { StorageService } from '../storage/storage.service';
+import { ToastService } from '../toast/toast.service';
 import { tap, map, catchError } from 'rxjs/operators';
-import { OAuthSettings } from 'src/oauth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private contentType = 'application/json';
-  private accessToken: string;
 
   constructor(
     private http: HttpClient,
     private logService: LogService,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private toastService: ToastService
     ) { }
 
   public get(url: string, storageKey: string): Observable<any> {
@@ -31,6 +30,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
             return throwError(error);
           }),
           map(result => result),
@@ -48,6 +48,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
             return throwError(error);
           }
         )
@@ -63,30 +64,12 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
             return throwError(error);
           }
         )
       );
     }
-  }
-
-  public login(email: string, password: string): Observable<any> {
-    let url = OAuthSettings.oauth2Endpoint;
-    
-    let headers: HttpHeaders = new HttpHeaders();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-
-    let scopes: string = OAuthSettings.scopes.join(" ");
-
-    let params: HttpParams = new HttpParams();
-    params.set('client_id', OAuthSettings.appId);
-    params.set('client_secret', OAuthSettings.clientSecret);
-    params.set('scope', scopes);
-    params.set('username', email);
-    params.set('password', password);
-    params.set('grant_type', 'password');
-
-    return this.http.post(url, params, {headers: headers});
   }
 
 }
