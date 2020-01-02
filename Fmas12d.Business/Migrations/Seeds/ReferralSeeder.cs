@@ -158,7 +158,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           meetingArrangementComment: RESPONSES_PARTIAL_MEETING_ARRGANEMENT_COMMENT,
           mustBeCompletedBy: RESPONSES_PARTIAL_MUST_BE_COMPLETED_BY,
           postcode: RESPONSES_PARTIAL_POSTCODE,
-          specialityId: Models.Speciality.LEARNING_DIFFICULTY,
+          specialityId: Models.Speciality.LEARNING_DISABILITY,
           userAssessmentNotifications: userAssessmentNotifications
         )
       };
@@ -235,7 +235,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           meetingArrangementComment: AWAITING_RESPONSES_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: AWAITING_RESPONSES_MUST_BE_COMPLETED_BY,
           postcode: AWAITING_RESPONSES_POSTCODE,
-          specialityId: Models.Speciality.CHILD,
+          specialityId: Models.Speciality.CHILDREN,
           userAssessmentNotifications: userAssessmentNotifications
         )
       };
@@ -318,7 +318,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRGANEMENT_COMMENT,
           mustBeCompletedBy: ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY,
           postcode: ASSESSMENT_SCHEDULED_POSTCODE,
-          specialityId: Models.Speciality.LEARNING_DIFFICULTY,
+          specialityId: Models.Speciality.LEARNING_DISABILITY,
           userAssessmentNotifications: userAssessmentNotifications
         )
       };
@@ -370,7 +370,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           meetingArrangementComment: SELECTING_DOCTORS_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: SELECTING_DOCTORS_MUST_BE_COMPLETED_BY,
           postcode: SELECTING_DOCTORS_POSTCODE,
-          specialityId: Models.Speciality.LEARNING_DIFFICULTY,
+          specialityId: Models.Speciality.LEARNING_DISABILITY,
           userAssessmentNotifications: userAssessmentNotifications
         )
       };
@@ -441,7 +441,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRGANEMENT_COMMENT,
           mustBeCompletedBy: ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY,
           postcode: ASSESSMENT_SCHEDULED_POSTCODE,
-          specialityId: Models.Speciality.LEARNING_DIFFICULTY,
+          specialityId: Models.Speciality.LEARNING_DISABILITY,
           userAssessmentNotifications: userAssessmentNotifications,
           unsuccessfulAssessmentTypeId: Models.UnsuccessfulAssessmentType.REFUSED_ENTRY
         )
