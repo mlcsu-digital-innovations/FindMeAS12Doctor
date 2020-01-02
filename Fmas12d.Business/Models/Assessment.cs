@@ -106,6 +106,13 @@ namespace Fmas12d.Business.Models
     public DateTimeOffset DateTime
     { get { return ScheduledTime ?? MustBeCompletedBy ?? default; } }
 
+    public bool IsScheduled
+    {
+      get {
+        return ScheduledTime != null;
+      }
+    }
+
     public virtual IList<AssessmentDetailType> DetailTypes
     {
       get

@@ -190,6 +190,7 @@
 
                     <ng-template #tipContent>
                       <div class="assessment-tooltip" *ngFor="let assessment of availableDoctor.activeAssessments">
+                        <span>{{assessment.isScheduled === true ? 'Scheduled' : 'Allocated'}}</span>
                         {{assessment.postcode}} @ {{assessment.dateTime | dateTimeFormat}}
                       </div>
                     </ng-template>
