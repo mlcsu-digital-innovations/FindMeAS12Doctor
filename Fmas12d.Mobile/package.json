@@ -6,7 +6,7 @@
   "scripts": {
     "build": "ng build",
     "build:aimes-uat": "del-cli ../Deployment/AimesUat/Fmas12d.Mobile --force && ng build --configuration=aimes-uat && cpy ./deployment/web.config ../Deployment/AimesUat/Fmas12d.Mobile",
-    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Mobile",    
+    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Mobile",
     "e2e": "ng e2e",
     "ionic": "ionic",
     "lint": "ng lint",
@@ -37,6 +37,7 @@
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^3.4.0",
     "core-js": "^2.5.4",
+    "jwt-decode": "^2.2.0",
     "native-run": "^0.2.9",
     "rxjs": "~6.5.1",
     "rxjs-compat": "^6.5.3",
