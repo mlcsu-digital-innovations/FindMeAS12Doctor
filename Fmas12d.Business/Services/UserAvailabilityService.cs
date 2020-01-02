@@ -119,6 +119,8 @@ namespace Fmas12d.Business.Services
                   .DoctorAssessments
                   .Where(da => da.IsActive)
                   .Where(da => da.Assessment.IsActive)
+                  .Where(da => da.Assessment.IsSuccessful == null)
+                  .Where(da => da.StatusId == AssessmentDoctorStatus.ALLOCATED)
                   .Where(da => da.Assessment.CompletedTime == null)
                   .Where(da => da.Assessment.ScheduledTime == null ||
                                da.Assessment.ScheduledTime <= requiredDateTime.AddHours(-8) ||

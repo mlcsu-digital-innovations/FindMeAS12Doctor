@@ -77,7 +77,6 @@ export class AllocationCompleteModalComponent implements OnInit {
       this.dateError = 'Invalid Date Format';
     } else {
       const nowDate = new Date();
-      nowDate.setHours(nowDate.getMinutes() - 5);
 
       if (selectedDate < nowDate) {
         this.dateError = 'Assessment Date / Time cannot be in the past';
