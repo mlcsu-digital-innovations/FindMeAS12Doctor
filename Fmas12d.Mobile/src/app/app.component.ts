@@ -8,6 +8,9 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './services/storage/storage.service';
 import * as jwt_decode from 'jwt-decode';
+import { UserDetailsService } from './services/user-details/user-details.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { PROFILETYPEAMHP, PROFILETYPEDOCTOR } from './constants/app.constants';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +20,8 @@ import * as jwt_decode from 'jwt-decode';
 export class AppComponent implements OnInit {
 
   userName: string;
+  isAmhp: boolean;
+  isDoctor: boolean;
 
   constructor(
     private authService: AuthService,
@@ -27,6 +32,7 @@ export class AppComponent implements OnInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storageService: StorageService,
+    private userDetailsService: UserDetailsService
   ) {
   }
 
@@ -42,15 +48,18 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
+        console.log('loginFailure');
         console.log(payload);
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
+        console.log('loginSuccess');
         console.log(payload);
         this.storageService.storeAccessToken(payload.token);
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
+        console.log('acquireTokenSuccess');
         console.log(payload);
       });
 
@@ -62,7 +71,13 @@ export class AppComponent implements OnInit {
       .subscribe(result => {
         const details = jwt_decode(result);
         this.userName = details.name;
-        console.log(details);
+
+        this.userDetailsService.getUserDetails(details.oid)
+        .subscribe(user => {
+          this.isAmhp = user.profileTypeId === PROFILETYPEAMHP;
+          this.isDoctor = user.profileTypeId === PROFILETYPEDOCTOR;
+        });
+
       });
 
     });
