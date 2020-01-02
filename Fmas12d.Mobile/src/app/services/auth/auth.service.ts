@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { MSAdal, AuthenticationContext, AuthenticationResult } from '@ionic-native/ms-adal/ngx';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { OAuthSettings } from 'src/oauth';
@@ -9,7 +9,7 @@ import { ToastService } from '../toast/toast.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private subscription: Subscription;
 
   constructor(    
@@ -21,8 +21,9 @@ export class AuthService {
     ) 
   {
     this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
+
       console.log(payload);
-    });    
+    });
   }
 
   public loginMsal(): void {
@@ -32,12 +33,12 @@ export class AuthService {
   public logoutMsal(): void {
     this.msalService.logout();
     this.storageService.clearAccessToken();
-  }     
+  }
 
   ngOnDestroy() {
     this.broadcastService.getMSALSubject().next(1);
-    if(this.subscription) {
-      this.subscription.unsubscribe();      
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
   

@@ -144,10 +144,15 @@ export class DoctorAddComponent implements OnInit {
         this.routerService.navigatePrevious();
     },
       (err) => {
-        console.log(err);
+
+        const msg =
+          err.error.errors.UserId !== undefined
+          ? 'Doctor is already allocated to this assessment'
+          : err.error.title;
+
         this.toastService.displayError({
           title: 'Error',
-          message: err.error.title
+          message: msg
         });
       });
   }

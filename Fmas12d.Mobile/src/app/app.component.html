@@ -8,21 +8,24 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle>
+          <ion-item>
+            <ion-icon name="person"></ion-icon> {{userName}}
+          </ion-item>
           <ion-item routerLink="/home" routerDirection="root">
             <ion-icon name="home"></ion-icon> Home
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="isDoctor">
           <ion-item routerLink="/amhp-assessment-requests" routerDirection="forward">
             <ion-icon name="list"></ion-icon> Assessment Requests
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="isAmhp">
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
             <ion-icon name="folder-open"></ion-icon> AMHP Assessments
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="isDoctor">
           <ion-item routerLink="/doctor-availability-view" routerDirection="forward">
             <ion-icon name="search"></ion-icon> Availability
           </ion-item>

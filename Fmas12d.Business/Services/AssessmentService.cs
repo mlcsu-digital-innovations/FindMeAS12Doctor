@@ -324,6 +324,11 @@ namespace Fmas12d.Business.Services
         model.AvailableDoctors = await _userAvailabilityService.GetAvailableDoctorsAsync(
           model.DateTime, true, true);
 
+        // don't include doctors that are already selected or allocated
+        model.AvailableDoctors =
+         model.AvailableDoctors
+         .Where(d1 => !entity.Doctors.Any(d2 => d1.UserId == d2.DoctorUserId));
+
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
         {
           availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
