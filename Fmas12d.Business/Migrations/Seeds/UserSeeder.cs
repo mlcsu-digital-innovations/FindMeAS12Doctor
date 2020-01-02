@@ -20,6 +20,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     // public const string DISPLAY_NAME_NEILDAVIESMLCSU = "Neil Davies (MLCSU)";
     // public const string DISPLAY_NAME_NEILEDAVIES = "Neil E Davies";
     // public const string DISPLAY_NAME_STEPHENHARLAND = "Stephen Harland";
+    // public const string DISPLAY_NAME_PAULCOPELAND = "Paul Copeland";
+    // public const string DISPLAY_NAME_SHARONIBBS = "Sharon Ibbs";
+    // public const string DISPLAY_NAME_PRIYANTHA = "Priyantha Jawardine";
 
     public const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
     public const int GMCNUMBER_DOCTOR_MALE = 2222222;
@@ -39,17 +42,23 @@ namespace Fmas12d.Business.Migrations.Seeds
     // public const string IDENTITY_SERVER_IDENTIFIER_HELENCROSS = 
     //   "efc945eb-ee1b-4ed1-9fac-269c145196c6";      
     // public const string IDENTITY_SERVER_IDENTIFIER_JEHANDAVIDBEYERS = 
-    //   "ac74d440-5901-4660-9ed7-3e579e248e2e";      
+    //   "8a09f167-0183-4610-90fe-69f33675d3e8";      
     // public const string IDENTITY_SERVER_IDENTIFIER_MARKCARTER = 
-    //   "903ec2b7-a3be-4e91-a8ef-e3f5292f44f1";      
+    //   "1b6011e5-dfaf-4c5f-af80-f1911f8ee3fd";      
     // public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIES = 
     //   "f52c4a24-4071-4cd8-a7be-9e6f27446aba";      
     // public const string IDENTITY_SERVER_IDENTIFIER_NEILDAVIESMLCSU = 
-    //   "b1f8a2ca-48d3-4c05-aff9-4c343384190b";      
+    //   "fb222dee-faea-43f9-9eb5-a9d33e3bb7d0";      
     // public const string IDENTITY_SERVER_IDENTIFIER_NEILEDAVIES = 
-    //   "bb3712bb-d1ea-4bbf-8a0c-02a3dae26b1d";      
+    //   "f7a8b331-e898-4a0c-8564-227efc2a8721";      
     // public const string IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND = 
-    //   "c37a5d2d-ffa0-47b7-9286-c4e252a65696";      
+    //   "6d6fda51-7663-43d6-92c2-482bcfd14bd3"; 
+    // public const string IDENTITY_SERVER_IDENTIFIER_PAULCOPELAND = 
+    //   "558237f7-47ce-4046-9700-8e1fa0c20d21";
+    // public const string IDENTITY_SERVER_IDENTIFIER_SHARONIBBS = 
+    //   "9ec0170f-c3da-4525-835a-108aa271a6c3";
+    // public const string IDENTITY_SERVER_IDENTIFIER_PRIYANTHA = 
+    //   "fb5c9355-9b51-45f7-b7e8-dcced31186bb";     
     public const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = 
       "bf673270-2538-4e59-9d26-5b4808fd9ef6";
 
@@ -151,6 +160,27 @@ namespace Fmas12d.Business.Migrations.Seeds
       //   GetGenderTypeMale().Id,
       //   GetProfileTypeAdmin().Id,
       //   IDENTITY_SERVER_IDENTIFIER_STEPHENHARLAND
+      // ); 
+
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_PAULCOPELAND,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_PAULCOPELAND
+      // ); 
+
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_SHARONIBBS,
+      //   GetGenderTypeFemale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_SHARONIBBS
+      // ); 
+
+      // AddUpdateUserWithDefaults(
+      //   DISPLAY_NAME_PRIYANTHA,
+      //   GetGenderTypeMale().Id,
+      //   GetProfileTypeAdmin().Id,
+      //   IDENTITY_SERVER_IDENTIFIER_PRIYANTHA
       // );                              
     }
 
