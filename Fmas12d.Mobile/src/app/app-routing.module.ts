@@ -66,10 +66,23 @@ const routes: Routes = [
     loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' +
     '#DoctorAvailabilityEditPageModule'
   },
-
-
-
-
+  {
+    path: 'claims-list',
+    loadChildren: './pages/claims-list/claims-list.module#ClaimsListPageModule'
+  },
+  {
+    path: 'claims-create',
+    loadChildren: './pages/claims-create/claims-create.module#ClaimsCreatePageModule'
+  },
+  {
+    path: 'claims-details',
+    loadChildren: './pages/claims-details/claims-details.module#ClaimsDetailsPageModule'
+  },
+  {
+    path: 'claims-confirmation',
+    loadChildren: './pages/claims-confirmation/claims-confirmation.module' +
+    '#ClaimsConfirmationPageModule'
+  },
 ];
 
 @NgModule({
