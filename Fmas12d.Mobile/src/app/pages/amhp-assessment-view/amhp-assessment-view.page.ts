@@ -33,6 +33,7 @@ export class AmhpAssessmentViewPage implements OnInit {
       this.showLoading();
 
       request.subscribe((result: AmhpAssessmentView) => {
+        console.log(result);
         this.assessmentLastUpdated = new Date();
         this.assessmentView = result;
 
