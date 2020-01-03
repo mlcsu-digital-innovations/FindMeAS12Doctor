@@ -49,38 +49,30 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
-        console.log('loginFailure');
+        console.log('msal:loginFailure');
         console.log(payload);
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
-        console.log('loginSuccess');
+        console.log('msal:loginSuccess');
         console.log(payload);
-        this.storageService.storeAccessToken(payload.token);
+        this.setUserDetails(payload.token);
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
-        console.log('acquireTokenSuccess');
+        console.log('msal:acquireTokenSuccess');
         console.log(payload);
       });
 
       this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
         console.log(payload);
       });
-
-      this.storageService.getAccessToken()
-      .subscribe(result => {
-        const details = jwt_decode(result);
-        this.userName = details.name;
-
-        this.userDetailsService.getUserDetails(details.oid)
-        .subscribe(user => {
-          this.isAmhp = user.profileTypeId === PROFILETYPEAMHP;
-          this.isDoctor = user.profileTypeId === PROFILETYPEDOCTOR;
-        });
-
+   
+      this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
+        console.log('msadal:loginSuccess');
+        console.log(payload);
+        this.setUserDetails(payload.accessToken);
       });
-
     });
   }
 
@@ -93,5 +85,17 @@ export class AppComponent implements OnInit {
     }
     
     this.navController.navigateRoot("login");
+  }
+
+  private setUserDetails(token: string): void {
+    this.storageService.storeAccessToken(token);
+    const details = jwt_decode(token);
+    this.userName = details.name;
+
+    this.userDetailsService.getUserDetails(details.oid)
+    .subscribe(user => {
+      this.isAmhp = user.profileTypeId === PROFILETYPEAMHP;
+      this.isDoctor = user.profileTypeId === PROFILETYPEDOCTOR;
+    });
   }
 }

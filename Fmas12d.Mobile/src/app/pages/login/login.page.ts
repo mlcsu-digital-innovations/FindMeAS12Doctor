@@ -21,14 +21,16 @@ export class LoginPage implements OnInit {
 
   public login(): void {    
     if (this.platform.is("cordova")) {
-      this.authService.loginMsAdal().subscribe(result => {}, error => {
+      this.authService.loginMsAdal().subscribe(result => {
+        this.navCtrl.navigateRoot("home");
+      }, error => {
         this.navCtrl.navigateRoot("login");
       });
     }
     else {
       this.authService.loginMsal();
-    }
-    this.navCtrl.navigateRoot("home");
+      this.navCtrl.navigateRoot("home");
+    }    
   }  
   
 }

@@ -53,8 +53,8 @@ export class AuthService implements OnDestroy {
         null, 
         null, 
         null
-      ).then((authResponse: AuthenticationResult) => {  
-        this.storageService.storeAccessToken(authResponse.accessToken);      
+      ).then((authResponse: AuthenticationResult) => {               
+        this.broadcastService.broadcast('msadal:loginSuccess', authResponse);
         return authResponse.accessToken;
       }, error => {        
         this.toastService.displayError({ message: error });
