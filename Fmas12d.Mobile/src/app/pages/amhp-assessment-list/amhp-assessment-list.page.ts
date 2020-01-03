@@ -30,7 +30,6 @@ export class AmhpAssessmentListPage implements OnInit {
     this.showLoading();
 
     request.subscribe((result: AmhpAssessmentList[]) => {
-      console.log(result);
       this.assessmentListLastUpdated = new Date();
       this.assessmentListScheduled = result
         .filter(assessment => assessment.referralStatusId >= REFERRALSTATUSASSESSMENTSCHEDULED);
