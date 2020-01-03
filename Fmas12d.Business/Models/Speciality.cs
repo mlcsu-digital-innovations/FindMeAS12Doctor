@@ -1,12 +1,14 @@
 using System.Collections.Generic;
-using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Models
 {
   public class Speciality : NameDescription
   {
-    public const int CHILD = 1;
-    public const int LEARNING_DIFFICULTY = 2;
+    public const int ADULT_MH = 1;
+    public const int CHILDREN = 2;
+    public const int LEARNING_DISABILITY = 3;
+    public const int NEUROPSYCHOLOGICAL = 4;
+    public const int OLDER_PEOPLE_MH = 5;  
 
     public Speciality() {}
     public Speciality(Data.Entities.Speciality entity) : base(entity)

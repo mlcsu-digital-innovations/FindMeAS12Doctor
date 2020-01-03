@@ -8,7 +8,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal void SeedData()
     {
       AddOrUpdate(
-        Models.Speciality.CHILD,
+        Models.Speciality.CHILDREN,
         UserSeeder.DISPLAY_NAME_DOCTOR_MALE
       );
     }
