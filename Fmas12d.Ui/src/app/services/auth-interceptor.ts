@@ -22,7 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
             console.log("*** getting token");
             let token = this.oidcSecurityService.getToken();
             if (token !== '') {
-                console.log("*** token: " + token);
+                console.log("*** token acquired");
                 let tokenValue = 'Bearer ' + token;
                 requestToForward = req.clone({ setHeaders: { Authorization: tokenValue } });
             } else {

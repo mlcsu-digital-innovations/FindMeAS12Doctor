@@ -56,7 +56,7 @@ namespace Fmas12d.Business.Services
 
     public async Task<PostcodeIoSearchResult> SearchPostcodeAsync(string stringPostcode)
     {
-      PostcodeIoSearchResult convertedResult = null;
+      PostcodeIoSearchResult convertedResult;
 
       using HttpClient client = new HttpClient();
       string endpoint =
