@@ -53,7 +53,7 @@ export class AppComponent {
     if (window.location.hash) {
       this.oidcSecurityService.authorizedImplicitFlowCallback();
     } else {
-      if ('/autologin' !== window.location.pathname) {
+      if ('/autologin' !== window.location.pathname) {        
         this.write('redirect', window.location.pathname);
       }
       console.log('AppComponent:onModuleSetup');
@@ -66,10 +66,13 @@ export class AppComponent {
   }
 
   private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
-    console.log('AppComponent:onAuthorizationResultComplete');
+    
     const path = this.read('redirect');
     if (authorizationResult.authorizationState === AuthorizationState.authorized) {
-      if (path) {
+      if (path === '/') {
+        this.routerService.navigate(['/referral/list']);
+      }
+      else if (path) {        
         this.routerService.navigate([path]);
       }
     } else {

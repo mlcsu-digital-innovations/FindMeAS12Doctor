@@ -58,24 +58,24 @@ export class ReferralService {
     );
   }
 
-  public createReferral(newReferral: Referral) {
+  public createReferral(newReferral: Referral, retrospective: boolean) {
 
     // ToDo: Get the id of the logged on user
     newReferral.createdByUserId = 1;
 
     newReferral.referralStatusId = ReferralStatus.NewReferral;
 
-    // ToDo: sort the time offset !
-    newReferral.createdAt = null ? new Date() : newReferral.createdAt;
+    const endpoint = retrospective ? '/retrospective' : '';
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post(
-      environment.apiEndpoint + '/referral',
+      `${environment.apiEndpoint}/referral${endpoint}`,
       newReferral,
       { headers }
     );
   }
+
 
   public updateReferral(referral: Referral) {
 

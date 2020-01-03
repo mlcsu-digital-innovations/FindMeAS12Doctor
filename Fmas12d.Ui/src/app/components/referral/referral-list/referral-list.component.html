@@ -71,10 +71,10 @@
                       Status
                     </th>
                     <th class="sm-col text-center" scope="col" sortable="responsesReceived" (sort)="onSort($event)">
-                      Responses Received
+                      No. of Responses<br/>Received / Accepted
                     </th>
                     <th class="sm-col text-center" scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">
-                      Doctors Allocated
+                      No. of Doctors<br/> Selected / Allocated
                     </th>
                   </tr>
                 </thead>
@@ -161,10 +161,13 @@
                         class="clickable"
                         *ngIf="referral.responsesReceived > 0"
                       >
-                        <ngb-highlight [result]="referral.responsesReceived" [term]="referralListService.searchTerm">
+                        <ngb-highlight [result]="referral.responsesReceivedAccepted" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
-                      <span class="zero-responses" *ngIf="referral.responsesReceived == 0">0</span>
+                      <span class="zero-responses" *ngIf="referral.responsesReceived == 0">
+                        <ngb-highlight [result]="referral.responsesReceivedAccepted" [term]="referralListService.searchTerm">
+                        </ngb-highlight>
+                      </span>
                     </td>
                     <td class="text-center">
                       <a
@@ -174,10 +177,13 @@
                         class="clickable"
                         *ngIf="referral.doctorsAllocated > 0"
                       >
-                        <ngb-highlight [result]="referral.doctorsAllocated" [term]="referralListService.searchTerm">
+                        <ngb-highlight [result]="referral.doctorsSelectedAllocated" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
-                      <span class="zero-responses" *ngIf="referral.doctorsAllocated == 0">0</span>
+                    <span class="zero-responses" *ngIf="referral.doctorsAllocated == 0">
+                      <ngb-highlight [result]="referral.doctorsSelectedAllocated" [term]="referralListService.searchTerm">
+                      </ngb-highlight>
+                    </span>
                     </td>
                   </tr>
                 </tbody>

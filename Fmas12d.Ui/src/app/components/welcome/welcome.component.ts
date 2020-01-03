@@ -33,6 +33,9 @@ export class WelcomeComponent implements OnInit {
           this.userData = userData;
           if (this.userData !== '') {
             this.userData.access_token = this.oidcSecurityService.getToken();
+            if (!this.isDevelopment) {
+             this.routerService.navigate(['/referral/list']);
+            }
           }
         });
       }

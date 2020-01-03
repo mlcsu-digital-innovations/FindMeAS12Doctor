@@ -94,6 +94,12 @@ export class ReferralListService {
     let endpoint = environment.apiEndpoint + '/referral/list/open';
     this.http.get<ReferralList[]>(endpoint).subscribe(
       (data: ReferralList[]) => {
+
+        data.forEach(item => {
+          item.doctorsSelectedAllocated = `${item.doctorsSelected} / ${item.doctorsAllocated}`;
+          item.responsesReceivedAccepted = `${item.responsesReceived} / ${item.responsesAccepted}`;
+        });
+
         this._rawReferralList = data;
         this._search$.next();
       },
