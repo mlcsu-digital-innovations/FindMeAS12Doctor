@@ -1,19 +1,10 @@
-<app-navbar></app-navbar>
+<app-navbar title="AMHP Assessments" lastUpdated={{assessmentListLastUpdated}}></app-navbar>
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
   </ion-refresher>
   <ion-grid>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>AMHP Assessments</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-item>
-      <ion-label>Last Updated:</ion-label>
-      <ion-label>{{assessmentListLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</ion-label>
-    </ion-item>
     <ion-card>
       <ion-card-header color="primary">
         <strong>Scheduled Assessments</strong>
