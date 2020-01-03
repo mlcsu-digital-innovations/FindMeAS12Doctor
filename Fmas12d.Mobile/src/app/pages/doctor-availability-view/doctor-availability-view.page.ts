@@ -39,8 +39,10 @@ export class DoctorAvailabilityViewPage implements OnInit {
     this.userAvailabilityService.getListForUser()
     .subscribe(
       (result: UserAvailability[]) => {
-        this.availableList = result.filter(item => item.statusId === AVAILABLE);
-        this.unavailableList = result.filter(item => item.statusId === UNAVAILABLE);
+        if (result) {
+          this.availableList = result.filter(item => item.statusId === AVAILABLE);
+          this.unavailableList = result.filter(item => item.statusId === UNAVAILABLE);
+        }
       }, error => {
         this.showErrorToast('Unable to retrieve availability details for user');
       }
