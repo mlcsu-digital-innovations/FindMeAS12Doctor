@@ -73,6 +73,17 @@ namespace Fmas12d.Business.Models
       }
     }
 
+    public int DoctorsSelected
+    {
+      get
+      {
+        return Assessments?.Where(e => e.IsActive)
+                            .FirstOrDefault(e => e.IsCurrent)
+                            ?.DoctorsSelected
+                            .Count ?? 0;
+      }
+    }
+
     public bool HasCurrentAssessment { get { return CurrentAssessment != null; } }
 
     public string AssessmentLocationPostcode
@@ -139,6 +150,20 @@ namespace Fmas12d.Business.Models
                             .Count(d => d.RespondedAt != null) ?? 0;
       }
     }
+
+    public int ResponsesAccepted
+    {
+      get
+      {
+        return Assessments?.Where(e => e.IsActive)
+                            .FirstOrDefault(e => e.IsCurrent)
+                            ?.Doctors
+                            ?.Where(d => d.IsActive)
+                            ?.Where(d => d.HasAccepted == true)
+                            .Count(d => d.RespondedAt != null) ?? 0;
+      }
+    }
+
     public string SpecialityName
     { get { return CurrentAssessment?.SpecialityName; } }
 
