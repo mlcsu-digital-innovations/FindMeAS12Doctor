@@ -234,7 +234,7 @@ export class ReferralCreateComponent implements OnInit {
       datePart.day,
       timePart.hour,
       timePart.minute,
-      timePart.second,
+      0,
       0
     );
   }
@@ -628,14 +628,17 @@ export class ReferralCreateComponent implements OnInit {
     referral.leadAmhpUserId = this.amhpUser.id;
     referral.patientId = this.patientDetails.id;
 
+    let retrospective = false;
+
     if (this.retrospectiveReferralField.value === true) {
       referral.createdAt = this.CreateDateFromPickerObjects(this.referralDateField.value, this.referralTimeField.value);
+      retrospective = true;
     } else {
       referral.createdAt = new Date();
     }
 
 
-    this.referralService.createReferral(referral).subscribe(
+    this.referralService.createReferral(referral, retrospective).subscribe(
       (result: Referral) => {
         this.toastService.displaySuccess({
           message: 'Referral Created'
@@ -894,7 +897,7 @@ export class ReferralCreateComponent implements OnInit {
             this.toastService.displaySuccess({
               title: 'Postcode Validation',
               message: `${result.postcode} is a valid postcode`
-            });            
+            });
           }
         },
         error => {
