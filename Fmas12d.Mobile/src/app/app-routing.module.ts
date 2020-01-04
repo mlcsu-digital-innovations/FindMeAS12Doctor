@@ -1,35 +1,39 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-//import { MsalGuard } from '@azure/msal-angular/dist/msal-guard.service';
+import { RouteGuardService } from './services/route-guard/route-guard.service';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login', pathMatch: 'full'
+    redirectTo: 'home', pathMatch: 'full'
   },
   {
     path: 'amhp-assessment-list',
+    canActivate: [RouteGuardService],
     loadChildren:
       './pages/amhp-assessment-list/amhp-assessment-list.module#AmhpAssessmentListPageModule'
   },
   {
     path: 'amhp-assessment-outcome',
+    canActivate: [RouteGuardService],
     loadChildren:
       './pages/amhp-assessment-outcome' +
       '/amhp-assessment-outcome.module#AmhpAssessmentOutcomePageModule' 
   },
   {
     path: 'amhp-assessment-view/:id',
+    canActivate: [RouteGuardService],
     loadChildren:
       './pages/amhp-assessment-view/amhp-assessment-view.module#AmhpAssessmentViewPageModule'
   },
   {
     path: 'help',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/help/help.module#HelpPageModule'
   },
   {
     path: 'home',
-    //canActivate: [MsalGuard],
+    canActivate: [RouteGuardService],
     loadChildren: () => import('./pages/home/home.module')
       .then(m => m.HomePageModule)
   },
@@ -39,30 +43,36 @@ const routes: Routes = [
   },
   {
     path: 'amhp-assessment-requests',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/amhp-assessment-requests/amhp-assessment-requests.module' +
     '#AmhpAssessmentRequestsPageModule'
   },
   {
     path: 'amhp-assessment-request-response/:id',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/amhp-assessment-request-response/amhp-assessment-request-response.module' +
     '#AmhpAssessmentRequestResponsePageModule'
   },
   {
     path: 'amhp-assessment-accept-request',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/amhp-assessment-accept-request/amhp-assessment-accept-request.module' +
     '#AmhpAssessmentAcceptRequestPageModule'
   },
   {
     path: 'doctor-availability-view',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/doctor-availability-view/doctor-availability-view.module' +
     '#DoctorAvailabilityViewPageModule' },
   {
     path: 'doctor-availability-add',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/doctor-availability-add/doctor-availability-add.module' +
     '#DoctorAvailabilityAddPageModule'
   },
   {
     path: 'doctor-availability-edit/:id',
+    canActivate: [RouteGuardService],
     loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' +
     '#DoctorAvailabilityEditPageModule'
   },

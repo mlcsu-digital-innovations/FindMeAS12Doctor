@@ -9,7 +9,10 @@ import { NetworkService, ConnectionStatus } from 'src/app/services/network/netwo
 export class HomePage implements OnInit {
   public connection: boolean;
 
-  constructor(private networkService: NetworkService, private changeRef: ChangeDetectorRef) { }
+  constructor(
+    private networkService: NetworkService, 
+    private changeRef: ChangeDetectorRef
+    ) { }
 
   ngOnInit() {  
     this.connection = this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Online;

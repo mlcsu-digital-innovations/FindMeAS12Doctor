@@ -24,7 +24,7 @@ export class LoginPage implements OnInit {
       this.authService.loginMsAdal().subscribe(result => {
         this.navCtrl.navigateRoot("home");
       }, error => {
-        this.navCtrl.navigateRoot("login");
+        this.navCtrl.navigateRoot("home");
       });
     }
     else {
