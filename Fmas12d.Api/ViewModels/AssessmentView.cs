@@ -30,6 +30,7 @@ namespace Fmas12d.Api.ViewModels
       Postcode = model.Postcode;
       PreferredDoctorGenderTypeName = model.PreferredDoctorGenderTypeName;
       ReferralId = model.ReferralId;
+      ReferralStatus = model.Referral.ReferralStatus.Name;
       SpecialityName = model.SpecialityName;
 
       if (model.DoctorsAllocated != null && 
@@ -66,6 +67,7 @@ namespace Fmas12d.Api.ViewModels
     public string Postcode { get; set; }
     public string PreferredDoctorGenderTypeName {get; set;}
     public int ReferralId { get; set; }
+    public string ReferralStatus { get; set; }
     public string SpecialityName { get; set; }
 
     public static Func<Business.Models.Assessment, AssessmentView> ProjectFromModel

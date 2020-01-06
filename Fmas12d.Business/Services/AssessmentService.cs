@@ -393,6 +393,8 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(d => d.ContactDetail)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.ReferralStatus)
                 .Include(e => e.Speciality)
                 .Include(e => e.UserAssessmentNotifications)
                   .ThenInclude(u => u.User)
