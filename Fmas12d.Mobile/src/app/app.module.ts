@@ -7,6 +7,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
+import { MSAdal } from '@ionic-native/ms-adal/ngx';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { Network } from '@ionic-native/network/ngx';
 import { NgModule } from '@angular/core';
@@ -40,6 +41,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   ],
   providers: [
     Geolocation,
+    MSAdal,
     Network,
     StatusBar,
     SplashScreen,
