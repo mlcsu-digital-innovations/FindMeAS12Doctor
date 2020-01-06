@@ -12,7 +12,7 @@
           </ion-label>
         </ion-row>
         <ion-row >
-          <ion-col push="1">
+          <ion-col>
             {{assessmentView?.patientIdentifier}}
           </ion-col>
         </ion-row>
@@ -23,23 +23,25 @@
           </ion-label>
         </ion-row>        
         <ion-row>
-          <ion-col push="1">
+          <ion-col>
             {{assessmentView?.dateTime | date: "d MMMM yyyy H:mm"}}
           </ion-col>
         </ion-row>
-        <ion-row *ngIf="assessmentView?.canUpdateOutcome && assessmentView?.specialityName">
+        <ion-row *ngIf="assessmentView?.specialityName">
           <ion-col>
-            Assessment Speciality:
-            <ion-text class="ion-text-wrap">
-              <strong>{{assessmentView?.specialityName}}</strong>
-            </ion-text>
+            <ion-label color="primary">Assessment Speciality</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="assessmentView?.specialityName">
+          <ion-col>
+            {{assessmentView?.specialityName}}
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-label color="primary">Assessment Address</ion-label>
         </ion-row>
         <ion-row>
-          <ion-col push="1">
+          <ion-col>
             {{assessmentView?.address1}}
             <br *ngIf="assessmentView?.address1?.length > 0" />
             {{assessmentView?.address2}}

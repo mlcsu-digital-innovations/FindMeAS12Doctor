@@ -15,8 +15,8 @@ namespace Fmas12d.Api.ViewModels
       DoctorHasAccepted = model.Doctors?.SingleOrDefault()?.HasAccepted;
       Id = model.Id;
       PatientId = model.Referral.Patient?.NhsNumber == null 
-        ? model.Referral.Patient.AlternativeIdentifier
-        : model.Referral.Patient.NhsNumber.ToString();
+        ? model.Referral.Patient?.AlternativeIdentifier
+        : model.Referral.Patient?.NhsNumber.ToString();
       Postcode = model.Postcode;
       ReferralStatusId = model.Referral.ReferralStatusId;
     }

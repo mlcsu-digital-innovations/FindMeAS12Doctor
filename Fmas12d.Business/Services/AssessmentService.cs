@@ -1284,7 +1284,12 @@ namespace Fmas12d.Business.Services
           Postcode = a.Postcode,
           Referral = new Referral
           {
-            ReferralStatusId = a.Referral.ReferralStatusId
+            ReferralStatusId = a.Referral.ReferralStatusId,
+            Patient = new Patient
+            {
+              AlternativeIdentifier = a.Referral.Patient.AlternativeIdentifier,
+              NhsNumber = a.Referral.Patient.NhsNumber
+            }
           },
           ScheduledTime = a.ScheduledTime
         })
