@@ -74,7 +74,7 @@
             </div>
             <div class="form-row">
               <div class="col-md-4">
-                <label for="mustBeCompletedBy">Must be Completed by</label>
+                <label for="mustBeCompletedBy">{{showDateTitle}}</label>
                 <input
                   class="form-control"
                   formControlName="mustBeCompletedBy"
@@ -152,7 +152,7 @@
               </div>
             </div>
             <div class="form-row mt-more-2">
-              <div class="col-md-3 mb-2 offset-md-9 text-right">
+              <div class="col-md-3 mb-2">
                 <button
                   class="btn btn-outline btn-fill btn-spaced"
                   type="button"
@@ -162,9 +162,7 @@
                   Close Referral
                 </button>
               </div>
-            </div>
-            <div class="form-row mt-more-2">
-              <div class="col-md-3 mb-2 offset-md-9 text-right">
+              <div class="col-md-3 mb-2 offset-md-6 text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="CancelView()">
                   <i class="far fa-times-circle"></i>
                   Cancel
