@@ -174,10 +174,14 @@ namespace Fmas12d.Business.Models
     {
       get
       {
-        DateTimeOffset? timescale =
+        Assessment assessment = 
           Assessments?.Where(e => e.IsActive)
-                       .FirstOrDefault(e => e.IsCurrent)
-                       ?.MustBeCompletedBy;
+            .FirstOrDefault(e => e.IsCurrent);
+
+        DateTimeOffset? timescale = 
+          assessment?.ScheduledTime == null 
+            ? assessment?.MustBeCompletedBy
+            : assessment?.ScheduledTime;
 
         return timescale == default(DateTimeOffset)
                ? null
