@@ -5,6 +5,7 @@ export class AmhpAssessmentSelectedDoctor {
   distance: number;
   doctorId: number;
   gmcNumber: number;
+  hasAccepted: boolean;
   hasResponded?: boolean;
   id: number;
   isRegistered?: boolean;

@@ -1,8 +1,8 @@
 {
   "name": "uk.nhs.fmas12d",
-  "version": "0.0.2",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "version": "0.0.3",
+  "author": "Digital Innovation Unit @MLCSU",
+  "homepage": "http://www.midlandsandlancashirecsu.nhs.uk",
   "scripts": {
     "build": "ng build",
     "build:aimes-uat": "del-cli ../Deployment/AimesUat/Fmas12d.Mobile --force && ng build --configuration=aimes-uat && cpy ./deployment/web.config ../Deployment/AimesUat/Fmas12d.Mobile",

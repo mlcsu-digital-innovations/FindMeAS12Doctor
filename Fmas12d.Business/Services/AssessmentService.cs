@@ -393,6 +393,8 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(d => d.ContactDetail)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.ReferralStatus)
                 .Include(e => e.Speciality)
                 .Include(e => e.UserAssessmentNotifications)
                   .ThenInclude(u => u.User)
@@ -1209,6 +1211,7 @@ namespace Fmas12d.Business.Services
       IQueryable<Entities.Assessment> query = _context
         .Assessments
         .Include(a => a.Referral)
+          .ThenInclude(r => r.Patient)
         .Where(a => a.AmhpUserId == amhpUserId)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);
@@ -1226,7 +1229,12 @@ namespace Fmas12d.Business.Services
           Postcode = a.Postcode,
           Referral = new Referral
           {
-            ReferralStatusId = a.Referral.ReferralStatusId
+            ReferralStatusId = a.Referral.ReferralStatusId,
+            Patient = new Patient
+            {
+              AlternativeIdentifier = a.Referral.Patient.AlternativeIdentifier,
+              NhsNumber = a.Referral.Patient.NhsNumber
+            }
           },
           ScheduledTime = a.ScheduledTime
         })
@@ -1278,7 +1286,12 @@ namespace Fmas12d.Business.Services
           Postcode = a.Postcode,
           Referral = new Referral
           {
-            ReferralStatusId = a.Referral.ReferralStatusId
+            ReferralStatusId = a.Referral.ReferralStatusId,
+            Patient = new Patient
+            {
+              AlternativeIdentifier = a.Referral.Patient.AlternativeIdentifier,
+              NhsNumber = a.Referral.Patient.NhsNumber
+            }
           },
           ScheduledTime = a.ScheduledTime
         })

@@ -91,7 +91,7 @@ export class AmhpAssessmentService {
 
   public getView(assessmentId: number): Observable<AmhpAssessmentView> {
     return this.apiService.get(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/user`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}`,
       `AmhpUserView-${assessmentId}`
     ) as Observable<AmhpAssessmentView>;
   }

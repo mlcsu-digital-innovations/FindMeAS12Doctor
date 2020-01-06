@@ -14,6 +14,9 @@ namespace Fmas12d.Api.ViewModels
       DoctorStatusId = model.Doctors?.SingleOrDefault()?.StatusId;
       DoctorHasAccepted = model.Doctors?.SingleOrDefault()?.HasAccepted;
       Id = model.Id;
+      PatientId = model.Referral.Patient?.NhsNumber == null 
+        ? model.Referral.Patient?.AlternativeIdentifier
+        : model.Referral.Patient?.NhsNumber.ToString();
       Postcode = model.Postcode;
       ReferralStatusId = model.Referral.ReferralStatusId;
     }
@@ -22,6 +25,7 @@ namespace Fmas12d.Api.ViewModels
     public int? DoctorStatusId { get; set; }
     public bool? DoctorHasAccepted { get; set; }
     public int Id { get; set; }
+    public string PatientId {get; set;}
     public string Postcode { get; set; }
     public int ReferralStatusId { get; set; }
 

@@ -1,19 +1,10 @@
-<app-navbar></app-navbar>
+<app-navbar title="Assessment Requests" lastUpdated={{assessmentRequestsLastUpdated}}></app-navbar>
 
 <ion-content>
   <ion-grid>
     <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
       <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
     </ion-refresher>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Assessment Requests</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-item>
-      <ion-label>Last Updated:</ion-label>
-      <ion-label>{{assessmentRequestsLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</ion-label>
-    </ion-item>
     <ion-card>
       <ion-card-header color="primary">
         <strong>Assessment Requests</strong>        

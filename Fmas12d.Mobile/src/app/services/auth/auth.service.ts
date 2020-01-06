@@ -63,7 +63,6 @@ export class AuthService implements OnDestroy {
   }
 
   public logoutMsAdal() {
-    this.storageService.clearAccessToken();    
-    this.toastService.displayMessage({ message: "You have logged out of Find Me An S12 Doctor" });
+    this.storageService.clearAccessToken();        
   }
 }
