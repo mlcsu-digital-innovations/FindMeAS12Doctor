@@ -44,9 +44,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
-
           this.assessmentRequest.doctorDetails = result.doctorsSelected[0];
-
           this.closeLoading();
         }, error => {
           this.showErrorToast('Unable to retrieve assessment details');
