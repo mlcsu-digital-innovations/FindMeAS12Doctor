@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="uk.nhs.fmas12d" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="uk.nhs.fmas12d" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Find Me An S12 Doctor</name>
     <description>A mobile app for the Find Me A S12 Doctor web app</description>
     <author email="mlcsu.digitalinnovations@nhs.net" href="http://www.midlandsandlancashirecsu.nhs.uk">Digital Innovation Unit @MLCSU</author>
