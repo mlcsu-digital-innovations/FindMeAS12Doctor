@@ -42,10 +42,16 @@ const routes: Routes = [
     loadChildren: './pages/login/login.module#LoginPageModule' 
   },
   {
-    path: 'amhp-assessment-requests',
+    path: 'doctor-assessments',
     canActivate: [RouteGuardService],
-    loadChildren: './pages/amhp-assessment-requests/amhp-assessment-requests.module' +
-    '#AmhpAssessmentRequestsPageModule'
+    loadChildren: './pages/doctor-assessments/doctor-assessments.module' +
+    '#DoctorAssessmentsPageModule'
+  },
+  {
+    path: 'doctor-assessment-details/:id',
+    canActivate: [RouteGuardService],
+    loadChildren: './pages/doctor-assessment-details/doctor-assessment-details.module' +
+    '#DoctorAssessmentDetailsPageModule'
   },
   {
     path: 'amhp-assessment-request-response/:id',
@@ -75,11 +81,7 @@ const routes: Routes = [
     canActivate: [RouteGuardService],
     loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' +
     '#DoctorAvailabilityEditPageModule'
-  },
-
-
-
-
+  }
 ];
 
 @NgModule({
