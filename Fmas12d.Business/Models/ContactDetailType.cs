@@ -9,11 +9,15 @@ namespace Fmas12d.Business.Models
     public const int HOME = 2;
 
     public ContactDetailType() { }
-    public ContactDetailType(Data.Entities.ContactDetailType entity) : base(entity)
+    public ContactDetailType(Data.Entities.ContactDetailType entity, bool includeContactDetails)
+    : base(entity)
     {
       if (entity == null) return;
 
-      ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd, false)).ToList();
+      if (includeContactDetails) {
+        ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd, false)).ToList();
+      }
+      
     }
 
     public virtual IList<ContactDetail> ContactDetails { get; set; }
