@@ -30,7 +30,7 @@ namespace Fmas12d.Api.ViewModels
       Postcode = model.Postcode;
       PreferredDoctorGenderTypeName = model.PreferredDoctorGenderTypeName;
       ReferralId = model.ReferralId;
-      ReferralStatus = model.Referral.ReferralStatus.Name;
+      ReferralStatus = model.Referral?.ReferralStatus?.Name;
       SpecialityName = model.SpecialityName;
 
       if (model.DoctorsAllocated != null && 
