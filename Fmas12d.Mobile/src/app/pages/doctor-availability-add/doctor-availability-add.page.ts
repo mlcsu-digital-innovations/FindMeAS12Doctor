@@ -154,6 +154,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
       .subscribe(
         result => {
           console.log(result);
+          this.showSuccessToast('Postcode Validated');
         }, error => {
           this.showErrorToast('Unable to validate postcode');
           this.validPostcode = false;
