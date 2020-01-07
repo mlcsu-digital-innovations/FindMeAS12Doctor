@@ -63,7 +63,7 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
       .subscribe(
         result => {
           this.showSuccessToast('Request accepted');
-          this.router.navigateByUrl('/amhp-assessment-requests');
+          this.router.navigateByUrl('/doctor-assessments');
         },
         error => {
           this.showErrorToast('Unable to accept request');
@@ -78,7 +78,7 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
       .subscribe(
         result => {
           this.showSuccessToast('Request accepted');
-          this.router.navigateByUrl('/amhp-assessment-requests');
+          this.router.navigateByUrl('/doctor-assessments');
         },
         error => {
           this.showErrorToast('Unable to accept request');
@@ -94,7 +94,7 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
       .subscribe(
         result => {
           this.showSuccessToast('Request accepted');
-          this.router.navigateByUrl('/amhp-assessment-requests');
+          this.router.navigateByUrl('/doctor-assessments');
         },
         error => {
           this.showErrorToast('Unable to accept request');
