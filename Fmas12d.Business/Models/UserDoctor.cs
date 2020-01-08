@@ -4,7 +4,7 @@ namespace Fmas12d.Business.Models
     {
         public UserDoctor()
         {
-          ProfileTypeId = Models.ProfileType.DOCTOR;
+          ProfileTypeId = Models.ProfileType.GP;
         }        
     }
 }

@@ -302,7 +302,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     protected ProfileType GetProfileTypeDoctor()
     {
-      return GetProfileTypeById(Models.ProfileType.DOCTOR);
+      return GetProfileTypeById(Models.ProfileType.GP);
     }
 
     protected ProfileType GetProfileTypeFinance()

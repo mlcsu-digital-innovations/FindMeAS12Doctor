@@ -6,7 +6,7 @@ namespace Fmas12d.Business.Models
   {
     public const int SYSTEM = 1;
     public const int AMHP = 2;
-    public const int DOCTOR = 3;
+    public const int GP = 3;
     public const int FINANCE = 4;
     public const int ADMIN = 5;
     public const int UNREGISTERED = 6;
@@ -19,6 +19,6 @@ namespace Fmas12d.Business.Models
 
     public virtual IList<User> Users { get; set; }
     public bool IsAmhp { get { return Id == AMHP; } }
-    public bool IsDoctor { get { return Id == DOCTOR; } }
+    public bool IsDoctor { get { return Id == GP; } }
   }
 }

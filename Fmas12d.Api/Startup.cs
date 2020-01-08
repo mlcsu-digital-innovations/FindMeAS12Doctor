@@ -88,7 +88,7 @@ namespace Fmas12d.Api
           policy.RequireClaim(
             UserClaimsService.CLAIM_PROFILETYPEID,
             ProfileType.ADMIN.ToString(),
-            ProfileType.DOCTOR.ToString(),
+            ProfileType.GP.ToString(),
             ProfileType.SYSTEM.ToString()
           )
         );
@@ -114,7 +114,7 @@ namespace Fmas12d.Api
             UserClaimsService.CLAIM_PROFILETYPEID,
             ProfileType.ADMIN.ToString(),
             ProfileType.AMHP.ToString(),
-            ProfileType.DOCTOR.ToString(),
+            ProfileType.GP.ToString(),
             ProfileType.FINANCE.ToString(),
             ProfileType.SYSTEM.ToString()
           )

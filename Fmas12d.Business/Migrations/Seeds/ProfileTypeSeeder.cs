@@ -35,7 +35,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ProfileType.DOCTOR,
+        Models.ProfileType.GP,
         NAME_DOCTOR,
         DESCRIPTION_DOCTOR
       );

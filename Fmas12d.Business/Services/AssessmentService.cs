@@ -365,7 +365,7 @@ namespace Fmas12d.Business.Services
         ProfileType.AMHP => await GetListByAmhpUserIdAsync(
           userId, referralStatusId, asNoTracking, activeOnly),
 
-        ProfileType.DOCTOR => await GetListByDoctorUserIdAsync(
+        ProfileType.GP => await GetListByDoctorUserIdAsync(
           userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
 
         _ => throw new ModelStateException("userId",
