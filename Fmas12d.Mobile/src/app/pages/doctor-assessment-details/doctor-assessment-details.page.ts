@@ -32,7 +32,6 @@ export class DoctorAssessmentDetailsPage implements OnInit {
       this.showLoading();
 
       request.subscribe((result: AmhpAssessmentView) => {
-        console.log(result);
         this.assessment = result;
 
         this.closeLoading();

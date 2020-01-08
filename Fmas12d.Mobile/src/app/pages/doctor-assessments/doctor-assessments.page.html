@@ -15,7 +15,7 @@
             <ion-item *ngFor="let assessment of scheduledAssessments" detail="false"
               [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward">
               <ion-row style="width:100%;">
-                <ion-col>
+                <ion-col size="2">
                   <ion-icon color="success" size="large" name="checkmark-circle"
                     *ngIf="assessmentIsScheduled(assessment)"></ion-icon>
                   <ion-icon color="warning" size="large" name="help-circle"
@@ -23,7 +23,7 @@
                   <ion-icon color="warning" size="large" name="timer"
                     *ngIf="assessmentIsReviewing(assessment)"></ion-icon>
                 </ion-col>
-                <ion-col size="10">
+                <ion-col>
                   <ion-row>
                     <strong>{{assessment.postcode}}</strong>
                   </ion-row>
@@ -47,7 +47,7 @@
             <ion-item *ngFor="let assessment of assessmentRequests" detail="false"
               [routerLink]="['/amhp-assessment-request-response/', assessment.id]" routerDirection="forward">
               <ion-row style="width:100%;">
-                <ion-col>
+                <ion-col size="2">
                   <ion-icon color="success" size="large" name="checkmark-circle"
                     *ngIf="assessment.doctorHasAccepted == true"></ion-icon>
                   <ion-icon color="warning" size="large" name="help-circle"
@@ -55,7 +55,7 @@
                   <ion-icon color="danger" size="large" name="close-circle"
                     *ngIf="assessment.doctorHasAccepted == false"></ion-icon>
                 </ion-col>
-                <ion-col size="10">
+                <ion-col>
                   <ion-row>
                     <strong>{{assessment.postcode}}</strong>
                   </ion-row>

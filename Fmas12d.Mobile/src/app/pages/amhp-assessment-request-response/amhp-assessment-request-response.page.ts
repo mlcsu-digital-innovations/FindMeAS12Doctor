@@ -20,6 +20,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
   private loading: HTMLIonLoadingElement;
   public assessmentRequest: AmhpAssessmentRequestDetails;
   private userDetails: UserDetails;
+  public expectedLocation: string;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
@@ -50,8 +51,17 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
-          this.assessmentRequest.doctorDetails =
+
+          if (this.userDetails) {
+            this.assessmentRequest.doctorDetails =
             result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
+          }
+
+          this.expectedLocation
+            = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
+            ? this.assessmentRequest.doctorDetails.knownLocation.postcode
+            : this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName;
+
           this.closeLoading();
         }, error => {
           this.showErrorToast('Unable to retrieve assessment details');

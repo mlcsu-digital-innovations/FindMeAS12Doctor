@@ -42,8 +42,6 @@ export class DoctorAssessmentsPage implements OnInit {
       .subscribe(
         result => {
 
-          console.log(result);
-
           if (result && result.length > 0) {
             this.allAssessments = result;
 
@@ -55,9 +53,6 @@ export class DoctorAssessmentsPage implements OnInit {
 
             this.assessmentRequests = this.allAssessments.filter
               (assessment => !scheduled.includes(assessment.referralStatusId));
-
-            console.log(this.scheduledAssessments);
-            console.log(this.assessmentRequests);
           }
 
           this.assessmentRequestsLastUpdated = new Date();
