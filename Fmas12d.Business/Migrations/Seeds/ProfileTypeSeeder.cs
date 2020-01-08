@@ -8,14 +8,16 @@ namespace Fmas12d.Business.Migrations.Seeds
     #region Constants
     public const string DESCRIPTION_ADMIN = "Admin Description";
     public const string DESCRIPTION_AMHP = "AMHP Description";
-    public const string DESCRIPTION_DOCTOR = "Doctor Description";
+    public const string DESCRIPTION_GP = "GP Description";
     public const string DESCRIPTION_FINANCE = "Finance Description";
     public const string DESCRIPTION_SYSTEM = "System Description";
-    public const string DESCRIPTION_UNREGISTERED = "Unregistered Description";
+    public const string DESCRIPTION_PSYCHIATRIST = "Psychiatrist Description";
+    public const string DESCRIPTION_UNREGISTERED = "Unregistered Description";    
     public const string NAME_ADMIN = "Admin";
     public const string NAME_AMHP = "AMHP";
-    public const string NAME_DOCTOR = "Doctor";
+    public const string NAME_GP = "GP";
     public const string NAME_FINANCE = "Finance";
+    public const string NAME_PSYCHIATRIST = "Psychiatrist";
     public const string NAME_SYSTEM = "System";
     public const string NAME_UNREGISTERED = "Unregistered";
     #endregion
@@ -36,8 +38,8 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       AddOrUpdateNameDescriptionEntityById(
         Models.ProfileType.GP,
-        NAME_DOCTOR,
-        DESCRIPTION_DOCTOR
+        NAME_GP,
+        DESCRIPTION_GP
       );
 
       AddOrUpdateNameDescriptionEntityById(
@@ -45,6 +47,12 @@ namespace Fmas12d.Business.Migrations.Seeds
         NAME_FINANCE,
         DESCRIPTION_FINANCE
       );
+
+      AddOrUpdateNameDescriptionEntityById(
+        Models.ProfileType.PSYCHIATRIST,
+        NAME_PSYCHIATRIST,
+        DESCRIPTION_PSYCHIATRIST
+      );      
 
       AddOrUpdateNameDescriptionEntityById(
         Models.ProfileType.UNREGISTERED,

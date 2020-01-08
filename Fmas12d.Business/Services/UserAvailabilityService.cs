@@ -109,7 +109,8 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(us => us.Speciality)
               .Where(u => u.Start <= requiredDateTime)
               .Where(u => u.End >= requiredDateTime)
-              .Where(u => u.User.ProfileTypeId == ProfileType.GP)
+              .Where(u => u.User.ProfileTypeId == ProfileType.GP ||
+                          u.User.ProfileTypeId == ProfileType.PSYCHIATRIST)
               .Where(u => u.UserAvailabilityStatusId == UserAvailabilityStatus.AVAILABLE)
               .WhereIsActiveOrActiveOnly(activeOnly)
               .AsNoTracking(asNoTracking)
@@ -161,7 +162,8 @@ namespace Fmas12d.Business.Services
         await _context.UserAvailabilities
                       .Where(ua => ua.Start <= dateTime)
                       .Where(ua => ua.End >= dateTime)
-                      .Where(ua => ua.User.ProfileTypeId == ProfileType.GP)
+                      .Where(ua => ua.User.ProfileTypeId == ProfileType.GP ||
+                                   ua.User.ProfileTypeId == ProfileType.PSYCHIATRIST)
                       .Where(ua => ua.UserAvailabilityStatusId == UserAvailabilityStatus.AVAILABLE)
                       .Where(ua => userIds.Any(id => id == ua.UserId))
                       .WhereIsActiveOrActiveOnly(activeOnly)

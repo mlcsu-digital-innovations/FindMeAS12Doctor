@@ -10,6 +10,7 @@ namespace Fmas12d.Business.Models
     public const int FINANCE = 4;
     public const int ADMIN = 5;
     public const int UNREGISTERED = 6;
+    public const int PSYCHIATRIST = 7;
 
     public ProfileType() {}
     public ProfileType(Data.Entities.ProfileType entity) : base(entity)
@@ -19,6 +20,6 @@ namespace Fmas12d.Business.Models
 
     public virtual IList<User> Users { get; set; }
     public bool IsAmhp { get { return Id == AMHP; } }
-    public bool IsDoctor { get { return Id == GP; } }
+    public bool IsDoctor { get { return Id == GP || Id == PSYCHIATRIST; } }
   }
 }

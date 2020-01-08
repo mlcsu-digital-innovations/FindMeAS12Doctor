@@ -356,7 +356,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
       );
 
-      // Dummy Doctors
+      // Dummy GPs
       AddUpdateUserDoctorWithDefaults(
         "Dr Snow",
         GetGenderTypeMale().Id,
@@ -365,7 +365,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypeGp().Id
       );                                                                                 
 
       AddUpdateUserDoctorWithDefaults(
@@ -376,7 +376,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypeGp().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -387,7 +387,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypeGp().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -398,7 +398,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypePsychiatrist().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -409,7 +409,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypePsychiatrist().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -420,7 +420,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_FEMALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypeGp().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -431,7 +431,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_FEMALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypeGp().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -442,7 +442,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_FEMALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypeGp().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -453,7 +453,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_FEMALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypePsychiatrist().Id
       );
 
       AddUpdateUserDoctorWithDefaults(
@@ -464,7 +464,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetSection12ApprovalStatusApproved().Id,
         SECTION_12_EXPIRY_DATE_DOCTOR_FEMALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
-        GetProfileTypeDoctor().Id
+        GetProfileTypePsychiatrist().Id
       );
                                         
 
@@ -517,7 +517,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       User user = AddUpdateUserWithDefaults(
         displayName, 
         genderTypeId,
-        profileTypeId ?? GetProfileTypeDoctor().Id,
+        profileTypeId ?? GetProfileTypeGp().Id,
         identityServerIdentifier: identityServerIdentifier,
         organisationId);
 

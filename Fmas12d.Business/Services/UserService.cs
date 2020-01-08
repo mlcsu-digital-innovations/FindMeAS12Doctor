@@ -66,8 +66,16 @@ namespace Fmas12d.Business.Services
       bool asNoTracking = true,
       bool activeOnly = true)
     {
-      return await GetAllByNameAndProfileTypeIdAsync(
-        doctorName, ProfileType.GP, asNoTracking, activeOnly);
+      IEnumerable<User> models = await _context.Users
+       .WhereIsActiveOrActiveOnly(activeOnly)
+       .Where(u => u.DisplayName.Contains(doctorName))
+       .Where(u => u.ProfileTypeId == ProfileType.GP ||
+                   u.ProfileTypeId == ProfileType.PSYCHIATRIST)
+       .AsNoTracking(asNoTracking)
+       .Select(User.ProjectFromEntity)
+       .ToListAsync();
+
+      return models;
     }
 
     public async Task<IEnumerable<User>> GetAllByGmcNumberAsync(
@@ -78,7 +86,8 @@ namespace Fmas12d.Business.Services
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
        .Where(u => u.GmcNumber.ToString().Contains(gmcNumber.ToString()))
-       .Where(u => u.ProfileTypeId == ProfileType.GP)
+       .Where(u => u.ProfileTypeId == ProfileType.GP ||
+                   u.ProfileTypeId == ProfileType.PSYCHIATRIST)
        .AsNoTracking(asNoTracking)
        .Select(User.ProjectFromEntity)
        .ToListAsync();

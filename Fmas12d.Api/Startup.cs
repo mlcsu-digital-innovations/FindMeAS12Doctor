@@ -89,6 +89,7 @@ namespace Fmas12d.Api
             UserClaimsService.CLAIM_PROFILETYPEID,
             ProfileType.ADMIN.ToString(),
             ProfileType.GP.ToString(),
+            ProfileType.PSYCHIATRIST.ToString(),
             ProfileType.SYSTEM.ToString()
           )
         );
@@ -115,6 +116,7 @@ namespace Fmas12d.Api
             ProfileType.ADMIN.ToString(),
             ProfileType.AMHP.ToString(),
             ProfileType.GP.ToString(),
+            ProfileType.PSYCHIATRIST.ToString(),
             ProfileType.FINANCE.ToString(),
             ProfileType.SYSTEM.ToString()
           )
