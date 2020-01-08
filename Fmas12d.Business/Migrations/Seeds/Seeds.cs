@@ -105,6 +105,16 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
     }
 
+    public void SeedUat()
+    {
+      new OrganisationSeeder().SeedDataUat();
+      Context.SaveChanges();
+
+      new UserSeeder().SeedDataUat();
+      Context.SaveChanges();
+
+    }
+
     public void SeedTestAll(bool noReferrals)
     {
       new OrganisationSeeder().SeedData();

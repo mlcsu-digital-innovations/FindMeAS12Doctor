@@ -21,7 +21,8 @@ namespace Fmas12d.Api.Extensions
       RemoveAll = 6,
       RemoveAllNoGpPractice = 7,
       RemoveAllNoGpPracticeOrCcgs = 8,
-      TestNoReferrals = 9
+      TestNoReferrals = 9,
+      Uat = 10
     }
 
     public static IWebHost SeedData(this IWebHost host, SeedType seedType)
@@ -72,6 +73,10 @@ namespace Fmas12d.Api.Extensions
         case SeedType.RemoveTest:
           new Seeds(context, config).RemoveSeedTestAll();
           break;
+
+        case SeedType.Uat:
+          new Seeds(context, config).SeedUat();
+          break;          
       }
 
       return host;
