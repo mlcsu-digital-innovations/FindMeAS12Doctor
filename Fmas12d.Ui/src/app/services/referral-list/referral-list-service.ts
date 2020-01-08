@@ -39,23 +39,23 @@ function matches(referral: ReferralList, term: string, pipe: PipeTransform) {
   let termLowerCase = term.toLowerCase();
   return pipe.transform(referral.referralId).includes(termLowerCase)
     || (referral.patientIdentifier &&
-        referral.patientIdentifier.toLowerCase().includes(termLowerCase))
+      referral.patientIdentifier.toLowerCase().includes(termLowerCase))
     || (referral.leadAmhp &&
-        referral.leadAmhp.toLowerCase().includes(termLowerCase))
+      referral.leadAmhp.toLowerCase().includes(termLowerCase))
     || (referral.numberOfAssessmentAttempts &&
-        pipe.transform(referral.numberOfAssessmentAttempts).includes(termLowerCase))
+      pipe.transform(referral.numberOfAssessmentAttempts).includes(termLowerCase))
     || (referral.assessmentLocationPostcode &&
-        referral.assessmentLocationPostcode.toLowerCase().includes(termLowerCase))  
+      referral.assessmentLocationPostcode.toLowerCase().includes(termLowerCase))
     || (referral.specialityName &&
-        referral.specialityName.toLowerCase().includes(termLowerCase))
+      referral.specialityName.toLowerCase().includes(termLowerCase))
     || (referral.timescale &&
-        referral.timescale.toString().toLowerCase().includes(termLowerCase))
+      referral.timescale.toString().toLowerCase().includes(termLowerCase))
     || (referral.statusName &&
-        referral.statusName.toLowerCase().includes(termLowerCase))
+      referral.statusName.toLowerCase().includes(termLowerCase))
     || (referral.responsesReceived &&
-        pipe.transform(referral.responsesReceived).includes(termLowerCase))
+      pipe.transform(referral.responsesReceived).includes(termLowerCase))
     || (referral.doctorsAllocated &&
-        pipe.transform(referral.doctorsAllocated).includes(termLowerCase));
+      pipe.transform(referral.doctorsAllocated).includes(termLowerCase));
 }
 
 @Injectable()
@@ -95,10 +95,12 @@ export class ReferralListService {
     this.http.get<ReferralList[]>(endpoint).subscribe(
       (data: ReferralList[]) => {
 
-        data.forEach(item => {
-          item.doctorsSelectedAllocated = `${item.doctorsSelected} / ${item.doctorsAllocated}`;
-          item.responsesReceivedAccepted = `${item.responsesReceived} / ${item.responsesAccepted}`;
-        });
+        if (data !== null) {
+          data.forEach(item => {
+            item.doctorsSelectedAllocated = `${item.doctorsSelected} / ${item.doctorsAllocated}`;
+            item.responsesReceivedAccepted = `${item.responsesReceived} / ${item.responsesAccepted}`;
+          });
+        }
 
         this._rawReferralList = data;
         this._search$.next();
