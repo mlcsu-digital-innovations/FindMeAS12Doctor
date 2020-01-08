@@ -1,4 +1,5 @@
 using Fmas12d.Data.Entities;
+using System;
 using System.Linq;
 
 namespace Fmas12d.Business.Migrations.Seeds
@@ -82,6 +83,11 @@ namespace Fmas12d.Business.Migrations.Seeds
       contactDetailCcg.TelephoneNumber = telephoneNumber;
       contactDetailCcg.UserId = GetUserByDisplayName(userDisplayName).Id;
       PopulateActiveAndModifiedWithSystemUser(contactDetailCcg);
+    }
+
+    internal void SeedDataUat()
+    {
+      throw new NotImplementedException();
     }
   }
 }

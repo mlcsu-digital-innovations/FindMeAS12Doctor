@@ -86,6 +86,11 @@ namespace Fmas12d.Business.Migrations.Seeds
   
     }
 
+    internal void SeedDataUat()
+    {
+      throw new NotImplementedException();
+    }
+
     private void Add(
       DateTimeOffset end,
       decimal latitude,
