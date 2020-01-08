@@ -105,6 +105,21 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
     }
 
+    public void SeedUat()
+    {
+      new OrganisationSeeder().SeedDataUat();
+      Context.SaveChanges();
+
+      new UserSeeder().SeedDataUat();
+      Context.SaveChanges();
+
+      new ContactDetailsSeeder().SeedDataUat();
+      Context.SaveChanges();
+
+      new UserAvailabilitySeeder().SeedDataUat();
+      Context.SaveChanges();
+    }
+
     public void SeedTestAll(bool noReferrals)
     {
       new OrganisationSeeder().SeedData();
@@ -169,13 +184,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       new NonPaymentLocationsSeeder().DeleteSeeds();
       Context.SaveChanges();
 
-      new ContactDetailsSeeder().DeleteSeeds();
-      Context.SaveChanges();
-
-      new ContactDetailCcgsSeeder().DeleteSeeds();
-      Context.SaveChanges();      
-
-      new BankDetailsSeeder().DeleteSeeds();
+      new UserAvailabilitySeeder().DeleteSeeds();
       Context.SaveChanges();
 
       new UserAssessmentClaimsSeeder().DeleteSeeds();
@@ -188,12 +197,18 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
 
       new ReferralSeeder().DeleteSeeds();
+      Context.SaveChanges();            
+
+      new ContactDetailsSeeder().DeleteSeeds();
+      Context.SaveChanges();
+
+      new ContactDetailCcgsSeeder().DeleteSeeds();
+      Context.SaveChanges();      
+
+      new BankDetailsSeeder().DeleteSeeds();
       Context.SaveChanges();
 
       new PatientSeeder().DeleteSeeds();
-      Context.SaveChanges();
-
-      new UserAvailabilitySeeder().DeleteSeeds();
       Context.SaveChanges();
 
       new UserSeeder().DeleteSeeds();

@@ -365,9 +365,12 @@ namespace Fmas12d.Business.Services
         ProfileType.AMHP => await GetListByAmhpUserIdAsync(
           userId, referralStatusId, asNoTracking, activeOnly),
 
-        ProfileType.DOCTOR => await GetListByDoctorUserIdAsync(
+        ProfileType.GP => await GetListByDoctorUserIdAsync(
           userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
 
+        ProfileType.PSYCHIATRIST => await GetListByDoctorUserIdAsync(
+          userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
+          
         _ => throw new ModelStateException("userId",
              "Assessments cannot be associated with a User that has a ProfileType of " +
               $"{userProfileTypeId}."),

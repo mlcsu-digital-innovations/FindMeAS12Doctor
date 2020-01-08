@@ -1,4 +1,5 @@
 using Fmas12d.Data.Entities;
+using System;
 using System.Linq;
 
 namespace Fmas12d.Business.Migrations.Seeds
@@ -14,6 +15,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string NAME_2 = "Organisation 2 Name";
     internal const string NAME_3 = "Organisation 3 Name";
     internal const string NAME_4 = "Organisation 4";
+    internal const string NAME_MLCSU = "MLCSU";
     #endregion
 
     internal void SeedData()
@@ -23,6 +25,11 @@ namespace Fmas12d.Business.Migrations.Seeds
       AddOrUpdate(NAME_3, DESCRIPTION_3);
       AddOrUpdate(NAME_4, DESCRIPTION_4);
     }
+
+    internal void SeedDataUat()
+    {
+      AddOrUpdate(NAME_MLCSU, "Midlands and Lancashire CSU");
+    }    
 
     private void AddOrUpdate(string name, string description)
     {
@@ -51,5 +58,6 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       ResetIdentity(1);
     }
+
   }
 }
