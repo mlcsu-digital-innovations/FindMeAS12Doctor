@@ -1,9 +1,85 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>doctor-assessment-details</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-navbar title="Assessment Details"></app-navbar>
 
 <ion-content>
+  <ion-grid>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Referral Id: {{assessment?.referralId}}</strong>
+        <br/>
+        Status: {{assessment.referralStatus}}
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row >
+          <ion-label color="primary">
+            Patient Identifier
+          </ion-label>
+        </ion-row>
+        <ion-row >
+          <ion-col>
+            {{assessment?.patientIdentifier}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-label color="primary">
+            <span *ngIf="assessment?.isPlanned">Scheduled</span>
+            <span *ngIf="!assessment?.isPlanned">Complete By</span>
+          </ion-label>
+        </ion-row>        
+        <ion-row>
+          <ion-col>
+            {{assessment?.dateTime | date: "d MMMM yyyy H:mm"}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-label color="primary">AMHP</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-col>{{assessment.amhpUserName}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="assessment?.specialityName">
+          <ion-col>
+            <ion-label color="primary">Assessment Speciality</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="assessment?.specialityName">
+          <ion-col>
+            {{assessment?.specialityName}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-label color="primary">Assessment Address</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            {{assessment.address1}}
+            <br *ngIf="assessment.address1?.length > 0" />
+            {{assessment.address2}}
+            <br *ngIf="assessment.address2?.length > 0" />
+            {{assessment.address3}}
+            <br *ngIf="assessment.address3?.length > 0" />
+            {{assessment.address4}}
+            <br *ngIf="assessment.address4?.length > 0" />
+            <strong>{{assessment?.postcode}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="assessment.meetingArrangementComment != ''">
+          <ion-label color="primary">Meeting Comments</ion-label>
+          <ion-col>
+            {{assessment.meetingArrangementComment}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="assessment.detailTypes.length > 0">
+          <ion-label color="primary">Further Information / Risks</ion-label>
+        </ion-row>
+        <ion-row 
+          *ngIf="assessment.detailTypes.length > 0">
+          <ion-col *ngFor="let detail of assessment.detailTypes">
+            {{detail.name}}
+          </ion-col>
+          
+        </ion-row>
 
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
 </ion-content>
