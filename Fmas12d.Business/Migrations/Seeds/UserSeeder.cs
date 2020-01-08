@@ -27,15 +27,15 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
     public const int GMCNUMBER_DOCTOR_MALE = 2222222;
 
-    public const string IDENTITY_SERVER_IDENTIFIER_ADMIN = 
-      "977f7610-4048-4a7f-ae8f-47ff0f33a59b";    
-    public const string IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE = 
+    public const string IDENTITY_SERVER_IDENTIFIER_ADMIN =
+      "977f7610-4048-4a7f-ae8f-47ff0f33a59b";
+    public const string IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE =
       "1635d415-69a8-45e3-8449-1112924beccf";
-    public const string IDENTITY_SERVER_IDENTIFIER_AMHP_MALE = 
-      "da5b9a7b-5a63-499e-a694-fe8286ae9d9f";      
-    public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE = 
+    public const string IDENTITY_SERVER_IDENTIFIER_AMHP_MALE =
+      "da5b9a7b-5a63-499e-a694-fe8286ae9d9f";
+    public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE =
       "7eb68d85-7df7-4a47-8320-55be73644fa8";
-    public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_MALE = 
+    public const string IDENTITY_SERVER_IDENTIFIER_DOCTOR_MALE =
       "d5f1594d-cdee-4961-ab2b-dd70228c9611";
     public const string IDENTITY_SERVER_IDENTIFIER_FINANCE =
       "e2d78f4e-4a0c-4289-aafd-31a1d5928411";
@@ -60,15 +60,29 @@ namespace Fmas12d.Business.Migrations.Seeds
     //   "9ec0170f-c3da-4525-835a-108aa271a6c3";
     // public const string IDENTITY_SERVER_IDENTIFIER_PRIYANTHA = 
     //   "fb5c9355-9b51-45f7-b7e8-dcced31186bb";     
-    public const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN = 
+    public const string IDENTITY_SERVER_IDENTIFIER_SYSTEM_ADMIN =
       "bf673270-2538-4e59-9d26-5b4808fd9ef6";
 
     public readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_FEMALE =
       new DateTimeOffset(2030, 1, 1,
-                         0, 00, 00, 00, DateTimeOffset.Now.Offset);  
+                         0, 00, 00, 00, DateTimeOffset.Now.Offset);
     public readonly DateTimeOffset SECTION_12_EXPIRY_DATE_DOCTOR_MALE =
       new DateTimeOffset(2025, 1, 1,
-                         0, 00, 00, 00, DateTimeOffset.Now.Offset);   
+                         0, 00, 00, 00, DateTimeOffset.Now.Offset);
+
+    // UAT Constants
+    public const string DISPLAY_NAME_DR_BAILEY = "Dr Bailey";
+    public const string DISPLAY_NAME_DR_BELL = "Dr Bell";
+    public const string DISPLAY_NAME_DR_BLACK = "Dr Black";
+    public const string DISPLAY_NAME_DR_BROWN = "Dr Brown";
+    public const string DISPLAY_NAME_DR_JONES = "Dr Jones";
+    public const string DISPLAY_NAME_DR_MORRIS = "Dr Morris";
+    public const string DISPLAY_NAME_DR_SMITH = "Dr Smith";
+    public const string DISPLAY_NAME_DR_SNOW = "Dr Snow";
+    public const string DISPLAY_NAME_DR_TAYLOR = "Dr Taylor";
+    public const string DISPLAY_NAME_DR_WHITE = "Dr White";
+
+
 
     #endregion
     public void SeedData()
@@ -81,21 +95,21 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserWithDefaults(
-        DISPLAY_NAME_AMHP_FEMALE, 
-        GetGenderTypeFemale().Id, 
+        DISPLAY_NAME_AMHP_FEMALE,
+        GetGenderTypeFemale().Id,
         GetProfileTypeAmhp().Id,
         IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE
-      );      
+      );
 
       AddUpdateUserWithDefaults(
-        DISPLAY_NAME_AMHP_MALE, 
-        GetGenderTypeMale().Id, 
+        DISPLAY_NAME_AMHP_MALE,
+        GetGenderTypeMale().Id,
         GetProfileTypeAmhp().Id,
         IDENTITY_SERVER_IDENTIFIER_AMHP_MALE
-      );      
+      );
 
       AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_FEMALE, 
+        DISPLAY_NAME_DOCTOR_FEMALE,
         GetGenderTypeFemale().Id,
         GMCNUMBER_DOCTOR_FEMALE,
         IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE
@@ -107,9 +121,9 @@ namespace Fmas12d.Business.Migrations.Seeds
         GMCNUMBER_DOCTOR_MALE,
         IDENTITY_SERVER_IDENTIFIER_DOCTOR_MALE,
         GetSection12ApprovalStatusApproved().Id,
-        SECTION_12_EXPIRY_DATE_DOCTOR_MALE        
+        SECTION_12_EXPIRY_DATE_DOCTOR_MALE
       );
-    
+
       AddUpdateUserWithDefaults(
         DISPLAY_NAME_FINANCE,
         GetGenderTypeFemale().Id,
@@ -199,23 +213,23 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserWithDefaults(
-        DISPLAY_NAME_AMHP_FEMALE, 
-        GetGenderTypeFemale().Id, 
+        DISPLAY_NAME_AMHP_FEMALE,
+        GetGenderTypeFemale().Id,
         GetProfileTypeAmhp().Id,
         IDENTITY_SERVER_IDENTIFIER_AMHP_FEMALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
-      );      
+      );
 
       AddUpdateUserWithDefaults(
-        DISPLAY_NAME_AMHP_MALE, 
-        GetGenderTypeMale().Id, 
+        DISPLAY_NAME_AMHP_MALE,
+        GetGenderTypeMale().Id,
         GetProfileTypeAmhp().Id,
         IDENTITY_SERVER_IDENTIFIER_AMHP_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
-      );      
+      );
 
       AddUpdateUserDoctorWithDefaults(
-        DISPLAY_NAME_DOCTOR_FEMALE, 
+        DISPLAY_NAME_DOCTOR_FEMALE,
         GetGenderTypeFemale().Id,
         GMCNUMBER_DOCTOR_FEMALE,
         IDENTITY_SERVER_IDENTIFIER_DOCTOR_FEMALE,
@@ -233,7 +247,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
       );
-    
+
       // AMHPS
 
       AddUpdateUserWithDefaults(
@@ -298,7 +312,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetProfileTypeAmhp().Id,
         "1684260a-1c78-444a-8bdb-5da1a1475778",
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
-      ); 
+      );
 
       AddUpdateUserWithDefaults(
         "Laura Rushton",
@@ -322,7 +336,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetProfileTypeAmhp().Id,
         "b3d2c8c1-bafa-4927-8deb-c274029d39ed",
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
-      ); 
+      );
 
       AddUpdateUserWithDefaults(
         "Nick Slater",
@@ -346,7 +360,7 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetProfileTypeAmhp().Id,
         "e7ed5af2-8833-4b81-abfc-d5aa5adc13f4",
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU)
-      );                                  
+      );
 
       AddUpdateUserWithDefaults(
         "Wes Machin",
@@ -358,7 +372,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       // Dummy GPs
       AddUpdateUserDoctorWithDefaults(
-        "Dr Snow",
+        DISPLAY_NAME_DR_SNOW,
         GetGenderTypeMale().Id,
         3333301,
         "00000000-0000-0000-0000-000003333301",
@@ -366,10 +380,10 @@ namespace Fmas12d.Business.Migrations.Seeds
         SECTION_12_EXPIRY_DATE_DOCTOR_MALE,
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
         GetProfileTypeGp().Id
-      );                                                                                 
+      );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Bell",
+        DISPLAY_NAME_DR_BELL,
         GetGenderTypeMale().Id,
         3333302,
         "00000000-0000-0000-0000-000003333302",
@@ -380,7 +394,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr White",
+        DISPLAY_NAME_DR_WHITE,
         GetGenderTypeMale().Id,
         3333303,
         "00000000-0000-0000-0000-000003333303",
@@ -391,7 +405,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Black",
+        DISPLAY_NAME_DR_BLACK,
         GetGenderTypeMale().Id,
         3333304,
         "00000000-0000-0000-0000-000003333304",
@@ -402,7 +416,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Brown",
+        DISPLAY_NAME_DR_BROWN,
         GetGenderTypeMale().Id,
         3333305,
         "00000000-0000-0000-0000-000003333305",
@@ -413,7 +427,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Jones",
+        DISPLAY_NAME_DR_JONES,
         GetGenderTypeFemale().Id,
         3333306,
         "00000000-0000-0000-0000-000003333306",
@@ -424,7 +438,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Smith",
+        DISPLAY_NAME_DR_SMITH,
         GetGenderTypeFemale().Id,
         3333307,
         "00000000-0000-0000-0000-000003333307",
@@ -435,7 +449,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Morris",
+        DISPLAY_NAME_DR_MORRIS,
         GetGenderTypeFemale().Id,
         3333308,
         "00000000-0000-0000-0000-000003333308",
@@ -446,7 +460,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Bailey",
+        DISPLAY_NAME_DR_BAILEY,
         GetGenderTypeFemale().Id,
         3333309,
         "00000000-0000-0000-0000-000003333309",
@@ -457,7 +471,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
 
       AddUpdateUserDoctorWithDefaults(
-        "Dr Taylor",
+        DISPLAY_NAME_DR_TAYLOR,
         GetGenderTypeFemale().Id,
         3333310,
         "00000000-0000-0000-0000-000003333310",
@@ -466,9 +480,9 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetOrganisationIdByName(OrganisationSeeder.NAME_MLCSU),
         GetProfileTypePsychiatrist().Id
       );
-                                        
 
-    }    
+
+    }
 
     private User AddUpdateUserWithDefaults(
       string displayName,
@@ -485,14 +499,14 @@ namespace Fmas12d.Business.Migrations.Seeds
         user = new User();
         Context.Add(user);
       }
-      
+
       user.DisplayName = displayName;
-      user.GenderTypeId = genderTypeId;                  
+      user.GenderTypeId = genderTypeId;
       user.GmcNumber = null;
       user.HasReadTermsAndConditions = true;
-      user.IdentityServerIdentifier = identityServerIdentifier ?? Guid.NewGuid().ToString();  
-      user.OrganisationId = organisationId.HasValue ? 
-                            (int)organisationId : 
+      user.IdentityServerIdentifier = identityServerIdentifier ?? Guid.NewGuid().ToString();
+      user.OrganisationId = organisationId.HasValue ?
+                            (int)organisationId :
                             GetOrganisationIdByName(OrganisationSeeder.NAME_1);
       user.ProfileTypeId = profileTypeId;
       user.Section12ApprovalStatusId = null;
@@ -507,7 +521,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       string displayName,
       int genderTypeId,
       int gmcNumber,
-      string identityServerIdentifier,      
+      string identityServerIdentifier,
       int? section12ApprovalStatusId = null,
       DateTimeOffset? section12ExpiryDate = null,
       int? organisationId = null,
@@ -515,7 +529,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     )
     {
       User user = AddUpdateUserWithDefaults(
-        displayName, 
+        displayName,
         genderTypeId,
         profileTypeId ?? GetProfileTypeGp().Id,
         identityServerIdentifier: identityServerIdentifier,
@@ -526,8 +540,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       user.Section12ExpiryDate = section12ExpiryDate;
 
       return user;
-    }      
-     
+    }
+
     /// <summary>
     /// Deletes all seeds except for Id = 1 which is required for the system account
     /// </summary>
@@ -540,5 +554,5 @@ namespace Fmas12d.Business.Migrations.Seeds
       ResetIdentity(1);
     }
   }
-  
+
 }

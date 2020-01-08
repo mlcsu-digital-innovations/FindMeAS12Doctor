@@ -116,12 +116,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       new ContactDetailsSeeder().SeedDataUat();
       Context.SaveChanges();
 
-      // new ContactDetailCcgsSeeder().SeedDataUat();
-      // Context.SaveChanges();      
-
-      // new UserAvailabilitySeeder().SeedDataUat();
-      // Context.SaveChanges();      
-
+      new UserAvailabilitySeeder().SeedDataUat();
+      Context.SaveChanges();
     }
 
     public void SeedTestAll(bool noReferrals)
