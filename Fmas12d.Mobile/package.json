@@ -1,6 +1,6 @@
 {
   "name": "uk.nhs.fmas12d",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Digital Innovation Unit @MLCSU",
   "homepage": "http://www.midlandsandlancashirecsu.nhs.uk",
   "scripts": {
@@ -34,6 +34,7 @@
     "@ionic/storage": "^2.2.0",
     "cordova": "^9.0.0",
     "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^3.4.0",
@@ -98,7 +99,8 @@
       "cordova-plugin-ms-adal": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
