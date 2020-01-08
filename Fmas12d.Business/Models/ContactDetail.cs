@@ -17,7 +17,7 @@ namespace Fmas12d.Business.Models
       Address1 = entity.Address1;
       Address2 = entity.Address2;
       Address3 = entity.Address3;
-      ContactDetailType = new ContactDetailType(entity.ContactDetailType);
+      ContactDetailType = new ContactDetailType(entity.ContactDetailType, false);
       ContactDetailTypeId = entity.ContactDetailTypeId;
       EmailAddress = entity.EmailAddress;
       Latitude = entity.Latitude;

@@ -62,6 +62,8 @@ namespace Fmas12d.Business.Services
     {
       IEnumerable<IUserAvailability> models = await _context
         .UserAvailabilities
+        .Include(ua => ua.ContactDetail)
+          .ThenInclude(cd => cd.ContactDetailType)
         .Where(ua => ua.UserId == userId)
         .Where(ua => ua.End >= from)
         .WhereIsActiveOrActiveOnly(activeOnly)

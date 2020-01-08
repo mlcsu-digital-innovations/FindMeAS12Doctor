@@ -2,11 +2,9 @@
 
 <ion-content>
   <ion-card>
-    <ion-card-header color="success">
-      <ion-icon style="font-size: larger;" name="checkmark-circle"></ion-icon>
-      <strong>
-        Available
-      </strong>
+    <ion-card-header>
+      <ion-icon color="success" size="large" name="checkmark-circle" class="icon"></ion-icon>
+      <span class="v-text"><strong>Available</strong></span>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
@@ -14,12 +12,15 @@
           (click)="editAvailability(item)">
           <ion-grid>
             <ion-row>
-              {{item.start | date: 'dd MMM yy'}}
-              {{item.start | date: 'HH:mm'}} to
+              Start: {{item.start | date: 'dd MMM yy'}}
+              {{item.start | date: 'HH:mm'}} 
+              <br/>
+              End:
               {{item.end | date: 'dd MMM yy'}}
               {{item.end | date: 'HH:mm'}}
             </ion-row>
             <ion-row class="location">
+              Location: 
               <span *ngIf="item.location.type === 'ContactDetail'">
                 {{item.location.contactDetailTypeName}}
               </span>
@@ -33,11 +34,9 @@
     </ion-card-content>
   </ion-card>
   <ion-card>
-    <ion-card-header color="danger">
-      <ion-icon style="font-size: larger;" name="close-circle"></ion-icon>
-      <strong>
-        Unavailable
-      </strong>
+    <ion-card-header>
+      <ion-icon color="danger" size="large" name="close-circle" class="icon"></ion-icon>
+      <span class="v-text"><strong>Unavailable</strong></span>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
@@ -45,8 +44,11 @@
           (click)="editAvailability(item)">
           <ion-grid>
             <ion-row>
+              Start:
               {{item.start | date: 'dd MMM yy'}}
-              {{item.start | date: 'HH:mm'}} to
+              {{item.start | date: 'HH:mm'}}
+              <br/>
+              End: 
               {{item.end | date: 'dd MMM yy'}}
               {{item.end | date: 'HH:mm'}}
             </ion-row>
