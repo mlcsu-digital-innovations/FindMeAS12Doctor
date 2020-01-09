@@ -1,19 +1,42 @@
-<app-navbar></app-navbar>
+<app-navbar title="Assessments" lastUpdated={{assessmentRequestsLastUpdated}}></app-navbar>
 
 <ion-content>
   <ion-grid>
     <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
       <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
     </ion-refresher>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Assessment Requests</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-item>
-      <ion-label>Last Updated:</ion-label>
-      <ion-label>{{assessmentRequestsLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</ion-label>
-    </ion-item>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Scheduled Assessments</strong>        
+      </ion-card-header>
+      <ion-card-content>
+        <ion-col>
+          <ion-list>
+            <ion-item *ngFor="let assessment of scheduledAssessments" detail="false"
+              [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward">
+              <ion-row style="width:100%;">
+                <ion-col size="2">
+                  <ion-icon color="success" size="large" name="checkmark-circle"
+                    *ngIf="assessmentIsScheduled(assessment)"></ion-icon>
+                  <ion-icon color="warning" size="large" name="help-circle"
+                    *ngIf="assessmentIsRescheduling(assessment)"></ion-icon>
+                  <ion-icon color="warning" size="large" name="timer"
+                    *ngIf="assessmentIsReviewing(assessment)"></ion-icon>
+                </ion-col>
+                <ion-col>
+                  <ion-row>
+                    <strong>{{assessment.postcode}}</strong>
+                  </ion-row>
+                  <ion-row>
+                    {{assessment.dateTime | date: "d MMM yy H:mm"}}
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-card-content>
+    </ion-card>
     <ion-card>
       <ion-card-header color="primary">
         <strong>Assessment Requests</strong>        
@@ -24,7 +47,7 @@
             <ion-item *ngFor="let assessment of assessmentRequests" detail="false"
               [routerLink]="['/amhp-assessment-request-response/', assessment.id]" routerDirection="forward">
               <ion-row style="width:100%;">
-                <ion-col>
+                <ion-col size="2">
                   <ion-icon color="success" size="large" name="checkmark-circle"
                     *ngIf="assessment.doctorHasAccepted == true"></ion-icon>
                   <ion-icon color="warning" size="large" name="help-circle"
@@ -32,7 +55,7 @@
                   <ion-icon color="danger" size="large" name="close-circle"
                     *ngIf="assessment.doctorHasAccepted == false"></ion-icon>
                 </ion-col>
-                <ion-col size="10">
+                <ion-col>
                   <ion-row>
                     <strong>{{assessment.postcode}}</strong>
                   </ion-row>

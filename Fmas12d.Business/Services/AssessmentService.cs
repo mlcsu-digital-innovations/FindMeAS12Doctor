@@ -365,9 +365,12 @@ namespace Fmas12d.Business.Services
         ProfileType.AMHP => await GetListByAmhpUserIdAsync(
           userId, referralStatusId, asNoTracking, activeOnly),
 
-        ProfileType.DOCTOR => await GetListByDoctorUserIdAsync(
+        ProfileType.GP => await GetListByDoctorUserIdAsync(
           userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
 
+        ProfileType.PSYCHIATRIST => await GetListByDoctorUserIdAsync(
+          userId, doctorStatusId, referralStatusId, asNoTracking, activeOnly),
+          
         _ => throw new ModelStateException("userId",
              "Assessments cannot be associated with a User that has a ProfileType of " +
               $"{userProfileTypeId}."),
@@ -391,8 +394,11 @@ namespace Fmas12d.Business.Services
                   .ThenInclude(d => d.DoctorUser)
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.ContactDetail)
+                    .ThenInclude(cd => cd.ContactDetailType)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
+                .Include(e => e.Referral)
+                  .ThenInclude(r => r.ReferralStatus)
                 .Include(e => e.Speciality)
                 .Include(e => e.UserAssessmentNotifications)
                   .ThenInclude(u => u.User)
@@ -1209,6 +1215,7 @@ namespace Fmas12d.Business.Services
       IQueryable<Entities.Assessment> query = _context
         .Assessments
         .Include(a => a.Referral)
+          .ThenInclude(r => r.Patient)
         .Where(a => a.AmhpUserId == amhpUserId)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);
@@ -1226,7 +1233,12 @@ namespace Fmas12d.Business.Services
           Postcode = a.Postcode,
           Referral = new Referral
           {
-            ReferralStatusId = a.Referral.ReferralStatusId
+            ReferralStatusId = a.Referral.ReferralStatusId,
+            Patient = new Patient
+            {
+              AlternativeIdentifier = a.Referral.Patient.AlternativeIdentifier,
+              NhsNumber = a.Referral.Patient.NhsNumber
+            }
           },
           ScheduledTime = a.ScheduledTime
         })
@@ -1278,7 +1290,12 @@ namespace Fmas12d.Business.Services
           Postcode = a.Postcode,
           Referral = new Referral
           {
-            ReferralStatusId = a.Referral.ReferralStatusId
+            ReferralStatusId = a.Referral.ReferralStatusId,
+            Patient = new Patient
+            {
+              AlternativeIdentifier = a.Referral.Patient.AlternativeIdentifier,
+              NhsNumber = a.Referral.Patient.NhsNumber
+            }
           },
           ScheduledTime = a.ScheduledTime
         })

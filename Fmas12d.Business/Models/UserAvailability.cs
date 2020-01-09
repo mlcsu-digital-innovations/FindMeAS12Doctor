@@ -10,6 +10,7 @@ namespace Fmas12d.Business.Models
     {
       if (entity == null) return;
 
+      ContactDetailTypeName = entity.ContactDetail?.ContactDetailType?.Name;
       End = entity.End;
       Location = new Location(entity);
       Start = entity.Start;
@@ -19,6 +20,7 @@ namespace Fmas12d.Business.Models
       UserId = entity.UserId;
     }
 
+    public string ContactDetailTypeName { get; set; }
     public DateTimeOffset End { get; set; }
     public Location Location { get; set; }
     public DateTimeOffset Start { get; set; }

@@ -1,16 +1,8 @@
-<app-navbar></app-navbar>
+<app-navbar title="Assessment Request"></app-navbar>
 
 <ion-content>
   <ion-grid>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Assessment Request</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-card>
-      <ion-card-header color="primary">
-        <strong></strong>
-      </ion-card-header>
       <ion-card-content>
         <ion-row>
           <ion-col>
@@ -24,7 +16,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            Known Location {{assessmentRequest.doctorDetails.knownLocation.type}}
+            Known Location {{expectedLocation}}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -46,13 +38,21 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col style="text-align: center;">
+          <ion-col 
+            style="text-align: center;" 
+            *ngIf="assessmentRequest.doctorDetails.hasAccepted == null
+              || !assessmentRequest.doctorDetails.hasAccepted
+              || !assessmentRequest.doctorDetails.hasResponded">
             <ion-button color="primary" (click)="acceptRequest()">
               <ion-icon name="checkmark-circle-outline"></ion-icon>
               Accept
             </ion-button>
           </ion-col>
-          <ion-col style="text-align: center;">
+          <ion-col
+            style="text-align: center;"
+            *ngIf="assessmentRequest.doctorDetails.hasAccepted == null 
+              ||assessmentRequest.doctorDetails.hasAccepted
+              || !assessmentRequest.doctorDetails.hasResponded">
             <ion-button color="primary" (click)="declineRequest()">
               <ion-icon name="close-circle-outline"></ion-icon>
               Decline

@@ -80,7 +80,7 @@ export class AmhpAssessmentService {
 
   public getRequests(): Observable<AmhpAssessmentRequest[]> {
     return (this.apiService.get(
-      `${environment.apiEndpoint}/assessment/list?doctorStatusId=${DOCTORSTATUSSELECTED}`,
+      `${environment.apiEndpoint}/assessment/list`,
       'AmhpUserList'
     ) as Observable<AmhpAssessmentList[]>)
     .pipe(delay(1000))
@@ -91,7 +91,7 @@ export class AmhpAssessmentService {
 
   public getView(assessmentId: number): Observable<AmhpAssessmentView> {
     return this.apiService.get(
-      `${environment.apiEndpoint}/assessment/${assessmentId}/user`,
+      `${environment.apiEndpoint}/assessment/${assessmentId}`,
       `AmhpUserView-${assessmentId}`
     ) as Observable<AmhpAssessmentView>;
   }

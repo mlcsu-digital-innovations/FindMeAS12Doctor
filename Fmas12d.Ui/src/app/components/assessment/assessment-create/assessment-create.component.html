@@ -31,6 +31,28 @@
         </div>
         <div class="card-body">
           <form [formGroup]="assessmentForm" novalidate>
+
+            <div class="form-row">
+              <!-- Planned assessment -->
+              <div class="col-md-8">
+                <div class="checkmark-content">
+                  <label class="container">
+                    <input
+                      class="form-control"
+                      type="checkbox"
+                      value=""
+                      id="plannedAssessment"
+                      formControlName="plannedAssessment"
+                      #plannedAssessment
+                      (change)="TogglePlannedAssessment($event)"
+                    />
+                    <span class="checkmark"></span>
+                    Planned / Retrospective Assessment
+                  </label>
+                </div>
+              </div>
+            </div>
+
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
@@ -45,24 +67,6 @@
                   [ngbTypeahead]="AmhpSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults" />
-              </div>
-              <!-- Planned assessment -->
-              <div class="col-md-3 offset-md-1 text-left">
-                  <div class="checkmark-content">
-                      <label class="container">
-                        <input
-                          class="form-control"
-                          type="checkbox"
-                          value=""
-                          id="plannedAssessment"
-                          formControlName="plannedAssessment"
-                          #plannedAssessment
-                          (change)="TogglePlannedAssessment($event)"
-                        />
-                        <span class="checkmark"></span>
-                        Planned Assessment
-                      </label>
-                    </div>
               </div>
             </div>
             <!-- AMHP User Errors-->
@@ -84,7 +88,7 @@
             <!-- Planned assessment date / time -->
             <div class="form-row" *ngIf="plannedAssessment.checked">
               <div class="col-md-6">
-                <label for="plannedPicker">Planned Assessment Date / Time</label>
+                <label for="plannedPicker">Assessment Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-5">
                     <input

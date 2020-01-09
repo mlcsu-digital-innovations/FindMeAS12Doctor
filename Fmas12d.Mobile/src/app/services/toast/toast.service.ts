@@ -9,7 +9,7 @@ export class ToastService {
   constructor(private toastCtrl: ToastController) { }
 
   public displayError(options: ToastOptions) {
-    options.showCloseButton = true;
+    options.duration = 5000;
     options.color = 'danger'
     this.show(options);
   }

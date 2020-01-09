@@ -1,16 +1,7 @@
-<app-navbar></app-navbar>
+<app-navbar title="AMHP Assessment Update" lastUpdated={{assessmentLastUpdated}}></app-navbar>
 
 <ion-content>
   <ion-grid>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>AMHP Assessment Update</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-item>
-      <ion-label>Last Updated:</ion-label>
-      <ion-label>{{assessmentLastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</ion-label>
-    </ion-item>
     <ion-card>
       <ion-card-header color="primary">
         <strong>Referral Id: {{assessmentView ? assessmentView.referralId : ""}}</strong>

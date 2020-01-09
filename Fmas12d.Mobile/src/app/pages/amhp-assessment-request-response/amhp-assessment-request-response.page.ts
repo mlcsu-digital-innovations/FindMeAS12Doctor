@@ -6,6 +6,8 @@ import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
 import { AmhpAssessmentRequestDetails } from 'src/app/models/amhp-assessment-request-details.model';
 import { AmhpAssessmentSelectedDoctor } from 'src/app/models/amhp-assessment-selected-doctor.model';
 import { KnownLocation } from 'src/app/models/known-location.model';
+import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
+import { UserDetails } from 'src/app/interfaces/user-details';
 
 @Component({
   selector: 'app-amhp-assessment-request-response',
@@ -17,6 +19,8 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
   private assessmentId: number;
   private loading: HTMLIonLoadingElement;
   public assessmentRequest: AmhpAssessmentRequestDetails;
+  private userDetails: UserDetails;
+  public expectedLocation: string;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
@@ -24,7 +28,8 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     private navController: NavController,
     private route: ActivatedRoute,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private userDetailsService: UserDetailsService
   ) { }
 
   ngOnInit() {
@@ -34,6 +39,8 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     this.assessmentRequest = new AmhpAssessmentRequestDetails();
     this.assessmentRequest.doctorDetails = new AmhpAssessmentSelectedDoctor();
     this.assessmentRequest.doctorDetails.knownLocation = new KnownLocation();
+
+    this.userDetails = this.userDetailsService.fetchUserDetails();
 
     this.showLoading();
 
@@ -45,7 +52,15 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
 
-          this.assessmentRequest.doctorDetails = result.doctorsSelected[0];
+          if (this.userDetails) {
+            this.assessmentRequest.doctorDetails =
+            result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
+          }
+
+          this.expectedLocation
+            = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
+            ? this.assessmentRequest.doctorDetails.knownLocation.postcode
+            : this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName;
 
           this.closeLoading();
         }, error => {

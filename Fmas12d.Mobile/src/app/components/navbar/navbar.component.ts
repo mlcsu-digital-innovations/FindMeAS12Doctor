@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 
 @Component({
@@ -8,6 +8,12 @@ import { NetworkService, ConnectionStatus } from 'src/app/services/network/netwo
 })
 export class NavbarComponent implements OnInit {
   public connection: boolean;
+
+  @Input()
+    title: string;
+
+  @Input()
+    lastUpdated: Date;
 
   constructor(
     private networkService: NetworkService,

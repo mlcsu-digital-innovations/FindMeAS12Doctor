@@ -1,8 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { MSAdal, AuthenticationContext, AuthenticationResult } from '@ionic-native/ms-adal/ngx';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { OAuthSettings } from 'src/oauth';
-import { Subscription, Observable, from } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
+import { Subscription, Observable, from } from 'rxjs';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,21 +12,25 @@ import { StorageService } from '../storage/storage.service';
 export class AuthService implements OnDestroy {
   private subscription: Subscription;
 
-  constructor(
-    private msalService: MsalService,
+  constructor(    
     private broadcastService: BroadcastService,
-    private storageService: StorageService
-    ) {
-    this.subscription = this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
+    private msAdal: MSAdal,
+    private msalService: MsalService,    
+    private storageService: StorageService,
+    private toastService: ToastService
+    ) 
+  {
+    this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
+
       console.log(payload);
     });
   }
 
-  public signIn(): void {
-    this.msalService.loginRedirect();
+  public loginMsal(): void {
+    this.msalService.loginRedirect();  
   }
-
-  public signOut(): void {
+  
+  public logoutMsal(): void {
     this.msalService.logout();
     this.storageService.clearAccessToken();
   }
@@ -34,5 +40,29 @@ export class AuthService implements OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+  
+  public loginMsAdal(): Observable<string> {
+    let authContext: AuthenticationContext = this.msAdal
+      .createAuthenticationContext(OAuthSettings.authority);        
+
+    return from(authContext.acquireTokenAsync(
+        OAuthSettings.appId, 
+        OAuthSettings.appId, 
+        OAuthSettings.redirectUrl,
+        null, 
+        null, 
+        null
+      ).then((authResponse: AuthenticationResult) => {               
+        this.broadcastService.broadcast('msadal:loginSuccess', authResponse);
+        return authResponse.accessToken;
+      }, error => {        
+        this.toastService.displayError({ message: error });
+        throw Promise.reject("Failed to authenticate: " + error);
+      }));
+  }
+
+  public logoutMsAdal() {
+    this.storageService.clearAccessToken();        
   }
 }

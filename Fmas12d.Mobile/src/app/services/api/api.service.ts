@@ -1,25 +1,25 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LogService } from '../log/log.service';
 import { NetworkService, ConnectionStatus } from '../network/network.service';
 import { Observable, from, of, throwError } from 'rxjs';
 import { OfflineManagerService } from '../offline-manager/offline-manager.service';
 import { StorageService } from '../storage/storage.service';
+import { ToastService } from '../toast/toast.service';
 import { tap, map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private contentType = 'application/json';
-  private accessToken: string;
 
   constructor(
     private http: HttpClient,
     private logService: LogService,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private toastService: ToastService
     ) { }
 
   public get(url: string, storageKey: string): Observable<any> {
@@ -30,6 +30,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
             return throwError(error);
           }),
           map(result => result),
@@ -47,6 +48,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
             return throwError(error);
           }
         )
@@ -62,6 +64,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
             return throwError(error);
           }
         )

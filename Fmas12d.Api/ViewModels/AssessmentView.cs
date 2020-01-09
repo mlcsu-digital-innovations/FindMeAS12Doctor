@@ -16,6 +16,7 @@ namespace Fmas12d.Api.ViewModels
       Address2 = model.Address2;
       Address3 = model.Address3;
       Address4 = model.Address4;
+      AmhpUserName = model.AmhpUser?.DisplayName;
       CanUpdateOutcome = 
         model.IsSuccessful == null && 
         model.Referral?.ReferralStatusId == Business.Models.ReferralStatus.ASSESSMENT_SCHEDULED;
@@ -30,6 +31,7 @@ namespace Fmas12d.Api.ViewModels
       Postcode = model.Postcode;
       PreferredDoctorGenderTypeName = model.PreferredDoctorGenderTypeName;
       ReferralId = model.ReferralId;
+      ReferralStatus = model.Referral?.ReferralStatus?.Name;
       SpecialityName = model.SpecialityName;
 
       if (model.DoctorsAllocated != null && 
@@ -53,6 +55,7 @@ namespace Fmas12d.Api.ViewModels
     public string Address2 { get; set; }
     public string Address3 { get; set; }
     public string Address4 { get; set; }
+    public string AmhpUserName { get; set; }
     public bool CanUpdateOutcome { get; set; }
     public DateTimeOffset DateTime { get; set; }
     public IList<AssessmentDetailType> DetailTypes { get; set; }
@@ -66,6 +69,7 @@ namespace Fmas12d.Api.ViewModels
     public string Postcode { get; set; }
     public string PreferredDoctorGenderTypeName {get; set;}
     public int ReferralId { get; set; }
+    public string ReferralStatus { get; set; }
     public string SpecialityName { get; set; }
 
     public static Func<Business.Models.Assessment, AssessmentView> ProjectFromModel
