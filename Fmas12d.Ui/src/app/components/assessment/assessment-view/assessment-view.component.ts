@@ -26,6 +26,7 @@ export class AssessmentViewComponent implements OnInit {
   referral$: Observable<Referral | any>;
   referralCreated: Date;
   referralId: number;
+  referralStatus: string;
   referralStatusId: number;
   showDateTitle: string;
   showDateValue: Date;
@@ -161,6 +162,7 @@ export class AssessmentViewComponent implements OnInit {
     this.currentAssessmentForm.disable();
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
+    this.referralStatus = referral.statusName;
 
     if (referral.currentAssessment.scheduledTime !== null) {
       this.showDateTitle = 'Scheduled Date / Time';

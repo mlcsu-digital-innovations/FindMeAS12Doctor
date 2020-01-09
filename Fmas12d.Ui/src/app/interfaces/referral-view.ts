@@ -9,5 +9,5 @@ export interface ReferralView {
   patientIdentifier: string;
   previousAssessments: PreviousAssessment;
   referralStatusId: number;
-  status: string;
+  statusName: string;
 }
