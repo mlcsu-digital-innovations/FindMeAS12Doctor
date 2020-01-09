@@ -481,6 +481,13 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetProfileTypePsychiatrist().Id
       );
 
+      // Test User
+      AddUpdateUserDoctorWithDefaults(
+        "Test User",
+        GetGenderTypeMale().Id,
+        0,         
+        "8fc64029-9b4d-4ae7-8552-f1b41dd420b9"
+      );
 
     }
 
