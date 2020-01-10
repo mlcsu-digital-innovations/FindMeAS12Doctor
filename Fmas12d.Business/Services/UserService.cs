@@ -64,13 +64,15 @@ namespace Fmas12d.Business.Services
     public async Task<IEnumerable<User>> GetAllByDoctorNameAsync(
       string doctorName,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true,
+      bool includeUnregisteredDoctors = false)
     {
+      List<int> profileTypes = DoctorProfileTypes(includeUnregisteredDoctors);
+
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
        .Where(u => u.DisplayName.Contains(doctorName))
-       .Where(u => u.ProfileTypeId == ProfileType.GP ||
-                   u.ProfileTypeId == ProfileType.PSYCHIATRIST)
+       .Where(u => profileTypes.Contains(u.ProfileTypeId))
        .AsNoTracking(asNoTracking)
        .Select(User.ProjectFromEntity)
        .ToListAsync();
@@ -81,13 +83,15 @@ namespace Fmas12d.Business.Services
     public async Task<IEnumerable<User>> GetAllByGmcNumberAsync(
       int gmcNumber,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true,
+      bool includeUnregisteredDoctors = false)
     {
+      List<int> profileTypes = DoctorProfileTypes(includeUnregisteredDoctors);
+
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
        .Where(u => u.GmcNumber.ToString().Contains(gmcNumber.ToString()))
-       .Where(u => u.ProfileTypeId == ProfileType.GP ||
-                   u.ProfileTypeId == ProfileType.PSYCHIATRIST)
+       .Where(u => profileTypes.Contains(u.ProfileTypeId))
        .AsNoTracking(asNoTracking)
        .Select(User.ProjectFromEntity)
        .ToListAsync();
@@ -160,6 +164,16 @@ namespace Fmas12d.Business.Services
         .SingleOrDefaultAsync();
 
       return profileTypeId;
+    }
+
+    private List<int> DoctorProfileTypes(bool includeUnregistered) {
+
+      List<int> profileTypes = new List<int>() {ProfileType.GP, ProfileType.PSYCHIATRIST};
+
+      if (includeUnregistered){
+        profileTypes.Add(ProfileType.UNREGISTERED);
+      }
+      return profileTypes;
     }
 
     private async Task<User> CheckUserIsAsync(

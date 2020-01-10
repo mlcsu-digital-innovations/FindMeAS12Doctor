@@ -11,14 +11,18 @@ export class DoctorListService {
 
   constructor(private httpClient: HttpClient) {}
 
-  public GetDoctorList(searchTerm: string) {
+  public GetDoctorList(searchTerm: string, includeUnregisteredDoctors: boolean) {
 
     if (searchTerm === '' || searchTerm.length < 3) {
       return of([]);
     }
-
     const paramName: string = isNaN(+searchTerm) ? 'doctorname' : 'gmcnumber';
-    const options = { params: new HttpParams().set(paramName, searchTerm) };
+
+    const options = {
+      params: new HttpParams()
+        .set(paramName, searchTerm)
+        .set('includeUnregisteredDoctors', String(includeUnregisteredDoctors))
+    };
 
     return this.httpClient.get(
       environment.apiEndpoint + '/user/search', options
