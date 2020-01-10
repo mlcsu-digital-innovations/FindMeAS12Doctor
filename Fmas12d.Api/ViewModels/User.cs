@@ -18,9 +18,8 @@ namespace Fmas12d.Api.ViewModels
       GmcNumber = model.GmcNumber;
       HasReadTermsAndConditions = model.HasReadTermsAndConditions;
       Id = model.Id;
-      IsAmhp = model.ProfileTypeId == Business.Models.ProfileType.AMHP;
-      IsDoctor = (model.ProfileTypeId == Business.Models.ProfileType.GP || 
-        model.ProfileTypeId == Business.Models.ProfileType.PSYCHIATRIST);      
+      IsAmhp = model.IsAmhp;
+      IsDoctor = model.IsDoctor;      
       OrganisationId = model.OrganisationId;
       ProfileTypeId = model.ProfileTypeId;
       ProfileTypeName = model.ProfileTypeName;
