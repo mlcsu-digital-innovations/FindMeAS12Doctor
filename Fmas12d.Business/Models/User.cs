@@ -77,9 +77,35 @@ namespace Fmas12d.Business.Models
 
     public string GenderName { get { return GenderType?.Name; } }
 
-    public bool IsAmhp { get { return ProfileType?.IsAmhp ?? false; } }
+    public bool IsAmhp
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdAnAmhp(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsAmhp;
+        }
+      }
+    }
 
-    public bool IsDoctor { get { return ProfileType?.IsDoctor ?? false; } }
+    public bool IsDoctor
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdADoctor(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsDoctor;
+        }
+      }
+    }
 
     public string ProfileTypeName { get { return ProfileType?.Name; } }
 
