@@ -45,3 +45,8 @@ form {
 .not-full-width {
   width: 80%;
 }
+
+::ng-deep.dropdown-menu.show {
+  max-height: 260px !important;
+  overflow-y: auto !important;
+}
