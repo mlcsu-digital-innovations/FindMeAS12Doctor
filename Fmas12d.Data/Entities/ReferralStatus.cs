@@ -2,6 +2,5 @@
 {
   public partial class ReferralStatus : NameDescription, IReferralStatus
   {
-    public const int CLOSED = 9;
   }
 }

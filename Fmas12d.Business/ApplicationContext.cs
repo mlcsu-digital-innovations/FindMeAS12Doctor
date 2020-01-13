@@ -122,6 +122,8 @@ namespace Fmas12d.Business
     public virtual DbSet<ReferralStatusAudit> ReferralStatusAudits { get; set; }
     public virtual DbSet<Section12ApprovalStatus> Section12ApprovalStatuses { get; set; }
     public virtual DbSet<Section12ApprovalStatusAudit> Section12ApprovalStatusAudits { get; set; }
+    public virtual DbSet<Section12LiveRegister> Section12LiveRegisters { get; set; }
+    public virtual DbSet<Section12LiveRegisterAudit> Section12LiveRegisterAudits { get; set; }    
     public virtual DbSet<Speciality> Specialities { get; set; }
     public virtual DbSet<SpecialityAudit> SpecialityAudits { get; set; }
     public virtual DbSet<UnsuccessfulAssessmentType> UnsuccessfulAssessmentTypes { get; set; }
@@ -221,6 +223,10 @@ namespace Fmas12d.Business
 
       modelBuilder.Entity<ReferralStatus>()
         .HasIndex(c => c.Name)
+        .IsUnique();  
+
+      modelBuilder.Entity<Section12LiveRegister>()
+        .HasIndex(c => c.GmcNumber)
         .IsUnique();  
 
       modelBuilder.Entity<Section12ApprovalStatus>()
