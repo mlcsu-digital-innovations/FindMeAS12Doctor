@@ -236,6 +236,7 @@ export class AssessmentCreateComponent implements OnInit {
         size: 'lg'
       });
     } else {
+      this.DisplayCancelAssessmentCreationToast();
       this.routerService.navigate(['/referral']);
     }
   }
@@ -440,6 +441,7 @@ export class AssessmentCreateComponent implements OnInit {
     this.cancelModal.close();
 
     if (action) {
+      this.DisplayCancelAssessmentCreationToast();
       this.routerService.navigate(['/referral']);
     }
   }
@@ -479,6 +481,12 @@ export class AssessmentCreateComponent implements OnInit {
         return throwError(error);
       }
     );
+  }
+
+  private DisplayCancelAssessmentCreationToast() {
+    this.toastService.displayInfo({
+      message: "Assessment creation has been cancelled"
+    });
   }
 
   ReferralListNavigation() {
