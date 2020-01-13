@@ -11,6 +11,7 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
+import { SortEvent } from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
 
 @Component({
   selector: 'app-assessment-view',
@@ -180,5 +181,9 @@ export class AssessmentViewComponent implements OnInit {
     } else {
       this.CancelModal();
     }
+  }
+
+  onSort({ column, direction }: SortEvent) {
+    // TODO
   }
 }
