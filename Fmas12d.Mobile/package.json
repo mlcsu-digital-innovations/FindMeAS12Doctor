@@ -11,7 +11,7 @@
     "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Mobile",
     "e2e": "ng e2e",
     "ionic": "ionic",
-    "ios:publish:aimes-uat": "ionic cordova build ios -c=aimes-uat-device-publish",
+    "ios:prepare:aimes-uat": "ionic cordova prepare ios -c=aimes-uat-device-publish",
     "lint": "ng lint",
     "ng": "ng",
     "serve:aimes-uat": "ionic serve -- -c=aimes-uat",
