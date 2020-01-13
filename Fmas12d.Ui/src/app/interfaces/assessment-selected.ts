@@ -3,4 +3,5 @@ import { AvailableDoctor } from './available-doctor';
 
 export interface AssessmentSelected extends AssessmentAvailability {
   doctorsSelected: AvailableDoctor[];
+  isPlanned: boolean;
 }

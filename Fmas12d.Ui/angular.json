@@ -38,7 +38,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -65,7 +65,28 @@
                   "with": "src/environments/environment.aimes-uat.ts"
                 }
               ],
-              "outputPath": "../Deployment/AimesUat/Fmas12d.Ui"
+              "outputPath": "../Deployment/AimesUat/Fmas12d.Ui",
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]              
             },
             "azure-development": {
               "fileReplacements": [
