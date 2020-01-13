@@ -27,16 +27,16 @@ export class UserAvailabilityService {
 
     let postType: string;
 
-    if (userAvailability.location.contactDetailId !== undefined) {
-      postType = 'contactDetail';
-    }
-
     if (userAvailability.location.latitude !== undefined && userAvailability.location.longitude !== undefined) {
       postType = 'location';
     }
 
     if (userAvailability.location.postcode !== undefined) {
       postType = 'postcode';
+    }
+
+    if (userAvailability.location.contactDetailId !== undefined) {
+      postType = 'contactDetail';
     }
 
     if (userAvailability.statusId === UNAVAILABLE) {

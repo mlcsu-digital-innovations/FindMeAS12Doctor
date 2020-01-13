@@ -3,9 +3,6 @@
 <ion-content>
   <ion-grid>
     <ion-card>
-      <ion-card-header color="primary">
-        <strong></strong>
-      </ion-card-header>
       <ion-card-content>
         <ion-row>
           <ion-col>
@@ -19,7 +16,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            Known Location {{assessmentRequest.doctorDetails.knownLocation.type}}
+            Known Location {{expectedLocation}}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -43,7 +40,9 @@
         <ion-row>
           <ion-col 
             style="text-align: center;" 
-            *ngIf="!assessmentRequest.doctorDetails.hasAccepted || !assessmentRequest.doctorDetails.hasResponded">
+            *ngIf="assessmentRequest.doctorDetails.hasAccepted == null
+              || !assessmentRequest.doctorDetails.hasAccepted
+              || !assessmentRequest.doctorDetails.hasResponded">
             <ion-button color="primary" (click)="acceptRequest()">
               <ion-icon name="checkmark-circle-outline"></ion-icon>
               Accept
@@ -51,7 +50,9 @@
           </ion-col>
           <ion-col
             style="text-align: center;"
-            *ngIf="assessmentRequest.doctorDetails.hasAccepted || !assessmentRequest.doctorDetails.hasResponded">
+            *ngIf="assessmentRequest.doctorDetails.hasAccepted == null 
+              ||assessmentRequest.doctorDetails.hasAccepted
+              || !assessmentRequest.doctorDetails.hasResponded">
             <ion-button color="primary" (click)="declineRequest()">
               <ion-icon name="close-circle-outline"></ion-icon>
               Decline

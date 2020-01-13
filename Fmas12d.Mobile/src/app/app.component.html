@@ -15,17 +15,17 @@
             <ion-icon name="home"></ion-icon> Home
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="isDoctor">
-          <ion-item routerLink="/amhp-assessment-requests" routerDirection="forward">
-            <ion-icon name="list"></ion-icon> Assessment Requests
+        <ion-menu-toggle *ngIf="user.isDoctor">
+          <ion-item routerLink="/doctor-assessments" routerDirection="forward">
+            <ion-icon name="list"></ion-icon> Assessments
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="isAmhp">
+        <ion-menu-toggle *ngIf="user.isAmhp">
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
             <ion-icon name="folder-open"></ion-icon> AMHP Assessments
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="isDoctor">
+        <ion-menu-toggle *ngIf="user.isDoctor">
           <ion-item routerLink="/doctor-availability-view" routerDirection="forward">
             <ion-icon name="search"></ion-icon> Availability
           </ion-item>

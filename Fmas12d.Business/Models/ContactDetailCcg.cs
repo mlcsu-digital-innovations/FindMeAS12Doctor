@@ -16,7 +16,7 @@ namespace Fmas12d.Business.Models
 
       Ccg = new Ccg(entity.Ccg);
       CcgId = entity.CcgId;
-      ContactDetailType = new ContactDetailType(entity.ContactDetailType);
+      ContactDetailType = new ContactDetailType(entity.ContactDetailType, false);
       ContactDetailTypeId = entity.ContactDetailTypeId;
       EmailAddress = entity.EmailAddress;
       TelephoneNumber = entity.TelephoneNumber;

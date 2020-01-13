@@ -3,8 +3,6 @@
 <ion-content>
   <ion-grid>
     <ion-card>
-      <ion-card-header color="primary">
-      </ion-card-header>
       <ion-card-content>
         <ion-row>
           <ion-item>
@@ -51,9 +49,22 @@
         <ion-row>
           &nbsp;
         </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-select 
+              interface="action-sheet" 
+              placeholder="Known Location"
+              [(ngModel)]="userAvailability.location.contactDetailId"
+            >
+              <ion-select-option *ngFor="let contact of contactDetails" [value]="contact.id">
+                <ion-label>{{contact.name}}</ion-label>
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
         <ion-row *ngIf="available">
           <ion-item style="width:100%;">
-            <ion-input placeholder="Postcode" minlength="6" maxlength="8" name="postcode" autocapitalize="on"
+            <ion-input placeholder="Postcode" minlength="6" maxlength="8" name="postcode" autocapitalize="characters"
               debounce=500 [(ngModel)]="userAvailability.location.postcode" (ionChange)="postcodeChanged()"
               pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})">
             </ion-input>

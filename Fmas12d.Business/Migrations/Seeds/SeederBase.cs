@@ -300,9 +300,14 @@ namespace Fmas12d.Business.Migrations.Seeds
       return GetProfileTypeById(Models.ProfileType.AMHP);
     }
 
-    protected ProfileType GetProfileTypeDoctor()
+    protected ProfileType GetProfileTypeGp()
     {
-      return GetProfileTypeById(Models.ProfileType.DOCTOR);
+      return GetProfileTypeById(Models.ProfileType.GP);
+    }
+
+    protected ProfileType GetProfileTypePsychiatrist()
+    {
+      return GetProfileTypeById(Models.ProfileType.PSYCHIATRIST);
     }
 
     protected ProfileType GetProfileTypeFinance()
