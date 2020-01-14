@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fmas12d.Business.Services
 {
@@ -13,35 +14,85 @@ namespace Fmas12d.Business.Services
     : ServiceBase<Entities.Section12LiveRegister>,
     ISection12LiveRegisterService
   {
+
+    private readonly Section12LiveRegisterEtl _section12LiveRegisterEtl;
+
     public Section12LiveRegisterService(
       ApplicationContext context,
       IUserClaimsService userClaimsService)
       : base(context, userClaimsService)
     {
+      _section12LiveRegisterEtl = new Section12LiveRegisterEtl()
+      {
+        LoadedDate = DateTimeOffset.Now
+      };      
     }
 
     public async Task<Section12LiveRegisterEtl> PerformEtlAsync(string filePath)
     {
+      await EtlSection12RegisterReport(filePath);
+      await UpdateUserSection12ApprovalStatus();
+
+      return _section12LiveRegisterEtl;
+    }
+
+    private async Task<bool> UpdateUserSection12ApprovalStatus()
+    {
+
+      // not sure how to do this with linq expressions
+      var query = from user in _context.Set<Entities.User>()
+                  join s12LiveRegister in _context.Set<Entities.Section12LiveRegister>()
+                    on user.GmcNumber equals s12LiveRegister.GmcNumber
+                  select new Entities.User(){
+                    Id = user.Id,
+                    Section12ExpiryDate = s12LiveRegister.ExpiryDate
+                  };
+      List<Entities.User> updatedUsers = await query.ToListAsync();
+
+      await _context.Users
+                    .Where(u => u.GmcNumber != null)
+                    .ForEachAsync(u => {
+                      Entities.User updatedUser = 
+                        updatedUsers.SingleOrDefault(uu => uu.Id == u.Id);
+                      
+                      if (updatedUser == null)
+                      {
+                        u.Section12ExpiryDate = null;
+                        u.Section12ApprovalStatusId = Section12ApprovalStatus.NOT_APPROVED;
+                      }
+                      else
+                      {
+                        u.Section12ExpiryDate = updatedUser.Section12ExpiryDate;
+                        u.Section12ApprovalStatusId = u.Section12ExpiryDate.HasValue ?
+                                                      Section12ApprovalStatus.APPROVED :
+                                                      Section12ApprovalStatus.NOT_APPROVED;
+                      }
+                      UpdateModified(u);
+                    });
+      
+      await _context.SaveChangesAsync();
+
+      return true;
+    }
+
+    private async Task<bool> EtlSection12RegisterReport(string filePath)
+    {
       using StreamReader streamReader = new StreamReader(filePath);
       using CsvReader csvReader = new CsvReader(streamReader);
-
-      Section12LiveRegisterEtl section12LiveRegisterEtl = new Section12LiveRegisterEtl()
-      {
-        LoadedDate = DateTimeOffset.Now
-      };
 
       List<Section12LiveRegisterCsv> newRegistersFromCsv = csvReader
         .GetRecords<Section12LiveRegisterCsv>()
         .Where(r => !string.IsNullOrWhiteSpace(r.DateOfS12ExpiryString))
         .Where(r => r.Prn.All(c => char.IsNumber(c)))
         .ToList();
-      section12LiveRegisterEtl.NoOfRowsInReport = newRegistersFromCsv.Count;
+      _section12LiveRegisterEtl.NoOfRowsInReport = newRegistersFromCsv.Count;
 
       List<Entities.Section12LiveRegister> currentMatchingRegisters =
-        _context.Section12LiveRegisters
-                .Where(s => newRegistersFromCsv.Select(c => c.GmcNumber).Contains(s.GmcNumber))
-                .ToList();
-      section12LiveRegisterEtl.NoOfRowsUpdated = currentMatchingRegisters.Count;
+        await _context.Section12LiveRegisters
+                      .Where(s => newRegistersFromCsv.Select(c => c.GmcNumber)
+                                                     .Contains(s.GmcNumber))
+                      .ToListAsync();                      
+      _section12LiveRegisterEtl.NoOfRowsUpdated = currentMatchingRegisters.Count;
 
       currentMatchingRegisters.ForEach(cr =>
       {
@@ -69,7 +120,7 @@ namespace Fmas12d.Business.Services
                              Title = nr.Title
                            })
                            .ToList();
-      section12LiveRegisterEtl.NoOfRowsAdded = newRegisters.Count;
+      _section12LiveRegisterEtl.NoOfRowsAdded = newRegisters.Count;
 
       newRegisters.ForEach(nr => { UpdateModified(nr); });
 
@@ -77,8 +128,8 @@ namespace Fmas12d.Business.Services
 
       await _context.SaveChangesAsync();
 
-      return section12LiveRegisterEtl;
-    }
+      return true;
 
+    }
   }
 }
