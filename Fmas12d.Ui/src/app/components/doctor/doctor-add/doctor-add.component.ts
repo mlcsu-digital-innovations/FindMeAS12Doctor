@@ -44,6 +44,7 @@ export class DoctorAddComponent implements OnInit {
   selectedDoctor: UserDetails;
   unregisteredDoctorForm: FormGroup;
   unregisteredUser: UnregisteredUser;
+  unregisteredUserError: string;
   unregisteredUsers: UnregisteredUser[];
 
   @ViewChild('cancelAllocation', null) cancelAllocationTemplate;
@@ -150,46 +151,12 @@ export class DoctorAddComponent implements OnInit {
   }
 
   AllocateUnregisteredDoctor() {
-    // ToDo: use a service to allocate the registered doctor
-
-    console.log(this.selectedDoctor);
 
     if (this.selectedDoctor) {
       // have an existing unregistered user
       this.assessmentService
-      .allocateDoctorDirectly(this.assessmentId, this.registeredDoctorDetails.id)
+      .allocateDoctorDirectly(this.assessmentId, this.selectedDoctor.id)
       .subscribe(userDetails => {
-        this.toastService.displaySuccess({
-          title: 'Success',
-          message: 'Doctor Allocated'
-        });
-        this.routerService.navigatePrevious();
-    },
-      (err) => {
-
-        const msg =
-          err.error.errors.UserId !== undefined
-          ? 'Doctor is already allocated to this assessment'
-          : err.error.title;
-
-        this.toastService.displayError({
-          title: 'Error',
-          message: msg
-        });
-      });
-    } else {
-      // create a new user and send it to the api
-      const newUser = {} as UserDetails;
-      newUser.displayName = this.unregisteredDoctorField.value;
-      newUser.gmcNumber = +this.unregisteredGmcNumberField.value;
-      newUser.genderTypeId = +this.unregisteredGenderField.value;
-      newUser.contactDetailBase = {telephoneNumber: this.unregisteredContactField.value};
-
-      console.log(newUser);
-      this.assessmentService
-      .allocateNewUnregisteredDoctor(this.assessmentId, newUser)
-      .subscribe(userDetails => {
-        console.log(userDetails);
         this.toastService.displaySuccess({
           title: 'Success',
           message: 'Doctor Allocated'
@@ -208,9 +175,79 @@ export class DoctorAddComponent implements OnInit {
           message: msg
         });
       });
+    } else {
+      // create a new user and send it to the api
+      const newUser = {} as UserDetails;
+      newUser.displayName = this.unregisteredDoctorField.value;
+      newUser.gmcNumber = +this.unregisteredGmcNumberField.value;
+      newUser.genderTypeId =
+        +this.unregisteredGenderField.value === 0 ? null : +this.unregisteredGenderField.value;
+      newUser.contactDetailBase = {telephoneNumber: this.unregisteredContactField.value};
+
+      let canCreateNewUser = true;
+
+      if (newUser.contactDetailBase.telephoneNumber === '') {
+        this.unregisteredUserError = '* Telephone Number must be supplied';
+        canCreateNewUser = false;
+      }
+
+      if (newUser.gmcNumber.toString().length !== 7) {
+        this.unregisteredUserError = '* GMC Number format incorrect';
+        canCreateNewUser = false;
+      }
+
+      if (newUser.displayName === '') {
+        this.unregisteredUserError = '* Doctor Name must be supplied';
+        canCreateNewUser = false;
+      }
+
+      if (canCreateNewUser) {
+
+        // check that the GMC number is unique
+        this.doctorListService.GetDoctorList(newUser.gmcNumber.toString(), true)
+        .subscribe((userList: NameIdList[]) => {
+          if (userList === null ) {
+            userList = [];
+          }
+          if (userList.length > 0) {
+            this.toastService.displayError({
+              title: 'Error',
+              message: 'GMC Number used by existing user'
+            });
+          } else {
+            this.assessmentService
+              .allocateNewUnregisteredDoctor(this.assessmentId, newUser)
+              .subscribe(
+                userDetails => {
+                  this.toastService.displaySuccess({
+                    title: 'Success',
+                    message: 'Doctor Allocated'
+                  });
+                  this.routerService.navigatePrevious();
+                },
+                err => {
+                  const msg =
+                    err.error.errors.UserId !== undefined
+                      ? 'Doctor is already allocated to this assessment'
+                      : err.error.title;
+
+                  this.toastService.displayError({
+                    title: 'Error',
+                    message: msg
+                  });
+                }
+              );
+          }
+        },
+          err => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error checking GMC number'
+          });
+        }
+      );
+      }
     }
-
-
   }
 
   Cancel() {
@@ -223,7 +260,6 @@ export class DoctorAddComponent implements OnInit {
       this.routerService.navigatePrevious();
     }
   }
-
 
   ClearField(fieldName: string) {
     if (this.unregisteredDoctorForm.contains(fieldName)) {
@@ -256,7 +292,6 @@ export class DoctorAddComponent implements OnInit {
           message: 'Unable to retrieve doctor details'
         });
       } else {
-        console.log(doctorDetails);
 
         // if the doctor is registered then inform the user
         if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
@@ -439,7 +474,6 @@ export class DoctorAddComponent implements OnInit {
     this.doctorListService.GetDoctorList(searchTerm, true)
     .subscribe((userList: NameIdList[]) => {
       this.isUnregisteredSearchComplete = true;
-      console.log(userList);
 
       if (userList === null ) {
         userList = [];

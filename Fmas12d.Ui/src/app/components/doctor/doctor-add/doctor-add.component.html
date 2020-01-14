@@ -242,6 +242,10 @@
               </div>
             </div>
 
+            <div class="form-row" *ngIf="unregisteredUserError !== ''">
+              <span class="invalid-field" style="margin-left:10px;">{{unregisteredUserError}}</span>
+            </div>
+
             <div class="form-row">
               <div class="col-md-12 text-left">
                 <button
