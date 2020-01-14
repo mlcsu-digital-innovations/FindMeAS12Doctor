@@ -198,6 +198,26 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPost]
+    [Route("{id:int}/doctors/allocated/unregistered")]
+    public async Task<ActionResult> PostUnregisteredDoctorAllocated(
+      int id,
+      [FromBody] RequestModels.AssessmentUnregisteredDoctorsPost requestModel
+    )
+    {
+      try
+      {
+        Business.Models.IUnregisteredDoctor businessModel = new Business.Models.UnregisteredDoctor();
+        requestModel.MapToBusinessModel(businessModel);
+        await Service.AddUnregisteredAllocatedDoctorDirectAsync(id, businessModel);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPost]
     [Route("{id:int}/doctors/selected")]
     public async Task<ActionResult<ViewModels.AssessmentDoctorsPost>> PostDoctorsSelected(
       int id,

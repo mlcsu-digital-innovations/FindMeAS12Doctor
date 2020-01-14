@@ -40,6 +40,68 @@ namespace Fmas12d.Business.Services
       _userAvailabilityService = userAvailabilityService;
     }
 
+    public async Task<IAssessmentDoctorsUpdate> AddUnregisteredAllocatedDoctorDirectAsync(
+      int id, 
+      IUnregisteredDoctor unregisteredDoctor
+    )
+    {
+      Entities.Assessment entity = await _context
+        .Assessments
+        .Include(a => a.Doctors)
+          .ThenInclude(d => d.Status)
+        .Include(a => a.Referral)
+        .WhereIsActiveOrActiveOnly(true)
+        .Where(a => a.Id == id)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("Id",
+          $"An active Assessment with an id of {id} was not found.");
+      }
+
+      // add the user
+      User newUser = new User() {
+        DisplayName = unregisteredDoctor.DisplayName,
+        GmcNumber = unregisteredDoctor.GmcNumber,
+        GenderTypeId = unregisteredDoctor.GenderTypeId,
+        IdentityServerIdentifier = Guid.NewGuid().ToString(),
+        OrganisationId = 1,
+        ProfileTypeId = ProfileType.UNREGISTERED       
+      };
+      newUser = await _userService.CreateAsync(newUser); 
+
+      if (newUser.Id == 0)
+      {
+        throw new ModelStateException("Id",
+          $"Unable to create new unregistered doctor.");
+      }
+
+      // add the contact detail
+      if (unregisteredDoctor.TelephoneNumber != null) {
+        ContactDetail contact = new ContactDetail() {
+          TelephoneNumber = unregisteredDoctor.TelephoneNumber,
+          ContactDetailTypeId = ContactDetailType.BASE,
+          UserId = newUser.Id,
+          Address1 = "Unregistered User",
+          Latitude = 0,
+          Longitude = 0
+        };
+
+        contact = await _contactDetailsService.CreateAsync(contact);
+
+        if (contact.Id == 0)
+        {
+          throw new ModelStateException("Id",
+            $"Unable to create new unregistered doctor contact.");
+        }
+      }
+     
+      // add the assessment allocation
+      return await AddAllocatedDoctorDirectAsync(id, newUser.Id);
+
+    }
+
     public async Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(
       int id,
       int userId

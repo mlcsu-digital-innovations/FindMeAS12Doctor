@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { UserDetails } from 'src/app/interfaces/user-details';
 
 @Injectable({
   providedIn: 'root'
@@ -107,6 +108,26 @@ export class AssessmentService {
     return this.httpClient.post(
       `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/allocated/direct`,
       user,
+      { headers }
+    );
+  }
+
+  public allocateNewUnregisteredDoctor(assessmentId: number, user: UserDetails) {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    console.log(user);
+
+    const userDetails = {
+      telephoneNumber: user.contactDetailBase.telephoneNumber,
+      displayName: user.displayName,
+      gmcNumber: user.gmcNumber,
+      genderTypeId: user.genderTypeId
+    };
+
+    return this.httpClient.post(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/doctors/allocated/unregistered`,
+      userDetails,
       { headers }
     );
   }

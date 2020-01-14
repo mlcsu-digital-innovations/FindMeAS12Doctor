@@ -1,9 +1,15 @@
+import { ContactDetail } from './contact-detail';
+
 export interface UserDetails {
+  contactDetailBase: ContactDetail;
   displayName: string;
-  id: number;
   gender: string;
-  type: string;
-  telephone: string;
-  specialities: string[];
+  genderTypeId: number;
   gmcNumber: number;
+  id: number;
+  profileTypeId: number;
+  section12ApprovalStatusId?: number;
+  specialities: string[];
+  telephone: string;
+  type: string;
 }

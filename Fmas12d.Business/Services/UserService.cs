@@ -20,6 +20,28 @@ namespace Fmas12d.Business.Services
     {
     }
 
+    public async Task<User> CreateAsync(User model)
+    {
+      Entities.User entity = model.MapToEntity();
+
+      entity.Id = 0;
+      entity.IsActive = true;
+
+      UpdateModified(entity);
+
+      _context.Add(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = _context.Users
+                      .Where(e => e.Id == entity.Id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(User.ProjectFromEntity)
+                      .Single();
+      return model;
+    }
+
     public async Task<User> CheckIsAmhpAsync(
       int id,
       string modelPropertyName,

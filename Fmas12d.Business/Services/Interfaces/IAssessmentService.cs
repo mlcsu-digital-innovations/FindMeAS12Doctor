@@ -10,6 +10,10 @@ namespace Fmas12d.Business.Services
     Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsAsync(IAssessmentDoctorsUpdate model);
     Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(int id, int userId);
     Task<IAssessmentDoctorsUpdate> AddSelectedDoctorsAsync(IAssessmentDoctorsUpdate model);
+    Task<IAssessmentDoctorsUpdate> AddUnregisteredAllocatedDoctorDirectAsync(
+      int id,
+      IUnregisteredDoctor unregisteredDoctor
+    );
     Task<AssessmentCreate> CreateAsync(AssessmentCreate model);
     Task<IEnumerable<Assessment>> GetListByUserIdAsync(
       int userId,

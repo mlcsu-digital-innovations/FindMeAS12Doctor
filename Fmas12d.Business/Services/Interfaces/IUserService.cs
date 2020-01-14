@@ -18,6 +18,7 @@ namespace Fmas12d.Business.Services
       bool asNoTracking = true,
       bool activeOnly = true
     );
+    Task<User> CreateAsync(User model);
     Task<IEnumerable<User>> GetAllByAmhpNameAsync(
       string amhpName, 
       bool asNoTracking = true, 

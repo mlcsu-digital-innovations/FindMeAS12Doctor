@@ -133,14 +133,14 @@
           </form>
 
            <!-- form for unregistered doctors -->
-           <!-- <form [formGroup]="unregisteredDoctorForm" class="form-style" novalidate>
+           <form [formGroup]="unregisteredDoctorForm" class="form-style" novalidate>
 
             <div class="form-row">
               <span class="form-title">Add unregistered doctor</span>
             </div>
 
             <div class="form-row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label for="amhp">Doctor Name</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
@@ -162,7 +162,7 @@
                   />
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-4">
                 <label for="amhp">GMC Number</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
@@ -191,49 +191,32 @@
                   type="button"
                   class="btn btn-primary"
                   (click)="SearchUnregisteredDoctor()"
-                  [disabled]="unregisteredUserField.value == '' && unregisteredGmcNumberField.value == ''"
                 >
-                  <i class="fas fa-search "></i>
+                  <i class="fas fa-search"></i>
                   Search
                 </button>
               </div>
             </div>
             <div class="form-row" *ngIf="isUnregisteredSearchComplete">
-                <div class="col-md-2">
-                    <label>Gender</label>
-                    <select
-                      class="custom-select custom-select-lg form-control"
-                      formControlName="gender"
-                      #gender
-                      id="gender"
-                    >
-                    <option></option>
-                    <option
-                      *ngFor="let gender of genderTypes; let i=index"
-                      [value]="genderTypes[i].id"
-                    >
-                      {{genderTypes[i].name}}
-                    </option>
-                    </select>
-                  </div>
-              <div class="col-md-2 mb-2">
-                  <div class="checkmark-content">
-                      <label class="container">
-                        <input
-                          class="form-control"
-                          type="checkbox"
-                          [checked]="unregisteredUser.isSection12"
-                          id="isSection12"
-                          formControlName="isSection12"
-                          #isSection12
-                        />
-                        <span class="checkmark"></span>
-                        Section 12 Doctor
-                      </label>
-                    </div>
+              <div class="col-md-4">
+                <label>Gender</label>
+                  <select
+                    class="custom-select custom-select-lg form-control"
+                    formControlName="gender"
+                    #gender
+                    id="gender"
+                  >
+                  <option></option>
+                  <option
+                    *ngFor="let gender of genderTypes; let i=index"
+                    [value]="genderTypes[i].id"
+                  >
+                    {{genderTypes[i].name}}
+                  </option>
+                </select>
               </div>
               <div class="col-md-4">
-                  <label>Contact Number</label>
+                <label>Contact Number</label>
                   <input
                     type="text"
                     class="form-control"
@@ -241,114 +224,38 @@
                     formControlName="contact"
                   />
                 </div>
-
-            </div>
-
-            <div class="form-row flex-top" *ngIf="isUnregisteredSearchComplete">
-                <div class="col-md-8">
-                    <label>Organisation</label>
+              <div class="col-md-4 mb-2">
+                <div class="checkmark-content">
+                  <label class="container">
                     <input
-                      type="text"
                       class="form-control"
-                      value={{unregisteredUser.organisation}}
-                      formControlName="organisation"
+                      type="checkbox"
+                      [checked]="unregisteredUser.isSection12"
+                      id="isSection12"
+                      formControlName="isSection12"
+                      #isSection12
                     />
-                  </div>
-            </div>
-
-            <div class="form-row" *ngIf="isUnregisteredSearchComplete">
-                <div class="col-md-2">
-                    <label>Postcode</label>
-                    <input
-                      type="text"
-                      maxlength="8"
-                      minlength="6"
-                      formControlName="postcode"
-                      #postcode
-                      id="postcode"
-                      oninput="this.value = this.value.toUpperCase()"
-                      class="form-control"
-                      [ngClass]="{
-                        'is-invalid': HasInvalidPostcode(),
-                        'is-valid': HasValidPostcode() && !hasUnregisteredUser
-                      }" />
-                  </div>
-                  <div class="col-md-2 mb-1" *ngIf="!hasUnregisteredUser">
-                      <button
-                      type="button"
-                      class="btn btn-primary btn-assessment"
-                      placement="top"
-                      ngbTooltip="Search for addresses"
-                      [openDelay]="1000"
-                      [closeDelay]="500"
-                      tooltipClass="subtle-tooltip"
-                      (click)="AddressSearch()"
-                      [disabled]="postcode.value == '' || postcode.errors != null || hasUnregisteredUser"
-                    >
-                    <i class="fas fa-search-location"></i>
-                    {{ isPostcodeSearching ? "Searching" : "Find" }}
-                    <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                        *ngIf="isPostcodeSearching"
-                      >
-                    </span>
-                    </button>
-                  </div>
-            </div>
-
-            <div class="form-row flex-top" *ngIf="isUnregisteredSearchComplete">
-              <div class="col-md-8" *ngIf="hasUnregisteredUser">
-                <label>Address</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  value={{unregisteredUser.address}}
-                  [disabled]=true
-                />
-              </div>
-              <div class="col-md-8" *ngIf="!hasUnregisteredUser && addressList.length > 0">
-                  <label>Address</label>
-                  <select
-                    class="custom-select custom-select-lg mb-2 form-control"
-                    formControlName="unregisteredUserAddress"
-                    #unregisteredUserAddress
-                    id="unregisteredUserAddress"
-                    appFocusOnShow
-                  >
-                    <option disabled=true [selected]=true>Please Select Address</option>
-                    <option *ngFor="let address of addressList; let i=index" [value]="addressList[i].address">
-                      {{addressList[i].address}}
-                    </option>
-                  </select>
+                  <span class="checkmark"></span>
+                    Section 12 Doctor
+                  </label>
                 </div>
-            </div>
-            <div class="form-row" *ngIf="isUnregisteredSearchComplete && hasUnregisteredUser">
-              <div class="col-md-2">
-                <label>Number of Previous Assessments</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  value={{unregisteredUser.numberOfAssessments}}
-                  formControlName="previousAssessments"
-                />
               </div>
             </div>
+
             <div class="form-row">
               <div class="col-md-12 text-left">
                 <button
                   type="button"
                   class="btn btn-primary btn-standard"
-                  (click)="AllocateRegisteredDoctor()"
-                  [disabled]="!hasUnregisteredUser"
+                  (click)="AllocateUnregisteredDoctor()"
+                  [disabled]="HasIncompleteUser()"
                 >
                   <i class="far fa-check-circle"></i>
                   Allocate
                 </button>
               </div>
             </div>
-          </form> -->
+          </form>
 
           <div class="row">
             <div class="col-md-12 text-right">
@@ -391,6 +298,15 @@
     (cancelled)="OnCancelUnregisteredUser()"
   >
   </app-unregistered-users-modal>
+</ng-template>
+
+<ng-template #confirmExistingUser>
+  <app-cancel-action-modal
+    [modalTitle]="'Registered User'"
+    [modalBody]=existingUserName
+    (actioned)="OnCancelExistingModalAction($event)"
+  >
+  </app-cancel-action-modal>
 </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
