@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Fmas12d.Business.Extensions;
 
 namespace Fmas12d.Business.Services
 {
@@ -25,7 +26,24 @@ namespace Fmas12d.Business.Services
       _section12LiveRegisterEtl = new Section12LiveRegisterEtl()
       {
         LoadedDate = DateTimeOffset.Now
-      };      
+      };
+    }
+
+    public async Task<Section12LiveRegister> GetByGmcNumber(
+      int gmcNumber,
+      bool activeOnly,
+      bool asNoTracking
+    )
+    {
+      Section12LiveRegister section12LiveRegister = await _context
+        .Section12LiveRegisters
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Where(s => s.GmcNumber == gmcNumber)
+        .Select(Section12LiveRegister.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return section12LiveRegister;
     }
 
     public async Task<Section12LiveRegisterEtl> PerformEtlAsync(string filePath)
@@ -43,7 +61,8 @@ namespace Fmas12d.Business.Services
       var query = from user in _context.Set<Entities.User>()
                   join s12LiveRegister in _context.Set<Entities.Section12LiveRegister>()
                     on user.GmcNumber equals s12LiveRegister.GmcNumber
-                  select new Entities.User(){
+                  select new Entities.User()
+                  {
                     Id = user.Id,
                     Section12ExpiryDate = s12LiveRegister.ExpiryDate
                   };
@@ -51,10 +70,11 @@ namespace Fmas12d.Business.Services
 
       await _context.Users
                     .Where(u => u.GmcNumber != null)
-                    .ForEachAsync(u => {
-                      Entities.User updatedUser = 
+                    .ForEachAsync(u =>
+                    {
+                      Entities.User updatedUser =
                         updatedUsers.SingleOrDefault(uu => uu.Id == u.Id);
-                      
+
                       if (updatedUser == null)
                       {
                         u.Section12ExpiryDate = null;
@@ -69,7 +89,7 @@ namespace Fmas12d.Business.Services
                       }
                       UpdateModified(u);
                     });
-      
+
       await _context.SaveChangesAsync();
 
       return true;
@@ -91,7 +111,7 @@ namespace Fmas12d.Business.Services
         await _context.Section12LiveRegisters
                       .Where(s => newRegistersFromCsv.Select(c => c.GmcNumber)
                                                      .Contains(s.GmcNumber))
-                      .ToListAsync();                      
+                      .ToListAsync();
       _section12LiveRegisterEtl.NoOfRowsUpdated = currentMatchingRegisters.Count;
 
       currentMatchingRegisters.ForEach(cr =>

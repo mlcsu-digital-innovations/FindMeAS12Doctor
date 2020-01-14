@@ -10,7 +10,7 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("[controller]")]
   [ApiController]
-  [Authorize(Policy = "Admin")]
+  [Authorize(Policy = "User")]
   public class Section12LiveRegisterController : ModelControllerBase
   {
     private readonly IConfiguration _configuration;
@@ -25,7 +25,36 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
+    [Route("{gmcNumber:int}")]
+    public async Task<ActionResult<ViewModels.AssessmentAvailableDoctors>> Get(
+      int gmcNumber)
+    {
+      try
+      {
+        Section12LiveRegister businessModel =
+          await Service.GetByGmcNumber(gmcNumber, true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.Section12LiveRegister viewModel =
+            new ViewModels.Section12LiveRegister(businessModel);
+
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
+
+    [HttpGet]
     [Route("etl")]
+    [Authorize(Policy = "Admin")]
     public async Task<ActionResult> Etl()
     {
       const string MISSING = "missing";
