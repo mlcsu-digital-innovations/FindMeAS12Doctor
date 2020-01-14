@@ -40,7 +40,7 @@ namespace Fmas12d.Business.Services
       _userAvailabilityService = userAvailabilityService;
     }
 
-    public async Task<IAssessmentDoctorsUpdate> AddUnregisteredAllocatedDoctorDirectAsync(
+    public async Task<IAssessmentDoctorsUpdate> AllocateUnregisteredDoctorAsync(
       int id, 
       IUnregisteredDoctor unregisteredDoctor
     )
@@ -98,13 +98,14 @@ namespace Fmas12d.Business.Services
       }
      
       // add the assessment allocation
-      return await AddAllocatedDoctorDirectAsync(id, newUser.Id);
+      return await AddAllocatedDoctorDirectAsync(id, newUser.Id, true);
 
     }
 
     public async Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(
       int id,
-      int userId
+      int userId,
+      bool setHasAccepted
     )
     {
       await _userService.CheckIsADoctorAsync(userId, "UserId", true, true);
@@ -158,6 +159,10 @@ namespace Fmas12d.Business.Services
       assessmentDoctor.DoctorUserId = userId;
       assessmentDoctor.IsActive = true;
       assessmentDoctor.StatusId = AssessmentDoctorStatus.ALLOCATED;
+
+      if (setHasAccepted == true) {
+        assessmentDoctor.HasAccepted = true;
+      }
 
       UpdateModified(assessmentDoctor);
 

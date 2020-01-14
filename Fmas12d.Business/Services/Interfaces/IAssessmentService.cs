@@ -8,9 +8,13 @@ namespace Fmas12d.Business.Services
   public interface IAssessmentService : IServiceBase
   {
     Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorsAsync(IAssessmentDoctorsUpdate model);
-    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(int id, int userId);
+    Task<IAssessmentDoctorsUpdate> AddAllocatedDoctorDirectAsync(
+      int id,
+      int userId,
+      bool setHasAccepted
+    );
     Task<IAssessmentDoctorsUpdate> AddSelectedDoctorsAsync(IAssessmentDoctorsUpdate model);
-    Task<IAssessmentDoctorsUpdate> AddUnregisteredAllocatedDoctorDirectAsync(
+    Task<IAssessmentDoctorsUpdate> AllocateUnregisteredDoctorAsync(
       int id,
       IUnregisteredDoctor unregisteredDoctor
     );
