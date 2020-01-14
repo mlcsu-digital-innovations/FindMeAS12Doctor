@@ -1,14 +1,14 @@
 <!-- Toolbar -->
 <div class="toolbar-container" role="banner">
-  <div class="toolbar-left">
+  <a class="toolbar-left" [href]=home()>
     <div class="title">Find Me An S12 Doctor</div>
     <div class="version">Version: {{version}} </div>
-  </div>
+  </a>
   <div class="user">
     <i class="far fa-user"></i>
     <span style="padding-left:15px">
       <a *ngIf="!isAuthorized" (click)="login()">Login</a>
       <a *ngIf="isAuthorized" (click)="logout()">Logout {{userData.name}}</a>
     </span>
-  </div>  
+  </div>
 </div>
