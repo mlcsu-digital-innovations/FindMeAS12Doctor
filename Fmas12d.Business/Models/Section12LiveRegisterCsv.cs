@@ -26,6 +26,8 @@ namespace Fmas12d.Business.Models
     public string FirstName { get; set; }
     [Name(" Grade")]
     public string Grade { get; set; }
+    [Name(" Surname")]
+    public string LastName { get; set; }    
     [Name(" Mobile")]
     public string Mobile { get; set; }
     [Name(" Organisation")]
@@ -34,8 +36,6 @@ namespace Fmas12d.Business.Models
     public string Postcode { get; set; }
     [Name(" PRN")]
     public string Prn { get; set; }
-    [Name(" Surname")]
-    public string Surname { get; set; }
     [Name(" Telephone")]
     public string Telephone { get; set; }
     [Name("Title")]
@@ -49,7 +49,7 @@ namespace Fmas12d.Business.Models
       {
         return DateTime.ParseExact(
           DateOfS12ExpiryString,
-          "d/M/YYYY",
+          "d/M/yyyy",
           CultureInfo.InvariantCulture
         );
       }

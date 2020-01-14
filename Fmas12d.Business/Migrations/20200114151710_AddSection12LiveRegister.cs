@@ -50,8 +50,14 @@ namespace Fmas12d.Business.Migrations
                 name: "Section12LiveRegistersAudit",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    AuditId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AuditAction = table.Column<string>(nullable: true),
+                    AuditDuration = table.Column<int>(nullable: false),
+                    AuditErrorMessage = table.Column<string>(nullable: true),
+                    AuditResult = table.Column<int>(nullable: false),
+                    AuditSuccess = table.Column<bool>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedByUserId = table.Column<int>(nullable: false),
@@ -63,13 +69,7 @@ namespace Fmas12d.Business.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Section12LiveRegistersAudit", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Section12LiveRegistersAudit_Users_ModifiedByUserId",
-                        column: x => x.ModifiedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Section12LiveRegistersAudit", x => x.AuditId);
                 });
 
             migrationBuilder.CreateIndex(
@@ -81,11 +81,6 @@ namespace Fmas12d.Business.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Section12LiveRegisters_ModifiedByUserId",
                 table: "Section12LiveRegisters",
-                column: "ModifiedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Section12LiveRegistersAudit_ModifiedByUserId",
-                table: "Section12LiveRegistersAudit",
                 column: "ModifiedByUserId");
         }
 

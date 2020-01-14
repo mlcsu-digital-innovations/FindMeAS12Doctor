@@ -6,6 +6,7 @@ namespace Fmas12d.Business.Models
     {
         public DateTimeOffset LoadedDate { get; set; }
         public int NoOfRowsAdded { get; set; }
+        public int NoOfRowsInReport { get; set; }
         public int NoOfRowsUpdated { get; set; }                
     }
 }

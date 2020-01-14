@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace Fmas12d.Api.Controllers
 
     [HttpGet]
     [Route("etl")]
-    public ActionResult Etl()
+    public async Task<ActionResult> Etl()
     {
       const string MISSING = "missing";
       const string CONFIGURATION_KEY = "Section12LiveRegisterCsvFilePath";
@@ -41,7 +42,7 @@ namespace Fmas12d.Api.Controllers
         }
         else
         {
-          Section12LiveRegisterEtl section12LiveRegisterEtl = Service.PerformEtl(
+          Section12LiveRegisterEtl section12LiveRegisterEtl = await Service.PerformEtlAsync(
             section12LiveRegisterCsvFilePath
           );
 
