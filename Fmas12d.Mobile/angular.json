@@ -78,6 +78,38 @@
               ],
               "outputPath": "../Deployment/AimesUat/Fmas12d.Mobile"
             },
+            "aimes-uat-device": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.aimes-uat-device.ts"
+                }
+              ]
+            },
+            "aimes-uat-device-publish": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.aimes-uat-device.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "azure-development": {
               "fileReplacements": [
                 {
@@ -86,7 +118,39 @@
                 }
               ],
               "outputPath": "../Deployment/AzureDevelopment/Fmas12d.Mobile"
-            }              
+            },
+            "azure-development-device": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.azure-development-device.ts"
+                }
+              ]
+            },
+            "azure-development-device-publish": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.azure-development-device.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }  
           }
         },
         "serve": {
@@ -100,6 +164,12 @@
             },
             "ci": {
               "progress": false
+            },
+            "aimes-uat-device": {
+              "browserTarget": "app:build:azure-uat-device"
+            },
+            "azure-development-device": {
+              "browserTarget": "app:build:azure-development-device"
             }
           }
         },
@@ -172,6 +242,18 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "aimes-uat-device": {
+              "browserTarget": "app:build:aimes-uat-device"
+            },
+            "aimes-uat-device-publish": {
+              "browserTarget": "app:build:aimes-uat-device-publish"
+            },
+            "azure-development-device": {
+              "browserTarget": "app:build:azure-development-device"
+            },
+            "azure-development-device-publish": {
+              "browserTarget": "app:build:azure-development-device-publish"
             }
           }
         },
