@@ -94,3 +94,42 @@ th {
   color: #495057;
   font-size: 1.2em;
 }
+
+.btn-outline-primary {
+  border-color: #0dadb7;
+  color: #0dadb7;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0dadb7;
+  border-color: #0dadb7;
+  color: #fff;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.show>.btn-outline-primary.dropdown-toggle {
+  border-color: #0dadb7;
+  background-color: #0dadb7;
+  color: #fff;
+}
+
+.btn-small {
+  max-height: 25px;
+  max-width: 25px;
+  padding-left: 3px;
+  padding-top: 0;
+}
+
+.dropdown-toggle::after {
+  border-top: none;
+  border-bottom: none;
+}
+
+a.clickable.dropdown-item {
+  font-size:1em;
+}
+
+a.clickable.dropdown-item:hover {
+  background-color: #ddedee;
+}

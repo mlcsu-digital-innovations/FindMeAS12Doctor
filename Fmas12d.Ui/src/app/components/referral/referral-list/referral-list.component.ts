@@ -1,7 +1,7 @@
 import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { REFERRAL_STATUS_CLOSED, REFERRAL_STATUS_ASSESSMENT_SCHEDULED } from 'src/app/constants/Constants';
+import { REFERRAL_STATUS_CLOSED, REFERRAL_STATUS_ASSESSMENT_SCHEDULED, REFERRAL_STATUS_NEW, REFERRAL_STATUS_OPEN } from 'src/app/constants/Constants';
 import { ReferralList } from '../../../interfaces/referral-list';
 import { ReferralListService } from '../../../services/referral-list/referral-list-service';
 import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
@@ -50,7 +50,18 @@ export class ReferralListComponent implements OnInit {
 
   CanDoctorsBeAllocated(referralStatusId: number): boolean {
     return referralStatusId !== REFERRAL_STATUS_CLOSED &&
-          referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED;
+          referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
+          referralStatusId !== REFERRAL_STATUS_NEW;
+  }
+
+  CanCreateNewAssessment(referralStatusId: number): boolean {
+    return referralStatusId === REFERRAL_STATUS_NEW ||
+      referralStatusId === REFERRAL_STATUS_OPEN;
+  }
+
+  CanViewAssessment(referralStatusId: number): boolean {
+    return referralStatusId !== REFERRAL_STATUS_NEW &&
+      referralStatusId !== REFERRAL_STATUS_OPEN;
   }
 
   onSort({ column, direction }: SortEvent) {
