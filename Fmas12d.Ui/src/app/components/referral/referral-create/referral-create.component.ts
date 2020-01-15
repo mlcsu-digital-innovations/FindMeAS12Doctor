@@ -182,6 +182,7 @@ export class ReferralCreateComponent implements OnInit {
       switchMap(term =>
         this.ccgListService.GetCcgList(term).pipe(
           tap(() => (this.hasCcgSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'ccg'))),
           catchError(() => {
             this.hasCcgSearchFailed = true;
             return of([]);

@@ -284,6 +284,9 @@
                 <div class="invalid-field" *ngIf="hasCcgSearchFailed">
                   Sorry, suggestions could not be loaded.
                 </div>
+                <div *ngIf="ccgField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
               </div>
             </div>
             <!-- AMHP User -->
