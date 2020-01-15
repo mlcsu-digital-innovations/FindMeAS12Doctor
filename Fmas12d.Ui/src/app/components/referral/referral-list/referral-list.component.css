@@ -27,6 +27,7 @@ form {
   color: #495057;
   font-weight: 400 !important;
   font-size: 1.2em;
+  height: 100%;
 }
 
 .referral-row:hover td:nth-child(n-4) {
