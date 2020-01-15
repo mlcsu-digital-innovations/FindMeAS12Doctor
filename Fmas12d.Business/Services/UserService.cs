@@ -193,7 +193,7 @@ namespace Fmas12d.Business.Services
       List<int> profileTypes = new List<int>() {ProfileType.GP, ProfileType.PSYCHIATRIST};
 
       if (includeUnregistered){
-        profileTypes.Add(ProfileType.UNREGISTERED);
+        profileTypes.Add(ProfileType.UNREGISTERED_DOCTOR);
       }
       return profileTypes;
     }

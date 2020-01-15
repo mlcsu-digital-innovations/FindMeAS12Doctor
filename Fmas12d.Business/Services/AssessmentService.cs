@@ -67,7 +67,7 @@ namespace Fmas12d.Business.Services
         GenderTypeId = unregisteredDoctor.GenderTypeId,
         IdentityServerIdentifier = Guid.NewGuid().ToString(),
         OrganisationId = 1,
-        ProfileTypeId = ProfileType.UNREGISTERED       
+        ProfileTypeId = ProfileType.UNREGISTERED_DOCTOR       
       };
       newUser = await _userService.CreateAsync(newUser); 
 

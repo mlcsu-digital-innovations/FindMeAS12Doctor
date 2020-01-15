@@ -55,7 +55,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );      
 
       AddOrUpdateNameDescriptionEntityById(
-        Models.ProfileType.UNREGISTERED,
+        Models.ProfileType.UNREGISTERED_DOCTOR,
         NAME_UNREGISTERED,
         DESCRIPTION_UNREGISTERED
       );
