@@ -29,5 +29,17 @@ namespace Fmas12d.Business.Models
     {
       return profileTypeId == GP || profileTypeId == PSYCHIATRIST || profileTypeId == UNREGISTERED_DOCTOR;
     } 
+
+    public static List<int> DoctorProfileTypes(bool includeUnregistered) {
+
+      List<int> profileTypes = new List<int>() {GP, PSYCHIATRIST};
+
+      if (includeUnregistered){
+        profileTypes.Add(UNREGISTERED_DOCTOR);
+      }
+      return profileTypes;
+    }
+
+
   }
 }

@@ -89,7 +89,7 @@ namespace Fmas12d.Business.Services
       bool activeOnly = true,
       bool includeUnregisteredDoctors = false)
     {
-      List<int> profileTypes = DoctorProfileTypes(includeUnregisteredDoctors);
+      List<int> profileTypes = ProfileType.DoctorProfileTypes(includeUnregisteredDoctors);
 
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
@@ -108,7 +108,7 @@ namespace Fmas12d.Business.Services
       bool activeOnly = true,
       bool includeUnregisteredDoctors = false)
     {
-      List<int> profileTypes = DoctorProfileTypes(includeUnregisteredDoctors);
+      List<int> profileTypes = ProfileType.DoctorProfileTypes(includeUnregisteredDoctors);
 
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
@@ -186,16 +186,6 @@ namespace Fmas12d.Business.Services
         .SingleOrDefaultAsync();
 
       return profileTypeId;
-    }
-
-    private List<int> DoctorProfileTypes(bool includeUnregistered) {
-
-      List<int> profileTypes = new List<int>() {ProfileType.GP, ProfileType.PSYCHIATRIST};
-
-      if (includeUnregistered){
-        profileTypes.Add(ProfileType.UNREGISTERED_DOCTOR);
-      }
-      return profileTypes;
     }
 
     private async Task<User> CheckUserIsAsync(
