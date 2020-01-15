@@ -60,7 +60,6 @@ export class ReferralCreateComponent implements OnInit {
   residentialPostcodeValidationMessage: string;
   unknownCcgId: number;
   unknownGpPracticeId: number;
-  noResultsCcg: number;
   value = false;
 
   @ViewChild('patientResults', { static: true }) patientResultTemplate;
@@ -85,7 +84,6 @@ export class ReferralCreateComponent implements OnInit {
 
     this.unknownCcgId = 0;
     this.unknownGpPracticeId = 0;
-    this.noResultsCcg = 0;
 
     this.modalResult = {} as PatientSearchResult;
 
@@ -226,7 +224,7 @@ export class ReferralCreateComponent implements OnInit {
 
   CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
 
-    if (datePart === null || timePart === null ) {
+    if (datePart === null || timePart === null) {
       return;
     }
 
@@ -297,12 +295,12 @@ export class ReferralCreateComponent implements OnInit {
       const referralDate = this.CreateDateFromPickerObjects(this.referralDateField.value, this.referralTimeField.value);
 
       if (referralDate === undefined) {
-        this.referralDateField.setErrors({ MissingDate: true});
+        this.referralDateField.setErrors({ MissingDate: true });
         canContinue = false;
       }
 
       if (referralDate > new Date()) {
-        this.referralDateField.setErrors({ FutureDate: true});
+        this.referralDateField.setErrors({ FutureDate: true });
         canContinue = false;
       }
     }
@@ -459,6 +457,7 @@ export class ReferralCreateComponent implements OnInit {
       switchMap(term =>
         this.gpPracticeListService.GetGpPracticeList(term).pipe(
           tap(() => (this.hasGpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'gpPractice'))),
           catchError(() => {
             this.hasGpSearchFailed = true;
             return of([]);
@@ -765,14 +764,14 @@ export class ReferralCreateComponent implements OnInit {
       );
     }
 
-    if (this.patientResult.residentialPostcode === null ) {
+    if (this.patientResult.residentialPostcode === null) {
       this.SetResidentialPostcodeField(UNKNOWN);
       this.unknownPostcodeField.setValue(true);
     } else {
       this.SetResidentialPostcodeField(this.patientResult.residentialPostcode);
     }
 
-    if (this.patientResult.ccgId === null ) {
+    if (this.patientResult.ccgId === null) {
       this.SetCcgField(
         0,
         UNKNOWN
@@ -911,5 +910,12 @@ export class ReferralCreateComponent implements OnInit {
           return throwError(error);
         }
       );
+  }
+
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results == null) {
+      this.patientForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
   }
 }

@@ -149,7 +149,10 @@
             <div class="form-row" *ngIf="gpPracticeField.errors">
               <div class="col-md-12 mb-2">
                 <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
-                  <span>* GP practice, Postcode or CCG Required </span>
+                  <span>* Valid GP practice, Postcode or CCG Required </span>
+                </div>
+                <div *ngIf="gpPracticeField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
                 </div>
               </div>
             </div>
@@ -254,7 +257,6 @@
                   [ngbTypeahead]="CcgSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
-                  typeahead-no-results="noResultsCcg"
                 />
               </div>
               <div class="col-md-2 mb-more-2">
@@ -281,9 +283,6 @@
                 <span *ngIf="isCcgSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasCcgSearchFailed">
                   Sorry, suggestions could not be loaded.
-                </div>
-                <div *ngIf="noResultsCcg">
-                  No Results Found!
                 </div>
               </div>
             </div>
