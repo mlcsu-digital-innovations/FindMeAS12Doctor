@@ -307,7 +307,7 @@
 <ng-template #confirmExistingUser>
   <app-cancel-action-modal
     [modalTitle]="'Registered User'"
-    [modalBody]=existingUserName
+    [modalBody]=existingUserMessage
     (actioned)="OnCancelExistingModalAction($event)"
   >
   </app-cancel-action-modal>

@@ -29,7 +29,7 @@ export class DoctorAddComponent implements OnInit {
   assessmentId: number;
   cancelModal: NgbModalRef;
   genderTypes: NameIdList[];
-  existingUserName: string;
+  existingUserMessage: string;
   existingUserModal: NgbModalRef;
   hasDoctorSearchFailed: boolean;
   hasRegisteredDoctorDetails: boolean;
@@ -297,7 +297,7 @@ export class DoctorAddComponent implements OnInit {
         if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
           this.registeredDoctorDetails = doctorDetails;
           this.isUnregisteredSearchComplete = false;
-          this.existingUserName = doctorDetails.displayName;
+          this.existingUserMessage = `Allocate existing user '${doctorDetails.displayName}' to this assessment ?`;
 
           this.existingUserModal = this.modalService.open(this.confirmExistingUser, {
             size: 'lg'
