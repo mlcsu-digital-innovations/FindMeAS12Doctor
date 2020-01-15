@@ -48,11 +48,12 @@ export class ReferralListComponent implements OnInit {
     );
   }
 
-  CanDoctorsBeSelectedOrAllocated(referralStatusId: number): boolean {
-    return referralStatusId !== REFERRAL_STATUS_CLOSED &&
-          referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
-          referralStatusId !== REFERRAL_STATUS_NEW &&
-          referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW;
+  CanDoctorsBeAllocated(referralStatusId: number): boolean {
+    return this.IsReferralEditableByStatus(referralStatusId);
+  }
+
+  CanDoctorsBeSelected(referralStatusId: number): boolean {
+    return this.IsReferralEditableByStatus(referralStatusId);
   }
 
   CanCreateNewAssessment(referralStatusId: number): boolean {
@@ -63,6 +64,13 @@ export class ReferralListComponent implements OnInit {
   CanViewAssessment(referralStatusId: number): boolean {
     return referralStatusId !== REFERRAL_STATUS_NEW &&
       referralStatusId !== REFERRAL_STATUS_OPEN;
+  }
+
+  IsReferralEditableByStatus(referralStatusId) {
+    return referralStatusId !== REFERRAL_STATUS_CLOSED &&
+    referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
+    referralStatusId !== REFERRAL_STATUS_NEW &&
+    referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW;
   }
 
   onSort({ column, direction }: SortEvent) {
