@@ -1,16 +1,21 @@
 {
   "name": "uk.nhs.fmas12d",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Digital Innovation Unit @MLCSU",
   "homepage": "http://www.midlandsandlancashirecsu.nhs.uk",
   "scripts": {
+    "android:publish:azure-development": "ionic cordova build android --prod --release -c=azure-development-device-publish -- -- --packageType=bundle",
+    "android:run:azure-development": "ionic cordova run android -c=azure-development-device",
     "build": "ng build",
     "build:aimes-uat": "del-cli ../Deployment/AimesUat/Fmas12d.Mobile --force && ng build --configuration=aimes-uat && cpy ./deployment/web.config ../Deployment/AimesUat/Fmas12d.Mobile",
     "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Mobile --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Mobile",
     "e2e": "ng e2e",
     "ionic": "ionic",
+    "ios:prepare:aimes-uat": "ionic cordova prepare ios -c=aimes-uat-device-publish",
     "lint": "ng lint",
     "ng": "ng",
+    "serve:aimes-uat": "ionic serve -- -c=aimes-uat",
+    "serve:azure-development-device": "ionic serve -- -c=azure-development-device",
     "start": "ng serve",
     "test": "ng test"
   },
@@ -34,6 +39,7 @@
     "@ionic/storage": "^2.2.0",
     "cordova": "^9.0.0",
     "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^3.4.0",
@@ -98,7 +104,8 @@
       "cordova-plugin-ms-adal": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

@@ -190,7 +190,7 @@
               </table>
             </div>
             <div class="form-row" style="text-align: center;">
-            <div class="col-md-12 empty-table" *ngIf="!referralListService.loading$ && referralListService.total$.source._value === 0">
+            <div class="col-md-12 empty-table" *ngIf="!referralListService.loading$ && noOfReferralsInList === 0">
               There are currently no active referrals
             </div>
           </div>
