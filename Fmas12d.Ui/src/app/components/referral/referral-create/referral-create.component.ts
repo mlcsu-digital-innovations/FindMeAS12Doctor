@@ -60,6 +60,7 @@ export class ReferralCreateComponent implements OnInit {
   residentialPostcodeValidationMessage: string;
   unknownCcgId: number;
   unknownGpPracticeId: number;
+  noResultsCcg: number;
   value = false;
 
   @ViewChild('patientResults', { static: true }) patientResultTemplate;
@@ -84,6 +85,7 @@ export class ReferralCreateComponent implements OnInit {
 
     this.unknownCcgId = 0;
     this.unknownGpPracticeId = 0;
+    this.noResultsCcg = 0;
 
     this.modalResult = {} as PatientSearchResult;
 

@@ -254,6 +254,7 @@
                   [ngbTypeahead]="CcgSearch"
                   [resultFormatter]="FormatTypeAheadResults"
                   [inputFormatter]="FormatTypeAheadResults"
+                  typeahead-no-results="noResultsCcg"
                 />
               </div>
               <div class="col-md-2 mb-more-2">
@@ -280,6 +281,9 @@
                 <span *ngIf="isCcgSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasCcgSearchFailed">
                   Sorry, suggestions could not be loaded.
+                </div>
+                <div *ngIf="noResultsCcg">
+                  No Results Found!
                 </div>
               </div>
             </div>
