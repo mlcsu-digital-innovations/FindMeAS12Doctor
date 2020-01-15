@@ -16,5 +16,6 @@ export interface AssessmentAvailability {
   patientIdentifier: string;
   postcode: string;
   preferredDoctorGenderTypeName?: string;
+  referralId: number;
   specialityName?: string;
 }
