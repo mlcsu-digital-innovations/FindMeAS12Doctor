@@ -84,11 +84,21 @@ namespace Fmas12d.Api.Controllers
       }
       else if (search.IsByDoctorName)
       {
-        models = await Service.GetAllByDoctorNameAsync(search.DoctorName, activeOnly: false, includeUnregisteredDoctors: search.IncludeUnregisteredDoctors);
+        models =
+          await Service.GetAllByDoctorNameAsync(
+            search.DoctorName,
+            activeOnly: false,
+            includeUnregisteredDoctors: search.IncludeUnregisteredDoctors
+          );
       }
       else if (search.IsByGmcNumber)
       {
-        models = await Service.GetAllByGmcNumberAsync(search.GmcNumber, activeOnly: false, includeUnregisteredDoctors: search.IncludeUnregisteredDoctors);
+        models =
+          await Service.GetAllByGmcNumberAsync(
+            search.GmcNumber,
+            activeOnly: false,
+            includeUnregisteredDoctors: search.IncludeUnregisteredDoctors
+          );
       }
 
       if (models.Any())
