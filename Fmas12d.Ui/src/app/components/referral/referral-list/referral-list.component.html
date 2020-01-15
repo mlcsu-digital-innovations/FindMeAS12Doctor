@@ -88,7 +88,7 @@
                         href="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
-                        ngbTooltip="Edit Referral Details"
+                        ngbTooltip="Edit Referral"
                         [openDelay]="1000"
                         [closeDelay]="200"
                         tooltipClass="subtle-tooltip"
@@ -102,7 +102,7 @@
                         href="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
-                        ngbTooltip="Edit Referral Details"
+                        ngbTooltip="Edit Referral"
                         [openDelay]="1000"
                         [closeDelay]="200"
                         tooltipClass="subtle-tooltip"
@@ -116,7 +116,7 @@
                         href="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
-                        ngbTooltip="Edit Referral Details"
+                        ngbTooltip="Edit Referral"
                         [openDelay]="1000"
                         [closeDelay]="200"
                         tooltipClass="subtle-tooltip"
@@ -127,13 +127,13 @@
                     </td>
 
                     <ng-template #tipContent>
-                      <span *ngIf="referral.currentAssessmentId == null">Create New Assessment</span>
-                      <span *ngIf="referral.currentAssessmentId != null">Edit Assessment</span>
+                      <span *ngIf="referral.currentAssessmentId == null">Create Assessment</span>
+                      <span *ngIf="referral.currentAssessmentId != null">View Assessment</span>
                     </ng-template>
 
                     <ng-template #assessmentTip>
-                      <span *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) == true">Allocate Doctors</span>
-                      <span *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) == false">View Assessment</span>
+                      <span *ngIf="CanDoctorsBeSelectedOrAllocated(referral.referralStatusId) == true">Allocate Doctors</span>
+                      <span *ngIf="CanDoctorsBeSelectedOrAllocated(referral.referralStatusId) == false">View Assessment</span>
                     </ng-template>
 
                     <td class="text-center">
@@ -218,7 +218,7 @@
                     </td>
                     <td class="text-center">
                       <a
-                        [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
+                        [routerLink]="CanDoctorsBeSelectedOrAllocated(referral.referralStatusId)
                         ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
                         : ['/assessment/view/', referral.referralId]"
                         class="clickable"
@@ -239,7 +239,7 @@
                     </td>
                     <td class="text-center">
                       <a
-                        [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
+                        [routerLink]="CanDoctorsBeSelectedOrAllocated(referral.referralStatusId)
                         ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
                         : ['/assessment/view/', referral.referralId]"
                         class="clickable"
@@ -289,13 +289,21 @@
                           ngbDropdownItem
                           *ngIf="CanCreateNewAssessment(referral.referralStatusId)"
                           >
-                            Add Assessment
+                            Create Assessment
+                          </a>
+                          <a
+                            [routerLink]="['/assessment/', referral.currentAssessmentId, 'select-doctors']"
+                            class="clickable"
+                            ngbDropdownItem
+                            *ngIf="CanDoctorsBeSelectedOrAllocated(referral.referralStatusId)"
+                          >
+                            Select Doctors
                           </a>
                           <a
                             [routerLink]="['/assessment/', referral.currentAssessmentId, 'allocate-doctors']"
                             class="clickable"
                             ngbDropdownItem
-                            *ngIf="CanDoctorsBeAllocated(referral.referralStatusId)"
+                            *ngIf="CanDoctorsBeSelectedOrAllocated(referral.referralStatusId)"
                           >
                             Allocate Doctors
                           </a>
