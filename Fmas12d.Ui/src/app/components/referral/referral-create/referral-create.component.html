@@ -278,14 +278,18 @@
               </div>
             </div>
             <!-- CCG Errors-->
+            <div class="form-row" *ngIf="ccgField.errors">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="ccgField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
+              </div>
+            </div>
             <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isCcgSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasCcgSearchFailed">
                   Sorry, suggestions could not be loaded.
-                </div>
-                <div *ngIf="ccgField.errors.NoMatchingResults" class="invalid-field">
-                  <span>* No Results Found </span>
                 </div>
               </div>
             </div>
