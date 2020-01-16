@@ -98,7 +98,7 @@ export class DoctorAddComponent implements OnInit {
         (err) => {
           this.toastService.displayError({
             title: 'Error',
-            message: 'Error Retrieving Gender Data'
+            message: 'Error retrieving gender data'
           });
         });
   }
@@ -114,7 +114,7 @@ export class DoctorAddComponent implements OnInit {
         this.isPostcodeSearching = false;
         this.toastService.displayError({
           title: 'Search Error',
-          message: 'Error Retrieving Address Information'
+          message: 'Error retrieving address information'
         });
       }, () => {
         this.isPostcodeSearching = false;
@@ -132,7 +132,7 @@ export class DoctorAddComponent implements OnInit {
       .subscribe(userDetails => {
         this.toastService.displaySuccess({
           title: 'Success',
-          message: 'Doctor Allocated'
+          message: 'Doctor allocated'
         });
         this.routerService.navigatePrevious();
     },
@@ -159,7 +159,7 @@ export class DoctorAddComponent implements OnInit {
       .subscribe(userDetails => {
         this.toastService.displaySuccess({
           title: 'Success',
-          message: 'Doctor Allocated'
+          message: 'Doctor allocated'
         });
         this.routerService.navigatePrevious();
     },
@@ -221,7 +221,7 @@ export class DoctorAddComponent implements OnInit {
                 userDetails => {
                   this.toastService.displaySuccess({
                     title: 'Success',
-                    message: 'Doctor Allocated'
+                    message: 'Doctor allocated'
                   });
                   this.routerService.navigatePrevious();
                 },
@@ -297,7 +297,7 @@ export class DoctorAddComponent implements OnInit {
         if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
           this.registeredDoctorDetails = doctorDetails;
           this.isUnregisteredSearchComplete = false;
-          this.existingUserMessage = `Allocate existing user '${doctorDetails.displayName}' to this assessment ?`;
+          this.existingUserMessage = `Allocate existing doctor '${doctorDetails.displayName}' to this assessment ?`;
 
           this.existingUserModal = this.modalService.open(this.confirmExistingUser, {
             size: 'lg'
@@ -321,7 +321,7 @@ export class DoctorAddComponent implements OnInit {
 
           this.toastService.displayInfo({
             title: 'Information',
-            message: 'An existing unregistered user has been found'
+            message: 'An existing unregistered doctor has been found'
           });
         }
       }
@@ -329,7 +329,7 @@ export class DoctorAddComponent implements OnInit {
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving User Details'
+          message: 'Error retrieving doctor details'
         });
       });
   }
@@ -428,10 +428,6 @@ export class DoctorAddComponent implements OnInit {
 
   OnSelectUnregisteredUser(user: UnregisteredUser) {
     this.FetchDoctorDetails(user.id);
-    // this.unregisteredUser = user;
-    // this.hasUnregisteredUser = true;
-    // this.DisableFieldsForUnregisteredUser();
-    // this.SetFieldValues();
     this.multipleUsersModal.close();
   }
 
@@ -485,7 +481,7 @@ export class DoctorAddComponent implements OnInit {
         case 0:
           this.toastService.displayInfo({
             title: 'Information',
-            message: 'No existing unregistered users found'
+            message: 'No existing unregistered doctors found'
           });
           this.hasUnregisteredUser = false;
 
@@ -529,7 +525,7 @@ export class DoctorAddComponent implements OnInit {
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving User Details'
+          message: 'Error retrieving doctor details'
         });
       });
   }
@@ -567,7 +563,7 @@ export class DoctorAddComponent implements OnInit {
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving User Details'
+          message: 'Error retrieving doctor details'
         });
       });
   }
