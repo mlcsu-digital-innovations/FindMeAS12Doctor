@@ -39,7 +39,7 @@ export class ReferralEditComponent implements OnInit {
   hasGpSearchFailed: boolean;
   initialReferralDetails: ReferralEdit;
   isAmhpSearching: boolean;
-  isCcgFieldShown: boolean;
+  isCcgFieldsShown: boolean;
   isCcgSearching: boolean;
   isGpFieldsShown: boolean;
   isGpSearching: boolean;
@@ -194,6 +194,7 @@ export class ReferralEditComponent implements OnInit {
       switchMap(term =>
         this.ccgListService.GetCcgList(term).pipe(
           tap(() => (this.hasCcgSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'ccg'))),
           catchError(() => {
             this.hasCcgSearchFailed = true;
             return of([]);
@@ -530,7 +531,7 @@ export class ReferralEditComponent implements OnInit {
     this.isPostcodeFieldShown = referral.patientGpPracticeId === null ? true : false;
 
     // only show the CCG field if both GP and Postcode are not known
-    this.isCcgFieldShown =
+    this.isCcgFieldsShown =
       referral.patientResidentialPostcode === null &&
       referral.patientGpPracticeId === null;
 
@@ -681,12 +682,12 @@ export class ReferralEditComponent implements OnInit {
     if (event.target.checked) {
       this.residentialPostcodeField.setValue('Unknown');
       this.residentialPostcodeField.disable();
-      this.isCcgFieldShown = true;
+      this.isCcgFieldsShown = true;
     } else {
       this.residentialPostcodeField.enable();
       this.residentialPostcodeField.setValue('');
       this.residentialPostcodeField.updateValueAndValidity();
-      this.isCcgFieldShown = false;
+      this.isCcgFieldsShown = false;
       this.SetFieldFocus('#residentialPostcode');
     }
   }

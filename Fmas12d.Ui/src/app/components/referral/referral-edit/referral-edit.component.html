@@ -169,7 +169,7 @@
               </div>
             </div>
             <!-- CCG -->
-            <div class="form-row" *ngIf="isCcgFieldShown">
+            <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-6">
                 <label for="ccg">Clinical Commissioning Group</label>
                 <div class="input-group">
@@ -189,7 +189,14 @@
               </div>
             </div>
             <!-- CCG Errors-->
-            <div class="form-row" ccgField.errors>
+            <div class="form-row" *ngIf="ccgField.errors">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="ccgField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isCcgSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasCcgSearchFailed">
