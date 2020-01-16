@@ -162,6 +162,7 @@ export class ReferralEditComponent implements OnInit {
       switchMap(term =>
         this.amhpListService.GetAmhpList(term).pipe(
           tap(() => (this.hasAmhpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'amhp'))),
           catchError(() => {
             this.hasAmhpSearchFailed = true;
             return of([]);
