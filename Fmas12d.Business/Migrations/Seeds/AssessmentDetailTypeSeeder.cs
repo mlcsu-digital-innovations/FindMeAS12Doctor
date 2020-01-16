@@ -6,22 +6,22 @@ namespace Fmas12d.Business.Migrations.Seeds
   {
     #region Constants
     internal const string DESCRIPTION_ANIMAL_IN_THE_PROPERTY =
-      "Animal in the Property Description";    
+      "Dangerous Animal in Property Description";    
     internal const string DESCRIPTION_POLICE_PRESENT =
       "Police Present Description";
     internal const string DESCRIPTION_RISK_OF_HARM_TO_THE_PUBLIC =
-      "Risk of Harm to the Public Description";
+      "Risk of Harm Description";
     internal const string DESCRIPTION_RISK_OF_RACIAL_ABUSE =
-      "Risk of Racial Abuse Public Description";
+      "Risk of Racial Abuse Description";
     internal const string DESCRIPTION_RISK_OF_VIOLENCE =
       "Risk of Violence Description";
     internal const string DESCRIPTION_SUBSTANCE_MISUSE =
       "Substance Misuse Description";      
     
-    internal const string NAME_ANIMAL_IN_THE_PROPERTY = "Animal in the Property";
+    internal const string NAME_ANIMAL_IN_THE_PROPERTY = "Dangerous Animal in Property";
     internal const string NAME_POLICE_PRESENT = "Police Present";    
-    internal const string NAME_RISK_OF_HARM_TO_THE_PUBLIC = "Risk of Harm to the Public";
-    internal const string NAME_RISK_OF_RACIAL_ABUSE = "Risk of Racial Abuse Public";
+    internal const string NAME_RISK_OF_HARM_TO_THE_PUBLIC = "Risk of Harm";
+    internal const string NAME_RISK_OF_RACIAL_ABUSE = "Risk of Racial Abuse";
     internal const string NAME_RISK_OF_VIOLENCE = "Risk of Violence";
     internal const string NAME_SUBSTANCE_MISUSE = "Substance Misuse";  
 
