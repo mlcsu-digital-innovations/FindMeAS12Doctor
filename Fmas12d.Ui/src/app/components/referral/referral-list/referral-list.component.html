@@ -303,7 +303,8 @@
                             [routerLink]="['/assessment/', referral.currentAssessmentId, 'allocate-doctors']"
                             class="clickable"
                             ngbDropdownItem
-                            *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) && referral.doctorsSelected > 0"
+                            *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) &&
+                                  (referral.doctorsAllocated > 0 || referral.responsesReceived > 0)"
                           >
                             Allocate Doctors
                           </a>
