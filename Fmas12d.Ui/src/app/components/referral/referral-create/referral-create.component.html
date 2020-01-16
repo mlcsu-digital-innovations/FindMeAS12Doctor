@@ -312,19 +312,22 @@
               </div>
             </div>
             <!-- AMHP User Errors-->
-            <div class="form-row">
+            <div class="form-row" *ngIf="amhpField.errors">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="amhpField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="hasAmhpSearchFailed">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isAmhpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
                   Sorry, suggestions could not be loaded.
                 </div>
               </div>
-              <div class="col-md-8 mb-2 mt-less-1" *ngIf="amhpField.errors">
-                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
-                  <span>* Invalid Lead AMHP </span>
-                </div>
-              </div>
             </div>
+
             <div class="form-row">
               <div class="col-md-4 flex">
                 <div class="checkmark-content">
