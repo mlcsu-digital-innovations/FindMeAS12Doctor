@@ -62,6 +62,17 @@ namespace Fmas12d.Business.Models
                CreatedAt.AddHours(3);
       }
     }
+    public int DoctorsAttended
+    {
+      get
+      {
+        return Assessments?.Where(e => e.IsActive)
+                            .FirstOrDefault(e => e.IsCurrent)
+                            ?.DoctorsAttended
+                            .Count ?? 0;
+      }
+    }
+
     public int DoctorsAllocated
     {
       get

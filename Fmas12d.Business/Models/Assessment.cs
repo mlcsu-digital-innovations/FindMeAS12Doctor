@@ -123,6 +123,14 @@ namespace Fmas12d.Business.Models
       }
     }
 
+    public IList<AssessmentDoctor> DoctorsAttended
+    {
+      get
+      {
+        return GetAssessmentActiveDoctorsByStatus(AssessmentDoctorStatus.ATTENDED);
+      }
+    }
+
     public IList<AssessmentDoctor> DoctorsAllocated
     {
       get

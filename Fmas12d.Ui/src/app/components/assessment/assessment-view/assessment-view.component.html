@@ -109,7 +109,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" *ngIf="referral.currentAssessment.isSuccessful == null">
               <div class="col-md-6">
                 <label for="doctorNamesAccepted">Doctors Selected</label>
                 <div class="read-only">
@@ -142,6 +142,52 @@
                     </div>
                   </div>
                   <div *ngIf="referral.currentAssessment.doctorsAllocated.length == 0">
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        None
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="referral.currentAssessment.isSuccessful != null">
+              <div class="col-md-4">
+                <label>Assessment Successful?</label>
+                <div class="read-only">
+                  {{referral.currentAssessment.isSuccessful === true ? 'Yes' : 'No'}}
+
+                </div>
+              </div>
+              <div class="col-md-4" *ngIf="referral.currentAssessment.isSuccessful === false">
+                <label>Unsuccessful Reason</label>
+                <div class="read-only">
+                  {{referral.currentAssessment.unsuccessfulAssessmentTypeIdName}}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="completedAt">Completed Date / Time</label>
+                <input
+                  class="form-control"
+                  formControlName="completedAt"
+                  id="completedAt"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row" *ngIf="referral.currentAssessment.isSuccessful != null">
+              <div class="col-md-6">
+                <label for="doctorNamesAccepted">Doctors Attended</label>
+                <div class="read-only">
+                  <div *ngFor="let doctor of referral.currentAssessment.doctorsAttended;">
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="referral.currentAssessment.doctorsAttended.length == 0">
                     <div class="row">
                       <div class="col-md-8 doctor-name">
                         None

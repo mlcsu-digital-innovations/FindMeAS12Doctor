@@ -70,6 +70,12 @@ export class AssessmentViewComponent implements OnInit {
       amhpUserName: [
         ''
       ],
+      completedAt: [
+        {
+          value: '',
+          disabled: true
+        }
+      ],
       currentAssessment: [
         ''
       ],
@@ -150,15 +156,30 @@ export class AssessmentViewComponent implements OnInit {
 
   InitialiseForm(referral: ReferralView) {
 
-    this.currentAssessmentForm.controls.amhpUserName.setValue(referral.currentAssessment.amhpUser.displayName);
-    this.currentAssessmentForm.controls.doctorNamesAccepted.setValue(referral.currentAssessment.doctorsSelected);
-    this.currentAssessmentForm.controls.doctorNamesAllocated.setValue(referral.currentAssessment.doctorsAllocated);
-    this.currentAssessmentForm.controls.fullAddress.setValue(referral.currentAssessment.fullAddress);
-    this.currentAssessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
-
-    this.currentAssessmentForm.controls.postCode.setValue(referral.currentAssessment.postcode);
-    this.currentAssessmentForm.controls.preferredDoctorGenderTypeName.setValue(referral.currentAssessment.preferredDoctorGenderType.name);
-    this.currentAssessmentForm.controls.specialityName.setValue(referral.currentAssessment.speciality.name);
+    this.currentAssessmentForm.controls.amhpUserName.setValue(
+      referral.currentAssessment.amhpUser.displayName
+    );
+    this.currentAssessmentForm.controls.doctorNamesAccepted.setValue(
+      referral.currentAssessment.doctorsSelected
+    );
+    this.currentAssessmentForm.controls.doctorNamesAllocated.setValue(
+      referral.currentAssessment.doctorsAllocated
+    );
+    this.currentAssessmentForm.controls.fullAddress.setValue(
+      referral.currentAssessment.fullAddress
+    );
+    this.currentAssessmentForm.controls.meetingArrangementComment.setValue(
+      referral.currentAssessment.meetingArrangementComment
+    );
+    this.currentAssessmentForm.controls.postCode.setValue(
+      referral.currentAssessment.postcode
+    );
+    this.currentAssessmentForm.controls.preferredDoctorGenderTypeName.setValue(
+      referral.currentAssessment.preferredDoctorGenderType.name
+    );
+    this.currentAssessmentForm.controls.specialityName.setValue(
+      referral.currentAssessment.speciality.name
+    );
     this.currentAssessmentForm.disable();
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
@@ -173,6 +194,11 @@ export class AssessmentViewComponent implements OnInit {
     const mustBeCompletedBy = moment(this.showDateValue).format('DD/MM/YYYY HH:mm');
     this.currentAssessmentForm.controls.mustBeCompletedBy.setValue(mustBeCompletedBy);
 
+    if (referral.currentAssessment.completedAt !== null) {
+      const formattedCompletedAt =
+        moment(referral.currentAssessment.completedAt).format('DD/MM/YYYY HH:mm');
+      this.currentAssessmentForm.controls.completedAt.setValue(formattedCompletedAt);
+    }
   }
 
   OnModalAction(event: any) {
