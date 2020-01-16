@@ -34,6 +34,7 @@ export class DoctorSelectComponent implements OnInit {
   isSavingSelection: boolean;
   page = 1;
   pageSize = 10;
+  referralId: number;
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
 
@@ -62,6 +63,7 @@ export class DoctorSelectComponent implements OnInit {
           return this.assessmentService.getAvailableDoctors(+params.get('assessmentId'))
             .pipe(
               map((assessment: AssessmentAvailability) => {
+                this.referralId = assessment.referralId;
                 this.assessmentId = assessment.id;
                 this.allDoctors = assessment.availableDoctors;
                 this.DisplayDoctorsWithinSearchRadius(this.doctorDistance.value);
@@ -103,7 +105,7 @@ export class DoctorSelectComponent implements OnInit {
         size: 'lg'
       });
     } else {
-      this.routerService.navigate([`assessment/edit/${this.assessmentId}`]);
+      this.routerService.navigate([`assessment/edit/${this.referralId}`]);
     }
   }
 
