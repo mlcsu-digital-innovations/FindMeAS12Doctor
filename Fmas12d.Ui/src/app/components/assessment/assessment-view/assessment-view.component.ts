@@ -21,7 +21,9 @@ import { SortEvent } from 'src/app/directives/table-header-sortable/table-header
 export class AssessmentViewComponent implements OnInit {
 
   closeModal: NgbModalRef;
+  completeModal: NgbModalRef;
   currentAssessmentForm: FormGroup;
+  isInReviewState: boolean;
   isPatientIdValidated: boolean;
   pageSize: number;
   referral$: Observable<Referral | any>;
@@ -32,6 +34,7 @@ export class AssessmentViewComponent implements OnInit {
   showDateValue: Date;
 
   @ViewChild('confirmClosure', null) closeTemplate;
+  @ViewChild('confirmCompletion', null) completeTemplate;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -107,13 +110,7 @@ export class AssessmentViewComponent implements OnInit {
     this.routerService.navigatePrevious();
   }
 
-  CancelModal() {
-    this.closeModal.close();
-  }
-
   CloseReferral() {
-    this.closeModal.close();
-
     let forceClose = false;
 
     if (this.referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW
@@ -144,6 +141,31 @@ export class AssessmentViewComponent implements OnInit {
     });
   }
 
+  CompleteReview() {
+
+    this.referralService.closeReferral(this.referralId).subscribe(
+      () => {
+        this.toastService.displaySuccess({
+          message: 'Review complete'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to complete review! Please try again in a few moments'
+        });
+      }
+    );
+
+  }
+
+  CompleteReviewConfirmation() {
+    this.completeModal = this.modalService.open(this.completeTemplate, {
+      size: 'lg'
+    });
+  }
+
   EditAssessment() {
     this.routerService.navigateByUrl(`/assessment/edit/${this.referralId}`);
   }
@@ -163,6 +185,8 @@ export class AssessmentViewComponent implements OnInit {
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
 
+    this.isInReviewState = referral.referralStatusId === REFERRAL_STATUS_AWAITING_REVIEW;
+
     if (referral.currentAssessment.scheduledTime !== null) {
       this.showDateTitle = 'Scheduled Date / Time';
       this.showDateValue = referral.currentAssessment.scheduledTime;
@@ -176,10 +200,16 @@ export class AssessmentViewComponent implements OnInit {
   }
 
   OnModalAction(event: any) {
+    this.closeModal.close();
     if (event) {
       this.CloseReferral();
-    } else {
-      this.CancelModal();
+    }
+  }
+
+  OnCompletionModalAction(event: any) {
+    this.completeModal.close();
+    if (event) {
+      this.CompleteReview();
     }
   }
 
