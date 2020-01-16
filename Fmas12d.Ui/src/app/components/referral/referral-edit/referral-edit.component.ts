@@ -377,6 +377,7 @@ export class ReferralEditComponent implements OnInit {
       switchMap(term =>
         this.gpPracticeListService.GetGpPracticeList(term).pipe(
           tap(() => (this.hasGpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'gpPractice'))),
           catchError(() => {
             this.hasGpSearchFailed = true;
             this.gpPracticeField.setErrors({ServiceUnavailable: true});
@@ -954,5 +955,12 @@ export class ReferralEditComponent implements OnInit {
           return throwError(err);
         }
       );
+  }
+
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results == null) {
+      this.referralForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
   }
 }
