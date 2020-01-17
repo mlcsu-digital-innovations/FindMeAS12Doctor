@@ -21,7 +21,6 @@ namespace Fmas12d.Api.ViewModels
       DoctorsAttended = model.DoctorsAttended?.Select(d => new AssessmentViewDoctor(d)).ToList();
       DoctorsSelected = model.DoctorsSelected?.Select(d => new AssessmentViewDoctor(d)).ToList();
       FullAddress = model.FullAddress;
-      
       Id = model.Id;
       IsPlanned = model.IsPlanned;
       IsSuccessful = model.IsSuccessful;
@@ -41,7 +40,12 @@ namespace Fmas12d.Api.ViewModels
     public IList<AssessmentViewDoctor> DoctorsSelected { get; set; }
     public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
     public string FullAddress { get; set; }
-    public bool HasOutcome { get; set; }
+    public bool HasOutcome { 
+      get
+      {
+        return IsSuccessful.HasValue;
+      } 
+    }
     public int Id { get; set; }
     public bool IsPlanned { get; set; }
     public bool? IsSuccessful { get; set; }
