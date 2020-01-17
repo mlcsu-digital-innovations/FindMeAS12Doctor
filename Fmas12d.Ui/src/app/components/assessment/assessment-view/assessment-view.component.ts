@@ -12,6 +12,7 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
 import { SortEvent } from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 
 @Component({
   selector: 'app-assessment-view',
@@ -20,6 +21,7 @@ import { SortEvent } from 'src/app/directives/table-header-sortable/table-header
 })
 export class AssessmentViewComponent implements OnInit {
 
+  assessmentId: number;
   closeModal: NgbModalRef;
   completeModal: NgbModalRef;
   currentAssessmentForm: FormGroup;
@@ -37,6 +39,7 @@ export class AssessmentViewComponent implements OnInit {
   @ViewChild('confirmCompletion', null) completeTemplate;
 
   constructor(
+    private assessmentService: AssessmentService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private referralService: ReferralService,
@@ -149,7 +152,8 @@ export class AssessmentViewComponent implements OnInit {
 
   CompleteReview() {
 
-    this.referralService.closeReferral(this.referralId).subscribe(
+    this.assessmentService.completeReview(this.assessmentId)
+    .subscribe(
       () => {
         this.toastService.displaySuccess({
           message: 'Review complete'
@@ -179,6 +183,8 @@ export class AssessmentViewComponent implements OnInit {
   InitialiseForm(referral: ReferralView) {
 
     console.log(referral);
+
+    this.assessmentId = referral.currentAssessment.id;
 
     this.currentAssessmentForm.controls.amhpUserName.setValue(
       referral.currentAssessment.amhpUser.displayName

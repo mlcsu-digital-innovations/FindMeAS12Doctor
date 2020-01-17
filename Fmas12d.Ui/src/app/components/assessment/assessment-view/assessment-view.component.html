@@ -198,7 +198,7 @@
               </div>
             </div>
             <div class="form-row mt-more-2">
-              <!-- <div class="col-md-3 mb-2">
+              <div class="col-md-3 mb-2">
                 <button
                   class="btn btn-outline btn-fill btn-spaced"
                   type="button"
@@ -207,19 +207,19 @@
                   <i class="fas fa-check-double"></i>
                   Close Referral
                 </button>
-              </div> -->
+              </div>
               <div class="col-md-3 mb-2">
                 <button
-                  class="btn btn-outline-complete btn-fill btn-spaced"
+                  class="btn btn-primary btn-spaced"
                   type="button"
                   (click)="CompleteReviewConfirmation()"
                   *ngIf="isInReviewState"
                 >
-                  <i class="fas fa-check-double"></i>
+                  <i class="fas fa-clipboard-check"></i>
                   Complete Review
                 </button>
               </div>
-              <div class="col-md-3 mb-2 offset-md-6 text-right">
+              <div class="col-md-3 mb-2 offset-md-3 text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="CancelView()">
                   <i class="far fa-times-circle"></i>
                   Cancel
