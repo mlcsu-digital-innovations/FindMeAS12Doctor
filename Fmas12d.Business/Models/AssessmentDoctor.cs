@@ -20,7 +20,7 @@ namespace Fmas12d.Business.Models
       DoctorUserId = entity.DoctorUserId;
       HasAccepted = entity.HasAccepted;
       SetIsRegistered(entity.DoctorUser?.ProfileTypeId);
-      SetIsS12(entity.DoctorUser?.Section12ApprovalStatusId); 
+      SetIsS12(entity.DoctorUser?.Section12ApprovalStatusId);
       Latitude = entity.Latitude;
       Longitude = entity.Longitude;
       Postcode = entity.Postcode;
@@ -40,7 +40,7 @@ namespace Fmas12d.Business.Models
     public bool? HasAccepted { get; set; }
     public bool IsAvailable { get; set; }
     public bool? IsRegistered { get; private set; }
-    public bool? IsS12 { get; private set; }    
+    public bool? IsS12 { get; private set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
     public string Postcode { get; set; }
@@ -48,6 +48,7 @@ namespace Fmas12d.Business.Models
     public virtual AssessmentDoctorStatus Status { get; set; }
     public int StatusId { get; set; }
 
+    public string DoctorUserDisplayName { get { return DoctorUser?.DisplayName; } }
     public Location KnownLocation
     {
       get
@@ -84,6 +85,6 @@ namespace Fmas12d.Business.Models
       IsS12 = section12ApprovalStatusId.HasValue ?
               section12ApprovalStatusId == Section12ApprovalStatus.APPROVED :
               (bool?)null;
-    }    
+    }
   }
 }

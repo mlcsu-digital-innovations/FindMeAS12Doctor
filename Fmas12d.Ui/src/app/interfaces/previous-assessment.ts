@@ -1,7 +1,10 @@
 export interface PreviousAssessment {
   amhpUserName: string;
-  completedTime?: Date;
-  doctorNamesAllocated: string[];
+  doctorAttendedNames: string[];
   id: number;
+  isSuccessful: boolean;
+  leadAmhpUserName: string;
+  postcode: string;
+  scheduledTime: Date;
   unsuccessfulAssessmentTypeName: string;
 }

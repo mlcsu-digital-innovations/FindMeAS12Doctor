@@ -28,7 +28,7 @@ export class AssessmentViewComponent implements OnInit {
   isInReviewState: boolean;
   isPatientIdValidated: boolean;
   pageSize: number;
-  referral$: Observable<Referral | any>;
+  referral$: Observable<ReferralView>;
   referralCreated: Date;
   referralId: number;
   referralStatusId: number;
@@ -67,7 +67,7 @@ export class AssessmentViewComponent implements OnInit {
           message: 'Error Retrieving Referral Information'
         });
 
-        const emptyReferral = {} as Referral;
+        const emptyReferral = {} as ReferralView;
         return of(emptyReferral);
       })
     );

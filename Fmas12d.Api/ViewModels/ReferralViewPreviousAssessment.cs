@@ -13,18 +13,24 @@ namespace Fmas12d.Api.ViewModels
     {
       if (model == null) return;
 
-      AmhpUserName = model.AmhpUser?.DisplayName;
-      DoctorsAllocated = model.DoctorsAllocated?.Select(d => new AssessmentViewDoctor(d)).ToList();
+      AmhpUserName = model.AmhpUserName;
+      DoctorAttendedNames = 
+        model.DoctorsAttended?.Select(d => d.DoctorUserDisplayName).ToList();
       Id = model.Id;
+      IsSuccessful = model.IsSuccessful ?? false;
+      LeadAmhpUserName = model.LeadAmhpName;
       Postcode = model.Postcode;
-      UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentType?.Name;
+      ScheduledTime = model.ScheduledTime;
+      UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentTypeName;
     }
 
-    public string AmhpUserName { get; set; }
-    public DateTimeOffset? CompletedTime { get; set; }
-    public IList<AssessmentViewDoctor> DoctorsAllocated { get; set; }
+    public string AmhpUserName { get; set; }    
+    public IList<string> DoctorAttendedNames { get; set; }
     public int Id { get; set; }
+    public bool IsSuccessful { get; set; }
+    public string LeadAmhpUserName { get; set; }
     public string Postcode { get; set; }
+    public DateTimeOffset? ScheduledTime { get; set; }
     public string UnsuccessfulAssessmentTypeName { get; set; }
   }
 }
