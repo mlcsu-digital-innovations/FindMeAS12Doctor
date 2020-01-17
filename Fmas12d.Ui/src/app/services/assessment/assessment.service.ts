@@ -11,6 +11,13 @@ export class AssessmentService {
 
   constructor(private httpClient: HttpClient) { }
 
+  public completeReview(assessmentId: number) {
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/assessment/${assessmentId}/completed`,
+      null
+    );
+  }
+
   public createAssessment(assessment: Assessment) {
 
     const assessmentType = assessment.isPlanned
