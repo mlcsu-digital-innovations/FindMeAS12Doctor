@@ -31,7 +31,7 @@ namespace Fmas12d.Api.ViewModels
       PreferredDoctorGenderType = new IdNameDescription(model.PreferredDoctorGenderType);
       ScheduledTime = model.ScheduledTime;
       Speciality = new IdNameDescription(model.Speciality);
-      UnsuccessfulAssessmentTypeIdName = model.UnsuccessfulAssessmentTypeName;
+      UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentType?.Name;
     }
 
     public UserSummary AmhpUser { get; set; }
@@ -51,6 +51,6 @@ namespace Fmas12d.Api.ViewModels
     public IdNameDescription PreferredDoctorGenderType { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
     public IdNameDescription Speciality { get; set; }
-    public string UnsuccessfulAssessmentTypeIdName { get; set; }
+    public string UnsuccessfulAssessmentTypeName { get; set; }
   }
 }

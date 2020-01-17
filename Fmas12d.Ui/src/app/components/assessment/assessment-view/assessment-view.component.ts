@@ -156,6 +156,8 @@ export class AssessmentViewComponent implements OnInit {
 
   InitialiseForm(referral: ReferralView) {
 
+    console.log(referral);
+
     this.currentAssessmentForm.controls.amhpUserName.setValue(
       referral.currentAssessment.amhpUser.displayName
     );

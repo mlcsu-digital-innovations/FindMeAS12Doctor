@@ -95,6 +95,8 @@ export class ReferralListService {
     this.http.get<ReferralList[]>(endpoint).subscribe(
       (data: ReferralList[]) => {
 
+        console.log(data);
+
         if (data !== null) {
           data.forEach(item => {
             item.doctorsSelectedAllocated = `${item.doctorsSelected} / ${item.doctorsAllocated}`;

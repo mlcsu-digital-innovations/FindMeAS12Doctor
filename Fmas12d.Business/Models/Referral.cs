@@ -114,8 +114,11 @@ namespace Fmas12d.Business.Models
     {
       get
       {
+        // return Assessments?.Where(e => e.IsActive)
+        //                     .Count(e => !e.IsSuccessful ?? false) ?? 0;
+
         return Assessments?.Where(e => e.IsActive)
-                            .Count(e => !e.IsSuccessful ?? false) ?? 0;
+            .Count(e => e.CompletionConfirmationByUserId != null) ?? 0;
       }
     }
 
