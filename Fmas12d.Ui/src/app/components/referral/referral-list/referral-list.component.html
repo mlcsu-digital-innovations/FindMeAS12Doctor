@@ -71,10 +71,14 @@
                       Status
                     </th>
                     <th class="sm-col text-center" scope="col" sortable="responsesReceived" (sort)="onSort($event)">
-                      No. of Responses<br/>Received / Accepted
+                      <span ngbTooltip="Received / Accepted"
+                            [openDelay]="1000"
+                            [closeDelay]="200">No. of Responses<br/>Rec. / Acc.</span>
                     </th>
                     <th class="sm-col text-center" scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">
-                      No. of Doctors<br/> Selected / Allocated
+                      <span ngbTooltip="Selected / Allocated / Attended"
+                            [openDelay]="1000"
+                            [closeDelay]="200">No. of Doctors<br/>Sel. / All. / Att.</span>                       
                     </th>
                     <th class="sm-col text-center" scope="col">
                       &nbsp;
@@ -250,11 +254,11 @@
                         [closeDelay]="200"
                         tooltipClass="subtle-tooltip"
                       >
-                        <ngb-highlight [result]="referral.doctorsSelectedAllocated" [term]="referralListService.searchTerm">
+                        <ngb-highlight [result]="referral.doctorsSelectedAllocatedAttended" [term]="referralListService.searchTerm">
                         </ngb-highlight>
                       </a>
                     <span class="zero-responses" *ngIf="referral.doctorsAllocated == 0">
-                      <ngb-highlight [result]="referral.doctorsSelectedAllocated" [term]="referralListService.searchTerm">
+                      <ngb-highlight [result]="referral.doctorsSelectedAllocatedAttended" [term]="referralListService.searchTerm">
                       </ngb-highlight>
                     </span>
                     </td>

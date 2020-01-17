@@ -97,8 +97,10 @@ export class ReferralListService {
 
         if (data !== null) {
           data.forEach(item => {
-            item.doctorsSelectedAllocated = `${item.doctorsSelected} / ${item.doctorsAllocated}`;
-            item.responsesReceivedAccepted = `${item.responsesReceived} / ${item.responsesAccepted}`;
+            item.doctorsSelectedAllocatedAttended = 
+              `${item.doctorsSelected} / ${item.doctorsAllocated} / ${item.doctorsAttended}`;
+            item.responsesReceivedAccepted = 
+              `${item.responsesReceived} / ${item.responsesAccepted}`;
           });
         }
 
