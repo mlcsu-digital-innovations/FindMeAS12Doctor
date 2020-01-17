@@ -109,7 +109,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-row" *ngIf="referral.currentAssessment.isSuccessful == null">
+            <div class="form-row" *ngIf="!referral.currentAssessment.hasOutcome">
               <div class="col-md-6">
                 <label for="doctorNamesAccepted">Doctors Selected</label>
                 <div class="read-only">
@@ -151,7 +151,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-row" *ngIf="referral.currentAssessment.isSuccessful != null">
+            <div class="form-row" *ngIf="referral.currentAssessment.hasOutcome">
               <div class="col-md-4">
                 <label>Assessment Successful?</label>
                 <div class="read-only">
@@ -175,7 +175,7 @@
                 />
               </div>
             </div>
-            <div class="form-row" *ngIf="referral.currentAssessment.isSuccessful != null">
+            <div class="form-row" *ngIf="referral.currentAssessment.hasOutcome">
               <div class="col-md-6">
                 <label for="doctorNamesAccepted">Doctors Attended</label>
                 <div class="read-only">
@@ -213,7 +213,12 @@
                   <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
-                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="EditAssessment()">
+                <button
+                  class="btn btn-primary btn-standard btn-spaced"
+                  type="button"
+                  (click)="EditAssessment()"
+                  *ngIf="!referral.currentAssessment.hasOutcome"
+                >
                   <i class="far fa-edit"></i>
                   Edit
                 </button>
