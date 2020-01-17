@@ -221,6 +221,9 @@
                 <div *ngIf="amhpField.errors.NoMatchingResults" class="invalid-field">
                   <span>* No Results Found </span>
                 </div>
+                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
+                  <span>* Invalid Lead AMHP </span>
+                </div>
               </div>
             </div>
             <div class="form-row" *ngIf="hasAmhpSearchFailed">
@@ -228,13 +231,6 @@
                 <span *ngIf="isAmhpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
                   Sorry, suggestions could not be loaded.
-                </div>
-              </div>
-            </div>
-            <div class="form-row" *ngIf="amhpField.errors">
-              <div class="col-md-12">
-                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
-                  <span>* Invalid Lead AMHP </span>
                 </div>
               </div>
             </div>
