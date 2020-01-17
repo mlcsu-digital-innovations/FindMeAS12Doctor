@@ -327,6 +327,11 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-8 mb-2 mt-less-1" *ngIf="amhpField.errors">
+              <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
+                <span>* Invalid Lead AMHP </span>
+              </div>
+            </div>
 
             <div class="form-row">
               <div class="col-md-4 flex">
