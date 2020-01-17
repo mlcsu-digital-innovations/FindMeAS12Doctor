@@ -611,7 +611,8 @@ namespace Fmas12d.Business.Services
           $"An active Assessment with an id of {id} could not be found.");
       }
 
-      if (entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESCHEDULING &&
+      if (entity.Referral.ReferralStatusId != ReferralStatus.SELECTING_DOCTORS &&
+          entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESCHEDULING &&
           entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_RESPONSES &&
           entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_PARTIAL &&
           entity.Referral.ReferralStatusId != ReferralStatus.RESPONSES_COMPLETE)
@@ -619,6 +620,7 @@ namespace Fmas12d.Business.Services
         throw new ModelStateException("id",
           $"An active Assessment with an id of {id} cannot be scheduled because " +
           $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be in [" +
+          $"{ReferralStatus.SELECTING_DOCTORS}," +
           $"{ReferralStatus.AWAITING_RESCHEDULING}," +
           $"{ReferralStatus.AWAITING_RESPONSES}," +
           $"{ReferralStatus.RESPONSES_PARTIAL}," +
