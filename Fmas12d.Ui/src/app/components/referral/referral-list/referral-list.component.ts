@@ -70,7 +70,8 @@ export class ReferralListComponent implements OnInit {
     return referralStatusId !== REFERRAL_STATUS_CLOSED &&
     referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
     referralStatusId !== REFERRAL_STATUS_NEW &&
-    referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW;
+    referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW &&
+    referralStatusId !== REFERRAL_STATUS_OPEN;
   }
 
   onSort({ column, direction }: SortEvent) {
