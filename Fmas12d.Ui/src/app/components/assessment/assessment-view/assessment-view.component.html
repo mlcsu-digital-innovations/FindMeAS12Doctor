@@ -198,7 +198,7 @@
               </div>
             </div>
             <div class="form-row mt-more-2">
-              <div class="col-md-3 mb-2">
+              <!-- <div class="col-md-3 mb-2">
                 <button
                   class="btn btn-outline btn-fill btn-spaced"
                   type="button"
@@ -206,6 +206,17 @@
                 >
                   <i class="fas fa-check-double"></i>
                   Close Referral
+                </button>
+              </div> -->
+              <div class="col-md-3 mb-2">
+                <button
+                  class="btn btn-outline-complete btn-fill btn-spaced"
+                  type="button"
+                  (click)="CompleteReviewConfirmation()"
+                  *ngIf="isInReviewState"
+                >
+                  <i class="fas fa-check-double"></i>
+                  Complete Review
                 </button>
               </div>
               <div class="col-md-3 mb-2 offset-md-6 text-right">
@@ -292,6 +303,15 @@
     [modalTitle]="'Confirm Referral Closure'"
     [modalBody]="'Please confirm that the referral can be closed.'"
     (actioned)="OnModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #confirmCompletion>
+  <app-cancel-action-modal
+    [modalTitle]="'Confirm Review Completion'"
+    [modalBody]="'Please confirm that the review is now complete.'"
+    (actioned)="OnCompletionModalAction($event)"
   >
   </app-cancel-action-modal>
 </ng-template>
