@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
+  [Table("ContactDetailCcgsAudit")]
   public partial class ContactDetailCcgAudit : BaseAudit, IContactDetailCcg
   {
     public int CcgId { get; set; }

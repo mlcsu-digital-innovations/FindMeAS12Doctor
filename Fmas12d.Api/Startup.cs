@@ -158,21 +158,22 @@ namespace Fmas12d.Api
         }
       });
 
-      services.AddScoped<IUserClaimsService, UserClaimsService>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
+      services.AddScoped<IAssessmentService, AssessmentService>();
       services.AddScoped<ICcgService, CcgService>();
-      services.AddScoped<IContactDetailsService, ContactDetailsService>();
       services.AddScoped<IContactDetailTypeService, ContactDetailTypeService>();
+      services.AddScoped<IContactDetailsService, ContactDetailsService>();
       services.AddScoped<IGenderTypeService, GenderTypeService>();
       services.AddScoped<IGpPracticeService, GpPracticeService>();
       services.AddScoped<ILocationDetailService, LocationDetailService>();
-      services.AddScoped<IAssessmentService, AssessmentService>();
-      services.AddScoped<IReferralStatusService, ReferralStatusService>();
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
+      services.AddScoped<IReferralStatusService, ReferralStatusService>();
+      services.AddScoped<ISection12LiveRegisterService, Section12LiveRegisterService>();
       services.AddScoped<ISpecialityService, SpecialityService>();
       services.AddScoped<IUnsuccessfulAssessmentTypeService, UnsuccessfulAssessmentTypeService>();
       services.AddScoped<IUserAvailabilityService, UserAvailabilityService>();
+      services.AddScoped<IUserClaimsService, UserClaimsService>();
       services.AddScoped<IUserNotificationService, UserNotificationService>();
       services.AddScoped<IUserService, UserService>();
 

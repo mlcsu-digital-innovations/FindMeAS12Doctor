@@ -107,3 +107,8 @@ form {
 input[type="checkbox"]:disabled  {
   background-color: #f00 !important;
 }
+
+::ng-deep.dropdown-menu.show {
+  max-height: 260px !important;
+  overflow-y: auto !important;
+}

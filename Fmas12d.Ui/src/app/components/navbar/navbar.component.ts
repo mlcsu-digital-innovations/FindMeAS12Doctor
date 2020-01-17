@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
   isAuthorizedSubscription: Subscription;
   isAuthorized: boolean;
   userDataSubscription: Subscription;
-  userData: { name: string };  
+  userData: { name: string };
 
   constructor(public oidcSecurityService: OidcSecurityService) {
   }
@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
       (isAuthorized: boolean) => {
         this.isAuthorized = isAuthorized;
       });
-    this.userDataSubscription = 
+    this.userDataSubscription =
       this.oidcSecurityService.getUserData<{ name: string }>().subscribe(userData => {
         this.userData = userData;
     });
@@ -45,5 +45,11 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.oidcSecurityService.logoff();
+  }
+
+  home(): string{
+    // TODO: replace with switch
+    return '/referral/list';
+
   }
 }
