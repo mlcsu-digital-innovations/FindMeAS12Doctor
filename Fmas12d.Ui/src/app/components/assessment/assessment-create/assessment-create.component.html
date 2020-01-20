@@ -31,7 +31,11 @@
         </div>
         <div class="card-body">
           <form [formGroup]="assessmentForm" novalidate>
-
+            <div class="form-row">
+              <div class="required-field col-md-3 mb-3 text-left">
+                <strong>Denotes required field.</strong>
+              </div>
+            </div>
             <div class="form-row">
               <!-- Planned assessment -->
               <div class="col-md-8">
@@ -52,11 +56,10 @@
                 </div>
               </div>
             </div>
-
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-8 mb-2">
-                <label for="amhp">AMHP</label>
+                <label class="required-field" for="amhp">AMHP</label>
                 <input
                   type="search"
                   class="form-control"
@@ -136,7 +139,7 @@
             <!-- Assessment Postcode -->
             <div class="form-row">
               <div class="col-md-3 mb-2">
-                <label for="assessmentPostcode">Assessment Postcode</label>
+                <label class="required-field" for="assessmentPostcode">Assessment Postcode</label>
                 <input
                   type="search"
                   maxlength="8"
@@ -209,7 +212,7 @@
             <!-- Assessment Address -->
             <div class="form-row" *ngIf="addressList.length > 0">
               <div class="col-md-8 mb-2">
-                <label for="assessmentAddress">Assessment Address</label>
+                <label class="required-field" for="assessmentAddress">Assessment Address</label>
                 <select
                   class="custom-select custom-select-lg mb-2 form-control"
                   formControlName="assessmentAddress"
