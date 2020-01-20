@@ -20,6 +20,28 @@ namespace Fmas12d.Business.Services
     {
     }
 
+    public async Task<User> CreateAsync(User model)
+    {
+      Entities.User entity = model.MapToEntity();
+
+      entity.Id = 0;
+      entity.IsActive = true;
+
+      UpdateModified(entity);
+
+      _context.Add(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = _context.Users
+                      .Where(e => e.Id == entity.Id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(User.ProjectFromEntity)
+                      .Single();
+      return model;
+    }
+
     public async Task<User> CheckIsAmhpAsync(
       int id,
       string modelPropertyName,
@@ -64,13 +86,15 @@ namespace Fmas12d.Business.Services
     public async Task<IEnumerable<User>> GetAllByDoctorNameAsync(
       string doctorName,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true,
+      bool includeUnregisteredDoctors = false)
     {
+      List<int> profileTypes = ProfileType.DoctorProfileTypes(includeUnregisteredDoctors);
+
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
        .Where(u => u.DisplayName.Contains(doctorName))
-       .Where(u => u.ProfileTypeId == ProfileType.GP ||
-                   u.ProfileTypeId == ProfileType.PSYCHIATRIST)
+       .Where(u => profileTypes.Contains(u.ProfileTypeId))
        .AsNoTracking(asNoTracking)
        .Select(User.ProjectFromEntity)
        .ToListAsync();
@@ -81,13 +105,15 @@ namespace Fmas12d.Business.Services
     public async Task<IEnumerable<User>> GetAllByGmcNumberAsync(
       int gmcNumber,
       bool asNoTracking = true,
-      bool activeOnly = true)
+      bool activeOnly = true,
+      bool includeUnregisteredDoctors = false)
     {
+      List<int> profileTypes = ProfileType.DoctorProfileTypes(includeUnregisteredDoctors);
+
       IEnumerable<User> models = await _context.Users
        .WhereIsActiveOrActiveOnly(activeOnly)
        .Where(u => u.GmcNumber.ToString().Contains(gmcNumber.ToString()))
-       .Where(u => u.ProfileTypeId == ProfileType.GP ||
-                   u.ProfileTypeId == ProfileType.PSYCHIATRIST)
+       .Where(u => profileTypes.Contains(u.ProfileTypeId))
        .AsNoTracking(asNoTracking)
        .Select(User.ProjectFromEntity)
        .ToListAsync();
