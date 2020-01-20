@@ -297,7 +297,9 @@ export class DoctorAddComponent implements OnInit {
         if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
           this.registeredDoctorDetails = doctorDetails;
           this.isUnregisteredSearchComplete = false;
-          this.existingUserMessage = `Allocate existing doctor '${doctorDetails.displayName}' to this assessment ?`;
+          this.existingUserMessage =
+          `Allocate existing doctor '${doctorDetails.displayName} GMC# ${doctorDetails.gmcNumber}'
+           to this assessment ?`;
 
           this.existingUserModal = this.modalService.open(this.confirmExistingUser, {
             size: 'lg'
