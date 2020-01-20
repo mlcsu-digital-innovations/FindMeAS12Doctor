@@ -1,15 +1,15 @@
-.form-control.is-invalid{
+.form-control.is-invalid {
   background-image: none;
   padding-right: 0.5em;
 }
 
-.form-control.is-valid{
+.form-control.is-valid {
   background-image: none;
   padding-right: 0.5em;
 }
 
 form {
-  margin:20px;
+  margin: 20px;
 }
 
 .form-row {
@@ -18,7 +18,7 @@ form {
 
 .button-container {
   align-items: flex-end;
-  display:flex;
+  display: flex;
   height: 100%;
 }
 
@@ -32,7 +32,7 @@ form {
 
 .at {
   color: #666;
-  font-size:1.3em;
+  font-size: 1.3em;
   font-weight: 600;
 }
 
@@ -81,50 +81,49 @@ form {
   text-decoration: line-through;
 }
 
-
 /* checkmark */
 
 /* The container */
 .container {
-  display: block;
-  position: static;
-  padding-left: 35px;
-  margin-bottom: 2px;
-  cursor: pointer;
-  font-size: 1em;
-  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none;
+  -webkit-user-select: none;
   color: #777;
-
+  cursor: pointer;
+  display: block;
+  font-size: 1em;
+  margin-bottom: 2px;
+  padding-left: 35px;
+  position: static;
+  user-select: none;
 }
 
 /* Create a custom checkbox */
 .checkmark {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
   background-color: #eee;
   border: 1px solid #ced4da;
+  bottom: 0;
+  height: 25px;
+  left: 0;
+  position: absolute;
+  width: 25px;
 }
 
 /* Hide the browser's default checkbox */
-.container input, .container input:disabled {
-  position: absolute;
-  opacity: 0;
+.container input,
+.container input:disabled {
   cursor: pointer;
+  opacity: 0;
+  position: absolute;
 }
 
 /* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
+.container:hover input~.checkmark {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container input:checked ~ .checkmark {
+.container input:checked~.checkmark {
   background-color: #fff;
   font-weight: bold;
 }
@@ -132,43 +131,47 @@ form {
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "";
-  position: absolute;
   display: none;
+  position: absolute;
 }
 
-
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+.container input:checked~.checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  content: 'X';
-  color: #f00;
-  font-weight: 600;
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
   border-width: 0 0;
-  position: absolute;
+  border: solid white;
+  color: #f00;
+  content: 'X';
+  font-weight: 600;
+  height: 10px;
   left: 40%;
+  left: 9px;
+  position: absolute;
   top: 10%;
-  -webkit-transform: translate(-50%,-50%);
-  -moz-transform: translate(-50%,-50%);
-  -ms-transform: translate(-50%,-50%);
-  transform: translate(-50%,-50%);
+  top: 5px;
+  transform: translate(-50%, -50%);
+  width: 5px;
 }
 
 .checkmark-content {
-  padding: 10px;
-  position: absolute;
   bottom: -10px;
   margin-left: 15px;
+  padding: 10px;
+  position: absolute;
 }
 
 .checkmark-content.less-space {
   bottom: 0;
+}
+
+.required-field::after {
+  color: red;
+  content: " *";
 }

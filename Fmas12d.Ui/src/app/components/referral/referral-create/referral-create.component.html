@@ -24,65 +24,40 @@
             </div>
             <div class="form-row">
               <div class="col-md-3">
-                <label class="required-field" for="nhsNumber"
-                [ngClass]="{
+                <label class="required-field" for="nhsNumber" [ngClass]="{
                   'required-field': !DisableIfFieldHasValue('alternativeIdentifier')
                 }">
                   NHS Number
                 </label>
-                <input
-                  class="form-control"
-                  digitOnly
-                  formControlName="nhsNumber"
-                  id="nhsNumber"
-                  maxlength="10"
-                  type="search"
-                  [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')"
-                  [ngClass]="{
+                <input class="form-control" digitOnly formControlName="nhsNumber" id="nhsNumber" maxlength="10"
+                  type="search" [appDisableControl]="DisableIfFieldHasValue('alternativeIdentifier')" [ngClass]="{
                     'is-invalid': HasInvalidNHSNumber(),
                     'is-valid': HasValidNHSNumber()
-                  }"
-                />
+                  }" />
               </div>
               <div class="col-md-1 mb-more-2 centered">
                 <span class="or">Or</span>
               </div>
               <div class="col-md-4">
-                <label class="required-field" for="alternativeIdentifier"
-                  [ngClass]="{
+                <label class="required-field" for="alternativeIdentifier" [ngClass]="{
                     'required-field': !DisableIfFieldHasValue('nhsNumber')
                   }">
                   Alternative Identifier
                 </label>
-                <input
-                  class="form-control"
-                  formControlName="alternativeIdentifier"
-                  maxlength="200"
-                  type="search"
-                  [appDisableControl]="DisableIfFieldHasValue('nhsNumber')"
-                  [ngClass]="{
+                <input class="form-control" formControlName="alternativeIdentifier" maxlength="200" type="search"
+                  [appDisableControl]="DisableIfFieldHasValue('nhsNumber')" [ngClass]="{
                     'is-invalid': HasInvalidAlternativeIdentifier(),
                     'is-valid': HasValidAlternativeIdentifier()
-                  }"
-                />
+                  }" />
               </div>
               <div class="col-md-2 offset-md-1 mb-more">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  placement="right"
-                  ngbTooltip="Search for existing patients using these identifiers"
-                  [openDelay]="1000"
-                  [closeDelay]="500"
-                  tooltipClass="subtle-tooltip"
-                  [disabled]="
+                <button type="button" class="btn btn-primary" placement="right"
+                  ngbTooltip="Search for existing patients using these identifiers" [openDelay]="1000"
+                  [closeDelay]="500" tooltipClass="subtle-tooltip" [disabled]="
                     DisablePatientValidationButtonIfFieldsAreInvalid() ||
                     IsSearchingForPatient() ||
                     existingPatientDetailsUsed
-                  "
-                  (click)="ValidatePatient()"
-                  [ngClass]="{ validating: IsSearchingForPatient() }"
-                  >
+                  " (click)="ValidatePatient()" [ngClass]="{ validating: IsSearchingForPatient() }">
                   <i class="fas fa-bolt"></i>
                   {{ IsSearchingForPatient() ? "Validating" : "Validate" }}
                   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
@@ -112,33 +87,17 @@
             <div class="form-row" *ngIf="isGpFieldsShown">
               <div class="col-md-8 mb-2">
                 <label class="required-field" for="gpPractice">GP Practice</label>
-                <input
-                  type="search"
-                  class="form-control"
-                  id="gpPractice"
-                  #gpPractice
-                  [appDisableControl]="
+                <input type="search" class="form-control" id="gpPractice" #gpPractice [appDisableControl]="
                     !IsPatientIdValidated() ||
                     IsUnknownFieldChecked('unknownGpPractice')
-                  "
-                  [class.is-invalid]="hasGpSearchFailed"
-                  formControlName="gpPractice"
-                  [ngbTypeahead]="GpSearch"
-                  [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults"
-                />
+                  " [class.is-invalid]="hasGpSearchFailed" formControlName="gpPractice" [ngbTypeahead]="GpSearch"
+                  [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
               </div>
               <div class="col-md-2 mb-more-2">
                 <div class="checkmark-content">
                   <label class="container">
-                    <input
-                      class="form-control"
-                      type="checkbox"
-                      value=""
-                      id="unknownGpPractice"
-                      formControlName="unknownGpPractice"
-                      (change)="ToggleGpPracticeUnknown($event)"
-                    />
+                    <input class="form-control" type="checkbox" value="" id="unknownGpPractice"
+                      formControlName="unknownGpPractice" (change)="ToggleGpPracticeUnknown($event)" />
                     <span class="checkmark"></span>
                     Unknown
                   </label>
@@ -168,37 +127,22 @@
             <div class="form-row" *ngIf="isResidentialPostcodeFieldShown">
               <div class="col-md-3 mb-2">
                 <label class="required-field" for="residentialPostcode">Residential Postcode</label>
-                <input
-                  type="search"
-                  maxlength="8"
-                  minlength="6"
-                  formControlName="residentialPostcode"
-                  #residentialPostcode
-                  [appDisableControl]="
+                <input type="search" maxlength="8" minlength="6" formControlName="residentialPostcode"
+                  #residentialPostcode [appDisableControl]="
                     !IsPatientIdValidated() ||
                     IsUnknownFieldChecked('unknownResidentialPostcode')
-                  "
-                  id="residentialPostcode"
-                  oninput="this.value = this.value.toUpperCase()"
-                  class="form-control"
+                  " id="residentialPostcode" oninput="this.value = this.value.toUpperCase()" class="form-control"
                   [ngClass]="{
                     'is-invalid': HasInvalidPostcode(),
                     'is-valid': HasValidPostcode()
-                  }"
-                />
+                  }" />
               </div>
               <div class="col-md-2 mb-more-2">
                 <div class="checkmark-content">
                   <label class="container">
-                    <input
-                      class="form-control"
-                      type="checkbox"
-                      [appDisableControl]="!IsPatientIdValidated()"
-                      value=""
-                      id="unknownResidentialPostcode"
-                      formControlName="unknownResidentialPostcode"
-                      (change)="ToggleResidentialPostcodeUnknown($event)"
-                    />
+                    <input class="form-control" type="checkbox" [appDisableControl]="!IsPatientIdValidated()" value=""
+                      id="unknownResidentialPostcode" formControlName="unknownResidentialPostcode"
+                      (change)="ToggleResidentialPostcodeUnknown($event)" />
                     <span class="checkmark"></span>
                     Unknown
                   </label>
@@ -206,23 +150,14 @@
               </div>
               <div class="col-md-2 centered-div">
                 <div class="column-div">
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    placement="right"
-                    ngbTooltip="Check that postcode is valid"
-                    [openDelay]="1000"
-                    [closeDelay]="500"
-                    tooltipClass="subtle-tooltip"
-                    [disabled]="
+                  <button type="button" class="btn btn-primary" placement="right"
+                    ngbTooltip="Check that postcode is valid" [openDelay]="1000" [closeDelay]="500"
+                    tooltipClass="subtle-tooltip" [disabled]="
                       DisablePostcodeValidationButtonIfFieldIsInvalid() ||
                       IsSearchingForPostcode() ||
                       PostcodeIsUnknown() ||
                       !IsPatientIdValidated()
-                    "
-                    (click)="ValidatePostcode()"
-                    [ngClass]="{ validating: IsSearchingForPostcode() }"
-                  >
+                    " (click)="ValidatePostcode()" [ngClass]="{ validating: IsSearchingForPostcode() }">
                     <i class="fas fa-bolt"></i>
                     {{ IsSearchingForPostcode() ? "Validating" : "Validate" }}
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
@@ -243,34 +178,17 @@
             <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-8 mb-2">
                 <label class="required-field" for="ccg">Clinical Commissioning Group</label>
-                <input
-                  type="search"
-                  class="form-control"
-                  id="ccg"
-                  #ccg
-                  [appDisableControl]="
+                <input type="search" class="form-control" id="ccg" #ccg [appDisableControl]="
                     !IsPatientIdValidated() ||
                     IsUnknownFieldChecked('unknownCcg')
-                  "
-                  [class.is-invalid]="hasCcgSearchFailed"
-                  formControlName="ccg"
-                  [ngbTypeahead]="CcgSearch"
-                  [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults"
-                />
+                  " [class.is-invalid]="hasCcgSearchFailed" formControlName="ccg" [ngbTypeahead]="CcgSearch"
+                  [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
               </div>
               <div class="col-md-2 mb-more-2">
                 <div class="checkmark-content">
                   <label class="container">
-                    <input
-                      class="form-control"
-                      type="checkbox"
-                      [appDisableControl]="!IsPatientIdValidated()"
-                      value=""
-                      id="unknownCcg"
-                      formControlName="unknownCcg"
-                      (change)="ToggleCcgUnknown($event)"
-                    />
+                    <input class="form-control" type="checkbox" [appDisableControl]="!IsPatientIdValidated()" value=""
+                      id="unknownCcg" formControlName="unknownCcg" (change)="ToggleCcgUnknown($event)" />
                     <span class="checkmark"></span>
                     Unknown
                   </label>
@@ -297,18 +215,9 @@
             <div class="form-row">
               <div class="col-md-8 mb-2">
                 <label class="required-field" for="amhp">Lead AMHP</label>
-                <input
-                  type="search"
-                  class="form-control"
-                  id="amhp"
-                  #amhp
-                  [appDisableControl]="!IsPatientIdValidated()"
-                  [class.is-invalid]="hasAmhpSearchFailed"
-                  formControlName="amhp"
-                  [ngbTypeahead]="AmhpSearch"
-                  [resultFormatter]="FormatTypeAheadResults"
-                  [inputFormatter]="FormatTypeAheadResults"
-                />
+                <input type="search" class="form-control" id="amhp" #amhp [appDisableControl]="!IsPatientIdValidated()"
+                  [class.is-invalid]="hasAmhpSearchFailed" formControlName="amhp" [ngbTypeahead]="AmhpSearch"
+                  [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
               </div>
             </div>
             <!-- AMHP User Errors-->
@@ -335,26 +244,16 @@
               <div class="col-md-4 flex">
                 <div class="checkmark-content">
                   <label class="container">
-                    <input
-                      class="form-control not-full-width"
-                      type="checkbox"
-                      value=""
-                      id="retrospectiveReferral"
-                      formControlName="retrospectiveReferral"
-                      #retrospectiveReferral
-                      [appDisableControl]="!IsPatientIdValidated()"
-                    />
+                    <input class="form-control not-full-width" type="checkbox" value="" id="retrospectiveReferral"
+                      formControlName="retrospectiveReferral" #retrospectiveReferral
+                      [appDisableControl]="!IsPatientIdValidated()" />
                     <span class="checkmark"></span>
                     Retrospective Referral
                   </label>
                 </div>
                 <div class="content-help">
-                  <i
-                    class="fas fa-question-circle"
-                    placement="right"
-                    ngbTooltip="Add a referral for an earlier date / time"
-                    [openDelay]="100"
-                    [closeDelay]="500"
+                  <i class="fas fa-question-circle" placement="right"
+                    ngbTooltip="Add a referral for an earlier date / time" [openDelay]="100" [closeDelay]="500"
                     tooltipClass="subtle-tooltip">
                   </i>
                 </div>
@@ -366,49 +265,32 @@
                 <label for="plannedPicker">Referral Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-5">
-                    <input
-                      class="form-control"
-                      formControlName='referralDate'
-                      placeholder="dd/mm/yyyy"
-                      name="referraldDate"
-                      [maxDate]='maxDate'
-                      ngbDatepicker
-                      #s="ngbDatepicker"/>
+                    <input class="form-control" formControlName='referralDate' placeholder="dd/mm/yyyy"
+                      name="referraldDate" [maxDate]='maxDate' ngbDatepicker #s="ngbDatepicker" />
                   </div>
                   <div class="col-md-1 padding-left-1">
-                    <button
-                      class="btn btn-outline-secondary calendar"
-                      (click)="s.toggle()"
-                      type="button">
-                        <i class="far fa-calendar-alt"></i>
+                    <button class="btn btn-outline-secondary calendar" (click)="s.toggle()" type="button">
+                      <i class="far fa-calendar-alt"></i>
                     </button>
                   </div>
                   <div class="col-md-1 at">@</div>
-                    <div class="col-md-4 mt-less-5 ml-less-2">
-                      <ngb-timepicker formControlName="referralTime" [minuteStep]="5"></ngb-timepicker>
-                    </div>
+                  <div class="col-md-4 mt-less-5 ml-less-2">
+                    <ngb-timepicker formControlName="referralTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
                 </div>
               </div>
             </div>
             <!-- Date Format Errors-->
             <div class="form-row" *ngIf="retrospectiveReferral.checked && referralDateField.errors">
               <div class="col-md-4 mb-2 reduced-top-margin">
-                <div
-                  class="invalid-field"
-                  *ngIf="referralDateField.errors && referralDateField.errors.DatePickerFormat"
-                >
+                <div class="invalid-field"
+                  *ngIf="referralDateField.errors && referralDateField.errors.DatePickerFormat">
                   <span>Invalid Date Format</span>
                 </div>
-                <div
-                  class="invalid-field"
-                  *ngIf="referralDateField.errors && referralDateField.errors.FutureDate"
-                >
+                <div class="invalid-field" *ngIf="referralDateField.errors && referralDateField.errors.FutureDate">
                   <span>* A retrospective referral cannot be in the future</span>
                 </div>
-                <div
-                  class="invalid-field"
-                  *ngIf="referralDateField.errors && referralDateField.errors.MissingDate"
-                >
+                <div class="invalid-field" *ngIf="referralDateField.errors && referralDateField.errors.MissingDate">
                   <span>* A referral date / time must be provided</span>
                 </div>
               </div>
@@ -426,12 +308,8 @@
                 </button>
               </div>
               <div class="col-md-2 mb-2 text-left">
-                <button
-                  class="btn btn-primary btn-standard"
-                  type="button"
-                  (click)="CreateReferral()"
-                  [disabled]="!IsPatientIdValidated()"
-                >
+                <button class="btn btn-primary btn-standard" type="button" (click)="CreateReferral()"
+                  [disabled]="!IsPatientIdValidated()">
                   <i class="fas fa-check"></i>
                   Save
                 </button>
@@ -448,19 +326,14 @@
 
 <!-- patient results -->
 <ng-template #patientResults let-patientResult>
-  <app-patient-results-modal
-    [patientResult]="modalResult"
-    (actioned)="OnPatientModalAction($event)"
-  >
+  <app-patient-results-modal [patientResult]="modalResult" (actioned)="OnPatientModalAction($event)">
   </app-patient-results-modal>
 </ng-template>
 
 <ng-template #cancelReferral>
-  <app-cancel-action-modal
-    [modalTitle]="'Cancel Referral'"
+  <app-cancel-action-modal [modalTitle]="'Cancel Referral'"
     [modalBody]="'Do you wish to cancel this referral creation? All changes will be lost.'"
-    (actioned)="OnCancelModalAction($event)"
-  >
+    (actioned)="OnCancelModalAction($event)">
   </app-cancel-action-modal>
 </ng-template>
 

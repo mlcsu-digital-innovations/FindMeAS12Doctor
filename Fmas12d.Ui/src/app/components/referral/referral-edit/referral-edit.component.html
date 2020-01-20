@@ -35,8 +35,7 @@
             </div>
             <div class="form-row">
               <div class="col-md-4">
-                <label class="required-field" for="nhsNumber"
-                [ngClass]="{
+                <label class="required-field" for="nhsNumber" [ngClass]="{
                   'required-field': !DisableIfFieldHasValue('alternativeIdentifier')
                 }">
                   NHS Number
@@ -53,8 +52,7 @@
                 <span class="or">Or</span>
               </div>
               <div class="col-md-4">
-                <label class="required-field" for="alternativeIdentifier"
-                  [ngClass]="{
+                <label class="required-field" for="alternativeIdentifier" [ngClass]="{
                     'required-field': !DisableIfFieldHasValue('nhsNumber')
                   }">
                   Alternative Identifier
