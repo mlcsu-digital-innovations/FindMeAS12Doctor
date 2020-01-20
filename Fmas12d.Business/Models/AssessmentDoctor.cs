@@ -76,7 +76,7 @@ namespace Fmas12d.Business.Models
     public void SetIsRegistered(int? profileTypeId)
     {
       IsRegistered = profileTypeId.HasValue ?
-                     profileTypeId != ProfileType.UNREGISTERED :
+                     profileTypeId != ProfileType.UNREGISTERED_DOCTOR :
                      (bool?)null;
     }
 
