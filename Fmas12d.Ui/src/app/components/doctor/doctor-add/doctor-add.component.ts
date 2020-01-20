@@ -126,7 +126,6 @@ export class DoctorAddComponent implements OnInit {
   }
 
   AllocateRegisteredDoctor() {
-    // ToDo: use a service to allocate the registered doctor
     this.assessmentService
       .allocateDoctorDirectly(this.assessmentId, this.registeredDoctorDetails.id)
       .subscribe(userDetails => {
@@ -137,11 +136,16 @@ export class DoctorAddComponent implements OnInit {
         this.routerService.navigatePrevious();
     },
       (err) => {
+        let msg = 'Error allocating doctor to assessment';
 
-        const msg =
-          err.error.errors.UserId !== undefined
-          ? 'Doctor is already allocated to this assessment'
-          : err.error.title;
+        if (err.error.errors && err.error.errors.UserId !== undefined) {
+          msg = 'Doctor is already allocated to this assessment';
+        }
+
+        // specific error message for missing contact details
+        if (String(err.error).includes('ContactDetailBaseMissingForUserException')) {
+          msg = 'Unable to find contact details for doctor. Doctor cannot be allocated.';
+        }
 
         this.toastService.displayError({
           title: 'Error',
