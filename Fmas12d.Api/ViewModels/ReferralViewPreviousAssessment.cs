@@ -14,7 +14,7 @@ namespace Fmas12d.Api.ViewModels
       if (model == null) return;
 
       AmhpUserName = model.AmhpUserName;
-      DoctorAttendedNames = 
+      DoctorAttendedNames =
         model.DoctorsAttended?.Select(d => d.DoctorUserDisplayName).ToList();
       Id = model.Id;
       IsSuccessful = model.IsSuccessful ?? false;
@@ -24,13 +24,14 @@ namespace Fmas12d.Api.ViewModels
       UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentTypeName;
     }
 
-    public string AmhpUserName { get; set; }    
+    public string AmhpUserName { get; set; }
     public IList<string> DoctorAttendedNames { get; set; }
     public int Id { get; set; }
     public bool IsSuccessful { get; set; }
     public string LeadAmhpUserName { get; set; }
     public string Postcode { get; set; }
     public DateTimeOffset? ScheduledTime { get; set; }
+    public string Status { get { return IsSuccessful ? "Successful" : "Unsuccessful"; } }
     public string UnsuccessfulAssessmentTypeName { get; set; }
   }
 }

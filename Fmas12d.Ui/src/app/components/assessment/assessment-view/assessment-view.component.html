@@ -247,7 +247,6 @@
                     <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Postcode</th>                    
                     <th scope="col" sortable="assessmentStatus" (sort)="onSort($event)">Status</th>
                     <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
-                    <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
                     <th scope="col" sortable="amhp" (sort)="onSort($event)">AMHP</th>
                     <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Attended</th>
                   </tr>
@@ -255,19 +254,16 @@
                 <tbody>
                   <tr *ngFor="let assessment of referral.previousAssessments">
                     <td>
-                      <ngb-highlight [result]="assessment.scheduledTime" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.scheduledTime | date:'dd/MM/yyyy HH:mm'" ></ngb-highlight>
                     </td>
                     <td>
                       <ngb-highlight [result]="assessment.postcode" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="assessment.isSuccessful" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.status" ></ngb-highlight>
                     </td>
                     <td>
                       <ngb-highlight [result]="assessment.unsuccessfulAssessmentTypeName" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="assessment.leadAmhpUserName" ></ngb-highlight>
                     </td>
                     <td>
                       <ngb-highlight [result]="assessment.amhpUserName" ></ngb-highlight>

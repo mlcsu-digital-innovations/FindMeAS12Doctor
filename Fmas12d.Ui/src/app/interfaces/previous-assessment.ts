@@ -6,5 +6,6 @@ export interface PreviousAssessment {
   leadAmhpUserName: string;
   postcode: string;
   scheduledTime: Date;
+  status: string;
   unsuccessfulAssessmentTypeName: string;
 }
