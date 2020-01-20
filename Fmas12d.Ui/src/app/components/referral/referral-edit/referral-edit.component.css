@@ -1,44 +1,17 @@
-.form-control.is-invalid{
-  background-image: none;
-  padding-right: 0.5em;
-}
-
-.form-control.is-valid{
-  background-image: none;
-  padding-right: 0.5em;
+::ng-deep.dropdown-menu.show {
+  max-height: 260px !important;
+  overflow-y: auto !important;
 }
 
 button.less-padding {
-  bottom:2px !important;
-}
-
-form {
-  margin:20px;
-}
-
-.required-field::after {
-  content: " *";
-  color: red;
-}
-
-.validating {
-  min-width: 150px;
-}
-
-.form-row {
-  margin-top:10px;
-  align-items: flex-end;
+  bottom: 2px !important;
 }
 
 .checkmark-content {
   bottom: 0;
   margin-left: 0;
-  position: relative;
   padding-left: 0;
-}
-
-.flex {
-  display: flex;
+  position: relative;
 }
 
 .content-help {
@@ -47,11 +20,38 @@ form {
   margin-left: -10px;
 }
 
+.flex {
+  display: flex;
+}
+
+form {
+  margin: 20px;
+}
+
+.form-control.is-invalid {
+  background-image: none;
+  padding-right: 0.5em;
+}
+
+.form-control.is-valid {
+  background-image: none;
+  padding-right: 0.5em;
+}
+
+.form-row {
+  margin-top: 10px;
+  align-items: flex-end;
+}
+
 .not-full-width {
   width: 80%;
 }
 
-::ng-deep.dropdown-menu.show {
-  max-height: 260px !important;
-  overflow-y: auto !important;
+.required-field::after {
+  color: red;
+  content: " *";
+}
+
+.validating {
+  min-width: 150px;
 }
