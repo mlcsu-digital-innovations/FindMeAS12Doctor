@@ -130,14 +130,14 @@ export class AssessmentViewComponent implements OnInit {
     this.referralService.closeReferral(this.referralId, forceClose).subscribe(
       () => {
         this.toastService.displaySuccess({
-          message: 'Referral Status Updated'
+          message: 'Referral closed'
         });
         this.routerService.navigateByUrl('/referral/list');
       },
       error => {
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to update referral! Please try again in a few moments'
+          message: 'Unable to close referral! Please try again in a few moments'
         });
       }
     );

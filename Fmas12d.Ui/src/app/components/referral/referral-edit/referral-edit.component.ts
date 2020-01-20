@@ -13,7 +13,7 @@ import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
-import { PostcodeRegex, UNKNOWN } from 'src/app/constants/Constants';
+import { PostcodeRegex, UNKNOWN, REFERRAL_STATUS_AWAITING_REVIEW, REFERRAL_STATUS_OPEN } from 'src/app/constants/Constants';
 import { PostcodeSearchResult } from 'src/app/interfaces/postcode-search-result';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
@@ -34,6 +34,7 @@ import { PatientService } from 'src/app/services/patient/patient.service';
 export class ReferralEditComponent implements OnInit {
 
   cancelModal: NgbModalRef;
+  closeModal: NgbModalRef;
   hasAmhpSearchFailed: boolean;
   hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
@@ -58,6 +59,7 @@ export class ReferralEditComponent implements OnInit {
   referralCreated: Date;
   referralForm: FormGroup;
   referralId: number;
+  referralStatusId: number;
   residentialPostcodeValidationMessage: string;
   unknownCcgId: number;
   unknownGpPracticeId: number;
@@ -81,6 +83,7 @@ export class ReferralEditComponent implements OnInit {
 
   @ViewChild('patientResults', {static: true}) patientResultTemplate;
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
+  @ViewChild('confirmClosure', null) closeTemplate;
 
   ngOnInit() {
 
@@ -210,6 +213,37 @@ export class ReferralEditComponent implements OnInit {
       this.referralForm.controls[fieldName].setValue('');
       this.SetFieldFocus(`#${fieldName}`);
     }
+  }
+
+  CloseReferral() {
+    let forceClose = false;
+
+    if (this.referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW
+        && this.referralStatusId !== REFERRAL_STATUS_OPEN ) {
+          forceClose = true;
+    }
+
+    this.referralService.closeReferral(this.referralId, forceClose).subscribe(
+      () => {
+        this.toastService.displaySuccess({
+          message: 'Referral closed'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to close referral! Please try again in a few moments'
+        });
+      }
+    );
+
+  }
+
+  CloseReferralConfirmation() {
+    this.closeModal = this.modalService.open(this.closeTemplate, {
+      size: 'lg'
+    });
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
@@ -505,8 +539,10 @@ export class ReferralEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralEdit) {
+    console.log(referral);
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
+    this.referralStatusId = referral.referralStatusId;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
     this.nhsNumberField.setValue(referral.patientNhsNumber);
 
@@ -635,6 +671,13 @@ export class ReferralEditComponent implements OnInit {
         this.unknownResidentialPostcode.setValue(false);
       }
     });
+  }
+
+  OnModalAction(event: any) {
+    this.closeModal.close();
+    if (event) {
+      this.CloseReferral();
+    }
   }
 
   OnPatientModalAction(action: number) {

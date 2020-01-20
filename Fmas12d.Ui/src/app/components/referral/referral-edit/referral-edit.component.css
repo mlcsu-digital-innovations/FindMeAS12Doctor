@@ -50,3 +50,12 @@ form {
   max-height: 260px !important;
   overflow-y: auto !important;
 }
+
+.btn-fill {
+  min-width: 200px;
+}
+
+.btn-outline {
+  border: 2px solid #ec5a3b;
+  color: #ec5a3b;
+}
