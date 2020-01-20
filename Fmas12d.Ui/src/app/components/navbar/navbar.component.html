@@ -1,10 +1,10 @@
 <!-- Toolbar -->
 <div class="toolbar-container" role="banner">
-  <a class="navbar-icon" routerLink="/referral/list">
+  <a class="navbar-icon" [routerLink]=home()>
     <div class="fas fa-home fa-2x"></div>
     <div class="">Home</div>
   </a>
-  <a class="toolbar-left" routerLink="/referral/list">
+  <a class="toolbar-left" [routerLink]=home()>
     <div class="title">Find Me An S12 Doctor</div>
     <div class="version">Version: {{version}} </div>
   </a>
