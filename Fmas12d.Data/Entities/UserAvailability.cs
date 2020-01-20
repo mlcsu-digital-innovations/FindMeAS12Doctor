@@ -12,6 +12,10 @@ namespace Fmas12d.Data.Entities
     public decimal Latitude { get; set; }
     [Column(TypeName = "decimal(9,6)")]
     public decimal Longitude { get; set; }
+    public DateTimeOffset? OnCallConfirmationSentAt { get; set; }
+    public DateTimeOffset? OnCallConfirmationReceivedAt { get; set; }
+    public string OnCallRejectedReason { get; set; }
+    public bool? OnCallIsConfirmed { get; set; }
     public string Postcode { get; set; }
     public DateTimeOffset Start { get; set; }
     public int UserAvailabilityStatusId { get; set; }
