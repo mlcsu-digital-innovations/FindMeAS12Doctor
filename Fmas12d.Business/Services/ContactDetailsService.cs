@@ -20,6 +20,28 @@ namespace Fmas12d.Business.Services
 
     }
 
+    public async Task<ContactDetail> CreateAsync(ContactDetail model)
+    {
+      Entities.ContactDetail entity = model.MapToEntity();
+
+      entity.Id = 0;
+      entity.IsActive = true;
+
+      UpdateModified(entity);
+
+      _context.Add(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = _context.ContactDetails
+                      .Where(e => e.Id == entity.Id)
+                      .WhereIsActiveOrActiveOnly(true)
+                      .AsNoTracking(true)
+                      .Select(ContactDetail.ProjectFromEntity)
+                      .Single();
+      return model;
+    }
+
     public async Task<ContactDetail> GetByIdAndUserIdAsync(
       int id,
       int userId,

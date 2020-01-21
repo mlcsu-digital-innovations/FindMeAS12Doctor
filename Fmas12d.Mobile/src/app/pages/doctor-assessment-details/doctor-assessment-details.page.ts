@@ -13,7 +13,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 export class DoctorAssessmentDetailsPage implements OnInit {
 
   private loading: HTMLIonLoadingElement;
-  private assessment: AmhpAssessmentView;
+  public assessment: AmhpAssessmentView;
 
   constructor(
     private route: ActivatedRoute,

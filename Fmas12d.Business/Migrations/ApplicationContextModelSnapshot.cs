@@ -1203,7 +1203,7 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasKey("AuditId");
 
-                    b.ToTable("ContactDetailCcgAudits");
+                    b.ToTable("ContactDetailCcgsAudit");
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailType", b =>
@@ -2777,6 +2777,101 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("Section12ApprovalStatusesAudit");
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.Section12LiveRegister", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTimeOffset>("ExpiryDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GmcNumber")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GmcNumber")
+                        .IsUnique();
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("Section12LiveRegisters");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.Section12LiveRegisterAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ExpiryDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GmcNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("Section12LiveRegistersAudit");
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.Speciality", b =>
                 {
                     b.Property<int>("Id")
@@ -4088,6 +4183,15 @@ namespace Fmas12d.Business.Migrations
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.Section12ApprovalStatus", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.Section12LiveRegister", b =>
                 {
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
                         .WithMany()

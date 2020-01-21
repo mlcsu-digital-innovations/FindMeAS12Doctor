@@ -18,6 +18,7 @@ namespace Fmas12d.Business.Services
       bool asNoTracking = true,
       bool activeOnly = true
     );
+    Task<User> CreateAsync(User model);
     Task<IEnumerable<User>> GetAllByAmhpNameAsync(
       string amhpName, 
       bool asNoTracking = true, 
@@ -26,12 +27,14 @@ namespace Fmas12d.Business.Services
     Task<IEnumerable<User>> GetAllByDoctorNameAsync(
       string doctorName, 
       bool asNoTracking = true, 
-      bool activeOnly = true
+      bool activeOnly = true,
+      bool includeUnregisteredDoctors = false
     );
     Task<IEnumerable<User>> GetAllByGmcNumberAsync(
       int gmcNumber, 
       bool asNoTracking = true, 
-      bool activeOnly = true
+      bool activeOnly = true,
+      bool includeUnregisteredDoctors = false
     );
     Task<User> GetAsync(int id, bool asNoTracking, bool activeOnly);      
     Task<User> GetByIdentityServerIdentifierAsync(

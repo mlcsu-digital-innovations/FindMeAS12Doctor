@@ -7,6 +7,7 @@ namespace Fmas12d.Api.ViewModels
     public string AssessmentLocationPostcode { get; set; }
     public int? CurrentAssessmentId { get; set; }
     public int DoctorsAllocated { get; set; }
+    public int DoctorsAttended { get; set; }
     public int DoctorsSelected { get; set; }
 
     public string LeadAmhp { get; set; }
@@ -30,6 +31,7 @@ namespace Fmas12d.Api.ViewModels
           AssessmentLocationPostcode = referral.AssessmentLocationPostcode,
           CurrentAssessmentId = referral?.CurrentAssessment?.Id,
           DoctorsAllocated = referral.DoctorsAllocated,
+          DoctorsAttended = referral.DoctorsAttended,
           DoctorsSelected = referral.DoctorsSelected,
           LeadAmhp = referral.LeadAmhpName,
           NumberOfAssessmentAttempts = referral.NumberOfAssessmentAttempts,

@@ -18,6 +18,8 @@ namespace Fmas12d.Api.ViewModels
       GmcNumber = model.GmcNumber;
       HasReadTermsAndConditions = model.HasReadTermsAndConditions;
       Id = model.Id;
+      IsAmhp = model.IsAmhp;
+      IsDoctor = model.IsDoctor;      
       OrganisationId = model.OrganisationId;
       ProfileTypeId = model.ProfileTypeId;
       ProfileTypeName = model.ProfileTypeName;
@@ -32,6 +34,8 @@ namespace Fmas12d.Api.ViewModels
     public int? GenderTypeId { get; set; }
     public int? GmcNumber { get; set; }
     public bool HasReadTermsAndConditions { get; set; }
+    public bool IsAmhp { get; set; }
+    public bool IsDoctor { get; set; }
     public int? OrganisationId { get; set; }
     public int? ProfileTypeId { get; set; }
     public string ProfileTypeName { get; set; }

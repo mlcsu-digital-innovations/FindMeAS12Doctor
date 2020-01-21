@@ -109,7 +109,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" *ngIf="!referral.currentAssessment.hasOutcome">
               <div class="col-md-6">
                 <label for="doctorNamesAccepted">Doctors Selected</label>
                 <div class="read-only">
@@ -151,6 +151,52 @@
                 </div>
               </div>
             </div>
+            <div class="form-row" *ngIf="referral.currentAssessment.hasOutcome">
+              <div class="col-md-4">
+                <label>Assessment Successful?</label>
+                <div class="read-only">
+                  {{referral.currentAssessment.isSuccessful === true ? 'Yes' : 'No'}}
+
+                </div>
+              </div>
+              <div class="col-md-4" *ngIf="referral.currentAssessment.isSuccessful === false">
+                <label>Unsuccessful Reason</label>
+                <div class="read-only">
+                  {{referral.currentAssessment.unsuccessfulAssessmentTypeName}}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="completedAt">Completed Date / Time</label>
+                <input
+                  class="form-control"
+                  formControlName="completedAt"
+                  id="completedAt"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row" *ngIf="referral.currentAssessment.hasOutcome">
+              <div class="col-md-6">
+                <label for="doctorNamesAccepted">Doctors Attended</label>
+                <div class="read-only">
+                  <div *ngFor="let doctor of referral.currentAssessment.doctorsAttended;">
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        {{doctor.displayName}}
+                        <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="referral.currentAssessment.doctorsAttended.length == 0">
+                    <div class="row">
+                      <div class="col-md-8 doctor-name">
+                        None
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="form-row mt-more-2">
               <div class="col-md-3 mb-2">
                 <button
@@ -162,12 +208,28 @@
                   Close Referral
                 </button>
               </div>
-              <div class="col-md-3 mb-2 offset-md-6 text-right">
+              <div class="col-md-3 mb-2">
+                <button
+                  class="btn btn-primary btn-spaced"
+                  type="button"
+                  (click)="CompleteReviewConfirmation()"
+                  *ngIf="isInReviewState"
+                >
+                  <i class="fas fa-clipboard-check"></i>
+                  Complete Review
+                </button>
+              </div>
+              <div class="col-md-3 mb-2 offset-md-3 text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="CancelView()">
                   <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
-                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="EditAssessment()">
+                <button
+                  class="btn btn-primary btn-standard btn-spaced"
+                  type="button"
+                  (click)="EditAssessment()"
+                  *ngIf="!referral.currentAssessment.hasOutcome"
+                >
                   <i class="far fa-edit"></i>
                   Edit
                 </button>
@@ -194,28 +256,28 @@
                 <tbody>
                   <tr *ngFor="">
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" [term]="assessmentListService.searchTerm"></ngb-highlight>
+                      <ngb-highlight [result]="" ></ngb-highlight>
                     </td>
                   </tr>
                 </tbody>
@@ -241,6 +303,15 @@
     [modalTitle]="'Confirm Referral Closure'"
     [modalBody]="'Please confirm that the referral can be closed.'"
     (actioned)="OnModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #confirmCompletion>
+  <app-cancel-action-modal
+    [modalTitle]="'Confirm Review Completion'"
+    [modalBody]="'Please confirm that the review is now complete.'"
+    (actioned)="OnCompletionModalAction($event)"
   >
   </app-cancel-action-modal>
 </ng-template>

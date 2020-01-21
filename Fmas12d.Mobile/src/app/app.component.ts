@@ -1,18 +1,17 @@
-import * as jwt_decode from 'jwt-decode';
 import { AuthService } from './services/auth/auth.service';
 import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
-import { PROFILETYPEAMHP, PROFILETYPEDOCTOR } from './constants/app.constants';
 import { Platform, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './services/storage/storage.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ToastService } from './services/toast/toast.service';
+import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +21,7 @@ import { UserDetailsService } from './services/user-details/user-details.service
 export class AppComponent implements OnInit {
 
   userName: string;
-  isAmhp: boolean;
-  isDoctor: boolean;
+  user = {} as UserDetails;
 
   constructor(
     private authService: AuthService,
@@ -72,7 +70,7 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
         console.log(payload);
       });
-   
+
       this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
         console.log('msadal:loginSuccess');
         console.log(payload);
@@ -84,42 +82,38 @@ export class AppComponent implements OnInit {
     this.storageService.getAccessToken().subscribe(token => {
       if (token) {
         this.setUserDetails(token);
-      }      
+      }
     }, error => {
       this.toastService.displayError({message: error});
     });
   }
 
-  public logOff(): void {    
-    if (this.platform.is("cordova")) {
+  public logOff(): void {
+    if (this.platform.is('cordova')) {
       this.authService.logoutMsAdal();
 
-      if (this.router.url === "/home") {
+      if (this.router.url === '/home') {
         this.authService.loginMsAdal();
+      } else {
+        this.navController.navigateRoot('home');
       }
-      else {
-        this.navController.navigateRoot("home");
-      }      
-    }
-    else {
+    } else {
       this.authService.logoutMsal();
     }
-    
   }
 
-  private setUserDetails(token: string): void {    
+  private setUserDetails(token: string): void {
     const details = jwt_decode(token);
 
     if (details.name) {
       this.userName = details.name;
     }
-    
+
     if (details.oid) {
       this.userDetailsService.getUserDetails(details.oid)
       .subscribe(user => {
-        this.isAmhp = user.profileTypeId === PROFILETYPEAMHP;
-        this.isDoctor = user.profileTypeId === PROFILETYPEDOCTOR;
+          this.user = user;
       });
-    }    
+    }
   }
 }

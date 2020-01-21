@@ -54,7 +54,7 @@ namespace Fmas12d.Business.Models
       ScheduledTime = entity.ScheduledTime;
       Speciality = new Speciality(entity.Speciality);
       SpecialityId = entity.SpecialityId;
-      //TODO UnsuccessfulAssessmentType = null;
+      UnsuccessfulAssessmentType = new UnsuccessfulAssessmentType(entity.UnsuccessfulAssessmentType);
       UnsuccessfulAssessmentTypeId = entity.UnsuccessfulAssessmentTypeId;
       //TODO UserAssessmentClaims = null;
       UserAssessmentNotifications = entity
@@ -123,6 +123,14 @@ namespace Fmas12d.Business.Models
       }
     }
 
+    public IList<AssessmentDoctor> DoctorsAttended
+    {
+      get
+      {
+        return GetAssessmentActiveDoctorsByStatus(AssessmentDoctorStatus.ATTENDED);
+      }
+    }
+
     public IList<AssessmentDoctor> DoctorsAllocated
     {
       get
@@ -176,8 +184,10 @@ namespace Fmas12d.Business.Models
     {
       get
       {
+        // return IsActive &&
+        //        UnsuccessfulAssessmentTypeId == null &&
+        //        CompletionConfirmationByUserId == null;
         return IsActive &&
-               UnsuccessfulAssessmentTypeId == null &&
                CompletionConfirmationByUserId == null;
       }
     }

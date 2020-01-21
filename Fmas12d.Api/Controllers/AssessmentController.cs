@@ -188,7 +188,27 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        await Service.AddAllocatedDoctorDirectAsync(id, requestModel.UserId.Value);
+        await Service.AddAllocatedDoctorDirectAsync(id, requestModel.UserId.Value, false);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPost]
+    [Route("{id:int}/doctors/allocated/unregistered")]
+    public async Task<ActionResult> PostUnregisteredDoctorAllocated(
+      int id,
+      [FromBody] RequestModels.AssessmentUnregisteredDoctorsPost requestModel
+    )
+    {
+      try
+      {
+        Business.Models.IUnregisteredDoctor businessModel = new Business.Models.UnregisteredDoctor();
+        requestModel.MapToBusinessModel(businessModel);
+        await Service.AllocateUnregisteredDoctorAsync(id, businessModel);
         return Ok();
       }
       catch (Exception ex)
