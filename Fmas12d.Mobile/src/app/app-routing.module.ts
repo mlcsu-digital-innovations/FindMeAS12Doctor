@@ -87,15 +87,15 @@ const routes: Routes = [
     loadChildren: './pages/claims-list/claims-list.module#ClaimsListPageModule'
   },
   {
-    path: 'claims-create',
+    path: 'claims-create/:assessmentId',
     loadChildren: './pages/claims-create/claims-create.module#ClaimsCreatePageModule'
   },
   {
-    path: 'claims-details',
+    path: 'claims-details/:claimId',
     loadChildren: './pages/claims-details/claims-details.module#ClaimsDetailsPageModule'
   },
   {
-    path: 'claims-confirmation',
+    path: 'claims-confirmation/:claimId',
     loadChildren: './pages/claims-confirmation/claims-confirmation.module' +
     '#ClaimsConfirmationPageModule'
   },
