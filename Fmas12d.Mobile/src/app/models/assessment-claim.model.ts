@@ -7,9 +7,11 @@ export class AssessmentClaim {
   claim: UserAssessmentClaim;
   completedTime: Date;
   id: number;
+  isCompleted: boolean;
   isSuccessful?: boolean;
   postcode: string;
-  unsuccessfulAssessmentTypeId?: boolean;
+  referralStatus: string;
+  unsuccessfulAssessmentType: string;
 
   constructor() { }
 }

@@ -1,5 +1,97 @@
-<app-navbar></app-navbar>
+<app-navbar title="Claims" lastUpdated={{listLastUpdated}}></app-navbar>
 
 <ion-content>
-
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Claims</strong>
+      </ion-card-header>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let assessment of claimsList" detail="false"
+            [routerLink]="['/claims-details/', assessment.claim.id]" routerDirection="forward"
+            class="margin-right-2">
+            <ion-row style="width:100%">
+              <ion-col>
+                <ion-icon color="success" size="large" name="paper">
+                </ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                  <span>
+                    Address:
+                    {{assessment.address1}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Postcode:
+                    {{assessment.postcode}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Assessed:
+                    {{assessment.assessmentDate | date: "dd MMM yy HH:mm"}}
+                  </span>                  
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Claim Status:
+                    {{assessment.claim.claimStatus}}
+                  </span>                  
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-card>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Completed Assessments</strong>
+      </ion-card-header>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let assessment of assessmentList" detail="false"
+            [routerLink]="['/amhp-assessment-view/', assessment.id]" routerDirection="forward"
+            class="margin-right-2">
+            <ion-row style="width:100%">
+              <ion-col>
+                <ion-icon color="success" size="large" name="checkmark-circle"
+                  *ngIf="assessment.isCompleted">
+                </ion-icon>
+                <ion-icon color="warning" size="large" name="help-circle" 
+                *ngIf="!assessment.isCompleted">
+                </ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                  <span>
+                    Address:
+                    {{assessment.address1}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Postcode:
+                    {{assessment.postcode}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Assessed:
+                    {{assessment.assessmentDate | date: "dd MMM yy HH:mm"}}
+                  </span> 
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-card >
+  </ion-grid>
 </ion-content>
