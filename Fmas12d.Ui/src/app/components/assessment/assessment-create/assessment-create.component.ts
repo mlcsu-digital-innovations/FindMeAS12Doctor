@@ -220,6 +220,7 @@ export class AssessmentCreateComponent implements OnInit {
       switchMap(term =>
         this.amhpListService.GetAmhpList(term).pipe(
           tap(() => (this.hasAmhpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'amhp'))),
           catchError(() => {
             this.hasAmhpSearchFailed = true;
             return of([]);
@@ -619,6 +620,13 @@ export class AssessmentCreateComponent implements OnInit {
       this.toBeCompletedByDateField.setValue(this.defaultCompletionDate);
       this.toBeCompletedByTimeField.setValue(this.defaultCompletionTime);
       this.toBeCompletedByDateField.setErrors(null);
+    }
+  }
+
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results == null) {
+      this.assessmentForm.controls[fieldName].setErrors({ NoMatchingResults: true });
     }
   }
 }
