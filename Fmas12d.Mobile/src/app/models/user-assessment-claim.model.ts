@@ -1,5 +1,8 @@
+import { Assessment } from './assessment.model';
+
 export class UserAssessmentClaim {
 
+  assessment: Assessment;
   assessmentPayment?: number;
   claimReference?: number;
   claimStatus: string;

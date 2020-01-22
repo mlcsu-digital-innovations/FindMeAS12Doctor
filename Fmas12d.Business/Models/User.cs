@@ -121,7 +121,7 @@ namespace Fmas12d.Business.Models
 
     public ContactDetail GetContactDetailTypeBase()
     {
-      return ContactDetails
+      return ContactDetails?
         .SingleOrDefault(cd => cd.ContactDetailTypeId == ContactDetailType.BASE);
     }
 

@@ -15,6 +15,13 @@ export class ClaimService {
     private apiService: ApiService
   ) { }
 
+  public getClaim(claimId: number): Observable<UserAssessmentClaim> {
+    return this.apiService.get(
+      `${environment.apiEndpoint}/assessmentclaim/${claimId}`,
+      null
+    );
+  }
+
   public getList(): Observable<AssessmentClaim[]> {
     // return (this.apiService.get(
     //   `${environment.apiEndpoint}/assessment/claims`,
@@ -40,6 +47,7 @@ export class ClaimService {
     claim1.claim.mileage = 25;
     claim1.claim.mileagePayment = 12.5;
     claim1.claim.assessmentPayment = 35;
+    claim1.claim.id = 7;
 
 
     claim2.assessmentDate = new Date();
