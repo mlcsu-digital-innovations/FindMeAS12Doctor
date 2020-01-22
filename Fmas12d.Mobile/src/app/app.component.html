@@ -25,7 +25,6 @@
             <ion-icon name="pricetag"></ion-icon> Claims
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="isAmhp">
         <ion-menu-toggle *ngIf="user.isAmhp">
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
             <ion-icon name="folder-open"></ion-icon> AMHP Assessments

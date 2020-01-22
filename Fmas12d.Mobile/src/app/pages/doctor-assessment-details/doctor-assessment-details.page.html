@@ -78,6 +78,19 @@
           </ion-col>
           
         </ion-row>
+        <br/>
+        <ion-row *ngIf="assessment.hasOutcome">
+          <ion-col style="text-align: center;">
+            <ion-button 
+              [routerLink]="['/claims-create/', assessment.id]" 
+              routerDirection="forward"
+              color="success"
+            >
+              <ion-icon name="pricetag"></ion-icon>&nbsp; 
+              Create Claim
+            </ion-button>  
+          </ion-col> 
+        </ion-row>
 
       </ion-card-content>
     </ion-card>

@@ -45,14 +45,14 @@ export class ClaimService {
     claim2.assessmentDate = new Date();
     claim2.address1 = '999 Letsbe Avenue';
     claim2.postcode = 'PO32 6EY';
-    claim2.id = 2;
+    claim2.id = 3005;
     claim2.isSuccessful = true;
     claim2.isCompleted = false;
 
     claim3.assessmentDate = new Date();
     claim3.address1 = '12 Manor Avenue';
     claim3.postcode = 'NG5 1PB';
-    claim3.id = 2;
+    claim3.id = 3003;
     claim3.isSuccessful = false;
     claim3.unsuccessfulAssessmentType = 'Patient unavailable';
     claim3.isCompleted = true;
