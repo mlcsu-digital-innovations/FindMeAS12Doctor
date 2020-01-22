@@ -18,6 +18,7 @@ namespace Fmas12d.Business.Services
       int id,
       IUnregisteredDoctor unregisteredDoctor
     );
+    Task<bool> Complete(int id);    
     Task<AssessmentCreate> CreateAsync(AssessmentCreate model);
     Task<IEnumerable<Assessment>> GetListByUserIdAsync(
       int userId,

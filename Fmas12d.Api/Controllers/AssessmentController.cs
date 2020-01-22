@@ -263,15 +263,16 @@ namespace Fmas12d.Api.Controllers
     [Route("{id:int}/doctors/remove")]
     public async Task<ActionResult> PutDoctorRemove(
       int id,
-      [FromBody] RequestModels.AssessmentDoctorsRemovePut requestModel)
+      [FromBody] RequestModels.AssessmentDoctorsRemovePut requestModel
+    )
     {
       try
       {
         Business.Models.IAssessmentDoctorsRemove businessModel =
           new Business.Models.AssessmentDoctorsRemove
-        {
-          Id = id
-        };
+          {
+            Id = id
+          };
         requestModel.MapToBusinessModel(businessModel);
         await Service.RemoveDoctorsAsync(businessModel);
 
@@ -283,6 +284,31 @@ namespace Fmas12d.Api.Controllers
       }
     }
 
+    [HttpPut]
+    [Route("{id:int}/completed")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutCompleted(
+      int id
+    )
+    {
+      try
+      {
+
+        bool isCompletedSuccessfully = await Service.Complete(id);
+
+        if (isCompletedSuccessfully)
+        {
+          return Ok();
+        }
+        else
+        {
+          return NoContent();
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
 
     [HttpPut]
     [Route("{id:int}/emergency")]
