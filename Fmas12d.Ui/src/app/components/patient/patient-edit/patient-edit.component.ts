@@ -12,4 +12,8 @@ export class PatientEditComponent implements OnInit {
   ngOnInit() {
   }
 
+  home(): string {
+    // TODO: replace with switch
+    return "/referral";
+  }
 }
