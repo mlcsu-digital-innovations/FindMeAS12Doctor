@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fmas12d.Api.RequestModels
 {
-  public class UserAvailabilityPostContactDetail : UserAvailability
+  public class UserOnCallPostContactDetail : UserOnCall
   {
     [Required]
     public int? ContactDetailId { get; set; }
 
-    internal override void MapToBusinessModel(Business.Models.IUserAvailability model)
+    internal override void MapToBusinessModel(Business.Models.IUserOnCall model)
     {
       base.MapToBusinessModel(model);
       if (model != null && model.Location != null)

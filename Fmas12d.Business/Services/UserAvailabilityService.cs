@@ -54,6 +54,11 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
+    public Task<IUserOnCall> CreateOnCallAsync(IUserOnCall model)
+    {
+      throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<IUserAvailability>> GetAsync(
       int userId,
       DateTimeOffset from,
@@ -182,6 +187,26 @@ namespace Fmas12d.Business.Services
 
       return doctorsPostcode;
     }
+ 
+    public async Task<IEnumerable<IUserOnCall>> GetOnCallAsync(
+      DateTimeOffset from, 
+      DateTimeOffset to, 
+      bool asNoTracking, 
+      bool activeOnly
+    )
+    {
+      IEnumerable<IUserOnCall> models = await _context
+        .UserAvailabilities
+        .Where(ua => ua.End >= from)
+        .Where(ua => ua.Start <= to)
+        .Where(ua => ua.)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserOnCall.ProjectFromEntity)
+        .ToListAsync();
+
+      return models;
+    }
 
     public async Task<IUserAvailability> UpdateAsync(IUserAvailability model)
     {
@@ -212,6 +237,11 @@ namespace Fmas12d.Business.Services
                       .SingleAsync();
 
       return model;
+    }
+
+    public Task<IUserOnCall> UpdateOnCallAsync(IUserOnCall model)
+    {
+      throw new NotImplementedException();
     }
 
     protected override void CheckUserCanSetActiveStatus(
