@@ -68,10 +68,10 @@ export class ReferralListComponent implements OnInit {
 
   IsReferralEditableByStatus(referralStatusId) {
     return referralStatusId !== REFERRAL_STATUS_CLOSED &&
-    referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
-    referralStatusId !== REFERRAL_STATUS_NEW &&
-    referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW &&
-    referralStatusId !== REFERRAL_STATUS_OPEN;
+      referralStatusId !== REFERRAL_STATUS_ASSESSMENT_SCHEDULED &&
+      referralStatusId !== REFERRAL_STATUS_NEW &&
+      referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW &&
+      referralStatusId !== REFERRAL_STATUS_OPEN;
   }
 
   onSort({ column, direction, columnType }: SortEvent) {
@@ -86,7 +86,5 @@ export class ReferralListComponent implements OnInit {
     this.referralListService.sortDirection = direction;
     this.referralListService.sortColumnType = columnType;
 
-    console.log(column);
   }
-
 }
