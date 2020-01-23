@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
+import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
 import { LoadingController } from '@ionic/angular';
 import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
 
@@ -17,7 +17,7 @@ export class ClaimsListPage implements OnInit {
   private claimsList: AssessmentClaim[] = [];
 
   constructor(
-    private claimService: ClaimService,
+    private assessmentClaimService: AssessmentClaimService,
     private loadingController: LoadingController
   ) { }
 
@@ -26,7 +26,7 @@ export class ClaimsListPage implements OnInit {
   }
 
   refreshPage($event?: any) {
-    const request = this.claimService.getList();
+    const request = this.assessmentClaimService.getList();
     this.showLoading();
 
     request.subscribe((result: AssessmentClaim[]) => {

@@ -9,7 +9,7 @@ import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim-model'
 @Injectable({
   providedIn: 'root'
 })
-export class ClaimService {
+export class AssessmentClaimService {
 
   constructor(
     private apiService: ApiService
@@ -18,6 +18,13 @@ export class ClaimService {
   public getClaim(claimId: number): Observable<UserAssessmentClaim> {
     return this.apiService.get(
       `${environment.apiEndpoint}/assessmentclaim/${claimId}`,
+      null
+    );
+  }
+
+  public prepareClaim(assessmentId: number): Observable<UserAssessmentClaim> {
+    return this.apiService.get(
+      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/prepare`,
       null
     );
   }
