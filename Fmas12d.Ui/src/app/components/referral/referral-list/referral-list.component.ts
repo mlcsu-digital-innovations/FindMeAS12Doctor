@@ -74,7 +74,7 @@ export class ReferralListComponent implements OnInit {
     referralStatusId !== REFERRAL_STATUS_OPEN;
   }
 
-  onSort({ column, direction }: SortEvent) {
+  onSort({ column, direction, columnType }: SortEvent) {
     // resetting other headers
     this.headers.forEach(header => {
       if (header.sortable !== column) {
@@ -84,6 +84,9 @@ export class ReferralListComponent implements OnInit {
 
     this.referralListService.sortColumn = column;
     this.referralListService.sortDirection = direction;
+    this.referralListService.sortColumnType = columnType;
+
+    console.log(column);
   }
 
 }
