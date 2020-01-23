@@ -15,21 +15,21 @@ namespace Fmas12d.Api.ViewModels
       MapFromBusinessModel(model);
     }
 
-    public DateTimeOffset OnCallConfirmationReceivedAt { get; set; }
-    public DateTimeOffset OnCallConfirmationSentAt { get; set; }
-    public bool OnCallIsConfirmed { get; set; }
+    public DateTimeOffset? OnCallConfirmationReceivedAt { get; set; }
+    public DateTimeOffset? OnCallConfirmationSentAt { get; set; }
+    public bool? OnCallIsConfirmed { get; set; }
     public string OnCallRejectedReason { get; set; }
+    public int UserId { get; set; }
 
     internal virtual void MapFromBusinessModel(IUserOnCall model)
     {
       if (model == null) return;
 
-      base.MapFromBusinessModel(model);
-      
-      model.OnCallConfirmationReceivedAt = OnCallConfirmationReceivedAt;
-      model.OnCallConfirmationSentAt = OnCallConfirmationSentAt;
-      model.OnCallIsConfirmed = OnCallIsConfirmed;
-      model.OnCallRejectedReason = OnCallRejectedReason;
+      OnCallConfirmationReceivedAt = model.OnCallConfirmationReceivedAt;
+      OnCallConfirmationSentAt = model.OnCallConfirmationSentAt;
+      OnCallIsConfirmed = model.OnCallIsConfirmed;
+      OnCallRejectedReason = model.OnCallRejectedReason;
+      UserId = model.UserId;
 
     }
 

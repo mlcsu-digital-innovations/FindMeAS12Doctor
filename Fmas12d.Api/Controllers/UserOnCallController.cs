@@ -51,7 +51,7 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPut]
     [Route("{id:int}/contactdetail")]
-    public async Task<ActionResult<ViewModels.UserOnCall>> PutAvailableContactDetail(
+    public async Task<ActionResult<ViewModels.UserOnCall>> PutContactDetail(
       int id,
       [FromBody] RequestModels.UserOnCallPutContactDetail requestModel
     )
@@ -61,7 +61,7 @@ namespace Fmas12d.Api.Controllers
 
     [HttpPut]
     [Route("{id:int}/postcode")]
-    public async Task<ActionResult<ViewModels.UserOnCall>> PutAvailablePutcode(
+    public async Task<ActionResult<ViewModels.UserOnCall>> PutPutcode(
       int id,
       [FromBody] RequestModels.UserOnCallPutPostcode requestModel
     )
@@ -75,7 +75,10 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.IUserOnCall businessModel = new Business.Models.UserOnCall();
+        Business.Models.IUserOnCall businessModel = new Business.Models.UserOnCall()
+        {
+          StatusId = Business.Models.UserAvailabilityStatus.ON_CALL
+        };
         requestModel.MapToBusinessModel(businessModel);
         businessModel = await Service.CreateOnCallAsync(businessModel);
         ViewModels.UserOnCall viewModel = new ViewModels.UserOnCall(businessModel);
@@ -134,10 +137,11 @@ namespace Fmas12d.Api.Controllers
       {
         Business.Models.IUserOnCall businessModel = new Business.Models.UserOnCall()
         {
-          Id = id
+          Id = id,
+          StatusId = Business.Models.UserAvailabilityStatus.ON_CALL
         };
         requestModel.MapToBusinessModel(businessModel);
-        
+
         businessModel = await Service.UpdateOnCallAsync(businessModel);
         ViewModels.UserOnCall viewModel = new ViewModels.UserOnCall(businessModel);
 

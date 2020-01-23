@@ -23,7 +23,7 @@ namespace Fmas12d.Business.Models
     public DateTimeOffset? OnCallConfirmationReceivedAt { get; set; }
     public DateTimeOffset? OnCallConfirmationSentAt { get; set; }
     public bool? OnCallIsConfirmed { get; set; }
-    public string OnCallRejectedReason { get; set; }        
+    public string OnCallRejectedReason { get; set; }
 
     public override void MapToEntity(Data.Entities.UserAvailability entity)
     {
@@ -34,7 +34,7 @@ namespace Fmas12d.Business.Models
       entity.OnCallConfirmationReceivedAt = OnCallConfirmationReceivedAt;
       entity.OnCallConfirmationSentAt = OnCallConfirmationSentAt;
       entity.OnCallIsConfirmed = OnCallIsConfirmed;
-      entity.OnCallRejectedReason = OnCallRejectedReason;      
+      entity.OnCallRejectedReason = OnCallRejectedReason;
     }
 
     public static new Expression<Func<Data.Entities.UserAvailability, UserOnCall>> ProjectFromEntity

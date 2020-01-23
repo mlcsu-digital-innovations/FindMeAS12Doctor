@@ -54,9 +54,26 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public Task<IUserOnCall> CreateOnCallAsync(IUserOnCall model)
+    public async Task<IUserOnCall> CreateOnCallAsync(IUserOnCall model)
     {
-      throw new NotImplementedException();
+      await SetLatitudeLongitudeAsync(model);
+      await CheckForOverlappingAvailabilityAsync(model);
+
+      Entities.UserAvailability entity = new Entities.UserAvailability();
+      model.MapToEntity(entity);
+      entity.IsActive = true;
+      UpdateModified(entity);
+
+      _context.Add(entity);
+      await _context.SaveChangesAsync();
+
+      model = await _context.UserAvailabilities
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(UserOnCall.ProjectFromEntity)
+                      .SingleAsync();
+
+      return model;
     }
 
     public async Task<IEnumerable<IUserAvailability>> GetAsync(
@@ -197,9 +214,8 @@ namespace Fmas12d.Business.Services
     {
       IEnumerable<IUserOnCall> models = await _context
         .UserAvailabilities
-        .Where(ua => ua.End >= from)
-        .Where(ua => ua.Start <= to)
-        .Where(ua => ua.)
+        .Where(ua => ua.End >= from || ua.Start <= to)
+        .Where(ua => ua.UserAvailabilityStatusId == UserAvailabilityStatus.ON_CALL)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
         .Select(UserOnCall.ProjectFromEntity)
@@ -239,9 +255,35 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public Task<IUserOnCall> UpdateOnCallAsync(IUserOnCall model)
+    public async Task<IUserOnCall> UpdateOnCallAsync(IUserOnCall model)
     {
-      throw new NotImplementedException();
+      await SetLatitudeLongitudeAsync(model);
+      await CheckForOverlappingAvailabilityAsync(model, model.Id);
+
+      Entities.UserAvailability entity = _context
+        .UserAvailabilities
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(false)
+        .SingleOrDefault(ua => ua.Id == model.Id);
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"Unable to find a UserAvailability with an Id of {model.Id}");
+      }
+
+      model.MapToEntity(entity);
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = await _context.UserAvailabilities
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(UserOnCall.ProjectFromEntity)
+                      .SingleAsync();
+
+      return model;
     }
 
     protected override void CheckUserCanSetActiveStatus(
