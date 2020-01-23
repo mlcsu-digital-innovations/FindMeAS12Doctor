@@ -16,9 +16,10 @@ namespace Fmas12d.Business.Models
       MileagePayment = entity.MileagePayment;
       Mileage = entity.Mileage;
       AssessmentPayment = entity.AssessmentPayment;
-
+      ClaimStatus = new ClaimStatus(entity.ClaimStatus);
       User = entity.User == null ? null : new User(entity.User);
       UserId = entity.UserId;
+      
     }
     public int? ClaimReference { get; set; }
     public virtual ClaimStatus ClaimStatus { get; set; }

@@ -32,6 +32,7 @@ namespace Fmas12d.Business.Services
     {
       UserAssessmentClaim model = await _context
       .UserAssessmentClaims
+      .Include(uac => uac.ClaimStatus)
       .Include(uac => uac.Assessment)
         .ThenInclude(a => a.AmhpUser)
       .Include(uac => uac.Assessment)

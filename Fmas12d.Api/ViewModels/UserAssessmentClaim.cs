@@ -1,3 +1,5 @@
+using System;
+
 namespace Fmas12d.Api.ViewModels
 {
     public class UserAssessmentClaim
@@ -7,26 +9,20 @@ namespace Fmas12d.Api.ViewModels
         if (model == null) return;
 
         Assessment = new Assessment(model.Assessment);
-        ClaimReference = model.ClaimReference;
-        MileagePayment = model.MileagePayment;
         AssessmentPayment = model.AssessmentPayment;
+        ClaimReference = model.ClaimReference;
+        ClaimStatus = model.ClaimStatus.Name;
+        LastUpdated = model.ModifiedAt;
         Mileage = model.Mileage;
-
-        
-
-      // AssessmentId = model.AssessmentId;
-      // NotificationTextId = model.NotificationTextId;
-      // SentAt = model.SentAt;
-      // UserId = model.UserId;
+        MileagePayment = model.MileagePayment;
       } 
 
       public Assessment Assessment {get; set; }
-
-      public int? ClaimReference {get; set;}
-
-      public decimal? MileagePayment { get; set; }
       public decimal? AssessmentPayment { get; set; }
-
+      public string ClaimStatus {get; set;}
+      public int? ClaimReference {get; set;}
+      public DateTimeOffset LastUpdated { get; set; }
       public int? Mileage { get; set; }
+      public decimal? MileagePayment { get; set; }
     }
 }
