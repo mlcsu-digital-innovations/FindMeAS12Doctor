@@ -539,7 +539,6 @@ export class ReferralEditComponent implements OnInit {
   }
 
   InitialiseForm(referral: ReferralEdit) {
-    console.log(referral);
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
