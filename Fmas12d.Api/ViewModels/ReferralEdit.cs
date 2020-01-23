@@ -21,6 +21,7 @@ namespace Fmas12d.Api.ViewModels
       PatientId = model.PatientId;
       PatientNhsNumber = model.Patient?.NhsNumber;
       PatientResidentialPostcode = model.Patient?.ResidentialPostcode;
+      ReferralStatusId = model.ReferralStatusId;
       StatusName = model.StatusName;
     }
 
@@ -36,6 +37,7 @@ namespace Fmas12d.Api.ViewModels
     public int PatientId { get; set; }
     public long? PatientNhsNumber { get; set; }
     public string PatientResidentialPostcode { get; set; }
+    public int ReferralStatusId { get; set; }
     public string StatusName { get; set; }
   }
 }
