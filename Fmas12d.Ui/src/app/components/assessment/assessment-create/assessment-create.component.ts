@@ -625,7 +625,7 @@ export class AssessmentCreateComponent implements OnInit {
 
   ValidateTypeAheadResults(results: any[], fieldName: string) {
 
-    if (results == null) {
+    if (results === null) {
       this.assessmentForm.controls[fieldName].setErrors({ NoMatchingResults: true });
     }
   }

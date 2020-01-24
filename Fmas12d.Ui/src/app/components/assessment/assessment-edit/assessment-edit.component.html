@@ -51,9 +51,6 @@
             </div>
             <div class="form-row" *ngIf="amhpField.errors">
               <div class="col-md-8 mb-2">
-                <div *ngIf="amhpField.errors.NoMatchingResults" class="invalid-field">
-                  <span>* No Results Found </span>
-                </div>
                 <div class="invalid-field" *ngIf="amhpField.errors.MissingAmhpUser">
                   * AMHP User is required
                 </div>
