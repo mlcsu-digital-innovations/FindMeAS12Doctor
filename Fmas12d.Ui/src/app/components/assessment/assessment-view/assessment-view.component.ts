@@ -28,7 +28,7 @@ export class AssessmentViewComponent implements OnInit {
   isInReviewState: boolean;
   isPatientIdValidated: boolean;
   pageSize: number;
-  referral$: Observable<Referral | any>;
+  referral$: Observable<ReferralView>;
   referralCreated: Date;
   referralId: number;
   referralStatusId: number;
@@ -67,7 +67,7 @@ export class AssessmentViewComponent implements OnInit {
           message: 'Error Retrieving Referral Information'
         });
 
-        const emptyReferral = {} as Referral;
+        const emptyReferral = {} as ReferralView;
         return of(emptyReferral);
       })
     );
@@ -130,14 +130,14 @@ export class AssessmentViewComponent implements OnInit {
     this.referralService.closeReferral(this.referralId, forceClose).subscribe(
       () => {
         this.toastService.displaySuccess({
-          message: 'Referral Status Updated'
+          message: 'Referral closed'
         });
         this.routerService.navigateByUrl('/referral/list');
       },
       error => {
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to update referral! Please try again in a few moments'
+          message: 'Unable to close referral! Please try again in a few moments'
         });
       }
     );

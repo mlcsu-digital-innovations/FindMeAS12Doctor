@@ -20,5 +20,5 @@ export interface CurrentAssessment {
   preferredDoctorGenderType: NameIdDescription;
   scheduledTime?: Date;
   speciality: NameIdDescription;
-  unsuccessfulAssessmentTypeIdName: string;
+  unsuccessfulAssessmentTypeName: string;
 }
