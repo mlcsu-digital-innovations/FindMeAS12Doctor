@@ -31,8 +31,13 @@
         <div class="card-body">
           <form [formGroup]="assessmentForm" novalidate>
             <div class="form-row">
+              <div class="required-field col-md-3 mb-3 text-left">
+                <strong>Denotes required field.</strong>
+              </div>
+            </div>
+            <div class="form-row">
               <div class="col-md-8">
-                <label for="amhp">AMHP</label>
+                <label class="required-field" for="amhp">AMHP</label>
                 <div class="input-group">
                   <input type="search" class="form-control" id="amhp" #amhp [class.is-invalid]="hasAmhpSearchFailed"
                     formControlName="amhp" [ngbTypeahead]="AmhpSearch" [resultFormatter]="FormatTypeAheadResults"
@@ -59,7 +64,7 @@
             <!-- Planned assessment date / time -->
             <div class="form-row" *ngIf="referral.currentAssessment.isPlanned">
               <div class="col-md-6">
-                <label for="picker">Assessment Date / Time</label>
+                <label class="required-field" for="picker">Assessment Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-4">
                     <input class="form-control" formControlName='scheduledDate' placeholder="dd/mm/yyyy"
@@ -90,7 +95,7 @@
             <!-- residential postcode -->
             <div class="form-row">
               <div class="col-md-2">
-                <label for="postCode">Post Code</label>
+                <label class="required-field" for="postCode">Post Code</label>
                 <div class="input-group">
                   <input class="form-control" formControlName="postCode" id="postCode" type="search"
                     oninput="this.value = this.value.toUpperCase()" />
@@ -136,7 +141,7 @@
             </div>
             <div class="form-row">
               <div class="col-md-8" *ngIf="addressList.length == 0">
-                <label>Assessment Address</label>
+                <label class="required-field">Assessment Address</label>
                 <div class="current-address">
                   {{referral.currentAssessment.fullAddress}}
                 </div>
@@ -199,7 +204,7 @@
             <!-- To Be Completed By -->
             <div class="form-row" *ngIf="!referral.currentAssessment.isPlanned">
               <div class="col-md-6">
-                <label for="picker">To Be Completed By</label>
+                <label class="required-field" for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
                   <div class="col-md-4">
                     <input class="form-control" formControlName='toBeCompletedByDate' placeholder="dd/mm/yyyy"
@@ -235,19 +240,11 @@
                     <div class="row">
                       <div class="col-md-10">
                         <label class="container" *ngIf="isAllowedToRemove">
-                          <input
-                            class="form-control"
-                            type="checkbox"
-                            [attr.id]="'selected' + i"
-                            [checked]="!doctor.selected"
-                            (change)="ToggleSelectedDoctor(i)"
-                          />
+                          <input class="form-control" type="checkbox" [attr.id]="'selected' + i"
+                            [checked]="!doctor.selected" (change)="ToggleSelectedDoctor(i)" />
                           <span class="checkmark"></span>
                         </label>
-                        <div
-                          class="col-md-8 doctor-name"
-                          [ngClass]="{'unselected' : !doctor.selected}"
-                        >
+                        <div class="col-md-8 doctor-name" [ngClass]="{'unselected' : !doctor.selected}">
                           {{doctor.displayName}}
                           <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
                         </div>
@@ -269,19 +266,11 @@
                     <div class="row">
                       <div class="col-md-10">
                         <label class="container" *ngIf="isAllowedToRemove">
-                          <input
-                            class="form-control"
-                            type="checkbox"
-                            [attr.id]="'selected' + i"
-                            [checked]="!doctor.selected"
-                            (change)="ToggleAllocatedDoctor(i)"
-                          />
+                          <input class="form-control" type="checkbox" [attr.id]="'selected' + i"
+                            [checked]="!doctor.selected" (change)="ToggleAllocatedDoctor(i)" />
                           <span class="checkmark"></span>
                         </label>
-                        <div
-                          class="col-md-8 doctor-name"
-                          [ngClass]="{'unselected' : !doctor.selected}"
-                        >
+                        <div class="col-md-8 doctor-name" [ngClass]="{'unselected' : !doctor.selected}">
                           {{doctor.displayName}}
                           <span class="gmc-number">GMC# {{doctor.gmcNumber}}</span>
                         </div>
@@ -300,7 +289,7 @@
               <div class="col-md-2 mb-2">
                 <button class="btn btn-primary btn-standard" type="button" (click)="ReselectDoctors()">
                   <i class="fas fa-redo"></i>
-                    Select Doctors
+                  Select Doctors
                 </button>
               </div>
               <div class="col-md-2 mb-2 offset-md-8 text-right">
@@ -308,7 +297,8 @@
                   <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
-                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="CheckAssessmentValidity()">
+                <button class="btn btn-primary btn-standard btn-spaced" type="button"
+                  (click)="CheckAssessmentValidity()">
                   <i class="fas fa-check"></i>
                   Save
                 </button>
