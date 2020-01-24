@@ -93,12 +93,7 @@ const routes: Routes = [
   {
     path: 'claims-details/:claimId',
     loadChildren: './pages/claims-details/claims-details.module#ClaimsDetailsPageModule'
-  },
-  {
-    path: 'claims-confirmation/:claimId',
-    loadChildren: './pages/claims-confirmation/claims-confirmation.module' +
-    '#ClaimsConfirmationPageModule'
-  },
+  }
 ];
 
 @NgModule({
