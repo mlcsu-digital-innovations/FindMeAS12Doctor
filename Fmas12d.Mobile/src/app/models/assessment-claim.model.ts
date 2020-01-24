@@ -1,4 +1,4 @@
-import { UserAssessmentClaim } from './user-assessment-claim-model';
+import { UserAssessmentClaim } from './user-assessment-claim.model';
 
 export class AssessmentClaim {
 

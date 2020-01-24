@@ -1,10 +1,14 @@
 import { ApiService } from '../api/api.service';
+import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
+import { AssessmentContact } from 'src/app/models/assessment-contact.model';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
-import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim-model';
+import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
+import { InitialClaimResponse } from 'src/app/models/initial-claim-response.model';
+import { InitialClaimRequest } from 'src/app/models/initial-claim-request.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,10 +26,17 @@ export class AssessmentClaimService {
     );
   }
 
-  public prepareClaim(assessmentId: number): Observable<UserAssessmentClaim> {
+  public getAssessmentAndLocations(assessmentId: number): Observable<AssessmentContact> {
     return this.apiService.get(
-      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/prepare`,
+      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/assessmentandlocations`,
       null
+    );
+  }
+
+  public validateClaim(assessmentId: number, claimRequest: InitialClaimRequest): Observable<InitialClaimResponse> {
+    return this.apiService.post(
+      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/validateclaim`,
+      claimRequest
     );
   }
 

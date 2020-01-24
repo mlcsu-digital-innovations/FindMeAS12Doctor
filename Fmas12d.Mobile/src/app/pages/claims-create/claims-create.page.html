@@ -1,9 +1,134 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>claims-create</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<app-navbar title="Create Claim"></app-navbar>
 <ion-content>
-
+  <ion-grid>
+    <ion-card>
+      <ion-card-content class="grey">
+        <ion-row>
+          <ion-col>
+            Assessment: 
+            <strong>{{assessment?.scheduledTime | date: "d MMMM yyyy H:mm"}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Location: 
+            <strong>{{assessment?.address1}}, {{assessment?.postcode}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            AMHP: <strong>{{assessment?.amhpUserName}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Assessment Status: 
+            <strong>{{assessment?.isSuccessful ? "Success" : "Failed"}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!assessment?.isSuccessful">
+          <ion-col>
+            Reason: <strong>{{assessment?.unsuccessfulAssessmentTypeName}}</strong>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+      <!-- create claim card -->
+      <ion-card-content *ngIf="!hasValidClaim">
+        <ion-row *ngIf="assessment?.userContactDetailTypes.length > 0">
+          <ion-item>
+            <ion-label>Start Location</ion-label>
+            <ion-select [(ngModel)]="startLocationId">
+              <ion-select-option 
+                *ngFor="let contact of assessment?.userContactDetailTypes" 
+                value={{contact.id}}
+              >
+                {{contact.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-label>Different return destination</ion-label>
+                <ion-checkbox [(ngModel)]="differentReturnDestination"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="assessment?.userContactDetailTypes.length > 0 && differentReturnDestination">
+          <ion-item>
+            <ion-label>End Location</ion-label>
+            <ion-select [(ngModel)]="endLocationId">
+              <ion-select-option 
+                *ngFor="let contact of assessment?.userContactDetailTypes" 
+                value={{contact.id}}
+              >
+                {{contact.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-label>My patient</ion-label>
+                <ion-checkbox [(ngModel)]="ownPatient"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row> 
+        <br/>
+        <ion-row>
+          <ion-col style="text-align: center;">
+            <ion-button 
+              (click)="registerClaim()"
+              color="primary"
+            >
+              <ion-icon name="add-circle-outline"></ion-icon>&nbsp; 
+              Create Claim
+            </ion-button>  
+          </ion-col> 
+        </ion-row>                                         
+      </ion-card-content>
+      <!-- confirm claim card-->
+      <ion-card-content *ngIf="hasValidClaim">
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-label>Different return destination</ion-label>
+                <ion-checkbox [(ngModel)]="differentReturnDestination"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-label>My patient</ion-label>
+                <ion-checkbox [(ngModel)]="ownPatient"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row> 
+        <br/>
+        <ion-row>
+          <ion-col style="text-align: center;">
+            <ion-button 
+              (click)="confirmClaim()"
+              color="primary"
+            >
+              <ion-icon name="checkmark"></ion-icon>&nbsp; 
+              Confirm Claim
+            </ion-button>  
+          </ion-col> 
+        </ion-row>                                         
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
 </ion-content>
+
