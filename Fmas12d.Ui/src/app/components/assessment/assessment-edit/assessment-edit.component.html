@@ -64,7 +64,7 @@
             <!-- Planned assessment date / time -->
             <div class="form-row" *ngIf="referral.currentAssessment.isPlanned">
               <div class="col-md-6">
-                <label for="picker">Assessment Date / Time</label>
+                <label class="required-field" for="picker">Assessment Date / Time</label>
                 <div class="row" name="plannedPicker">
                   <div class="col-md-4">
                     <input class="form-control" formControlName='scheduledDate' placeholder="dd/mm/yyyy"
@@ -204,7 +204,7 @@
             <!-- To Be Completed By -->
             <div class="form-row" *ngIf="!referral.currentAssessment.isPlanned">
               <div class="col-md-6">
-                <label for="picker">To Be Completed By</label>
+                <label class="required-field" for="picker">To Be Completed By</label>
                 <div class="row" name="picker">
                   <div class="col-md-4">
                     <input class="form-control" formControlName='toBeCompletedByDate' placeholder="dd/mm/yyyy"
