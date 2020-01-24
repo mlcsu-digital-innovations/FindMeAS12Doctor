@@ -36,7 +36,7 @@ namespace Fmas12d.Api.Controllers
       try
       {
         Business.Models.UserAssessmentClaim businessModel =
-          await Service.GetAssessmentClaim(id);
+          await Service.GetAssessmentClaimAsync(id);
 
         if (businessModel == null)
         {
@@ -48,6 +48,67 @@ namespace Fmas12d.Api.Controllers
             new ViewModels.UserAssessmentClaim(businessModel);
 
           return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpGet]
+    [Route("{assessmentId:int}/assessmentandlocations")]
+    public async Task<ActionResult<ViewModels.UserAssessmentClaimDetail>> GetAssessmentAndLocations(
+      int assessmentId)
+    {
+
+      try {
+        Business.Models.UserAssessmentClaimDetail businessModel = 
+          await Service.GetAssessmentAndContactAsync(assessmentId, GetUserId());
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else 
+        {
+          ViewModels.UserAssessmentClaimDetail viewModel = 
+            new ViewModels.UserAssessmentClaimDetail(businessModel);
+
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPost]
+    [Route("{assessmentId:int}/validateclaim")]
+    public async Task<ActionResult<ViewModels.AssessmentSelectedDoctors>> PostValidateClaim(
+      int assessmentId,
+      [FromBody] RequestModels.UserAssessmentClaimPost requestModel
+    )
+    {
+
+      try {
+
+        Business.Models.UserAssessmentClaimCreate businessModel =
+          new Business.Models.UserAssessmentClaimCreate();
+
+        requestModel.MapToBusinessModel(businessModel);
+
+        Business.Models.UserAssessmentClaimResult newClaim =
+          await Service.ValidateAssessmentClaim(assessmentId, GetUserId(), businessModel);
+
+        if (newClaim == null)
+        {
+          return NoContent();
+        } 
+        else
+        {
+          return Ok(newClaim);
         }
       }
       catch (Exception ex)
