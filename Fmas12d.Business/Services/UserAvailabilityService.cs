@@ -286,6 +286,35 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
+    public async Task<IUserOnCall> UpdateOnCallConfirmationAsync(IUserOnCall model)
+    {
+
+      Entities.UserAvailability entity = _context
+        .UserAvailabilities
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(false)
+        .SingleOrDefault(ua => ua.Id == model.Id);
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"Unable to find a UserAvailability with an Id of {model.Id}");
+      }
+
+      model.MapToEntity(entity);
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      model = await _context.UserAvailabilities
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(UserOnCall.ProjectFromEntity)
+                      .SingleAsync();
+
+      return model;
+    }    
+
     protected override void CheckUserCanSetActiveStatus(
       Entities.UserAvailability entity,
       int userId

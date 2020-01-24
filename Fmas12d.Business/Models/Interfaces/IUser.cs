@@ -18,7 +18,6 @@ namespace Fmas12d.Business.Models
     int? GmcNumber { get; set; }
     bool HasReadTermsAndConditions { get; set; }
     string IdentityServerIdentifier { get; set; }
-    IList<OnCallUser> OnCallUsers { get; set; }
     Organisation Organisation { get; set; }
     int OrganisationId { get; set; }
     IList<PaymentMethod> PaymentMethods { get; set; }

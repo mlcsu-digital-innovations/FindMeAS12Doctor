@@ -40,5 +40,6 @@ namespace Fmas12d.Business.Services
     );
     Task<IUserAvailability> UpdateAsync(IUserAvailability model);
     Task<IUserOnCall> UpdateOnCallAsync(IUserOnCall model);
+    Task<IUserOnCall> UpdateOnCallConfirmationAsync(IUserOnCall businessModel);
   }
 }

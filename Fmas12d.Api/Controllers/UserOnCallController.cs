@@ -60,6 +60,15 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPut]
+    [Route("{id:int}/confirm")]
+    public async Task<ActionResult<ViewModels.UserOnCall>> PutConfirm(
+      int id
+    )
+    {
+      return await UpdateConfirmation(id, new RequestModels.UserOnCallPutConfirm());
+    }
+
+    [HttpPut]
     [Route("{id:int}/postcode")]
     public async Task<ActionResult<ViewModels.UserOnCall>> PutPutcode(
       int id,
@@ -68,6 +77,16 @@ namespace Fmas12d.Api.Controllers
     {
       return await Update(id, requestModel);
     }
+
+    [HttpPut]
+    [Route("{id:int}/reject")]
+    public async Task<ActionResult<ViewModels.UserOnCall>> PutReject(
+      int id,
+      [FromBody] RequestModels.UserOnCallPutReject requestModel
+    )
+    {
+      return await UpdateConfirmation(id, requestModel);
+    }    
 
     private async Task<ActionResult<ViewModels.UserOnCall>> Create(
       RequestModels.UserOnCall requestModel
@@ -152,6 +171,30 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    private async Task<ActionResult<ViewModels.UserOnCall>> UpdateConfirmation(
+      int id,
+      RequestModels.UserOnCallPutConfirm requestModel
+    )
+    {
+      try
+      {
+        Business.Models.IUserOnCall businessModel = new Business.Models.UserOnCallConfirmation()
+        {
+          Id = id,
+        };
+        requestModel.MapToBusinessModel(businessModel);
+
+        businessModel = await Service.UpdateOnCallConfirmationAsync(businessModel);
+        ViewModels.UserOnCall viewModel = new ViewModels.UserOnCall(businessModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }    
 
     private IUserAvailabilityService Service
     {
