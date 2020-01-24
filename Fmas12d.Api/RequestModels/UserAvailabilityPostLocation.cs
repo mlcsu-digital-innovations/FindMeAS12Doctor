@@ -11,12 +11,14 @@ namespace Fmas12d.Api.RequestModels
     [Range(-180, 180)]
     public decimal? Longitude { get; set; }
 
-    internal override Business.Models.UserAvailability MapToBusinessModel(int userId)
+    internal override void MapToBusinessModel(Business.Models.IUserAvailability model)
     {
-      base.MapToBusinessModel(userId);
-      _model.Location.Latitude = Latitude.Value;
-      _model.Location.Longitude = Longitude.Value;
-      return _model;
+      base.MapToBusinessModel(model);
+      if (model != null && model.Location != null)
+      {
+        model.Location.Latitude = Latitude.Value;
+        model.Location.Longitude = Longitude.Value;
+      }
     }
   }
 }

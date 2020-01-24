@@ -5,6 +5,7 @@ namespace Fmas12d.Business.Models
   {
     public const int AVAILABLE = 1;
     public const int UNAVAILABLE = 2;
+    public const int ON_CALL = 3;
 
     public virtual IList<UserAvailability> UserAvailabilities { get; set; }
   }
