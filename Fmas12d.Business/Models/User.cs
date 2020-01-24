@@ -125,5 +125,21 @@ namespace Fmas12d.Business.Models
         .SingleOrDefault(cd => cd.ContactDetailTypeId == ContactDetailType.BASE);
     }
 
+    internal Data.Entities.User MapToEntity()
+    {
+      Data.Entities.User entity = new Data.Entities.User()
+      {
+        DisplayName = DisplayName,
+        GenderTypeId = GenderTypeId,
+        GmcNumber = GmcNumber,
+        IdentityServerIdentifier = IdentityServerIdentifier,
+        OrganisationId = OrganisationId,
+        ProfileTypeId = ProfileTypeId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
+    }
+
   }
 }

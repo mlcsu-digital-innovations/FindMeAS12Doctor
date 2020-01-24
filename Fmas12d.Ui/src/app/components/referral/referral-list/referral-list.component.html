@@ -28,7 +28,7 @@
               </div>
               <div class="col-md-2 offset-md-6 text-right mt-more-2">
                 <a
-                  href="/referral/new"
+                  routerLink="/referral/new"
                   class="btn btn-primary"
                   aria-disabled="true"
                   placement="top"
@@ -89,7 +89,7 @@
                   <tr class="referral-row" *ngFor="let referral of referralList$ | async">
                     <td class="text-center referral-link">
                       <a
-                        href="/referral/edit/{{referral.referralId}}"
+                        routerLink="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
                         ngbTooltip="Edit Referral"
@@ -103,7 +103,7 @@
                     </td>
                     <td class="referral-link">
                       <a
-                        href="/referral/edit/{{referral.referralId}}"
+                        routerLink="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
                         ngbTooltip="Edit Referral"
@@ -117,7 +117,7 @@
                     </td>
                     <td>
                       <a
-                        href="/referral/edit/{{referral.referralId}}"
+                        routerLink="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
                         ngbTooltip="Edit Referral"

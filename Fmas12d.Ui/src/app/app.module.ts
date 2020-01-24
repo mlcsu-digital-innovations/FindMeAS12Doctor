@@ -76,7 +76,7 @@ export class AppModule {
         forbidden_route: "/forbidden",
         history_cleanup_off: true,
         iss_validation_off: true,
-        log_console_debug_active: !environment.production,
+        log_console_debug_active: false, // !environment.production,
         log_console_warning_active: !environment.production,
         max_id_token_iat_offset_allowed_in_seconds: 1000,
         post_login_route: '/welcome',

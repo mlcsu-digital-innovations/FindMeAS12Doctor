@@ -1,4 +1,3 @@
-export interface ContactDetail
-{
+export interface ContactDetail {
   telephoneNumber: string;
 }
