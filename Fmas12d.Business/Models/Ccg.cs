@@ -23,6 +23,7 @@ namespace Fmas12d.Business.Models
       // TODO PaymentMethods
       // TODO PaymentRuleSets
       ShortCode = entity.ShortCode;
+      SuccessfulAssessmentPayment = entity.SuccessfulAssessmentPayment;
       SuccessfulPencePerMile = entity.SuccessfulPencePerMile;
       UnsuccessfulPencePerMile = entity.UnsuccessfulPencePerMile;
     }
@@ -44,7 +45,8 @@ namespace Fmas12d.Business.Models
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
     public virtual IList<PaymentRuleSet> PaymentRuleSets { get; set; }
     [MaxLength(5)]
-    public string ShortCode { get; set; }    
+    public string ShortCode { get; set; }
+    public decimal SuccessfulAssessmentPayment { get; set; }    
     public decimal SuccessfulPencePerMile { get; set; }
     public decimal UnsuccessfulPencePerMile { get; set; }
   }
