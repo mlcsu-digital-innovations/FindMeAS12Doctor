@@ -1768,88 +1768,6 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("NotificationTextsAudit");
                 });
 
-            modelBuilder.Entity("Fmas12d.Data.Entities.OnCallUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTimeOffset>("DateTimeEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DateTimeStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OnCallUsers");
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.OnCallUserAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuditDuration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuditErrorMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuditResult")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("AuditSuccess")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("DateTimeEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DateTimeStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("OnCallUsersAudit");
-                });
-
             modelBuilder.Entity("Fmas12d.Data.Entities.Organisation", b =>
                 {
                     b.Property<int>("Id")
@@ -3488,6 +3406,18 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset?>("OnCallConfirmationReceivedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("OnCallConfirmationSentAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool?>("OnCallIsConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OnCallRejectedReason")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Postcode")
                         .HasColumnType("nvarchar(max)");
 
@@ -4020,21 +3950,6 @@ namespace Fmas12d.Business.Migrations
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.OnCallUser", b =>
-                {
-                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fmas12d.Data.Entities.User", "User")
-                        .WithMany("OnCallUsers")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

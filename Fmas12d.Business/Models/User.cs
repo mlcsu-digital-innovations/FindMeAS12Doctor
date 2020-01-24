@@ -60,7 +60,6 @@ namespace Fmas12d.Business.Models
     [MaxLength(50)]
     [Required]
     public string IdentityServerIdentifier { get; set; }
-    public virtual IList<OnCallUser> OnCallUsers { get; set; }
     public virtual Organisation Organisation { get; set; }
     public int OrganisationId { get; set; }
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
@@ -123,6 +122,22 @@ namespace Fmas12d.Business.Models
     {
       return ContactDetails
         .SingleOrDefault(cd => cd.ContactDetailTypeId == ContactDetailType.BASE);
+    }
+
+    internal Data.Entities.User MapToEntity()
+    {
+      Data.Entities.User entity = new Data.Entities.User()
+      {
+        DisplayName = DisplayName,
+        GenderTypeId = GenderTypeId,
+        GmcNumber = GmcNumber,
+        IdentityServerIdentifier = IdentityServerIdentifier,
+        OrganisationId = OrganisationId,
+        ProfileTypeId = ProfileTypeId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
     }
 
   }

@@ -12,5 +12,6 @@ export interface ReferralEdit {
   patientId: number;
   patientNhsNumber: number;
   patientResidentialPostcode: string;
+  referralStatusId: number;
   statusName: string;
 }

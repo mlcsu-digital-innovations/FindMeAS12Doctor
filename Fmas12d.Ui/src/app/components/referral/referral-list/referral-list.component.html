@@ -28,7 +28,7 @@
               </div>
               <div class="col-md-2 offset-md-6 text-right mt-more-2">
                 <a
-                  href="/referral/new"
+                  routerLink="/referral/new"
                   class="btn btn-primary"
                   aria-disabled="true"
                   placement="top"
@@ -46,41 +46,76 @@
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th class="text-center" scope="col" sortable="referralId" (sort)="onSort($event)">
-                      Referral Id
+                    <th class="text-center" 
+                        scope="col" 
+                        sortable="referralId" 
+                        columnType='number' 
+                        (sort)="onSort($event)">
+                        Referral Id
                     </th>
-                    <th class="text-center" scope="col" sortable="patientIdentifier" (sort)="onSort($event)">
-                      Patient Identifier
+                    <th class="text-center" 
+                        scope="col" 
+                        sortable="patientIdentifier" 
+                        columnType='string' 
+                        (sort)="onSort($event)">
+                        Patient Identifier
                     </th>
-                    <th class="text-center" scope="col" sortable="leadAmhp" (sort)="onSort($event)">
-                      Lead AMHP
+                    <th class="text-center" 
+                        scope="col" 
+                        sortable="leadAmhp" 
+                        columnType='string' 
+                        (sort)="onSort($event)">
+                        Lead AMHP
                     </th>
-                    <th class="sm-col text-center" scope="col" sortable="numberOfAssessmentAttempts" (sort)="onSort($event)">
-                      Assessment Attempts
+                    <th class="sm-col text-center" 
+                        scope="col" 
+                        sortable="numberOfAssessmentAttempts" 
+                        columnType='number' 
+                        (sort)="onSort($event)">
+                        Assessment Attempts
                     </th>
-                    <th class="sm-col text-center" scope="col" sortable="assessmentLocationPostcode" (sort)="onSort($event)">
-                      Assessment Postcode
+                    <th class="sm-col text-center" 
+                        scope="col" 
+                        sortable="assessmentLocationPostcode" 
+                        columnType='string' 
+                        (sort)="onSort($event)">
+                        Assessment Postcode
                     </th>
-                    <th class="text-center" scope="col" sortable="speciality" (sort)="onSort($event)">
-                      Speciality
+                    <th class="text-center" 
+                        scope="col" 
+                        sortable="specialityName" 
+                        columnType='string' 
+                        (sort)="onSort($event)">
+                        Speciality
                     </th>
-                    <th class="text-center" scope="col" sortable="timescale" (sort)="onSort($event)">
-                      Timescale
+                    <th class="text-center" 
+                        scope="col" 
+                        sortable="timescale" 
+                        columnType='dateTime' 
+                        (sort)="onSort($event)">
+                        Timescale
                     </th>
-                    <th class="text-center" scope="col" sortable="status" (sort)="onSort($event)">
-                      Status
+                    <th class="text-center" 
+                        scope="col" 
+                        sortable="statusName" 
+                        columnType='string' 
+                        (sort)="onSort($event)">
+                        Status
                     </th>
-                    <th class="sm-col text-center" scope="col" sortable="responsesReceived" (sort)="onSort($event)">
+                    <th class="sm-col text-center" 
+                        scope="col">
                       <span ngbTooltip="Received / Accepted"
                             [openDelay]="1000"
                             [closeDelay]="200">No. of Responses<br/>Rec. / Acc.</span>
                     </th>
-                    <th class="sm-col text-center" scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">
+                    <th class="sm-col text-center" 
+                        scope="col">
                       <span ngbTooltip="Selected / Allocated / Attended"
                             [openDelay]="1000"
                             [closeDelay]="200">No. of Doctors<br/>Sel. / All. / Att.</span>                       
                     </th>
-                    <th class="sm-col text-center" scope="col">
+                    <th class="sm-col text-center" 
+                        scope="col">
                       &nbsp;
                     </th>
                   </tr>
@@ -89,7 +124,7 @@
                   <tr class="referral-row" *ngFor="let referral of referralList$ | async">
                     <td class="text-center referral-link">
                       <a
-                        href="/referral/edit/{{referral.referralId}}"
+                        routerLink="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
                         ngbTooltip="Edit Referral"
@@ -103,7 +138,7 @@
                     </td>
                     <td class="referral-link">
                       <a
-                        href="/referral/edit/{{referral.referralId}}"
+                        routerLink="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
                         ngbTooltip="Edit Referral"
@@ -117,7 +152,7 @@
                     </td>
                     <td>
                       <a
-                        href="/referral/edit/{{referral.referralId}}"
+                        routerLink="/referral/edit/{{referral.referralId}}"
                         class="clickable"
                         placement="top"
                         ngbTooltip="Edit Referral"

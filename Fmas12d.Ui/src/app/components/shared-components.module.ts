@@ -12,6 +12,7 @@ import { NgbDateCustomParserFormatter } from '../components/datePicker-format/da
 import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { OnCallDoctorListComponent } from './on-call-doctor-list/on-call-doctor-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
 import { TemplateModule } from '../templates/template.module';
 import { ToastsComponent } from './toasts/toasts.component';
@@ -38,6 +39,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     NgMultiSelectDropDownModule,
     NgbModule,
     ReactiveFormsModule,
+    RouterModule,
     TemplateModule
   ],
   exports: [

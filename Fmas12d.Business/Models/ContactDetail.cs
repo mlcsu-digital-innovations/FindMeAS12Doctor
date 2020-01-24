@@ -60,5 +60,23 @@ namespace Fmas12d.Business.Models
       }
     }
 
+    internal Data.Entities.ContactDetail MapToEntity()
+    {
+      Data.Entities.ContactDetail entity = new Data.Entities.ContactDetail()
+      {
+        Address1 = Address1,
+        Address2 = Address2,
+        Address3 = Address3,
+        ContactDetailTypeId = ContactDetailTypeId,
+        Latitude = Latitude,
+        Longitude = Longitude,
+        TelephoneNumber = TelephoneNumber,
+        UserId = UserId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
+    }
+
   }
 }

@@ -188,7 +188,27 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        await Service.AddAllocatedDoctorDirectAsync(id, requestModel.UserId.Value);
+        await Service.AddAllocatedDoctorDirectAsync(id, requestModel.UserId.Value, false);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPost]
+    [Route("{id:int}/doctors/allocated/unregistered")]
+    public async Task<ActionResult> PostUnregisteredDoctorAllocated(
+      int id,
+      [FromBody] RequestModels.AssessmentUnregisteredDoctorsPost requestModel
+    )
+    {
+      try
+      {
+        Business.Models.IUnregisteredDoctor businessModel = new Business.Models.UnregisteredDoctor();
+        requestModel.MapToBusinessModel(businessModel);
+        await Service.AllocateUnregisteredDoctorAsync(id, businessModel);
         return Ok();
       }
       catch (Exception ex)
@@ -243,15 +263,16 @@ namespace Fmas12d.Api.Controllers
     [Route("{id:int}/doctors/remove")]
     public async Task<ActionResult> PutDoctorRemove(
       int id,
-      [FromBody] RequestModels.AssessmentDoctorsRemovePut requestModel)
+      [FromBody] RequestModels.AssessmentDoctorsRemovePut requestModel
+    )
     {
       try
       {
         Business.Models.IAssessmentDoctorsRemove businessModel =
           new Business.Models.AssessmentDoctorsRemove
-        {
-          Id = id
-        };
+          {
+            Id = id
+          };
         requestModel.MapToBusinessModel(businessModel);
         await Service.RemoveDoctorsAsync(businessModel);
 
@@ -263,6 +284,31 @@ namespace Fmas12d.Api.Controllers
       }
     }
 
+    [HttpPut]
+    [Route("{id:int}/completed")]
+    public async Task<ActionResult<ViewModels.AssessmentPut>> PutCompleted(
+      int id
+    )
+    {
+      try
+      {
+
+        bool isCompletedSuccessfully = await Service.Complete(id);
+
+        if (isCompletedSuccessfully)
+        {
+          return Ok();
+        }
+        else
+        {
+          return NoContent();
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
 
     [HttpPut]
     [Route("{id:int}/emergency")]

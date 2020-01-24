@@ -7,11 +7,13 @@ namespace Fmas12d.Api.RequestModels
     [Required]
     public string Postcode { get; set; }
 
-    internal override Business.Models.UserAvailability MapToBusinessModel(int userId)
+    internal override void MapToBusinessModel(Business.Models.IUserAvailability model)
     {
-      base.MapToBusinessModel(userId);
-      _model.Location.Postcode = Postcode;
-      return _model;
+      base.MapToBusinessModel(model);
+      if (model != null && model.Location != null)
+      {
+        model.Location.Postcode = Postcode;
+      }
     }
   }
 }
