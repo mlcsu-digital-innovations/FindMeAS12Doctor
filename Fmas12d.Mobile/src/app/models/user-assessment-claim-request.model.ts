@@ -1,4 +1,4 @@
-export class InitialClaimRequest {
+export class UserAssessmentClaimRequest {
   assessmentId: number;
   ownPatient: boolean;
   startPostcode: string;
