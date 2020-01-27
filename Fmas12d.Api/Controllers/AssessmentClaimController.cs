@@ -85,13 +85,12 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPost]
-    [Route("{assessmentId:int}/validateclaim")]
-    public async Task<ActionResult<ViewModels.AssessmentSelectedDoctors>> PostValidateClaim(
+    [Route("{assessmentId:int}/validate")]
+    public async Task<ActionResult<ViewModels.UserAssessmentClaim>> CreateUserAssessmentClaim(
       int assessmentId,
       [FromBody] RequestModels.UserAssessmentClaimPost requestModel
     )
     {
-
       try {
 
         Business.Models.UserAssessmentClaimCreate businessModel =
@@ -100,7 +99,7 @@ namespace Fmas12d.Api.Controllers
         requestModel.MapToBusinessModel(businessModel);
 
         Business.Models.UserAssessmentClaimResult newClaim =
-          await Service.ValidateAssessmentClaim(assessmentId, GetUserId(), businessModel);
+          await Service.ValidateAssessmentClaimAsync(assessmentId, GetUserId(), businessModel);
 
         if (newClaim == null)
         {
@@ -110,6 +109,31 @@ namespace Fmas12d.Api.Controllers
         {
           return Ok(newClaim);
         }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpPost]
+    [Route("{assessmentId:int}/confirm")]
+    public async Task<ActionResult<ViewModels.UserAssessmentClaim>> ConfirmUserAssessmentClaim(
+      int assessmentId,
+      [FromBody] RequestModels.UserAssessmentClaimPost requestModel
+    )
+    {
+      try {
+
+        Business.Models.UserAssessmentClaimCreate businessModel =
+          new Business.Models.UserAssessmentClaimCreate();
+
+        requestModel.MapToBusinessModel(businessModel);
+
+        Business.Models.UserAssessmentClaim viewModel =
+          await Service.ConfirmAssessmentClaimAsync(assessmentId, GetUserId(), businessModel);
+
+        return Created(GetCreatedModelUri(viewModel.Id), viewModel);
       }
       catch (Exception ex)
       {

@@ -87,7 +87,7 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public async Task<UserAssessmentClaimResult> ValidateAssessmentClaim(
+    public async Task<UserAssessmentClaimResult> ValidateAssessmentClaimAsync(
       int assessmentId,
       int userId,
       UserAssessmentClaimCreate model
@@ -113,6 +113,80 @@ namespace Fmas12d.Business.Services
       return assessmentClaim;
     }
 
+    public async Task<UserAssessmentClaim> ConfirmAssessmentClaimAsync(
+      int assessmentId,
+      int userId,
+      UserAssessmentClaimCreate model
+    ) {
+
+      Entities.Assessment assessment = await GetAssessmentAndCcgAsync(assessmentId);
+      await GetPreviousClaimsCountAsync(userId, assessmentId);
+
+      // ToDo: Sort out rules determining if claim can be made or not
+
+      UserAssessmentClaim assessmentClaim = new UserAssessmentClaim();
+      assessmentClaim.Mileage = await CalculateDistanceAsync(assessment, model);
+      
+      assessmentClaim.AssessmentId = assessmentId;
+      assessmentClaim.EndPostcode = model.EndPostcode;
+      assessmentClaim.StartPostcode = model.StartPostcode;
+
+      assessmentClaim.IsAttendanceConfirmed =
+        await ConfirmDoctorAssessmentAttendance(userId, assessmentId);
+
+      assessmentClaim.UserId = userId;
+      assessmentClaim.ClaimStatusId = ClaimStatus.ACCEPTED;
+
+      // ToDo: query these
+      assessmentClaim.HasBeenDeallocated = false;
+      assessmentClaim.SelectedByUserId = 1;
+      assessmentClaim.ClaimReference = 1;
+      assessmentClaim.TravelComments = "";
+
+      assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
+        ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile
+        : assessmentClaim.Mileage * assessment.Ccg.UnsuccessfulPencePerMile;
+
+      assessmentClaim.AssessmentPayment = assessment.IsSuccessful == true
+        ? assessment.Ccg.SuccessfulAssessmentPayment
+        : assessment.Ccg.FailedAssessmentPayment;
+
+      return await CreateUserAssessmentClaimAsync(assessmentClaim);
+    }
+
+    public async Task<UserAssessmentClaim> CreateUserAssessmentClaimAsync(UserAssessmentClaim model)
+    {
+      Entities.UserAssessmentClaim entity = model.MapToEntity();
+
+      entity.Id = 0;
+      entity.IsActive = true;
+
+      UpdateModified(entity);
+
+      _context.Add(entity);
+
+      await _context.SaveChangesAsync();
+
+      return await GetAsync(entity.Id);
+    }
+
+    private async Task<UserAssessmentClaim> GetAsync(
+      int id,
+      bool activeOnly = true,
+      bool asNoTracking = true
+      )
+    {
+      UserAssessmentClaim userAssessmentClaim =
+      await _context.UserAssessmentClaims
+        .Where(uac => uac.Id == id)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserAssessmentClaim.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return userAssessmentClaim;
+    }
+
     private async Task<Entities.Assessment> GetAssessmentAndCcgAsync(int assessmentId) {
 
       Entities.Assessment assessment = await _context
@@ -135,6 +209,26 @@ namespace Fmas12d.Business.Services
       }
 
       return assessment;
+    }
+
+    private async Task<bool> ConfirmDoctorAssessmentAttendance(int userId, int assessmentId) {
+
+      bool attendanceConfirmed = await _context
+      .AssessmentDoctors
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(ad => ad.AssessmentId == assessmentId)
+      .Where(ad => ad.DoctorUserId == userId)
+      .Where(ad => ad.StatusId == AssessmentDoctorStatus.ATTENDED)
+      .Select(ad => ad.AttendanceConfirmedByUserId != null)
+      .SingleOrDefaultAsync();
+
+      if (!attendanceConfirmed) 
+      {
+        throw new ModelStateException("Id",
+         $"Unable to confirm attendance for user {userId} and assessment {assessmentId}.");
+      }
+
+      return attendanceConfirmed;
     }
 
     private async Task<int> GetPreviousClaimsCountAsync(int userId, int assessmentId) {

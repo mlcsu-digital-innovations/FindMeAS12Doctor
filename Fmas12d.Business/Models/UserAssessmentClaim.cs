@@ -5,6 +5,8 @@ namespace Fmas12d.Business.Models
 {
   public class UserAssessmentClaim : BaseModel
   {
+    public UserAssessmentClaim() { }
+
     public UserAssessmentClaim(Data.Entities.UserAssessmentClaim entity) 
       : base(entity)
     {
@@ -68,6 +70,7 @@ namespace Fmas12d.Business.Models
         EndPostcode = EndPostcode,
         HasBeenDeallocated = HasBeenDeallocated,
         IsClaimable = IsClaimable,
+        IsAttendanceConfirmed = IsAttendanceConfirmed,
         Mileage = Mileage,
         MileagePayment = MileagePayment,
         SelectedByUserId = SelectedByUserId,

@@ -1,12 +1,11 @@
-import { ActivatedRoute } from '@angular/router';
-import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
+import {  LoadingController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
 import { AssessmentContact } from 'src/app/models/assessment-contact.model';
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from '@ionic/angular';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { InitialClaimRequest } from 'src/app/models/initial-claim-request.model';
-import { InitialClaimResponse } from 'src/app/models/initial-claim-response.model';
+import { UserAssessmentClaimRequest } from 'src/app/models/user-assessment-claim-request.model';
+import { UserAssessmentClaimResponse } from 'src/app/models/user-assessment-claim-response.model';
 
 @Component({
   selector: 'app-claims-create',
@@ -15,21 +14,23 @@ import { InitialClaimResponse } from 'src/app/models/initial-claim-response.mode
 })
 export class ClaimsCreatePage implements OnInit {
 
-  public assessmentLastUpdated: Date;
+  private loading: HTMLIonLoadingElement;
   public assessment: AssessmentContact;
   public assessmentId: number;
-  private loading: HTMLIonLoadingElement;
-  public startLocationId: number;
-  public endLocationId: number;
+  public assessmentLastUpdated: Date;
+  public claim = {} as UserAssessmentClaimRequest;
+  public claimResponse: UserAssessmentClaimResponse;
   public differentReturnDestination: boolean;
-  public ownPatient: boolean;
+  public endLocationId: number;
   public hasValidClaim: boolean;
+  public ownPatient: boolean;
+  public startLocationId: number;
 
   constructor(
-    private route: ActivatedRoute,
     private assessmentClaimService: AssessmentClaimService,
-    private navCtrl: NavController,
     private loadingController: LoadingController,
+    private route: ActivatedRoute,
+    private router: Router,
     private toastService: ToastService
   ) { }
 
@@ -54,7 +55,6 @@ export class ClaimsCreatePage implements OnInit {
         });
       });
     }
-
   }
 
   closeLoading() {
@@ -64,13 +64,27 @@ export class ClaimsCreatePage implements OnInit {
   }
 
   confirmClaim() {
-    
+    console.log(this.claim);
+    this.assessmentClaimService.confirmClaim(this.assessmentId, this.claim)
+    .subscribe((result: UserAssessmentClaimResponse) => {
+      this.claimResponse = result;
+      this.hasValidClaim = true;
+      this.toastService.displaySuccess({
+        message: 'Claim Submitted'
+      });
+      this.router.navigateByUrl('/home');
+    },
+    error => {
+      this.closeLoading();
+      this.toastService.displayError({
+        message: 'Unable to confirm claim'
+      });
+    });
   }
 
-  registerClaim() {
-    const claim = {} as InitialClaimRequest;
-    claim.assessmentId = this.assessmentId;
-    claim.ownPatient = this.ownPatient || false;
+  validateClaim() {
+    this.claim.assessmentId = this.assessmentId;
+    this.claim.ownPatient = this.ownPatient || false;
 
     if (this.startLocationId === 0 || this.endLocationId === 0) {
       return;
@@ -87,16 +101,23 @@ export class ClaimsCreatePage implements OnInit {
     const endContact =
       availableContactTypes.find(cd => cd.id === this.endLocationId);
 
-    claim.startPostcode = startContact.contactDetails[0].postcode;
-    claim.endPostcode = endContact.contactDetails[0].postcode;
+    this.claim.startPostcode = startContact.contactDetails[0].postcode;
+    this.claim.endPostcode = endContact.contactDetails[0].postcode;
 
-    this.assessmentClaimService.validateClaim(this.assessmentId, claim)
-    .subscribe((result: InitialClaimResponse) => {
+    this.assessmentClaimService.validateClaim(this.assessmentId, this.claim)
+    .subscribe((result: UserAssessmentClaimResponse) => {
       console.log(result);
+      this.claimResponse = result;
       this.hasValidClaim = true;
+    },
+    error => {
+      this.closeLoading();
+      this.toastService.displayError({
+        message: 'Unable to create claim'
+      });
     });
 
-    console.log(claim);
+    console.log(this.claim);
 
   }
 

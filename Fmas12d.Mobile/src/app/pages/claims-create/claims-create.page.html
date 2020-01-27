@@ -1,4 +1,4 @@
-<app-navbar title="Create Claim"></app-navbar>
+<app-navbar title="{{hasValidClaim ? 'Confirm Claim' : 'Create Claim'}}"></app-navbar>
 <ion-content>
   <ion-grid>
     <ion-card>
@@ -84,7 +84,7 @@
         <ion-row>
           <ion-col style="text-align: center;">
             <ion-button 
-              (click)="registerClaim()"
+              (click)="validateClaim()"
               color="primary"
             >
               <ion-icon name="add-circle-outline"></ion-icon>&nbsp; 
@@ -99,8 +99,7 @@
           <ion-col>
             <ion-list>
               <ion-item>
-                <ion-label>Different return destination</ion-label>
-                <ion-checkbox [(ngModel)]="differentReturnDestination"></ion-checkbox>
+                Start Postcode: <strong>{{claim?.startPostcode}}</strong>
               </ion-item>
             </ion-list>
           </ion-col>
@@ -109,12 +108,38 @@
           <ion-col>
             <ion-list>
               <ion-item>
-                <ion-label>My patient</ion-label>
-                <ion-checkbox [(ngModel)]="ownPatient"></ion-checkbox>
+                End Postcode: <strong>{{claim?.endPostcode}}</strong>
               </ion-item>
             </ion-list>
           </ion-col>
-        </ion-row> 
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                Distance: <strong>{{claimResponse?.mileage}} miles</strong>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                Assessment Payment: <strong>{{claimResponse?.assessmentPayment | currency: 'GBP'}}</strong>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                Mileage Payment: <strong>{{claimResponse?.mileagePayment | currency: 'GBP'}}</strong>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>                  
         <br/>
         <ion-row>
           <ion-col style="text-align: center;">
@@ -122,7 +147,7 @@
               (click)="confirmClaim()"
               color="primary"
             >
-              <ion-icon name="checkmark"></ion-icon>&nbsp; 
+              <ion-icon name="checkmark-circle"></ion-icon>&nbsp; 
               Confirm Claim
             </ion-button>  
           </ion-col> 

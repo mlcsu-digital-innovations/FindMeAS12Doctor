@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
-import { InitialClaimResponse } from 'src/app/models/initial-claim-response.model';
-import { InitialClaimRequest } from 'src/app/models/initial-claim-request.model';
+import { InitialClaimResponse } from 'src/app/models/user-assessment-claim-response.model';
+import { InitialClaimRequest } from 'src/app/models/user-assessment-claim-request.model';
 
 
 @Injectable({
@@ -35,7 +35,14 @@ export class AssessmentClaimService {
 
   public validateClaim(assessmentId: number, claimRequest: InitialClaimRequest): Observable<InitialClaimResponse> {
     return this.apiService.post(
-      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/validateclaim`,
+      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/validate`,
+      claimRequest
+    );
+  }
+
+  public confirmClaim(assessmentId: number, claimRequest: InitialClaimRequest): Observable<InitialClaimResponse> {
+    return this.apiService.post(
+      `${environment.apiEndpoint}/assessmentclaim/${assessmentId}/confirm`,
       claimRequest
     );
   }
