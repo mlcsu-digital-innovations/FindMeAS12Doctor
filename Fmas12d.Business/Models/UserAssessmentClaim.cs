@@ -34,22 +34,19 @@ namespace Fmas12d.Business.Models
     public decimal? AssessmentPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
+    public bool? IsUsersPatient { get; set; }
     public int? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
     public int? NextAssessmentId { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }
     public int? PreviousAssessmentId { get; set; }
-    public virtual User SelectedByUser { get; set; }
-    public int SelectedByUserId { get; set; }
     [MaxLength(10)]
     [Required]
     public string StartPostcode { get; set; }
     [MaxLength(2000)]
-    [Required]
     public string TravelComments { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
-    public bool HasBeenDeallocated { get; set; }
 
     public static Expression<Func<Data.Entities.UserAssessmentClaim, UserAssessmentClaim>> ProjectFromEntity
     {
@@ -68,14 +65,12 @@ namespace Fmas12d.Business.Models
         ClaimReference = ClaimReference,
         ClaimStatusId = ClaimStatusId,
         EndPostcode = EndPostcode,
-        HasBeenDeallocated = HasBeenDeallocated,
         IsClaimable = IsClaimable,
+        IsUsersPatient = IsUsersPatient,
         IsAttendanceConfirmed = IsAttendanceConfirmed,
         Mileage = Mileage,
         MileagePayment = MileagePayment,
-        SelectedByUserId = SelectedByUserId,
         StartPostcode = StartPostcode,
-        TravelComments = TravelComments,
         UserId = UserId,
         NextAssessmentId = NextAssessmentId,
         PreviousAssessmentId = PreviousAssessmentId

@@ -242,6 +242,10 @@ namespace Fmas12d.Business
         .IsUnique();   
       modelBuilder.Entity<User>()
         .HasIndex(c => c.IdentityServerIdentifier)
+        .IsUnique();
+
+      modelBuilder.Entity<UserAssessmentClaim>()
+        .HasIndex(uac => uac.ClaimReference)
         .IsUnique();                                          
     }
 

@@ -30,6 +30,34 @@ namespace Fmas12d.Api.Controllers
 
     [HttpGet]
     [Route("{id:int}")]
+    public async Task<ActionResult<IEnumerable<ViewModels.UserAssessmentClaim>>> GetUserAssessmentClaims(
+      int id)
+    {
+      try
+      {
+        Business.Models.UserAssessmentClaim businessModel =
+          await Service.GetAssessmentClaimAsync(id);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.UserAssessmentClaim viewModel =
+            new ViewModels.UserAssessmentClaim(businessModel);
+
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpGet]
+    [Route("{id:int}")]
     public async Task<ActionResult<ViewModels.UserAssessmentClaim>> GetAssessmentClaim(
       int id)
     {

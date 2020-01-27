@@ -130,6 +130,7 @@ namespace Fmas12d.Business.Services
       assessmentClaim.AssessmentId = assessmentId;
       assessmentClaim.EndPostcode = model.EndPostcode;
       assessmentClaim.StartPostcode = model.StartPostcode;
+      assessmentClaim.IsUsersPatient = model.OwnPatient;
 
       assessmentClaim.IsAttendanceConfirmed =
         await ConfirmDoctorAssessmentAttendance(userId, assessmentId);
@@ -137,11 +138,8 @@ namespace Fmas12d.Business.Services
       assessmentClaim.UserId = userId;
       assessmentClaim.ClaimStatusId = ClaimStatus.ACCEPTED;
 
-      // ToDo: query these
-      assessmentClaim.HasBeenDeallocated = false;
-      assessmentClaim.SelectedByUserId = 1;
+      // ToDo: query this
       assessmentClaim.ClaimReference = 1;
-      assessmentClaim.TravelComments = "";
 
       assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
         ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile

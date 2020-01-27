@@ -55,8 +55,6 @@ namespace Fmas12d.Data.Entities
     public virtual IList<UserSpeciality> UserSpecialities { get; set; }
     [InverseProperty("User")]
     public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
-    [InverseProperty("SelectedByUser")]
-    public virtual IList<UserAssessmentClaim> UserAssessmentClaimSelections { get; set; }
     [InverseProperty("User")]
     public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
   }

@@ -13,15 +13,14 @@ namespace Fmas12d.Data.Entities
     decimal? AssessmentPayment { get; set; }
     bool IsAttendanceConfirmed { get; set; }
     bool? IsClaimable { get; set; }
+    bool? IsUsersPatient { get; set; }
     int? Mileage { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     decimal? MileagePayment { get; set; }
     DateTimeOffset? PaymentDate { get; set; }
-    int SelectedByUserId { get; set; }
     string StartPostcode { get; set; }
     string TravelComments { get; set; }
     int UserId { get; set; }
-    bool HasBeenDeallocated { get; set; }
 
     int? NextAssessmentId { get; set; }
     int? PreviousAssessmentId { get; set; }
