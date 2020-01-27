@@ -8,28 +8,42 @@
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-item class="item green-item" *ngFor="let item of availableList" detail="false"
-          (click)="editAvailability(item)">
-          <ion-grid>
-            <ion-row>
-              Start: {{item.start | date: 'dd MMM yy'}}
-              {{item.start | date: 'HH:mm'}} 
-              <br/>
-              End:
-              {{item.end | date: 'dd MMM yy'}}
-              {{item.end | date: 'HH:mm'}}
-            </ion-row>
-            <ion-row class="location">
-              Location: 
-              <span *ngIf="item.location.type === 'ContactDetail'">
-                {{item.location.contactDetailTypeName}}
-              </span>
-              <span *ngIf="item.location.type === 'Postcode'">
-                {{item.location.postcode}}
-              </span>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
+        <ion-item-sliding class="item green-item" 
+                          *ngFor="let item of availableList" 
+                          detail="false"
+                          #slidingItem>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                Start: {{item.start | date: 'dd MMM yy'}}
+                {{item.start | date: 'HH:mm'}}
+                <br />
+                End:
+                {{item.end | date: 'dd MMM yy'}}
+                {{item.end | date: 'HH:mm'}}
+              </ion-row>
+              <ion-row class="location">
+                Location:
+                <span *ngIf="item.location.type === 'ContactDetail'">
+                  {{item.location.contactDetailTypeName}}
+                </span>
+                <span *ngIf="item.location.type === 'Postcode'">
+                  {{item.location.postcode}}
+                </span>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="editAvailability(item, slidingItem)">
+              <ion-icon name="clipboard"></ion-icon>
+              Edit
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="deleteAvailability(item, slidingItem)">
+              <ion-icon name="trash"></ion-icon>
+              Delete
+            </ion-item-option> 
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>
     </ion-card-content>
   </ion-card>
@@ -40,95 +54,47 @@
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-item class="item red-item" *ngFor="let item of unavailableList" detail="false"
-          (click)="editAvailability(item)">
-          <ion-grid>
-            <ion-row>
-              Start:
-              {{item.start | date: 'dd MMM yy'}}
-              {{item.start | date: 'HH:mm'}}
-              <br/>
-              End: 
-              {{item.end | date: 'dd MMM yy'}}
-              {{item.end | date: 'HH:mm'}}
-            </ion-row>
-            <ion-row class="location">
-              <span *ngIf="item.location.type === 'ContactDetail'">
-                {{item.location.contactDetailTypeName}}
-              </span>
-              <span *ngIf="item.location.type === 'Postcode'">
-                {{item.location.postcode}}
-              </span>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
+        <ion-item-sliding class="item red-item" 
+                          *ngFor="let item of unavailableList" 
+                          detail="false"
+                          #slidingItem
+        >
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                Start:
+                {{item.start | date: 'dd MMM yy'}}
+                {{item.start | date: 'HH:mm'}}
+                <br />
+                End:
+                {{item.end | date: 'dd MMM yy'}}
+                {{item.end | date: 'HH:mm'}}
+              </ion-row>
+              <ion-row class="location">
+                <span *ngIf="item.location.type === 'ContactDetail'">
+                  {{item.location.contactDetailTypeName}}
+                </span>
+                <span *ngIf="item.location.type === 'Postcode'">
+                  {{item.location.postcode}}
+                  >
+                </span>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="editAvailability(item, slidingItem)">
+              <ion-icon name="clipboard"></ion-icon>
+              Edit
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="deleteAvailability(item, slidingItem)">
+              <ion-icon name="trash"></ion-icon>
+              Delete
+            </ion-item-option>                        
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>
     </ion-card-content>
   </ion-card>
-  <!-- <ion-row>
-    <ion-col>
-      <span class="list-title green">
-        <ion-icon class="green" name="checkmark-circle"></ion-icon>
-        Available
-      </span>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-list>
-      <ion-item class="item green-item" *ngFor="let item of availableList" detail="false"
-        (click)="editAvailability(item)">
-        <ion-grid>
-          <ion-row>
-            {{item.start | date: 'dd MMM yy'}}
-            {{item.start | date: 'HH:mm'}} to
-            {{item.end | date: 'dd MMM yy'}}
-            {{item.end | date: 'HH:mm'}}
-          </ion-row>
-          <ion-row class="location">
-            <span *ngIf="item.location.type === 'ContactDetail'">
-              {{item.location.contactDetailTypeName}}
-            </span>
-            <span *ngIf="item.location.type === 'Postcode'">
-              {{item.location.postcode}}
-            </span>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-list>
-  </ion-row>
-  <ion-row>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <span class="list-title red">
-        <ion-icon class="red" name="close-circle"></ion-icon>
-        Unavailable
-      </span>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-list>
-      <ion-item class="item red-item" *ngFor="let item of unavailableList" detail="false"
-        (click)="editAvailability(item)">
-        <ion-grid>
-          <ion-row>
-            {{item.start | date: 'dd MMM yy'}}
-            {{item.start | date: 'HH:mm'}} to
-            {{item.end | date: 'dd MMM yy'}}
-            {{item.end | date: 'HH:mm'}}
-          </ion-row>
-          <ion-row class="location">
-            <span *ngIf="item.location.type === 'ContactDetail'">
-              {{item.location.contactDetailTypeName}}
-            </span>
-            <span *ngIf="item.location.type === 'Postcode'">
-              {{item.location.postcode}}
-            </span>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-list>
-  </ion-row> -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small">
       <ion-icon name="add" [routerLink]="['/doctor-availability-add/']" routerDirection="forward">
