@@ -24,6 +24,9 @@ namespace Fmas12d.Business.Models
     public int? ClaimReference { get; set; }
     public virtual ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
+    [MaxLength(10)]
+    [Required]
+    public string EndPostcode { get; set; }
     public virtual Assessment Assessment { get; set; }
     public int AssessmentId { get; set; }
     public decimal? AssessmentPayment { get; set; }
@@ -31,7 +34,9 @@ namespace Fmas12d.Business.Models
     public bool? IsClaimable { get; set; }
     public int? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
+    public int? NextAssessmentId { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }
+    public int? PreviousAssessmentId { get; set; }
     public virtual User SelectedByUser { get; set; }
     public int SelectedByUserId { get; set; }
     [MaxLength(10)]
@@ -50,6 +55,31 @@ namespace Fmas12d.Business.Models
       {
         return entity => new UserAssessmentClaim(entity);
       }
+    }
+
+    internal Data.Entities.UserAssessmentClaim MapToEntity()
+    {
+      Data.Entities.UserAssessmentClaim entity = new Data.Entities.UserAssessmentClaim()
+      {
+        AssessmentId = AssessmentId,
+        AssessmentPayment = AssessmentPayment,
+        ClaimReference = ClaimReference,
+        ClaimStatusId = ClaimStatusId,
+        EndPostcode = EndPostcode,
+        HasBeenDeallocated = HasBeenDeallocated,
+        IsClaimable = IsClaimable,
+        Mileage = Mileage,
+        MileagePayment = MileagePayment,
+        SelectedByUserId = SelectedByUserId,
+        StartPostcode = StartPostcode,
+        TravelComments = TravelComments,
+        UserId = UserId,
+        NextAssessmentId = NextAssessmentId,
+        PreviousAssessmentId = PreviousAssessmentId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
     }
   }
   

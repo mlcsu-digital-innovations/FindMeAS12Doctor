@@ -7,6 +7,7 @@ namespace Fmas12d.Data.Entities
   {
     int? ClaimReference { get; set; }
     int? ClaimStatusId { get; set; }
+    string EndPostcode { get; set; }
     int AssessmentId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     decimal? AssessmentPayment { get; set; }
@@ -21,5 +22,8 @@ namespace Fmas12d.Data.Entities
     string TravelComments { get; set; }
     int UserId { get; set; }
     bool HasBeenDeallocated { get; set; }
+
+    int? NextAssessmentId { get; set; }
+    int? PreviousAssessmentId { get; set; }
   }
 }
