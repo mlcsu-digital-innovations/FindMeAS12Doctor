@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fmas12d.Api.ViewModels
 {
@@ -19,12 +20,7 @@ namespace Fmas12d.Api.ViewModels
       Postcode = model.Postcode;
       ScheduledTime = model.ScheduledTime;
       UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentTypeName;
-      UserContactDetailTypes = new List<ContactDetailType>();
-
-      foreach(Business.Models.ContactDetailType contactDetailType in model.UserContactDetailTypes)
-      {
-        UserContactDetailTypes.Add(new ContactDetailType(contactDetailType));
-      }
+      UserContactDetailTypes = model.UserContactDetailTypes.Select(cd => new ContactDetailType(cd)).ToList();
     }
 
     public string Address1 { get; set; }
