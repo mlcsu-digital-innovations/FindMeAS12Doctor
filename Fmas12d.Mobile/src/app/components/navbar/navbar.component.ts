@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
+import { AlertController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -10,14 +12,19 @@ export class NavbarComponent implements OnInit {
   public connection: boolean;
 
   @Input()
-    title: string;
+  title: string;
 
   @Input()
-    lastUpdated: Date;
+  showWarning: boolean;
+
+  @Input()
+  lastUpdated: Date;
 
   constructor(
     private networkService: NetworkService,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    public alertCtrl: AlertController,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -28,4 +35,36 @@ export class NavbarComponent implements OnInit {
       this.changeRef.detectChanges();
     });
   }
+
+  async showConfirm() {
+    console.log(this.showWarning);
+
+    if (this.showWarning === true) {
+
+      const confirm = await this.alertCtrl.create({
+        header: 'Confirm!',
+        message: 'Your changes have not been saved, are you sure you want to leave?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('stop navigation');
+            }
+          },
+          {
+            text: 'Okay',
+            handler: () => {
+              console.log('Confirm Okay.');
+              this.location.back();
+            }
+          }
+        ]
+      });
+      await confirm.present();
+    } else {
+      this.location.back();
+    }
+  }
+
 }

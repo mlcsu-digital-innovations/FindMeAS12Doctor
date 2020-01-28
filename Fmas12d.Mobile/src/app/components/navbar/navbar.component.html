@@ -4,7 +4,9 @@
       {{connection ? "Online" : "Offline"}}
     </ion-title>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+      <ion-button (click)="showConfirm()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
