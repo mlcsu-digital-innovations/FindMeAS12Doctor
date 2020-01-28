@@ -113,6 +113,42 @@ namespace Fmas12d.Business.Services
       return assessmentClaim;
     }
 
+    public async Task<UserAssessmentClaimList> GetAssessmentClaimsByUserIdAsync(int userId) {
+
+      UserAssessmentClaimList userAssessmentClaimList = new UserAssessmentClaimList();
+
+      List<int> claimableReferralStatusIds =
+        new List<int>{ReferralStatus.AWAITING_REVIEW, ReferralStatus.OPEN};
+
+      List<UserAssessmentClaim> claims = await _context
+      .UserAssessmentClaims
+      .Include(uac => uac.Assessment)
+      .Include(uac => uac.ClaimStatus)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(uac => uac.UserId == userId)
+      .Select(UserAssessmentClaim.ProjectFromEntity)
+      .ToListAsync();
+
+      userAssessmentClaimList.Claims = claims;
+
+      List<Assessment> assessments = await _context
+      .AssessmentDoctors
+      .Include(ad => ad.Assessment)
+        .ThenInclude(a => a.UnsuccessfulAssessmentType)
+      .Include(ad => ad.Assessment)
+        .ThenInclude(a => a.Referral)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(ad => ad.DoctorUserId == userId)
+      .Where(ad => ad.StatusId == AssessmentDoctorStatus.ATTENDED)
+      .Where(ad => claimableReferralStatusIds.Contains(ad.Assessment.Referral.ReferralStatusId))
+      .Select(ad => new Assessment(ad.Assessment, false))
+      .ToListAsync();
+
+      userAssessmentClaimList.Assessments = assessments;
+
+      return userAssessmentClaimList;
+    }
+
     public async Task<UserAssessmentClaim> ConfirmAssessmentClaimAsync(
       int assessmentId,
       int userId,

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Assessment } from 'src/app/models/assessment.model';
 import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
+import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
+import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
+import { UserAssessmentClaimList } from 'src/app/models/user-assessment-claim-list.model';
 
 @Component({
   selector: 'app-claims-list',
@@ -13,8 +15,8 @@ export class ClaimsListPage implements OnInit {
   public listLastUpdated: Date;
   private loading: HTMLIonLoadingElement;
 
-  private assessmentList: AssessmentClaim[] = [];
-  private claimsList: AssessmentClaim[] = [];
+  private assessmentList: Assessment[] = [];
+  private claimsList: UserAssessmentClaim[] = [];
 
   constructor(
     private assessmentClaimService: AssessmentClaimService,
@@ -29,22 +31,17 @@ export class ClaimsListPage implements OnInit {
     const request = this.assessmentClaimService.getList();
     this.showLoading();
 
-    request.subscribe((result: AssessmentClaim[]) => {
+    request.subscribe((result: UserAssessmentClaimList) => {
       this.listLastUpdated = new Date();
-      console.log(result);
-      this.claimsList = result
-        .filter(assessment => assessment.claim !== undefined);
-      this.assessmentList = result
-        .filter(assessment => assessment.claim === undefined);
+      this.claimsList = result.claims;
+      this.assessmentList = result.assessments;
       this.closeLoading();
       this.closeRefreshing($event);
-      console.log(this.claimsList);
-      console.log(this.assessmentList);
     }, error => {
       this.closeLoading();
       this.closeRefreshing($event);
-    });    
-  }  
+    });
+  }
 
   closeLoading() {
     if (this.loading) {
@@ -62,7 +59,7 @@ export class ClaimsListPage implements OnInit {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
       spinner: 'lines',
-      duration: 5000
+      duration: 3000
     });
     await this.loading.present();
   }

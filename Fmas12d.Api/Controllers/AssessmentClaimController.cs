@@ -29,14 +29,13 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
-    [Route("{id:int}")]
-    public async Task<ActionResult<IEnumerable<ViewModels.UserAssessmentClaim>>> GetUserAssessmentClaims(
-      int id)
+    [Route("list")]
+    public async Task<ActionResult<IEnumerable<ViewModels.UserAssessmentClaimList>>> GetUserAssessmentClaims()
     {
       try
       {
-        Business.Models.UserAssessmentClaim businessModel =
-          await Service.GetAssessmentClaimAsync(id);
+        Business.Models.UserAssessmentClaimList businessModel =
+          await Service.GetAssessmentClaimsByUserIdAsync(GetUserId());
 
         if (businessModel == null)
         {
@@ -44,8 +43,8 @@ namespace Fmas12d.Api.Controllers
         }
         else
         {
-          ViewModels.UserAssessmentClaim viewModel =
-            new ViewModels.UserAssessmentClaim(businessModel);
+          ViewModels.UserAssessmentClaimList viewModel =
+            new ViewModels.UserAssessmentClaimList(businessModel);
 
           return Ok(viewModel);
         }
@@ -58,8 +57,7 @@ namespace Fmas12d.Api.Controllers
 
     [HttpGet]
     [Route("{id:int}")]
-    public async Task<ActionResult<ViewModels.UserAssessmentClaim>> GetAssessmentClaim(
-      int id)
+    public async Task<ActionResult<ViewModels.UserAssessmentClaim>> GetAssessmentClaim(int id)
     {
       try
       {

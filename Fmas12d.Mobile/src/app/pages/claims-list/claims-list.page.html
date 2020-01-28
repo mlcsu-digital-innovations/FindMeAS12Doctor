@@ -11,8 +11,8 @@
       </ion-card-header>
       <ion-col>
         <ion-list>
-          <ion-item *ngFor="let assessment of claimsList" detail="false"
-            [routerLink]="['/claims-details/', assessment.claim.id]" routerDirection="forward"
+          <ion-item *ngFor="let claim of claimsList" detail="false"
+            [routerLink]="['/claims-details/', claim.id]" routerDirection="forward"
             class="margin-right-2">
             <ion-row style="width:100%">
               <ion-col>
@@ -23,29 +23,32 @@
                 <ion-row>
                   <span>
                     Address:
-                    {{assessment.address1}}
+                    {{claim.assessment.address1}}
                   </span>
                 </ion-row>
                 <ion-row>
                   <span>
                     Postcode:
-                    {{assessment.postcode}}
+                    {{claim.assessment.postcode}}
                   </span>
                 </ion-row>
                 <ion-row>
                   <span>
                     Assessed:
-                    {{assessment.assessmentDate | date: "dd MMM yy HH:mm"}}
+                    {{claim.assessment.completedTime | date: "dd MMM yy HH:mm"}}
                   </span>                  
                 </ion-row>
                 <ion-row>
                   <span>
                     Claim Status:
-                    {{assessment.claim.claimStatus}}
+                    {{claim.claimStatus}}
                   </span>                  
                 </ion-row>
               </ion-col>
             </ion-row>
+          </ion-item>
+          <ion-item *ngIf="claimsList.length == 0">
+            None
           </ion-item>
         </ion-list>
       </ion-col>
@@ -84,11 +87,14 @@
                 <ion-row>
                   <span>
                     Assessed:
-                    {{assessment.assessmentDate | date: "dd MMM yy HH:mm"}}
+                    {{assessment.scheduledTime | date: "dd MMM yy HH:mm"}}
                   </span> 
                 </ion-row>
               </ion-col>
             </ion-row>
+          </ion-item>
+          <ion-item *ngIf="assessmentList.length == 0">
+            None
           </ion-item>
         </ion-list>
       </ion-col>

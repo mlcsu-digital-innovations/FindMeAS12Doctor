@@ -72,6 +72,11 @@ namespace Fmas12d.Api.ViewModels
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
     public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
+    public bool? IsCompleted {
+      get {
+        return CompletedByUser != null;
+      }
+    }
     public bool? IsSuccessful { get; set; }
     [MaxLength(2000)]
     public string MeetingArrangementComment { get; set; }

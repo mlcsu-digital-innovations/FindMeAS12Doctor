@@ -1,5 +1,6 @@
 using Fmas12d.Business.Models;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Fmas12d.Business.Services
 {
@@ -18,5 +19,6 @@ namespace Fmas12d.Business.Services
       int userId,
       UserAssessmentClaimCreate model
       );
+      Task<UserAssessmentClaimList> GetAssessmentClaimsByUserIdAsync(int userId);
     }
 }

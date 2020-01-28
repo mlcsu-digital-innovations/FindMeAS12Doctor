@@ -7,6 +7,7 @@ export class UserAssessmentClaim {
   claimReference?: number;
   claimStatus: string;
   claimStatusId?: number;
+  hasClaim: boolean;
   id: number;
   isClaimable: boolean;
   mileage: number;
