@@ -3,4 +3,6 @@ export class UserAssessmentClaimRequest {
   ownPatient: boolean;
   startPostcode: string;
   endPostcode: string;
+  previousAssessmentId?: number;
+  nextAssessmentId?: number;
 }

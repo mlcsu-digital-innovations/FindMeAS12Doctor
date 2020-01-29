@@ -1,8 +1,9 @@
-import {  LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
 import { AssessmentContact } from 'src/app/models/assessment-contact.model';
+import { AssessmentLocation } from 'src/app/models/assessment-location.model';
 import { Component, OnInit } from '@angular/core';
+import { LoadingController, NavController } from '@ionic/angular';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserAssessmentClaimRequest } from 'src/app/models/user-assessment-claim-request.model';
 import { UserAssessmentClaimResponse } from 'src/app/models/user-assessment-claim-response.model';
@@ -21,16 +22,20 @@ export class ClaimsCreatePage implements OnInit {
   public claim = {} as UserAssessmentClaimRequest;
   public claimResponse: UserAssessmentClaimResponse;
   public differentReturnDestination: boolean;
-  public endLocationId: number;
   public hasValidClaim: boolean;
   public ownPatient: boolean;
-  public startLocationId: number;
+  public startLocation = {} as AssessmentLocation;
+  public endLocation: AssessmentLocation;
+
+  public startLocations: AssessmentLocation[] = [];
+  public endLocations: AssessmentLocation[] = [];
 
   constructor(
     private assessmentClaimService: AssessmentClaimService,
     private loadingController: LoadingController,
     private route: ActivatedRoute,
     private router: Router,
+    private navController: NavController,
     private toastService: ToastService
   ) { }
 
@@ -44,8 +49,33 @@ export class ClaimsCreatePage implements OnInit {
       request.subscribe((result: AssessmentContact) => {
         this.assessmentLastUpdated = new Date();
         this.assessment = result;
-        
+
         console.log(result);
+
+        this.assessment.userContactDetailTypes.forEach(cd => {
+          this.startLocations.push(
+            {
+              address1: cd.name,
+              postcode: cd.contactDetails[0].postcode,
+              isContactDetail: true
+            } as AssessmentLocation
+          );
+          this.endLocations.push(
+            {
+              address1: cd.name,
+              postcode: cd.contactDetails[0].postcode,
+              isContactDetail: true
+            } as AssessmentLocation
+          );
+        });
+
+        result.previousAssessmentLocations.forEach(al => {
+          this.startLocations.push(al);
+        });
+
+        result.nextAssessmentLocations.forEach(al => {
+          this.endLocations.push(al);
+        });
 
         this.closeLoading();
       }, error => {
@@ -72,7 +102,7 @@ export class ClaimsCreatePage implements OnInit {
       this.toastService.displaySuccess({
         message: 'Claim Submitted'
       });
-      this.router.navigateByUrl('/home');
+      this.navController.back();
     },
     error => {
       this.closeLoading();
@@ -86,27 +116,24 @@ export class ClaimsCreatePage implements OnInit {
     this.claim.assessmentId = this.assessmentId;
     this.claim.ownPatient = this.ownPatient || false;
 
-    if (this.startLocationId === 0 || this.endLocationId === 0) {
+    if ((this.startLocation.postcode === undefined) ||
+       (this.differentReturnDestination && this.endLocation.postcode === undefined)) {
       return;
     }
 
-    const availableContactTypes = this.assessment.userContactDetailTypes;
-    this.startLocationId = +this.startLocationId;
+    this.claim.startPostcode = this.startLocation.postcode;
+    this.claim.endPostcode =
+      this.differentReturnDestination ? this.endLocation.postcode : this.startLocation.postcode;
 
-    this.endLocationId =
-      this.differentReturnDestination ? +this.endLocationId : this.startLocationId;
+    this.claim.previousAssessmentId =
+      this.startLocation.isContactDetail ? null : this.startLocation.id;
 
-    const startContact =
-      availableContactTypes.find(cd => cd.id === this.startLocationId);
-    const endContact =
-      availableContactTypes.find(cd => cd.id === this.endLocationId);
-
-    this.claim.startPostcode = startContact.contactDetails[0].postcode;
-    this.claim.endPostcode = endContact.contactDetails[0].postcode;
+    if (this.differentReturnDestination) {
+      this.claim.nextAssessmentId = this.endLocation.isContactDetail ? null : this.endLocation.id;
+    }
 
     this.assessmentClaimService.validateClaim(this.assessmentId, this.claim)
     .subscribe((result: UserAssessmentClaimResponse) => {
-      console.log(result);
       this.claimResponse = result;
       this.hasValidClaim = true;
     },

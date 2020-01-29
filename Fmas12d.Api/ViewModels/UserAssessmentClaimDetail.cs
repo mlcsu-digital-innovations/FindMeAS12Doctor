@@ -20,7 +20,13 @@ namespace Fmas12d.Api.ViewModels
       Postcode = model.Postcode;
       ScheduledTime = model.ScheduledTime;
       UnsuccessfulAssessmentTypeName = model.UnsuccessfulAssessmentTypeName;
-      UserContactDetailTypes = model.UserContactDetailTypes.Select(cd => new ContactDetailType(cd)).ToList();
+      UserContactDetailTypes =
+        model.UserContactDetailTypes.Select(cd => new ContactDetailType(cd)).ToList();
+
+      PreviousAssessmentLocations =
+        model.PreviousAssessmentLocations.Select(al => new AssessmentLocation(al)).ToList();
+      NextAssessmentLocations =
+        model.NextAssessmentLocations.Select(al => new AssessmentLocation(al)).ToList();
     }
 
     public string Address1 { get; set; }
@@ -41,5 +47,8 @@ namespace Fmas12d.Api.ViewModels
     public string UnsuccessfulAssessmentTypeName { get; set; }
 
     public IList<ContactDetailType> UserContactDetailTypes { get; set; }
+
+    public IList<AssessmentLocation> PreviousAssessmentLocations { get; set;}
+    public IList<AssessmentLocation> NextAssessmentLocations { get; set;}
   }
 }

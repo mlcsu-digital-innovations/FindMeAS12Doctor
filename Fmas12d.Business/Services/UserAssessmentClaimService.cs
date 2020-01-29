@@ -55,9 +55,15 @@ namespace Fmas12d.Business.Services
       IEnumerable<ContactDetailType> contactDetailTypes = 
         await _contactDetailTypeService.GetAsync(userId, true, true);
 
-      foreach(ContactDetailType contactDetailType in contactDetailTypes) {
-        model.UserContactDetailTypes.Add(contactDetailType);
-      }
+      model.UserContactDetailTypes = contactDetailTypes.Select(cd => cd).ToList();
+
+      IEnumerable<AssessmentLocation> otherAssessments = 
+        await GetOtherAssessments(assessmentId, userId);
+
+      model.PreviousAssessmentLocations =
+        otherAssessments.Where(oa => oa.AssessmentDate < model.ScheduledTime).ToList();
+      model.NextAssessmentLocations =
+        otherAssessments.Where(oa => oa.AssessmentDate > model.ScheduledTime).ToList();
 
       return model;
     }
@@ -137,10 +143,13 @@ namespace Fmas12d.Business.Services
         .ThenInclude(a => a.UnsuccessfulAssessmentType)
       .Include(ad => ad.Assessment)
         .ThenInclude(a => a.Referral)
+      .Include(ad => ad.Assessment)
+        .ThenInclude(a => a.UserAssessmentClaims)
       .WhereIsActiveOrActiveOnly(true)
       .Where(ad => ad.DoctorUserId == userId)
       .Where(ad => ad.StatusId == AssessmentDoctorStatus.ATTENDED)
       .Where(ad => claimableReferralStatusIds.Contains(ad.Assessment.Referral.ReferralStatusId))
+      .Where(ad => ad.Assessment.UserAssessmentClaims.Where(uac => uac.UserId == userId).Count() == 0)
       .Select(ad => new Assessment(ad.Assessment, false))
       .ToListAsync();
 
@@ -165,8 +174,10 @@ namespace Fmas12d.Business.Services
       
       assessmentClaim.AssessmentId = assessmentId;
       assessmentClaim.EndPostcode = model.EndPostcode;
-      assessmentClaim.StartPostcode = model.StartPostcode;
       assessmentClaim.IsUsersPatient = model.OwnPatient;
+      assessmentClaim.NextAssessmentId = model.NextAssessmentId;
+      assessmentClaim.PreviousAssessmentId = model.PreviousAssessmentId;
+      assessmentClaim.StartPostcode = model.StartPostcode;
 
       assessmentClaim.IsAttendanceConfirmed =
         await ConfirmDoctorAssessmentAttendance(userId, assessmentId);
@@ -174,8 +185,8 @@ namespace Fmas12d.Business.Services
       assessmentClaim.UserId = userId;
       assessmentClaim.ClaimStatusId = ClaimStatus.ACCEPTED;
 
-      // ToDo: query this
-      assessmentClaim.ClaimReference = 1;
+      // ToDo: temp value until it is determined where this value comes from
+      assessmentClaim.ClaimReference = assessmentId;
 
       assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
         ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile
@@ -202,6 +213,35 @@ namespace Fmas12d.Business.Services
       await _context.SaveChangesAsync();
 
       return await GetAsync(entity.Id);
+    }
+
+    private async Task<IEnumerable<AssessmentLocation>> GetOtherAssessments(
+      int assessmentId,
+      int userId
+    ) {
+      IEnumerable<AssessmentLocation> otherAssessments = await _context
+      .AssessmentDoctors
+      .Include(ad => ad.Assessment)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(ad => ad.DoctorUserId == userId)
+      .Where(ad => (ad.StatusId == AssessmentDoctorStatus.ALLOCATED) || (ad.StatusId == AssessmentDoctorStatus.ATTENDED))
+      .Where(ad => ad.Assessment.Id != assessmentId)
+      .Select(ad => new AssessmentLocation {
+        Id = ad.AssessmentId,
+        Address1 = ad.Assessment.Address1,
+        Address2 = ad.Assessment.Address2,
+        Address3 = ad.Assessment.Address3,
+        Address4 = ad.Assessment.Address4,
+        AssessmentDate = 
+          ad.Assessment.ScheduledTime == null 
+          ? ad.Assessment.MustBeCompletedBy 
+          : ad.Assessment.ScheduledTime,
+        Postcode = ad.Assessment.Postcode
+      })
+      .ToListAsync();
+
+      return otherAssessments;
+
     }
 
     private async Task<UserAssessmentClaim> GetAsync(

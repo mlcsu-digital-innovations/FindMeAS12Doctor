@@ -42,6 +42,9 @@ namespace Fmas12d.Business.Models
 
     public IList<ContactDetailType> UserContactDetailTypes { get; set; }
 
+    public List<AssessmentLocation> PreviousAssessmentLocations { get; set; }
+    public List<AssessmentLocation> NextAssessmentLocations { get; set; }
+
     public static Expression<Func<Data.Entities.Assessment, UserAssessmentClaimDetail>> ProjectFromEntity
     {
       get
