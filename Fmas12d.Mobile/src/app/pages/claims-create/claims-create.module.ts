@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { EllipsisPipe } from 'src/app/pipes/ellipsis.pipe';
 
 const routes: Routes = [
   {
@@ -21,6 +22,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ClaimsCreatePage]
+  declarations: [ClaimsCreatePage, EllipsisPipe]
 })
 export class ClaimsCreatePageModule {}
