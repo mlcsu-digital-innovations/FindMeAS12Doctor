@@ -92,7 +92,6 @@ export class ClaimsCreatePage implements OnInit {
   }
 
   confirmClaim() {
-    console.log(this.claim);
     this.assessmentClaimService.confirmClaim(this.assessmentId, this.claim)
     .subscribe((result: UserAssessmentClaimResponse) => {
       this.claimResponse = result;
@@ -100,7 +99,7 @@ export class ClaimsCreatePage implements OnInit {
       this.toastService.displaySuccess({
         message: 'Claim Submitted'
       });
-      this.navController.back();
+      this.router.navigateByUrl('/claims-list');
     },
     error => {
       this.closeLoading();
@@ -141,9 +140,6 @@ export class ClaimsCreatePage implements OnInit {
         message: 'Unable to create claim'
       });
     });
-
-    console.log(this.claim);
-
   }
 
   async showLoading() {
