@@ -50,8 +50,6 @@ export class ClaimsCreatePage implements OnInit {
         this.assessmentLastUpdated = new Date();
         this.assessment = result;
 
-        console.log(result);
-
         this.assessment.userContactDetailTypes.forEach(cd => {
           this.startLocations.push(
             {
@@ -152,7 +150,7 @@ export class ClaimsCreatePage implements OnInit {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
       spinner: 'lines',
-      duration: 5000
+      duration: 3000
     });
     await this.loading.present();
   }

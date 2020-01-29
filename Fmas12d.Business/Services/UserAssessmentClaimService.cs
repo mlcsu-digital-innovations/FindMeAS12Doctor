@@ -186,7 +186,10 @@ namespace Fmas12d.Business.Services
       assessmentClaim.ClaimStatusId = ClaimStatus.ACCEPTED;
 
       // ToDo: temp value until it is determined where this value comes from
-      assessmentClaim.ClaimReference = assessmentId;
+      bool testParse =
+        int.TryParse(assessmentId.ToString() + userId.ToString(), out int tempReference);
+
+      assessmentClaim.ClaimReference = testParse ? tempReference : assessmentId;
 
       assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
         ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile
