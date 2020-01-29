@@ -34,15 +34,16 @@
       </ion-card-content>
       <!-- create claim card -->
       <ion-card-content *ngIf="!hasValidClaim">
-        <ion-row *ngIf="assessment?.userContactDetailTypes.length > 0">
+        <ion-row *ngIf="startLocations.length > 0">
           <ion-item>
             <ion-label>Start Location</ion-label>
-            <ion-select [(ngModel)]="startLocationId">
+            <ion-select [(ngModel)]="startLocation">
               <ion-select-option 
-                *ngFor="let contact of assessment?.userContactDetailTypes" 
-                value={{contact.id}}
+                *ngFor="let location of startLocations" 
+                [value]="location"
+               
               >
-                {{contact.name}}
+                {{location.address1 | ellipsis: 15}} {{location.postcode}}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -57,15 +58,15 @@
             </ion-list>
           </ion-col>
         </ion-row>
-        <ion-row *ngIf="assessment?.userContactDetailTypes.length > 0 && differentReturnDestination">
+        <ion-row *ngIf="endLocations.length > 0 && differentReturnDestination">
           <ion-item>
             <ion-label>End Location</ion-label>
-            <ion-select [(ngModel)]="endLocationId">
+            <ion-select [(ngModel)]="endLocation">
               <ion-select-option 
-                *ngFor="let contact of assessment?.userContactDetailTypes" 
-                value={{contact.id}}
+                *ngFor="let location of endLocations" 
+                [value]="location"
               >
-                {{contact.name}}
+                {{location.address1 | ellipsis: 15}} {{location.postcode}}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -140,7 +141,6 @@
             </ion-list>
           </ion-col>
         </ion-row>                  
-        <br/>
         <ion-row>
           <ion-col style="text-align: center;">
             <ion-button 
