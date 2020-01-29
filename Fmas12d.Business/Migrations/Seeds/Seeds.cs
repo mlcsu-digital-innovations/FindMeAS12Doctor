@@ -152,9 +152,6 @@ namespace Fmas12d.Business.Migrations.Seeds
       new NonPaymentLocationsSeeder().SeedData();
       Context.SaveChanges();
 
-      new OnCallUsersSeeder().SeedData();
-      Context.SaveChanges();
-
       new PaymentMethodsSeeder().SeedData();
       Context.SaveChanges();
 
@@ -176,9 +173,6 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
 
       new PaymentMethodsSeeder().DeleteSeeds();
-      Context.SaveChanges();
-
-      new OnCallUsersSeeder().DeleteSeeds();
       Context.SaveChanges();
 
       new NonPaymentLocationsSeeder().DeleteSeeds();

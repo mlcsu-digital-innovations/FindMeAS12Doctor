@@ -9,7 +9,7 @@ namespace Fmas12d.Api.ViewModels
 
     public UserAvailability(IUserAvailability model)
     {
-      MapFromBuinessModel(model);
+      MapFromBusinessModel(model);
     }
 
     public DateTimeOffset End { get; set; }
@@ -19,7 +19,7 @@ namespace Fmas12d.Api.ViewModels
 
     public int StatusId { get; set; }
 
-    internal virtual void MapFromBuinessModel(IUserAvailability model)
+    internal virtual void MapFromBusinessModel(IUserAvailability model)
     {
       if (model == null) return;
 

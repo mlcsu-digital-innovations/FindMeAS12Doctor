@@ -288,8 +288,12 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.IUserAvailability businessModel = requestModel.MapToBusinessModel(userId);
-        businessModel.StatusId = statusId;
+        Business.Models.IUserAvailability businessModel = new Business.Models.UserAvailability
+        {
+          UserId = userId,
+          StatusId = statusId
+        };
+        requestModel.MapToBusinessModel(businessModel);
         businessModel = await Service.CreateAsync(businessModel);
         ViewModels.UserAvailability viewModel = new ViewModels.UserAvailability(businessModel);
 
@@ -343,9 +347,13 @@ namespace Fmas12d.Api.Controllers
     {
       try
       {
-        Business.Models.IUserAvailability businessModel = requestModel.MapToBusinessModel(userId);
-        businessModel.Id = id;
-        businessModel.StatusId = statusId;
+        Business.Models.IUserAvailability businessModel = new Business.Models.UserAvailability
+        {
+          Id = id,
+          StatusId = statusId,
+          UserId = userId
+        };
+        requestModel.MapToBusinessModel(businessModel);
         businessModel = await Service.UpdateAsync(businessModel);
         ViewModels.UserAvailability viewModel = new ViewModels.UserAvailability(businessModel);
 

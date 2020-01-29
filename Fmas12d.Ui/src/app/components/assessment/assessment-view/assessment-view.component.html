@@ -243,41 +243,33 @@
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th scope="col" sortable="assessmentId" (sort)="onSort($event)">Assessment Id</th>
-                    <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Assessment Postcode</th>
-                    <th scope="col" sortable="assessmentType" (sort)="onSort($event)">Assessment Type</th>
-                    <th scope="col" sortable="dateTime" (sort)="onSort($event)">Date/Time</th>
+                    <th scope="col" sortable="dateTime" (sort)="onSort($event)">Scheduled Date/Time</th>
+                    <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Postcode</th>                    
                     <th scope="col" sortable="assessmentStatus" (sort)="onSort($event)">Status</th>
                     <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
-                    <th scope="col" sortable="leadAmhp" (sort)="onSort($event)">Lead AMHP</th>
-                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Allocated</th>
+                    <th scope="col" sortable="amhp" (sort)="onSort($event)">AMHP</th>
+                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Attended</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="">
+                  <tr *ngFor="let assessment of referral.previousAssessments">
                     <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.scheduledTime | date:'dd/MM/yyyy HH:mm'" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.postcode" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.status" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.unsuccessfulAssessmentTypeName" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.amhpUserName" ></ngb-highlight>
                     </td>
                     <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="" ></ngb-highlight>
+                      <ngb-highlight [result]="assessment.doctorAttendedNames" ></ngb-highlight>
                     </td>
                   </tr>
                 </tbody>

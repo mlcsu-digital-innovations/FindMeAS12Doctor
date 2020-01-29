@@ -312,6 +312,41 @@ namespace Fmas12d.Business.Services
       };
     }
 
+    public async Task<bool> Complete(int id)
+    {
+      Entities.Assessment entity = await _context
+        .Assessments
+        .Include(a => a.Referral)
+        .Where(a => a.Id == id)
+        .WhereIsActiveOrActiveOnly(true)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"An active Assessment with an id of {id} could not be found.");
+      }
+
+      if (entity.Referral.ReferralStatusId != ReferralStatus.AWAITING_REVIEW)
+      {
+        throw new ModelStateException("id",
+          $"An active Assessment with an id of {id} cannot be completed because " +
+          $"its Referral Status is {entity.Referral.ReferralStatusId} when it needs to be "+
+          $"{ReferralStatus.AWAITING_REVIEW}."
+        );
+      }
+
+      entity.Referral.ReferralStatusId = ReferralStatus.OPEN;
+      UpdateModified(entity.Referral);
+
+      entity.CompletionConfirmationByUserId = _userClaimsService.GetUserId();
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      return true; 
+    }
+
     /// <summary>
     /// Sets the assessment entity's properties from the provided business model
     /// The CCG id is set from the referral patient's ccg, it's duplicated on the assessment so 

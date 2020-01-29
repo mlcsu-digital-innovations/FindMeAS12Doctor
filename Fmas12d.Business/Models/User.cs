@@ -60,7 +60,6 @@ namespace Fmas12d.Business.Models
     [MaxLength(50)]
     [Required]
     public string IdentityServerIdentifier { get; set; }
-    public virtual IList<OnCallUser> OnCallUsers { get; set; }
     public virtual Organisation Organisation { get; set; }
     public int OrganisationId { get; set; }
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }

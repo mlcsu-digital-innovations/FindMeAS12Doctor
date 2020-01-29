@@ -100,8 +100,6 @@ namespace Fmas12d.Business
     public virtual DbSet<NonPaymentLocationTypeAudit> NonPaymentLocationTypeAudits { get; set; }
     public virtual DbSet<NotificationText> NotificationTexts { get; set; }
     public virtual DbSet<NotificationTextAudit> NotificationTextAudits { get; set; }
-    public virtual DbSet<OnCallUser> OnCallUsers { get; set; }
-    public virtual DbSet<OnCallUserAudit> OnCallUserAudits { get; set; }
     public virtual DbSet<Organisation> Organisations { get; set; }
     public virtual DbSet<OrganisationAudit> OrganisationAudits { get; set; }
     public virtual DbSet<Patient> Patients { get; set; }
