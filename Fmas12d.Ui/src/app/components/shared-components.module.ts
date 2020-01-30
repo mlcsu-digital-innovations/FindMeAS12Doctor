@@ -10,7 +10,6 @@ import { NgModule } from '@angular/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgbDateCustomParserFormatter } from '../components/datePicker-format/datePicker-format';
 import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import { OnCallDoctorListComponent } from './on-call-doctor-list/on-call-doctor-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
@@ -25,8 +24,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     DelaySpinnerComponent,
     DisableControlDirective,
     FocusOnShowDirective,
-    NavbarComponent,
-    OnCallDoctorListComponent,
+    NavbarComponent,    
     TableHeaderSortable,
     ToastsComponent,
     UnauthorizedComponent,

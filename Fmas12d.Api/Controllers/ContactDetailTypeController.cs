@@ -29,8 +29,7 @@ namespace Fmas12d.Api.Controllers
       return await GetListInternal(null, GetUserId());
     }
 
-    [HttpGet]
-    [Authorize(Policy = "Admin")]
+    [HttpGet]  
     [Route("{userId:int}")]
     public async Task<ActionResult<IEnumerable<ViewModels.ContactDetailType>>> GetList(
       int userId

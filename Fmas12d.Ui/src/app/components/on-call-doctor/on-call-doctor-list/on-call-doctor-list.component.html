@@ -1,0 +1,194 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12 offset-md-0">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <em class="fas fa-th-list fa-4x"></em>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">On Call Doctor List</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-body">
+          <form novalidate>
+            <div class="form-row">              
+              <div class="col-md-2 offset-md-10 text-right mt-more-2">
+                <a
+                  (click)="addOnCallDoctor()"
+                  class="btn btn-primary"
+                  aria-disabled="true"
+                  placement="top"
+                  ngbTooltip="Add a new on call doctor"
+                  [openDelay]="1000"
+                  [closeDelay]="500"
+                  tooltipClass="subtle-tooltip"
+                >
+                  <i class="fas fa-plus"></i>
+                  Add On Call Doctor
+                </a>
+              </div>
+            </div>
+            <div class="form-row">
+              <table class="table table-bordered table-sm table-on-call-doctor-list">
+                <thead>
+                  <tr>
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="userName" 
+                      columnType='string' 
+                      (sort)="onSort($event)">
+                      Doctor
+                    </th>
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="gmcNumber" 
+                      columnType='number' 
+                      (sort)="onSort($event)">
+                      GMC Number
+                    </th>
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="start" 
+                      columnType='string' 
+                      (sort)="onSort($event)">
+                      Start Date / Time
+                    </th>
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="end" 
+                      columnType='string' 
+                      (sort)="onSort($event)">
+                      End Date / Time
+                    </th>
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="onCallConfirmationSentAt" 
+                      columnType='string' 
+                      (sort)="onSort($event)">
+                      Confirmation Request Sent
+                    </th>
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="location.contactDetailTypeName"
+                      columnType='string' 
+                      (sort)="onSort($event)">
+                      Location
+                    </th> 
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="onCallIsConfirmed" 
+                      columnType='boolean' 
+                      (sort)="onSort($event)">
+                      Confirmation Status
+                    </th>                    
+                    <th class="text-center" 
+                      scope="col" 
+                      sortable="location.onCallRejectedReason"
+                      columnType='string' 
+                      (sort)="onSort($event)">
+                      If Confirmation Status is No, reason and details
+                    </th>                     
+                    <th class="sm-col text-center" scope="col">
+                      &nbsp; &nbsp;
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="on-call-doctor-row" *ngFor="let onCallDoctor of onCallDoctorList$ | async">
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight [result]="onCallDoctor.userName">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight [result]="onCallDoctor.gmcNumber">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight result="{{onCallDoctor.start | date: 'dd/MM/yyyy HH:mm'}}">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight result="{{onCallDoctor.end | date: 'dd/MM/yyyy HH:mm'}}">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight result="{{onCallDoctor.onCallConfirmationSentAt | date: 'dd/MM/yyyy HH:mm'}}">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight result="{{onCallDoctor.location.contactDetailTypeName ? onCallDoctor.location.contactDetailTypeName : onCallDoctor.location.postcode}}">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight result="{{onCallDoctor.onCallIsConfirmed === null ? '' : (onCallDoctor.onCallIsConfirmed ? 'Yes' : 'No') }}">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <ngb-highlight [result]="onCallDoctor.onCallRejectedReason">
+                      </ngb-highlight>
+                    </td>
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                      <button class="btn btn-outline-primary btn-small" (click)="editOnCallDoctor(onCallDoctor)">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn btn-outline-primary btn-small" (click)="deleteOnCallDoctor(onCallDoctor)">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-row" style="text-align: center;">
+              <div class="col-md-12 empty-table" *ngIf="!onCallDoctorListService.loading$ && noOfOnCallDoctorsInList === 0">
+                There are currently no active on call doctors
+              </div>
+            </div>
+              <div class="d-flex justify-content-between p-2">
+                <ngb-pagination [collectionSize]="total$ | async" [(page)]="onCallDoctorListService.page"
+                  [pageSize]="onCallDoctorListService.pageSize">
+                </ngb-pagination>
+                <select class="custom-select" style="width: auto" name="pageSize"
+                  [(ngModel)]="onCallDoctorListService.pageSize">
+                  <option [ngValue]="5">5 items per page</option>
+                  <option [ngValue]="10">10 items per page</option>
+                  <option [ngValue]="9999999">All items</option>
+                </select>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-delay-spinner *ngIf="onCallDoctorListService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<ng-template #addOnCallDoctorModal>
+  <app-on-call-doctor-modal    
+  (actioned)="OnModalActionAdd($event)"
+  >
+  </app-on-call-doctor-modal>
+</ng-template>
+
+<ng-template #editOnCallDoctorModal>
+  <app-on-call-doctor-modal    
+  (actioned)="OnModalActionEdit($event)"
+  [onCallDoctor]="selectedOnCallDoctor"
+  >
+  </app-on-call-doctor-modal>
+</ng-template>
+
+<ng-template #deleteOnCallDoctorModal>
+  <app-cancel-action-modal [modalTitle]="'Confirm On Call Doctor Delete'"
+    [modalBody]="'Please confirm that you wish to delete this on call doctor.'"
+    (actioned)="OnDeleteOnCallDoctorAction($event)">
+  </app-cancel-action-modal>
+</ng-template>

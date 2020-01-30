@@ -1,11 +1,15 @@
-export interface OnCallDoctorList {
-  confirmationReasonAndDetails: string;
-  confirmationRequestSentDateTime: Date;
-  confirmationStatus: boolean;
-  doctorName: string;
-  endDateTime: Date;
+import { Location } from './location';
+
+export interface OnCallDoctorList {  
+  onCallConfirmationSentAt: Date;
+  onCallIsConfirmed?: boolean;  
+  onCallRejectedReason: string;
+  userName: string;
+  end: Date;
   gmcNumber: number;
   id: number;
-  location: string;
-  startDateTime: Date;
+  location: Location;
+  start: Date;
+  userId: number;
 }
+
