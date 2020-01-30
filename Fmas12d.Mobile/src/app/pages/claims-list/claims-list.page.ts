@@ -39,7 +39,6 @@ export class ClaimsListPage implements OnInit {
       this.assessmentList = result.assessments;
       this.closeLoading();
       this.closeRefreshing($event);
-      console.log(this.claimsList);
     }, error => {
       this.closeLoading();
       this.closeRefreshing($event);
@@ -67,8 +66,6 @@ export class ClaimsListPage implements OnInit {
   }
 
   GetIconDetailsForClaimStatus(claimStatusId: number): IconDetail {
-
-    console.log(claimStatusId);
 
     const iconDetail = {} as IconDetail;
     
@@ -98,7 +95,6 @@ export class ClaimsListPage implements OnInit {
         iconDetail.colour = 'danger';
         break;
     }
-    console.log(iconDetail);
     return iconDetail;
   }
 
