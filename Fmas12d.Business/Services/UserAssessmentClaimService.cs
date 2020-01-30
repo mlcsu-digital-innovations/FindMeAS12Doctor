@@ -183,7 +183,7 @@ namespace Fmas12d.Business.Services
         await ConfirmDoctorAssessmentAttendance(userId, assessmentId);
 
       assessmentClaim.UserId = userId;
-      assessmentClaim.ClaimStatusId = ClaimStatus.ACCEPTED;
+      assessmentClaim.ClaimStatusId = ClaimStatus.SUBMITTED;
 
       // ToDo: temp value until it is determined where this value comes from
       bool testParse =

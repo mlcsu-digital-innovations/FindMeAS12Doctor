@@ -9,7 +9,12 @@ namespace Fmas12d.Business.Models
 
     }
 
-    public const int ACCEPTED = 1;
+    public const int SUBMITTED = 1;
+    public const int PROCESSING = 2;
+    public const int QUERY = 3;
+    public const int APPROVED = 4;
+    public const int AWAITING_CCG_APPROVAL = 5;
+    public const int REJECTED = 6;
     public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
 
   }

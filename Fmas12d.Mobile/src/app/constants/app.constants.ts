@@ -10,3 +10,10 @@ export const PROFILETYPEAMHP = 2;
 export const ASSESSMENTSCHEDULED = 6;
 export const ASSESSMENTRESCHEDULING = 7;
 export const AWAITINGREVIEW = 8;
+
+export const CLAIMSTATUSSUBMITTED = 1;
+export const CLAIMSTATUSPROCESSING = 2;
+export const CLAIMSTATUSQUERY = 3;
+export const CLAIMSTATUSAPPROVED = 4;
+export const CLAIMSTATUSAWAITING = 5;
+export const CLAIMSTATUSREJECTED = 6;
