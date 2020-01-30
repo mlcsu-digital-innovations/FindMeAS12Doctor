@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
 import { UserAssessmentClaimList } from 'src/app/models/user-assessment-claim-list.model';
+import { CLAIMSTATUSSUBMITTED, CLAIMSTATUSPROCESSING, CLAIMSTATUSQUERY, CLAIMSTATUSAPPROVED, CLAIMSTATUSAWAITING, CLAIMSTATUSREJECTED } from 'src/app/constants/app.constants';
+import { IconDetail } from 'src/app/interfaces/icon-detail.interface';
 
 @Component({
   selector: 'app-claims-list',
@@ -17,7 +19,7 @@ export class ClaimsListPage implements OnInit {
 
   private assessmentList: Assessment[] = [];
   private claimsList: UserAssessmentClaim[] = [];
-
+ 
   constructor(
     private assessmentClaimService: AssessmentClaimService,
     private loadingController: LoadingController
@@ -37,6 +39,7 @@ export class ClaimsListPage implements OnInit {
       this.assessmentList = result.assessments;
       this.closeLoading();
       this.closeRefreshing($event);
+      console.log(this.claimsList);
     }, error => {
       this.closeLoading();
       this.closeRefreshing($event);
@@ -53,6 +56,50 @@ export class ClaimsListPage implements OnInit {
     if ($event) {
       $event.target.complete();
     }
+  }
+
+  GetIconColourForClaimStatus(claimStatusId: number): string {
+    return this.GetIconDetailsForClaimStatus(claimStatusId).colour;
+  }
+
+  GetIconNameForClaimStatus(claimStatusId: number): string {
+    return this.GetIconDetailsForClaimStatus(claimStatusId).name;
+  }
+
+  GetIconDetailsForClaimStatus(claimStatusId: number): IconDetail {
+
+    console.log(claimStatusId);
+
+    const iconDetail = {} as IconDetail;
+    
+    switch (claimStatusId) {
+      case CLAIMSTATUSSUBMITTED:
+        iconDetail.name = 'paper-plane';
+        iconDetail.colour = 'warning';
+        break;
+      case CLAIMSTATUSPROCESSING:
+        iconDetail.name = 'filing';
+        iconDetail.colour = 'warning';
+        break;
+      case CLAIMSTATUSQUERY:
+        iconDetail.name = 'help-circle';
+        iconDetail.colour = 'warning';
+        break;
+      case CLAIMSTATUSAPPROVED:
+        iconDetail.name = 'checkmark-circle';
+        iconDetail.colour = 'success';
+        break;
+      case CLAIMSTATUSAWAITING:
+        iconDetail.name = 'hourglass';
+        iconDetail.colour = 'warning';
+        break;
+      case CLAIMSTATUSREJECTED:
+        iconDetail.name = 'close-circle';
+        iconDetail.colour = 'danger';
+        break;
+    }
+    console.log(iconDetail);
+    return iconDetail;
   }
 
   async showLoading() {
