@@ -16,6 +16,12 @@ export class UserAvailabilityService {
     private apiService: ApiService
   ) { }
 
+  public delete(id: number) {
+    return (this.apiService.delete(
+      `${environment.apiEndpoint}/useravailabilities/${id}`
+    ));    
+  }
+
   public getListForUser() {
     return (this.apiService.get(
       `${environment.apiEndpoint}/useravailabilities`,
