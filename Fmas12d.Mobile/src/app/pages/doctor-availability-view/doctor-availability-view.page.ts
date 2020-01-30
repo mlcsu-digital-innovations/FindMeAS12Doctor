@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, AlertController, IonItemSliding } from '@ionic/angular';
 import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 import { Router, NavigationExtras } from '@angular/router';
 
@@ -17,6 +17,7 @@ export class DoctorAvailabilityViewPage implements OnInit {
   public unavailableList: UserAvailability[] = [];
 
   constructor(
+    public alertController: AlertController,
     private router: Router,
     private toastController: ToastController,
     private userAvailabilityService: UserAvailabilityService
@@ -25,29 +26,67 @@ export class DoctorAvailabilityViewPage implements OnInit {
   ngOnInit() {
   }
 
-  editAvailability(item: UserAvailability) {
+  editAvailability(item: UserAvailability, slidingItem: IonItemSliding) {
+    slidingItem.close();
     const navigationExtras: NavigationExtras = {
       state: {
-      availability: item
+        availability: item
       }
     };
 
     this.router.navigate([`/doctor-availability-edit/${item.id}`], navigationExtras);
   }
 
-  ionViewDidEnter() {
-    this.userAvailabilityService.getListForUser()
-    .subscribe(
-      (result: UserAvailability[]) => {
-
-        if (result && result.length > 0) {
-          this.availableList = result.filter(item => item.statusId === AVAILABLE);
-          this.unavailableList = result.filter(item => item.statusId === UNAVAILABLE);
+  async deleteAvailability(item: UserAvailability, slidingItem: IonItemSliding) {
+    slidingItem.close();
+    const alert = await this.alertController.create({
+      header: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this availability period?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Yes',
+          cssClass: 'primary',
+          handler: () => {
+            this.userAvailabilityService.delete(item.id)
+              .subscribe(
+                result => {
+                  this.showSuccessToast('Availability sucessfully deleted');
+                  this.refreshList();
+                }, error => {
+                  this.showErrorToast('Unable to delete availability');
+                }
+              );
+          }
         }
-      }, error => {
-        this.showErrorToast('Unable to retrieve availability details for user');
-      }
-    );
+      ]
+    });
+    await alert.present();
+  }
+
+  ionViewDidEnter() {
+    this.refreshList();
+  }
+
+  refreshList() {
+    this.userAvailabilityService.getListForUser()
+      .subscribe(
+        (result: UserAvailability[]) => {
+
+          if (result && result.length > 0) {
+            this.availableList = result.filter(item => item.statusId === AVAILABLE);
+            this.unavailableList = result.filter(item => item.statusId === UNAVAILABLE);
+          } else {
+            this.availableList = [];
+            this.unavailableList = [];
+          }
+        }, error => {
+          this.showErrorToast('Unable to retrieve availability details for user');
+        }
+      );
   }
 
   showErrorToast(msg: string) {

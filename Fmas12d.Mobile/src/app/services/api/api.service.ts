@@ -20,7 +20,23 @@ export class ApiService {
     private offlineManager: OfflineManagerService,
     private storageService: StorageService,
     private toastService: ToastService
-    ) { }
+  ) { }
+
+  public delete(url: string): Observable<any> {
+    if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+      return from(this.offlineManager.storeRequest(url, 'DELETE', null));
+    } else {
+      return this.http.delete(url)
+        .pipe(
+          catchError(error => {
+            this.logService.logError(error);
+            this.toastService.displayError({ message: error.message });
+            return throwError(error);
+          }
+          )
+        );
+    }
+  }
 
   public get(url: string, storageKey: string): Observable<any> {
     if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
@@ -35,8 +51,8 @@ export class ApiService {
           }),
           map(result => result),
           tap(result => this.storageService.storeApiRequestData(storageKey, result)
-        )
-      );
+          )
+        );
     }
   }
 
@@ -51,8 +67,8 @@ export class ApiService {
             this.toastService.displayError({ message: error.message });
             return throwError(error);
           }
-        )
-      );
+          )
+        );
     }
   }
 
@@ -67,8 +83,8 @@ export class ApiService {
             this.toastService.displayError({ message: error.message });
             return throwError(error);
           }
-        )
-      );
+          )
+        );
     }
   }
 
