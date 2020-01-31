@@ -3,6 +3,17 @@ namespace Fmas12d.Api.ViewModels
 {
   public class BankDetail : BaseViewModel
   {
+    public BankDetail(Business.Models.BankDetail model) {
+      if (model == null) return;
+
+      AccountNumber = model.AccountNumber;
+      CcgId = model.CcgId;
+      NameOnAccount = model.NameOnAccount;
+      SortCode = model.SortCode;
+      UserId = model.UserId;
+      VsrNumber = model.VsrNumber;
+    }
+
     public int AccountNumber { get; set; }
     [MaxLength(200)]
     [Required]

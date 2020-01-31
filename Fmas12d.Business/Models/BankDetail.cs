@@ -3,6 +3,17 @@ namespace Fmas12d.Business.Models
 {
   public class BankDetail : BaseModel
   {
+    public BankDetail(Data.Entities.BankDetail entity) {
+      if (entity == null) return;
+
+      AccountNumber = entity.AccountNumber;
+      BankName = entity.BankName;
+      CcgId = entity.CcgId;
+      NameOnAccount = entity.NameOnAccount;
+      SortCode= entity.SortCode;
+      UserId = entity.UserId;
+      VsrNumber = entity.VsrNumber;
+    }
     public int AccountNumber { get; set; }
     [MaxLength(200)]
     [Required]

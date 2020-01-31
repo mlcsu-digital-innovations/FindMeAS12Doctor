@@ -10,6 +10,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DoctorModule } from './components/doctor/doctor.module';
 import { environment } from 'src/environments/environment';
+import { FinanceModule } from './components/finance/finance.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -34,10 +35,11 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   ],
   imports: [
     AuthModule.forRoot(),
+    AssessmentModule,
     BrowserModule,
     DigitOnlyModule,
     DoctorModule,
-    AssessmentModule,
+    FinanceModule,
     HttpClientModule,
     PatientModule,
     ReferralModule,
@@ -85,7 +87,7 @@ export class AppModule {
         response_type: "id_token token",
         scope: "openid profile email https://graph.microsoft.com/User.Read",
         silent_renew: true,
-        silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,        
+        silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,
         start_checksession: true,
         stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
         trigger_authorization_result_event: true,
