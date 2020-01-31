@@ -4,10 +4,12 @@ import { FinanceRoutes } from './finance.routes';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedComponentsModule } from '../shared-components.module';
+import { ClaimViewComponent } from './claim-view/claim-view.component';
 
 @NgModule({
   declarations: [
-    ClaimListComponent
+    ClaimListComponent,
+    ClaimViewComponent
   ],
   imports: [
     CommonModule,

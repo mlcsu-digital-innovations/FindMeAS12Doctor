@@ -1,6 +1,7 @@
 import { AuthorizationGuard } from 'src/app/authorization.guard';
-import { Routes } from '@angular/router';
 import { ClaimListComponent } from './claim-list/claim-list.component';
+import { ClaimViewComponent } from './claim-view/claim-view.component';
+import { Routes } from '@angular/router';
 
 export const FinanceRoutes: Routes = [
   {
@@ -11,6 +12,11 @@ export const FinanceRoutes: Routes = [
   {
     path: 'finance/claims/list',
     component: ClaimListComponent,
+    canActivate: [AuthorizationGuard]
+  },
+  {
+    path: 'finance/claim/:claimId',
+    component: ClaimViewComponent,
     canActivate: [AuthorizationGuard]
   }
 ];
