@@ -177,6 +177,7 @@ namespace Fmas12d.Api
       services.AddScoped<IUserNotificationService, UserNotificationService>();
       services.AddScoped<IUserService, UserService>();
       services.AddScoped<IUserAssessmentClaimService, UserAssessmentClaimService>();
+      services.AddScoped<IFinanceAssessmentClaimService, FinanceAssessmentClaimService>();
 
       services.AddHttpContextAccessor();
 
