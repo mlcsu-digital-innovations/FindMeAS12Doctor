@@ -1,0 +1,73 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12 ">
+      <div class="card" *ngIf="claim$ | async as claim; else loading">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="far fa-edit fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">View Claim</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="claimForm" novalidate>
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="claimReference">Claim Reference</label>
+                <input
+                  class="form-control"
+                  formControlName="claimReference"
+                  id="claimReference"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="claimStatus">Claim Status</label>
+                <input
+                  class="form-control"
+                  formControlName="claimStatus"
+                  id="claimStatus"
+                  type="text"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<!-- patient results -->
+<ng-template #patientResults let-patientResult>
+  <app-patient-results-modal [patientResult]="modalResult" (actioned)="OnPatientModalAction($event)">
+  </app-patient-results-modal>
+</ng-template>
+
+<ng-template #confirmClosure>
+  <app-cancel-action-modal
+    [modalTitle]="'Confirm Referral Closure'"
+    [modalBody]="'Please confirm that the referral can be closed.'"
+    (actioned)="OnModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #cancelUpdate>
+  <app-cancel-action-modal [modalTitle]="'Cancel Update'"
+    [modalBody]="'Do you wish to cancel this update? All changes will be lost.'"
+    (actioned)="OnCancelModalAction($event)">
+  </app-cancel-action-modal>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

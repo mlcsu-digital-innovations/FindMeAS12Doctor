@@ -7,5 +7,6 @@ namespace Fmas12d.Business.Services
     public interface IFinanceAssessmentClaimService : IServiceBase
     {
       Task<IEnumerable<FinanceAssessmentClaim>> GetListAsync();
+      Task<FinanceAssessmentClaim> GetClaimByIdAsync(int claimId);
     }
 }

@@ -34,6 +34,22 @@ namespace Fmas12d.Business.Services
       _userService = userService;
     }
 
+    public async Task<FinanceAssessmentClaim> GetClaimByIdAsync(int claimId) {
+      FinanceAssessmentClaim model = await _context
+      .UserAssessmentClaims
+      .Include(uac => uac.Assessment)
+        .ThenInclude(a => a.Ccg)
+      .Include(uac => uac.User)
+        .ThenInclude(u => u.BankDetails)
+      .Include(uac => uac.ClaimStatus)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(uac => uac.Id == claimId)
+      .Select(FinanceAssessmentClaim.ProjectFromEntity)
+      .SingleOrDefaultAsync();
+
+      return model;
+    }
+
     public async Task<IEnumerable<FinanceAssessmentClaim>> GetListAsync()
     {
       IEnumerable<FinanceAssessmentClaim> model = await _context

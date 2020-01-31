@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
 import { ToastService } from '../../../services/toast/toast.service';
-import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
+import { FinanceClaimListService } from 'src/app/services/finance-claim-list/finance-claim-list.service';
 import { FinanceClaim } from 'src/app/interfaces/finance-claim';
 
 @Component({
@@ -21,7 +21,7 @@ export class ClaimListComponent implements OnInit {
 
   constructor(
     public oidcSecurityService: OidcSecurityService,
-    private claimsService: FinanceClaimService,
+    private claimsService: FinanceClaimListService,
     private toastService: ToastService,
   ) {
   }

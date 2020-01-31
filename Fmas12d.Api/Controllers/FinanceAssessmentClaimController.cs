@@ -29,8 +29,33 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
+    [Route("{id:int}")]
+    public async Task<ActionResult<ViewModels.FinanceAssessmentClaim>> GetFinanceAssessmentClaim(int id)
+    {
+      try
+      {
+        Business.Models.FinanceAssessmentClaim businessModel = await Service.GetClaimByIdAsync(id);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          ViewModels.FinanceAssessmentClaim viewModel =
+            new ViewModels.FinanceAssessmentClaim(businessModel);
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpGet]
     [Route("list")]
-    public async Task<ActionResult<IEnumerable<ViewModels.FinanceAssessmentClaimList>>> GetFinanceAssessmentClaimList()
+    public async Task<ActionResult<IEnumerable<ViewModels.FinanceAssessmentClaim>>> GetFinanceAssessmentClaimList()
     {
       try
       {
@@ -43,9 +68,9 @@ namespace Fmas12d.Api.Controllers
         }
         else
         {
-          IEnumerable<ViewModels.FinanceAssessmentClaimList> viewModels =
+          IEnumerable<ViewModels.FinanceAssessmentClaim> viewModels =
               businessModels
-              .Select(ViewModels.FinanceAssessmentClaimList.ProjectFromModel).ToList();
+              .Select(ViewModels.FinanceAssessmentClaim.ProjectFromModel).ToList();
 
           return Ok(viewModels);
         }
