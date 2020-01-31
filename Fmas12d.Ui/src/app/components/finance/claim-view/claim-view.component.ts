@@ -66,18 +66,11 @@ export class ClaimViewComponent implements OnInit {
     );
 
     this.claimForm = this.formBuilder.group({
-      claimReference:[
-        {
-          value: '',
-          disabled: true
-        }
-      ],
-      claimStatus: [
-        {
-          value: '',
-          disabled: true
-        }
-      ]
+      claimReference: [{ value: '', disabled: true }],
+      claimStatus: [{ value: '', disabled: true }],
+      ccg: [{ value: '', disabled: true }],
+      claimant: [{ value: '', disabled: true }],
+      vsr: [{ value: '', disabled: true }],
     });
 
   }
@@ -87,6 +80,10 @@ export class ClaimViewComponent implements OnInit {
 
     this.claimForm.controls['claimReference'].setValue(claim.claimReference);
     this.claimForm.controls['claimStatus'].setValue(claim.claimStatus.name);
-
+    this.claimForm.controls['ccg'].setValue(claim.ccg.name);
+    this.claimForm.controls['claimant'].setValue(claim.claimant.displayName);
+    if (claim.claimant.hasBankDetails) {
+      this.claimForm.controls['vsr'].setValue(claim.claimant.bankDetails[0].vsrNumber);
+    }
   }
 }
