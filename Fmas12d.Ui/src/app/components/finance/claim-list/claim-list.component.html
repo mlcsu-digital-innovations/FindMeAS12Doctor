@@ -38,7 +38,11 @@
                 <th scope="col">Status</th>
               </thead>
               <tbody>
-                <tr *ngFor="let claim of claimsList$ | async; index as i">
+                <tr
+                  *ngFor="let claim of claimsList$ | async; index as i"
+                  routerLink="/finance/claim/{{claim.id}}"
+                  class="clickable"
+                >
                   <td>
                     <ngb-highlight [result]="claim.claimReference" [term]="claimsService.searchTerm"></ngb-highlight>
                   </td>

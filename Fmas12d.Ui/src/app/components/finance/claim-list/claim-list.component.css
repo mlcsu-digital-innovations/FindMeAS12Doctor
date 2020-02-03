@@ -11,4 +11,12 @@ form {
   margin: 10px;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: #dedede;
+}
+
 
