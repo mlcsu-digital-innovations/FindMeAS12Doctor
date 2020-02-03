@@ -15,6 +15,7 @@ namespace Fmas12d.Api.ViewModels
         Description = model.ClaimStatus.Description
       };
       Claimant = new User(model.Claimant);
+      Id = model.Id;
     }
 
     public FinanceAssessmentClaim() {}
@@ -24,6 +25,8 @@ namespace Fmas12d.Api.ViewModels
     public IdNameDescription ClaimStatus { get; set; }
     public virtual User Claimant { get; set; }
     public virtual Ccg Ccg { get; set; }
+
+    public int Id { get; set; }
 
     public static Func<Business.Models.FinanceAssessmentClaim, FinanceAssessmentClaim> ProjectFromModel
     {
@@ -39,7 +42,8 @@ namespace Fmas12d.Api.ViewModels
             Name = financeAssessmentClaim.ClaimStatus.Name,
             Description = financeAssessmentClaim.ClaimStatus.Description
           },
-          Claimant = new User(financeAssessmentClaim.Claimant)
+          Claimant = new User(financeAssessmentClaim.Claimant),
+          Id = financeAssessmentClaim.Id
         };
       }
     }

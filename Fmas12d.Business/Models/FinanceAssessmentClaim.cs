@@ -9,11 +9,12 @@ namespace Fmas12d.Business.Models
   public class FinanceAssessmentClaim
   {
     public FinanceAssessmentClaim(Data.Entities.UserAssessmentClaim entity) {
+      Assessment = new Assessment(entity.Assessment);
+      Ccg = new Ccg(entity.Assessment.Ccg);
+      Claimant = new User(entity.User);
       ClaimReference = entity.ClaimReference;
       ClaimStatus = new ClaimStatus(entity.ClaimStatus);
-      Claimant = new User(entity.User);
-      Ccg = new Ccg(entity.Assessment.Ccg);
-      Assessment = new Assessment(entity.Assessment);
+      Id = entity.Id;
 
       Claimant.BankDetails = Claimant.BankDetails.Where(bd => bd.CcgId == Ccg.Id).ToList();
     }
@@ -21,6 +22,7 @@ namespace Fmas12d.Business.Models
     public int? ClaimReference { get; set; }
     public Assessment Assessment { get; set; }
     public ClaimStatus ClaimStatus { get; set; }
+    public int Id { get; set; }
     public User Claimant { get; set; }
     public Ccg Ccg { get; set; }
 
