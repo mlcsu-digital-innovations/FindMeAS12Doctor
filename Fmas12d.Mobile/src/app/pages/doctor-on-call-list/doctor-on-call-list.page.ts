@@ -27,6 +27,8 @@ export class DoctorOnCallListPage implements OnInit {
   }
 
   refreshPage($event?: any) {
+    this.showLoading();
+    
     this.onCallService.getListForUser().subscribe((result: OnCallDoctor[])  => {      
       this.onCallDoctorsConfirmed = result
         .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
