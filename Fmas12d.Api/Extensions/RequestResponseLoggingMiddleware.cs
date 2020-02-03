@@ -42,7 +42,7 @@ namespace Fmas12d.Api.Extensions
         RequestAt = requestAt,
         Response = $"{context.Response.StatusCode}",
         ResponseAt = DateTimeOffset.Now,
-        UserId = userClaimsService.GetUserId()
+        UserId = userClaimsService.HasUserIdClaim() ? userClaimsService.GetUserId() : 0
       };
 
       await requestResponseLogService.CreateAsync(requestResponseLog);
