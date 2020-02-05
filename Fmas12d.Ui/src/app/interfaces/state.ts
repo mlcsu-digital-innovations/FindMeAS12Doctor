@@ -5,5 +5,6 @@ export interface State {
   pageSize: number;
   searchTerm: string;
   sortColumn: string;
+  sortColumnType: string;
   sortDirection: SortDirection;
 }

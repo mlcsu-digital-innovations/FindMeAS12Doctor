@@ -31,11 +31,18 @@
             <div class="form-row">
             <table class="table">
               <thead>
-                <th scope="col">Claim Reference</th>
-                <th scope="col">Assessment Date</th>
-                <th scope="col">CCG</th>
-                <th scope="col">Claimant</th>
-                <th scope="col">Status</th>
+                <th scope="col" sortable="claimReference" (sort)="onSort($event)">Claim Reference</th>
+                <th
+                  scope="col"
+                  sortable="assessment.scheduledTime"
+                  (sort)="onSort($event)"
+                  columnType='dateTime'
+                >
+                  Assessment Date
+                </th>
+                <th scope="col" sortable="ccg.name" (sort)="onSort($event)">CCG</th>
+                <th scope="col" sortable="claimant.displayName" (sort)="onSort($event)">Claimant</th>
+                <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
               </thead>
               <tbody>
                 <tr

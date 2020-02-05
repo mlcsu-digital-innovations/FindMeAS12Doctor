@@ -44,5 +44,16 @@ export class ClaimListComponent implements OnInit {
 
   }
 
+  onSort({column, direction, columnType}: SortEvent) {
+    this.headers.forEach(header => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+
+      this.claimsService.sortColumn = column;
+      this.claimsService.sortDirection = direction;
+      this.claimsService.sortColumnType = columnType === undefined ? 'string' : columnType;
+    });
+  }
 
 }
