@@ -80,5 +80,28 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    public virtual async Task<ActionResult<ViewModels.Referral>> Put(
+      int id,
+      [FromBody] RequestModels.FinanceAssessmentClaimUpdate requestModel)
+    {
+      try
+      {
+        Business.Models.FinanceAssessmentClaimUpdate businessModel =
+          new Business.Models.FinanceAssessmentClaimUpdate();
+        requestModel.MapToBusinessModel(businessModel);
+        businessModel.Id = id;
+        Business.Models.FinanceAssessmentClaim updateModel = await Service.UpdateClaimStatusAsync(businessModel);
+        ViewModels.FinanceAssessmentClaim viewModel = new ViewModels.FinanceAssessmentClaim(updateModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
   }
 }

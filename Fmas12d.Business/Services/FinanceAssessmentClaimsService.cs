@@ -65,5 +65,28 @@ namespace Fmas12d.Business.Services
 
       return model;
     }
+
+    public async Task<FinanceAssessmentClaim> UpdateClaimStatusAsync(FinanceAssessmentClaimUpdate model)
+    {
+      Entities.UserAssessmentClaim entity = await _context
+        .UserAssessmentClaims
+        .Where(uac => uac.Id == model.Id)
+        .WhereIsActiveOrActiveOnly(true)
+        .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+        $"Unable to find a user assessment claim with an id of {model.Id}");
+      }
+
+      entity.ClaimStatusId = model.ClaimStatusId;
+
+      UpdateModified(entity);
+
+      await _context.SaveChangesAsync();
+
+      return await GetClaimByIdAsync(model.Id);
+    }
   }
 }

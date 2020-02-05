@@ -71,13 +71,54 @@ export class ClaimViewComponent implements OnInit {
       ccg: [{ value: '', disabled: true }],
       claimant: [{ value: '', disabled: true }],
       vsr: [{ value: '', disabled: true }],
+      assessmentPayment: [{value: '', disabled: true}],
+      mileagePayment: [{value: '', disabled: true}]
     });
 
   }
 
+  UpdateClaim(isQuery: boolean) {
+
+    let updateRequest: Observable<ClaimView>;
+
+    if (isQuery === true) {
+      updateRequest = this.claimsService.updateClaimStatusToQuerying(this.claimId);
+    } else {
+      updateRequest = this.claimsService.updateClaimStatusToProcessing(this.claimId);
+    }
+
+    console.log(this.claimId);
+
+    updateRequest.subscribe(
+      () => {
+        this.toastService.displaySuccess({
+          message: 'Claim Updated'
+        });
+        this.routerService.navigateByUrl('/finance/claims/list');
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to update claim! Please try again in a few moments'
+        });
+      }
+    );
+  }
+
+  SetClaimAsProcessing() {
+    this.UpdateClaim(false);
+  }
+
+  SetClaimAsQuerying() {
+    this.UpdateClaim(true);
+  }
+
+
+
   InitialiseForm(claim: ClaimView) {
     console.log(claim);
 
+    this.claimId = claim.id;
     this.claimForm.controls['claimReference'].setValue(claim.claimReference);
     this.claimForm.controls['claimStatus'].setValue(claim.claimStatus.name);
     this.claimForm.controls['ccg'].setValue(claim.ccg.name);
@@ -85,5 +126,7 @@ export class ClaimViewComponent implements OnInit {
     if (claim.claimant.hasBankDetails) {
       this.claimForm.controls['vsr'].setValue(claim.claimant.bankDetails[0].vsrNumber);
     }
+    this.claimForm.controls['assessmentPayment'].setValue(claim.assessmentPayment);
+    this.claimForm.controls['mileagePayment'].setValue(claim.mileagePayment);
   }
 }

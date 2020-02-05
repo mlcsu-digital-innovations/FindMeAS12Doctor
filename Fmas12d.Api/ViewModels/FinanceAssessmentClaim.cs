@@ -7,6 +7,7 @@ namespace Fmas12d.Api.ViewModels
       if (model == null) return;
 
       Assessment = new Assessment(model.Assessment);
+      AssessmentPayment = model.AssessmentPayment;
       ClaimReference = model.ClaimReference;
       Ccg = new Ccg(model.Ccg);
       ClaimStatus = new IdNameDescription{
@@ -16,17 +17,24 @@ namespace Fmas12d.Api.ViewModels
       };
       Claimant = new User(model.Claimant);
       Id = model.Id;
+      Mileage = model.Mileage;
+      MileagePayment = model.MileagePayment;
     }
 
     public FinanceAssessmentClaim() {}
 
     public virtual Assessment Assessment { get; set; }
+    public decimal? AssessmentPayment { get; set; }
     public int? ClaimReference { get; set; }
     public IdNameDescription ClaimStatus { get; set; }
     public virtual User Claimant { get; set; }
     public virtual Ccg Ccg { get; set; }
 
     public int Id { get; set; }
+
+    public int? Mileage { get; set; }
+    public decimal? MileagePayment { get; set; }
+
 
     public static Func<Business.Models.FinanceAssessmentClaim, FinanceAssessmentClaim> ProjectFromModel
     {
@@ -35,6 +43,7 @@ namespace Fmas12d.Api.ViewModels
         return financeAssessmentClaim => new FinanceAssessmentClaim()
         {
           Assessment = new Assessment(financeAssessmentClaim.Assessment),
+          AssessmentPayment = financeAssessmentClaim.AssessmentPayment,
           Ccg = new Ccg(financeAssessmentClaim.Ccg),
           ClaimReference = financeAssessmentClaim.ClaimReference,
           ClaimStatus = new IdNameDescription{
@@ -43,7 +52,9 @@ namespace Fmas12d.Api.ViewModels
             Description = financeAssessmentClaim.ClaimStatus.Description
           },
           Claimant = new User(financeAssessmentClaim.Claimant),
-          Id = financeAssessmentClaim.Id
+          Id = financeAssessmentClaim.Id,
+          Mileage = financeAssessmentClaim.Mileage,
+          MileagePayment = financeAssessmentClaim.MileagePayment
         };
       }
     }

@@ -18,7 +18,7 @@
         <div class="card-body">
           <form [formGroup]="claimForm" novalidate>
             <div class="form-row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label for="claimReference">Claim Reference</label>
                 <input
                   class="form-control"
@@ -27,7 +27,7 @@
                   type="text"
                 />
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label for="claimStatus">Claim Status</label>
                 <input
                   class="form-control"
@@ -49,7 +49,7 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="col-md-8">
+              <div class="col-md-6">
                 <label for="claimant">Claimant</label>
                 <input
                   class="form-control"
@@ -58,7 +58,7 @@
                   type="text"
                 />
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <label for="vsr">VSR No.</label>
                 <input
                   class="form-control"
@@ -66,6 +66,55 @@
                   id="vsr"
                   type="text"
                 />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label for="assessmentPayment">Assessment Payment</label>
+                <input
+                  class="form-control"
+                  formControlName="assessmentPayment"
+                  id="assessmentPayment"
+                  type="text"
+                  value="{{claim.assessmentPayment | currency:'GBP'}}"
+                />
+              </div>
+              <div class="col-md-3">
+                <label for="mileagePayment">Mileage Payment</label>
+                <input
+                  class="form-control"
+                  formControlName="mileagePayment"
+                  id="mileagePayment"
+                  type="text"
+                  value="{{claim.mileagePayment | currency:'GBP'}}"
+                />
+              </div>
+            </div>
+            <br/>
+            <div class="form-row">
+              <div class="col-md-2 mb-2 offset-md-8 text-right">
+                <a class="btn btn-standard btn-cancel" type="button" routerLink="/finance/claims/list">
+                  <i class="fas fa-arrow-left"></i>
+                  Back
+                </a>
+              </div>
+              <div class="col-md-2 mb-2 text-left">
+                <button class="btn btn-primary btn-standard"
+                  type="button"
+                  *ngIf="claim.claimant.hasBankDetails"
+                  (click)="SetClaimAsProcessing()"
+                >
+                  <i class="fas fa-cog"></i>
+                  Process
+                </button>
+                <button class="btn btn-primary btn-standard"
+                type="button"
+                *ngIf="!claim.claimant.hasBankDetails"
+                (click)="SetClaimAsQuerying()"
+                >
+                  <i class="far fa-question-circle"></i>
+                  Query
+                </button>
               </div>
             </div>
           </form>
