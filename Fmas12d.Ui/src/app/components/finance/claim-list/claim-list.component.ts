@@ -28,12 +28,11 @@ export class ClaimListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.claimsList$ = this.claimsService.claims$;
+    this.claimsList$ = this.claimsService.getClaims(true);
     this.total$ = this.claimsService.total$;
 
     this.claimsList$.subscribe(
       result => {
-        console.log(result);
       },
       error => {
         this.toastService.displayError({

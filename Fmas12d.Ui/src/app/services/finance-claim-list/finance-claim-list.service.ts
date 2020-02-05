@@ -1,13 +1,13 @@
 import { BehaviorSubject, Subject, Observable, of } from 'rxjs';
+import { ClaimSearchResult } from 'src/app/interfaces/claim-search-result';
+import { DecimalPipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { FinanceClaim } from 'src/app/interfaces/finance-claim';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, PipeTransform } from '@angular/core';
-import { map, tap, debounceTime, switchMap, delay } from 'rxjs/operators';
-import { State } from 'src/app/interfaces/state';
-import { DecimalPipe } from '@angular/common';
-import { ClaimSearchResult } from 'src/app/interfaces/claim-search-result';
 import { SortDirection } from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
+import { State } from 'src/app/interfaces/state';
+import { tap, debounceTime, switchMap, delay } from 'rxjs/operators';
 
 
 @Injectable({
@@ -15,9 +15,9 @@ import { SortDirection } from 'src/app/directives/table-header-sortable/table-he
 })
 export class FinanceClaimListService {
 
+  _claims$ = new BehaviorSubject<FinanceClaim[]>([]);
   _loading$ = new BehaviorSubject<boolean>(true);
   _search$ = new Subject<void>();
-  _claims$ = new BehaviorSubject<FinanceClaim[]>([]);
   _total$ = new BehaviorSubject<number>(0);
   rawClaimsList: FinanceClaim[] = [];
 
@@ -62,13 +62,19 @@ export class FinanceClaimListService {
       this._claims$.next(result.claims);
       this._total$.next(result.total);
     });
+  }
 
-    this.httpClient.get(
-      `${environment.apiEndpoint}/financeassessmentclaim/list`
-    ).subscribe((result: FinanceClaim[]) => {
-      this.rawClaimsList = result;
-      this._search$.next();
-    });
+  getClaims(refresh: boolean = false) {
+    if (refresh || !this._claims$) {
+      this.httpClient.get(
+        `${environment.apiEndpoint}/financeassessmentclaim/list`
+      ).subscribe((result: FinanceClaim[]) => {
+        this.rawClaimsList = result;
+        this._search$.next();
+      });
+
+    }
+    return this._claims$.asObservable();
   }
 
   get claims$() { return this._claims$.asObservable(); }
