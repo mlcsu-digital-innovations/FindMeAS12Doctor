@@ -15,6 +15,7 @@ import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 })
 export class DoctorAvailabilityAddPage implements OnInit {
 
+  private originalUserAvailability: UserAvailability;
   public available = true;
   public contactDetails: NameId[] = [];
   public dateErrorText: string;
@@ -22,9 +23,8 @@ export class DoctorAvailabilityAddPage implements OnInit {
   public hasDateError: boolean;
   public maxDate: string;
   public minDate: string;
-  public validPostcode: boolean;
   public userAvailability: UserAvailability;
-  private originalUserAvailability: UserAvailability;
+  public validPostcode: boolean;
 
   constructor(
     private contactDetailService: ContactDetailService,
@@ -57,6 +57,8 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.userAvailability.end = new Date(now.setHours(now.getHours() + 8)).toISOString();
 
     this.originalUserAvailability = Object.assign({} as UserAvailability, this.userAvailability);
+    this.originalUserAvailability.location =
+      Object.assign({} as Location, this.userAvailability.location);
 
     this.getContactDetails();
   }
@@ -77,6 +79,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
   }
 
   hasDataChanged(): boolean {
+
     return this.available !== true ||
       this.userAvailability.start !== this.originalUserAvailability.start ||
       this.userAvailability.end !== this.originalUserAvailability.end ||

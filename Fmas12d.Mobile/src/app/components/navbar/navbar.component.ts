@@ -37,7 +37,6 @@ export class NavbarComponent implements OnInit {
   }
 
   async showConfirm() {
-    console.log(this.showWarning);
 
     if (this.showWarning === true) {
 
@@ -49,13 +48,11 @@ export class NavbarComponent implements OnInit {
             text: 'Cancel',
             role: 'cancel',
             handler: () => {
-              console.log('stop navigation');
             }
           },
           {
             text: 'Okay',
             handler: () => {
-              console.log('Confirm Okay.');
               this.location.back();
             }
           }
