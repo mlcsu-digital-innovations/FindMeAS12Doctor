@@ -12,6 +12,7 @@ import { DoctorModule } from './components/doctor/doctor.module';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { OnCallDoctorModule } from './components/on-call-doctor/on-call-doctor.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
@@ -39,6 +40,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     DoctorModule,
     AssessmentModule,
     HttpClientModule,
+    OnCallDoctorModule,
     PatientModule,
     ReferralModule,
     RouterModule.forRoot(AppRoutes)

@@ -35,6 +35,11 @@
             <ion-icon name="search"></ion-icon> Availability
           </ion-item>
         </ion-menu-toggle>
+        <ion-menu-toggle *ngIf="user.isDoctor">
+          <ion-item routerLink="/doctor-on-call-list" routerDirection="forward">
+            <ion-icon name="list"></ion-icon> On Call
+          </ion-item>
+        </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-item routerLink="/help" routerDirection="forward">
             <ion-icon name="help"></ion-icon> Help

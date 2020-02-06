@@ -38,6 +38,11 @@ namespace Fmas12d.Business.Services
       bool asNoTracking,
       bool activeOnly
     );
+    Task<IEnumerable<IUserOnCall>> GetOnCallByCurrentUserAsync(       
+      DateTimeOffset to, 
+      bool asNoTracking, 
+      bool activeOnly
+    );
     Task<IUserAvailability> UpdateAsync(IUserAvailability model);
     Task<IUserOnCall> UpdateOnCallAsync(IUserOnCall model);
     Task<IUserOnCall> UpdateOnCallConfirmationAsync(IUserOnCall businessModel);

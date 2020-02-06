@@ -31,6 +31,15 @@ namespace Fmas12d.Api.Controllers
       return await GetListInternal(from, to);
     }
 
+    [HttpGet]
+    [Route("current")]
+    public async Task<ActionResult<IEnumerable<ViewModels.UserOnCall>>> GetList(      
+      [FromQuery] DateTimeOffset? to = null
+    )
+    {
+      return await GetListByCurrentUserInternal(to);
+    }
+
     [HttpPost]
     [Route("contactdetail")]
     public async Task<ActionResult<ViewModels.UserOnCall>> PostContactDetail(
@@ -128,6 +137,38 @@ namespace Fmas12d.Api.Controllers
 
         IEnumerable<Business.Models.IUserOnCall> businessModels =
           await Service.GetOnCallAsync(from.Value, to.Value, true, true);
+
+        if (businessModels == null || !businessModels.Any())
+        {
+          return NoContent();
+        }
+        else
+        {
+          IEnumerable<ViewModels.UserOnCall> viewModels =
+            businessModels.Select(ViewModels.UserOnCall.ProjectFromModel).ToList();
+
+          return Ok(viewModels);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    private async Task<ActionResult<IEnumerable<ViewModels.UserOnCall>>> GetListByCurrentUserInternal(      
+      DateTimeOffset? to
+    )
+    {
+      try
+      {       
+        if (to == null)
+        {
+          to = DateTimeOffset.Now;
+        }
+
+        IEnumerable<Business.Models.IUserOnCall> businessModels =
+          await Service.GetOnCallByCurrentUserAsync(to.Value, true, true);
 
         if (businessModels == null || !businessModels.Any())
         {
