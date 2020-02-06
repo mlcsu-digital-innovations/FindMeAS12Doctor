@@ -10,6 +10,7 @@ export class UserAssessmentClaim {
   hasClaim: boolean;
   id: number;
   isClaimable: boolean;
+  lastUpdated: Date;
   mileage: number;
   mileagePayment: number;
   paymentDate?: Date;
