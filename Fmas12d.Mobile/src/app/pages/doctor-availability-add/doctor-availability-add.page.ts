@@ -131,7 +131,6 @@ export class DoctorAvailabilityAddPage implements OnInit {
           this.navController.back();
         }, err => {
 
-          console.log(err);
           let errorDetail = '';
           if (err.error.errors.Start.length > 0) {
             errorDetail = err.error.errors.Start[0];
