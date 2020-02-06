@@ -18,6 +18,7 @@ import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
+import { UserProfileModule } from './components/user-profile/user-profile.module';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   // https://login.microsoftonline.com/damienbod.onmicrosoft.com/.well-known/openid-configuration
@@ -43,7 +44,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     HttpClientModule,
     PatientModule,
     ReferralModule,
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes),
+    UserProfileModule
   ],
   providers: [
     AuthorizationGuard,

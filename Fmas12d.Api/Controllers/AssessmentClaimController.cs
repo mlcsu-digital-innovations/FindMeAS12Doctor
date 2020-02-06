@@ -56,6 +56,34 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
+    [Route("doctor/list")]
+    public async Task<ActionResult<IEnumerable<ViewModels.UserAssessmentClaim>>> GetAssessmentClaimsForDoctor()
+    {
+      try
+      {
+        IEnumerable<Business.Models.UserAssessmentClaim> businessModels =
+          await Service.GetAssessmentClaimsListByUserIdAsync(GetUserId());
+
+        if (businessModels == null)
+        {
+          return NoContent();
+        }
+        else
+        {
+          IEnumerable<ViewModels.UserAssessmentClaim> viewModels =
+              businessModels
+              .Select(ViewModels.UserAssessmentClaim.ProjectFromModel).ToList();
+
+          return Ok(viewModels);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
+    [HttpGet]
     [Route("{id:int}")]
     public async Task<ActionResult<ViewModels.UserAssessmentClaim>> GetAssessmentClaim(int id)
     {

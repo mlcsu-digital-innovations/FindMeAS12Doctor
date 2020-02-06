@@ -1,12 +1,8 @@
-import { Assessment } from './assessment';
-import { NameIdList } from './name-id-list';
 import { User } from './user';
 import { Ccg } from './ccg';
+import { UserAssessmentClaim } from './user-assessment-claim';
 
-export interface FinanceClaim {
-  assessment: Assessment;
+export interface FinanceClaim extends UserAssessmentClaim{
   ccg: Ccg;
   claimant: User;
-  claimReference: number;
-  claimStatus: NameIdList;
 }

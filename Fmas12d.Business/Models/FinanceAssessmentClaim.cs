@@ -6,34 +6,19 @@ using Fmas12d.Data.Entities;
 
 namespace Fmas12d.Business.Models
 {
-  public class FinanceAssessmentClaim
+  public class FinanceAssessmentClaim : UserAssessmentClaim
   {
-    public FinanceAssessmentClaim(Data.Entities.UserAssessmentClaim entity) {
-      Assessment = new Assessment(entity.Assessment);
-      AssessmentPayment = entity.AssessmentPayment;
+    public FinanceAssessmentClaim(Data.Entities.UserAssessmentClaim entity) : base(entity) {
+
       Ccg = new Ccg(entity.Assessment.Ccg);
       Claimant = new User(entity.User);
-      ClaimReference = entity.ClaimReference;
-      ClaimStatus = new ClaimStatus(entity.ClaimStatus);
-      Id = entity.Id;
-      Mileage = entity.Mileage;
-      MileagePayment = entity.MileagePayment;
-
       Claimant.BankDetails = Claimant.BankDetails.Where(bd => bd.CcgId == Ccg.Id).ToList();
     }
 
-    public int? ClaimReference { get; set; }
-    public Assessment Assessment { get; set; }
-    public ClaimStatus ClaimStatus { get; set; }
-    public int Id { get; set; }
     public User Claimant { get; set; }
     public Ccg Ccg { get; set; }
 
-    public int? Mileage { get; set; }
-    public decimal? MileagePayment { get; set; }
-    public decimal? AssessmentPayment { get; set; }
-
-    public static Expression<Func<Data.Entities.UserAssessmentClaim, FinanceAssessmentClaim>> ProjectFromEntity
+    public static new Expression<Func<Data.Entities.UserAssessmentClaim, FinanceAssessmentClaim>> ProjectFromEntity
     {
       get
       {

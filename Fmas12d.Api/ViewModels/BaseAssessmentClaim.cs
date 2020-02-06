@@ -2,11 +2,11 @@ using System;
 
 namespace Fmas12d.Api.ViewModels
 {
-  public class UserAssessmentClaim
+  public class BaseAssessmentClaim
   {
-    public UserAssessmentClaim() { }
+    public BaseAssessmentClaim() { }
 
-    public UserAssessmentClaim(Business.Models.UserAssessmentClaim model)
+    public BaseAssessmentClaim(Business.Models.UserAssessmentClaim model)
     {
       if (model == null) return;
 
@@ -31,19 +31,19 @@ namespace Fmas12d.Api.ViewModels
     public int? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
 
-    public static Func<Business.Models.UserAssessmentClaim, UserAssessmentClaim> ProjectFromModel
+    public static Func<Business.Models.BaseAssessmentClaim, BaseAssessmentClaim> ProjectFromModel
     {
       get
       {
-        return userAssessmentClaim => new UserAssessmentClaim()
+        return baseAssessmentClaim => new BaseAssessmentClaim()
         {
-          Assessment = new Assessment(userAssessmentClaim.Assessment),
-          AssessmentPayment = userAssessmentClaim.AssessmentPayment,
-          ClaimReference = userAssessmentClaim.ClaimReference,
-          ClaimStatus = userAssessmentClaim.ClaimStatus.Name,
-          Id = userAssessmentClaim.Id,
-          Mileage = userAssessmentClaim.Mileage,
-          MileagePayment = userAssessmentClaim.MileagePayment
+          Assessment = new Assessment(baseAssessmentClaim.Assessment),
+          AssessmentPayment = baseAssessmentClaim.AssessmentPayment,
+          ClaimReference = baseAssessmentClaim.ClaimReference,
+          ClaimStatus = baseAssessmentClaim.ClaimStatus.Name,
+          Id = baseAssessmentClaim.Id,
+          Mileage = baseAssessmentClaim.Mileage,
+          MileagePayment = baseAssessmentClaim.MileagePayment
         };
       }
     }

@@ -202,6 +202,21 @@ namespace Fmas12d.Business.Services
       return await CreateUserAssessmentClaimAsync(assessmentClaim);
     }
 
+    public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
+      int userId
+    ) {
+      IEnumerable<UserAssessmentClaim> claims = await _context
+      .UserAssessmentClaims
+      .Include(uac => uac.Assessment)
+      .Include(uac => uac.ClaimStatus)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(uac => uac.UserId == userId)
+      .Select(uac => new UserAssessmentClaim(uac))
+      .ToListAsync(); 
+
+      return claims;
+    }
+
     public async Task<UserAssessmentClaim> CreateUserAssessmentClaimAsync(UserAssessmentClaim model)
     {
       Entities.UserAssessmentClaim entity = model.MapToEntity();

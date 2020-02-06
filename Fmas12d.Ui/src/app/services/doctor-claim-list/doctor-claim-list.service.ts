@@ -9,17 +9,18 @@ import { SortDirection } from 'src/app/directives/table-header-sortable/table-he
 import { State } from 'src/app/interfaces/state';
 import { tap, debounceTime, switchMap, delay } from 'rxjs/operators';
 import * as moment from 'moment';
+import { UserAssessmentClaim } from 'src/app/interfaces/user-assessment-claim';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FinanceClaimListService {
+export class DoctorClaimListService {
 
-  _claims$ = new BehaviorSubject<FinanceClaim[]>([]);
+  _claims$ = new BehaviorSubject<UserAssessmentClaim[]>([]);
   _loading$ = new BehaviorSubject<boolean>(true);
   _search$ = new Subject<void>();
   _total$ = new BehaviorSubject<number>(0);
-  rawClaimsList: FinanceClaim[] = [];
+  rawClaimsList: UserAssessmentClaim[] = [];
 
   private _state: State = {
     page: 1,
@@ -57,15 +58,17 @@ export class FinanceClaimListService {
     return returnValue;
   }
 
-  matches(claim: FinanceClaim, term: string, pipe: PipeTransform) {
+  matches(claim: UserAssessmentClaim, term: string, pipe: PipeTransform) {
     return pipe.transform(claim.claimReference).includes(term.toLowerCase())
-      || claim.claimant.displayName.toLowerCase().includes(term)
-      || claim.ccg.name.toLowerCase().includes(term)
+      || claim.assessment.postcode.toLowerCase().includes(term.toLowerCase())
       ||
-      (typeof claim.claimStatus !== 'string' && claim.claimStatus.name.toLowerCase().includes(term));
+      (
+        typeof claim.claimStatus === 'string'
+        && claim.claimStatus.toLowerCase().includes(term.toLowerCase()
+      ));
   }
 
-  sort(claims: FinanceClaim[], column: string, direction: string, columnType: string): FinanceClaim[] {
+  sort(claims: UserAssessmentClaim[], column: string, direction: string, columnType: string): UserAssessmentClaim[] {
     if (direction === '') {
       return claims;
     } else {
@@ -99,7 +102,7 @@ export class FinanceClaimListService {
       delay(200),
       tap(() => this._loading$.next(false))
     ).subscribe(result => {
-      this._claims$.next(result.claims as FinanceClaim[]);
+      this._claims$.next(result.claims);
       this._total$.next(result.total);
     });
   }
@@ -107,8 +110,8 @@ export class FinanceClaimListService {
   getClaims(refresh: boolean = false) {
     if (refresh || !this._claims$) {
       this.httpClient.get(
-        `${environment.apiEndpoint}/financeassessmentclaim/list`
-      ).subscribe((result: FinanceClaim[]) => {
+        `${environment.apiEndpoint}/assessmentclaim/doctor/list`
+      ).subscribe((result: UserAssessmentClaim[]) => {
         this.rawClaimsList = result;
         this._search$.next();
       });

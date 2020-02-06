@@ -1,6 +1,6 @@
-import { FinanceClaim } from './finance-claim';
+import { UserAssessmentClaim } from './user-assessment-claim';
 
 export interface ClaimSearchResult {
-  claims: FinanceClaim[];
+  claims: UserAssessmentClaim[];
   total: number;
 }
