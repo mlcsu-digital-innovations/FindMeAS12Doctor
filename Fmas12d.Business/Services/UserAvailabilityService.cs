@@ -213,7 +213,9 @@ namespace Fmas12d.Business.Services
     )
     {
       IEnumerable<IUserOnCall> models = await _context
-        .UserAvailabilities
+        .UserAvailabilities        
+        .Include(ua => ua.ContactDetail.ContactDetailType)
+        .Include(ua => ua.User)
         .Where(ua => ua.End >= from || ua.Start <= to)
         .Where(ua => ua.UserAvailabilityStatusId == UserAvailabilityStatus.ON_CALL)
         .WhereIsActiveOrActiveOnly(activeOnly)
@@ -324,13 +326,14 @@ namespace Fmas12d.Business.Services
       {
         throw new Exception("Unable to CheckUserCanSetActiveStatus because the entity is null");
       }
-      if (entity.UserId != userId)
-      {
-        throw new UnauthorizedAccessException(
-          $"User Id {userId} cannot update the active status of the UserAvailability Id " +
-          $"{entity.Id} because its associated with User Id {entity.UserId}."
-        );
-      }
+      // TODO: need to implement and accommodate AMHP users
+      // if (entity.UserId != userId)
+      // {
+      //   throw new UnauthorizedAccessException(
+      //     $"User Id {userId} cannot update the active status of the UserAvailability Id " +
+      //     $"{entity.Id} because its associated with User Id {entity.UserId}."
+      //   );
+      // }
     }
 
     private async Task<bool> CheckForOverlappingAvailabilityAsync(

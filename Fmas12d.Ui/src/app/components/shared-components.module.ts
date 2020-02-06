@@ -24,7 +24,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     DelaySpinnerComponent,
     DisableControlDirective,
     FocusOnShowDirective,
-    NavbarComponent,
+    NavbarComponent,    
     TableHeaderSortable,
     ToastsComponent,
     UnauthorizedComponent,
