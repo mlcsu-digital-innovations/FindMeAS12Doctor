@@ -22,6 +22,11 @@ namespace Fmas12d.Business.Services
       return GetClaimInt(CLAIM_USERID, CLAIM_USERID);
     }
 
+    public bool HasUserIdClaim()
+    {
+      return _httpContextAccessor?.HttpContext?.User.HasClaim(c => c.Type == CLAIM_USERID) ?? false;
+    }
+
     public bool IsUserAdmin()
     {
       int profileTypeId = GetClaimInt(CLAIM_PROFILETYPEID, CLAIM_PROFILETYPEID);
@@ -57,5 +62,7 @@ namespace Fmas12d.Business.Services
         throw new Exception($"Invalid {claimTypeName} claim of {claimValue}.");
       }      
     }
+
+
   }
 }
