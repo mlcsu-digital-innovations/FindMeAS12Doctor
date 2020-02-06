@@ -81,7 +81,19 @@ const routes: Routes = [
     canActivate: [RouteGuardService],
     loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' +
     '#DoctorAvailabilityEditPageModule'
-  }
+  },
+  { 
+    path: 'doctor-on-call-list', 
+    canActivate: [RouteGuardService],
+    loadChildren: './pages/doctor-on-call-list/doctor-on-call-list.module' + 
+    '#DoctorOnCallListPageModule' },
+  { 
+    path: 'doctor-on-call-confirm-reject', 
+    canActivate: [RouteGuardService],
+    loadChildren: './pages/doctor-on-call-confirm-reject/doctor-on-call-confirm-reject.module' + 
+    '#DoctorOnCallConfirmRejectPageModule' }
+
+
 ];
 
 @NgModule({

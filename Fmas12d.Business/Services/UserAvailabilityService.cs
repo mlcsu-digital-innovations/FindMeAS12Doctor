@@ -226,6 +226,28 @@ namespace Fmas12d.Business.Services
       return models;
     }
 
+    public async Task<IEnumerable<IUserOnCall>> GetOnCallByCurrentUserAsync(       
+      DateTimeOffset to, 
+      bool asNoTracking, 
+      bool activeOnly
+    )
+    {
+      int userId = _userClaimsService.GetUserId();
+
+      IEnumerable<IUserOnCall> models = await _context
+        .UserAvailabilities
+        .Include(ua => ua.ContactDetail.ContactDetailType)
+        .Where(ua => ua.End >= to)
+        .Where(ua => ua.UserAvailabilityStatusId == UserAvailabilityStatus.ON_CALL)
+        .Where(ua => ua.UserId == userId)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserOnCall.ProjectFromEntity)
+        .ToListAsync();
+
+      return models;
+    }
+
     public async Task<IUserAvailability> UpdateAsync(IUserAvailability model)
     {
       await SetLatitudeLongitudeAsync(model);
