@@ -15,6 +15,7 @@ import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 })
 export class DoctorAvailabilityAddPage implements OnInit {
 
+  private originalUserAvailability: UserAvailability;
   public available = true;
   public contactDetails: NameId[] = [];
   public dateErrorText: string;
@@ -22,8 +23,8 @@ export class DoctorAvailabilityAddPage implements OnInit {
   public hasDateError: boolean;
   public maxDate: string;
   public minDate: string;
-  public validPostcode: boolean;
   public userAvailability: UserAvailability;
+  public validPostcode: boolean;
 
   constructor(
     private contactDetailService: ContactDetailService,
@@ -55,6 +56,10 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.userAvailability.start = now.toISOString();
     this.userAvailability.end = new Date(now.setHours(now.getHours() + 8)).toISOString();
 
+    this.originalUserAvailability = Object.assign({} as UserAvailability, this.userAvailability);
+    this.originalUserAvailability.location =
+      Object.assign({} as Location, this.userAvailability.location);
+
     this.getContactDetails();
   }
 
@@ -68,9 +73,17 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.hasDateError = false;
     this.dateErrorText = '';
 
-    if ( this.userAvailability.start > this.userAvailability.end ) {
+    if (this.userAvailability.start > this.userAvailability.end) {
       this.userAvailability.end = this.userAvailability.start;
     }
+  }
+
+  hasDataChanged(): boolean {
+
+    return this.available !== true ||
+      this.userAvailability.start !== this.originalUserAvailability.start ||
+      this.userAvailability.end !== this.originalUserAvailability.end ||
+      this.userAvailability.location !== this.originalUserAvailability.location; 
   }
 
   isDataValid(): boolean {
@@ -82,7 +95,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
     }
 
     if (this.available === true) {
-      if ( !this.validPostcode && this.userAvailability.location.contactDetailId === undefined) {
+      if (!this.validPostcode && this.userAvailability.location.contactDetailId === undefined) {
         dataValid = false;
       }
     }
@@ -95,7 +108,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
         result => {
           if (result !== null) {
             result.forEach(contact => {
-              this.contactDetails.push({id: contact.contactDetails[0].id, name: contact.name});
+              this.contactDetails.push({ id: contact.contactDetails[0].id, name: contact.name });
             });
           }
         }, error => {
@@ -112,21 +125,20 @@ export class DoctorAvailabilityAddPage implements OnInit {
   saveAvailability() {
 
     this.userAvailabilityService.postUserAvailability(this.userAvailability)
-    .subscribe(
-      result => {
-        this.showSuccessToast('Availability saved');
-        this.navController.back();
-      }, err => {
+      .subscribe(
+        result => {
+          this.showSuccessToast('Availability saved');
+          this.navController.back();
+        }, err => {
 
-        console.log(err);
-        let errorDetail = '';
-        if (err.error.errors.Start.length > 0) {
-          errorDetail = err.error.errors.Start[0];
+          let errorDetail = '';
+          if (err.error.errors.Start.length > 0) {
+            errorDetail = err.error.errors.Start[0];
+          }
+
+          this.showErrorToast(`Unable to save availability for user. ${errorDetail}`);
         }
-
-        this.showErrorToast(`Unable to save availability for user. ${errorDetail}` );
-      }
-    );
+      );
   }
 
   showErrorToast(msg: string) {
@@ -160,5 +172,4 @@ export class DoctorAvailabilityAddPage implements OnInit {
         }
       );
   }
-
 }

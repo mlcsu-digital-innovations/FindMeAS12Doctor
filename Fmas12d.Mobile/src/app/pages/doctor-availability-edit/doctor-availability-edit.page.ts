@@ -15,6 +15,7 @@ import { UserAvailabilityService } from 'src/app/services/user-availability/user
 })
 export class DoctorAvailabilityEditPage implements OnInit {
 
+  private originalUserAvailability: UserAvailability;
   public available = true;
   public contactDetails: NameId[] = [];
   public dateErrorText: string;
@@ -39,6 +40,12 @@ export class DoctorAvailabilityEditPage implements OnInit {
         if (this.router.getCurrentNavigation().extras.state) {
 
           this.userAvailability = this.router.getCurrentNavigation().extras.state.availability;
+
+          this.originalUserAvailability =
+            Object.assign({} as UserAvailability, this.userAvailability);
+          this.originalUserAvailability.location =
+            Object.assign({} as Location, this.userAvailability.location);
+
           this.postcode = this.userAvailability.location.postcode;
           this.available = this.userAvailability.statusId === AVAILABLE;
         } else {
@@ -77,6 +84,15 @@ export class DoctorAvailabilityEditPage implements OnInit {
       this.hasDateError = true;
       this.dateErrorText = 'Invalid start / end dates';
     }
+  }
+
+  hasDataChanged(): boolean {
+
+    return this.userAvailability.statusId !== this.originalUserAvailability.statusId ||
+      this.userAvailability.start !== this.originalUserAvailability.start ||
+      this.userAvailability.end !== this.originalUserAvailability.end ||
+      this.userAvailability.location.contactDetailId !== this.originalUserAvailability.location.contactDetailId ||
+      this.userAvailability.location.postcode !== this.originalUserAvailability.location.postcode;
   }
 
   isDataValid(): boolean {
