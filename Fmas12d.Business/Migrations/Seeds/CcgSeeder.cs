@@ -125,6 +125,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       ccg.CostCentre = 1;
       ccg.FailedAssessmentPayment = 0.0m;
       ccg.IsPaymentApprovalRequired = true;
+      ccg.SuccessfulAssessmentPayment = 0.0m;
       ccg.SuccessfulPencePerMile = 0.0m;
       ccg.UnsuccessfulPencePerMile = 0.0m;
       PopulateActiveAndModifiedWithSystemUser(ccg);

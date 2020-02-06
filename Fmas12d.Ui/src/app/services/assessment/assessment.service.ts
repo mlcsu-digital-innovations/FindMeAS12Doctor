@@ -123,8 +123,6 @@ export class AssessmentService {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    console.log(user);
-
     const userDetails = {
       telephoneNumber: user.contactDetailBase.telephoneNumber,
       displayName: user.displayName,

@@ -64,6 +64,8 @@
         </ion-row>
         <ion-row *ngIf="assessment.meetingArrangementComment != ''">
           <ion-label color="primary">Meeting Comments</ion-label>
+        </ion-row>
+        <ion-row *ngIf="assessment.meetingArrangementComment != ''">
           <ion-col>
             {{assessment.meetingArrangementComment}}
           </ion-col>
@@ -75,8 +77,20 @@
           *ngIf="assessment.detailTypes.length > 0">
           <ion-col *ngFor="let detail of assessment.detailTypes">
             {{detail.name}}
-          </ion-col>
-          
+          </ion-col>          
+        </ion-row>
+        <br/>
+        <ion-row *ngIf="assessment.hasOutcome">
+          <ion-col style="text-align: center;">
+            <ion-button 
+              [routerLink]="['/claims-create/', assessment.id]" 
+              routerDirection="forward"
+              color="primary"
+            >
+              <ion-icon name="pricetag"></ion-icon>&nbsp; 
+              Create Claim
+            </ion-button>  
+          </ion-col> 
         </ion-row>
 
       </ion-card-content>

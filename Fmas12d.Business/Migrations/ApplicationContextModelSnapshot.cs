@@ -783,6 +783,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
+                    b.Property<decimal>("SuccessfulAssessmentPayment")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");
 
@@ -3107,8 +3110,10 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasBeenDeallocated")
-                        .HasColumnType("bit");
+                    b.Property<string>("EndPostcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -3117,6 +3122,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsClaimable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<int?>("Mileage")
@@ -3131,10 +3139,13 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("NextAssessmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("PaymentDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SelectedByUserId")
+                    b.Property<int?>("PreviousAssessmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("StartPostcode")
@@ -3143,7 +3154,6 @@ namespace Fmas12d.Business.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("TravelComments")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
@@ -3154,11 +3164,13 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasAlternateKey("AssessmentId", "UserId");
 
+                    b.HasIndex("ClaimReference")
+                        .IsUnique()
+                        .HasFilter("[ClaimReference] IS NOT NULL");
+
                     b.HasIndex("ClaimStatusId");
 
                     b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("SelectedByUserId");
 
                     b.HasIndex("UserId");
 
@@ -3199,8 +3211,10 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasBeenDeallocated")
-                        .HasColumnType("bit");
+                    b.Property<string>("EndPostcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -3212,6 +3226,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsClaimable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<int?>("Mileage")
@@ -3226,10 +3243,13 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("NextAssessmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("PaymentDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SelectedByUserId")
+                    b.Property<int?>("PreviousAssessmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("StartPostcode")
@@ -3238,7 +3258,6 @@ namespace Fmas12d.Business.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("TravelComments")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
@@ -4210,12 +4229,6 @@ namespace Fmas12d.Business.Migrations
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fmas12d.Data.Entities.User", "SelectedByUser")
-                        .WithMany("UserAssessmentClaimSelections")
-                        .HasForeignKey("SelectedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

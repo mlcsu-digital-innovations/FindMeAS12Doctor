@@ -82,18 +82,30 @@ const routes: Routes = [
     loadChildren: './pages/doctor-availability-edit/doctor-availability-edit.module' +
     '#DoctorAvailabilityEditPageModule'
   },
-  { 
+  {
+    path: 'claims-list',
+    loadChildren: './pages/claims-list/claims-list.module#ClaimsListPageModule'
+  },
+  {
+    path: 'claims-create/:assessmentId',
+    loadChildren: './pages/claims-create/claims-create.module#ClaimsCreatePageModule'
+  },
+  {
+    path: 'claims-details/:claimId',
+    loadChildren: './pages/claims-details/claims-details.module#ClaimsDetailsPageModule'
+  },
+  {
     path: 'doctor-on-call-list', 
     canActivate: [RouteGuardService],
-    loadChildren: './pages/doctor-on-call-list/doctor-on-call-list.module' + 
-    '#DoctorOnCallListPageModule' },
-  { 
-    path: 'doctor-on-call-confirm-reject', 
+    loadChildren: './pages/doctor-on-call-list/doctor-on-call-list.module' +
+    '#DoctorOnCallListPageModule'
+  },
+  {
+    path: 'doctor-on-call-confirm-reject',
     canActivate: [RouteGuardService],
-    loadChildren: './pages/doctor-on-call-confirm-reject/doctor-on-call-confirm-reject.module' + 
-    '#DoctorOnCallConfirmRejectPageModule' }
-
-
+    loadChildren: './pages/doctor-on-call-confirm-reject/doctor-on-call-confirm-reject.module' +
+    '#DoctorOnCallConfirmRejectPageModule'
+  }
 ];
 
 @NgModule({

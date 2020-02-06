@@ -33,12 +33,11 @@ export class DoctorAssessmentDetailsPage implements OnInit {
 
       request.subscribe((result: AmhpAssessmentView) => {
         this.assessment = result;
-
         this.closeLoading();
       }, error => {
         this.closeLoading();
         this.toastService.displayError({
-          message: "Unable to retrieve assessment details"
+          message: 'Unable to retrieve assessment details'
         });
       });
     }
@@ -58,5 +57,4 @@ export class DoctorAssessmentDetailsPage implements OnInit {
     });
     await this.loading.present();
   }
-
 }
