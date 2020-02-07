@@ -2613,6 +2613,39 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("ReferralStatusesAudit");
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.RequestResponseLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Controller")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Request")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("RequestAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Response")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ResponseAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequestResponseLog");
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.Section12ApprovalStatus", b =>
                 {
                     b.Property<int>("Id")

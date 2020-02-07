@@ -93,6 +93,18 @@ const routes: Routes = [
   {
     path: 'claims-details/:claimId',
     loadChildren: './pages/claims-details/claims-details.module#ClaimsDetailsPageModule'
+  },
+  {
+    path: 'doctor-on-call-list', 
+    canActivate: [RouteGuardService],
+    loadChildren: './pages/doctor-on-call-list/doctor-on-call-list.module' +
+    '#DoctorOnCallListPageModule'
+  },
+  {
+    path: 'doctor-on-call-confirm-reject',
+    canActivate: [RouteGuardService],
+    loadChildren: './pages/doctor-on-call-confirm-reject/doctor-on-call-confirm-reject.module' +
+    '#DoctorOnCallConfirmRejectPageModule'
   }
 ];
 

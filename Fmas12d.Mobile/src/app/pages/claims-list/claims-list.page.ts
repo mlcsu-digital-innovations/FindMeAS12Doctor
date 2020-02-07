@@ -17,8 +17,8 @@ export class ClaimsListPage implements OnInit {
   public listLastUpdated: Date;
   private loading: HTMLIonLoadingElement;
 
-  private assessmentList: Assessment[] = [];
-  private claimsList: UserAssessmentClaim[] = [];
+  assessmentList: Assessment[] = [];
+  claimsList: UserAssessmentClaim[] = [];
  
   constructor(
     private assessmentClaimService: AssessmentClaimService,

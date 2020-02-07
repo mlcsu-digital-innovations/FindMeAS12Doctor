@@ -1,4 +1,5 @@
-﻿using Fmas12d.Business;
+﻿using Fmas12d.Api.Extensions;
+using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Fmas12d.Models;
@@ -169,6 +170,7 @@ namespace Fmas12d.Api
       services.AddScoped<IPatientService, PatientService>();
       services.AddScoped<IReferralService, ReferralService>();
       services.AddScoped<IReferralStatusService, ReferralStatusService>();
+      services.AddScoped<IRequestResponseLogService, RequestResponseLogService>();
       services.AddScoped<ISection12LiveRegisterService, Section12LiveRegisterService>();
       services.AddScoped<ISpecialityService, SpecialityService>();
       services.AddScoped<IUnsuccessfulAssessmentTypeService, UnsuccessfulAssessmentTypeService>();
@@ -216,7 +218,8 @@ namespace Fmas12d.Api
       app.UseRouting();
       app.UseCors("AllowAnyOrigin");      
       app.UseAuthentication();
-      app.UseUserClaims();      
+      app.UseUserClaims();
+      app.UseMiddleware<RequestResponseLoggingMiddleware>();
       app.UseAuthorization();            
       app.UseEndpoints(endpoints =>
       {

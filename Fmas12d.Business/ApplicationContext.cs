@@ -118,6 +118,7 @@ namespace Fmas12d.Business
     public virtual DbSet<ReferralAudit> ReferralAudits { get; set; }
     public virtual DbSet<ReferralStatus> ReferralStatuses { get; set; }
     public virtual DbSet<ReferralStatusAudit> ReferralStatusAudits { get; set; }
+    public virtual DbSet<RequestResponseLog> RequestResponseLog { get; set; }
     public virtual DbSet<Section12ApprovalStatus> Section12ApprovalStatuses { get; set; }
     public virtual DbSet<Section12ApprovalStatusAudit> Section12ApprovalStatusAudits { get; set; }
     public virtual DbSet<Section12LiveRegister> Section12LiveRegisters { get; set; }

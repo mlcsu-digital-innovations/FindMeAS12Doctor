@@ -1,5 +1,7 @@
 import { AuthorizationGuard } from './authorization.guard';
 import { AutoLoginComponent } from './components/auto-login/auto-login.component';
+import { OnCallDoctorListComponent } 
+  from './components/on-call-doctor/on-call-doctor-list/on-call-doctor-list.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { Routes } from '@angular/router';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
@@ -18,6 +20,10 @@ export const AppRoutes: Routes = [
   {
     path: 'unauthorized',
     component: UnauthorizedComponent
+  },
+  {
+    path: 'user/oncall',
+    component: OnCallDoctorListComponent
   },
   {
     path: 'welcome',
