@@ -41,7 +41,7 @@
                   Assessment Date
                 </th>
                 <th scope="col" sortable="assessment.postcode" (sort)="onSort($event)">Postcode</th>
-                <th scope="col" sortable="claimStatus" (sort)="onSort($event)">Status</th>
+                <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
               </thead>
               <tbody>
                 <tr
@@ -59,7 +59,7 @@
                     <ngb-highlight [result]="claim.assessment.postcode" [term]="claimsService.searchTerm"></ngb-highlight>
                   </td>
                   <td>
-                    <ngb-highlight [result]="claim.claimStatus" [term]="claimsService.searchTerm"></ngb-highlight>
+                    <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
                   </td>
                 </tr>
               </tbody>

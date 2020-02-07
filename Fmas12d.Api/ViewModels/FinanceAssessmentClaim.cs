@@ -1,42 +1,23 @@
 using System;
 namespace Fmas12d.Api.ViewModels
 {
-  public class FinanceAssessmentClaim
+  public class FinanceAssessmentClaim : UserAssessmentClaim
   {
-    public FinanceAssessmentClaim(Business.Models.FinanceAssessmentClaim model) {
+    public FinanceAssessmentClaim(Business.Models.FinanceAssessmentClaim model) : base(model) {
       if (model == null) return;
 
-      Assessment = new Assessment(model.Assessment);
-      AssessmentPayment = model.AssessmentPayment;
-      ClaimReference = model.ClaimReference;
       Ccg = new Ccg(model.Ccg);
-      ClaimStatus = new IdNameDescription{
-        Id = model.ClaimStatus.Id,
-        Name = model.ClaimStatus.Name,
-        Description = model.ClaimStatus.Description
-      };
+      ClaimStatus = new ClaimStatus(model.ClaimStatus);
       Claimant = new User(model.Claimant);
-      Id = model.Id;
-      Mileage = model.Mileage;
-      MileagePayment = model.MileagePayment;
     }
 
     public FinanceAssessmentClaim() {}
 
-    public virtual Assessment Assessment { get; set; }
-    public decimal? AssessmentPayment { get; set; }
-    public int? ClaimReference { get; set; }
-    public IdNameDescription ClaimStatus { get; set; }
+    public new ClaimStatus ClaimStatus { get; set; }
     public virtual User Claimant { get; set; }
     public virtual Ccg Ccg { get; set; }
 
-    public int Id { get; set; }
-
-    public int? Mileage { get; set; }
-    public decimal? MileagePayment { get; set; }
-
-
-    public static Func<Business.Models.FinanceAssessmentClaim, FinanceAssessmentClaim> ProjectFromModel
+    public static new Func<Business.Models.FinanceAssessmentClaim, FinanceAssessmentClaim> ProjectFromModel
     {
       get
       {
@@ -46,11 +27,7 @@ namespace Fmas12d.Api.ViewModels
           AssessmentPayment = financeAssessmentClaim.AssessmentPayment,
           Ccg = new Ccg(financeAssessmentClaim.Ccg),
           ClaimReference = financeAssessmentClaim.ClaimReference,
-          ClaimStatus = new IdNameDescription{
-            Id = financeAssessmentClaim.ClaimStatus.Id,
-            Name = financeAssessmentClaim.ClaimStatus.Name,
-            Description = financeAssessmentClaim.ClaimStatus.Description
-          },
+          ClaimStatus = new ClaimStatus(financeAssessmentClaim.ClaimStatus),
           Claimant = new User(financeAssessmentClaim.Claimant),
           Id = financeAssessmentClaim.Id,
           Mileage = financeAssessmentClaim.Mileage,

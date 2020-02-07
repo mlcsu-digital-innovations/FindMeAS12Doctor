@@ -13,7 +13,7 @@ namespace Fmas12d.Api.ViewModels
       Assessment = new Assessment(model.Assessment);
       AssessmentPayment = model.AssessmentPayment;
       ClaimReference = model.ClaimReference;
-      ClaimStatus = model.ClaimStatus.Name;
+      ClaimStatus = new ClaimStatus(model.ClaimStatus);
       ClaimStatusId = model.ClaimStatus.Id;
       Id = model.Id;
       LastUpdated = model.ModifiedAt;
@@ -23,7 +23,7 @@ namespace Fmas12d.Api.ViewModels
 
     public Assessment Assessment { get; set; }
     public decimal? AssessmentPayment { get; set; }
-    public string ClaimStatus { get; set; }
+    public ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
     public int? ClaimReference { get; set; }
     public int Id { get; set; }
@@ -40,7 +40,7 @@ namespace Fmas12d.Api.ViewModels
           Assessment = new Assessment(userAssessmentClaim.Assessment),
           AssessmentPayment = userAssessmentClaim.AssessmentPayment,
           ClaimReference = userAssessmentClaim.ClaimReference,
-          ClaimStatus = userAssessmentClaim.ClaimStatus.Name,
+          ClaimStatus = new ClaimStatus(userAssessmentClaim.ClaimStatus),
           Id = userAssessmentClaim.Id,
           Mileage = userAssessmentClaim.Mileage,
           MileagePayment = userAssessmentClaim.MileagePayment

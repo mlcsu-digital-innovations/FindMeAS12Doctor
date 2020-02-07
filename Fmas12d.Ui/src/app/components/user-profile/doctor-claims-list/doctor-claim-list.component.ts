@@ -55,13 +55,10 @@ export class DoctorClaimListComponent implements OnInit {
 
 
   exportClaims() {
-    // export: DoctorClaimExport[];
 
     this.exportData = [];
 
     console.log('exporting claims');
-
-
 
     this.displayedList.forEach(claim => {
 
@@ -69,7 +66,7 @@ export class DoctorClaimListComponent implements OnInit {
 
     this.exportData.push({
         claimReference: claim.claimReference,
-        claimStatus: claim.claimStatus as string,
+        claimStatus: claim.claimStatus.name,
         assessmentDate: moment(claim.assessment.scheduledTime).toISOString(),
         assessmentPostcode: claim.assessment.postcode,
         successfulAssessment: claim.assessment.isSuccessful,
