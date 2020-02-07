@@ -1,14 +1,11 @@
 import { ClaimView } from 'src/app/interfaces/claim-view';
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GpPracticeListService } from 'src/app/services/gp-practice-list/gp-practice-list.service';
-import { NgbModalRef, NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of, throwError } from 'rxjs';
-import { ParamMap, ActivatedRoute, Router } from '@angular/router';
-import { PatientService } from 'src/app/services/patient/patient.service';
-import { RouterService } from 'src/app/services/router/router.service';
-import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { ParamMap, ActivatedRoute } from '@angular/router';
+
+import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
 
@@ -19,15 +16,14 @@ import * as moment from 'moment';
 })
 export class DoctorClaimViewComponent implements OnInit {
 
+  claim$: Observable<ClaimView | any>;
   claimForm: FormGroup;
   claimId: number;
-  claim$: Observable<ClaimView | any>;
 
   constructor(
     private formBuilder: FormBuilder,
     private claimsService: FinanceClaimService,
     private route: ActivatedRoute,
-    private routerService: RouterService,
     private toastService: ToastService
   ) { }
 
@@ -39,7 +35,6 @@ export class DoctorClaimViewComponent implements OnInit {
           return this.claimsService.getClaimView(+params.get('claimId'))
             .pipe(
               map(claim => {
-                console.log(claim);
                 this.InitialiseForm(claim);
                 return claim;
               })
@@ -47,7 +42,6 @@ export class DoctorClaimViewComponent implements OnInit {
         }
       ),
       catchError((err) => {
-
         this.toastService.displayError({
           title: 'Error',
           message: 'Error Retrieving Referral Information'
@@ -59,19 +53,19 @@ export class DoctorClaimViewComponent implements OnInit {
     );
 
     this.claimForm = this.formBuilder.group({
-      claimReference: [{ value: '', disabled: true }],
-      claimStatus: [{ value: '', disabled: true }],
-      ccg: [{ value: '', disabled: true }],
       assessmentAddress: [{value: '', disabled: true}],
       assessmentDate: [{value: '', disabled: true}],
+      assessmentOutcome: [{value: '', disabled: true}],
       assessmentPayment: [{value: '', disabled: true}],
+      ccg: [{ value: '', disabled: true }],
+      claimReference: [{ value: '', disabled: true }],
+      claimStatus: [{ value: '', disabled: true }],
       mileagePayment: [{value: '', disabled: true}]
     });
 
   }
 
   InitialiseForm(claim: ClaimView) {
-    console.log(claim);
 
     this.claimId = claim.id;
     this.claimForm.controls['claimReference'].setValue(claim.claimReference);
@@ -86,10 +80,12 @@ export class DoctorClaimViewComponent implements OnInit {
     address += claim.assessment.address4 == null ? '' : `, ${claim.assessment.address4}`;
     address += claim.assessment.postcode == null ? '' : `, ${claim.assessment.postcode}`;
 
-    console.log(address);
-
     this.claimForm.controls['assessmentAddress'].setValue(address);
-    this.claimForm.controls['assessmentDate'].setValue(moment(claim.assessment.scheduledTime).format('DD MMM YYYY HH:mm'));
+    this.claimForm.controls['assessmentDate']
+      .setValue(moment(claim.assessment.scheduledTime).format('DD MMM YYYY HH:mm'));
 
+    this.claimForm.controls['assessmentOutcome'].setValue(
+     claim.assessment.isSuccessful ? 'Successful Assessment' : 'Unsuccessful Assessment'
+    );
   }
 }
