@@ -8,7 +8,6 @@ import { UserAssessmentClaim } from 'src/app/interfaces/user-assessment-claim';
 import { ExcelService } from 'src/app/services/excel-service/excel.service';
 import { DoctorClaimExport } from 'src/app/interfaces/doctor-claim-export';
 import * as moment from 'moment';
-
 @Component({
   selector: 'app-doctor-claim-list',
   styleUrls: ['./doctor-claim-list.component.css'],
@@ -50,34 +49,39 @@ export class DoctorClaimListComponent implements OnInit {
         });
       }
     );
-
   }
-
 
   exportClaims() {
 
     this.exportData = [];
-
-    console.log('exporting claims');
-
     this.displayedList.forEach(claim => {
-
-    console.log(moment(claim.assessment.scheduledTime).toISOString());
-
-    this.exportData.push({
-        claimReference: claim.claimReference,
-        claimStatus: claim.claimStatus.name,
-        assessmentDate: moment(claim.assessment.scheduledTime).toISOString(),
-        assessmentPostcode: claim.assessment.postcode,
-        successfulAssessment: claim.assessment.isSuccessful,
-        mileage: claim.mileage,
-        mileagePayment: claim.mileagePayment,
-        assessmentPayment: claim.assessmentPayment,
-        totalPayment: claim.mileagePayment + claim.assessmentPayment
-      });
+      this.exportData.push({
+          claimReference: claim.claimReference,
+          claimStatus: claim.claimStatus.name,
+          assessmentDate: moment(claim.assessment.scheduledTime).toDate(),
+          assessmentPostcode: claim.assessment.postcode,
+          successfulAssessment: claim.assessment.isSuccessful,
+          mileage: claim.mileage,
+          mileagePayment: claim.mileagePayment,
+          assessmentPayment: claim.assessmentPayment,
+          totalPayment: claim.mileagePayment + claim.assessmentPayment
+        });
     });
 
-    this.excelService.exportAsExcelFile(this.exportData, 'FMAS12D_ClaimExport');
+    const cols = [
+      {cell: 'A1', title: 'Claim Reference'},
+      {cell: 'B1', title: 'Claim Status'},
+      {cell: 'C1', title: 'Assessment Date'},
+      {cell: 'D1', title: 'Assessment Postcode'},
+      {cell: 'E1', title: 'Successful Assessment'},
+      {cell: 'F1', title: 'Miles Travelled'},
+      {cell: 'G1', title: 'Mileage Payment'},
+      {cell: 'H1', title: 'Assessment Payment'},
+      {cell: 'I1', title: 'Claim Total'},
+    ];
+
+
+    this.excelService.exportAsExcelFile(this.exportData, 'FMAS12D_ClaimExport', cols);
 
   }
 

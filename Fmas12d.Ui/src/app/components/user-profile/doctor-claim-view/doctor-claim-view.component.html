@@ -48,26 +48,31 @@
                 />
               </div>
             </div>
+
             <div class="form-row">
-              <div class="col-md-6">
-                <label for="claimant">Claimant</label>
+              <div class="col-md-12">
+                <label for="assessmentPayment">Assessment Address</label>
                 <input
                   class="form-control"
-                  formControlName="claimant"
-                  id="claimant"
-                  type="text"
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="vsr">VSR No.</label>
-                <input
-                  class="form-control"
-                  formControlName="vsr"
-                  id="vsr"
+                  formControlName="assessmentAddress"
+                  id="assessmentAddress"
                   type="text"
                 />
               </div>
             </div>
+
+            <div class="form-row">
+              <div class="col-md-12">
+                <label for="assessmentPayment">Assessment Date</label>
+                <input
+                  class="form-control"
+                  formControlName="assessmentDate"
+                  id="assessmentDate"
+                  type="text"
+                />
+              </div>
+            </div>
+
             <div class="form-row">
               <div class="col-md-3">
                 <label for="assessmentPayment">Assessment Payment</label>
@@ -92,29 +97,11 @@
             </div>
             <br/>
             <div class="form-row">
-              <div class="col-md-2 mb-2 offset-md-8 text-right">
-                <a class="btn btn-standard btn-cancel" type="button" routerLink="/finance/claims/list">
+              <div class="col-md-2 mb-2 offset-md-10 text-right">
+                <a class="btn btn-standard btn-cancel" type="button" routerLink="/doctor/claims/list">
                   <i class="fas fa-arrow-left"></i>
                   Back
                 </a>
-              </div>
-              <div class="col-md-2 mb-2 text-left">
-                <button class="btn btn-primary btn-standard"
-                  type="button"
-                  *ngIf="claim.claimant.hasBankDetails"
-                  (click)="SetClaimAsProcessing()"
-                >
-                  <i class="fas fa-cog"></i>
-                  Process
-                </button>
-                <button class="btn btn-primary btn-standard"
-                type="button"
-                *ngIf="!claim.claimant.hasBankDetails"
-                (click)="SetClaimAsQuerying()"
-                >
-                  <i class="far fa-question-circle"></i>
-                  Query
-                </button>
               </div>
             </div>
           </form>

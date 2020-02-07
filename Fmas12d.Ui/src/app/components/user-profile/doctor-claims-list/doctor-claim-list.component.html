@@ -41,12 +41,13 @@
                   Assessment Date
                 </th>
                 <th scope="col" sortable="assessment.postcode" (sort)="onSort($event)">Postcode</th>
+                <th scope="col">Claim Amount</th>
                 <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
               </thead>
               <tbody>
                 <tr
                   *ngFor="let claim of claimsList$ | async; index as i"
-                  routerLink="/finance/claim/{{claim.id}}"
+                  routerLink="/doctor/claim/{{claim.id}}"
                   class="clickable"
                 >
                   <td>
@@ -57,6 +58,9 @@
                   </td>
                   <td>
                     <ngb-highlight [result]="claim.assessment.postcode" [term]="claimsService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="claim.mileagePayment + claim.assessmentPayment | currency: 'GBP'" [term]="claimsService.searchTerm"></ngb-highlight>
                   </td>
                   <td>
                     <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
@@ -78,7 +82,7 @@
               <option [ngValue]="9999999">All items</option>
             </select>
           </div>
-          <div class="form-row">
+          <div class="form-row" *ngIf="(total$ | async) > 0">
             <button class="btn btn-primary" (click)="exportClaims()">
               <i class="fas fa-download"></i>
               Export

@@ -1,9 +1,10 @@
-import { NameIdList } from './name-id-list';
+import { Assessment } from './assessment';
 import { Ccg } from './ccg';
-import { User } from './user';
 import { Claimant } from './claimant';
+import { NameIdList } from './name-id-list';
 
 export interface ClaimView {
+  assessment: Assessment;
   assessmentPayment: number;
   claimReference: number;
   claimStatus: NameIdList;
