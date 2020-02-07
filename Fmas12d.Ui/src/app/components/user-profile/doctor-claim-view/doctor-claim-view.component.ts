@@ -21,8 +21,8 @@ export class DoctorClaimViewComponent implements OnInit {
   claimId: number;
 
   constructor(
-    private formBuilder: FormBuilder,
     private claimsService: FinanceClaimService,
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private toastService: ToastService
   ) { }

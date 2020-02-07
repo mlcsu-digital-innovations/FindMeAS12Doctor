@@ -15,7 +15,6 @@ export class ExcelService {
   public exportAsExcelFile(json: any[], excelFileName: string, cols: {cell: string, title: string}[]): void {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    console.log('worksheet', worksheet);
 
     cols.forEach(col => {
       worksheet[col.cell].v = col.title;

@@ -1,12 +1,12 @@
-import { Component, QueryList, ViewChildren, OnInit, PipeTransform } from '@angular/core';
+import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
+import { DoctorClaimExport } from 'src/app/interfaces/doctor-claim-export';
 import { DoctorClaimListService } from 'src/app/services/doctor-claim-list/doctor-claim-list.service';
+import { ExcelService } from 'src/app/services/excel-service/excel.service';
 import { Observable } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
 import { ToastService } from '../../../services/toast/toast.service';
 import { UserAssessmentClaim } from 'src/app/interfaces/user-assessment-claim';
-import { ExcelService } from 'src/app/services/excel-service/excel.service';
-import { DoctorClaimExport } from 'src/app/interfaces/doctor-claim-export';
 import * as moment from 'moment';
 @Component({
   selector: 'app-doctor-claim-list',
@@ -15,20 +15,19 @@ import * as moment from 'moment';
 })
 export class DoctorClaimListComponent implements OnInit {
 
-  error: any;
   claimsList$: Observable<UserAssessmentClaim[]>;
-  total$: Observable<number>;
-
   displayedList: UserAssessmentClaim[];
+  error: any;
   exportData: DoctorClaimExport[];
+  total$: Observable<number>;
 
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
 
   constructor(
-    public oidcSecurityService: OidcSecurityService,
     private claimsService: DoctorClaimListService,
     private excelService: ExcelService,
     private toastService: ToastService,
+    public oidcSecurityService: OidcSecurityService,
   ) {
   }
 
@@ -39,7 +38,6 @@ export class DoctorClaimListComponent implements OnInit {
 
     this.claimsList$.subscribe(
       result => {
-        console.log(result);
         this.displayedList = result;
       },
       error => {
@@ -68,7 +66,7 @@ export class DoctorClaimListComponent implements OnInit {
         });
     });
 
-    const cols = [
+    const columnHeaders = [
       {cell: 'A1', title: 'Claim Reference'},
       {cell: 'B1', title: 'Claim Status'},
       {cell: 'C1', title: 'Assessment Date'},
@@ -80,9 +78,7 @@ export class DoctorClaimListComponent implements OnInit {
       {cell: 'I1', title: 'Claim Total'},
     ];
 
-
-    this.excelService.exportAsExcelFile(this.exportData, 'FMAS12D_ClaimExport', cols);
-
+    this.excelService.exportAsExcelFile(this.exportData, 'FMAS12D_ClaimExport', columnHeaders);
   }
 
   onSort({column, direction, columnType}: SortEvent) {

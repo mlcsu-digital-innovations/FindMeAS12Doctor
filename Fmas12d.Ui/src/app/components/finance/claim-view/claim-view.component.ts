@@ -1,11 +1,11 @@
 import { ClaimView } from 'src/app/interfaces/claim-view';
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable, of, throwError } from 'rxjs';
-import { ParamMap, ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { ParamMap, ActivatedRoute } from '@angular/router';
 import { RouterService } from 'src/app/services/router/router.service';
-import { switchMap, map, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
 
@@ -16,13 +16,13 @@ import * as moment from 'moment';
 })
 export class ClaimViewComponent implements OnInit {
 
+  claim$: Observable<ClaimView | any>;
   claimForm: FormGroup;
   claimId: number;
-  claim$: Observable<ClaimView | any>;
 
   constructor(
-    private formBuilder: FormBuilder,
     private claimsService: FinanceClaimService,
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private routerService: RouterService,
     private toastService: ToastService
@@ -66,6 +66,28 @@ export class ClaimViewComponent implements OnInit {
 
   }
 
+  InitialiseForm(claim: ClaimView) {
+
+    this.claimId = claim.id;
+    this.claimForm.controls['claimReference'].setValue(claim.claimReference);
+    this.claimForm.controls['claimStatus'].setValue(claim.claimStatus.name);
+    this.claimForm.controls['ccg'].setValue(claim.ccg.name);
+    this.claimForm.controls['claimant'].setValue(claim.claimant.displayName);
+    if (claim.claimant.hasBankDetails) {
+      this.claimForm.controls['vsr'].setValue(claim.claimant.bankDetails[0].vsrNumber);
+    }
+    this.claimForm.controls['assessmentPayment'].setValue(claim.assessmentPayment);
+    this.claimForm.controls['mileagePayment'].setValue(claim.mileagePayment);
+  }
+
+  SetClaimAsProcessing() {
+    this.UpdateClaim(false);
+  }
+
+  SetClaimAsQuerying() {
+    this.UpdateClaim(true);
+  }
+
   UpdateClaim(isQuery: boolean) {
 
     let updateRequest: Observable<ClaimView>;
@@ -75,8 +97,6 @@ export class ClaimViewComponent implements OnInit {
     } else {
       updateRequest = this.claimsService.updateClaimStatusToProcessing(this.claimId);
     }
-
-    console.log(this.claimId);
 
     updateRequest.subscribe(
       () => {
@@ -92,30 +112,5 @@ export class ClaimViewComponent implements OnInit {
         });
       }
     );
-  }
-
-  SetClaimAsProcessing() {
-    this.UpdateClaim(false);
-  }
-
-  SetClaimAsQuerying() {
-    this.UpdateClaim(true);
-  }
-
-
-
-  InitialiseForm(claim: ClaimView) {
-    console.log(claim);
-
-    this.claimId = claim.id;
-    this.claimForm.controls['claimReference'].setValue(claim.claimReference);
-    this.claimForm.controls['claimStatus'].setValue(claim.claimStatus.name);
-    this.claimForm.controls['ccg'].setValue(claim.ccg.name);
-    this.claimForm.controls['claimant'].setValue(claim.claimant.displayName);
-    if (claim.claimant.hasBankDetails) {
-      this.claimForm.controls['vsr'].setValue(claim.claimant.bankDetails[0].vsrNumber);
-    }
-    this.claimForm.controls['assessmentPayment'].setValue(claim.assessmentPayment);
-    this.claimForm.controls['mileagePayment'].setValue(claim.mileagePayment);
   }
 }
