@@ -14,6 +14,8 @@ namespace Fmas12d.Api.ViewModels
       DoctorStatusId = model.Doctors?.SingleOrDefault()?.StatusId;
       DoctorHasAccepted = model.Doctors?.SingleOrDefault()?.HasAccepted;
       Id = model.Id;
+      HasBeenReviewed = model.CompletionConfirmationByUserId != null;
+      HasBeenCompleted = model.CompletedByUserId != null;
       PatientId = model.Referral.Patient?.NhsNumber == null 
         ? model.Referral.Patient?.AlternativeIdentifier
         : model.Referral.Patient?.NhsNumber.ToString();
@@ -24,6 +26,8 @@ namespace Fmas12d.Api.ViewModels
     public DateTimeOffset DateTime { get; set; }
     public int? DoctorStatusId { get; set; }
     public bool? DoctorHasAccepted { get; set; }
+    public bool HasBeenCompleted { get; set; }
+    public bool HasBeenReviewed { get; set; }
     public int Id { get; set; }
     public string PatientId {get; set;}
     public string Postcode { get; set; }

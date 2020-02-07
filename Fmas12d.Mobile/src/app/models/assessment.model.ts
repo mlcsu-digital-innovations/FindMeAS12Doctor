@@ -7,6 +7,8 @@ export class Assessment {
   address1: string;
   amhpUser: UserDetails;
   completedTime: Date;
+  hasBeenCompleted: boolean;
+  hasBeenReview: boolean;
   isSuccessful: boolean;
   postcode: string;
   unsuccessfulAssessmentType: UnsuccessfulAssessmentType;
