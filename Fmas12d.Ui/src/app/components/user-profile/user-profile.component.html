@@ -1,0 +1,107 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12 offset-md-0">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <em class="fas fa-user fa-4x"></em>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">User Profile</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="userProfileForm" novalidate>
+            <div class="form-row user-row">
+              <div class="required-field col-md-3 mb-3 text-left">
+                <strong>Denotes required field.</strong>
+              </div>
+            </div>
+            <div class="form-row user-row">
+              <div class="col-md-2">
+                <label class="required-field">Display name: </label>             
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" 
+                  formControlName="displayName"
+                  #displayName
+                  id="displayName">
+              </div>
+            </div>
+            <div *ngIf="isAMHPProfile" class="form-row user-row">
+              <div class="col-md-2">
+                <label>Organisation: </label>             
+              </div>
+              <div class="col-md-3">
+              <label>{{userProfile.organisationName}}</label>
+              </div>
+            </div>
+            <div class="form-row user-row">
+              <div class="col-md-2">
+                <label class="required-field">Gender: </label>             
+              </div>
+              <div class="col-md-3">
+                <select class="custom-select custom-select-lg mb-2 form-control" formControlName="genderTypeId"
+                  #genderTypeId id="genderTypeId">                  
+                  <option *ngFor="let gender of genderTypes" [value]="gender.id" [selected]="gender.id==genderTypeIdField.value">
+                    {{gender.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="isAMHPProfile" class="form-row user-row">
+              <div class="col-md-2">
+                <label class="required-field">Email: </label>             
+              </div>
+              <div class="col-md-3">
+                <input class="form-control"
+                  formControlName="emailAddress"
+                  #emailAddress
+                  id="emailAddress">
+              </div>
+            </div>
+            <div *ngIf="isAMHPProfile" class="form-row user-row">
+              <div class="col-md-2">
+                <label>Mobile: </label>             
+              </div>
+              <div class="col-md-3">
+                <input class="form-control"
+                  formControlName="mobileNumber"
+                  #mobileNumber
+                  id="mobileNumber">
+              </div>
+            </div>
+            <div *ngIf="isAMHPProfile" class="form-row user-row">
+              <div class="col-md-2">
+                <label>Telephone: </label>             
+              </div>
+              <div class="col-md-3">
+                <input class="form-control"
+                  formControlName="telephoneNumber"
+                  #telephoneNumber
+                  id="telephoneNumber">
+              </div>
+            </div>
+            <div class="form-row mt-more-2">              
+              <div class="col-md-2 mb-2 offset-md-4 text-right">
+                <button class="btn btn-standard btn-cancel" type="button" (click)="Cancel()">
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+                <button class="btn btn-primary btn-standard btn-spaced" type="button"
+                  (click)="Save()">
+                  <i class="fas fa-check"></i>
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

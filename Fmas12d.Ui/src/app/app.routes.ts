@@ -5,6 +5,7 @@ import { OnCallDoctorListComponent }
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { Routes } from '@angular/router';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 
 export const AppRoutes: Routes = [
@@ -20,6 +21,10 @@ export const AppRoutes: Routes = [
   {
     path: 'unauthorized',
     component: UnauthorizedComponent
+  },
+  {
+    path: 'user/profile',
+    component: UserProfileComponent
   },
   {
     path: 'user/oncall',

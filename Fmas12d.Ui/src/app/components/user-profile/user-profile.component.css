@@ -1,0 +1,13 @@
+.user-row {
+  border-radius: 0.25rem;
+  color: #495057;
+  font-size: 1.2em;
+  font-weight: 600;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.required-field::after {
+  color: red;
+  content: " *";
+}
