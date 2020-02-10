@@ -23,8 +23,8 @@ namespace Fmas12d.Api.ViewModels
       DateTime = model.DateTime;
       DetailTypes = model.DetailTypes
                          ?.Select(dt => new AssessmentDetailType(dt)).ToList();
-      HasBeenCompleted = model.CompletedByUserId != null;
-      HasBeenReviewed = model.CompletionConfirmationByUserId != null;
+      HasBeenCompleted = model.CompletedByUserId.HasValue;
+      HasBeenReviewed = model.CompletionConfirmationByUserId.HasValue;
       Id = model.Id;
       IsPlanned = model.IsPlanned;
       IsSuccessful = model.IsSuccessful;

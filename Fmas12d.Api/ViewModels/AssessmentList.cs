@@ -14,8 +14,8 @@ namespace Fmas12d.Api.ViewModels
       DoctorStatusId = model.Doctors?.SingleOrDefault()?.StatusId;
       DoctorHasAccepted = model.Doctors?.SingleOrDefault()?.HasAccepted;
       Id = model.Id;
-      HasBeenReviewed = model.CompletionConfirmationByUserId != null;
-      HasBeenCompleted = model.CompletedByUserId != null;
+      HasBeenReviewed = model.CompletionConfirmationByUserId.HasValue;
+      HasBeenCompleted = model.CompletedByUserId.HasValue;
       PatientId = model.Referral.Patient?.NhsNumber == null 
         ? model.Referral.Patient?.AlternativeIdentifier
         : model.Referral.Patient?.NhsNumber.ToString();

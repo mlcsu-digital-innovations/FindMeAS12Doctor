@@ -74,12 +74,12 @@ namespace Fmas12d.Api.ViewModels
     public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
     public Boolean HasBeenCompleted {
       get {
-        return CompletedByUserId != null;
+        return CompletedByUserId.HasValue;
       }
     }
     public Boolean HasBeenReviewed {
       get {
-        return CompletionConfirmationByUserId != null;
+        return CompletionConfirmationByUserId.HasValue;
       }
     }
     public bool? IsCompleted {
