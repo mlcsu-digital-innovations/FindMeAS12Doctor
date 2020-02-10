@@ -29,13 +29,16 @@ export class DoctorOnCallListPage implements OnInit {
   refreshPage($event?: any) {
     this.showLoading();
     
-    this.onCallService.getListForUser().subscribe((result: OnCallDoctor[])  => {      
-      this.onCallDoctorsConfirmed = result
+    this.onCallService.getListForUser().subscribe((result: OnCallDoctor[])  => {  
+      if (result && result.length > 0) {
+        this.onCallDoctorsConfirmed = result
         .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
       this.onCallDoctorsUnconfirmed = result
         .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null);
       this.onCallDoctorsRejected = result
-        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === false);    
+        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === false); 
+      }   
+         
       this.closeLoading();
       this.closeRefreshing($event);
     }, err => {      
