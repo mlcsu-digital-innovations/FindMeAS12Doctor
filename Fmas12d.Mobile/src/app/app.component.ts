@@ -3,7 +3,7 @@ import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
-import { Platform, NavController } from '@ionic/angular';
+import { Platform, NavController, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -12,6 +12,7 @@ import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
 import * as jwt_decode from 'jwt-decode';
+import { FCM } from '@ionic-native/fcm/ngx';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,10 @@ export class AppComponent implements OnInit {
   user = {} as UserDetails;
 
   constructor(
+    private alertController: AlertController,
     private authService: AuthService,
     private broadcastService: BroadcastService,
+    private fcm: FCM,
     private navController: NavController,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
@@ -43,6 +46,32 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      // this is only here for testing !
+      this.fcm.getToken().then(token => {
+        console.log('Token testing', token);
+      });
+
+      this.fcm.onTokenRefresh().subscribe(
+        token => {
+          // update the users table with the new token
+          console.log('Token Refresh', token);
+        }
+      );
+
+      this.fcm.onNotification().subscribe(
+        data => {
+          if (data.wasTapped) {
+            console.log('received in background');
+            console.log(data);
+            this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
+          } else {
+            console.log('received in foreground');
+            console.log(data);
+            this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
+          }
+        }
+      );
 
       this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
         if (status === ConnectionStatus.Online) {
@@ -76,6 +105,11 @@ export class AppComponent implements OnInit {
         console.log(payload);
         this.storageService.storeAccessToken(payload.accessToken);
         this.setUserDetails(payload.accessToken);
+
+        this.fcm.getToken().then(token => {
+          console.log('Token after login', token);
+        });
+
       });
     });
 
@@ -100,6 +134,31 @@ export class AppComponent implements OnInit {
     } else {
       this.authService.logoutMsal();
     }
+  }
+
+  private async presentAlertConfirm(title: string, message: string) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   private setUserDetails(token: string): void {

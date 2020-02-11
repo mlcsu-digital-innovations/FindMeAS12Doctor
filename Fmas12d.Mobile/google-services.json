@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "498917054832",
+    "firebase_url": "https://fmas12d.firebaseio.com",
+    "project_id": "fmas12d",
+    "storage_bucket": "fmas12d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498917054832:android:3c7eba9d50b6590ae017b5",
+        "android_client_info": {
+          "package_name": "uk.nhs.fmas12d"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498917054832-3jv31pmptkn1vthlgker5n7hhq5dhcgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3RcT-b6FRq8SF_F7LoGKUC8pHbmzwpLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498917054832-3jv31pmptkn1vthlgker5n7hhq5dhcgl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

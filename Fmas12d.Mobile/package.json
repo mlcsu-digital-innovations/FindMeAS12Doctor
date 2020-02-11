@@ -30,6 +30,7 @@
     "@angular/router": "~8.1.2",
     "@azure/msal-angular": "^0.1.4",
     "@ionic-native/core": "^5.0.0",
+    "@ionic-native/fcm": "^5.21.2",
     "@ionic-native/geolocation": "^5.17.1",
     "@ionic-native/ms-adal": "^5.19.0",
     "@ionic-native/network": "^5.0.0",
@@ -39,7 +40,8 @@
     "@ionic/storage": "^2.2.0",
     "cordova": "^9.0.0",
     "cordova-android": "^8.1.0",
-    "cordova-ios": "^5.1.1",
+    "cordova-plugin-compat": "^1.2.0",
+    "cordova-plugin-fcm-with-dependecy-updated": "^4.1.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^3.4.0",
@@ -101,11 +103,16 @@
       },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-ms-adal": {}
+      "cordova-plugin-ms-adal": {},
+      "cordova-plugin-fcm-with-dependecy-updated": {
+        "FCM_CORE_VERSION": "16.0.9",
+        "FCM_VERSION": "18.0.0",
+        "GRADLE_TOOLS_VERSION": "3.5.0",
+        "GOOGLE_SERVICES_VERSION": "4.2.0"
+      }
     },
     "platforms": [
-      "android",
-      "ios"
+      "android"
     ]
   }
 }
