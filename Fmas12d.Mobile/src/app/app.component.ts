@@ -62,12 +62,10 @@ export class AppComponent implements OnInit {
       this.fcm.onNotification().subscribe(
         data => {
           if (data.wasTapped) {
-            console.log('received in background');
-            console.log(data);
+            // app is currently in background
             this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
           } else {
-            console.log('received in foreground');
-            console.log(data);
+            // app is being used
             this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
           }
         }
