@@ -184,8 +184,7 @@ namespace Fmas12d.Business.Services
 
 
       await _context.SaveChangesAsync();
-
-      // send notifications
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return new AssessmentDoctorsUpdate()
       {
@@ -233,6 +232,7 @@ namespace Fmas12d.Business.Services
       }
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return new AssessmentDoctorsUpdate()
       {
@@ -307,7 +307,6 @@ namespace Fmas12d.Business.Services
       }
 
       await _context.SaveChangesAsync();
-
       await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return new AssessmentDoctorsUpdate()
@@ -700,6 +699,7 @@ namespace Fmas12d.Business.Services
       }
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
       return true;
     }
 
@@ -929,6 +929,7 @@ namespace Fmas12d.Business.Services
       }
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       model = _context.Assessments
                       .Include(e => e.Details)

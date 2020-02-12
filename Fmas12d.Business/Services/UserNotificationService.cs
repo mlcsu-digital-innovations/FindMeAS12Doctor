@@ -87,17 +87,22 @@ namespace Fmas12d.Business.Services
           notification.NotificationText.MessageTemplate
           .Replace("{0}", notification.Assessment.Postcode);
 
-        string timePrefix = notification.Assessment.MustBeCompletedBy.HasValue ? "by " : "at ";
-        messageBody = messageBody.Replace("{1}", timePrefix + assessmentDate.Value.ToString("dd/MM/yy HH:mm"));
+        string timePrefix =
+          notification.Assessment.MustBeCompletedBy.HasValue 
+          ? "to be completed by "
+          : "scheduled at ";
+        messageBody = messageBody.Replace("{1}", timePrefix + assessmentDate.Value.ToString("dd/MM/yyyy HH:mm"));
 
-        bool messageSent =
-          await SendFcmNotification(notification.NotificationText.Name, messageBody, notification.User.FcmToken);
+        if (notification.User.FcmToken != null) {
+          bool messageSent =
+            await SendFcmNotification(notification.NotificationText.Name, messageBody, notification.User.FcmToken);
 
-        if (messageSent == true) {
-          notification.SentAt = DateTimeOffset.Now;
-          UpdateModified(notification);
+          if (messageSent == true) {
+            notification.SentAt = DateTimeOffset.Now;
+            UpdateModified(notification);
 
-          await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+          }
         }
       }
 
