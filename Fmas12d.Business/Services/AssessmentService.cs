@@ -21,6 +21,7 @@ namespace Fmas12d.Business.Services
     private readonly IReferralService _referralService;
     private readonly IUserService _userService;
     private readonly IUserAvailabilityService _userAvailabilityService;
+    private readonly IUserNotificationService _userNotificationService;
 
     public AssessmentService(
       ApplicationContext context,
@@ -29,7 +30,8 @@ namespace Fmas12d.Business.Services
       IReferralService referralService,
       IUserService userService,
       IUserAvailabilityService userAvailabilityService,
-      IUserClaimsService userClaimsService
+      IUserClaimsService userClaimsService,
+      IUserNotificationService notificationService
     )
       : base(context, userClaimsService)
     {
@@ -38,6 +40,7 @@ namespace Fmas12d.Business.Services
       _referralService = referralService;
       _userService = userService;
       _userAvailabilityService = userAvailabilityService;
+      _userNotificationService = notificationService;
     }
 
     public async Task<IAssessmentDoctorsUpdate> AllocateUnregisteredDoctorAsync(
@@ -182,6 +185,8 @@ namespace Fmas12d.Business.Services
 
       await _context.SaveChangesAsync();
 
+      // send notifications
+
       return new AssessmentDoctorsUpdate()
       {
         Id = entity.Id,
@@ -303,6 +308,8 @@ namespace Fmas12d.Business.Services
 
       await _context.SaveChangesAsync();
 
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
+
       return new AssessmentDoctorsUpdate()
       {
         Id = entity.Id,
@@ -383,6 +390,8 @@ namespace Fmas12d.Business.Services
       referral.ReferralStatusId = ReferralStatus.SELECTING_DOCTORS;
 
       await _context.SaveChangesAsync();
+
+
 
       model = _context.Assessments
                       .Include(e => e.Details)
@@ -1245,6 +1254,19 @@ namespace Fmas12d.Business.Services
         $"[{string.Join(",", availableUserIds)}], " +
         $"from the requested [{string.Join(",", selectedUserIds)}]");
       }
+    }
+
+    private async Task<IEnumerable<UserAssessmentNotification>> SendUnsentNotifications
+    (
+      IList<Data.Entities.UserAssessmentNotification> notifications
+    ) {  
+       IEnumerable<UserAssessmentNotification> unsentNotifications =
+        notifications.Where(uan => uan.SentAt == null)
+        .Select(u => new UserAssessmentNotification(){
+          Id = u.Id
+        });
+
+      return await _userNotificationService.SendAssessmentNotifications(unsentNotifications);
     }
 
     private void CheckSelectedDoctorsAreNotAlreadySelected(
