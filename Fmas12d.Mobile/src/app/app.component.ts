@@ -140,15 +140,8 @@ export class AppComponent implements OnInit {
       header: title,
       message,
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: 'Okay',
+         {
+          text: 'Ok',
           handler: () => {
             console.log('Confirm Okay');
           }
