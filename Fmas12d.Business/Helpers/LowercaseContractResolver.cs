@@ -16,7 +16,9 @@ public class LowercaseJsonSerializer
     {
         protected override string ResolvePropertyName(string propertyName)
         {
-            return propertyName.ToLower();
+          return propertyName.Length > 1
+          ? char.ToLower(propertyName[0]) + propertyName.Substring(1)
+          : propertyName.ToLower();
         }
     }
 }
