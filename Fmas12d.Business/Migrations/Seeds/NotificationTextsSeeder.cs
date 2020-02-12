@@ -21,17 +21,17 @@ namespace Fmas12d.Business.Migrations.Seeds
       "Selected for assessment description";    
 
     internal const string MESSAGE_TEMPLATE_ALLOCATED_TO_ASSESSMENT =
-      "Allocated to assessment {0} at {1} template";
+      "Allocated to an assessment in {0} {1}";
     internal const string MESSAGE_TEMPLATE_ASSESSMENT_CANCELLED =
-      "Assessment {0} at {1} cancelled template";
+      "Assessment in {0} {1} has been cancelled";
     internal const string MESSAGE_TEMPLATE_ASSESSMENT_UPDATED =
-      "Assessment {0} at {1} updated template";
+      "Assessment in {0} {1} has been updated";
     internal const string MESSAGE_TEMPLATE_NOT_ALLOCATED_TO_ASSESSMENT =
-      "Not allocated to assessment {0} at {1} template";
+      "Not allocated to an assessment in {0} {1}";
     internal const string MESSAGE_TEMPLATE_REMOVED_FROM_ASSESSMENT =
-      "Removed from assessment {0} at {1} template";
+      "Removed from assessment in {0} {1}";
     internal const string MESSAGE_TEMPLATE_SELECTED_FOR_ASSESSMENT =
-      "Selected for assessment {0} at {1} template";      
+      "Selected for an assessment in {0} {1}";      
 
     internal const string NAME_ALLOCATED_TO_ASSESSMENT = "Allocated to assessment";
     internal const string NAME_ASSESSMENT_CANCELLED = "Assessment Cancelled";      
