@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Fmas12d.Api.Controllers
 {
@@ -110,6 +111,22 @@ namespace Fmas12d.Api.Controllers
       else
       {
         return NoContent();
+      }
+    }
+
+    [HttpPut]
+    [Route("refreshToken/{token}")]
+    public async Task<ActionResult> Put(string token)
+    {
+      try
+      {
+        await Service.RefreshFcmToken(GetUserId(), token);
+
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
       }
     }
 

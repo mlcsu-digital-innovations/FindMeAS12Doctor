@@ -47,15 +47,11 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      // this is only here for testing !
-      this.fcm.getToken().then(token => {
-        console.log('Token testing', token);
-      });
-
       this.fcm.onTokenRefresh().subscribe(
         token => {
           // update the users table with the new token
           console.log('Token Refresh', token);
+          this.refreshFcmToken(token);
         }
       );
 
@@ -87,6 +83,10 @@ export class AppComponent implements OnInit {
         console.log(payload);
         this.storageService.storeAccessToken(payload.token);
         this.setUserDetails(payload.token);
+        this.fcm.getToken().then(token => {
+          this.refreshFcmToken(token);
+        });
+        
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
@@ -103,11 +103,9 @@ export class AppComponent implements OnInit {
         console.log(payload);
         this.storageService.storeAccessToken(payload.accessToken);
         this.setUserDetails(payload.accessToken);
-
         this.fcm.getToken().then(token => {
-          console.log('Token after login', token);
+          this.refreshFcmToken(token);
         });
-
       });
     });
 
@@ -150,6 +148,14 @@ export class AppComponent implements OnInit {
     });
 
     await alert.present();
+  }
+
+  private refreshFcmToken(token: string): void {
+    console.log('Refreshing FCM token', token);
+    if (token !== null && token !== '') {
+      this.userDetailsService.refreshFcmToken(token)
+      .subscribe();
+    }
   }
 
   private setUserDetails(token: string): void {

@@ -29,6 +29,13 @@ export class UserDetailsService {
     );
   }
 
+  public refreshFcmToken(token: string) {
+    return (this.apiService.put(
+      `${environment.apiEndpoint}/user/refreshToken/${token}`,
+      null
+    ));
+  }
+
   public fetchUserDetails(): UserDetails {
     return this.userDetails;
   }

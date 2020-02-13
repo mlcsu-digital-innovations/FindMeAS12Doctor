@@ -75,6 +75,8 @@ namespace Fmas12d.Business.Models
     public virtual IList<UserAssessmentClaim> UserAssessmentClaimSelections { get; set; }
     public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
 
+    public string FcmToken { get; set; }
+
     public string GenderName { get { return GenderType?.Name; } }
 
     public bool IsAmhp

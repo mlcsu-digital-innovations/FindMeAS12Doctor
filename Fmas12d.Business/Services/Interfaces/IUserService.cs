@@ -40,5 +40,7 @@ namespace Fmas12d.Business.Services
     Task<User> GetByIdentityServerIdentifierAsync(
       string identityServerIdentifier, bool asNoTracking = true, bool activeOnly = true);
     Task<int> GetByProfileTypeIdAsync(int userId, bool asNoTracking, bool activeOnly);
+
+    Task<bool> RefreshFcmToken(int userId, string token);
   }
 }
