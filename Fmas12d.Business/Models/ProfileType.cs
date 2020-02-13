@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Fmas12d.Business.Models
@@ -21,6 +22,7 @@ namespace Fmas12d.Business.Models
     public virtual IList<User> Users { get; set; }
     public bool IsAmhp { get { return IsIdAnAmhp(Id); } }
     public bool IsDoctor { get { return IsIdADoctor(Id); } }
+    public bool IsFinance { get { return IsIdFinance(Id); } }
     public static bool IsIdAnAmhp(int profileTypeId)
     {
       return profileTypeId == AMHP;
@@ -29,6 +31,11 @@ namespace Fmas12d.Business.Models
     {
       return profileTypeId == GP || profileTypeId == PSYCHIATRIST || profileTypeId == UNREGISTERED_DOCTOR;
     } 
+
+    public static bool IsIdFinance(int profileTypeId)
+    {
+      return profileTypeId == FINANCE;
+    }
 
     public static List<int> DoctorProfileTypes(bool includeUnregistered) {
 
@@ -39,7 +46,6 @@ namespace Fmas12d.Business.Models
       }
       return profileTypes;
     }
-
 
   }
 }

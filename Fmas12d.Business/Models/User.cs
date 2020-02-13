@@ -106,6 +106,21 @@ namespace Fmas12d.Business.Models
       }
     }
 
+    public bool IsFinance
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdFinance(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsFinance;
+        }
+      }
+    }
+
     public string ProfileTypeName { get { return ProfileType?.Name; } }
 
     // Need EF core 3.1 fix: https://github.com/aspnet/EntityFrameworkCore/issues/18127
