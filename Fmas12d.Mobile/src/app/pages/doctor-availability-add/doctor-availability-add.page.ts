@@ -7,6 +7,7 @@ import { ToastController, NavController } from '@ionic/angular';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
+import { ContactDetail } from 'src/app/models/contact-detail.model';
 
 @Component({
   selector: 'app-doctor-availability-add',
@@ -109,7 +110,11 @@ export class DoctorAvailabilityAddPage implements OnInit {
           if (result !== null) {
             result.forEach(contact => {
               this.contactDetails.push({ id: contact.contactDetails[0].id, name: contact.name });
+              if (contact.isBase) {
+                this.userAvailability.location.contactDetailId = contact.contactDetails[0].id;
+              }              
             });
+            this.contactDetails.push({ id: 0, name: "Other" });
           }
         }, error => {
           this.showErrorToast('Unable to retrieve contact details for user');
