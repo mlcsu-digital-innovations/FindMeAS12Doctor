@@ -19,7 +19,8 @@ namespace Fmas12d.Api.ViewModels
       HasReadTermsAndConditions = model.HasReadTermsAndConditions;
       Id = model.Id;
       IsAmhp = model.IsAmhp;
-      IsDoctor = model.IsDoctor;      
+      IsDoctor = model.IsDoctor;
+      IsFinance = model.IsFinance;
       OrganisationId = model.OrganisationId;
       ProfileTypeId = model.ProfileTypeId;
       ProfileTypeName = model.ProfileTypeName;
@@ -36,6 +37,7 @@ namespace Fmas12d.Api.ViewModels
     public bool HasReadTermsAndConditions { get; set; }
     public bool IsAmhp { get; set; }
     public bool IsDoctor { get; set; }
+    public bool IsFinance { get; set; }
     public int? OrganisationId { get; set; }
     public int? ProfileTypeId { get; set; }
     public string ProfileTypeName { get; set; }
