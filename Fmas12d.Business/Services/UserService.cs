@@ -207,10 +207,13 @@ namespace Fmas12d.Business.Services
         );
       }
 
-      entity.FcmToken = token;
-      UpdateModified(entity);
+      if (entity.FcmToken != token) 
+      {
+        entity.FcmToken = token;
+        UpdateModified(entity);
 
-      await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
+      }
 
       return true;
     }
