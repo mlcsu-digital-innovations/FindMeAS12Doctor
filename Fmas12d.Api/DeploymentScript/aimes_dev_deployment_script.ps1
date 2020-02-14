@@ -24,8 +24,13 @@ Expand-Archive -Path "c:\iis\findmeans12doctor\ui.zip" -DestinationPath "c:\iis\
 $ConfigFile = "c:\iis\findmeans12doctor\api\appsettings.AimesUat.json"
 (Get-Content "$Configfile") `
 	-replace '"AddressSearchAPiKey": ""', '"AddressSearchAPiKey": ""' `
-	| Set-Content "$Configfile"
-
+  | Set-Content "$Configfile"
+  
+# Update the Firebase Cloud Messaging API key
+$ConfigFile = "c:\iis\findmeans12doctor\api\appsettings.AimesUat.json"
+(Get-Content "$Configfile") `
+	-replace '"FcmKey": ""', '"FcmKey": ""' `
+	| Set-Content "$Configfile"  
 
 # If an update sql script is present perform database backup, update and seed
 $UpdateDatabase = Test-Path "c:\iis\findmeans12doctor\update.sql" -IsValid
