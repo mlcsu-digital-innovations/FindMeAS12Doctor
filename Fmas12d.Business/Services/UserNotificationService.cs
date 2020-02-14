@@ -52,6 +52,44 @@ namespace Fmas12d.Business.Services
       return notifications;
     }
 
+    public async Task<UserAssessmentNotification> SendClaimNotification(
+      Entities.UserAssessmentClaim claim
+    )
+    {
+      UserAssessmentNotification notification = await CreateNotificationAsync(
+        claim.AssessmentId,
+        claim.UserId,
+        NotificationText.CLAIM_STATUS_UPDATED
+      );
+
+      if (claim != null)
+      {
+        string messageBody =
+          notification.NotificationText.MessageTemplate
+          .Replace("{0}", claim.ClaimReference.ToString());
+
+        messageBody = messageBody.Replace("{1}", claim.ClaimStatus.Name);
+
+        bool messageSent =
+          await SendFcmNotification(
+            notification.NotificationText.Name,
+            messageBody,
+            claim.User.FcmToken
+          );
+
+        if (messageSent == true)
+        {
+          Entities.UserAssessmentNotification entity = notification.MapToEntity();
+
+          entity.SentAt = DateTimeOffset.Now;
+          UpdateModified(entity);
+
+          await _context.SaveChangesAsync();
+        }
+      }
+      return await GetAsync(notification.Id);
+    }
+
     public async Task<IEnumerable<UserAssessmentNotification>> SendAssessmentNotifications (
       IEnumerable<UserAssessmentNotification> notifications
     )
@@ -108,6 +146,45 @@ namespace Fmas12d.Business.Services
 
       return await GetAsync(notification.Id);
     }
+
+    private async Task<UserAssessmentNotification> CreateNotificationAsync(
+      int assessmentId,
+      int userId,
+      int notificationTextId
+    )
+    {
+      Entities.UserAssessmentNotification notification = new Entities.UserAssessmentNotification();
+
+      notification.IsActive = true;
+      notification.AssessmentId = assessmentId;
+      notification.UserId = userId;
+      notification.NotificationTextId = notificationTextId;
+
+      UpdateModified(notification);
+
+      _context.Add(notification);
+
+      await _context.SaveChangesAsync();
+
+      return await GetNotificationWithDetailsAsync(notification.Id);
+    }
+
+    private async Task<UserAssessmentNotification> GetNotificationWithDetailsAsync(
+      int notificationId
+    )
+    {
+      UserAssessmentNotification notification = await _context
+      .UserAssessmentNotifications
+      .Include(uan => uan.NotificationText)
+      .Include(uan => uan.User)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(uan => uan.Id == notificationId)
+      .Select(UserAssessmentNotification.ProjectFromEntity)
+      .SingleOrDefaultAsync();
+
+      return notification;
+    }
+
 
     public async Task<UserAssessmentNotification> GetAsync(
       int id,

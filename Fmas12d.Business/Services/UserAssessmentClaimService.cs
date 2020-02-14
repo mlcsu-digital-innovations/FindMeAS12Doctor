@@ -20,18 +20,22 @@ namespace Fmas12d.Business.Services
     private readonly IContactDetailTypeService _contactDetailTypeService;
     private readonly ILocationDetailService _locationDetailService;
 
+    private readonly IUserNotificationService _notificationService;
+
     public UserAssessmentClaimService(
       ApplicationContext context,
       IUserService userService,
       IUserClaimsService userClaimsService,
       IContactDetailTypeService contactDetailTypeService,
-      ILocationDetailService locationDetailService
+      ILocationDetailService locationDetailService,
+      IUserNotificationService notificationService
     )
       : base(context, userClaimsService)
     {
       _contactDetailTypeService = contactDetailTypeService;
       _locationDetailService = locationDetailService;
       _userService = userService;
+      _notificationService = notificationService;
     }
 
     public async Task<UserAssessmentClaimDetail> GetAssessmentAndContactAsync(int assessmentId, int userId)
@@ -229,6 +233,7 @@ namespace Fmas12d.Business.Services
 
       entity.Id = 0;
       entity.IsActive = true;
+      entity.ClaimStatusId = ClaimStatus.SUBMITTED;
 
       UpdateModified(entity);
 

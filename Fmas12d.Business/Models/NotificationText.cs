@@ -4,6 +4,12 @@ namespace Fmas12d.Business.Models
 {
   public class NotificationText : NameDescription
   {
+    public NotificationText(Data.Entities.NotificationText entity) : base(entity) {
+      if (entity == null) return;
+      MessageTemplate = entity.MessageTemplate;
+    }
+
+
     public const int SELECTED_FOR_ASSESSMENT = 1;
     public const int ALLOCATED_TO_ASSESSMENT = 2;
     public const int ASSESSMENT_CANCELLED = 3;
