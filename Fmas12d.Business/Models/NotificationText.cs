@@ -11,6 +11,7 @@ namespace Fmas12d.Business.Models
     public const int NOT_ALLOCATED_TO_ASSESSMENT = 5;
     public const int REMOVED_FROM_ASSESSMENT = 6;
     public const int ASSESSMENT_SCHEDULED = 7;
+    public const int CLAIM_STATUS_UPDATED = 8;
     
     [MaxLength(2000)]
     [Required]
