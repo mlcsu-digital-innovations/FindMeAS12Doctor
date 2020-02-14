@@ -757,13 +757,21 @@ namespace Fmas12d.Business.Services
           );
           assessmentDoctor.StatusId = AssessmentDoctorStatus.NOT_ALLOCATED;
         }
+        else
+        {
+            AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_SCHEDULED
+          );
+        }
       }
 
       entity.ScheduledTime = scheduledTime;
       entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
       UpdateModified(entity.Referral);
       await _context.SaveChangesAsync();
-
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
       return true;
     }
 

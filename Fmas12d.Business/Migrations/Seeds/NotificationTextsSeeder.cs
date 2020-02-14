@@ -18,7 +18,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_REMOVED_FROM_ASSESSMENT =
       "Removed from assessment description";          
     internal const string DESCRIPTION_SELECTED_FOR_ASSESSMENT =
-      "Selected for assessment description";    
+      "Selected for assessment description";
+    internal const string DESCRIPTION_ASSESSMENT_SCHEDULED =
+      "Assessment scheduled decription";            
 
     internal const string MESSAGE_TEMPLATE_ALLOCATED_TO_ASSESSMENT =
       "Allocated to an assessment in {0} {1}";
@@ -32,6 +34,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       "Removed from assessment in {0} {1}";
     internal const string MESSAGE_TEMPLATE_SELECTED_FOR_ASSESSMENT =
       "Selected for an assessment in {0} {1}";      
+    internal const string MESSAGE_TEMPLATE_ASSESSMENT_SCHEDULED =
+      "The assessment in {0} {1} has now been confirmed";  
 
     internal const string NAME_ALLOCATED_TO_ASSESSMENT = "Allocated to assessment";
     internal const string NAME_ASSESSMENT_CANCELLED = "Assessment Cancelled";      
@@ -39,6 +43,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string NAME_NOT_ALLOCATED_TO_ASSESSMENT = "Not allocated to assessment";
     internal const string NAME_REMOVED_FROM_ASSESSMENT = "Removed from assessment";
     internal const string NAME_SELECTED_FOR_ASSESSMENT = "Selected for assessment";    
+    internal const string NAME_ASSESSMENT_SCHEDULED = "Assessment scheduled";    
     #endregion
 
     internal void SeedData()
@@ -83,7 +88,14 @@ namespace Fmas12d.Business.Migrations.Seeds
         NAME_REMOVED_FROM_ASSESSMENT,
         DESCRIPTION_REMOVED_FROM_ASSESSMENT,
         MESSAGE_TEMPLATE_REMOVED_FROM_ASSESSMENT
-      );        
+      ); 
+
+      AddOrUpdate(
+        Models.NotificationText.ASSESSMENT_SCHEDULED,
+        NAME_ASSESSMENT_SCHEDULED,
+        DESCRIPTION_ASSESSMENT_SCHEDULED,
+        MESSAGE_TEMPLATE_ASSESSMENT_SCHEDULED
+      );              
 
       SaveChangesWithIdentity();
     }
