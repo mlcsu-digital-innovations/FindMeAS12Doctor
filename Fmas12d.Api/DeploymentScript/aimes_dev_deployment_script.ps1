@@ -27,7 +27,6 @@ $ConfigFile = "c:\iis\findmeans12doctor\api\appsettings.AimesUat.json"
   | Set-Content "$Configfile"
   
 # Update the Firebase Cloud Messaging API key
-$ConfigFile = "c:\iis\findmeans12doctor\api\appsettings.AimesUat.json"
 (Get-Content "$Configfile") `
 	-replace '"FcmKey": ""', '"FcmKey": ""' `
 	| Set-Content "$Configfile"  
