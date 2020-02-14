@@ -187,7 +187,13 @@ namespace Fmas12d.Business.Services
 
       // ToDo: temp value until it is determined where this value comes from
       bool testParse =
-        int.TryParse(assessmentId.ToString() + userId.ToString(), out int tempReference);
+        int.TryParse(
+          DateTime.Now.Day.ToString() +
+          DateTime.Now.Month.ToString() +
+          assessmentId.ToString() +
+          userId.ToString(),
+          out int tempReference
+        );
 
       assessmentClaim.ClaimReference = testParse ? tempReference : assessmentId;
 
