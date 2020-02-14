@@ -20,7 +20,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_SELECTED_FOR_ASSESSMENT =
       "Selected for assessment description";
     internal const string DESCRIPTION_ASSESSMENT_SCHEDULED =
-      "Assessment scheduled decription";            
+      "Assessment scheduled description";            
 
     internal const string MESSAGE_TEMPLATE_ALLOCATED_TO_ASSESSMENT =
       "Allocated to an assessment in {0} {1}";
