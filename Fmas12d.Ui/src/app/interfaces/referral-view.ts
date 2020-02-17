@@ -7,7 +7,7 @@ export interface ReferralView {
   id: number;
   leadAmhp: string;
   patientIdentifier: string;
-  previousAssessments: PreviousAssessment;
+  previousAssessments: PreviousAssessment[];
   referralStatusId: number;
   statusName: string;
 }

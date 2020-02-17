@@ -32,6 +32,7 @@ namespace Fmas12d.Api.ViewModels
       PreferredDoctorGenderTypeName = model.PreferredDoctorGenderTypeName;
       ReferralId = model.ReferralId;
       ReferralStatus = model.Referral?.ReferralStatus?.Name;
+      ReferralStatusId = model.Referral?.ReferralStatusId;
       SpecialityName = model.SpecialityName;
 
       if (model.DoctorsAllocated != null && 
@@ -64,12 +65,18 @@ namespace Fmas12d.Api.ViewModels
     public int Id { get; set; }
     public bool IsPlanned { get; set; }
     public bool? IsSuccessful { get; set; }
+    public bool HasOutcome { 
+      get {
+        return IsSuccessful.HasValue; 
+      }
+    }
     public string MeetingArrangementComment { get; set; }
     public string PatientIdentifier { get; set; }    
     public string Postcode { get; set; }
     public string PreferredDoctorGenderTypeName {get; set;}
     public int ReferralId { get; set; }
     public string ReferralStatus { get; set; }
+    public int? ReferralStatusId { get; set; }
     public string SpecialityName { get; set; }
 
     public static Func<Business.Models.Assessment, AssessmentView> ProjectFromModel

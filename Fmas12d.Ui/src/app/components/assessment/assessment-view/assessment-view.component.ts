@@ -11,6 +11,8 @@ import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
+import { SortEvent } from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
+import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 
 @Component({
   selector: 'app-assessment-view',
@@ -19,11 +21,14 @@ import * as moment from 'moment';
 })
 export class AssessmentViewComponent implements OnInit {
 
+  assessmentId: number;
   closeModal: NgbModalRef;
+  completeModal: NgbModalRef;
   currentAssessmentForm: FormGroup;
+  isInReviewState: boolean;
   isPatientIdValidated: boolean;
   pageSize: number;
-  referral$: Observable<Referral | any>;
+  referral$: Observable<ReferralView>;
   referralCreated: Date;
   referralId: number;
   referralStatus: string;
@@ -32,8 +37,10 @@ export class AssessmentViewComponent implements OnInit {
   showDateValue: Date;
 
   @ViewChild('confirmClosure', null) closeTemplate;
+  @ViewChild('confirmCompletion', null) completeTemplate;
 
   constructor(
+    private assessmentService: AssessmentService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private referralService: ReferralService,
@@ -61,7 +68,7 @@ export class AssessmentViewComponent implements OnInit {
           message: 'Error Retrieving Referral Information'
         });
 
-        const emptyReferral = {} as Referral;
+        const emptyReferral = {} as ReferralView;
         return of(emptyReferral);
       })
     );
@@ -69,6 +76,12 @@ export class AssessmentViewComponent implements OnInit {
     this.currentAssessmentForm = this.formBuilder.group({
       amhpUserName: [
         ''
+      ],
+      completedAt: [
+        {
+          value: '',
+          disabled: true
+        }
       ],
       currentAssessment: [
         ''
@@ -107,13 +120,7 @@ export class AssessmentViewComponent implements OnInit {
     this.routerService.navigatePrevious();
   }
 
-  CancelModal() {
-    this.closeModal.close();
-  }
-
   CloseReferral() {
-    this.closeModal.close();
-
     let forceClose = false;
 
     if (this.referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW
@@ -124,14 +131,14 @@ export class AssessmentViewComponent implements OnInit {
     this.referralService.closeReferral(this.referralId, forceClose).subscribe(
       () => {
         this.toastService.displaySuccess({
-          message: 'Referral Status Updated'
+          message: 'Referral closed'
         });
         this.routerService.navigateByUrl('/referral/list');
       },
       error => {
         this.toastService.displayError({
           title: 'Server Error',
-          message: 'Unable to update referral! Please try again in a few moments'
+          message: 'Unable to close referral! Please try again in a few moments'
         });
       }
     );
@@ -144,25 +151,70 @@ export class AssessmentViewComponent implements OnInit {
     });
   }
 
+  CompleteReview() {
+
+    this.assessmentService.completeReview(this.assessmentId)
+    .subscribe(
+      () => {
+        this.toastService.displaySuccess({
+          message: 'Review complete'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to complete review! Please try again in a few moments'
+        });
+      }
+    );
+
+  }
+
+  CompleteReviewConfirmation() {
+    this.completeModal = this.modalService.open(this.completeTemplate, {
+      size: 'lg'
+    });
+  }
+
   EditAssessment() {
     this.routerService.navigateByUrl(`/assessment/edit/${this.referralId}`);
   }
 
   InitialiseForm(referral: ReferralView) {
 
-    this.currentAssessmentForm.controls.amhpUserName.setValue(referral.currentAssessment.amhpUser.displayName);
-    this.currentAssessmentForm.controls.doctorNamesAccepted.setValue(referral.currentAssessment.doctorsSelected);
-    this.currentAssessmentForm.controls.doctorNamesAllocated.setValue(referral.currentAssessment.doctorsAllocated);
-    this.currentAssessmentForm.controls.fullAddress.setValue(referral.currentAssessment.fullAddress);
-    this.currentAssessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
+    this.assessmentId = referral.currentAssessment.id;
 
-    this.currentAssessmentForm.controls.postCode.setValue(referral.currentAssessment.postcode);
-    this.currentAssessmentForm.controls.preferredDoctorGenderTypeName.setValue(referral.currentAssessment.preferredDoctorGenderType.name);
-    this.currentAssessmentForm.controls.specialityName.setValue(referral.currentAssessment.speciality.name);
+    this.currentAssessmentForm.controls.amhpUserName.setValue(
+      referral.currentAssessment.amhpUser.displayName
+    );
+    this.currentAssessmentForm.controls.doctorNamesAccepted.setValue(
+      referral.currentAssessment.doctorsSelected
+    );
+    this.currentAssessmentForm.controls.doctorNamesAllocated.setValue(
+      referral.currentAssessment.doctorsAllocated
+    );
+    this.currentAssessmentForm.controls.fullAddress.setValue(
+      referral.currentAssessment.fullAddress
+    );
+    this.currentAssessmentForm.controls.meetingArrangementComment.setValue(
+      referral.currentAssessment.meetingArrangementComment
+    );
+    this.currentAssessmentForm.controls.postCode.setValue(
+      referral.currentAssessment.postcode
+    );
+    this.currentAssessmentForm.controls.preferredDoctorGenderTypeName.setValue(
+      referral.currentAssessment.preferredDoctorGenderType.name
+    );
+    this.currentAssessmentForm.controls.specialityName.setValue(
+      referral.currentAssessment.speciality.name
+    );
     this.currentAssessmentForm.disable();
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
     this.referralStatus = referral.statusName;
+
+    this.isInReviewState = referral.referralStatusId === REFERRAL_STATUS_AWAITING_REVIEW;
 
     if (referral.currentAssessment.scheduledTime !== null) {
       this.showDateTitle = 'Scheduled Date / Time';
@@ -174,13 +226,28 @@ export class AssessmentViewComponent implements OnInit {
     const mustBeCompletedBy = moment(this.showDateValue).format('DD/MM/YYYY HH:mm');
     this.currentAssessmentForm.controls.mustBeCompletedBy.setValue(mustBeCompletedBy);
 
+    if (referral.currentAssessment.completedAt !== null) {
+      const formattedCompletedAt =
+        moment(referral.currentAssessment.completedAt).format('DD/MM/YYYY HH:mm');
+      this.currentAssessmentForm.controls.completedAt.setValue(formattedCompletedAt);
+    }
   }
 
   OnModalAction(event: any) {
+    this.closeModal.close();
     if (event) {
       this.CloseReferral();
-    } else {
-      this.CancelModal();
     }
+  }
+
+  OnCompletionModalAction(event: any) {
+    this.completeModal.close();
+    if (event) {
+      this.CompleteReview();
+    }
+  }
+
+  onSort({ column, direction }: SortEvent) {
+    // TODO
   }
 }

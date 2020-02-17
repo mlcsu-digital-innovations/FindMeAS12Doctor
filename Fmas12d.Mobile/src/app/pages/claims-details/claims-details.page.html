@@ -1,0 +1,63 @@
+<app-navbar title="Assessment Claim: {{claim?.claimReference}}"></app-navbar>
+<ion-content>
+  <ion-grid>
+    <ion-card>
+      <ion-card-content>
+        <ion-row>
+          <ion-col>
+            Assessment: 
+            <strong>{{claim?.assessment.completedTime | date: "d MMMM yyyy H:mm"}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Location: 
+            <strong>{{claim?.assessment.address1}}, {{claim?.assessment.postcode}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            AMHP: <strong>{{claim?.assessment?.amhpUser?.displayName}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Assessment Status: 
+            <strong>{{claim?.assessment?.isSuccessful ? "Success" : "Failed"}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!claim?.assessment.isSuccessful">
+          <ion-col>
+            Reason: <strong>{{claim?.assessment?.unsuccessfulAssessmentType?.name}}</strong>
+          </ion-col>
+        </ion-row>
+        <hr/>
+        <ion-row>
+          <ion-col>
+            Reference: <strong>{{claim?.claimReference}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Last Updated: <strong>{{claim?.lastUpdated | date: "d MMMM yyyy H:mm"}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Assessment Claim: <strong>{{claim?.assessmentPayment | currency: 'GBP'}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Mileage Claim: <strong>{{claim?.mileagePayment | currency: 'GBP'}}</strong>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Claim Status: <strong>{{claim?.claimStatus}}</strong>
+          </ion-col>
+        </ion-row>                                
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+</ion-content>

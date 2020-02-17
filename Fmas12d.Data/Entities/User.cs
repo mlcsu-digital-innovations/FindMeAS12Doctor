@@ -38,8 +38,6 @@ namespace Fmas12d.Data.Entities
     [MaxLength(50)]
     [Required]
     public string IdentityServerIdentifier { get; set; }
-    [InverseProperty("User")]
-    public virtual IList<OnCallUser> OnCallUsers { get; set; }
     public virtual Organisation Organisation { get; set; }
     public int OrganisationId { get; set; }
     [InverseProperty("User")]
@@ -55,8 +53,6 @@ namespace Fmas12d.Data.Entities
     public virtual IList<UserSpeciality> UserSpecialities { get; set; }
     [InverseProperty("User")]
     public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
-    [InverseProperty("SelectedByUser")]
-    public virtual IList<UserAssessmentClaim> UserAssessmentClaimSelections { get; set; }
     [InverseProperty("User")]
     public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
   }

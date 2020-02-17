@@ -6,6 +6,7 @@ import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { ReferralList } from '../../interfaces/referral-list';
 import { SortDirection } from '../../directives/table-header-sortable/table-header-sortable.directive';
 import { environment } from 'src/environments/environment';
+import * as moment from 'moment';
 
 interface SearchResult {
   referralList: ReferralList[];
@@ -18,18 +19,42 @@ interface State {
   searchTerm: string;
   sortColumn: string;
   sortDirection: SortDirection;
+  sortColumnType: string;
 }
 
-function compare(value1: any, value2: any) {
-  return value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+function compare(value1: any, value2: any, sortColumnType: string) {
+
+  let returnValue = 0;
+
+  switch (sortColumnType) {
+    case 'dateTime':
+      const defaultDate = new Date();
+      defaultDate.setFullYear(2000);
+      value1 = moment(value1 === null ? defaultDate : value1);
+      value2 = moment(value2 === null ? defaultDate : value2);
+      returnValue = moment(value1).isBefore(moment(value2)) ? -1 : moment(value1).isAfter(moment(value2)) ? 1 : 0;
+      break;
+    case 'string':
+      value1 = value1 === (null || undefined) ? '' : String(value1);
+      value2 = value2 === (null || undefined) ? '' : String(value2);
+      returnValue = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+      break;
+    case 'number':
+      value1 = value1 === (null || undefined) ? 0 : +value1;
+      value2 = value2 === (null || undefined) ? 0 : +value2;
+      returnValue = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+      break;
+  }
+
+  return returnValue;
 }
 
-function sort(referralList: ReferralList[], column: string, direction: string): ReferralList[] {
+function sort(referralList: ReferralList[], column: string, direction: string, sortColumnType: string): ReferralList[] {
   if (direction === '') {
     return referralList;
   } else {
     return [...referralList].sort((a, b) => {
-      const res = compare(a[column], b[column]);
+      const res = compare(a[column], b[column], sortColumnType);
       return direction === 'asc' ? res : -res;
     });
   }
@@ -73,7 +98,8 @@ export class ReferralListService {
     pageSize: 10,
     searchTerm: '',
     sortColumn: '',
-    sortDirection: ''
+    sortDirection: '',
+    sortColumnType: ''
   };
 
   constructor(
@@ -97,8 +123,10 @@ export class ReferralListService {
 
         if (data !== null) {
           data.forEach(item => {
-            item.doctorsSelectedAllocated = `${item.doctorsSelected} / ${item.doctorsAllocated}`;
-            item.responsesReceivedAccepted = `${item.responsesReceived} / ${item.responsesAccepted}`;
+            item.doctorsSelectedAllocatedAttended = 
+              `${item.doctorsSelected} / ${item.doctorsAllocated} / ${item.doctorsAttended}`;
+            item.responsesReceivedAccepted = 
+              `${item.responsesReceived} / ${item.responsesAccepted}`;
           });
         }
 
@@ -126,6 +154,7 @@ export class ReferralListService {
   set searchTerm(searchTerm: string) { this._set({ searchTerm }); }
   set sortColumn(sortColumn: string) { this._set({ sortColumn }); }
   set sortDirection(sortDirection: SortDirection) { this._set({ sortDirection }); }
+  set sortColumnType(sortColumnType: string) { this._set({ sortColumnType }); }
 
   private _set(patch: Partial<State>) {
     if (this._rawReferralList) {
@@ -135,11 +164,11 @@ export class ReferralListService {
   }
 
   private _search(): Observable<SearchResult> {
-    const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
+    const { sortColumn, sortDirection, sortColumnType, pageSize, page, searchTerm } = this._state;
 
     if (this._rawReferralList != null) {
       // 1. sort
-      let referralList = sort(this._rawReferralList, sortColumn, sortDirection);
+      let referralList = sort(this._rawReferralList, sortColumn, sortDirection, sortColumnType) ;
 
       // 2. filter
       referralList = referralList.filter(referral => matches(referral, searchTerm, this.pipe));

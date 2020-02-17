@@ -26,6 +26,7 @@ namespace Fmas12d.Data.Entities
     [MaxLength(5)]
     public string ShortCode {get; set;}    
     [Column(TypeName = "decimal(18,2)")]
+    public decimal SuccessfulAssessmentPayment { get; set; }
     public decimal SuccessfulPencePerMile { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal UnsuccessfulPencePerMile { get; set; }

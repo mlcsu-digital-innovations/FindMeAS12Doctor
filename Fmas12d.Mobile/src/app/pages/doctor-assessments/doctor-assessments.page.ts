@@ -2,7 +2,7 @@ import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.mo
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src/app/constants/app.constants';
 
 @Component({
@@ -23,7 +23,8 @@ export class DoctorAssessmentsPage implements OnInit {
 
   constructor(
     private assessmentService: AmhpAssessmentService,
-    private loadingController: LoadingController) { }
+    private loadingController: LoadingController,
+    private toastController: ToastController) { }
 
   ngOnInit() {
   }
@@ -42,8 +43,9 @@ export class DoctorAssessmentsPage implements OnInit {
       .subscribe(
         result => {
 
+          this.allAssessments = result;
+
           if (result && result.length > 0) {
-            this.allAssessments = result;
 
             const scheduled = [ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW];
 
@@ -53,14 +55,19 @@ export class DoctorAssessmentsPage implements OnInit {
 
             this.assessmentRequests = this.allAssessments.filter
               (assessment => !scheduled.includes(assessment.referralStatusId));
+          } else {
+            this.scheduledAssessments = [];
+            this.assessmentRequests = [];
           }
 
           this.assessmentRequestsLastUpdated = new Date();
           this.closeLoading();
           this.closeRefreshing($event);
         }, error => {
+          this.showErrorToast(error)
           this.closeLoading();
           this.closeRefreshing($event);
+          
         }
       );
   }
@@ -94,4 +101,22 @@ export class DoctorAssessmentsPage implements OnInit {
     });
     await this.loading.present();
   }
+
+  showErrorToast(msg: string) {
+    this.showToast(msg, 'danger', 'Error!', 5000);
+  }
+  showSuccessToast(msg: string) {
+    this.showToast(msg, 'success', 'Success');
+  }
+
+  async showToast(msg: string, colour: string, hdr: string, dur?: number) {
+    const toast = await this.toastController.create({
+      message: msg,
+      header: hdr,
+      color: colour,
+      duration: dur ? dur : 2000,
+      position: 'top'
+    });
+    await toast.present();
+  }  
 }

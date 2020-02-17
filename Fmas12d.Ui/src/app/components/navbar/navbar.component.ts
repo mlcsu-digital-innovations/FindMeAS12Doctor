@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { version } from '../../../../package.json';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { UserDetailsService } from 'src/app/services/user/user-details.service.js';
+import { User } from 'src/app/interfaces/user.js';
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'app-navbar',
@@ -10,29 +12,18 @@ import { Subscription } from 'rxjs';
 })
 export class NavbarComponent implements OnInit {
 
-  // Add standard navbar options here !
   public version: string = version;
-  isAuthorizedSubscription: Subscription;
-  isAuthorized: boolean;
-  userDataSubscription: Subscription;
-  userData: { name: string };  
+  isAuthorized$: Observable<boolean>;
+  user$: Observable<User>;
 
-  constructor(public oidcSecurityService: OidcSecurityService) {
-  }
+  constructor(
+    public oidcSecurityService: OidcSecurityService,
+    private userDetailsService: UserDetailsService
+  ) { }
 
   ngOnInit() {
-    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe(
-      (isAuthorized: boolean) => {
-        this.isAuthorized = isAuthorized;
-      });
-    this.userDataSubscription = 
-      this.oidcSecurityService.getUserData<{ name: string }>().subscribe(userData => {
-        this.userData = userData;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.isAuthorizedSubscription.unsubscribe();
+    this.isAuthorized$ = this.oidcSecurityService.getIsAuthorized();
+    this.user$ = this.userDetailsService.getCurrentUserDetails();
   }
 
   login() {
@@ -45,5 +36,11 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.oidcSecurityService.logoff();
+  }
+
+  home(): string {
+    // TODO: replace with switch
+    return '/referral/list';
+
   }
 }

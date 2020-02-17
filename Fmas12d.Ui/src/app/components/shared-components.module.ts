@@ -6,11 +6,12 @@ import { DisableControlDirective } from '../directives/disable-control/disable-c
 import { FocusOnShowDirective } from '../directives/focus-on-show/focus-on-show.directive';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
-import { NgbDateCustomParserFormatter } from '../components/datePicker-format/datePicker-format';
-import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgbDateCustomParserFormatter } from '../components/datePicker-format/datePicker-format';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { TableHeaderSortable } from '../directives/table-header-sortable/table-header-sortable.directive';
 import { TemplateModule } from '../templates/template.module';
 import { ToastsComponent } from './toasts/toasts.component';
@@ -23,7 +24,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     DelaySpinnerComponent,
     DisableControlDirective,
     FocusOnShowDirective,
-    NavbarComponent,
+    NavbarComponent,    
     TableHeaderSortable,
     ToastsComponent,
     UnauthorizedComponent,
@@ -36,6 +37,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     NgMultiSelectDropDownModule,
     NgbModule,
     ReactiveFormsModule,
+    RouterModule,
     TemplateModule
   ],
   exports: [

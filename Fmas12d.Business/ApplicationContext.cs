@@ -100,8 +100,6 @@ namespace Fmas12d.Business
     public virtual DbSet<NonPaymentLocationTypeAudit> NonPaymentLocationTypeAudits { get; set; }
     public virtual DbSet<NotificationText> NotificationTexts { get; set; }
     public virtual DbSet<NotificationTextAudit> NotificationTextAudits { get; set; }
-    public virtual DbSet<OnCallUser> OnCallUsers { get; set; }
-    public virtual DbSet<OnCallUserAudit> OnCallUserAudits { get; set; }
     public virtual DbSet<Organisation> Organisations { get; set; }
     public virtual DbSet<OrganisationAudit> OrganisationAudits { get; set; }
     public virtual DbSet<Patient> Patients { get; set; }
@@ -120,8 +118,11 @@ namespace Fmas12d.Business
     public virtual DbSet<ReferralAudit> ReferralAudits { get; set; }
     public virtual DbSet<ReferralStatus> ReferralStatuses { get; set; }
     public virtual DbSet<ReferralStatusAudit> ReferralStatusAudits { get; set; }
+    public virtual DbSet<RequestResponseLog> RequestResponseLog { get; set; }
     public virtual DbSet<Section12ApprovalStatus> Section12ApprovalStatuses { get; set; }
     public virtual DbSet<Section12ApprovalStatusAudit> Section12ApprovalStatusAudits { get; set; }
+    public virtual DbSet<Section12LiveRegister> Section12LiveRegisters { get; set; }
+    public virtual DbSet<Section12LiveRegisterAudit> Section12LiveRegisterAudits { get; set; }    
     public virtual DbSet<Speciality> Specialities { get; set; }
     public virtual DbSet<SpecialityAudit> SpecialityAudits { get; set; }
     public virtual DbSet<UnsuccessfulAssessmentType> UnsuccessfulAssessmentTypes { get; set; }
@@ -223,6 +224,10 @@ namespace Fmas12d.Business
         .HasIndex(c => c.Name)
         .IsUnique();  
 
+      modelBuilder.Entity<Section12LiveRegister>()
+        .HasIndex(c => c.GmcNumber)
+        .IsUnique();  
+
       modelBuilder.Entity<Section12ApprovalStatus>()
         .HasIndex(c => c.Name)
         .IsUnique();    
@@ -236,6 +241,10 @@ namespace Fmas12d.Business
         .IsUnique();   
       modelBuilder.Entity<User>()
         .HasIndex(c => c.IdentityServerIdentifier)
+        .IsUnique();
+
+      modelBuilder.Entity<UserAssessmentClaim>()
+        .HasIndex(uac => uac.ClaimReference)
         .IsUnique();                                          
     }
 

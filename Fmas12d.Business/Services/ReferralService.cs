@@ -238,6 +238,8 @@ namespace Fmas12d.Business.Services
                         .ThenInclude(e => e.PreferredDoctorGenderType)
                       .Include(r => r.Assessments)
                         .ThenInclude(e => e.Speciality)
+                      .Include(r => r.Assessments)
+                        .ThenInclude(r => r.UnsuccessfulAssessmentType)
                       .Include(r => r.LeadAmhpUser)
                       .Include(r => r.Patient)
                       .Include(r => r.ReferralStatus)

@@ -12,6 +12,7 @@ import { DoctorModule } from './components/doctor/doctor.module';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { OnCallDoctorModule } from './components/on-call-doctor/on-call-doctor.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
@@ -39,6 +40,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     DoctorModule,
     AssessmentModule,
     HttpClientModule,
+    OnCallDoctorModule,
     PatientModule,
     ReferralModule,
     RouterModule.forRoot(AppRoutes)
@@ -76,7 +78,7 @@ export class AppModule {
         forbidden_route: "/forbidden",
         history_cleanup_off: true,
         iss_validation_off: true,
-        log_console_debug_active: !environment.production,
+        log_console_debug_active: false, // !environment.production,
         log_console_warning_active: !environment.production,
         max_id_token_iat_offset_allowed_in_seconds: 1000,
         post_login_route: '/welcome',
@@ -84,8 +86,8 @@ export class AppModule {
         redirect_url: environment.oidc_redirect_url,
         response_type: "id_token token",
         scope: "openid profile email https://graph.microsoft.com/User.Read",
-        silent_renew: false,
-        silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,
+        silent_renew: true,
+        silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,        
         start_checksession: true,
         stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
         trigger_authorization_result_event: true,

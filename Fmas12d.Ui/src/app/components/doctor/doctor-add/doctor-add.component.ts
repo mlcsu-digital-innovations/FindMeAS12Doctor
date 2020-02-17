@@ -10,12 +10,11 @@ import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
-import { PostcodeRegex } from 'src/app/constants/Constants';
+import { PostcodeRegex, PROFILE_TYPE_UNREGISTERED, SECTION12_APPROVED } from 'src/app/constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { RouterService } from 'src/app/services/router/router.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UnregisteredUser } from 'src/app/interfaces/unregistered-user';
-import { UnregisteredUserService } from 'src/app/services/unregistered-user/unregistered-user.service';
 import { UserDetails } from 'src/app/interfaces/user-details';
 import { UserDetailsService } from 'src/app/services/user/user-details.service';
 
@@ -30,6 +29,8 @@ export class DoctorAddComponent implements OnInit {
   assessmentId: number;
   cancelModal: NgbModalRef;
   genderTypes: NameIdList[];
+  existingUserMessage: string;
+  existingUserModal: NgbModalRef;
   hasDoctorSearchFailed: boolean;
   hasRegisteredDoctorDetails: boolean;
   hasUnregisteredUser: boolean;
@@ -40,12 +41,15 @@ export class DoctorAddComponent implements OnInit {
   multipleUsersModal: NgbModalRef;
   registeredDoctorDetails: UserDetails;
   registeredDoctorForm: FormGroup;
+  selectedDoctor: UserDetails;
   unregisteredDoctorForm: FormGroup;
   unregisteredUser: UnregisteredUser;
+  unregisteredUserError: string;
   unregisteredUsers: UnregisteredUser[];
 
   @ViewChild('cancelAllocation', null) cancelAllocationTemplate;
   @ViewChild('unregisteredUserResults', { static: true }) unregisteredUserResults;
+  @ViewChild('confirmExistingUser', null) confirmExistingUser;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -58,7 +62,6 @@ export class DoctorAddComponent implements OnInit {
     private route: ActivatedRoute,
     private routerService: RouterService,
     private toastService: ToastService,
-    private unregisteredUserService: UnregisteredUserService,
     private userDetailsService: UserDetailsService
   ) { }
 
@@ -74,6 +77,7 @@ export class DoctorAddComponent implements OnInit {
     });
 
     this.unregisteredDoctorForm = this.formBuilder.group({
+      unregisteredSearch: [''],
       unregisteredName: [''],
       unregisteredGmcNumber: ['',
       [
@@ -81,20 +85,9 @@ export class DoctorAddComponent implements OnInit {
         Validators.maxLength(7),
         Validators.pattern('^\d{7}$')
       ]],
-      postcode: ['',
-        [
-          Validators.minLength(6),
-          Validators.maxLength(8),
-          Validators.pattern(`${PostcodeRegex}$`)
-        ]
-      ],
       contact: [''],
-      organisation: [''],
-      previousAssessments: [{disabled: true}],
-      address: [''],
       gender: null,
-      isSection12: false,
-      unregisteredUserAddress: ['']
+      isSection12: [{value: false, disabled: true }]
     });
 
     // get the list of genders for the dropdown
@@ -105,7 +98,7 @@ export class DoctorAddComponent implements OnInit {
         (err) => {
           this.toastService.displayError({
             title: 'Error',
-            message: 'Error Retrieving Gender Data'
+            message: 'Error retrieving gender data'
           });
         });
   }
@@ -121,7 +114,7 @@ export class DoctorAddComponent implements OnInit {
         this.isPostcodeSearching = false;
         this.toastService.displayError({
           title: 'Search Error',
-          message: 'Error Retrieving Address Information'
+          message: 'Error retrieving address information'
         });
       }, () => {
         this.isPostcodeSearching = false;
@@ -133,18 +126,49 @@ export class DoctorAddComponent implements OnInit {
   }
 
   AllocateRegisteredDoctor() {
-    // ToDo: use a service to allocate the registered doctor
     this.assessmentService
       .allocateDoctorDirectly(this.assessmentId, this.registeredDoctorDetails.id)
       .subscribe(userDetails => {
         this.toastService.displaySuccess({
           title: 'Success',
-          message: 'Doctor Allocated'
+          message: 'Doctor allocated'
         });
         this.routerService.navigatePrevious();
     },
       (err) => {
+        let msg = 'Error allocating doctor to assessment';
 
+        if (err.error.errors && err.error.errors.UserId !== undefined) {
+          msg = 'Doctor is already allocated to this assessment';
+        }
+
+        // specific error message for missing contact details
+        if (String(err.error).includes('ContactDetailBaseMissingForUserException')) {
+          msg = 'Unable to find contact details for doctor. Doctor cannot be allocated.';
+        }
+
+        this.toastService.displayError({
+          title: 'Error',
+          message: msg
+        });
+      });
+  }
+
+  AllocateUnregisteredDoctor() {
+
+    if (this.selectedDoctor) {
+      // have an existing unregistered user
+      this.assessmentService
+      .allocateDoctorDirectly(this.assessmentId, this.selectedDoctor.id)
+      .subscribe(userDetails => {
+        this.toastService.displaySuccess({
+          title: 'Success',
+          message: 'Doctor allocated'
+        });
+        this.routerService.navigatePrevious();
+    },
+      (err) => {
+        console.log(err);
         const msg =
           err.error.errors.UserId !== undefined
           ? 'Doctor is already allocated to this assessment'
@@ -155,8 +179,80 @@ export class DoctorAddComponent implements OnInit {
           message: msg
         });
       });
-  }
+    } else {
+      // create a new user and send it to the api
+      const newUser = {} as UserDetails;
+      newUser.displayName = this.unregisteredDoctorField.value;
+      newUser.gmcNumber = +this.unregisteredGmcNumberField.value;
+      newUser.genderTypeId =
+        +this.unregisteredGenderField.value === 0 ? null : +this.unregisteredGenderField.value;
+      newUser.contactDetailBase = {telephoneNumber: this.unregisteredContactField.value};
 
+      let canCreateNewUser = true;
+
+      if (newUser.contactDetailBase.telephoneNumber === '') {
+        this.unregisteredUserError = '* Telephone Number must be supplied';
+        canCreateNewUser = false;
+      }
+
+      if (newUser.gmcNumber.toString().length !== 7) {
+        this.unregisteredUserError = '* GMC Number format incorrect';
+        canCreateNewUser = false;
+      }
+
+      if (newUser.displayName === '') {
+        this.unregisteredUserError = '* Doctor Name must be supplied';
+        canCreateNewUser = false;
+      }
+
+      if (canCreateNewUser) {
+
+        // check that the GMC number is unique
+        this.doctorListService.GetDoctorList(newUser.gmcNumber.toString(), true)
+        .subscribe((userList: NameIdList[]) => {
+          if (userList === null ) {
+            userList = [];
+          }
+          if (userList.length > 0) {
+            this.toastService.displayError({
+              title: 'Error',
+              message: 'GMC Number used by existing user'
+            });
+          } else {
+            this.assessmentService
+              .allocateNewUnregisteredDoctor(this.assessmentId, newUser)
+              .subscribe(
+                userDetails => {
+                  this.toastService.displaySuccess({
+                    title: 'Success',
+                    message: 'Doctor allocated'
+                  });
+                  this.routerService.navigatePrevious();
+                },
+                err => {
+                  const msg =
+                    err.error.errors.UserId !== undefined
+                      ? 'Doctor is already allocated to this assessment'
+                      : err.error.title;
+
+                  this.toastService.displayError({
+                    title: 'Error',
+                    message: msg
+                  });
+                }
+              );
+          }
+        },
+          err => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error checking GMC number'
+          });
+        }
+      );
+      }
+    }
+  }
 
   Cancel() {
     // if either form has been changed then ask the user for confirmation
@@ -168,7 +264,6 @@ export class DoctorAddComponent implements OnInit {
       this.routerService.navigatePrevious();
     }
   }
-
 
   ClearField(fieldName: string) {
     if (this.unregisteredDoctorForm.contains(fieldName)) {
@@ -183,16 +278,66 @@ export class DoctorAddComponent implements OnInit {
   }
 
   DisableFieldsForUnregisteredUser() {
-    this.unregisteredAssessmentsField.disable();
     this.unregisteredContactField.disable();
     this.unregisteredGenderField.disable();
-    this.unregisteredOrganisationField.disable();
-    this.unregisteredPostcodeField.disable();
-    this.unregisteredSection12Field.disable();
   }
 
   DisableIfParentIsDisabled(fieldName: string): boolean {
     return this.unregisteredDoctorForm.controls[fieldName].disabled;
+  }
+
+  FetchDoctorDetails(userId: number) {
+    this.userDetailsService.GetDoctorDetails(userId)
+    .subscribe((doctorDetails: UserDetails) => {
+
+      if (doctorDetails === null ) {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Unable to retrieve doctor details'
+        });
+      } else {
+
+        // if the doctor is registered then inform the user
+        if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
+          this.registeredDoctorDetails = doctorDetails;
+          this.isUnregisteredSearchComplete = false;
+          this.existingUserMessage =
+          `Allocate existing doctor '${doctorDetails.displayName} GMC# ${doctorDetails.gmcNumber}'
+           to this assessment ?`;
+
+          this.existingUserModal = this.modalService.open(this.confirmExistingUser, {
+            size: 'lg'
+          });
+
+        } else {
+          this.selectedDoctor = doctorDetails;
+          this.unregisteredDoctorField.setValue(doctorDetails.displayName);
+          this.unregisteredGmcNumberField.setValue(doctorDetails.gmcNumber);
+          this.unregisteredGenderField.setValue(doctorDetails.genderTypeId);
+
+          if (doctorDetails.section12ApprovalStatusId === SECTION12_APPROVED) {
+            this.unregisteredSection12Field.setValue(true);
+          }
+
+          this.unregisteredContactField.setValue(doctorDetails.contactDetailBase.telephoneNumber);
+
+          this.unregisteredDoctorField.disable();
+          this.unregisteredGmcNumberField.disable();
+          this.hasUnregisteredUser = true;
+
+          this.toastService.displayInfo({
+            title: 'Information',
+            message: 'An existing unregistered doctor has been found'
+          });
+        }
+      }
+    },
+      (err) => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error retrieving doctor details'
+        });
+      });
   }
 
   FormatTypeAheadResults(value: any): string {
@@ -235,12 +380,22 @@ export class DoctorAddComponent implements OnInit {
     return this.unregisteredDoctorForm.controls.isSection12;
   }
 
+  get unregisteredSearchField() {
+    return this.unregisteredDoctorForm.controls.unregisteredSearch;
+  }
+
   get unregisteredUserField() {
     return this.unregisteredDoctorForm.controls.unregisteredName;
   }
 
   HasDoctorBeenSelected() {
     return (typeof this.registeredDoctorField.value) === 'object';
+  }
+
+  HasIncompleteUser(): boolean {
+
+    return !(this.unregisteredDoctorField.value !== '' &&
+      this.unregisteredGmcNumberField.value !== '');
   }
 
   HasInvalidPostcode(): boolean {
@@ -257,6 +412,14 @@ export class DoctorAddComponent implements OnInit {
     );
   }
 
+  OnCancelExistingModalAction(action: boolean) {
+    this.existingUserModal.close();
+    if (action) {
+      // add the already registered doctor to the assessment
+      this.AllocateRegisteredDoctor();
+    }
+  }
+
   OnCancelModalAction(action: boolean) {
     this.cancelModal.close();
     if (action) {
@@ -270,10 +433,7 @@ export class DoctorAddComponent implements OnInit {
   }
 
   OnSelectUnregisteredUser(user: UnregisteredUser) {
-    this.unregisteredUser = user;
-    this.hasUnregisteredUser = true;
-    this.DisableFieldsForUnregisteredUser();
-    this.SetFieldValues();
+    this.FetchDoctorDetails(user.id);
     this.multipleUsersModal.close();
   }
 
@@ -283,7 +443,7 @@ export class DoctorAddComponent implements OnInit {
       distinctUntilChanged(),
       tap(() => (this.isRegisteredDoctorSearching = true)),
       switchMap(term =>
-        this.doctorListService.GetDoctorList(term).pipe(
+        this.doctorListService.GetDoctorList(term, false).pipe(
           tap(() => (this.hasDoctorSearchFailed = false)),
           catchError(() => {
             this.hasDoctorSearchFailed = true;
@@ -295,55 +455,71 @@ export class DoctorAddComponent implements OnInit {
     )
 
   ResetAllFields() {
-    this.unregisteredAssessmentsField.enable();
-    this.unregisteredAssessmentsField.setValue('');
     this.unregisteredContactField.enable();
     this.unregisteredContactField.setValue('');
     this.unregisteredGenderField.enable();
     this.unregisteredGenderField.setValue('');
-    this.unregisteredOrganisationField.enable();
-    this.unregisteredOrganisationField.setValue('');
-    this.unregisteredPostcodeField.enable();
-    this.unregisteredPostcodeField.setValue('');
-    this.unregisteredSection12Field.enable();
-    this.unregisteredSection12Field.setValue(false);
   }
 
   SearchUnregisteredDoctor() {
 
-    if (this.unregisteredUserField.value === '' && this.unregisteredGmcNumberField.value === '') {
+    if (this.unregisteredDoctorField.value === '' && this.unregisteredGmcNumberField.value === '') {
       return;
     }
 
     this.ResetAllFields();
 
-    this.unregisteredUserService.SearchUnregisteredUsers(this.unregisteredUserField.value, +this.unregisteredGmcNumberField.value)
-    .subscribe((unregisteredUsers: UnregisteredUser[]) => {
+    const searchTerm = this.unregisteredGmcNumberField.value === ''
+      ? this.unregisteredDoctorField.value
+      : this.unregisteredGmcNumberField.value;
+
+    this.doctorListService.GetDoctorList(searchTerm, true)
+    .subscribe((userList: NameIdList[]) => {
       this.isUnregisteredSearchComplete = true;
 
-      switch (unregisteredUsers.length) {
+      if (userList === null ) {
+        userList = [];
+      }
+
+      this.unregisteredUser = {} as UnregisteredUser;
+
+      switch (userList.length) {
         case 0:
           this.toastService.displayInfo({
             title: 'Information',
-            message: 'No existing unregistered users found'
+            message: 'No existing unregistered doctors found'
           });
           this.hasUnregisteredUser = false;
-          this.unregisteredUser = {} as UnregisteredUser;
+
+          // prevent fields from being changed after searching
+          if (this.unregisteredDoctorField.value !== '') {
+            this.unregisteredDoctorField.disable();
+          }
+          if (this.unregisteredGmcNumberField.value !== '') {
+            this.unregisteredGmcNumberField.disable();
+          }
+
           break;
         case 1:
-          this.unregisteredUser = unregisteredUsers[0];
-          this.hasUnregisteredUser = true;
-
-          this.DisableFieldsForUnregisteredUser();
-          this.SetFieldValues();
-
-          this.toastService.displayInfo({
-            title: 'Information',
-            message: 'An existing unregistered user has been found'
-          });
+          this.FetchDoctorDetails(userList[0].id);
           break;
         default:
-          this.unregisteredUsers = unregisteredUsers;
+
+          this.unregisteredUser = {} as UnregisteredUser;
+          this.unregisteredUsers = [];
+
+          userList.forEach(user => {
+            const tempUser = {} as UnregisteredUser;
+            tempUser.id = user.id;
+            const index = user.resultText.indexOf('-');
+
+            if (index > 0) {
+              tempUser.displayName = user.resultText.substr(0, index - 1);
+              tempUser.gmcNumber = +user.resultText.substr(index + 2, user.resultText.length - index);
+              this.unregisteredUsers.push(tempUser);
+            }
+          });
+
           this.multipleUsersModal = this.modalService.open(
             this.unregisteredUserResults,
             { size: 'lg' }
@@ -355,7 +531,7 @@ export class DoctorAddComponent implements OnInit {
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving User Details'
+          message: 'Error retrieving doctor details'
         });
       });
   }
@@ -393,7 +569,7 @@ export class DoctorAddComponent implements OnInit {
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving User Details'
+          message: 'Error retrieving doctor details'
         });
       });
   }

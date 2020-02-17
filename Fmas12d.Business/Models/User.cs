@@ -60,7 +60,6 @@ namespace Fmas12d.Business.Models
     [MaxLength(50)]
     [Required]
     public string IdentityServerIdentifier { get; set; }
-    public virtual IList<OnCallUser> OnCallUsers { get; set; }
     public virtual Organisation Organisation { get; set; }
     public int OrganisationId { get; set; }
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
@@ -77,9 +76,50 @@ namespace Fmas12d.Business.Models
 
     public string GenderName { get { return GenderType?.Name; } }
 
-    public bool IsAmhp { get { return ProfileType?.IsAmhp ?? false; } }
+    public bool IsAmhp
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdAnAmhp(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsAmhp;
+        }
+      }
+    }
 
-    public bool IsDoctor { get { return ProfileType?.IsDoctor ?? false; } }
+    public bool IsDoctor
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdADoctor(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsDoctor;
+        }
+      }
+    }
+
+    public bool IsFinance
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdFinance(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsFinance;
+        }
+      }
+    }
 
     public string ProfileTypeName { get { return ProfileType?.Name; } }
 
@@ -95,8 +135,24 @@ namespace Fmas12d.Business.Models
 
     public ContactDetail GetContactDetailTypeBase()
     {
-      return ContactDetails
+      return ContactDetails?
         .SingleOrDefault(cd => cd.ContactDetailTypeId == ContactDetailType.BASE);
+    }
+
+    internal Data.Entities.User MapToEntity()
+    {
+      Data.Entities.User entity = new Data.Entities.User()
+      {
+        DisplayName = DisplayName,
+        GenderTypeId = GenderTypeId,
+        GmcNumber = GmcNumber,
+        IdentityServerIdentifier = IdentityServerIdentifier,
+        OrganisationId = OrganisationId,
+        ProfileTypeId = ProfileTypeId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
     }
 
   }

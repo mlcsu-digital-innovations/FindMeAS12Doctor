@@ -208,6 +208,7 @@ export class AssessmentEditComponent implements OnInit {
       switchMap(term =>
         this.amhpListService.GetAmhpList(term).pipe(
           tap(() => (this.hasAmhpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'amhp'))),
           catchError(() => {
             this.hasAmhpSearchFailed = true;
             return of([]);
@@ -268,7 +269,7 @@ export class AssessmentEditComponent implements OnInit {
       }
     });
 
-    if (this.unwantedDoctorList.length > 0 ) {
+    if (this.unwantedDoctorList.length > 0) {
       this.removeModal = this.modalService.open(this.removeDoctorTemplate, {
         size: 'lg'
       });
@@ -343,27 +344,27 @@ export class AssessmentEditComponent implements OnInit {
 
     // get the list of genders for the dropdown
     this.nameIdListService.GetListData('gendertype')
-    .subscribe(genders => {
-      this.genderTypes = genders;
-    },
-      (err) => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Error Retrieving Gender Data'
+      .subscribe(genders => {
+        this.genderTypes = genders;
+      },
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving Gender Data'
+          });
         });
-      });
 
     // get the list of risks for the dropdown
     this.nameIdListService.GetListData('assessmentdetailtype')
       .subscribe(details => {
         this.assessmentDetails = details;
       },
-      (err) => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Error Retrieving Assessment Risks'
-      });
-    });
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving Assessment Risks'
+          });
+        });
   }
 
   FormatAddress(): string[] {
@@ -374,9 +375,9 @@ export class AssessmentEditComponent implements OnInit {
     // can only store 4 lines of the address
     for (let i = 0; i < 4; i++) {
       if (addressSplitByCommas.length - 1 >= i &&
-          addressSplitByCommas[i] !== undefined &&
-          addressSplitByCommas[i].trim() !== this.assessmentPostcode.value) {
-            addressLines.push(addressSplitByCommas[i].trim());
+        addressSplitByCommas[i] !== undefined &&
+        addressSplitByCommas[i].trim() !== this.assessmentPostcode.value) {
+        addressLines.push(addressSplitByCommas[i].trim());
       } else {
         addressLines.push(null);
       }
@@ -448,7 +449,7 @@ export class AssessmentEditComponent implements OnInit {
     const amhpUser = assessment.amhpUser;
 
     // AMHP User - mandatory field
-    const AmhpUser: TypeAheadResult = {id: amhpUser.id, resultText: amhpUser.displayName};
+    const AmhpUser: TypeAheadResult = { id: amhpUser.id, resultText: amhpUser.displayName };
     this.assessmentForm.controls.amhp.setValue(AmhpUser);
 
     this.assessmentForm.controls.meetingArrangementComment.setValue(referral.currentAssessment.meetingArrangementComment);
@@ -473,7 +474,7 @@ export class AssessmentEditComponent implements OnInit {
     this.isPlannedAssessment = referral.currentAssessment.isPlanned;
 
     referral.currentAssessment.detailTypes.forEach(detailType => {
-      const detail = {id: detailType.id, name: detailType.name} as NameIdList;
+      const detail = { id: detailType.id, name: detailType.name } as NameIdList;
       this.selectedDetails.push(detail);
     });
 
@@ -644,43 +645,43 @@ export class AssessmentEditComponent implements OnInit {
 
   }
 
-  ValidateAssessment(): boolean{
+  ValidateAssessment(): boolean {
 
     let formIsValid = true;
 
-    if ( this.amhpField.value === null || this.amhpField.value === '' ) {
+    if (this.amhpField.value === null || this.amhpField.value === '') {
       formIsValid = false;
-      this.amhpField.setErrors({MissingAmhpUser: true});
+      this.amhpField.setErrors({ MissingAmhpUser: true });
     }
 
-    if ( this.isPlannedAssessment && this.scheduledDateField.value === null) {
+    if (this.isPlannedAssessment && this.scheduledDateField.value === null) {
       formIsValid = false;
-      this.scheduledDateField.setErrors({MissingDate: true});
+      this.scheduledDateField.setErrors({ MissingDate: true });
     }
 
-    if ( this.isPlannedAssessment && this.scheduledTimeField.value === null) {
+    if (this.isPlannedAssessment && this.scheduledTimeField.value === null) {
       formIsValid = false;
-      this.scheduledDateField.setErrors({MissingTime: true});
+      this.scheduledDateField.setErrors({ MissingTime: true });
     }
 
-    if ( !this.isPlannedAssessment && this.toBeCompletedByDateField.value === null) {
+    if (!this.isPlannedAssessment && this.toBeCompletedByDateField.value === null) {
       formIsValid = false;
-      this.toBeCompletedByDateField.setErrors({MissingDate: true});
+      this.toBeCompletedByDateField.setErrors({ MissingDate: true });
     }
 
-    if ( !this.isPlannedAssessment && this.toBeCompletedByTimeField.value === null) {
+    if (!this.isPlannedAssessment && this.toBeCompletedByTimeField.value === null) {
       formIsValid = false;
-      this.toBeCompletedByDateField.setErrors({MissingTime: true});
+      this.toBeCompletedByDateField.setErrors({ MissingTime: true });
     }
 
-    if ( this.assessmentPostcode.value === null || this.assessmentPostcode.value === '' ) {
+    if (this.assessmentPostcode.value === null || this.assessmentPostcode.value === '') {
       formIsValid = false;
-      this.assessmentPostcode.setErrors({MissingPostcode: true});
+      this.assessmentPostcode.setErrors({ MissingPostcode: true });
     }
 
-    if ( this.assessmentAddressField.value === null || this.assessmentAddressField.value === '' ) {
+    if (this.assessmentAddressField.value === null || this.assessmentAddressField.value === '') {
       formIsValid = false;
-      this.assessmentPostcode.setErrors({MissingAddress: true});
+      this.assessmentPostcode.setErrors({ MissingAddress: true });
     }
 
     if (!formIsValid) {
@@ -690,5 +691,12 @@ export class AssessmentEditComponent implements OnInit {
     }
 
     return formIsValid;
+  }
+
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results === null) {
+      this.assessmentForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
   }
 }

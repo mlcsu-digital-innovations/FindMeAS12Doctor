@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Fmas12d.Business.Models
@@ -9,7 +10,7 @@ namespace Fmas12d.Business.Models
     public const int GP = 3;
     public const int FINANCE = 4;
     public const int ADMIN = 5;
-    public const int UNREGISTERED = 6;
+    public const int UNREGISTERED_DOCTOR = 6;
     public const int PSYCHIATRIST = 7;
 
     public ProfileType() {}
@@ -19,7 +20,32 @@ namespace Fmas12d.Business.Models
     }
 
     public virtual IList<User> Users { get; set; }
-    public bool IsAmhp { get { return Id == AMHP; } }
-    public bool IsDoctor { get { return Id == GP || Id == PSYCHIATRIST; } }
+    public bool IsAmhp { get { return IsIdAnAmhp(Id); } }
+    public bool IsDoctor { get { return IsIdADoctor(Id); } }
+    public bool IsFinance { get { return IsIdFinance(Id); } }
+    public static bool IsIdAnAmhp(int profileTypeId)
+    {
+      return profileTypeId == AMHP;
+    }
+    public static bool IsIdADoctor(int profileTypeId)
+    {
+      return profileTypeId == GP || profileTypeId == PSYCHIATRIST || profileTypeId == UNREGISTERED_DOCTOR;
+    } 
+
+    public static bool IsIdFinance(int profileTypeId)
+    {
+      return profileTypeId == FINANCE;
+    }
+
+    public static List<int> DoctorProfileTypes(bool includeUnregistered) {
+
+      List<int> profileTypes = new List<int>() {GP, PSYCHIATRIST};
+
+      if (includeUnregistered){
+        profileTypes.Add(UNREGISTERED_DOCTOR);
+      }
+      return profileTypes;
+    }
+
   }
 }

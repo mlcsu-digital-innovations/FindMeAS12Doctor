@@ -1,9 +1,9 @@
 <div class="modal-header header-info">
-  <h4 class="modal-title" >Multiple Unregistered Doctors Have Been Found</h4>
+  <h4 class="modal-title" >Multiple Doctors Have Been Found</h4>
 </div>
 <div class="modal-body">
   <div class="row user-row" *ngFor="let user of unregisteredUsers">
-    <div class="col-md-10">
+    <div class="col-md-9">
       <div class="user-name">
           {{user.displayName}}
       </div>
@@ -11,7 +11,7 @@
           GMC# {{user.gmcNumber}}
       </div>
     </div>
-    <div class="col-md-2" style="padding-top:6px;">
+    <div class="col-md-3" style="padding-top:6px;">
       <button
         type="button"
         class="btn btn-primary "

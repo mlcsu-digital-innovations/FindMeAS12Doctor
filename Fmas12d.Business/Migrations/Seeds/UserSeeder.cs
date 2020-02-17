@@ -13,6 +13,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     public const string DISPLAY_NAME_DOCTOR_FEMALE = "Doctor Female";
     public const string DISPLAY_NAME_DOCTOR_MALE = "Doctor Male";
     public const string DISPLAY_NAME_FINANCE = "Finance";
+    public const string DISPLAY_NAME_APP_STORE_REVIEW_USER = "App Store Review User";
     // public const string DISPLAY_NAME_HELENCROSS = "Helen Cross";
     // public const string DISPLAY_NAME_JEHANDAVIDBEYERS = "Jehan-David Beyers";
     // public const string DISPLAY_NAME_MARKCARTER = "Mark Carter";
@@ -26,6 +27,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     public const int GMCNUMBER_DOCTOR_FEMALE = 1111111;
     public const int GMCNUMBER_DOCTOR_MALE = 2222222;
+    public const int GMCNUMBER_APP_STORE_REVIEW_USER = 0;
 
     public const string IDENTITY_SERVER_IDENTIFIER_ADMIN =
       "977f7610-4048-4a7f-ae8f-47ff0f33a59b";
@@ -39,6 +41,9 @@ namespace Fmas12d.Business.Migrations.Seeds
       "d5f1594d-cdee-4961-ab2b-dd70228c9611";
     public const string IDENTITY_SERVER_IDENTIFIER_FINANCE =
       "e2d78f4e-4a0c-4289-aafd-31a1d5928411";
+
+    public const string IDENTITY_SERVER_IDENTIFIER_APP_STORE_REVIEW_USER = 
+      "8fc64029-9b4d-4ae7-8552-f1b41dd420b9";
 
     // public const string IDENTITY_SERVER_IDENTIFIER_HELENCROSS = 
     //   "efc945eb-ee1b-4ed1-9fac-269c145196c6";      
@@ -199,7 +204,15 @@ namespace Fmas12d.Business.Migrations.Seeds
       //   GetGenderTypeMale().Id,
       //   GetProfileTypeAdmin().Id,
       //   IDENTITY_SERVER_IDENTIFIER_PRIYANTHA
-      // );                              
+      // );            
+
+      // App Store Review User
+      AddUpdateUserDoctorWithDefaults(
+        DISPLAY_NAME_APP_STORE_REVIEW_USER,
+        GetGenderTypeMale().Id,
+        GMCNUMBER_APP_STORE_REVIEW_USER,         
+        IDENTITY_SERVER_IDENTIFIER_APP_STORE_REVIEW_USER
+      );            
     }
 
     internal void SeedDataUat()
@@ -481,6 +494,13 @@ namespace Fmas12d.Business.Migrations.Seeds
         GetProfileTypePsychiatrist().Id
       );
 
+      // App Store Review User
+      AddUpdateUserDoctorWithDefaults(
+        DISPLAY_NAME_APP_STORE_REVIEW_USER,
+        GetGenderTypeMale().Id,
+        GMCNUMBER_APP_STORE_REVIEW_USER,         
+        IDENTITY_SERVER_IDENTIFIER_APP_STORE_REVIEW_USER
+      );
 
     }
 

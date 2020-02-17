@@ -1,0 +1,106 @@
+<app-navbar title="Claims" lastUpdated={{listLastUpdated}}></app-navbar>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Claims</strong>
+      </ion-card-header>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let claim of claimsList" detail="false"
+            [routerLink]="['/claims-details/', claim.id]" routerDirection="forward"
+            class="margin-right-2">
+            <ion-row style="width:100%">
+              <ion-col>
+                <ion-icon
+                  [color]="GetIconColourForClaimStatus(claim.claimStatusId)"
+                  size="large"
+                  [name]="GetIconNameForClaimStatus(claim.claimStatusId)">
+                </ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                  <span>
+                    Address:
+                    {{claim.assessment.address1}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Postcode:
+                    {{claim.assessment.postcode}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Assessed:
+                    {{claim.assessment.completedTime | date: "dd MMM yy HH:mm"}}
+                  </span>                  
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Claim Status:
+                    {{claim.claimStatus}}
+                  </span>                  
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item *ngIf="claimsList.length == 0">
+            None
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-card>
+    <ion-card>
+      <ion-card-header color="primary">
+        <strong>Completed Assessments</strong>
+      </ion-card-header>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let assessment of assessmentList" detail="false"
+            [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward"
+            class="margin-right-2">
+            <ion-row style="width:100%">
+              <ion-col>
+                <ion-icon color="success" size="large" name="checkmark-circle"
+                  *ngIf="assessment.isCompleted">
+                </ion-icon>
+                <ion-icon color="warning" size="large" name="help-circle" 
+                *ngIf="!assessment.isCompleted">
+                </ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                  <span>
+                    Address:
+                    {{assessment.address1}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Postcode:
+                    {{assessment.postcode}}
+                  </span>
+                </ion-row>
+                <ion-row>
+                  <span>
+                    Assessed:
+                    {{assessment.scheduledTime | date: "dd MMM yy HH:mm"}}
+                  </span> 
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item *ngIf="assessmentList.length == 0">
+            None
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-card >
+  </ion-grid>
+</ion-content>

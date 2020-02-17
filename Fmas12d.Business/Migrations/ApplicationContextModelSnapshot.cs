@@ -783,6 +783,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
+                    b.Property<decimal>("SuccessfulAssessmentPayment")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");
 
@@ -1203,7 +1206,7 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasKey("AuditId");
 
-                    b.ToTable("ContactDetailCcgAudits");
+                    b.ToTable("ContactDetailCcgsAudit");
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.ContactDetailType", b =>
@@ -1766,88 +1769,6 @@ namespace Fmas12d.Business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("NotificationTextsAudit");
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.OnCallUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTimeOffset>("DateTimeEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DateTimeStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OnCallUsers");
-                });
-
-            modelBuilder.Entity("Fmas12d.Data.Entities.OnCallUserAudit", b =>
-                {
-                    b.Property<int>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuditAction")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuditDuration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuditErrorMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuditResult")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("AuditSuccess")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("DateTimeEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DateTimeStart")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("OnCallUsersAudit");
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.Organisation", b =>
@@ -2692,6 +2613,39 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("ReferralStatusesAudit");
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.RequestResponseLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Controller")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Request")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("RequestAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Response")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ResponseAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequestResponseLog");
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.Section12ApprovalStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -2775,6 +2729,101 @@ namespace Fmas12d.Business.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("Section12ApprovalStatusesAudit");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.Section12LiveRegister", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTimeOffset>("ExpiryDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GmcNumber")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GmcNumber")
+                        .IsUnique();
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("Section12LiveRegisters");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.Section12LiveRegisterAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ExpiryDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GmcNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("Section12LiveRegistersAudit");
                 });
 
             modelBuilder.Entity("Fmas12d.Data.Entities.Speciality", b =>
@@ -3061,8 +3110,10 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasBeenDeallocated")
-                        .HasColumnType("bit");
+                    b.Property<string>("EndPostcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -3071,6 +3122,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsClaimable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<int?>("Mileage")
@@ -3085,10 +3139,13 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("NextAssessmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("PaymentDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SelectedByUserId")
+                    b.Property<int?>("PreviousAssessmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("StartPostcode")
@@ -3097,7 +3154,6 @@ namespace Fmas12d.Business.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("TravelComments")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
@@ -3108,11 +3164,13 @@ namespace Fmas12d.Business.Migrations
 
                     b.HasAlternateKey("AssessmentId", "UserId");
 
+                    b.HasIndex("ClaimReference")
+                        .IsUnique()
+                        .HasFilter("[ClaimReference] IS NOT NULL");
+
                     b.HasIndex("ClaimStatusId");
 
                     b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("SelectedByUserId");
 
                     b.HasIndex("UserId");
 
@@ -3153,8 +3211,10 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasBeenDeallocated")
-                        .HasColumnType("bit");
+                    b.Property<string>("EndPostcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -3166,6 +3226,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsClaimable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<int?>("Mileage")
@@ -3180,10 +3243,13 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("NextAssessmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("PaymentDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("SelectedByUserId")
+                    b.Property<int?>("PreviousAssessmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("StartPostcode")
@@ -3192,7 +3258,6 @@ namespace Fmas12d.Business.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("TravelComments")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
@@ -3392,6 +3457,18 @@ namespace Fmas12d.Business.Migrations
 
                     b.Property<int>("ModifiedByUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("OnCallConfirmationReceivedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("OnCallConfirmationSentAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool?>("OnCallIsConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OnCallRejectedReason")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Postcode")
                         .HasColumnType("nvarchar(max)");
@@ -3929,21 +4006,6 @@ namespace Fmas12d.Business.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Fmas12d.Data.Entities.OnCallUser", b =>
-                {
-                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fmas12d.Data.Entities.User", "User")
-                        .WithMany("OnCallUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Fmas12d.Data.Entities.Organisation", b =>
                 {
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
@@ -4096,6 +4158,15 @@ namespace Fmas12d.Business.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.Section12LiveRegister", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.Speciality", b =>
                 {
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
@@ -4158,12 +4229,6 @@ namespace Fmas12d.Business.Migrations
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fmas12d.Data.Entities.User", "SelectedByUser")
-                        .WithMany("UserAssessmentClaimSelections")
-                        .HasForeignKey("SelectedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

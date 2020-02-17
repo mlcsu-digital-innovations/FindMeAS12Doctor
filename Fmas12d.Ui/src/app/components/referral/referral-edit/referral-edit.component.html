@@ -29,8 +29,17 @@
         <div class="card-body">
           <form [formGroup]="referralForm" novalidate>
             <div class="form-row">
+              <div class="required-field col-md-3 mb-3 text-left">
+                <strong>Denotes required field.</strong>
+              </div>
+            </div>
+            <div class="form-row">
               <div class="col-md-4">
-                <label for="nhsNumber">NHS Number</label>
+                <label class="required-field" for="nhsNumber" [ngClass]="{
+                  'required-field': !DisableIfFieldHasValue('alternativeIdentifier')
+                }">
+                  NHS Number
+                </label>
                 <div class="input-group">
                   <input type="search" digitOnly maxlength="10" formControlName="nhsNumber" id="nhsNumber"
                     class="form-control" [ngClass]="{
@@ -43,7 +52,11 @@
                 <span class="or">Or</span>
               </div>
               <div class="col-md-4">
-                <label for="alternativeIdentifier">Alternative Identifier</label>
+                <label class="required-field" for="alternativeIdentifier" [ngClass]="{
+                    'required-field': !DisableIfFieldHasValue('nhsNumber')
+                  }">
+                  Alternative Identifier
+                </label>
                 <div class="input-group">
                   <input [appDisableControl]="DisableIfFieldHasValue('nhsNumber')" [ngClass]="{
                         'is-invalid': HasInvalidAlternativeIdentifier(),
@@ -88,7 +101,7 @@
             <!-- GP Practice -->
             <div class="form-row">
               <div class="col-md-6">
-                <label for="gpPractice">GP Practice</label>
+                <label class="required-field" for="gpPractice">GP Practice</label>
                 <div class="input-group">
                   <input #gpPractice [appDisableControl]="
                       IsUnknownFieldChecked('unknownGpPractice')
@@ -108,11 +121,16 @@
             </div>
             <!-- GP Practice Errors-->
             <div class="form-row" *ngIf="gpPracticeField.errors">
-              <div class="col-md-12 mb-2" *ngIf="gpPracticeField.errors != null">
+              <div class="col-md-12 mb-2">
                 <div *ngIf="gpPracticeField.errors.InvalidGpPostcodeCcg" class="invalid-field">
-                  <span>* GP practice, Postcode or CCG Required </span>
+                  <span>* Valid GP practice, Postcode or CCG Required </span>
+                </div>
+                <div *ngIf="gpPracticeField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
                 </div>
               </div>
+            </div>
+            <div class="form-row" *ngIf="isGpSearching || hasGpSearchFailed">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isGpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasGpSearchFailed">
@@ -123,7 +141,7 @@
             <!-- Residential Postcode -->
             <div class="form-row" *ngIf="isPostcodeFieldShown">
               <div class="col-lg-2 col-md-3 col-sm-6">
-                <label for="residentialPostcode">Residential Postcode</label>
+                <label class="required-field" for="residentialPostcode">Residential Postcode</label>
                 <div class="input-group">
                   <input type="search" maxlength="8" minlength="6" formControlName="residentialPostcode"
                     #residentialPostcode id="residentialPostcode" oninput="this.value = this.value.toUpperCase()"
@@ -164,9 +182,9 @@
               </div>
             </div>
             <!-- CCG -->
-            <div class="form-row" *ngIf="isCcgFieldShown">
+            <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-6">
-                <label for="ccg">Clinical Commissioning Group</label>
+                <label class="required-field" for="ccg">Clinical Commissioning Group</label>
                 <div class="input-group">
                   <input type="search" class="form-control" id="ccg" #ccg [appDisableControl]="
                       IsUnknownFieldChecked('unknownCcg')
@@ -184,7 +202,14 @@
               </div>
             </div>
             <!-- CCG Errors-->
-            <div class="form-row" ccgField.errors>
+            <div class="form-row" *ngIf="ccgField.errors">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="ccgField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="isCcgFieldsShown">
               <div class="col-md-8 mb-2">
                 <span *ngIf="isCcgSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasCcgSearchFailed">
@@ -195,7 +220,7 @@
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-6">
-                <label for="amhp">Lead AMHP</label>
+                <label class="required-field" for="amhp">Lead AMHP</label>
                 <div class="input-group">
                   <input type="search" class="form-control" id="amhp" #amhp [class.is-invalid]="hasAmhpSearchFailed"
                     formControlName="amhp" [ngbTypeahead]="AmhpSearch" [resultFormatter]="FormatTypeAheadResults"
@@ -204,21 +229,25 @@
               </div>
             </div>
             <!-- AMHP User Errors-->
-            <div class="form-row">
-              <div class="col-md-8">
+            <div class="form-row" *ngIf="amhpField.errors">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="amhpField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
+                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
+                  <span>* Invalid Lead AMHP </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="hasAmhpSearchFailed">
+              <div class="col-md-8 mb-2">
                 <span *ngIf="isAmhpSearching">searching...</span>
                 <div class="invalid-field" *ngIf="hasAmhpSearchFailed">
                   Sorry, suggestions could not be loaded.
                 </div>
               </div>
             </div>
-            <div class="form-row" *ngIf="amhpField.errors">
-              <div class="col-md-12">
-                <div *ngIf="amhpField.errors.InvalidAmhp" class="invalid-field">
-                  <span>* Invalid Lead AMHP </span>
-                </div>
-              </div>
-            </div>
+
             <div class="form-row">
               <div class="col-md-4 flex">
                 <div class="checkmark-content">
@@ -273,8 +302,19 @@
                 </div>
               </div>
             </div>
+            <br/>
             <div class="form-row">
-              <div class="col-md-2 mb-2 offset-md-8 text-right">
+              <div class="col-md-3 mb-2">
+                <button
+                  class="btn btn-outline btn-fill btn-spaced"
+                  type="button"
+                  (click)="CloseReferralConfirmation()"
+                >
+                  <i class="fas fa-check-double"></i>
+                  Close Referral
+                </button>
+              </div>
+              <div class="col-md-2 mb-2 offset-md-5 text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="CancelEdit()">
                   <i class="far fa-times-circle"></i>
                   Cancel
@@ -304,6 +344,15 @@
 <ng-template #patientResults let-patientResult>
   <app-patient-results-modal [patientResult]="modalResult" (actioned)="OnPatientModalAction($event)">
   </app-patient-results-modal>
+</ng-template>
+
+<ng-template #confirmClosure>
+  <app-cancel-action-modal
+    [modalTitle]="'Confirm Referral Closure'"
+    [modalBody]="'Please confirm that the referral can be closed.'"
+    (actioned)="OnModalAction($event)"
+  >
+  </app-cancel-action-modal>
 </ng-template>
 
 <ng-template #cancelUpdate>

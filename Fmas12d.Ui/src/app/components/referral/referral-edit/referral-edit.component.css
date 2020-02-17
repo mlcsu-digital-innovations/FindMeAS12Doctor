@@ -1,19 +1,19 @@
-.form-control.is-invalid{
+.form-control.is-invalid {
   background-image: none;
   padding-right: 0.5em;
 }
 
-.form-control.is-valid{
+.form-control.is-valid {
   background-image: none;
   padding-right: 0.5em;
 }
 
 button.less-padding {
-  bottom:2px !important;
+  bottom: 2px !important;
 }
 
 form {
-  margin:20px;
+  margin: 20px;
 }
 
 .validating {
@@ -21,7 +21,7 @@ form {
 }
 
 .form-row {
-  margin-top:10px;
+  margin-top: 10px;
   align-items: flex-end;
 }
 
@@ -44,4 +44,23 @@ form {
 
 .not-full-width {
   width: 80%;
+}
+
+::ng-deep.dropdown-menu.show {
+  max-height: 260px !important;
+  overflow-y: auto !important;
+}
+
+.btn-fill {
+  min-width: 200px;
+}
+
+.btn-outline {
+  border: 2px solid #ec5a3b;
+  color: #ec5a3b;
+}
+
+.required-field::after {
+  color: red;
+  content: " *";
 }

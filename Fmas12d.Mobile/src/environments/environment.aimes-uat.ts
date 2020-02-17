@@ -6,7 +6,7 @@ export const environment = {
   production: true,
   apiEndpoint: 'https://findmeans12doctor.co.uk/api',
   redirectUri: 'https://findmeans12doctor.co.uk/home',
-  postLogoutRedirectUrl: 'https://findmeans12doctor.co.uk/login'
+  postLogoutRedirectUrl: 'https://findmeans12doctor.co.uk/home'
 };
 
 export const ProtectedResourceMap: [string, string[]][] = 

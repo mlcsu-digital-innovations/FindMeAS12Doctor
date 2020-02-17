@@ -44,7 +44,7 @@ namespace Fmas12d.Business.Models
       if (Referrals != null)
       {
         Referral referral = Referrals.OrderByDescending(r => r.CreatedAt)
-          .FirstOrDefault(r => r.ReferralStatusId != Data.Entities.ReferralStatus.CLOSED);
+          .FirstOrDefault(r => r.ReferralStatusId != ReferralStatus.CLOSED);
 
         latestNotClosedReferralId = referral?.Id;
       }

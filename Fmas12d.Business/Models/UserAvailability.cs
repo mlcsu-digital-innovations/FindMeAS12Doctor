@@ -5,7 +5,10 @@ namespace Fmas12d.Business.Models
 {
   public class UserAvailability : BaseModel, IUserAvailability
   {
-    public UserAvailability() { }
+    public UserAvailability() {
+      Location = new Location();
+    }
+    
     public UserAvailability(Data.Entities.UserAvailability entity) : base(entity)
     {
       if (entity == null) return;
@@ -29,7 +32,7 @@ namespace Fmas12d.Business.Models
     public IUser User { get; set; }
     public int UserId { get; set; }
 
-    public void MapToEntity(Data.Entities.UserAvailability entity)
+    public virtual void MapToEntity(Data.Entities.UserAvailability entity)
     {
       if (entity == null) return;
 

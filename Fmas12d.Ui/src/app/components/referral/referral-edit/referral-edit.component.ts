@@ -13,7 +13,7 @@ import { PatientAction } from 'src/app/enums/PatientModalAction.enum';
 import { PatientSearchParams } from 'src/app/interfaces/patient-search-params';
 import { PatientSearchResult } from 'src/app/interfaces/patient-search-result';
 import { PatientSearchService } from 'src/app/services/patient-search/patient-search.service';
-import { PostcodeRegex, UNKNOWN } from 'src/app/constants/Constants';
+import { PostcodeRegex, UNKNOWN, REFERRAL_STATUS_AWAITING_REVIEW, REFERRAL_STATUS_OPEN } from 'src/app/constants/Constants';
 import { PostcodeSearchResult } from 'src/app/interfaces/postcode-search-result';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Referral } from 'src/app/interfaces/referral';
@@ -34,12 +34,13 @@ import { PatientService } from 'src/app/services/patient/patient.service';
 export class ReferralEditComponent implements OnInit {
 
   cancelModal: NgbModalRef;
+  closeModal: NgbModalRef;
   hasAmhpSearchFailed: boolean;
   hasCcgSearchFailed: boolean;
   hasGpSearchFailed: boolean;
   initialReferralDetails: ReferralEdit;
   isAmhpSearching: boolean;
-  isCcgFieldShown: boolean;
+  isCcgFieldsShown: boolean;
   isCcgSearching: boolean;
   isGpFieldsShown: boolean;
   isGpSearching: boolean;
@@ -58,6 +59,7 @@ export class ReferralEditComponent implements OnInit {
   referralCreated: Date;
   referralForm: FormGroup;
   referralId: number;
+  referralStatusId: number;
   residentialPostcodeValidationMessage: string;
   unknownCcgId: number;
   unknownGpPracticeId: number;
@@ -81,6 +83,7 @@ export class ReferralEditComponent implements OnInit {
 
   @ViewChild('patientResults', {static: true}) patientResultTemplate;
   @ViewChild('cancelUpdate', null) cancelUpdateTemplate;
+  @ViewChild('confirmClosure', null) closeTemplate;
 
   ngOnInit() {
 
@@ -162,6 +165,7 @@ export class ReferralEditComponent implements OnInit {
       switchMap(term =>
         this.amhpListService.GetAmhpList(term).pipe(
           tap(() => (this.hasAmhpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'amhp'))),
           catchError(() => {
             this.hasAmhpSearchFailed = true;
             return of([]);
@@ -194,6 +198,7 @@ export class ReferralEditComponent implements OnInit {
       switchMap(term =>
         this.ccgListService.GetCcgList(term).pipe(
           tap(() => (this.hasCcgSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'ccg'))),
           catchError(() => {
             this.hasCcgSearchFailed = true;
             return of([]);
@@ -208,6 +213,37 @@ export class ReferralEditComponent implements OnInit {
       this.referralForm.controls[fieldName].setValue('');
       this.SetFieldFocus(`#${fieldName}`);
     }
+  }
+
+  CloseReferral() {
+    let forceClose = false;
+
+    if (this.referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW
+        && this.referralStatusId !== REFERRAL_STATUS_OPEN ) {
+          forceClose = true;
+    }
+
+    this.referralService.closeReferral(this.referralId, forceClose).subscribe(
+      () => {
+        this.toastService.displaySuccess({
+          message: 'Referral closed'
+        });
+        this.routerService.navigateByUrl('/referral/list');
+      },
+      error => {
+        this.toastService.displayError({
+          title: 'Server Error',
+          message: 'Unable to close referral! Please try again in a few moments'
+        });
+      }
+    );
+
+  }
+
+  CloseReferralConfirmation() {
+    this.closeModal = this.modalService.open(this.closeTemplate, {
+      size: 'lg'
+    });
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
@@ -377,6 +413,7 @@ export class ReferralEditComponent implements OnInit {
       switchMap(term =>
         this.gpPracticeListService.GetGpPracticeList(term).pipe(
           tap(() => (this.hasGpSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'gpPractice'))),
           catchError(() => {
             this.hasGpSearchFailed = true;
             this.gpPracticeField.setErrors({ServiceUnavailable: true});
@@ -504,6 +541,7 @@ export class ReferralEditComponent implements OnInit {
   InitialiseForm(referral: ReferralEdit) {
     this.referralCreated = referral.createdAt;
     this.referralId = referral.id;
+    this.referralStatusId = referral.referralStatusId;
     this.alternativeIdentifierField.setValue(referral.patientAlternativeIdentifier);
     this.nhsNumberField.setValue(referral.patientNhsNumber);
 
@@ -529,7 +567,7 @@ export class ReferralEditComponent implements OnInit {
     this.isPostcodeFieldShown = referral.patientGpPracticeId === null ? true : false;
 
     // only show the CCG field if both GP and Postcode are not known
-    this.isCcgFieldShown =
+    this.isCcgFieldsShown =
       referral.patientResidentialPostcode === null &&
       referral.patientGpPracticeId === null;
 
@@ -634,6 +672,13 @@ export class ReferralEditComponent implements OnInit {
     });
   }
 
+  OnModalAction(event: any) {
+    this.closeModal.close();
+    if (event) {
+      this.CloseReferral();
+    }
+  }
+
   OnPatientModalAction(action: number) {
     switch (action) {
       case PatientAction.Cancel:
@@ -680,12 +725,12 @@ export class ReferralEditComponent implements OnInit {
     if (event.target.checked) {
       this.residentialPostcodeField.setValue('Unknown');
       this.residentialPostcodeField.disable();
-      this.isCcgFieldShown = true;
+      this.isCcgFieldsShown = true;
     } else {
       this.residentialPostcodeField.enable();
       this.residentialPostcodeField.setValue('');
       this.residentialPostcodeField.updateValueAndValidity();
-      this.isCcgFieldShown = false;
+      this.isCcgFieldsShown = false;
       this.SetFieldFocus('#residentialPostcode');
     }
   }
@@ -954,5 +999,12 @@ export class ReferralEditComponent implements OnInit {
           return throwError(err);
         }
       );
+  }
+
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results == null) {
+      this.referralForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
   }
 }
