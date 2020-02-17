@@ -72,6 +72,16 @@ namespace Fmas12d.Api.ViewModels
     public virtual User CreatedByUser { get; set; }
     public int CreatedByUserId { get; set; }
     public virtual IList<AssessmentDetailType> DetailTypes { get; set; }
+    public Boolean HasBeenCompleted {
+      get {
+        return CompletedByUserId.HasValue;
+      }
+    }
+    public Boolean HasBeenReviewed {
+      get {
+        return CompletionConfirmationByUserId.HasValue;
+      }
+    }
     public bool? IsCompleted {
       get {
         return CompletedByUser != null;

@@ -15,6 +15,9 @@ export class CancelActionModalComponent {
   @Input()
   modalBody: string;
 
+  @Input()
+  referralStatus: string;
+
   @Output() actioned = new EventEmitter<boolean>();
 
   modalAction(action: boolean) {

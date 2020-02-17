@@ -130,17 +130,15 @@ export class DoctorAvailabilityAddPage implements OnInit {
   saveAvailability() {
 
     this.userAvailabilityService.postUserAvailability(this.userAvailability)
-      .subscribe(
+        .subscribe(
         result => {
           this.showSuccessToast('Availability saved');
           this.navController.back();
         }, err => {
-
           let errorDetail = '';
           if (err.error.errors.Start.length > 0) {
             errorDetail = err.error.errors.Start[0];
           }
-
           this.showErrorToast(`Unable to save availability for user. ${errorDetail}`);
         }
       );

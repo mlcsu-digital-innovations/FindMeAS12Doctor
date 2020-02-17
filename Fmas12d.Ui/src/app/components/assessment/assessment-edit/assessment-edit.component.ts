@@ -109,7 +109,6 @@ export class AssessmentEditComponent implements OnInit {
         }
       ),
       catchError((err) => {
-        console.log(err);
         this.toastService.displayError({
           title: 'Error',
           message: 'Error Retrieving Referral Information'
@@ -536,7 +535,6 @@ export class AssessmentEditComponent implements OnInit {
         this.UpdateReferral();
       },
       error => {
-        console.log(error);
         this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to remove doctors from assessment! Please try again in a few moments'
@@ -637,7 +635,6 @@ export class AssessmentEditComponent implements OnInit {
         this.routerService.navigateByUrl(this.navigationPage);
       },
       error => {
-        console.log(error);
         this.toastService.displayError({
           title: 'Server Error',
           message: 'Unable to update assessment! Please try again in a few moments'
