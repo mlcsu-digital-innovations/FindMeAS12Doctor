@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "del-cli dist && ng build",
     "build:aimes-uat": "del-cli ../Deployment/AimesUat/Fmas12d.Ui --force && ng build --configuration=aimes-uat && cpy ./deployment/web.config ../Deployment/AimesUat/Fmas12d.Ui",
-    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Ui --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Ui",    
+    "build:azure-development": "del-cli ../Deployment/AzureDevelopment/Fmas12d.Ui --force && ng build --configuration=azure-development && cpy ./deployment/web.config ../Deployment/AzureDevelopment/Fmas12d.Ui",
     "build:prod": "del-cli dist && ng build --prod --build-optimizer",
     "test": "ng test",
     "test-coverage": "del-cli .testing && ng test --code-coverage",
@@ -58,5 +58,9 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
+  },
+  "resolutions": {
+    "serialize-javascript": "^2.1.1",
+    "tree-kill": "^1.2.2"
   }
 }
