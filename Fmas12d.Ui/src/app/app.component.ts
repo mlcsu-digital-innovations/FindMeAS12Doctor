@@ -34,29 +34,24 @@ export class AppComponent {
   }
 
   login() {
-    console.log('start login');
     this.oidcSecurityService.authorize();
   }
 
   refreshSession() {
-    console.log('start refreshSession');
     this.oidcSecurityService.authorize();
   }
 
   logout() {
-    console.log('start logoff');
     this.oidcSecurityService.logoff();
   }
 
   private onOidcModuleSetup() {
-    console.log('AppComponent:onAuthorizationResultComplete');
     if (window.location.hash) {
       this.oidcSecurityService.authorizedImplicitFlowCallback();
     } else {
       if ('/autologin' !== window.location.pathname) {        
         this.write('redirect', window.location.pathname);
       }
-      console.log('AppComponent:onModuleSetup');
       this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
         if (!authorized) {
           this.routerService.navigate(['/autologin']);
