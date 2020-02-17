@@ -53,29 +53,23 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
-        console.log('msal:loginFailure');
-        console.log(payload);
+        // TODO: Process the login failure
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
-        console.log('msal:loginSuccess');
-        console.log(payload);
         this.storageService.storeAccessToken(payload.token);
         this.setUserDetails(payload.token);
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
-        console.log('msal:acquireTokenSuccess');
-        console.log(payload);
+        // TODO: Process the acquire token success
       });
 
       this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
-        console.log(payload);
+        // TODO: Process the acquire token failure
       });
    
       this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
-        console.log('msadal:loginSuccess');
-        console.log(payload);
         this.storageService.storeAccessToken(payload.accessToken);
         this.setUserDetails(payload.accessToken);
       });

@@ -21,7 +21,6 @@ export class CancelActionModalComponent {
   @Output() actioned = new EventEmitter<boolean>();
 
   modalAction(action: boolean) {
-    console.log(this.referralStatus);
     this.actioned.emit(action);
   }
 
