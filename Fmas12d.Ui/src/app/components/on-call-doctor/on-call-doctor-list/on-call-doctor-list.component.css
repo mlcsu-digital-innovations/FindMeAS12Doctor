@@ -40,11 +40,11 @@ form {
   max-width: 80px;
 }
 
-.on-call-doctor-row td.confirmed {
+.on-call-doctor-row:hover td.confirmed {
   background-color: #b8dbf9;
 }
 
-.on-call-doctor-row td.unconfirmed {
+.on-call-doctor-row:hover td.unconfirmed {
   background-color: #f7d7bb;
 }
 
