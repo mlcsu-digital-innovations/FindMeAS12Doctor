@@ -14,21 +14,18 @@
             </h6>
           </div>
         </div>
-
         <div class="card-body">
-
           <!-- form for existing (registered) doctors -->
           <form [formGroup]="registeredDoctorForm" class="form-style" novalidate>
 
             <div class="form-row">
               <span class="form-title">Search for registered doctor</span>
             </div>
-
             <div class="form-row">
               <div class="col-md-4">
                   <label for="amhp">Doctor Name / GMC Number</label>
                   <input
-                    type="text"
+                    type="search"
                     class="form-control"
                     id="registeredName"
                     #registeredName
@@ -50,6 +47,7 @@
                 </button>
               </div>
             </div>
+            <!-- Doctor Name / GMC Number Errors-->
             <div class="form-row" *ngIf="registeredDoctorField.errors">
               <div class="col-md-12 mb-2">
                 <div *ngIf="registeredDoctorField.errors.NoMatchingResults" class="invalid-field">
@@ -94,7 +92,6 @@
                 />
               </div>
             </div>
-
             <div class="form-row flex-top" *ngIf="hasRegisteredDoctorDetails">
               <div class="col-md-4">
                 <label>Contact</label>
@@ -141,14 +138,12 @@
               </div>
             </div>
           </form>
-
            <!-- form for unregistered doctors -->
            <form [formGroup]="unregisteredDoctorForm" class="form-style" novalidate>
 
             <div class="form-row">
               <span class="form-title">Add unregistered doctor</span>
             </div>
-
             <div class="form-row">
               <div class="col-md-6">
                 <label for="amhp">Doctor Name</label>
@@ -251,11 +246,9 @@
                 </div>
               </div>
             </div>
-
             <div class="form-row" *ngIf="unregisteredUserError !== ''">
               <span class="invalid-field" style="margin-left:10px;">{{unregisteredUserError}}</span>
             </div>
-
             <div class="form-row">
               <div class="col-md-12 text-left">
                 <button
@@ -270,7 +263,6 @@
               </div>
             </div>
           </form>
-
           <div class="row">
             <div class="col-md-12 text-right">
               <div class="mr-more-2">
@@ -285,7 +277,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -324,4 +315,3 @@
 </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
-
