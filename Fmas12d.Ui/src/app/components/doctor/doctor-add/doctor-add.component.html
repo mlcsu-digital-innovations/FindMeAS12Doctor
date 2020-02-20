@@ -50,9 +50,19 @@
                 </button>
               </div>
             </div>
+            <div class="form-row" *ngIf="registeredDoctorField.errors">
+              <div class="col-md-12 mb-2">
+                <div *ngIf="registeredDoctorField.errors.NoMatchingResults" class="invalid-field">
+                  <span>* No Results Found </span>
+                </div>
+              </div>
+            </div>
             <div class="form-row">
-              <div class="col-md-4" *ngIf="isRegisteredDoctorSearching">
-                <span>Searching</span>
+              <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
+                <span *ngIf="isRegisteredDoctorSearching">searching...</span>
+                <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
+                  Sorry, suggestions could not be loaded.
+                </div>
               </div>
             </div>
             <div class="form-row" *ngIf="hasRegisteredDoctorDetails">
