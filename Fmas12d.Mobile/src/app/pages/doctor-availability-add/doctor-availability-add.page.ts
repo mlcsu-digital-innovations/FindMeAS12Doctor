@@ -104,7 +104,7 @@ export class DoctorAvailabilityAddPage implements OnInit {
   }
 
   getContactDetails() {
-    this.contactDetailService.getContactDetailsForUser()
+    this.contactDetailService.getContactDetailsForUser(false)
       .subscribe(
         result => {
           if (result !== null) {

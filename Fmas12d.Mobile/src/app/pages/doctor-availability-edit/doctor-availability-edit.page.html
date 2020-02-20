@@ -6,9 +6,9 @@
       <ion-card-content>
         <ion-row>
           <ion-item>
-            <ion-toggle color="primary" [(ngModel)]="available" (ionChange)="availabilityChange()">
+            <ion-toggle color="primary" [(ngModel)]="doctorAvailability.isAvailable">
             </ion-toggle>
-            <ion-label class="available-label">{{available == true ? 'Available' : 'Unavailable'}}
+            <ion-label class="available-label">{{doctorAvailability.isAvailable ? 'Available' : 'Unavailable'}}
             </ion-label>
           </ion-item>
         </ion-row>
@@ -18,41 +18,54 @@
         <ion-list>
           <ion-item>
             <ion-label>Start Date</ion-label>
-            <ion-datetime [min]="minDate" [max]="maxDate" [(ngModel)]="userAvailability.start"
-              (ionChange)="datesChanged()">
+            <ion-datetime [min]="minDate" [max]="maxDate" [(ngModel)]="doctorAvailability.startDateTime">
             </ion-datetime>
           </ion-item>
           <ion-item>
             <ion-label>Start Time</ion-label>
-            <ion-datetime [(ngModel)]="userAvailability.start" minuteValues="0,15,30,45" [min]="minDate"
-              displayFormat="HH:mm" (ionChange)="datesChanged()">
+            <ion-datetime [(ngModel)]="doctorAvailability.startDateTime" minuteValues="0,15,30,45" [min]="minDate"
+              displayFormat="HH:mm">
             </ion-datetime>
           </ion-item>
           <ion-item>
             <ion-label>End Date</ion-label>
-            <ion-datetime [(ngModel)]="userAvailability.end" [min]="minDate" [max]="maxDate"
-              (ionChange)="datesChanged()">
+            <ion-datetime [(ngModel)]="doctorAvailability.endDateTime" [min]="minDate" [max]="maxDate">
             </ion-datetime>
           </ion-item>
           <ion-item>
             <ion-label>End Time</ion-label>
-            <ion-datetime [(ngModel)]="userAvailability.end" minuteValues="0,15,30,45" displayFormat="HH:mm"
-              (ionChange)="datesChanged()">
+            <ion-datetime [(ngModel)]="doctorAvailability.endDateTime" minuteValues="0,15,30,45" displayFormat="HH:mm">
             </ion-datetime>
           </ion-item>
         </ion-list>
-        <ion-row *ngIf="hasDateError">
+        <ion-row *ngIf="doctorAvailability.hasDateError()">
           <span class="date-error">
-            * {{dateErrorText}}
+            * {{doctorAvailability.dateErrorText}}
           </span>
         </ion-row>
         <ion-row>
           &nbsp;
         </ion-row>
-        <ion-row *ngIf="available">
+        <ion-row *ngIf="doctorAvailability.isAvailable">
+          <ion-item style="width:100%">
+            <ion-label>Known Location</ion-label>
+            <ion-select
+              interface="action-sheet" 
+              [(ngModel)]="doctorAvailability.knownLocation"
+              [selectedText]="doctorAvailability.knownLocation.name"
+              [compareWith]="doctorAvailability.compareKnownLocation"
+            >
+              <ion-select-option *ngFor="let contact of contactDetails$ | async" [value]="contact">
+                {{contact.name}}
+              </ion-select-option>
+            </ion-select 
+            >
+          </ion-item>
+        </ion-row>         
+        <ion-row *ngIf="doctorAvailability.isAvailable && doctorAvailability.isPostcode()">
           <ion-item style="width:100%;">
             <ion-input placeholder="Postcode" minlength="6" maxlength="8" name="postcode" autocapitalize="on"
-              debounce=500 [(ngModel)]="postcode" (ionChange)="postcodeChanged()"
+              debounce=500 [(ngModel)]="doctorAvailability.postcode"
               pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})">
             </ion-input>
             <ion-button (click)="validatePostcode()">
@@ -64,7 +77,10 @@
     </ion-card>
   </ion-grid>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button size="small" (click)="updateAvailability()" [disabled]="!isDataValid()">
+    <ion-fab-button 
+      size="small" 
+      (click)="updateAvailability()" 
+      [disabled]="!doctorAvailability.isValid()">
       <ion-icon name="checkmark">
       </ion-icon>
     </ion-fab-button>

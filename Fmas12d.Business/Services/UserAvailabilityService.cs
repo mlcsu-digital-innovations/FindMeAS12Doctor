@@ -76,7 +76,25 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public async Task<IEnumerable<IUserAvailability>> GetAsync(
+    public async Task<IUserAvailability> GetAsync(
+      int id,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      IUserAvailability model = await _context
+        .UserAvailabilities
+        .Include(ua => ua.ContactDetail)
+          .ThenInclude(cd => cd.ContactDetailType)
+        .Where(ua => ua.Id == id)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserAvailability.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }    
+
+    public async Task<IEnumerable<IUserAvailability>> GetListAsync(
       int userId,
       DateTimeOffset from,
       bool asNoTracking,
