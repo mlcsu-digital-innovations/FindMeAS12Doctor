@@ -123,7 +123,7 @@ namespace Fmas12d.Business.Services
       IUserAvailability model = await _context
         .UserAvailabilities
         .Where(ua => ua.UserId == userId)
-        .Where(ua => ua.End >= at)
+        .Where(ua => ua.End > at)
         .Where(ua => ua.Start <= at)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
