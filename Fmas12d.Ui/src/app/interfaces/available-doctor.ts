@@ -10,5 +10,7 @@ export interface AvailableDoctor {
   isSelected: boolean;
   name: string;
   specialityNames: string[];
+  section12ApprovalStatusName: string;
+  section12ExpiryDate: Date;
   type: string;
 }
