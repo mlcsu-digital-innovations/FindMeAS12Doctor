@@ -64,10 +64,18 @@ namespace Fmas12d.Business.Services
                         gp.Postcode.Contains(searchParam));
         }
 
-        IEnumerable<IdResultText> entities =
-          await query.Select(e => new IdResultText(e)).ToListAsync();
+        List<IdResultText> models = await query.Select(e => new IdResultText(e)).ToListAsync();
 
-        return entities;
+        string firstParam = searchParams[0].ToUpper();
+
+        List<IdResultText> termAtTopModels = 
+          models.Where(r => r.ResultText.ToUpper().StartsWith(firstParam)).ToList();
+                     
+        termAtTopModels.AddRange(
+          models.Where(r => !r.ResultText.ToUpper().StartsWith(firstParam)).ToList()
+        );
+
+        return termAtTopModels;
       }
     }    
   }
