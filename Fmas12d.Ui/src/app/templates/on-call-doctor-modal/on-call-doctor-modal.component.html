@@ -38,14 +38,19 @@
       </div>           
     </div>
     <!-- Doctor Search Errors-->
+    <div class="form-row" *ngIf="doctorSearchField.errors">
+      <div class="col-md-12 mb-2">
+        <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
+          <span>* No Results Found </span>
+        </div>
+      </div>
+    </div>
     <div class="form-row">
-      <div class="col-md-4 mb-2">
-        <div
-          class="invalid-field"
-          *ngIf="doctorSearchField.errors && doctorSearchField.errors.InvalidDoctor"
-        >
-          <span>* Invalid Doctor</span>
-        </div>        
+      <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
+        <span *ngIf="isRegisteredDoctorSearching">searching...</span>
+        <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
+          Sorry, suggestions could not be loaded.
+        </div>
       </div>
     </div>
     <!-- Doctor Details -->
