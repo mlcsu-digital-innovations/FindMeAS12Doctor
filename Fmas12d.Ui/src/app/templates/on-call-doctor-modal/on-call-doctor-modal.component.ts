@@ -42,6 +42,8 @@ export class OnCallDoctorModalComponent implements OnInit {
   onCallDoctorForm: FormGroup;
   startDate: NgbDateStruct;
   startTime: NgbTimeStruct;
+  now: Date = new Date();
+  minDate: NgbDateStruct = { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() };
 
   constructor(
     private contactDetailTypeService: ContactDetailTypeService,
@@ -407,4 +409,5 @@ export class OnCallDoctorModalComponent implements OnInit {
           this.doctorIsValid = false;
         });
   }
+
 }

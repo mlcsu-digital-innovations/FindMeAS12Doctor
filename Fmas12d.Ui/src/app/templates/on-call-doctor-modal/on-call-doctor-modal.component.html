@@ -84,6 +84,7 @@
               formControlName='startDate'
               placeholder="dd/mm/yyyy"
               name="startDate"
+              [minDate]="minDate"
               [startDate]='startDate'
               ngbDatepicker
               #s="ngbDatepicker"/>
@@ -125,6 +126,7 @@
               formControlName='endDate'
               placeholder="dd/mm/yyyy"
               name="endDate"
+              [minDate]="minDate"
               [startDate]='endDate'
               ngbDatepicker
               #t="ngbDatepicker"/>
@@ -153,14 +155,16 @@
         >
           <span>* Invalid Date Format</span>
         </div>
-        <div
-          class="invalid-field"
-          *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate"
-        >
+        <!-- <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
           <span>* End date is earlier than the start date</span>
-        </div>
+        </div> -->
       </div>
-    </div>    
+    </div>  
+    <div class="form-row" *ngIf="IsEndDateBeforeStartDate">
+      <span class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
+        * End date is earlier than the start date
+      </span>
+    </div>  
     <!-- Location -->
     <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
       <div class="col-md-10">        
