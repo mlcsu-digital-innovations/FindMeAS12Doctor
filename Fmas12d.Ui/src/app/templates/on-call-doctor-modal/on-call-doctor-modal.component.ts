@@ -31,19 +31,18 @@ export class OnCallDoctorModalComponent implements OnInit {
   contactDetails: ContactDetail[];
   doctorGmcNumber: number;
   doctorId: number;
-  doctorName: string;
   doctorIsValid?: boolean;
+  doctorName: string;
   endDate: NgbDateStruct;
   endTime: NgbTimeStruct;
+  hasDoctorSearchFailed: boolean;
   isRegisteredDoctorSearching: boolean;
   isSearchingForPostcode: boolean;
-  hasDoctorSearchFailed: boolean;
+  minDate: NgbDateStruct;
   onCallDoctorExists: boolean;
   onCallDoctorForm: FormGroup;
   startDate: NgbDateStruct;
   startTime: NgbTimeStruct;
-  now: Date = new Date();
-  minDate: NgbDateStruct = { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() };
 
   constructor(
     private contactDetailTypeService: ContactDetailTypeService,
@@ -55,6 +54,7 @@ export class OnCallDoctorModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.minDate = this.ConvertToDateStruct(new Date());
     this.onCallDoctorExists = false;
     this.contactDetails = [];
     this.onCallDoctorForm = this.formBuilder.group({
