@@ -10,7 +10,7 @@
         <div class="row" name="doctorSearch">          
           <div class="col-md-6">            
             <input
-              type="text"
+              type="search"
               class="form-control"
               id="doctorSearch"
               #doctorSearch              
@@ -38,14 +38,19 @@
       </div>           
     </div>
     <!-- Doctor Search Errors-->
+    <div class="form-row" *ngIf="doctorSearchField.errors">
+      <div class="col-md-12 mb-2">
+        <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
+          <span>* No Results Found </span>
+        </div>
+      </div>
+    </div>
     <div class="form-row">
-      <div class="col-md-4 mb-2">
-        <div
-          class="invalid-field"
-          *ngIf="doctorSearchField.errors && doctorSearchField.errors.InvalidDoctor"
-        >
-          <span>* Invalid Doctor</span>
-        </div>        
+      <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
+        <span *ngIf="isRegisteredDoctorSearching">searching...</span>
+        <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
+          Sorry, suggestions could not be loaded.
+        </div>
       </div>
     </div>
     <!-- Doctor Details -->
@@ -81,9 +86,11 @@
           <div class="col-md-5">
             <input
               class="form-control"
+              type="text"
               formControlName='startDate'
               placeholder="dd/mm/yyyy"
               name="startDate"
+              [minDate]="minDate"
               [startDate]='startDate'
               ngbDatepicker
               #s="ngbDatepicker"/>
@@ -122,10 +129,12 @@
           <div class="col-md-5">
             <input
               class="form-control"
+              type="text"
               formControlName='endDate'
               placeholder="dd/mm/yyyy"
               name="endDate"
-              [startDate]='endDate'
+              [minDate]="minDate"
+              [startDate]='startDate'
               ngbDatepicker
               #t="ngbDatepicker"/>
           </div>
@@ -147,20 +156,15 @@
     <!-- End Date Format Errors-->
     <div class="form-row">
       <div class="col-md-4 mb-2 reduced-top-margin">
-        <div
-          class="invalid-field"
-          *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat"
-        >
+        <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat">
           <span>* Invalid Date Format</span>
         </div>
-        <div
-          class="invalid-field"
-          *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate"
-        >
+        <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
           <span>* End date is earlier than the start date</span>
         </div>
       </div>
-    </div>    
+    </div>
+
     <!-- Location -->
     <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
       <div class="col-md-10">        

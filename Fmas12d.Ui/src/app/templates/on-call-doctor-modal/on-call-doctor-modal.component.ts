@@ -31,13 +31,14 @@ export class OnCallDoctorModalComponent implements OnInit {
   contactDetails: ContactDetail[];
   doctorGmcNumber: number;
   doctorId: number;
-  doctorName: string;
   doctorIsValid?: boolean;
+  doctorName: string;
   endDate: NgbDateStruct;
   endTime: NgbTimeStruct;
+  hasDoctorSearchFailed: boolean;
   isRegisteredDoctorSearching: boolean;
   isSearchingForPostcode: boolean;
-  hasDoctorSearchFailed: boolean;
+  minDate: NgbDateStruct;
   onCallDoctorExists: boolean;
   onCallDoctorForm: FormGroup;
   startDate: NgbDateStruct;
@@ -53,6 +54,7 @@ export class OnCallDoctorModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.minDate = this.ConvertToDateStruct(new Date());
     this.onCallDoctorExists = false;
     this.contactDetails = [];
     this.onCallDoctorForm = this.formBuilder.group({
@@ -266,6 +268,7 @@ export class OnCallDoctorModalComponent implements OnInit {
       switchMap(term =>
         this.doctorListService.GetDoctorList(term, false).pipe(
           tap(() => (this.hasDoctorSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'doctorSearch'))),
           catchError(() => {
             this.hasDoctorSearchFailed = true;
             return of([]);
@@ -406,5 +409,11 @@ export class OnCallDoctorModalComponent implements OnInit {
           });
           this.doctorIsValid = false;
         });
+  }
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results == null) {
+      this.onCallDoctorForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
   }
 }
