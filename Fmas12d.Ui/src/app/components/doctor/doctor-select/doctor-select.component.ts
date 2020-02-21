@@ -144,9 +144,9 @@ export class DoctorSelectComponent implements OnInit {
 
   OnSort(event: any) {
     if (event.direction === 'desc') {
-      this.allDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? -1 : 1);
+      this.filteredDoctorList.sort((a, b) => (a[event.column] > b[event.column]) ? -1 : 1);
     } else {
-      this.allDoctors.sort((a, b) => (a[event.column] > b[event.column]) ? 1 : -1);
+      this.filteredDoctorList.sort((a, b) => (a[event.column] > b[event.column]) ? 1 : -1);
     }
     this.UpdateAvailableDoctorList();
   }

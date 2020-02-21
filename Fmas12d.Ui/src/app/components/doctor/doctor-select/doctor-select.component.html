@@ -136,25 +136,31 @@
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th class="text-center" scope="col" sortable="doctorName" (sort)="OnSort($event)">
-                      Doctor
+                    <th class="text-center" scope="col" sortable="name" (sort)="OnSort($event)">
+                      Name
                     </th>
-                    <th class="text-center" scope="col" sortable="doctorGender" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col" sortable="genderName" (sort)="OnSort($event)">
                       Gender
                     </th>
-                    <th class="text-center" scope="col" sortable="doctorType" (sort)="OnSort($event)">
-                      Doctor Type
+                    <th class="text-center" scope="col" sortable="type" (sort)="OnSort($event)">
+                      Type
                     </th>
-                    <th class="text-center" scope="col" sortable="doctorSpeciality" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col" sortable="section12ApprovalStatusName" (sort)="OnSort($event)">
+                      S12 Status
+                    </th>
+                    <th class="text-center" scope="col" sortable="section12ExpiryDate" (sort)="OnSort($event)">
+                      S12 Expiry Date
+                    </th>                    
+                    <th class="text-center" scope="col">
                       Speciality
                     </th>
-                    <th class="text-center sm-col" scope="col" sortable="otherAssessmentDetails" (sort)="OnSort($event)">
-                      Scheduled Assessment
+                    <th class="text-center sm-col" scope="col">
+                      Scheduled Assessments
                     </th>
-                    <th class="text-center" scope="col" sortable="availabilityDetails" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col">
                       Availability
                     </th>
-                    <th class="text-center sm-col" scope="col" sortable="distanceFromAssessment" (sort)="OnSort($event)">
+                    <th class="text-center sm-col" scope="col" sortable="distance" (sort)="OnSort($event)">
                       Distance (miles)
                     </th>
                     <th class="text-center" scope="col">
@@ -172,7 +178,13 @@
                     </td>
                     <td>
                       {{availableDoctor.type}}
+                    </td>                    
+                    <td>
+                      {{availableDoctor.section12ApprovalStatusName}}
                     </td>
+                    <td>
+                      {{availableDoctor.section12ExpiryDate | date:'dd/MM/yyyy'}}
+                    </td>                    
                     <td>
                       <span *ngFor="let speciality of availableDoctor.specialityNames">
                         {{speciality}},

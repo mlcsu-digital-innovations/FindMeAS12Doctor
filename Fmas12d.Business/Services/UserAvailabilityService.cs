@@ -131,6 +131,8 @@ namespace Fmas12d.Business.Services
               .Include(u => u.User)
                 .ThenInclude(u => u.UserSpecialities)
                   .ThenInclude(us => us.Speciality)
+              .Include(u => u.User)
+                .ThenInclude(u => u.Section12ApprovalStatus)                  
               .Where(u => u.Start <= requiredDateTime)
               .Where(u => u.End >= requiredDateTime)
               .Where(u => u.User.ProfileTypeId == ProfileType.GP ||
@@ -173,6 +175,17 @@ namespace Fmas12d.Business.Services
                 Start = entity.Start,
                 Type = entity.User.ProfileType.Name,
                 UserId = entity.User.Id,
+                User = new User
+                {
+                  Section12ApprovalStatus = new Section12ApprovalStatus
+                  {
+                    Id = entity.User.Section12ApprovalStatus.Id,
+                    Description = entity.User.Section12ApprovalStatus.Description,
+                    Name = entity.User.Section12ApprovalStatus.Name
+                  },
+                  Section12ExpiryDate = entity.User.Section12ExpiryDate,
+                  Section12ApprovalStatusId = entity.User.Section12ApprovalStatusId
+                }
               })
               .ToListAsync();
 
