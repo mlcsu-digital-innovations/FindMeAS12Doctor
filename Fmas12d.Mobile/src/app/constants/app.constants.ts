@@ -17,3 +17,6 @@ export const CLAIMSTATUSQUERY = 3;
 export const CLAIMSTATUSAPPROVED = 4;
 export const CLAIMSTATUSAWAITING = 5;
 export const CLAIMSTATUSREJECTED = 6;
+
+export const KNOWN_LOCATION_OTHER_ID = -1;
+export const KNOWN_LOCATION_OTHER_NAME = "Other";

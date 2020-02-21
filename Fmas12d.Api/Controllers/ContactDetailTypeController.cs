@@ -24,27 +24,30 @@ namespace Fmas12d.Api.Controllers
     [HttpGet]
     [Route("")]
     public async Task<ActionResult<IEnumerable<ViewModels.ContactDetailType>>> GetList(
+      [FromQuery] bool? includeOther
     )
     {
-      return await GetListInternal(null, GetUserId());
+      return await GetListInternal(null, GetUserId(), includeOther ?? false);
     }
 
-    [HttpGet]  
+    [HttpGet]
     [Route("{userId:int}")]
     public async Task<ActionResult<IEnumerable<ViewModels.ContactDetailType>>> GetList(
-      int userId
+      int userId,
+      [FromQuery] bool? includeOther
     )
     {
-      return await GetListInternal(null, userId);
+      return await GetListInternal(null, userId, includeOther ?? false);
     }
 
     [HttpGet]
     [Route("assessments/{assessmentId:int}")]
     public async Task<ActionResult<IEnumerable<ViewModels.ContactDetailType>>> GetListForAssessment(
-      int assessmentId
+      int assessmentId,
+      [FromQuery] bool? includeOther
     )
     {
-      return await GetListInternal(assessmentId, GetUserId());
+      return await GetListInternal(assessmentId, GetUserId(), includeOther ?? false);
     }
 
     [HttpGet]
@@ -52,15 +55,17 @@ namespace Fmas12d.Api.Controllers
     [Authorize(Policy = "Admin")]
     public async Task<ActionResult<IEnumerable<ViewModels.ContactDetailType>>> GetListForAssessment(
       int assessmentId,
-      int userId
+      int userId,
+      [FromQuery] bool? includeOther
     )
     {
-      return await GetListInternal(assessmentId, userId);
+      return await GetListInternal(assessmentId, userId, includeOther ?? false);
     }
 
     private async Task<ActionResult<IEnumerable<ViewModels.ContactDetailType>>> GetListInternal(
       int? assessmentId,
-      int userId
+      int userId,
+      bool includeOther
     )
     {
       try
@@ -75,17 +80,31 @@ namespace Fmas12d.Api.Controllers
           businessModels = await Service.GetAsync(assessmentId.Value, userId, true, true);
         }
 
+        List<ViewModels.ContactDetailType> viewModels = null;
         if (businessModels == null || !businessModels.Any())
         {
-          return NoContent();
+          viewModels = new List<ViewModels.ContactDetailType>();
         }
         else
         {
-          IEnumerable<ViewModels.ContactDetailType> viewModels =
-            businessModels.Select(cdt => new ViewModels.ContactDetailType(cdt)).ToList();
-
-          return Ok(viewModels);
+          viewModels = businessModels.Select(cdt => new ViewModels.ContactDetailType(cdt)).ToList();
         }
+
+        if (includeOther)
+        {
+          viewModels.Add(new ViewModels.ContactDetailType()
+          {
+            ContactDetails = new List<ViewModels.ContactDetail>() {
+              new ViewModels.ContactDetail() {
+                Id = -1
+              }
+            },
+            Description = "Other",
+            Name = "Other"
+          });
+        }
+
+        return Ok(viewModels);
       }
       catch (Exception ex)
       {

@@ -1,4 +1,4 @@
-<app-navbar [showWarning]="hasDataChanged()" title="Add Availability"></app-navbar>
+<app-navbar title="Add Availability"></app-navbar>
 
 <ion-content>
   <ion-grid>
@@ -49,9 +49,10 @@
         <ion-row>
           &nbsp;
         </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-select 
+        <ion-row *ngIf="available">
+          <ion-item style="width:100%">
+            <ion-label>Known Location</ion-label>
+            <ion-select
               interface="action-sheet" 
               placeholder="Known Location"
               [(ngModel)]="userAvailability.location.contactDetailId"
@@ -59,10 +60,11 @@
               <ion-select-option *ngFor="let contact of contactDetails" [value]="contact.id">
                 <ion-label>{{contact.name}}</ion-label>
               </ion-select-option>
-            </ion-select>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="available">
+            </ion-select
+            >
+          </ion-item>
+        </ion-row> 
+        <ion-row *ngIf="available && userAvailability.location.contactDetailId === 0">
           <ion-item style="width:100%;">
             <ion-input placeholder="Postcode" minlength="6" maxlength="8" name="postcode" autocapitalize="characters"
               debounce=500 [(ngModel)]="userAvailability.location.postcode" (ionChange)="postcodeChanged()"

@@ -4,5 +4,5 @@ export interface Location {
   latitude?: number;
   longitude?: number;
   postcode?: string;
-  type: string;
+  type?: string;
 }
