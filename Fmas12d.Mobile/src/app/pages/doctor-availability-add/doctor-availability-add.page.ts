@@ -123,7 +123,6 @@ export class DoctorAvailabilityAddPage implements OnInit {
   }
 
   postcodeChanged() {
-    this.userAvailability.location.contactDetailId = undefined;
     this.validPostcode = false;
   }
 
