@@ -33,7 +33,7 @@ namespace Fmas12d.Business.Models
       ProfileType = new ProfileType(entity.ProfileType);
       ProfileTypeId = entity.ProfileTypeId;
       // TODO Referrals
-      // TODO Section12ApprovalStatus
+      Section12ApprovalStatus = new Section12ApprovalStatus(entity.Section12ApprovalStatus);
       Section12ApprovalStatusId = entity.Section12ApprovalStatusId;
       Section12ExpiryDate = entity.Section12ExpiryDate;
       UserSpecialities = entity

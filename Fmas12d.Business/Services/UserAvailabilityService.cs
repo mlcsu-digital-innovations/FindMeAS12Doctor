@@ -76,7 +76,25 @@ namespace Fmas12d.Business.Services
       return model;
     }
 
-    public async Task<IEnumerable<IUserAvailability>> GetAsync(
+    public async Task<IUserAvailability> GetAsync(
+      int id,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      IUserAvailability model = await _context
+        .UserAvailabilities
+        .Include(ua => ua.ContactDetail)
+          .ThenInclude(cd => cd.ContactDetailType)
+        .Where(ua => ua.Id == id)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(UserAvailability.ProjectFromEntity)
+        .SingleOrDefaultAsync();
+
+      return model;
+    }    
+
+    public async Task<IEnumerable<IUserAvailability>> GetListAsync(
       int userId,
       DateTimeOffset from,
       bool asNoTracking,
@@ -105,7 +123,7 @@ namespace Fmas12d.Business.Services
       IUserAvailability model = await _context
         .UserAvailabilities
         .Where(ua => ua.UserId == userId)
-        .Where(ua => ua.End >= at)
+        .Where(ua => ua.End > at)
         .Where(ua => ua.Start <= at)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
@@ -131,6 +149,8 @@ namespace Fmas12d.Business.Services
               .Include(u => u.User)
                 .ThenInclude(u => u.UserSpecialities)
                   .ThenInclude(us => us.Speciality)
+              .Include(u => u.User)
+                .ThenInclude(u => u.Section12ApprovalStatus)                  
               .Where(u => u.Start <= requiredDateTime)
               .Where(u => u.End >= requiredDateTime)
               .Where(u => u.User.ProfileTypeId == ProfileType.GP ||
@@ -173,6 +193,17 @@ namespace Fmas12d.Business.Services
                 Start = entity.Start,
                 Type = entity.User.ProfileType.Name,
                 UserId = entity.User.Id,
+                User = new User
+                {
+                  Section12ApprovalStatus = new Section12ApprovalStatus
+                  {
+                    Id = entity.User.Section12ApprovalStatus.Id,
+                    Description = entity.User.Section12ApprovalStatus.Description,
+                    Name = entity.User.Section12ApprovalStatus.Name
+                  },
+                  Section12ExpiryDate = entity.User.Section12ExpiryDate,
+                  Section12ApprovalStatusId = entity.User.Section12ApprovalStatusId
+                }
               })
               .ToListAsync();
 

@@ -114,5 +114,9 @@
     "platforms": [
       "android"
     ]
+  },
+  "resolutions": {
+    "serialize-javascript": "^2.1.1",
+    "tree-kill": "^1.2.2"
   }
 }

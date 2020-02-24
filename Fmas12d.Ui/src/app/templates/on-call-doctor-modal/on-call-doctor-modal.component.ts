@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ContactDetail } from 'src/app/interfaces/contact-detail';
 import { ContactDetailType } from 'src/app/interfaces/contact-detail-type';
-import { ContactDetailTypeService } 
+import { ContactDetailTypeService }
   from 'src/app/services/contact-detail-type/contact-detail-type.service';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { DoctorListService } from 'src/app/services/doctor-list/doctor-list.service';
@@ -11,7 +11,7 @@ import { Observable, of } from 'rxjs';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor';
 import { OnCallDoctorList } from 'src/app/interfaces/on-call-doctor-list';
 import { PostcodeRegex } from 'src/app/constants/Constants';
-import { PostcodeValidationService } 
+import { PostcodeValidationService }
   from 'src/app/services/postcode-validation/postcode-validation.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserDetails } from 'src/app/interfaces/user-details';
@@ -27,21 +27,22 @@ import * as moment from 'moment';
 export class OnCallDoctorModalComponent implements OnInit {
   @Output() actioned = new EventEmitter<any>();
   @Input() public onCallDoctor: OnCallDoctorList;
-  
+
   contactDetails: ContactDetail[];
   doctorGmcNumber: number;
   doctorId: number;
-  doctorName: string;  
   doctorIsValid?: boolean;
+  doctorName: string;
   endDate: NgbDateStruct;
   endTime: NgbTimeStruct;
+  hasDoctorSearchFailed: boolean;
   isRegisteredDoctorSearching: boolean;
   isSearchingForPostcode: boolean;
-  hasDoctorSearchFailed: boolean;  
+  minDate: NgbDateStruct;
   onCallDoctorExists: boolean;
   onCallDoctorForm: FormGroup;
-  startDate: NgbDateStruct;  
-  startTime: NgbTimeStruct; 
+  startDate: NgbDateStruct;
+  startTime: NgbTimeStruct;
 
   constructor(
     private contactDetailTypeService: ContactDetailTypeService,
@@ -49,10 +50,12 @@ export class OnCallDoctorModalComponent implements OnInit {
     private formBuilder: FormBuilder,
     private postcodeValidationService: PostcodeValidationService,
     private toastService: ToastService,
-    private userDetailsService: UserDetailsService
+    private userDetailsService: UserDetailsService,
   ) { }
 
-  ngOnInit() {   
+  ngOnInit() {
+    this.minDate = this.ConvertToDateStruct(new Date());
+    this.onCallDoctorExists = false;
     this.contactDetails = [];
     this.onCallDoctorForm = this.formBuilder.group({
       endDate: [
@@ -62,15 +65,15 @@ export class OnCallDoctorModalComponent implements OnInit {
         ]
       ],
       endTime: [this.endTime],
-      doctorSearch: [''],    
+      doctorSearch: [''],
       startDate: [
         this.startDate,
         [
           DatePickerFormat
         ]
       ],
-      startTime: [this.startTime],    
-      contactDetail: null,     
+      startTime: [this.startTime],
+      contactDetail: null,
       locationPostcode: [
         '',
         [
@@ -78,10 +81,11 @@ export class OnCallDoctorModalComponent implements OnInit {
           Validators.maxLength(8),
           Validators.pattern(`${PostcodeRegex}$`)
         ]
-      ],     
+      ],
     });
-   
+
     if (this.onCallDoctor) {
+      this.onCallDoctorExists = true;
       this.InitialiseForm();
     }
     else {
@@ -105,7 +109,7 @@ export class OnCallDoctorModalComponent implements OnInit {
   }
 
   ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
-    
+
     const momentDate = moment(dateValue);
     const timeStruct = {} as NgbTimeStruct;
     timeStruct.hour = momentDate.hour();
@@ -125,7 +129,7 @@ export class OnCallDoctorModalComponent implements OnInit {
       timePart.second,
       0
     );
-  }    
+  }
 
   FormatTypeAheadResults(value: any): string {
     return value.resultText || '';
@@ -138,18 +142,18 @@ export class OnCallDoctorModalComponent implements OnInit {
           if (result !== null) {
             this.contactDetails = [];
             this.contactDetails
-              .push({id: null, name: "Please Select Location", telephoneNumber: null });                      
+              .push({ id: null, name: "Please Select Location", telephoneNumber: null });
             result.forEach(contact => {
               this.contactDetails
-                .push({id: contact.contactDetails[0].id, name: contact.name, telephoneNumber: null});
+                .push({ id: contact.contactDetails[0].id, name: contact.name, telephoneNumber: null });
             });
-            this.contactDetails.push({id: 0, name: "Other", telephoneNumber: null }); 
+            this.contactDetails.push({ id: 0, name: "Other", telephoneNumber: null });
           }
         }, error => {
           this.toastService.displayError({
             title: 'Server Error',
             message: 'Unable to retrieve contact detail types'
-          });          
+          });
         }
       );
   }
@@ -180,7 +184,7 @@ export class OnCallDoctorModalComponent implements OnInit {
 
   get endTimeField() {
     return this.onCallDoctorForm.controls.endTime;
-  } 
+  }
 
   FormatPostcode() {
     let postcode = this.locationPostcodeField.value.trim();
@@ -193,34 +197,33 @@ export class OnCallDoctorModalComponent implements OnInit {
   }
 
   InitialiseForm() {
-    
     this.doctorName = this.onCallDoctor.userName;
-    this.doctorGmcNumber = this.onCallDoctor.gmcNumber;  
-    this.doctorId = this.onCallDoctor.userId; 
+    this.doctorGmcNumber = this.onCallDoctor.gmcNumber;
+    this.doctorId = this.onCallDoctor.userId;
     this.doctorSearchField.setValue(`${this.doctorName} - ${this.doctorGmcNumber}`);
     this.doctorIsValid = null;
     this.startDateField.setValue(this.ConvertToDateStruct(this.onCallDoctor.start));
     this.startTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.start));
     this.endDateField.setValue(this.ConvertToDateStruct(this.onCallDoctor.end));
     this.endTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.end));
-   
+
     this.getContactDetails(this.onCallDoctor.userId);
     if (this.onCallDoctor.location.contactDetailId) {
       this.locationField.setValue(this.onCallDoctor.location.contactDetailId);
-    }  
+    }
     else {
       this.locationField.setValue(0);
       this.locationPostcodeField.setValue(this.onCallDoctor.location.postcode);
-    }    
-  }  
+    }
+  }
 
   IsSearchingForPostcode(): boolean {
     return this.isSearchingForPostcode;
   }
 
-  IsEndDateBeforeStartDate(endDateField: AbstractControl, endTimeField: AbstractControl, 
+  IsEndDateBeforeStartDate(endDateField: AbstractControl, endTimeField: AbstractControl,
     startDateField: AbstractControl, startTimeField: AbstractControl
-    ): boolean {
+  ): boolean {
 
     const endDate = this.CreateDateFromPickerObjects(endDateField.value, endTimeField.value);
     const startDate = this.CreateDateFromPickerObjects(startDateField.value, startDateField.value);
@@ -229,9 +232,9 @@ export class OnCallDoctorModalComponent implements OnInit {
       moment(endDate).isBefore(moment(startDate));
 
     if (endDateIsBeforeStartDate) {
-      endDateField.setErrors({InvalidEndDate: true});
+      endDateField.setErrors({ InvalidEndDate: true });
     } else {
-      endDateField.setErrors({InvalidEndDate: false});
+      endDateField.setErrors({ InvalidEndDate: false });
     }
 
     return endDateIsBeforeStartDate;
@@ -241,10 +244,10 @@ export class OnCallDoctorModalComponent implements OnInit {
     return (typeof this.doctorSearchField.value) === 'object';
   }
 
-  HasInvalidPostcode(): boolean {    
+  HasInvalidPostcode(): boolean {
     return (
       this.locationPostcodeField.value === '' ||
-      this.locationPostcodeField.value === null || 
+      this.locationPostcodeField.value === null ||
       this.locationPostcodeField.errors !== null
     );
   }
@@ -257,7 +260,7 @@ export class OnCallDoctorModalComponent implements OnInit {
     );
   }
 
-  RegisteredDoctorSearch = (text$: Observable<string>) =>   
+  RegisteredDoctorSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -265,6 +268,7 @@ export class OnCallDoctorModalComponent implements OnInit {
       switchMap(term =>
         this.doctorListService.GetDoctorList(term, false).pipe(
           tap(() => (this.hasDoctorSearchFailed = false)),
+          tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'doctorSearch'))),
           catchError(() => {
             this.hasDoctorSearchFailed = true;
             return of([]);
@@ -286,18 +290,18 @@ export class OnCallDoctorModalComponent implements OnInit {
     // check start date
     if (!this.startDateField.value) {
       canContinue = false;
-      this.startDateField.setErrors({ DatePickerFormat: true});
+      this.startDateField.setErrors({ DatePickerFormat: true });
     }
 
     // check end date
     if (!this.endDateField.value) {
       canContinue = false;
-      this.endDateField.setErrors({ DatePickerFormat: true});
+      this.endDateField.setErrors({ DatePickerFormat: true });
     }
 
     // check end date is after start date
-    if (this.startDateField.value && this.startTimeField && 
-      this.endDateField.value && this.endTimeField) {                   
+    if (this.startDateField.value && this.startTimeField &&
+      this.endDateField.value && this.endTimeField) {
       if (this.IsEndDateBeforeStartDate(
         this.endDateField,
         this.endTimeField,
@@ -306,8 +310,8 @@ export class OnCallDoctorModalComponent implements OnInit {
       )) {
         canContinue = false;
         this.endDateField.setErrors({ InvalidEndDate: true });
-      }      
-    }    
+      }
+    }
 
     // check location
     if (this.locationField.value === null || this.locationField.value === undefined) {
@@ -318,60 +322,60 @@ export class OnCallDoctorModalComponent implements OnInit {
     // check postcode if location is Other
     if (this.locationField.value == 0 && !this.HasValidPostcode()) {
       canContinue = false;
-      this.locationPostcodeField.setErrors({ InvalidPostcode: true });      
-    } 
+      this.locationPostcodeField.setErrors({ InvalidPostcode: true });
+    }
 
     if (canContinue) {
-    // create onCallDoctorList object
-      const onCallDoctor = {} as OnCallDoctor; 
-      
+      // create onCallDoctorList object
+      const onCallDoctor = {} as OnCallDoctor;
+
       if (this.onCallDoctor) {
         onCallDoctor.id = this.onCallDoctor.id;
       }
 
       onCallDoctor.userId = this.doctorId;
-      onCallDoctor.start = 
+      onCallDoctor.start =
         this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
-      onCallDoctor.end = 
+      onCallDoctor.end =
         this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
 
       let contactDetailId: number = this.locationField.value;
 
       if (contactDetailId > 0) {
-    
+
         onCallDoctor.contactDetailId = contactDetailId;
-      } 
-      else {     
+      }
+      else {
         onCallDoctor.postcode = this.locationPostcodeField.value;
-      }            
-    
+      }
+
       this.actioned.emit(onCallDoctor);
     }
-       
+
   }
 
   ShowPostcodeField(): boolean {
-    return this.onCallDoctorForm.controls.location.value > 0
+    return this.onCallDoctorForm.controls.location.value > 0;
   }
 
-  Cancel() {    
+  Cancel() {
     this.actioned.emit(null);
   }
 
-  ValidatePostcode(): void {    
+  ValidatePostcode(): void {
     this.isSearchingForPostcode = true;
     this.FormatPostcode();
 
     this.postcodeValidationService.validatePostcode(this.locationPostcodeField.value)
-      .subscribe(result => {        
+      .subscribe(result => {
         this.isSearchingForPostcode = false;
         this.locationPostcodeField.setErrors(null);
-        this.toastService.displaySuccess({          
+        this.toastService.displaySuccess({
           message: 'Postcode is valid'
         });
       }, (err) => {
         this.isSearchingForPostcode = false;
-        this.locationPostcodeField.setErrors({InvalidPostcode: true});
+        this.locationPostcodeField.setErrors({ InvalidPostcode: true });
         this.toastService.displayError({
           title: 'Search Error',
           message: 'Error Retrieving Address Information'
@@ -381,29 +385,35 @@ export class OnCallDoctorModalComponent implements OnInit {
 
   ValidateRegisteredDoctor() {
     this.userDetailsService.GetDoctorDetails(this.doctorSearchField.value.id)
-    .subscribe((doctorDetails: UserDetails) => {
+      .subscribe((doctorDetails: UserDetails) => {
 
-      if (doctorDetails === null ) {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Unable to retrieve doctor details'
+        if (doctorDetails === null) {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Unable to retrieve doctor details'
+          });
+          this.doctorIsValid = false;
+        } else {
+          this.doctorGmcNumber = doctorDetails.gmcNumber;
+          this.doctorId = doctorDetails.id;
+          this.doctorName = doctorDetails.displayName;
+          this.doctorIsValid = true;
+          this.locationField.setValue(null);
+          this.getContactDetails(doctorDetails.id);
+        }
+      },
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving User Details'
+          });
+          this.doctorIsValid = false;
         });
-        this.doctorIsValid = false;
-      } else {
-        this.doctorGmcNumber = doctorDetails.gmcNumber;
-        this.doctorId = doctorDetails.id;
-        this.doctorName = doctorDetails.displayName;
-        this.doctorIsValid = true;
-        this.locationField.setValue(null);
-        this.getContactDetails(doctorDetails.id);                
-      }
-    },
-      (err) => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: 'Error Retrieving User Details'
-        });
-        this.doctorIsValid = false;
-      });
+  }
+  ValidateTypeAheadResults(results: any[], fieldName: string) {
+
+    if (results == null) {
+      this.onCallDoctorForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
   }
 }

@@ -31,14 +31,30 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpGet]
-    [Authorize(Policy="Admin")]
-    [Route("{userId:int}")]
-    public async Task<ActionResult<IEnumerable<ViewModels.UserAvailability>>> GetList(
-      int userId,
-      [FromQuery] DateTimeOffset? from = null
+    [Route("{id:int}")]
+    public async Task<ActionResult<IEnumerable<ViewModels.UserAvailability>>> Get(
+      int id
     )
     {
-      return await GetListInternal(userId, from);
+      try
+      {
+        Business.Models.IUserAvailability businessModel = 
+          await Service.GetAsync(id, true, true);
+
+        if (businessModel == null)
+        {
+          return NoContent();
+        }
+        else
+        {          
+          ViewModels.UserAvailability viewModel = new ViewModels.UserAvailability(businessModel);
+          return Ok(viewModel);
+        }
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }  
     }
 
     [HttpPost]
@@ -318,7 +334,7 @@ namespace Fmas12d.Api.Controllers
         }
 
         IEnumerable<Business.Models.IUserAvailability> businessModels = 
-          await Service.GetAsync(userId, from.Value, true, true);
+          await Service.GetListAsync(userId, from.Value, true, true);
 
         if (businessModels == null || !businessModels.Any())
         {

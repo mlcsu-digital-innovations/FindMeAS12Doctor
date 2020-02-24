@@ -15,10 +15,6 @@ export class RouterService {
       if (event instanceof NavigationEnd) {
         this.previousUrl = this.currentUrl;
         this.currentUrl = event.url;
-        console.log('RouteService:');
-        console.log('previous Url = ' + this.previousUrl);
-        console.log('current Url = ' + this.currentUrl);
-        console.log('');
       }
     });
   }

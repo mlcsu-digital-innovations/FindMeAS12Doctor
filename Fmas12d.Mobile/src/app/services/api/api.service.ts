@@ -46,7 +46,7 @@ export class ApiService {
         .pipe(
           catchError(error => {
             this.logService.logError(error);
-            this.toastService.displayError({ message: error.message });
+            // this.toastService.displayError({ message: error.message });
             return throwError(error);
           }),
           map(result => result),

@@ -19,6 +19,8 @@ namespace Fmas12d.Api.ViewModels
       End = model.End;
       GenderName = model.GenderName;
       Id = model.UserId;
+      Section12ApprovalStatusName = model.User?.Section12ApprovalStatus?.Name;
+      Section12ExpiryDate = model.User?.Section12ExpiryDate;
       Name = model.Name;
       SpecialityNames = model.SpecialityNames;
       Start = model.Start;
@@ -30,6 +32,8 @@ namespace Fmas12d.Api.ViewModels
     public int Id { get; set; }
     public string GenderName { get; set; }
     public string Name { get; set; }
+    public string Section12ApprovalStatusName { get; set; }
+    public DateTimeOffset? Section12ExpiryDate { get; set; }
     public IEnumerable<string> SpecialityNames { get; set; }
     public string Type { get; set; }    
 

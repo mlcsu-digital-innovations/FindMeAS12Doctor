@@ -21,8 +21,7 @@ export class AuthService implements OnDestroy {
     ) 
   {
     this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
-
-      console.log(payload);
+      // TODO: Process acquire token failure
     });
   }
 

@@ -1,6 +1,8 @@
 import { ApiService } from '../api/api.service';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ContactDetailType } from 'src/app/models/contact-detail-type.model';
 
 
 @Injectable({
@@ -26,10 +28,10 @@ export class ContactDetailService {
     ));
   }
 
-  public getContactDetailsForUser() {
-    return (this.apiService.get(
-      `${environment.apiEndpoint}/contactdetailtype`,
+  public getContactDetailsForUser(includeOther: boolean) {
+    return this.apiService.get(
+      `${environment.apiEndpoint}/contactdetailtype${includeOther ? "?includeOther=true" : ""}`,
       null
-    ));
+    );
   }
 }

@@ -14,11 +14,8 @@
             </h6>
           </div>
         </div>
-
         <div class="card-body" *ngIf="assessment$ | async as assessment; else loading">
-
           <div class="assessment-details">
-
             <div class="row">
               <div class="col-md-3 label">
                 Assessment To be Completed By:
@@ -33,7 +30,6 @@
                 {{assessment.postcode}}
               </div>
             </div>
-
             <div class="row">
               <div class="col-md-3 label">
                 Patient Identifier:
@@ -48,7 +44,6 @@
                 {{assessment.specialityName === null ? 'None' : assessment.specialityName}}
               </div>
             </div>
-
             <div class="row">
               <div class="col-md-3 label">
                 Lead AMHP:
@@ -63,7 +58,6 @@
                 {{assessment.preferredDoctorGenderTypeName === null ? 'N/A' : assessment.preferredDoctorGenderTypeName}}
               </div>
             </div>
-
             <div class="row">
                 <div class="col-md-3 label">
                   AMHP:
@@ -72,7 +66,6 @@
                   {{assessment.amhpName}}
                 </div>
               </div>
-
             <div class="row">
               <div class="col-md-3 label">
                 Doctors Selected:
@@ -107,7 +100,7 @@
                 (click)="SearchDoctors()"
               >
                 <i class="fas fa-user-plus"></i>
-                Add Other Doctor
+                Add System Registered Doctor
               </button>
             </div>
             <div class="form-row" style="margin-left:6px;">
@@ -138,32 +131,36 @@
                 </div>
               </div>
             </div>
-
             <app-delay-spinner [delayMessage]="'Retrieving Available Doctors'" *ngIf="isAvailableDoctorSearching"></app-delay-spinner>
-
             <div class="form-row" style="margin:10px; padding-top:10px; overflow: auto;">
               <table class="table table-bordered table-sm table-referral-list">
                 <thead>
                   <tr>
-                    <th class="text-center" scope="col" sortable="doctorName" (sort)="OnSort($event)">
-                      Doctor
+                    <th class="text-center" scope="col" sortable="name" (sort)="OnSort($event)">
+                      Name
                     </th>
-                    <th class="text-center" scope="col" sortable="doctorGender" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col" sortable="genderName" (sort)="OnSort($event)">
                       Gender
                     </th>
-                    <th class="text-center" scope="col" sortable="doctorType" (sort)="OnSort($event)">
-                      Doctor Type
+                    <th class="text-center" scope="col" sortable="type" (sort)="OnSort($event)">
+                      Type
                     </th>
-                    <th class="text-center" scope="col" sortable="doctorSpeciality" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col" sortable="section12ApprovalStatusName" (sort)="OnSort($event)">
+                      S12 Status
+                    </th>
+                    <th class="text-center" scope="col" sortable="section12ExpiryDate" (sort)="OnSort($event)">
+                      S12 Expiry Date
+                    </th>                    
+                    <th class="text-center" scope="col">
                       Speciality
                     </th>
-                    <th class="text-center sm-col" scope="col" sortable="otherAssessmentDetails" (sort)="OnSort($event)">
-                      Scheduled Assessment
+                    <th class="text-center sm-col" scope="col">
+                      Scheduled Assessments
                     </th>
-                    <th class="text-center" scope="col" sortable="availabilityDetails" (sort)="OnSort($event)">
+                    <th class="text-center" scope="col">
                       Availability
                     </th>
-                    <th class="text-center sm-col" scope="col" sortable="distanceFromAssessment" (sort)="OnSort($event)">
+                    <th class="text-center sm-col" scope="col" sortable="distance" (sort)="OnSort($event)">
                       Distance (miles)
                     </th>
                     <th class="text-center" scope="col">
@@ -181,20 +178,24 @@
                     </td>
                     <td>
                       {{availableDoctor.type}}
+                    </td>                    
+                    <td>
+                      {{availableDoctor.section12ApprovalStatusName}}
                     </td>
+                    <td>
+                      {{availableDoctor.section12ExpiryDate | date:'dd/MM/yyyy'}}
+                    </td>                    
                     <td>
                       <span *ngFor="let speciality of availableDoctor.specialityNames">
                         {{speciality}},
                       </span>
                     </td>
-
                     <ng-template #tipContent>
                       <div class="assessment-tooltip" *ngFor="let assessment of availableDoctor.activeAssessments">
                         <span>{{assessment.isScheduled === true ? 'Scheduled' : 'Allocated'}}</span>
                         {{assessment.postcode}} @ {{assessment.dateTime | dateTimeFormat}}
                       </div>
                     </ng-template>
-
                     <td class="text-center sm-col">
                       <i
                         class="fas fa-calendar-check scheduled"
@@ -212,7 +213,6 @@
                       {{availableDoctor.distance | number: '1.1-1'}}
                     </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
-
                       <label class="container">
                         <input
                           class=""
@@ -230,7 +230,6 @@
                 No available doctors found within search radius
               </div>
             </div>
-
             <div class="form-row ml-more-2 mr-more-2">
               <div class="col-md-2" >
                 <ngb-pagination
