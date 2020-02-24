@@ -382,6 +382,7 @@ namespace Fmas12d.Business.Services
         model.AmhpUserId,
         NotificationText.ALLOCATED_TO_ASSESSMENT
       );
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
       await AddLatitudeAndLongitudeAsync(model.Postcode, entity);
       _context.Add(entity);
 
