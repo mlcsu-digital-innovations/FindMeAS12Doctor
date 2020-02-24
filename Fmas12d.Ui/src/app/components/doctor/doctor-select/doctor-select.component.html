@@ -5,7 +5,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
-            <i class="fas fa-search fa-4x"></i>
+            <em class="fas fa-search fa-4x"></em>
           </div>
           <div class="card-header-text">
             <h4 class="card-title">Select Doctor</h4>
@@ -99,7 +99,7 @@
                 [openDelay]="1000"
                 (click)="SearchDoctors()"
               >
-                <i class="fas fa-user-plus"></i>
+                <em class="fas fa-user-plus"></em>
                 Add System Registered Doctor
               </button>
             </div>
@@ -186,8 +186,8 @@
                       {{availableDoctor.section12ExpiryDate | date:'dd/MM/yyyy'}}
                     </td>                    
                     <td>
-                      <span *ngFor="let speciality of availableDoctor.specialityNames">
-                        {{speciality}},
+                      <span *ngFor="let speciality of availableDoctor.specialityNames; last as isLast">
+                        {{speciality}}<span *ngIf="!isLast">, </span>
                       </span>
                     </td>
                     <ng-template #tipContent>
@@ -197,14 +197,14 @@
                       </div>
                     </ng-template>
                     <td class="text-center sm-col">
-                      <i
+                      <em
                         class="fas fa-calendar-check scheduled"
                         *ngIf="availableDoctor.activeAssessments.length > 0"
                         [ngbTooltip]="tipContent"
                         placement="right"
                         tooltipClass="subtle-tooltip"
                         [closeDelay]="500" [openDelay]="500"
-                        ></i>
+                        ></em>
                     </td>
                     <td class="text-center">
                       {{availableDoctor.start | timeOnlyFormat}} - {{availableDoctor.end | timeOnlyFormat}}
@@ -257,7 +257,7 @@
                   class="btn btn-standard btn-cancel"
                   (click)="Cancel()"
                   >
-                  <i class="far fa-times-circle"></i>
+                  <em class="far fa-times-circle"></em>
                   Cancel
                 </button>
                 <button
@@ -266,7 +266,7 @@
                   (click)="UpdateSelectedDoctors()"
                   [disabled]="selectedDoctors.length === 0"
                 >
-                  <i class="far fa-check-circle"></i>
+                  <em class="far fa-check-circle"></em>
                   Save
                 </button>
               </div>
