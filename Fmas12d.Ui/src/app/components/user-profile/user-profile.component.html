@@ -14,11 +14,11 @@
             </h6>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body offset-md-1">
           <form [formGroup]="userProfileForm" novalidate>
             <div class="form-row user-row">
               <div class="required-field col-md-3 mb-3 text-left">
-                <strong>Denotes required field.</strong>
+                <strong>Denotes mandatory field.</strong>
               </div>
             </div>
             <div class="form-row user-row">
@@ -30,9 +30,27 @@
                   formControlName="displayName"
                   #displayName
                   id="displayName">
+              </div>              
+              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+                <label class="required-field">GMC Number: </label>             
               </div>
+              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+                <input class="form-control" 
+                  formControlName="gmcNumber"
+                  #gmcNumber
+                  id="gmcNumber">
+              </div>
+              <div class="col-md-1" *ngIf="isGPOrPsychiatrist">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="VerifyGMCNumber()"              
+                >                
+                  Verify
+                </button>
+              </div>               
             </div>
-            <div *ngIf="isAMHPProfile" class="form-row user-row">
+            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
               <div class="col-md-2">
                 <label>Organisation: </label>             
               </div>
@@ -52,8 +70,14 @@
                   </option>
                 </select>
               </div>
+              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+                <label>S12 Approved: </label>             
+              </div>
+              <div class="col-md-3" *ngIf="isGPOrPsychiatrist">
+                <label>{{S12Status()}}</label>
+              </div>
             </div>
-            <div *ngIf="isAMHPProfile" class="form-row user-row">
+            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
               <div class="col-md-2">
                 <label class="required-field">Email: </label>             
               </div>
@@ -64,9 +88,9 @@
                   id="emailAddress">
               </div>
             </div>
-            <div *ngIf="isAMHPProfile" class="form-row user-row">
+            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
               <div class="col-md-2">
-                <label>Mobile: </label>             
+                <label [class]="MobileNumberIsMandatory() ? 'required-field' : ''">Mobile: </label>             
               </div>
               <div class="col-md-3">
                 <input class="form-control"
@@ -75,7 +99,7 @@
                   id="mobileNumber">
               </div>
             </div>
-            <div *ngIf="isAMHPProfile" class="form-row user-row">
+            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
               <div class="col-md-2">
                 <label>Telephone: </label>             
               </div>
@@ -86,8 +110,126 @@
                   id="telephoneNumber">
               </div>
             </div>
+            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+              <div class="col-md-2">
+                <label class="required-field">Specialities</label>
+              </div>
+              <div class="col-md-3">
+                <ng-multiselect-dropdown 
+                  formControlName="specialities" 
+                  [settings]="dropdownSettings"
+                  [data]="specialities" 
+                  (onSelect)="OnItemSelect($event)" 
+                  (onDeSelect)="OnItemDeselect($event)">
+                </ng-multiselect-dropdown>
+              </div>
+              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+                <label>S12 Expiry Date: </label>             
+              </div>
+              <div class="col-md-3" *ngIf="isGPOrPsychiatrist">
+                <label>{{userProfile.section12ExpiryDate | date: 'd MMMM yyyy'}}</label>
+              </div>
+            </div>            
+            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+              <div class="col-md-2">
+                <label class="required-field">Contact Details </label>             
+              </div>
+            </div>
+            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+              <div class="col-md-10">
+                <table class="table table-bordered table-sm table-contact-details">
+                  <thead>
+                    <tr>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='string'>
+                        Contact Detail
+                      </th>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='number'>
+                        Address
+                      </th>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='string'>
+                        Postcode
+                      </th>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='string'>
+                        Telephone
+                      </th>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='string'>
+                        Mobile
+                      </th>                                      
+                      <th class="sm-col text-center" scope="col">
+                        &nbsp; &nbsp;
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="contact-detail-row" *ngFor="let contactDetail of userProfile.contactDetails">
+                      <td>
+                        <ngb-highlight result="{{contactDetail.name}}">
+                        </ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight result="{{FullAddress(contactDetail)}}">
+                        </ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight result="{{contactDetail.postcode}}">
+                        </ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight result="{{contactDetail.telephoneNumber}}">
+                        </ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight result="{{contactDetail.mobileNumber}}">
+                        </ngb-highlight>
+                      </td>                      
+                      <td>
+                        <button class="btn btn-outline-primary btn-small" (click)="EditContactDetail(contactDetail)">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-small" (click)="DeleteContactDetail(contactDetail)">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+              <div class="col-md-1 offset-md-9">
+                <button class="btn btn-primary btn-standard btn-spaced" type="button" [disabled]="UserHasAllContactDetails()" (click)="AddContactDetail()">                  
+                  Add
+                </button>
+              </div>
+            </div>
+            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+              <div class="col-md-2">
+                <label>Bank Details Provided: </label>             
+              </div>
+              <div class="col-md-3">
+                <label>{{VSRNumber() ? 'Yes' : 'No'}}</label>
+              </div>
+            </div>
+            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+              <div class="col-md-2">
+                <label>VSR Number: </label>             
+              </div>
+              <div class="col-md-3">
+                <label>{{VSRNumber()}}</label>
+              </div>
+            </div>
             <div class="form-row mt-more-2">              
-              <div class="col-md-2 mb-2 offset-md-4 text-right">
+              <div class="col-md-2 mb-2 {{isGPOrPsychiatrist ? 'offset-md-8' : 'offset-md-4'}} text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="Cancel()">
                   <i class="far fa-times-circle"></i>
                   Cancel

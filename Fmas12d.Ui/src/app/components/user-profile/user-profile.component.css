@@ -11,3 +11,34 @@
   color: red;
   content: " *";
 }
+
+.contact-detail-row {
+  background-color: #b8dbf9;
+}
+
+.table-contact-details {  
+  background-color: #fff;
+  font-size: smaller;
+}
+
+.table-contact-details th:nth-child(n-5) {  
+  background-color:#0dadb7;
+  color: white;
+}
+
+.table-contact-details th:nth-child(n+5) {  
+  background-color:#0dadb7;
+  color: white;
+}
+
+.table-contact-details td {
+  font-size: 1.2em;
+}
+
+.table-contact-details td a {
+  font-weight: bold;
+}
+
+.table-contact-details th:nth-child(n-1) {
+  width: 40px;
+}

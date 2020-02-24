@@ -1,7 +1,9 @@
+import { ContactDetailProfile } from './contact-detail-profile';
 import { User } from './user';
 import { UserSpeciality } from './user-speciality';
 
 export interface UserProfile extends User {
+  contactDetails: ContactDetailProfile[];
   contactDetailTypeId: number;
 	emailAddress: string;
 	genderTypeId: number;

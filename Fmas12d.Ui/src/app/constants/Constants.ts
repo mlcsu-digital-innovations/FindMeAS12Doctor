@@ -1,3 +1,6 @@
+export const CONTACT_DETAIL_TYPE_BASE = 1;
+export const CONTACT_DETAIL_TYPE_HOME = 2;
+
 export const PostcodeRegex = '^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})';
 
 export const UNKNOWN = 'Unknown';
@@ -12,6 +15,7 @@ export const REFERRAL_STATUS_AWAITING_REVIEW = 8;
 export const REFERRAL_STATUS_CLOSED = 9;
 export const REFERRAL_STATUS_OPEN = 10;
 
+export const PROFILE_TYPE_AMHP = 2;
 export const PROFILE_TYPE_GP = 3;
 export const PROFILE_TYPE_UNREGISTERED = 6;
 export const PROFILE_TYPE_PSYCHIATRIST = 7;
