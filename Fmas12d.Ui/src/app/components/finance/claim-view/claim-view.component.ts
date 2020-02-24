@@ -1,3 +1,4 @@
+import { CLAIM_STATUS_QUERY, CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
 import { ClaimView } from 'src/app/interfaces/claim-view';
 import { Component, OnInit } from '@angular/core';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
@@ -7,7 +8,6 @@ import { ParamMap, ActivatedRoute } from '@angular/router';
 import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-claim-view',
@@ -46,7 +46,7 @@ export class ClaimViewComponent implements OnInit {
 
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Referral Information'
+          message: 'Error Retrieving Claim Information'
         });
 
         const emptyClaim = {} as ClaimView;
@@ -78,6 +78,14 @@ export class ClaimViewComponent implements OnInit {
     }
     this.claimForm.controls['assessmentPayment'].setValue(claim.assessmentPayment);
     this.claimForm.controls['mileagePayment'].setValue(claim.mileagePayment);
+  }
+
+  IsProcessing(claim: ClaimView): boolean {
+    return claim.claimStatus.id === CLAIM_STATUS_PROCESSING;
+  }
+
+  IsQuerying(claim: ClaimView): boolean {
+    return claim.claimStatus.id === CLAIM_STATUS_QUERY;
   }
 
   SetClaimAsProcessing() {

@@ -92,25 +92,29 @@
             </div>
             <br/>
             <div class="form-row">
-              <div class="col-md-2 mb-2 offset-md-8 text-right">
-                <a class="btn btn-standard btn-cancel" type="button" routerLink="/finance/claims/list">
+              <div class="col-md-4 mb-2 offset-md-8 text-right">
+                <a
+                  class="btn btn-standard btn-cancel"
+                  type="button"
+                  routerLink="/finance/claims/list"
+                >
                   <i class="fas fa-arrow-left"></i>
                   Back
                 </a>
-              </div>
-              <div class="col-md-2 mb-2 text-left">
-                <button class="btn btn-primary btn-standard"
+                <button
+                  class="btn btn-primary btn-standard"
                   type="button"
-                  *ngIf="claim.claimant.hasBankDetails"
+                  *ngIf="claim.claimant.hasBankDetails && !IsProcessing(claim)"
                   (click)="SetClaimAsProcessing()"
                 >
                   <i class="fas fa-cog"></i>
                   Process
                 </button>
-                <button class="btn btn-primary btn-standard"
-                type="button"
-                *ngIf="!claim.claimant.hasBankDetails"
-                (click)="SetClaimAsQuerying()"
+                <button
+                  class="btn btn-primary btn-standard"
+                  type="button"
+                  *ngIf="!claim.claimant.hasBankDetails && !IsQuerying(claim)"
+                  (click)="SetClaimAsQuerying()"
                 >
                   <i class="far fa-question-circle"></i>
                   Query
