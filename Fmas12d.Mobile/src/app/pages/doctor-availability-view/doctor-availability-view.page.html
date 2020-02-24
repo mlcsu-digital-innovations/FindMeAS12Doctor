@@ -1,6 +1,9 @@
 <app-navbar title="Availability"></app-navbar>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshList($event)">
+    <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
+  </ion-refresher>  
   <ion-card>
     <ion-card-header>
       <ion-icon color="success" size="large" name="checkmark-circle" class="icon"></ion-icon>
@@ -12,7 +15,7 @@
                           *ngFor="let item of availableList" 
                           detail="false"
                           #slidingItem>
-          <ion-item>
+          <ion-item (click)="editAvailability(item, slidingItem)">
             <ion-grid>
               <ion-row>
                 Start: {{item.start | date: 'dd MMM yy'}}
@@ -59,7 +62,7 @@
                           detail="false"
                           #slidingItem
         >
-          <ion-item>
+          <ion-item (click)="editAvailability(item, slidingItem)">
             <ion-grid>
               <ion-row>
                 Start:

@@ -80,7 +80,7 @@
           </ion-col>          
         </ion-row>
         <br/>
-        <ion-row *ngIf="assessment.hasOutcome">
+        <ion-row *ngIf="assessment.hasBeenReviewed">
           <ion-col style="text-align: center;">
             <ion-button 
               [routerLink]="['/claims-create/', assessment.id]" 

@@ -121,6 +121,7 @@ export class AmhpAssessmentService {
   }
 
   private assessmentListSort(assessmentList: AmhpAssessmentList[]): AmhpAssessmentList[] {
+    if (assessmentList === null) { assessmentList = []; }
     return assessmentList.sort(
       (assessment1: AmhpAssessmentList, assessment2: AmhpAssessmentList) => {
         if (assessment1.dateTime > assessment2.dateTime) {

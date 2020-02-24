@@ -13,6 +13,7 @@ export class AmhpAssessmentView {
   detailTypes: DetailType[];
   doctorsAllocated: AmhpAssessmentViewDoctor[];
   doctorsSelected: AmhpAssessmentSelectedDoctor[];
+  hasBeenReviewed: boolean;
   hasOutcome: boolean;
   id: number;
   isPlanned: boolean;

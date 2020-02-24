@@ -33,7 +33,7 @@ namespace Fmas12d.Business.Models
       ProfileType = new ProfileType(entity.ProfileType);
       ProfileTypeId = entity.ProfileTypeId;
       // TODO Referrals
-      // TODO Section12ApprovalStatus
+      Section12ApprovalStatus = new Section12ApprovalStatus(entity.Section12ApprovalStatus);
       Section12ApprovalStatusId = entity.Section12ApprovalStatusId;
       Section12ExpiryDate = entity.Section12ExpiryDate;
       UserSpecialities = entity
@@ -103,6 +103,21 @@ namespace Fmas12d.Business.Models
         else
         {
           return ProfileType.IsDoctor;
+        }
+      }
+    }
+
+    public bool IsFinance
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdFinance(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsFinance;
         }
       }
     }

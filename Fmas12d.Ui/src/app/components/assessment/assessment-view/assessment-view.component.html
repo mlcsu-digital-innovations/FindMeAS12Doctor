@@ -294,6 +294,7 @@
   <app-cancel-action-modal
     [modalTitle]="'Confirm Referral Closure'"
     [modalBody]="'Please confirm that the referral can be closed.'"
+    [referralStatus]=referralStatus
     (actioned)="OnModalAction($event)"
   >
   </app-cancel-action-modal>

@@ -132,12 +132,12 @@
                       <ngb-highlight [result]="onCallDoctor.onCallRejectedReason">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}">
+                    <td class="{{onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed'}}" style="text-align: center;">
                       <button class="btn btn-outline-primary btn-small" (click)="editOnCallDoctor(onCallDoctor)">
                         <i class="fas fa-edit"></i>
                       </button>
                       <button class="btn btn-outline-primary btn-small" (click)="deleteOnCallDoctor(onCallDoctor)">
-                        <i class="fas fa-times"></i>
+                        <div class="fas fa-times" style="padding-left: 3px;"></div>
                       </button>
                     </td>
                   </tr>
