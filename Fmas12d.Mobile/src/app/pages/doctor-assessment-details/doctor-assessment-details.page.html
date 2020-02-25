@@ -2,6 +2,12 @@
 
 <ion-content fullscreen>
  
+  <ion-list>
+
+    <ion-list-header>
+      Assessment Details  
+    </ion-list-header>
+
   <ion-item>
     <ion-label>
       <h3 class="bold">Referral Id</h3>
@@ -69,6 +75,8 @@
       <h3 *ngFor="let detail of assessment.detailTypes">{{detail.name}}</h3>
     </ion-label>
   </ion-item>
+
+  </ion-list>
 </ion-content>
 
 <ion-footer *ngIf="assessment.hasBeenReviewed">
