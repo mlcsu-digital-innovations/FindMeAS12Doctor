@@ -6,46 +6,6 @@
   </ion-refresher>
   <ion-card>
     <ion-card-header>
-      <ion-icon color="success" size="large" name="checkmark-circle" class="icon"></ion-icon>
-      <span class="v-text"><strong>Confirmed</strong></span>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item-sliding class="item green-item" 
-                          *ngFor="let item of onCallDoctorsConfirmed" 
-                          detail="false"
-                          #slidingItem>
-          <ion-item>
-            <ion-grid>
-              <ion-row>
-                Start: {{item.start | date: 'dd MMM yy'}}
-                {{item.start | date: 'HH:mm'}}
-                <br />
-                End:
-                {{item.end | date: 'dd MMM yy'}}
-                {{item.end | date: 'HH:mm'}}
-                <br />
-                Request sent:
-                {{item.onCallConfirmationSentAt | date: 'dd MMM yy'}}
-                {{item.onCallConfirmationSentAt | date: 'HH:mm'}}
-              </ion-row>
-              <ion-row class="location">
-                Location:&nbsp;
-                <span *ngIf="item.location.type === 'ContactDetail'">
-                  {{item.location.contactDetailTypeName}}
-                </span>
-                <span *ngIf="item.location.type === 'Postcode'">
-                  {{item.location.postcode}}
-                </span>
-              </ion-row>
-            </ion-grid>
-          </ion-item>          
-        </ion-item-sliding>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
       <ion-icon color="warning" size="large" name="help" class="icon"></ion-icon>
       <span class="v-text"><strong>Unconfirmed</strong></span>
     </ion-card-header>
@@ -84,6 +44,46 @@
               Reject
             </ion-item-option>                                  
           </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-icon color="success" size="large" name="checkmark-circle" class="icon"></ion-icon>
+      <span class="v-text"><strong>Confirmed</strong></span>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item-sliding class="item green-item" 
+                          *ngFor="let item of onCallDoctorsConfirmed" 
+                          detail="false"
+                          #slidingItem>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                Start: {{item.start | date: 'dd MMM yy'}}
+                {{item.start | date: 'HH:mm'}}
+                <br />
+                End:
+                {{item.end | date: 'dd MMM yy'}}
+                {{item.end | date: 'HH:mm'}}
+                <br />
+                Request sent:
+                {{item.onCallConfirmationSentAt | date: 'dd MMM yy'}}
+                {{item.onCallConfirmationSentAt | date: 'HH:mm'}}
+              </ion-row>
+              <ion-row class="location">
+                Location:&nbsp;
+                <span *ngIf="item.location.type === 'ContactDetail'">
+                  {{item.location.contactDetailTypeName}}
+                </span>
+                <span *ngIf="item.location.type === 'Postcode'">
+                  {{item.location.postcode}}
+                </span>
+              </ion-row>
+            </ion-grid>
+          </ion-item>          
         </ion-item-sliding>
       </ion-list>
     </ion-card-content>
