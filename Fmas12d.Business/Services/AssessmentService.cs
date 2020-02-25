@@ -382,7 +382,7 @@ namespace Fmas12d.Business.Services
         model.AmhpUserId,
         NotificationText.ALLOCATED_TO_ASSESSMENT
       );
-      await SendUnsentNotifications(entity.UserAssessmentNotifications);
+
       await AddLatitudeAndLongitudeAsync(model.Postcode, entity);
       _context.Add(entity);
 
@@ -390,8 +390,7 @@ namespace Fmas12d.Business.Services
       referral.ReferralStatusId = ReferralStatus.SELECTING_DOCTORS;
 
       await _context.SaveChangesAsync();
-
-
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       model = _context.Assessments
                       .Include(e => e.Details)
