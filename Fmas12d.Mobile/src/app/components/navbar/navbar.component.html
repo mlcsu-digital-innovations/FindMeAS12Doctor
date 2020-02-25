@@ -12,16 +12,19 @@
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
-  <div class="nav-info">
+
+  <!-- <ion-toolbar class="bob" *ngIf="lastUpdated">
+    <ion-title class="small">
+      Last updated: {{lastUpdated | date: "dd/MM/yyyy HH:mm:ss"}} 
+    </ion-title>
+  </ion-toolbar> -->
+
+  <div class="nav-info" *ngIf="lastUpdated">
     <ion-row>
-      <ion-col>
-        {{title}}
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="lastUpdated">
       <ion-col>
         <span class="last-updated">Last Updated {{lastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</span>
       </ion-col>
     </ion-row>
   </div>
+
 </ion-header>
