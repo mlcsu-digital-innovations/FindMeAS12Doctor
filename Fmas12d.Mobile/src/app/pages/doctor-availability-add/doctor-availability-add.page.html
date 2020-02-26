@@ -1,87 +1,115 @@
 <app-navbar title="Add Availability"></app-navbar>
 
 <ion-content>
-  <ion-grid>
-    <ion-card>
-      <ion-card-content>
-        <ion-row>
-          <ion-item>
-            <ion-toggle color="primary" [(ngModel)]="available" (ionChange)="availabilityChange()">
-            </ion-toggle>
-            <ion-label class="available-label">{{available == true ? 'Available' : 'Unavailable'}}
-            </ion-label>
-          </ion-item>
-        </ion-row>
-        <ion-row>
-          &nbsp;
-        </ion-row>
-        <ion-list>
-          <ion-item>
-            <ion-label>Start Date</ion-label>
-            <ion-datetime [min]="minDate" [max]="maxDate" [(ngModel)]="userAvailability.start"
-              (ionChange)="datesChanged()">
-            </ion-datetime>
-          </ion-item>
-          <ion-item>
-            <ion-label>Start Time</ion-label>
-            <ion-datetime [(ngModel)]="userAvailability.start" minuteValues="0,15,30,45" [min]="minDate"
-              displayFormat="HH:mm" (ionChange)="datesChanged()">
-            </ion-datetime>
-          </ion-item>
-          <ion-item>
-            <ion-label>End Date</ion-label>
-            <ion-datetime [(ngModel)]="userAvailability.end" [min]="minDate" [max]="maxDate"
-              (ionChange)="datesChanged()">
-            </ion-datetime>
-          </ion-item>
-          <ion-item>
-            <ion-label>End Time</ion-label>
-            <ion-datetime [(ngModel)]="userAvailability.end" minuteValues="0,15,30,45" displayFormat="HH:mm"
-              (ionChange)="datesChanged()">
-            </ion-datetime>
-          </ion-item>
-        </ion-list>
-        <ion-row *ngIf="hasDateError">
-          <span class="date-error">
-            * {{dateErrorText}}
-          </span>
-        </ion-row>
-        <ion-row>
-          &nbsp;
-        </ion-row>
-        <ion-row *ngIf="available">
-          <ion-item style="width:100%">
-            <ion-label>Known Location</ion-label>
-            <ion-select
-              interface="action-sheet" 
-              placeholder="Known Location"
-              [(ngModel)]="userAvailability.location.contactDetailId"
-            >
-              <ion-select-option *ngFor="let contact of contactDetails" [value]="contact.id">
-                <ion-label>{{contact.name}}</ion-label>
-              </ion-select-option>
-            </ion-select
-            >
-          </ion-item>
-        </ion-row> 
-        <ion-row *ngIf="available && userAvailability.location.contactDetailId === 0">
-          <ion-item style="width:100%;">
-            <ion-input placeholder="Postcode" minlength="6" maxlength="8" name="postcode" autocapitalize="characters"
-              debounce=500 [(ngModel)]="userAvailability.location.postcode" (ionChange)="postcodeChanged()"
-              pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})">
-            </ion-input>
-            <ion-button (click)="validatePostcode()">
-              <ion-icon name="flash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
-  </ion-grid>
+
+  <ion-list>
+    <ion-list-header>
+      Add Availability  
+    </ion-list-header>
+
+    <ion-item>
+      <ion-toggle color="primary" [(ngModel)]="available" (ionChange)="availabilityChange()">
+      </ion-toggle>
+      <ion-label class="available-label">{{available ? 'Available' : 'Unavailable'}}
+      </ion-label>   
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Start Date</h3>
+      </ion-label>
+      <ion-datetime
+        [min]="minDate"
+        [max]="maxDate"
+        (ionChange)="datesChanged()"
+        [(ngModel)]="userAvailability.start"
+      >
+      </ion-datetime>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Start Time</h3>
+      </ion-label>
+      <ion-datetime
+        [(ngModel)]="userAvailability.start"
+        minuteValues="0,15,30,45"
+        [min]="minDate"
+        (ionChange)="datesChanged()"
+        displayFormat="HH:mm">
+      </ion-datetime>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">End Date</h3>
+      </ion-label>
+      <ion-datetime
+        [(ngModel)]="userAvailability.end"
+        [min]="minDate"
+        [max]="maxDate"
+        (ionChange)="datesChanged()"
+      >
+      </ion-datetime>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">End Time</h3>
+      </ion-label>
+      <ion-datetime
+        [(ngModel)]="userAvailability.end"
+        minuteValues="0,15,30,45"
+        displayFormat="HH:mm"
+        (ionChange)="datesChanged()"
+      >
+      </ion-datetime>            
+    </ion-item>
+
+    <ion-item *ngIf="hasDateError">
+      <ion-label color="danger">
+        <h3>* {{dateErrorText}}</h3>
+      </ion-label>  
+    </ion-item>
+
+    <ion-item *ngIf="available">
+      <ion-label>
+        <h3 class="bold">Known Location</h3>
+      </ion-label>
+      <ion-select
+        interface="action-sheet" 
+        placeholder="Known Location"
+        [(ngModel)]="userAvailability.location.contactDetailId"
+      >
+        <ion-select-option *ngFor="let contact of contactDetails" [value]="contact.id">
+          <ion-label>{{contact.name}}</ion-label>
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="available && userAvailability.location.contactDetailId === 0">
+      <ion-input
+        placeholder="Postcode"
+        minlength="6"
+        maxlength="8"
+        name="postcode"
+        autocapitalize="characters"
+        debounce=500 
+        [(ngModel)]="userAvailability.location.postcode"
+        (ionChange)="postcodeChanged()"
+        pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})">
+      </ion-input>
+      <ion-button (click)="validatePostcode()">
+        <ion-icon name="flash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small" (click)="saveAvailability()" [disabled]="!isDataValid()">
       <ion-icon name="checkmark">
       </ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>
