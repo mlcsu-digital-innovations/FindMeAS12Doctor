@@ -1,58 +1,63 @@
 <app-navbar title="Confirm or Reject"></app-navbar>
 
 <ion-content>
-  <ion-grid>
-    <ion-card>
-      <ion-card-content>      
-        <ion-row>
-          <ion-col>
-            <ion-list lines="none">
-              <ion-item>
-                <ion-label>Start:</ion-label>
-                <strong>{{onCallDoctor.start | date: "dd/MM/yyyy HH:mm"}}</strong>
-              </ion-item>
-              <ion-item>
-                <ion-label>End:</ion-label>
-                <strong>{{onCallDoctor.end | date: "dd/MM/yyyy HH:mm"}}</strong>
-              </ion-item>
-              <ion-item>
-                <ion-label>Location:</ion-label>
-                <strong>                
-                  <span *ngIf="onCallDoctor.location.type === 'ContactDetail'">
-                    {{onCallDoctor.location.contactDetailTypeName}}
-                  </span>
-                  <span *ngIf="onCallDoctor.location.type === 'Postcode'">
-                    {{onCallDoctor.location.postcode}}
-                  </span>
-                </strong>
-              </ion-item>
-              <ion-item>
-                <ion-label>Confirm/Reject:</ion-label>
-                <ion-toggle [(ngModel)]="isConfirmed" color="primary"></ion-toggle>
-              </ion-item>
-            </ion-list>
-          </ion-col>          
-        </ion-row>
-        <ion-row *ngIf="!isConfirmed">
-          <ion-col>
-            <ion-label><strong>Reason and details for rejection</strong></ion-label>
-            <ion-textarea [(ngModel)]="reasonAndDetails"></ion-textarea>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            &nbsp;
-          </ion-col>
-        </ion-row>      
-        <ion-row>
-          <ion-col style="text-align: center;">
-            <ion-button color="primary" (click)="saveDialog()">
-              <ion-icon name="checkmark-circle-outline"></ion-icon>
-              Save
-            </ion-button>
-          </ion-col>          
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
-  </ion-grid>
+
+  <ion-list>
+
+    <ion-list-header>
+      Confirm / Reject Oncall Status  
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Start</h3>
+        <h3>{{onCallDoctor.start | date: "dd MMMM yyyy HH:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">End</h3>
+        <h3>{{onCallDoctor.end | date: "dd MMMM yyyy HH:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Location</h3>
+        <h3 *ngIf="onCallDoctor.location.type === 'ContactDetail'">
+          {{onCallDoctor.location.contactDetailTypeName}}
+        </h3>
+        <h3 *ngIf="onCallDoctor.location.type === 'Postcode'">
+          {{onCallDoctor.location.postcode}}
+        </h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Confirmed</h3>
+      </ion-label>
+      <ion-checkbox [(ngModel)]="isConfirmed" color="primary"></ion-checkbox>
+    </ion-item>
+
+    <ion-item *ngIf="!isConfirmed">
+      <ion-textarea
+        placeholder="Reason and details for rejection" 
+        [(ngModel)]="reasonAndDetails"
+        rows="6"
+      >
+      </ion-textarea>
+    </ion-item>
+
+  </ion-list>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button color="primary" (click)="saveDialog()" expand="block">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      Save
+    </ion-button>  
+  </ion-toolbar>
+</ion-footer>
