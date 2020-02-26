@@ -1,11 +1,11 @@
 import { Assessment } from 'src/app/models/assessment.model';
 import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
+import { CLAIMSTATUSSUBMITTED, CLAIMSTATUSPROCESSING, CLAIMSTATUSQUERY, CLAIMSTATUSAPPROVED, CLAIMSTATUSAWAITING, CLAIMSTATUSREJECTED } from 'src/app/constants/app.constants';
 import { Component, OnInit } from '@angular/core';
+import { IconDetail } from 'src/app/interfaces/icon-detail.interface';
 import { LoadingController } from '@ionic/angular';
 import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
 import { UserAssessmentClaimList } from 'src/app/models/user-assessment-claim-list.model';
-import { CLAIMSTATUSSUBMITTED, CLAIMSTATUSPROCESSING, CLAIMSTATUSQUERY, CLAIMSTATUSAPPROVED, CLAIMSTATUSAWAITING, CLAIMSTATUSREJECTED } from 'src/app/constants/app.constants';
-import { IconDetail } from 'src/app/interfaces/icon-detail.interface';
 
 @Component({
   selector: 'app-claims-list',
@@ -37,6 +37,7 @@ export class ClaimsListPage implements OnInit {
       this.listLastUpdated = new Date();
       this.claimsList = result.claims;
       this.assessmentList = result.assessments;
+
       this.closeLoading();
       this.closeRefreshing($event);
     }, error => {
