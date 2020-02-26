@@ -79,7 +79,7 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
       }
     };
 
-    this.router.navigate(['/amhp-assessment-accept-request'], navigationExtras);
+    this.router.navigate(['/doctor-assessment-accept-request'], navigationExtras);
   }
 
   closeLoading() {

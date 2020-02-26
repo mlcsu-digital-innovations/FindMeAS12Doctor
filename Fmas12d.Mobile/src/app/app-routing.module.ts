@@ -60,10 +60,10 @@ const routes: Routes = [
     '#DoctorAssessmentRequestResponsePageModule'
   },
   {
-    path: 'amhp-assessment-accept-request',
+    path: 'doctor-assessment-accept-request',
     canActivate: [RouteGuardService],
-    loadChildren: './pages/amhp-assessment-accept-request/amhp-assessment-accept-request.module' +
-    '#AmhpAssessmentAcceptRequestPageModule'
+    loadChildren: './pages/doctor-assessment-accept-request/doctor-assessment-accept-request.module' +
+    '#DoctorAssessmentAcceptRequestPageModule'
   },
   {
     path: 'doctor-availability-view',

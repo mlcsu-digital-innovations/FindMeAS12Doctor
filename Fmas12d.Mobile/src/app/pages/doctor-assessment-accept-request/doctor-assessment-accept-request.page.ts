@@ -8,11 +8,11 @@ import { ContactDetailService } from 'src/app/services/contact-details/contact-d
 import { NameId } from 'src/app/interfaces/name-id.interface';
 
 @Component({
-  selector: 'app-amhp-assessment-accept-request',
-  templateUrl: './amhp-assessment-accept-request.page.html',
-  styleUrls: ['./amhp-assessment-accept-request.page.scss'],
+  selector: 'app-doctor-assessment-accept-request',
+  templateUrl: './doctor-assessment-accept-request.page.html',
+  styleUrls: ['./doctor-assessment-accept-request.page.scss'],
 })
-export class AmhpAssessmentAcceptRequestPage implements OnInit {
+export class DoctorAssessmentAcceptRequestPage implements OnInit {
 
   public assessmentRequest: AssessmentRequestDetails;
   public currentLocationId: number;
