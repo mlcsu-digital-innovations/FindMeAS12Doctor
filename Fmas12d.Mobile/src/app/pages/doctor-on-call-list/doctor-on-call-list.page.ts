@@ -47,14 +47,12 @@ export class DoctorOnCallListPage implements OnInit {
     });
   }
 
-  confirmOrReject(onCallDoctor: OnCallDoctor, slidingItem: IonItemSliding) {
-    slidingItem.close();
+  confirmOrReject(onCallDoctor: OnCallDoctor) {
     const navigationExtras: NavigationExtras = {
       state: {
         onCallDoctor: onCallDoctor
       }
     };
-
     this.router.navigate(['/doctor-on-call-confirm-reject'], navigationExtras);
   } 
 
