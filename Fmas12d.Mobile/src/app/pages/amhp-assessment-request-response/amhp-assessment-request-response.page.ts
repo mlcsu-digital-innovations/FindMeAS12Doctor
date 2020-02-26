@@ -47,10 +47,13 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     request
       .subscribe(
         (result: AmhpAssessmentView) => {
+          console.log(result);
           this.assessmentRequest.dateTime = result.dateTime;
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
+          this.assessmentRequest.amhpUserName = result.amhpUserName;
+          this.assessmentRequest.isPlanned = result.isPlanned;
 
           if (this.userDetails) {
             this.assessmentRequest.doctorDetails =
@@ -92,7 +95,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
       .subscribe(
         result => {
           this.showSuccessToast('Request declined');
-          this.router.navigateByUrl('/amhp-assessment-requests');
+          this.router.navigateByUrl('/doctor-assessments');
         },
         error => {
           this.showErrorToast('Unable to decline request');
