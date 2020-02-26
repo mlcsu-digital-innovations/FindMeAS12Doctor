@@ -8,34 +8,6 @@
   <ion-list>
 
     <ion-list-header>
-      Confirmed Oncall  
-    </ion-list-header>
-
-    <ion-item 
-      *ngFor="let item of onCallDoctorsConfirmed"
-      detail="false"
-    >
-      <ion-avatar slot="start">
-        <ion-icon
-          color="success"
-          size="large"
-          name="checkmark-circle"
-        >
-        </ion-icon>
-      </ion-avatar>
-      <ion-label>
-        <h3>Start: {{item.start | date: 'dd MMMM yyyy'}} {{item.start | date: 'HH:mm'}}</h3>
-        <h3>End:   {{item.end | date: 'dd MMMM yyyy'}} {{item.end | date: 'HH:mm'}}</h3>
-        <h3 *ngIf="item.location.type === 'ContactDetail'">
-          Location: {{item.location.contactDetailTypeName}}
-        </h3>
-        <h3 *ngIf="item.location.type === 'Postcode'">
-          Location: {{item.location.postcode}}
-        </h3>
-      </ion-label>
-    </ion-item>
-    <br/>
-    <ion-list-header>
       Unconfirmed Oncall  
     </ion-list-header>
 
@@ -64,6 +36,36 @@
       </ion-label>
     </ion-item>
     <br/>
+
+    <ion-list-header>
+      Confirmed Oncall  
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let item of onCallDoctorsConfirmed"
+      detail="false"
+    >
+      <ion-avatar slot="start">
+        <ion-icon
+          color="success"
+          size="large"
+          name="checkmark-circle"
+        >
+        </ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h3>Start: {{item.start | date: 'dd MMMM yyyy'}} {{item.start | date: 'HH:mm'}}</h3>
+        <h3>End:   {{item.end | date: 'dd MMMM yyyy'}} {{item.end | date: 'HH:mm'}}</h3>
+        <h3 *ngIf="item.location.type === 'ContactDetail'">
+          Location: {{item.location.contactDetailTypeName}}
+        </h3>
+        <h3 *ngIf="item.location.type === 'Postcode'">
+          Location: {{item.location.postcode}}
+        </h3>
+      </ion-label>
+    </ion-item>
+    <br/>
+
     <ion-list-header>
       Rejected Oncall  
     </ion-list-header>
