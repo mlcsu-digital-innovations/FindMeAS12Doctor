@@ -46,7 +46,7 @@
       </ion-label>            
     </ion-item>
 
-    <ion-item *ngIf="assessmentView?.detailTypes.length > 0">
+    <ion-item *ngIf="assessmentView?.detailTypes">
       <ion-label>
         <h3 class="bold">Further Information / Risks</h3>
         <h3 *ngFor="let detail of assessmentView?.detailTypes">
@@ -55,7 +55,7 @@
       </ion-label>            
     </ion-item>
 
-    <ion-item *ngIf="assessmentView?.doctorsSelected.length > 0">
+    <ion-item *ngIf="assessmentView?.doctorsSelected">
       <ion-label>
         <h3 class="bold">Selected Doctors</h3>
          
@@ -89,7 +89,7 @@
       </ion-label>
     </ion-item>
 
-    <ion-item *ngIf="assessmentView?.doctorsAllocated.length > 0">
+    <ion-item *ngIf="assessmentView?.doctorsAllocated">
       <ion-label>
         <h3 class="bold">Allocated Doctors</h3>
          

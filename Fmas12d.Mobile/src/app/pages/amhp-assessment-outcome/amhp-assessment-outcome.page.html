@@ -1,59 +1,56 @@
 <app-navbar title="AMHP Assessment Update" lastUpdated={{assessmentLastUpdated}}></app-navbar>
 
-<ion-content>
-  <ion-grid>
-    <ion-card>
-      <ion-card-header color="primary">
-        <strong>Referral Id: {{assessmentView ? assessmentView.referralId : ""}}</strong>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-row>
-          <ion-col>
-            <strong>Patient Id: {{assessmentView ? assessmentView.patientIdentifier : ""}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-select interface="action-sheet" placeholder="Assessment Status" [(ngModel)]="assessmentStatusId">
-              <ion-select-option *ngFor="let assessmentStatus of assessmentStatusList" [value]="assessmentStatus.id">
-                <ion-label>{{assessmentStatus.name}}</ion-label>
-              </ion-select-option>
-            </ion-select>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            &nbsp;
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-label offset="1">
-            <strong>Confirm attending doctors</strong>
-          </ion-label>
-        </ion-row>
-        <ion-row *ngIf="assessmentView?.doctorsAllocated?.length > 0">
-          <ion-col>
-            <ion-list>
-              <div *ngFor="let doctor of assessmentView.doctorsAllocated">
-                <ion-row style="width:100%">
-                  <ion-col size="9">
-                    <ion-row><strong>{{doctor.displayName}}</strong></ion-row>
-                    <ion-row>GMC number: <strong>{{doctor.gmcNumber}}</strong></ion-row>
-                  </ion-col>
-                  <ion-col>
-                    <ion-toggle [(ngModel)]="doctor.attended"></ion-toggle>
-                  </ion-col>
-                </ion-row>
-              </div>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="assessmentStatusId >= 0">
-          <ion-col>
-            <ion-button expand="block" color="primary" (click)="confirmSave()">Save</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
-  </ion-grid>
+<ion-content fullscreen>
+
+  <ion-list>
+
+    <ion-list-header>
+      Assessment Outcome  
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Patient Identifier</h3>
+        <h3>{{assessmentView ? assessmentView.patientIdentifier : ""}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment Status</h3>
+      </ion-label>
+      <ion-select interface="action-sheet" placeholder="Assessment Status" [(ngModel)]="assessmentStatusId">
+        <ion-select-option *ngFor="let assessmentStatus of assessmentStatusList" [value]="assessmentStatus.id">
+          <ion-label>{{assessmentStatus.name}}</ion-label>
+        </ion-select-option>
+      </ion-select>            
+    </ion-item>
+
+    <ion-list-header>
+      Confirm Attending Doctors  
+    </ion-list-header>
+
+    <ion-item *ngFor="let doctor of assessmentView.doctorsAllocated">
+      <ion-label>
+        <h3>{{doctor.displayName}}</h3>
+        <h3>{{doctor.gmcNumber}}</h3>
+      </ion-label>
+      <ion-checkbox [(ngModel)]="doctor.attended" color="primary"></ion-checkbox>
+    </ion-item>
+
+  </ion-list>
+
 </ion-content>
+
+<ion-footer *ngIf="assessmentView?.canUpdateOutcome">
+  <ion-toolbar>
+    <ion-button 
+    (click)="confirmSave()"
+      color="primary"
+      expand="block"
+      [disabled]="assessmentStatusId == null"
+    >
+      Save
+    </ion-button>  
+  </ion-toolbar>
+</ion-footer>
