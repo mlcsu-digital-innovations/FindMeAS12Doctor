@@ -3,22 +3,22 @@ import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-ass
 import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
-import { AmhpAssessmentRequestDetails } from 'src/app/models/amhp-assessment-request-details.model';
-import { AmhpAssessmentSelectedDoctor } from 'src/app/models/amhp-assessment-selected-doctor.model';
+import { AssessmentRequestDetails } from 'src/app/models/assessment-request-details.model';
+import { AssessmentSelectedDoctor } from 'src/app/models/assessment-selected-doctor.model';
 import { KnownLocation } from 'src/app/models/known-location.model';
 import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 import { UserDetails } from 'src/app/interfaces/user-details';
 
 @Component({
-  selector: 'app-amhp-assessment-request-response',
-  templateUrl: './amhp-assessment-request-response.page.html',
-  styleUrls: ['./amhp-assessment-request-response.page.scss'],
+  selector: 'app-doctor-assessment-request-response',
+  templateUrl: './doctor-assessment-request-response.page.html',
+  styleUrls: ['./doctor-assessment-request-response.page.scss'],
 })
-export class AmhpAssessmentRequestResponsePage implements OnInit {
+export class DoctorAssessmentRequestResponsePage implements OnInit {
 
   private assessmentId: number;
   private loading: HTMLIonLoadingElement;
-  public assessmentRequest: AmhpAssessmentRequestDetails;
+  public assessmentRequest: AssessmentRequestDetails;
   private userDetails: UserDetails;
   public expectedLocation: string;
 
@@ -36,8 +36,8 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     this.assessmentId = +this.route.snapshot.paramMap.get('id');
     const request = this.assessmentService.getView(this.assessmentId);
 
-    this.assessmentRequest = new AmhpAssessmentRequestDetails();
-    this.assessmentRequest.doctorDetails = new AmhpAssessmentSelectedDoctor();
+    this.assessmentRequest = new AssessmentRequestDetails();
+    this.assessmentRequest.doctorDetails = new AssessmentSelectedDoctor();
     this.assessmentRequest.doctorDetails.knownLocation = new KnownLocation();
 
     this.userDetails = this.userDetailsService.fetchUserDetails();
@@ -47,7 +47,6 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     request
       .subscribe(
         (result: AmhpAssessmentView) => {
-          console.log(result);
           this.assessmentRequest.dateTime = result.dateTime;
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
@@ -55,7 +54,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.amhpUserName = result.amhpUserName;
           this.assessmentRequest.isPlanned = result.isPlanned;
 
-          if (this.userDetails) {
+          if (this.userDetails && result.doctorsSelected !== null) {
             this.assessmentRequest.doctorDetails =
             result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
           }

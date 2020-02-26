@@ -29,14 +29,14 @@
       </ion-label>            
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="expectedLocation != null">
       <ion-label>
         <h3 class="bold">Known Location</h3>
         <h3>{{expectedLocation}}</h3>
       </ion-label>            
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="assessmentRequest.doctorDetails.distance != null">
       <ion-label>
         <h3 class="bold">Distance</h3>
         <h3>{{assessmentRequest.doctorDetails.distance | number:'.1-1'}} miles</h3>

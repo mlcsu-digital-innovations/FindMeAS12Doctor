@@ -54,10 +54,10 @@ const routes: Routes = [
     '#DoctorAssessmentDetailsPageModule'
   },
   {
-    path: 'amhp-assessment-request-response/:id',
+    path: 'doctor-assessment-request-response/:id',
     canActivate: [RouteGuardService],
-    loadChildren: './pages/amhp-assessment-request-response/amhp-assessment-request-response.module' +
-    '#AmhpAssessmentRequestResponsePageModule'
+    loadChildren: './pages/doctor-assessment-request-response/doctor-assessment-request-response.module' +
+    '#DoctorAssessmentRequestResponsePageModule'
   },
   {
     path: 'amhp-assessment-accept-request',

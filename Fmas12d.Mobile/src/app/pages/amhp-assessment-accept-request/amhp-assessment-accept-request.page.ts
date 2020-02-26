@@ -1,4 +1,4 @@
-import { AmhpAssessmentRequestDetails } from 'src/app/models/amhp-assessment-request-details.model';
+import { AssessmentRequestDetails } from 'src/app/models/assessment-request-details.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastController, NavController } from '@ionic/angular';
@@ -14,7 +14,7 @@ import { NameId } from 'src/app/interfaces/name-id.interface';
 })
 export class AmhpAssessmentAcceptRequestPage implements OnInit {
 
-  public assessmentRequest: AmhpAssessmentRequestDetails;
+  public assessmentRequest: AssessmentRequestDetails;
   public currentLocationId: number;
   public latitude: number;
   public longitude: number;
@@ -35,7 +35,7 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
           this.assessmentRequest = this.router.getCurrentNavigation().extras.state.assessment;
           this.getContactDetails();
         } else {
-          this.assessmentRequest = new AmhpAssessmentRequestDetails();
+          this.assessmentRequest = new AssessmentRequestDetails();
           // show an error page !
         }
       }

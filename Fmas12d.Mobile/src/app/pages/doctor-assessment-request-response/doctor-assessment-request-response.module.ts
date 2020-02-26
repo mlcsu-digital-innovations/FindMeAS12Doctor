@@ -1,6 +1,6 @@
-import { AmhpAssessmentRequestResponsePage } from './amhp-assessment-request-response.page';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { DoctorAssessmentRequestResponsePage } from './doctor-assessment-request-response.page';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
@@ -9,7 +9,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    component: AmhpAssessmentRequestResponsePage
+    component: DoctorAssessmentRequestResponsePage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AmhpAssessmentRequestResponsePage]
+  declarations: [DoctorAssessmentRequestResponsePage]
 })
-export class AmhpAssessmentRequestResponsePageModule {}
+export class DoctorAssessmentRequestResponsePageModule {}

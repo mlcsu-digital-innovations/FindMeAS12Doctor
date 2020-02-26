@@ -1,10 +1,10 @@
-import { AmhpAssessmentSelectedDoctor } from './amhp-assessment-selected-doctor.model';
+import { AssessmentSelectedDoctor } from './assessment-selected-doctor.model';
 import { DetailType } from './detail-type.model';
 
-export class AmhpAssessmentRequestDetails {
+export class AssessmentRequestDetails {
   amhpUserName: string;
   detailTypes: DetailType[];
-  doctorDetails: AmhpAssessmentSelectedDoctor;
+  doctorDetails: AssessmentSelectedDoctor;
   id: number;
   isPlanned: boolean;
   postcode: string;

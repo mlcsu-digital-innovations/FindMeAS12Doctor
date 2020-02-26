@@ -1,5 +1,5 @@
-import { AmhpAssessmentViewDoctor } from './amhp-assessment-view-doctor.model';
-import { AmhpAssessmentSelectedDoctor } from './amhp-assessment-selected-doctor.model';
+import { AssessmentViewDoctor } from './assessment-view-doctor.model';
+import { AssessmentSelectedDoctor } from './assessment-selected-doctor.model';
 import { DetailType } from './detail-type.model';
 
 export class AmhpAssessmentView {
@@ -11,8 +11,8 @@ export class AmhpAssessmentView {
   canUpdateOutcome: boolean;
   dateTime: Date;
   detailTypes: DetailType[];
-  doctorsAllocated: AmhpAssessmentViewDoctor[];
-  doctorsSelected: AmhpAssessmentSelectedDoctor[];
+  doctorsAllocated: AssessmentViewDoctor[];
+  doctorsSelected: AssessmentSelectedDoctor[];
   hasBeenReviewed: boolean;
   hasOutcome: boolean;
   id: number;
