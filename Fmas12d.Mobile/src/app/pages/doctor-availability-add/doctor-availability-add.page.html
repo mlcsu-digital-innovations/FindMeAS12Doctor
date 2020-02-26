@@ -105,11 +105,17 @@
     </ion-item>
   </ion-list>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button size="small" (click)="saveAvailability()" [disabled]="!isDataValid()">
-      <ion-icon name="checkmark">
-      </ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button 
+      (click)="saveAvailability()"
+      [disabled]="!isDataValid()"
+      color="primary"
+      expand="block"
+     >
+      Save
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -43,12 +43,13 @@
       </ion-label>            
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="assessmentRequest?.detailTypes">
       <ion-label>
         <h3 class="bold">Further Information / Risks</h3>
         <h3 *ngFor="let detail of assessmentRequest.detailTypes">
           {{detail.name}}
         </h3>
+        <h3 *ngIf="assessmentRequest.detailTypes.length == 0">None</h3>
       </ion-label>            
     </ion-item>
 
@@ -67,7 +68,7 @@
       >
         <ion-button 
           (click)="acceptRequest()"
-          color="success"
+          color="primary"
           expand="block"
         >
           <ion-icon name="checkmark-circle-outline"></ion-icon>
@@ -81,8 +82,9 @@
       >
         <ion-button 
         (click)="declineRequest()"
-        color="danger"
+        color="primary"
         expand="block"
+        fill="outline"
         >
         <ion-icon name="close-circle-outline"></ion-icon> 
           Decline
