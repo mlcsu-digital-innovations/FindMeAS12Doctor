@@ -323,6 +323,8 @@ namespace Fmas12d.Business.Services
       Entities.Assessment entity = await _context
         .Assessments
         .Include(a => a.Referral)
+        .Include(a => a.Doctors)
+        .Include(a => a.UserAssessmentNotifications)
         .Where(a => a.Id == id)
         .WhereIsActiveOrActiveOnly(true)
         .SingleOrDefaultAsync();
@@ -348,7 +350,19 @@ namespace Fmas12d.Business.Services
       entity.CompletionConfirmationByUserId = _userClaimsService.GetUserId();
       UpdateModified(entity);
 
+      foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
+      {
+        if (assessmentDoctor.StatusId != AssessmentDoctorStatus.REMOVED)
+        {
+          AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_COMPLETED);
+        }
+      }
+
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return true; 
     }
