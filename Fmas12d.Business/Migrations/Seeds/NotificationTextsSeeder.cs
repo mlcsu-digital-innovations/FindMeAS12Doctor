@@ -22,7 +22,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_ASSESSMENT_SCHEDULED =
       "Assessment scheduled description";
     internal const string DESCRIPTION_CLAIM_STATUS_UPDATED =
-      "Claim updated description";            
+      "Claim updated description";
+    internal const string DESCRIPTION_ASSESSMENT_COMPLETED =
+      "Assessment completed description";              
 
     internal const string MESSAGE_TEMPLATE_ALLOCATED_TO_ASSESSMENT =
       "Allocated to an assessment in {0} {1}";
@@ -39,7 +41,10 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string MESSAGE_TEMPLATE_ASSESSMENT_SCHEDULED =
       "The assessment in {0} {1} has now been confirmed";
     internal const string MESSAGE_TEMPLATE_CLAIM_STATUS_UPDATED =
-      "The status for claim reference: {0} has been updated to {1}";  
+      "The status for claim reference: {0} has been updated to {1}";
+
+    internal const string MESSAGE_TEMPLATE_ASSESSMENT_COMPLETED = 
+      "The assessment in {0} {1} has been completed";  
 
     internal const string NAME_ALLOCATED_TO_ASSESSMENT = "Allocated to assessment";
     internal const string NAME_ASSESSMENT_CANCELLED = "Assessment Cancelled";      
@@ -48,7 +53,8 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string NAME_REMOVED_FROM_ASSESSMENT = "Removed from assessment";
     internal const string NAME_SELECTED_FOR_ASSESSMENT = "Selected for assessment";    
     internal const string NAME_ASSESSMENT_SCHEDULED = "Assessment scheduled";
-    internal const string NAME_CLAIM_STATUS_UPDATED = "Claim status updated";    
+    internal const string NAME_CLAIM_STATUS_UPDATED = "Claim status updated";
+    internal const string NAME_ASSESSMENT_COMPLETED = "Assessment completed";
     #endregion
 
     internal void SeedData()
@@ -107,6 +113,13 @@ namespace Fmas12d.Business.Migrations.Seeds
         NAME_CLAIM_STATUS_UPDATED,
         DESCRIPTION_CLAIM_STATUS_UPDATED,
         MESSAGE_TEMPLATE_CLAIM_STATUS_UPDATED
+      );
+
+      AddOrUpdate(
+        Models.NotificationText.ASSESSMENT_COMPLETED,
+        NAME_ASSESSMENT_COMPLETED,
+        DESCRIPTION_ASSESSMENT_COMPLETED,
+        MESSAGE_TEMPLATE_ASSESSMENT_COMPLETED
       );                    
 
       SaveChangesWithIdentity();

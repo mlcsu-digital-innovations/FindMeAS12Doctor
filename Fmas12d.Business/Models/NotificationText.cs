@@ -18,6 +18,7 @@ namespace Fmas12d.Business.Models
     public const int REMOVED_FROM_ASSESSMENT = 6;
     public const int ASSESSMENT_SCHEDULED = 7;
     public const int CLAIM_STATUS_UPDATED = 8;
+    public const int ASSESSMENT_COMPLETED = 9;
     
     [MaxLength(2000)]
     [Required]
