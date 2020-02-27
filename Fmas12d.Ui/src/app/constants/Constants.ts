@@ -15,9 +15,6 @@ export const REFERRAL_STATUS_AWAITING_REVIEW = 8;
 export const REFERRAL_STATUS_CLOSED = 9;
 export const REFERRAL_STATUS_OPEN = 10;
 
-export const PROFILE_TYPE_AMHP = 2;
-export const PROFILE_TYPE_GP = 3;
 export const PROFILE_TYPE_UNREGISTERED = 6;
-export const PROFILE_TYPE_PSYCHIATRIST = 7;
 
 export const SECTION12_APPROVED = 1;

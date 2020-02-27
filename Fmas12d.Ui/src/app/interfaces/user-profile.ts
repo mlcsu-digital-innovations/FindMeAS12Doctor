@@ -7,13 +7,15 @@ export interface UserProfile extends User {
   contactDetailTypeId: number;
 	emailAddress: string;
 	genderTypeId: number;
-	gmcNumber?: number;
+  gmcNumber?: number;
+  isAmhp: boolean;
+  isDoctor: boolean;
+  isFinance: boolean;
 	mobileNumber?: string;
   organisationName: string;
   profileTypeId: number;
 	section12ApprovalStatusId?: number;
 	section12ExpiryDate?: Date;
 	telephoneNumber: string;	
-	userSpecialities?: UserSpeciality[];
-	vsrNumber?: string;  
+	userSpecialities?: UserSpeciality[];	
 }

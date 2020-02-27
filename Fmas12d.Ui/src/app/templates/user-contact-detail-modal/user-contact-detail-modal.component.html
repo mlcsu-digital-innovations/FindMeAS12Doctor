@@ -1,0 +1,249 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> Add Contact Detail</h4>
+</div>
+<div class="modal-body offset-md-1">
+  <form [formGroup]="contactDetailForm" class="form-style" novalidate>
+    <!-- Contact Detail Type -->
+    <div class="form-row">
+      <div class="col-md-10">        
+        <div class="row" name="contactDetailType">
+          <div class="col-md-6">
+            <label for="contactDetailType">Contact Detail Type</label>
+            <select
+              class="custom-select custom-select-lg mb-2 form-control"
+              formControlName="contactDetailType"
+              #contactDetailType
+              id="contactDetailType"
+            >              
+              <option *ngFor="let item of contactDetailTypes"                 
+                [selected]="item.id==contactDetailType.value"
+                [value]="item.id"
+              >
+                {{item.name}}
+              </option>
+            </select>
+          </div>      
+        </div>                      
+      </div>
+    </div>
+    <!-- Contact Detail Type Errors -->
+    <div class="form-row">
+      <div class="col-md-4 mb-2">
+        <div
+          class="invalid-field"
+          *ngIf="contactDetailTypeField.errors && contactDetailTypeField.errors.InvalidContactDetailType"
+        >
+          <span>* Please select a contact detail type</span>
+        </div>        
+      </div>
+    </div>
+    <!-- Address -->
+    <div class="form-row">
+      <div class="col-md-10">
+        <div class="row" name="address">
+          <div class="col-md-12">
+            <label for="address">Address</label>            
+            <input
+              type="text"             
+              class="form-control"   
+              id="address1"
+              #address1              
+              formControlName="address1"           
+            />
+          </div>             
+        </div>
+        <div class="row address-row">
+          <div class="col-md-12">                     
+            <input
+              type="text"              
+              class="form-control"  
+              id="address2"
+              #address2              
+              formControlName="address2"          
+            />
+          </div>             
+        </div> 
+        <div class="row address-row">
+          <div class="col-md-12">                   
+            <input
+              type="text"             
+              class="form-control"   
+              id="address3"
+              #address3              
+              formControlName="address3"           
+            />
+          </div>             
+        </div>   
+      </div>
+    </div>       
+    <!-- Town -->
+    <div class="form-row">
+      <div class="col-md-12">
+        <div class="row" name="town">
+          <div class="col-md-6">  
+            <label for="town">Town</label>                 
+            <input
+              type="text"             
+              class="form-control"   
+              id="town"
+              #town              
+              formControlName="town"           
+            />
+          </div>             
+        </div>  
+      </div>
+    </div>
+    <!-- Postcode -->
+    <div class="form-row">
+      <div class="col-md-10">
+        <label for="postcode">Postcode</label>
+        <div class="row" name="postcode">
+          <div class="col-md-4">            
+            <input
+              type="search"
+              maxlength="8"
+              minlength="6"
+              formControlName="postcode"
+              #postcode
+              id="postcode"
+              oninput="this.value = this.value.toUpperCase()"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': HasInvalidPostcode(),
+                'is-valid': HasValidPostcode()
+              }" />
+          </div>
+          <div class="col-md-3">
+            <div class="button-container">
+              <button
+                type="button"
+                class="btn btn-primary .btn-validate-postcode"
+                placement="top"
+                ngbTooltip="Validate postcode"
+                [openDelay]="1000"
+                [closeDelay]="500"
+                tooltipClass="subtle-tooltip"
+                (click)="ValidatePostcode()"
+                [disabled]="postcode.value == '' || postcode.errors != null"
+              >
+                {{ IsSearchingForPostcode() ? "Searching" : "Validate" }}
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  *ngIf="IsSearchingForPostcode()"
+                >
+                </span>
+              </button>                                      
+            </div>
+          </div>       
+        </div>
+      </div>      
+    </div>
+    <!-- Postcode Errors -->
+    <div class="form-row">
+      <div class="col-md-4 mb-2">
+        <div
+          class="invalid-field"
+          *ngIf="postcodeField.errors && postcodeField.errors.InvalidPostcode"
+        >
+          <span>* Invalid Postcode</span>
+        </div>        
+      </div>
+    </div>
+    <!-- Latitude and Longitude -->
+    <div class="form-row" *ngIf="latitudeField.value && longitudeField.value">
+      <div class="col-md-10">
+        <div class="row" name="coordinates">
+          <div class="col-md-4">
+            <label for="latitude">Latitude</label> 
+            <input
+              type="text"             
+              class="form-control"   
+              id="latitude"
+              #latitude              
+              formControlName="latitude" 
+              disabled=true          
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="longitude">Longitude</label> 
+            <input
+              type="text"             
+              class="form-control"   
+              id="longitude"
+              #longitude              
+              formControlName="longitude" 
+              disabled=true          
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Email -->
+    <div class="form-row">
+      <div class="col-md-8">
+        <div class="row" name="email">
+          <div class="col-md-6">
+            <label for="email">Email</label>                     
+            <input
+              type="text"             
+              class="form-control"   
+              id="email"
+              #email              
+              formControlName="email"           
+            />
+          </div>             
+        </div>  
+      </div>
+    </div>
+    <!-- Telephone -->
+    <div class="form-row">
+      <div class="col-md-8">
+        <div class="row" name="telephone">
+          <div class="col-md-6">
+            <label for="telephone">Telephone</label>                     
+            <input
+              type="text"             
+              class="form-control"   
+              id="telephone"
+              #telephone              
+              formControlName="telephone"           
+            />
+          </div>             
+        </div>  
+      </div>
+    </div>
+    <!-- Mobile -->
+    <div class="form-row">
+      <div class="col-md-8">
+        <div class="row" name="Mobile">
+          <div class="col-md-6">  
+            <label for="mobile">Mobile</label>                   
+            <input
+              type="text"             
+              class="form-control"   
+              id="mobile"
+              #mobile              
+              formControlName="mobile"           
+            />
+          </div>             
+        </div>  
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-4 offset-md-8 text-right cancelOrSave">
+        <button
+          type="button"
+          class="btn btn-standard btn-cancel"
+          (click)="Cancel()"          
+        >Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary btn-standard"
+          (click)="SaveContactDetail()"          
+        >Save</button>
+      </div>
+    </div>       
+  </form>
+</div>

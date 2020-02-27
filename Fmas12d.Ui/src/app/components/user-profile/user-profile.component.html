@@ -21,6 +21,7 @@
                 <strong>Denotes mandatory field.</strong>
               </div>
             </div>
+            <!-- DisplayName -->
             <div class="form-row user-row">
               <div class="col-md-2">
                 <label class="required-field">Display name: </label>             
@@ -30,17 +31,18 @@
                   formControlName="displayName"
                   #displayName
                   id="displayName">
-              </div>              
-              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+              </div>
+              <!-- GMC Number -->              
+              <div class="col-md-2" *ngIf="userProfile.isDoctor">
                 <label class="required-field">GMC Number: </label>             
               </div>
-              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+              <div class="col-md-2" *ngIf="userProfile.isDoctor">
                 <input class="form-control" 
                   formControlName="gmcNumber"
                   #gmcNumber
                   id="gmcNumber">
               </div>
-              <div class="col-md-1" *ngIf="isGPOrPsychiatrist">
+              <div class="col-md-1" *ngIf="userProfile.isDoctor">
                 <button
                   type="button"
                   class="btn btn-primary"
@@ -50,7 +52,18 @@
                 </button>
               </div>               
             </div>
-            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
+            <!-- DisplayName Errors -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 offset-md-2">
+                <div
+                  class="invalid-field"
+                  *ngIf="displayNameField.errors && displayNameField.errors.InvalidDisplayName"
+                >
+                  <span>* Invalid Display Name</span>
+                </div>        
+              </div>
+            </div>
+            <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
                 <label>Organisation: </label>             
               </div>
@@ -58,6 +71,7 @@
               <label>{{userProfile.organisationName}}</label>
               </div>
             </div>
+            <!-- Gender -->
             <div class="form-row user-row">
               <div class="col-md-2">
                 <label class="required-field">Gender: </label>             
@@ -65,19 +79,31 @@
               <div class="col-md-3">
                 <select class="custom-select custom-select-lg mb-2 form-control" formControlName="genderTypeId"
                   #genderTypeId id="genderTypeId">                  
-                  <option *ngFor="let gender of genderTypes" [value]="gender.id" [selected]="gender.id==genderTypeIdField.value">
+                  <option *ngFor="let gender of genderTypes$ | async" [value]="gender.id" [selected]="gender.id==genderTypeIdField.value">
                     {{gender.name}}
                   </option>
                 </select>
               </div>
-              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+              <div class="col-md-2" *ngIf="userProfile.isDoctor">
                 <label>S12 Approved: </label>             
               </div>
-              <div class="col-md-3" *ngIf="isGPOrPsychiatrist">
+              <div class="col-md-3" *ngIf="userProfile.isDoctor">
                 <label>{{S12Status()}}</label>
               </div>
             </div>
-            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
+            <!-- GenderType Errors -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 offset-md-2">
+                <div
+                  class="invalid-field"
+                  *ngIf="genderTypeIdField.errors && genderTypeIdField.errors.InvalidGenderType"
+                >
+                  <span>* Please select a gender </span>
+                </div>        
+              </div>
+            </div>
+            <!-- Email -->
+            <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
                 <label class="required-field">Email: </label>             
               </div>
@@ -87,8 +113,20 @@
                   #emailAddress
                   id="emailAddress">
               </div>
+            </div>            
+            <!-- Email Errors -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 offset-md-2">
+                <div
+                  class="invalid-field"
+                  *ngIf="emailAddressField.errors && emailAddressField.errors.InvalidEmailAddress"
+                >
+                  <span>* Invalid Email Address</span>
+                </div>        
+              </div>
             </div>
-            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
+            <!-- Mobile Number -->
+            <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
                 <label [class]="MobileNumberIsMandatory() ? 'required-field' : ''">Mobile: </label>             
               </div>
@@ -99,7 +137,19 @@
                   id="mobileNumber">
               </div>
             </div>
-            <div *ngIf="!isGPOrPsychiatrist" class="form-row user-row">
+            <!-- Mobile Number Errors -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 offset-md-2">
+                <div
+                  class="invalid-field"
+                  *ngIf="mobileNumberField.errors && mobileNumberField.errors.InvalidMobileNumber"
+                >
+                  <span>* Invalid Mobile Number</span>
+                </div>        
+              </div>
+            </div>
+            <!-- Telephone Number -->
+            <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
                 <label>Telephone: </label>             
               </div>
@@ -110,7 +160,8 @@
                   id="telephoneNumber">
               </div>
             </div>
-            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+            <!-- Specialities -->
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
                 <label class="required-field">Specialities</label>
               </div>
@@ -123,19 +174,31 @@
                   (onDeSelect)="OnItemDeselect($event)">
                 </ng-multiselect-dropdown>
               </div>
-              <div class="col-md-2" *ngIf="isGPOrPsychiatrist">
+              <div class="col-md-2" *ngIf="userProfile.isDoctor">
                 <label>S12 Expiry Date: </label>             
               </div>
-              <div class="col-md-3" *ngIf="isGPOrPsychiatrist">
+              <div class="col-md-3" *ngIf="userProfile.isDoctor">
                 <label>{{userProfile.section12ExpiryDate | date: 'd MMMM yyyy'}}</label>
               </div>
-            </div>            
-            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+            </div>
+            <!-- Specialities Errors -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2 offset-md-2">
+                <div
+                  class="invalid-field"
+                  *ngIf="!(selectedSpecialities && selectedSpecialities.length > 0)"
+                >
+                  <span>* Please select a speciality</span>
+                </div>        
+              </div>
+            </div>
+            <!-- Contact Details -->            
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
                 <label class="required-field">Contact Details </label>             
               </div>
             </div>
-            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-10">
                 <table class="table table-bordered table-sm table-contact-details">
                   <thead>
@@ -154,6 +217,11 @@
                         scope="col"                         
                         columnType='string'>
                         Postcode
+                      </th>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='string'>
+                        Email
                       </th>
                       <th class="text-center" 
                         scope="col"                         
@@ -185,6 +253,10 @@
                         </ngb-highlight>
                       </td>
                       <td>
+                        <ngb-highlight result="{{contactDetail.email}}">
+                        </ngb-highlight>
+                      </td>
+                      <td>
                         <ngb-highlight result="{{contactDetail.telephoneNumber}}">
                         </ngb-highlight>
                       </td>
@@ -205,31 +277,26 @@
                 </table>
               </div>
             </div>
-            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
+            <!-- Contact Details Errors -->
+            <div class="form-row">
+              <div class="col-md-4 mb-2">
+                <div
+                  class="invalid-field"
+                  *ngIf="!(userProfile.contactDetails && userProfile.contactDetails.length > 0)"
+                >
+                  <span>* Please add a contact detail</span>
+                </div>        
+              </div>
+            </div>
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-1 offset-md-9">
                 <button class="btn btn-primary btn-standard btn-spaced" type="button" [disabled]="UserHasAllContactDetails()" (click)="AddContactDetail()">                  
                   Add
                 </button>
               </div>
-            </div>
-            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
-              <div class="col-md-2">
-                <label>Bank Details Provided: </label>             
-              </div>
-              <div class="col-md-3">
-                <label>{{VSRNumber() ? 'Yes' : 'No'}}</label>
-              </div>
-            </div>
-            <div *ngIf="isGPOrPsychiatrist" class="form-row user-row">
-              <div class="col-md-2">
-                <label>VSR Number: </label>             
-              </div>
-              <div class="col-md-3">
-                <label>{{VSRNumber()}}</label>
-              </div>
-            </div>
+            </div>            
             <div class="form-row mt-more-2">              
-              <div class="col-md-2 mb-2 {{isGPOrPsychiatrist ? 'offset-md-8' : 'offset-md-4'}} text-right">
+              <div class="col-md-2 mb-2 {{userProfile.isDoctor ? 'offset-md-8' : 'offset-md-4'}} text-right">
                 <button class="btn btn-standard btn-cancel" type="button" (click)="Cancel()">
                   <i class="far fa-times-circle"></i>
                   Cancel
@@ -247,3 +314,29 @@
     </div>
   </div>
 </div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<ng-template #addUserContactDetailModal>
+  <app-user-contact-detail-modal    
+  (actioned)="OnModalActionAdd($event)"
+  [userProfile]="userProfile"
+  >
+  </app-user-contact-detail-modal>
+</ng-template>
+
+<ng-template #editUserContactDetailModal>
+  <app-user-contact-detail-modal    
+  (actioned)="OnModalActionEdit($event)"
+  [userProfile]="userProfile"
+  [contactDetail]="selectedContactDetail"
+  >
+  </app-user-contact-detail-modal>
+</ng-template>
+
+<ng-template #deleteUserContactDetailModal>
+  <app-cancel-action-modal [modalTitle]="'Confirm Contact Detail Delete'"
+    [modalBody]="'Please confirm that you wish to delete this contact detail.'"
+    (actioned)="OnDeleteContactDetailAction($event)">
+  </app-cancel-action-modal>
+</ng-template>

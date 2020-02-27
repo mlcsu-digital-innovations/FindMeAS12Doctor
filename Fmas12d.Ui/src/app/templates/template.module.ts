@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OnCallDoctorModalComponent } from './on-call-doctor-modal/on-call-doctor-modal.component';
 import { PatientResultsModalComponent } from './patient-results-modal/patient-results-modal.component';
 import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unregistered-users-modal.component';
+import { UserContactDetailModalComponent } from './user-contact-detail-modal/user-contact-detail-modal.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unre
     CancelActionModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,    
-    UnregisteredUsersModalComponent
+    UnregisteredUsersModalComponent, 
+    UserContactDetailModalComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unre
     CancelActionModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
-    UnregisteredUsersModalComponent
+    UnregisteredUsersModalComponent,
+    UserContactDetailModalComponent
   ]
 })
 export class TemplateModule {}
