@@ -915,6 +915,8 @@ namespace Fmas12d.Business.Services
 
       CheckAssessmentCanBeUpdated(entity);
 
+      bool amhpChanged = CheckForChangeOfAmphpUser(model, entity);
+
       if (entity == null)
       {
         throw new ModelStateException("Id",
@@ -925,15 +927,21 @@ namespace Fmas12d.Business.Services
       model.MapToEntity(entity);
       UpdateModified(entity);
 
-      AddUserAssessmentNotification(
-        entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      if (!amhpChanged)
+      {
+        AddUserAssessmentNotification(
+          entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      }
 
       foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
       {
-        AddUserAssessmentNotification(
-          entity,
-          assessmentDoctor.DoctorUserId,
-          NotificationText.ASSESSMENT_UPDATED);
+        if (assessmentDoctor.StatusId != AssessmentDoctorStatus.REMOVED)
+        {
+          AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_UPDATED);
+        }
       }
 
       await _context.SaveChangesAsync();
@@ -1041,6 +1049,21 @@ namespace Fmas12d.Business.Services
         }
       }
     }
+
+    private bool CheckForChangeOfAmphpUser(AssessmentUpdate model, Entities.Assessment entity) {
+
+      bool amhpChanged = model.AmhpUserId != entity.AmhpUserId;
+
+      if (amhpChanged) {
+        AddUserAssessmentNotification(
+          entity, model.AmhpUserId, NotificationText.ALLOCATED_TO_ASSESSMENT);
+
+        AddUserAssessmentNotification(
+            entity, entity.AmhpUserId, NotificationText.REMOVED_FROM_ASSESSMENT);
+      }
+
+      return amhpChanged;
+    } 
 
     private async Task<bool> AddDoctorAvailabilityToAssessmentDoctorIfAvailableAsync(
       Entities.AssessmentDoctor assessmentDoctor,
