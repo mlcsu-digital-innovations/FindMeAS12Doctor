@@ -11,7 +11,6 @@ export class AutoLoginComponent implements OnInit, OnDestroy {
 
     constructor(public oidcSecurityService: OidcSecurityService
     ) {
-        console.log(typeof oidcSecurityService.onModuleSetup);
         this.oidcSecurityService.onModuleSetup.subscribe(() => { this.onModuleSetup(); });
     }
 

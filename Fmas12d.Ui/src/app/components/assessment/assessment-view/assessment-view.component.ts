@@ -31,6 +31,7 @@ export class AssessmentViewComponent implements OnInit {
   referral$: Observable<ReferralView>;
   referralCreated: Date;
   referralId: number;
+  referralStatus: string;
   referralStatusId: number;
   showDateTitle: string;
   showDateValue: Date;
@@ -211,6 +212,7 @@ export class AssessmentViewComponent implements OnInit {
     this.currentAssessmentForm.disable();
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
+    this.referralStatus = referral.statusName;
 
     this.isInReviewState = referral.referralStatusId === REFERRAL_STATUS_AWAITING_REVIEW;
 

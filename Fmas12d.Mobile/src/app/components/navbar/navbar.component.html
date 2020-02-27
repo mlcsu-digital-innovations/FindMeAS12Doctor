@@ -1,16 +1,16 @@
 <ion-header>
-  <ion-toolbar color="primary">        
-    <ion-title slot="start">
-      {{connection ? "Online" : "Offline"}}
-    </ion-title>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="showConfirm()">
         <ion-icon name="arrow-back"></ion-icon>Back
       </ion-button>
     </ion-buttons>
+    <ion-title class="toolbar-title">
+      {{connection ? "Online" : "Offline"}}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
-    </ion-buttons>     
+    </ion-buttons>
   </ion-toolbar>
   <div class="nav-info">
     <ion-row>

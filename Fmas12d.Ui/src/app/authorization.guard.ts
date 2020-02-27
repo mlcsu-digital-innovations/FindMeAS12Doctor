@@ -23,12 +23,8 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
   }
 
   private checkUser(): any {
-    console.log('AuthorizationGuard, canActivate');
-
     return this.oidcSecurityService.getIsAuthorized().pipe(
       tap((isAuthorized: boolean) => {
-        console.log('AuthorizationGuard, canActivate isAuthorized: ' + isAuthorized);
-
         if (!isAuthorized) {
           this.routerService.navigate(['/unauthorized']);
         }

@@ -8,11 +8,51 @@
     <div class="title">Find Me An S12 Doctor</div>
     <div class="version">Version: {{version}} </div>
   </a>
-  <div class="user">
-    <i class="far fa-user"></i>
-    <span style="padding-left:15px">
-      <a *ngIf="!isAuthorized" (click)="login()">Login</a>
-      <a *ngIf="isAuthorized" (click)="logout()">Logout {{userData.name}}</a>
-    </span>
+  <div class="row">
+    <div class="col">
+      <div ngbDropdown class="d-inline-block" *ngIf="(user$ | async) as user; else alternativeLogin">
+        <button class="navbar-icon-dropdown far fa-user fa-2x" id="dropdownAdmin" ngbDropdownToggle></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownAdmin">
+          <div class="account-name">{{user.displayName}}</div>
+          <div class="dropdown-divider"></div>
+          <button ngbDropdownItem *ngIf="!(isAuthorized$ | async)" (click)="login()">Login</button>
+          <button ngbDropdownItem *ngIf="(isAuthorized$ | async)" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="(isAuthorized$ | async)">
+    <div class="col">
+      <div ngbDropdown class="d-inline-block" *ngIf="(user$ | async) as user; else loading">
+        <button class="navbar-icon-dropdown fas fa-bars fa-2x" id="dropdownNavMenu" ngbDropdownToggle></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownNavMenu">
+          <button ngbDropdownItem [routerLink]="['/referral/new']" *ngIf="user.isAmhp">Create Referral</button>
+          <button ngbDropdownItem [routerLink]="['/referral/list']" *ngIf="user.isAmhp">Referral List</button>
+          <div class="dropdown-divider" *ngIf="user.isAmhp"></div>
+          <button ngbDropdownItem [routerLink]="['/user/oncall']" *ngIf="user.isAmhp">On Call Doctors</button>
+          <button ngbDropdownItem [routerLink]="['/finance/claims/list']" *ngIf="user.isFinance">Finance Claims
+            List</button>
+          <button ngbDropdownItem [routerLink]="['/doctor/claims/list']" *ngIf="user.isDoctor">Doctor Claims
+            List</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<ng-template #alternativeLogin>
+  <div ngbDropdown class="d-inline-block">
+    <button class="navbar-icon-dropdown far fa-user fa-2x" id="dropdownAdmin" ngbDropdownToggle></button>
+    <div ngbDropdownMenu aria-labelledby="dropdownAdmin">
+      <button ngbDropdownItem *ngIf="!(isAuthorized$ | async)" (click)="login()">Login</button>
+      <button ngbDropdownItem *ngIf="(isAuthorized$ | async)" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #loading>
+  <div ngbDropdown class="d-inline-block">
+    <button class="navbar-icon-dropdown fas fa-bars fa-2x" id="dropdownNavMenu" ngbDropdownToggle></button>
+    <div ngbDropdownMenu aria-labelledby="dropdownNavMenu">
+      <label>Loading...</label>
+    </div>
+  </div>
+</ng-template>

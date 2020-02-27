@@ -9,7 +9,13 @@ namespace Fmas12d.Business.Services
   {
     Task<IUserAvailability> CreateAsync(IUserAvailability model);
     Task<IUserOnCall> CreateOnCallAsync(IUserOnCall model);
-    Task<IEnumerable<IUserAvailability>> GetAsync(
+    Task<IUserAvailability> GetAsync(
+      int id,
+      bool asNoTracking,
+      bool activeOnly
+    );
+
+    Task<IEnumerable<IUserAvailability>> GetListAsync(
       int userId,
       DateTimeOffset from,
       bool asNoTracking,

@@ -4,6 +4,8 @@
 <div class="modal-body">
   <h5>
    {{modalBody}}
+   <br *ngIf="referralStatus"/>
+   <span class="referral-status" *ngIf="referralStatus">Current Referral Status: {{referralStatus}}</span>
   </h5>
 </div>
 <div class="modal-footer">

@@ -5,6 +5,7 @@ import { UNAVAILABLE } from 'src/app/constants/app.constants';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityPost } from 'src/app/interfaces/availability-post.interface';
 import { UserAvailabilityPut } from 'src/app/interfaces/availability-put.interface';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -22,6 +23,13 @@ export class UserAvailabilityService {
     ));    
   }
 
+  public get(id: number): Observable<UserAvailability> {
+    return (this.apiService.get(
+      `${environment.apiEndpoint}/useravailabilities/${id}`,
+      null
+    ));
+  }
+
   public getListForUser() {
     return (this.apiService.get(
       `${environment.apiEndpoint}/useravailabilities`,
@@ -33,19 +41,14 @@ export class UserAvailabilityService {
 
     let postType: string;
 
-    if (userAvailability.location.latitude !== undefined && userAvailability.location.longitude !== undefined) {
+    if (userAvailability.location.latitude !== undefined && 
+        userAvailability.location.longitude !== undefined) {
       postType = 'location';
-    }
-
-    if (userAvailability.location.postcode !== undefined) {
+    } else if (userAvailability.location.postcode !== undefined) {
       postType = 'postcode';
-    }
-
-    if (userAvailability.location.contactDetailId !== undefined) {
+    } else if (userAvailability.location.contactDetailId !== undefined) {
       postType = 'contactDetail';
-    }
-
-    if (userAvailability.statusId === UNAVAILABLE) {
+    } else if (userAvailability.statusId === UNAVAILABLE) {
       postType = 'unavailable';
     }
 

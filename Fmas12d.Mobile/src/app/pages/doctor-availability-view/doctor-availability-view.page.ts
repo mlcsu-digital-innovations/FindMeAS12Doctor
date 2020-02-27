@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
-import { ToastController, AlertController, IonItemSliding } from '@ionic/angular';
+import { ToastController, AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
 import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 import { Router, NavigationExtras } from '@angular/router';
 
@@ -14,10 +14,12 @@ export class DoctorAvailabilityViewPage implements OnInit {
 
   public availableList: UserAvailability[] = [];
   public fullList: UserAvailability[] = [];
-  public unavailableList: UserAvailability[] = [];
+  private loading: HTMLIonLoadingElement;
+  public unavailableList: UserAvailability[] = [];  
 
   constructor(
     public alertController: AlertController,
+    private loadingController: LoadingController,
     private router: Router,
     private toastController: ToastController,
     private userAvailabilityService: UserAvailabilityService
@@ -25,6 +27,18 @@ export class DoctorAvailabilityViewPage implements OnInit {
 
   ngOnInit() {
   }
+
+  closeLoading() {
+    if (this.loading) {
+      this.loading.dismiss();
+    }
+  }
+
+  closeRefreshing($event?: any) {
+    if ($event) {
+      $event.target.complete();
+    }
+  }  
 
   editAvailability(item: UserAvailability, slidingItem: IonItemSliding) {
     slidingItem.close();
@@ -71,7 +85,8 @@ export class DoctorAvailabilityViewPage implements OnInit {
     this.refreshList();
   }
 
-  refreshList() {
+  refreshList($event?: any) {
+    this.showLoading();
     this.userAvailabilityService.getListForUser()
       .subscribe(
         (result: UserAvailability[]) => {
@@ -83,8 +98,12 @@ export class DoctorAvailabilityViewPage implements OnInit {
             this.availableList = [];
             this.unavailableList = [];
           }
+          this.closeLoading();
+          this.closeRefreshing($event);
         }, error => {
           this.showErrorToast('Unable to retrieve availability details for user');
+          this.closeLoading();
+          this.closeRefreshing($event);
         }
       );
   }
@@ -92,6 +111,15 @@ export class DoctorAvailabilityViewPage implements OnInit {
   showErrorToast(msg: string) {
     this.showToast(msg, 'danger', 'Error!');
   }
+
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines'
+    });
+    await this.loading.present();
+  }  
+
   showSuccessToast(msg: string) {
     this.showToast(msg, 'success', 'Success');
   }

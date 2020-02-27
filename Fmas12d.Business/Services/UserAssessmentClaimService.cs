@@ -123,9 +123,6 @@ namespace Fmas12d.Business.Services
 
       UserAssessmentClaimList userAssessmentClaimList = new UserAssessmentClaimList();
 
-      List<int> claimableReferralStatusIds =
-        new List<int>{ReferralStatus.AWAITING_REVIEW, ReferralStatus.OPEN};
-
       List<UserAssessmentClaim> claims = await _context
       .UserAssessmentClaims
       .Include(uac => uac.Assessment)
@@ -148,7 +145,6 @@ namespace Fmas12d.Business.Services
       .WhereIsActiveOrActiveOnly(true)
       .Where(ad => ad.DoctorUserId == userId)
       .Where(ad => ad.StatusId == AssessmentDoctorStatus.ATTENDED)
-      .Where(ad => claimableReferralStatusIds.Contains(ad.Assessment.Referral.ReferralStatusId))
       .Where(ad => ad.Assessment.UserAssessmentClaims.Where(uac => uac.UserId == userId).Count() == 0)
       .Select(ad => new Assessment(ad.Assessment, false))
       .ToListAsync();
@@ -187,7 +183,13 @@ namespace Fmas12d.Business.Services
 
       // ToDo: temp value until it is determined where this value comes from
       bool testParse =
-        int.TryParse(assessmentId.ToString() + userId.ToString(), out int tempReference);
+        int.TryParse(
+          DateTime.Now.Day.ToString() +
+          DateTime.Now.Month.ToString() +
+          assessmentId.ToString() +
+          userId.ToString(),
+          out int tempReference
+        );
 
       assessmentClaim.ClaimReference = testParse ? tempReference : assessmentId;
 
