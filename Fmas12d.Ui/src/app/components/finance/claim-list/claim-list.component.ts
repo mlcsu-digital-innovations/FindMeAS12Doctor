@@ -20,7 +20,7 @@ export class ClaimListComponent implements OnInit {
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
 
   constructor(
-    private claimsService: FinanceClaimListService,
+    public claimsService: FinanceClaimListService,
     private toastService: ToastService,
     public oidcSecurityService: OidcSecurityService,
   ) {

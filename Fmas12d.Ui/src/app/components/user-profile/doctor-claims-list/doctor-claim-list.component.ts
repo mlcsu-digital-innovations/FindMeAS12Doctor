@@ -24,7 +24,7 @@ export class DoctorClaimListComponent implements OnInit {
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
 
   constructor(
-    private claimsService: DoctorClaimListService,
+    public claimsService: DoctorClaimListService,
     private excelService: ExcelService,
     private toastService: ToastService,
     public oidcSecurityService: OidcSecurityService,
