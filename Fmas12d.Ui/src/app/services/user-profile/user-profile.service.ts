@@ -9,7 +9,7 @@ export class UserProfileService {
 
   constructor() { }
 
-  GetUser(): Observable<any> {
+  GetUser(): Observable<UserProfile> {
     let user: UserProfile = {
       contactDetails: [
         {
@@ -46,11 +46,11 @@ export class UserProfileService {
       gmcNumber: 1234567,
       id: 555,
       isAmhp: false,
-      isDoctor: false,
-      isFinance: true,
+      isDoctor: true,
+      isFinance: false,
       mobileNumber: '07847 435822',
       organisationName: 'Midlands and Lancashire CSU',
-      profileTypeId: 4,
+      profileTypeId: 3,
       section12ApprovalStatusId: 1,
       section12ExpiryDate: new Date(),
       telephoneNumber: '01256 435822',
@@ -70,4 +70,6 @@ export class UserProfileService {
 
     return of(user);
   }
+
+
 }

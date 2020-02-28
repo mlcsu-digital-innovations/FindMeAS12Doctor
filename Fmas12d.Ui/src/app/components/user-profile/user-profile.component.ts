@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit {
   selectedContactDetail: ContactDetailProfile;
   selectedSpecialities: NameIdList[];
   specialities: NameIdList[];
-  public userProfile: UserProfile;
+  userProfile: UserProfile;
   userProfileForm: FormGroup;
   userContactDetailModal: NgbModalRef;
   
@@ -233,7 +233,8 @@ export class UserProfileComponent implements OnInit {
 
     if (action) {      
       this.toastService.displaySuccess({ message: "Contact Detail deleted" });                   
-      this.userProfile.contactDetails = this.userProfile.contactDetails.filter(item => item.id !== this.selectedContactDetail.id);
+      this.userProfile.contactDetails = this.userProfile.contactDetails
+        .filter(item => item.contactDetailTypeId !== this.selectedContactDetail.contactDetailTypeId);
     }    
     else {
       this.toastService.displayInfo({ message: "Contact Detail delete has been cancelled" }); 

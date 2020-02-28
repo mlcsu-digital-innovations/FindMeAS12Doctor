@@ -319,16 +319,14 @@
 
 <ng-template #addUserContactDetailModal>
   <app-user-contact-detail-modal    
-  (actioned)="OnModalActionAdd($event)"
-  [userProfile]="userProfile"
+  (actioned)="OnModalActionAdd($event)"  
   >
   </app-user-contact-detail-modal>
 </ng-template>
 
 <ng-template #editUserContactDetailModal>
   <app-user-contact-detail-modal    
-  (actioned)="OnModalActionEdit($event)"
-  [userProfile]="userProfile"
+  (actioned)="OnModalActionEdit($event)"  
   [contactDetail]="selectedContactDetail"
   >
   </app-user-contact-detail-modal>

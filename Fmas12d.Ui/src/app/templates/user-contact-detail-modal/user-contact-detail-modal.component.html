@@ -2,21 +2,21 @@
   <h4 class="modal-title"><i class="fas fa-info-circle"></i> Add Contact Detail</h4>
 </div>
 <div class="modal-body offset-md-1">
-  <form [formGroup]="contactDetailForm" class="form-style" novalidate>
+  <form [formGroup]="contactDetailForm" class="form-style" (ngSubmit)="SaveContactDetail()">
     <!-- Contact Detail Type -->
     <div class="form-row">
       <div class="col-md-10">        
-        <div class="row" name="contactDetailType">
+        <div class="row" name="contactDetailTypeId">
           <div class="col-md-6">
-            <label for="contactDetailType">Contact Detail Type</label>
+            <label for="contactDetailTypeId">Contact Detail Type</label>
             <select
               class="custom-select custom-select-lg mb-2 form-control"
-              formControlName="contactDetailType"
-              #contactDetailType
-              id="contactDetailType"
+              formControlName="contactDetailTypeId"
+              #contactDetailTypeId
+              id="contactDetailTypeId"
             >              
               <option *ngFor="let item of contactDetailTypes"                 
-                [selected]="item.id==contactDetailType.value"
+                [selected]="item.id==controls.contactDetailTypeId.value"
                 [value]="item.id"
               >
                 {{item.name}}
@@ -27,13 +27,13 @@
       </div>
     </div>
     <!-- Contact Detail Type Errors -->
-    <div class="form-row">
+    <div class="form-row" *ngIf="controls.contactDetailTypeId.errors">
       <div class="col-md-4 mb-2">
         <div
           class="invalid-field"
-          *ngIf="contactDetailTypeField.errors && contactDetailTypeField.errors.InvalidContactDetailType"
+          *ngIf="controls.contactDetailTypeId.errors.required"
         >
-          <span>* Please select a contact detail type</span>
+          <span>* Contact detail type is required</span>
         </div>        
       </div>
     </div>
@@ -106,12 +106,14 @@
               formControlName="postcode"
               #postcode
               id="postcode"
-              oninput="this.value = this.value.toUpperCase()"
+              oninput="this.value = this.value.toUpperCase()"              
               class="form-control"
+              (input)="ClearCoordinates()"
               [ngClass]="{
-                'is-invalid': HasInvalidPostcode(),
-                'is-valid': HasValidPostcode()
-              }" />
+                'is-invalid': controls.postcode.errors,
+                'is-valid': !controls.postcode.errors
+              }" 
+              />
           </div>
           <div class="col-md-3">
             <div class="button-container">
@@ -124,14 +126,14 @@
                 [closeDelay]="500"
                 tooltipClass="subtle-tooltip"
                 (click)="ValidatePostcode()"
-                [disabled]="postcode.value == '' || postcode.errors != null"
+                [disabled]="controls.postcode.errors.required"
               >
-                {{ IsSearchingForPostcode() ? "Searching" : "Validate" }}
+                {{ isSearchingForPostcode ? "Searching" : "Validate" }}
                 <span
                   class="spinner-border spinner-border-sm"
                   role="status"
                   aria-hidden="true"
-                  *ngIf="IsSearchingForPostcode()"
+                  *ngIf="isSearchingForPostcode"
                 >
                 </span>
               </button>                                      
@@ -141,18 +143,24 @@
       </div>      
     </div>
     <!-- Postcode Errors -->
-    <div class="form-row">
+    <div class="form-row" *ngIf="controls.postcode.errors">
       <div class="col-md-4 mb-2">
         <div
           class="invalid-field"
-          *ngIf="postcodeField.errors && postcodeField.errors.InvalidPostcode"
+          *ngIf="controls.postcode.errors.required"
         >
-          <span>* Invalid Postcode</span>
+          <span>* Postcode is required</span>
+        </div> 
+        <div
+          class="invalid-field"
+          *ngIf="controls.postcode.errors.InvalidPostcode"
+        >
+          <span>* Please validate postcode</span>
         </div>        
       </div>
     </div>
     <!-- Latitude and Longitude -->
-    <div class="form-row" *ngIf="latitudeField.value && longitudeField.value">
+    <div class="form-row" *ngIf="controls.latitude.value && controls.longitude.value">
       <div class="col-md-10">
         <div class="row" name="coordinates">
           <div class="col-md-4">
@@ -162,8 +170,7 @@
               class="form-control"   
               id="latitude"
               #latitude              
-              formControlName="latitude" 
-              disabled=true          
+              formControlName="latitude"                     
             />
           </div>
           <div class="col-md-4">
@@ -173,8 +180,7 @@
               class="form-control"   
               id="longitude"
               #longitude              
-              formControlName="longitude" 
-              disabled=true          
+              formControlName="longitude"                      
             />
           </div>
         </div>
@@ -200,15 +206,15 @@
     <!-- Telephone -->
     <div class="form-row">
       <div class="col-md-8">
-        <div class="row" name="telephone">
+        <div class="row" name="telephoneNumber">
           <div class="col-md-6">
-            <label for="telephone">Telephone</label>                     
+            <label for="telephoneNumber">Telephone</label>                     
             <input
               type="text"             
               class="form-control"   
-              id="telephone"
-              #telephone              
-              formControlName="telephone"           
+              id="telephoneNumber"
+              #telephoneNumber              
+              formControlName="telephoneNumber"           
             />
           </div>             
         </div>  
@@ -217,15 +223,15 @@
     <!-- Mobile -->
     <div class="form-row">
       <div class="col-md-8">
-        <div class="row" name="Mobile">
+        <div class="row" name="mobileNumber">
           <div class="col-md-6">  
-            <label for="mobile">Mobile</label>                   
+            <label for="mobileNumber">Mobile</label>                   
             <input
               type="text"             
               class="form-control"   
-              id="mobile"
-              #mobile              
-              formControlName="mobile"           
+              id="mobileNumber"
+              #mobileNumber              
+              formControlName="mobileNumber"           
             />
           </div>             
         </div>  
@@ -239,9 +245,8 @@
           (click)="Cancel()"          
         >Cancel</button>
         <button
-          type="button"
-          class="btn btn-primary btn-standard"
-          (click)="SaveContactDetail()"          
+          type="submit"
+          class="btn btn-primary btn-standard"          
         >Save</button>
       </div>
     </div>       
