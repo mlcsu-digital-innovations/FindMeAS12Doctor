@@ -7,6 +7,7 @@ export interface Assessment {
   detailTypeIds: number[];
   id: number;
   isPlanned: boolean;
+  isSuccessful: boolean;
   meetingArrangementComment?: string;
   mustBeCompletedBy?: Date;
   postcode: string;

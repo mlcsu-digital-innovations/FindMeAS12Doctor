@@ -10,6 +10,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { DoctorModule } from './components/doctor/doctor.module';
 import { environment } from 'src/environments/environment';
+import { FinanceModule } from './components/finance/finance.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { OnCallDoctorModule } from './components/on-call-doctor/on-call-doctor.module';
@@ -18,6 +19,7 @@ import { PatientModule } from './components/patient/patient.module';
 import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
+import { UserProfileModule } from './components/user-profile/user-profile.module';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   // https://login.microsoftonline.com/damienbod.onmicrosoft.com/.well-known/openid-configuration
@@ -35,15 +37,17 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   ],
   imports: [
     AuthModule.forRoot(),
+    AssessmentModule,
     BrowserModule,
     DigitOnlyModule,
     DoctorModule,
-    AssessmentModule,
+    FinanceModule,
     HttpClientModule,
     OnCallDoctorModule,
     PatientModule,
     ReferralModule,
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes),
+    UserProfileModule
   ],
   providers: [
     AuthorizationGuard,
@@ -87,7 +91,7 @@ export class AppModule {
         response_type: "id_token token",
         scope: "openid profile email https://graph.microsoft.com/User.Read",
         silent_renew: true,
-        silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,        
+        silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,
         start_checksession: true,
         stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
         trigger_authorization_result_event: true,

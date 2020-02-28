@@ -20,5 +20,6 @@ namespace Fmas12d.Business.Services
       UserAssessmentClaimCreate model
       );
       Task<UserAssessmentClaimList> GetAssessmentClaimsByUserIdAsync(int userId);
+      Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(int userId);
     }
 }
