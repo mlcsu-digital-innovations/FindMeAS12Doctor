@@ -19,13 +19,17 @@ export class ClaimsListPage implements OnInit {
 
   assessmentList: Assessment[] = [];
   claimsList: UserAssessmentClaim[] = [];
- 
+
   constructor(
     private assessmentClaimService: AssessmentClaimService,
     private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
+    this.refreshPage();
+  }
+
+  ionViewWillEnter() {
     this.refreshPage();
   }
 
@@ -69,7 +73,7 @@ export class ClaimsListPage implements OnInit {
   GetIconDetailsForClaimStatus(claimStatusId: number): IconDetail {
 
     const iconDetail = {} as IconDetail;
-    
+
     switch (claimStatusId) {
       case CLAIMSTATUSSUBMITTED:
         iconDetail.name = 'paper-plane';

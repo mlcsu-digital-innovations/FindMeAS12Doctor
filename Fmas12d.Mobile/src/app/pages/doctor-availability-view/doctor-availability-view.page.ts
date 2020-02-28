@@ -15,7 +15,7 @@ export class DoctorAvailabilityViewPage implements OnInit {
   public availableList: UserAvailability[] = [];
   public fullList: UserAvailability[] = [];
   private loading: HTMLIonLoadingElement;
-  public unavailableList: UserAvailability[] = [];  
+  public unavailableList: UserAvailability[] = [];
 
   constructor(
     public alertController: AlertController,
@@ -26,6 +26,11 @@ export class DoctorAvailabilityViewPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.refreshList();
+  }
+
+  ionViewDidEnter() {
+    this.refreshList();
   }
 
   closeLoading() {
@@ -38,7 +43,7 @@ export class DoctorAvailabilityViewPage implements OnInit {
     if ($event) {
       $event.target.complete();
     }
-  }  
+  }
 
   editAvailability(item: UserAvailability, slidingItem: IonItemSliding) {
     slidingItem.close();
@@ -81,10 +86,6 @@ export class DoctorAvailabilityViewPage implements OnInit {
     await alert.present();
   }
 
-  ionViewDidEnter() {
-    this.refreshList();
-  }
-
   refreshList($event?: any) {
     this.showLoading();
     this.userAvailabilityService.getListForUser()
@@ -118,7 +119,7 @@ export class DoctorAvailabilityViewPage implements OnInit {
       spinner: 'lines'
     });
     await this.loading.present();
-  }  
+  }
 
   showSuccessToast(msg: string) {
     this.showToast(msg, 'success', 'Success');

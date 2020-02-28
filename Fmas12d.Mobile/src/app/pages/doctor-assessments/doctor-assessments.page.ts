@@ -14,7 +14,7 @@ export class DoctorAssessmentsPage implements OnInit {
 
   public assessmentRequestsLastUpdated: Date;
   public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
-  
+
   public allAssessments: AmhpAssessmentRequest[] = [];
   public assessmentRequests: AmhpAssessmentRequest[] = [];
   public scheduledAssessments: AmhpAssessmentRequest[] = [];
@@ -27,6 +27,7 @@ export class DoctorAssessmentsPage implements OnInit {
     private toastController: ToastController) { }
 
   ngOnInit() {
+    this.refreshPage();
   }
 
   ionViewDidEnter() {
@@ -67,7 +68,7 @@ export class DoctorAssessmentsPage implements OnInit {
           this.showErrorToast(error)
           this.closeLoading();
           this.closeRefreshing($event);
-          
+
         }
       );
   }
@@ -118,5 +119,5 @@ export class DoctorAssessmentsPage implements OnInit {
       position: 'top'
     });
     await toast.present();
-  }  
+  }
 }
