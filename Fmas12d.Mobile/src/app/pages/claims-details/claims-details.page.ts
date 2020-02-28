@@ -31,6 +31,10 @@ export class ClaimsDetailsPage implements OnInit {
     this.refreshPage();
   }
 
+  ionViewWillEnter() {
+    this.refreshPage();
+  }
+
   refreshPage($event?: any) {
     const request = this.assessmentClaimService.getClaim(this.claimId);
     this.showLoading();

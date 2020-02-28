@@ -16,11 +16,13 @@ export class DoctorOnCallListPage implements OnInit {
   private loading: HTMLIonLoadingElement;
 
   constructor(
-    private onCallService: OnCallService, 
+    private onCallService: OnCallService,
     private router: Router,
     private loadingController: LoadingController) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.refreshPage();
+  }
 
   ionViewWillEnter() {
     this.refreshPage();
@@ -28,20 +30,20 @@ export class DoctorOnCallListPage implements OnInit {
 
   refreshPage($event?: any) {
     this.showLoading();
-    
-    this.onCallService.getListForUser().subscribe((result: OnCallDoctor[])  => {  
+
+    this.onCallService.getListForUser().subscribe((result: OnCallDoctor[]) => {
       if (result && result.length > 0) {
         this.onCallDoctorsConfirmed = result
-        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
-      this.onCallDoctorsUnconfirmed = result
-        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null);
-      this.onCallDoctorsRejected = result
-        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === false); 
-      }   
-         
+          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
+        this.onCallDoctorsUnconfirmed = result
+          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null);
+        this.onCallDoctorsRejected = result
+          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === false);
+      }
+
       this.closeLoading();
       this.closeRefreshing($event);
-    }, err => {      
+    }, err => {
       this.closeLoading();
       this.closeRefreshing($event);
     });
@@ -54,7 +56,7 @@ export class DoctorOnCallListPage implements OnInit {
       }
     };
     this.router.navigate(['/doctor-on-call-confirm-reject'], navigationExtras);
-  } 
+  }
 
   closeLoading() {
     if (this.loading) {
@@ -71,7 +73,8 @@ export class DoctorOnCallListPage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines'
+      spinner: 'lines',
+      duration: 3000
     });
     await this.loading.present();
   }
