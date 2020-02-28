@@ -18,3 +18,6 @@ export const REFERRAL_STATUS_OPEN = 10;
 export const PROFILE_TYPE_UNREGISTERED = 6;
 
 export const SECTION12_APPROVED = 1;
+
+export const CLAIM_STATUS_PROCESSING = 2;
+export const CLAIM_STATUS_QUERY = 3;

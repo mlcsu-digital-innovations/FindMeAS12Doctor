@@ -1,0 +1,135 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12 ">
+      <div class="card" *ngIf="claim$ | async as claim; else loading">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="far fa-file-alt fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">View Claim</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="claimForm" novalidate>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="claimReference">Claim Reference</label>
+                <input
+                  class="form-control"
+                  formControlName="claimReference"
+                  id="claimReference"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="claimStatus">Claim Status</label>
+                <input
+                  class="form-control"
+                  formControlName="claimStatus"
+                  id="claimStatus"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label for="ccg">CCG</label>
+                <input
+                  class="form-control"
+                  formControlName="ccg"
+                  id="ccg"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="claimant">Claimant</label>
+                <input
+                  class="form-control"
+                  formControlName="claimant"
+                  id="claimant"
+                  type="text"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="vsr">VSR No.</label>
+                <input
+                  class="form-control"
+                  formControlName="vsr"
+                  id="vsr"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label for="assessmentPayment">Assessment Payment</label>
+                <input
+                  class="form-control"
+                  formControlName="assessmentPayment"
+                  id="assessmentPayment"
+                  type="text"
+                  value="{{claim.assessmentPayment | currency:'GBP'}}"
+                />
+              </div>
+              <div class="col-md-3">
+                <label for="mileagePayment">Mileage Payment</label>
+                <input
+                  class="form-control"
+                  formControlName="mileagePayment"
+                  id="mileagePayment"
+                  type="text"
+                  value="{{claim.mileagePayment | currency:'GBP'}}"
+                />
+              </div>
+            </div>
+            <br/>
+            <div class="form-row">
+              <div class="col-md-4 mb-2 offset-md-8 text-right">
+                <a
+                  class="btn btn-standard btn-cancel"
+                  type="button"
+                  routerLink="/finance/claims/list"
+                >
+                  <i class="fas fa-arrow-left"></i>
+                  Back
+                </a>
+                <button
+                  class="btn btn-primary btn-standard"
+                  type="button"
+                  *ngIf="claim.claimant.hasBankDetails && !IsProcessing(claim)"
+                  (click)="SetClaimAsProcessing()"
+                >
+                  <i class="fas fa-cog"></i>
+                  Process
+                </button>
+                <button
+                  class="btn btn-primary btn-standard"
+                  type="button"
+                  *ngIf="!claim.claimant.hasBankDetails && !IsQuerying(claim)"
+                  (click)="SetClaimAsQuerying()"
+                >
+                  <i class="far fa-question-circle"></i>
+                  Query
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving claim details'"></app-delay-spinner>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

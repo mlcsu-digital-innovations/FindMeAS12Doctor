@@ -14,6 +14,7 @@ namespace Fmas12d.Business.Models
       if (entity == null) return;
       // TODO AmhpReferrals
       // TODO BankDetails
+      BankDetails = entity.BankDetails?.Select(bd => new BankDetail(bd)).ToList();
       // TODO CompletedAssessments
       // TODO CompletionConfirmationAssessments
       ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd, false)).ToList();
