@@ -6,8 +6,27 @@
   </ion-refresher>
   
   <ion-list>
-    <ion-list-header>
-      Available  
+
+    <ion-list-header *ngIf="availableList.length == 0 && unavailableList.length ==0">
+      Availability
+    </ion-list-header>
+
+    <ion-item *ngIf="availableList.length == 0 && unavailableList.length ==0">
+
+      <div class="no-data-container">
+        <ion-icon
+          color="medium"
+          name="cube"
+          class="no-data"
+        >
+        </ion-icon>
+        <h3>No availability records found</h3>
+      </div>
+    </ion-item>
+
+
+    <ion-list-header *ngIf="availableList.length > 0">
+      <ion-label>Available </ion-label>
     </ion-list-header>
 
     <ion-item-sliding  
@@ -43,7 +62,7 @@
       </ion-item-options>
     </ion-item-sliding>
     <br/>
-    <ion-list-header>
+    <ion-list-header *ngIf="unavailableList.length > 0">
       Unavailable  
     </ion-list-header>
 
@@ -73,6 +92,22 @@
         </ion-item-option> 
       </ion-item-options>
     </ion-item-sliding>
+
+    <!-- <ion-item>
+      <ion-avatar slot="start">
+        <ion-icon
+          color="medium"
+          size="large"
+          name="cube"
+        >
+        </ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h3>None</h3>
+      </ion-label>
+    </ion-item> -->
+
+
   </ion-list>  
   
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

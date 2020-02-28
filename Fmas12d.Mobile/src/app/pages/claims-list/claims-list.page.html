@@ -9,6 +9,18 @@
       Claims  
     </ion-list-header>
 
+    <ion-item *ngIf="claimsList.length == 0 && assessmentList.length == 0">
+      <div class="no-data-container">
+        <ion-icon
+          color="medium"
+          name="cube"
+          class="no-data"
+        >
+        </ion-icon>
+        <h3>No claims or completed assessments found</h3>
+      </div>
+    </ion-item>
+
     <ion-item 
       *ngFor="let claim of claimsList"
       detail="false"
@@ -32,11 +44,8 @@
       </ion-label>
     </ion-item>
 
-    <ion-item *ngIf="claimsList.length == 0">
-      None
-    </ion-item>
     <br/>
-    <ion-list-header>
+    <ion-list-header *ngIf="assessmentList.length > 0">
       Completed Assessments  
     </ion-list-header>
 

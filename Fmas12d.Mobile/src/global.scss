@@ -57,3 +57,22 @@
 .wrap {
   white-space: normal;
 }
+
+/* No data pages */
+.no-data {
+  display: table !important;
+  height: 50% !important;
+  margin: 0 auto;
+  width: 50% !important;
+}
+
+.no-data-container {
+  display: table;
+  margin: 20px auto;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.no-data-container h3 {
+  color: #989aa2;
+}
