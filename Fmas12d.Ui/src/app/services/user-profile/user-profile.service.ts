@@ -42,6 +42,20 @@ export class UserProfileService {
       contactDetailTypeId: 1,
       displayName: 'John Smith',
       emailAddress: 'jsmith@nhs.net',
+      financeDetails: [
+        {
+          id: 11,
+          ccgId: 114,
+          ccgName: 'Shropshire',
+          VsrNumber: 1234567
+        },
+        {
+          id: 12,
+          ccgId: 7,
+          ccgName: 'Staffordshire',
+          VsrNumber: 123456789
+        }      
+      ],
       genderTypeId: 2,
       gmcNumber: 1234567,
       id: 555,

@@ -1,3 +1,4 @@
+import { BankDetailsProfile } from './bank-details-profile';
 import { ContactDetailProfile } from './contact-detail-profile';
 import { User } from './user';
 import { UserSpeciality } from './user-speciality';
@@ -5,7 +6,8 @@ import { UserSpeciality } from './user-speciality';
 export interface UserProfile extends User {
   contactDetails: ContactDetailProfile[];
   contactDetailTypeId: number;
-	emailAddress: string;
+  emailAddress: string;
+  financeDetails: BankDetailsProfile[];
 	genderTypeId: number;
   gmcNumber?: number;
   isAmhp: boolean;

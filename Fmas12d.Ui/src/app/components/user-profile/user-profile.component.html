@@ -264,7 +264,7 @@
                         <ngb-highlight result="{{contactDetail.mobileNumber}}">
                         </ngb-highlight>
                       </td>                      
-                      <td>
+                      <td class="text-right">
                         <button class="btn btn-outline-primary btn-small" (click)="EditContactDetail(contactDetail)">
                           <i class="fas fa-edit"></i>
                         </button>
@@ -291,6 +291,62 @@
             <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-1 offset-md-9">
                 <button class="btn btn-primary btn-standard btn-spaced" type="button" [disabled]="UserHasAllContactDetails()" (click)="AddContactDetail()">                  
+                  Add
+                </button>
+              </div>
+            </div> 
+            <!-- Finance Details -->            
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
+              <div class="col-md-2">
+                <label>Finance Details </label>             
+              </div>
+            </div>
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
+              <div class="col-md-10">
+                <table class="table table-bordered table-sm table-contact-details">
+                  <thead>
+                    <tr>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='string'>
+                        CCG Name
+                      </th>
+                      <th class="text-center" 
+                        scope="col"                         
+                        columnType='number'>
+                        VSR Number
+                      </th>                                                       
+                      <th class="sm-col text-center" scope="col">
+                        &nbsp; &nbsp;
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="contact-detail-row" *ngFor="let financeDetail of userProfile.financeDetails">
+                      <td>
+                        <ngb-highlight result="{{financeDetail.ccgName}}">
+                        </ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight result="{{financeDetail.VsrNumber}}">
+                        </ngb-highlight>
+                      </td> 
+                      <td class="text-right">                     
+                        <button class="btn btn-outline-primary btn-small" (click)="EditFinanceDetail(financeDetail)">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-small" (click)="DeleteFinanceDetail(financeDetail)">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div *ngIf="userProfile.isDoctor" class="form-row user-row">
+              <div class="col-md-1 offset-md-9">
+                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="AddFinanceDetail()">                  
                   Add
                 </button>
               </div>
