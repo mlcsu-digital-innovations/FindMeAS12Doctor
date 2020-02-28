@@ -30,7 +30,9 @@ namespace Fmas12d.Data.Entities
     [InverseProperty("User")]
     public virtual IList<UserAvailability> UserAvailabilities { get; set; }
     [InverseProperty("AttendanceConfirmedByUser")]
-    public virtual IList<AssessmentDoctor> AssessmentAttendanceConfirmations { get; set; }       
+    public virtual IList<AssessmentDoctor> AssessmentAttendanceConfirmations { get; set; }
+    [MaxLength(255)]
+    public string FcmToken { get; set; }       
     public virtual GenderType GenderType { get; set; }
     public int? GenderTypeId { get; set; }    
     public int? GmcNumber { get; set; }
