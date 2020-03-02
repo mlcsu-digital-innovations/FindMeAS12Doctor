@@ -1,5 +1,5 @@
 <div class="modal-header header-info">
-  <h4 class="modal-title"><i class="fas fa-info-circle"></i> Add Contact Detail</h4>
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> {{contactDetail ? "Edit" : "Add"}} Contact Detail</h4>
 </div>
 <div class="modal-body offset-md-1">
   <form [formGroup]="contactDetailForm" class="form-style" (ngSubmit)="SaveContactDetail()">

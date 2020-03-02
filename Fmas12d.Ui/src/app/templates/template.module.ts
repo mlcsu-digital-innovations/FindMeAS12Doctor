@@ -8,6 +8,7 @@ import { OnCallDoctorModalComponent } from './on-call-doctor-modal/on-call-docto
 import { PatientResultsModalComponent } from './patient-results-modal/patient-results-modal.component';
 import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unregistered-users-modal.component';
 import { UserContactDetailModalComponent } from './user-contact-detail-modal/user-contact-detail-modal.component';
+import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/user-finance-detail-modal.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { UserContactDetailModalComponent } from './user-contact-detail-modal/use
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,    
     UnregisteredUsersModalComponent, 
-    UserContactDetailModalComponent
+    UserContactDetailModalComponent, 
+    UserFinanceDetailModalComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { UserContactDetailModalComponent } from './user-contact-detail-modal/use
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
     UnregisteredUsersModalComponent,
-    UserContactDetailModalComponent
+    UserContactDetailModalComponent,
+    UserFinanceDetailModalComponent
   ]
 })
 export class TemplateModule {}

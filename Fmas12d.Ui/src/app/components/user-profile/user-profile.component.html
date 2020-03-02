@@ -375,14 +375,14 @@
 
 <ng-template #addUserContactDetailModal>
   <app-user-contact-detail-modal    
-  (actioned)="OnModalActionAdd($event)"  
+  (actioned)="OnContactDetailModalActionAdd($event)"  
   >
   </app-user-contact-detail-modal>
 </ng-template>
 
 <ng-template #editUserContactDetailModal>
   <app-user-contact-detail-modal    
-  (actioned)="OnModalActionEdit($event)"  
+  (actioned)="OnContactDetailModalActionEdit($event)"  
   [contactDetail]="selectedContactDetail"
   >
   </app-user-contact-detail-modal>
@@ -392,5 +392,27 @@
   <app-cancel-action-modal [modalTitle]="'Confirm Contact Detail Delete'"
     [modalBody]="'Please confirm that you wish to delete this contact detail.'"
     (actioned)="OnDeleteContactDetailAction($event)">
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #addUserFinanceDetailModal>
+  <app-user-finance-detail-modal    
+  (actioned)="OnFinanceDetailModalActionAdd($event)"  
+  >
+  </app-user-finance-detail-modal>
+</ng-template>
+
+<ng-template #editUserFinanceDetailModal>
+  <app-user-finance-detail-modal    
+  (actioned)="OnFinanceDetailModalActionEdit($event)"  
+  [financeDetail]="selectedFinanceDetail"
+  >
+  </app-user-finance-detail-modal>
+</ng-template>
+
+<ng-template #deleteUserFinanceDetailModal>
+  <app-cancel-action-modal [modalTitle]="'Confirm Finance Detail Delete'"
+    [modalBody]="'Please confirm that you wish to delete this finance detail.'"
+    (actioned)="OnDeleteFinanceDetailAction($event)">
   </app-cancel-action-modal>
 </ng-template>

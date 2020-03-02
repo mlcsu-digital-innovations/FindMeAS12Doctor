@@ -1,3 +1,4 @@
+import { BankDetailsProfile } from 'src/app/interfaces/bank-details-profile';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ContactDetailProfile } from 'src/app/interfaces/contact-detail-profile';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -22,15 +23,20 @@ export class UserProfileComponent implements OnInit {
   dropdownSettings: IDropdownSettings;
   genderTypes$: Observable<NameIdList[]>
   selectedContactDetail: ContactDetailProfile;
+  selectedFinanceDetail: BankDetailsProfile;
   selectedSpecialities: NameIdList[];
   specialities: NameIdList[];
   userProfile: UserProfile;
   userProfileForm: FormGroup;
   userContactDetailModal: NgbModalRef;
+  userFinanceDetailModal: NgbModalRef;
   
   @ViewChild('addUserContactDetailModal', null) addUserContactDetailTemplate;
   @ViewChild('editUserContactDetailModal', null) editUserContactDetailTemplate;
   @ViewChild('deleteUserContactDetailModal', null) deleteUserContactDetailTemplate;
+  @ViewChild('addUserFinanceDetailModal', null) addUserFinanceDetailTemplate;
+  @ViewChild('editUserFinanceDetailModal', null) editUserFinanceDetailTemplate;
+  @ViewChild('deleteUserFinanceDetailModal', null) deleteUserFinanceDetailTemplate;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -131,6 +137,28 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  AddFinanceDetail() {
+    this.userFinanceDetailModal = this.modalService.open(
+      this.addUserFinanceDetailTemplate,
+      { size: 'lg' }
+    );   
+  }
+
+  EditFinanceDetail(financeDetail: BankDetailsProfile) {
+    this.selectedFinanceDetail = financeDetail;
+    this.userFinanceDetailModal = this.modalService.open(
+      this.editUserFinanceDetailTemplate,
+      { size: 'lg' }
+    );  
+  }
+
+  DeleteFinanceDetail(financeDetail: BankDetailsProfile) {    
+    this.selectedFinanceDetail = financeDetail;
+    this.deleteModal = this.modalService.open(this.deleteUserFinanceDetailTemplate, {
+      size: 'lg'
+    });
+  }
+
   VerifyGMCNumber() {
 
   }
@@ -203,7 +231,7 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  OnModalActionAdd(userContactDetail: ContactDetailProfile) {
+  OnContactDetailModalActionAdd(userContactDetail: ContactDetailProfile) {
     this.userContactDetailModal.close();
     if (userContactDetail)
     { 
@@ -215,7 +243,7 @@ export class UserProfileComponent implements OnInit {
     } 
   }
 
-  OnModalActionEdit(userContactDetail: ContactDetailProfile) {
+  OnContactDetailModalActionEdit(userContactDetail: ContactDetailProfile) {
     this.userContactDetailModal.close();
     if (userContactDetail)
     {      
@@ -238,6 +266,47 @@ export class UserProfileComponent implements OnInit {
     }    
     else {
       this.toastService.displayInfo({ message: "Contact Detail delete has been cancelled" }); 
+    }
+  }
+
+  OnFinanceDetailModalActionAdd(userFinanceDetail: BankDetailsProfile) {
+    this.userFinanceDetailModal.close();
+    if (userFinanceDetail)
+    { 
+      this.userProfile.financeDetails.push(userFinanceDetail);
+      this.toastService.displaySuccess({ message: "Contact Detail added" });
+    }
+    else {
+      this.toastService.displayInfo({ message: "Finance Detail add has been cancelled" });      
+    } 
+  }
+
+  OnFinanceDetailModalActionEdit(userFinanceDetail: BankDetailsProfile) {
+    this.userFinanceDetailModal.close();
+    if (userFinanceDetail)
+    {      
+      this.toastService.displaySuccess({ message: "Contact Detail updated" });
+      let i: number = this.userProfile.financeDetails.findIndex(item => item.id === userFinanceDetail.id);
+      this.userProfile.financeDetails[i] = userFinanceDetail;
+    }
+    else {
+      this.toastService.displayInfo({ message: "Finance Detail update has been cancelled" });      
+    }    
+  }
+
+  OnDeleteFinanceDetailAction(action: boolean) {
+    this.deleteModal.close();
+
+    if (action) {      
+      this.toastService.displaySuccess({ message: "Finance Detail deleted" });                   
+      this.userProfile.financeDetails = this.userProfile.financeDetails
+        .filter(item => 
+          !(item.id === this.selectedFinanceDetail.id && 
+            item.ccgId === this.selectedFinanceDetail.ccgId)
+        );
+    }    
+    else {
+      this.toastService.displayInfo({ message: "Finance Detail delete has been cancelled" }); 
     }
   }
 
