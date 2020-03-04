@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { ToastController, AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
@@ -10,7 +10,7 @@ import { Router, NavigationExtras } from '@angular/router';
   templateUrl: './doctor-availability-view.page.html',
   styleUrls: ['./doctor-availability-view.page.scss'],
 })
-export class DoctorAvailabilityViewPage implements OnInit {
+export class DoctorAvailabilityViewPage {
 
   public availableList: UserAvailability[] = [];
   public fullList: UserAvailability[] = [];
@@ -24,10 +24,6 @@ export class DoctorAvailabilityViewPage implements OnInit {
     private toastController: ToastController,
     private userAvailabilityService: UserAvailabilityService
   ) { }
-
-  ngOnInit() {
-    this.refreshList();
-  }
 
   ionViewDidEnter() {
     this.refreshList();
