@@ -7,7 +7,24 @@
 
   <ion-list>
 
-    <ion-list-header>
+    <ion-list-header *ngIf="!hasOncallDetails()">
+      On Call
+    </ion-list-header>
+
+    <ion-item *ngIf="!hasOncallDetails()">
+
+      <div class="no-data-container">
+        <ion-icon
+          color="medium"
+          name="cube"
+          class="no-data"
+        >
+        </ion-icon>
+        <h3>No on call details found</h3>
+      </div>
+    </ion-item>
+
+    <ion-list-header *ngIf="onCallDoctorsUnconfirmed.length > 0">
       Unconfirmed Oncall  
     </ion-list-header>
 
@@ -37,7 +54,7 @@
     </ion-item>
     <br/>
 
-    <ion-list-header>
+    <ion-list-header *ngIf="onCallDoctorsConfirmed.length > 0">
       Confirmed Oncall  
     </ion-list-header>
 
@@ -66,7 +83,7 @@
     </ion-item>
     <br/>
 
-    <ion-list-header>
+    <ion-list-header *ngIf="onCallDoctorsRejected.length > 0">
       Rejected Oncall  
     </ion-list-header>
 

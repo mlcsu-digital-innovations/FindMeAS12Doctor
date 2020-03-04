@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { IonItemSliding, LoadingController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 import { NavigationExtras, Router } from '@angular/router';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
 import { OnCallService } from 'src/app/services/on-call/on-call.service';
@@ -9,10 +9,10 @@ import { OnCallService } from 'src/app/services/on-call/on-call.service';
   templateUrl: './doctor-on-call-list.page.html',
   styleUrls: ['./doctor-on-call-list.page.scss'],
 })
-export class DoctorOnCallListPage implements OnInit {
-  public onCallDoctorsConfirmed: OnCallDoctor[];
-  public onCallDoctorsUnconfirmed: OnCallDoctor[];
-  public onCallDoctorsRejected: OnCallDoctor[];
+export class DoctorOnCallListPage {
+  public onCallDoctorsConfirmed: OnCallDoctor[] = [];
+  public onCallDoctorsUnconfirmed: OnCallDoctor[] = [];
+  public onCallDoctorsRejected: OnCallDoctor[] = [];
   private loading: HTMLIonLoadingElement;
 
   constructor(
@@ -20,8 +20,11 @@ export class DoctorOnCallListPage implements OnInit {
     private router: Router,
     private loadingController: LoadingController) { }
 
-  ngOnInit() {
-    this.refreshPage();
+  hasOncallDetails() {
+    return (
+      this.onCallDoctorsConfirmed.length +
+      this.onCallDoctorsUnconfirmed.length +
+      this.onCallDoctorsRejected.length) > 0;
   }
 
   ionViewWillEnter() {
