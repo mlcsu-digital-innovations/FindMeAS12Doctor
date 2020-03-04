@@ -7,7 +7,23 @@
 
   <ion-list>
 
-    <ion-list-header>
+    <ion-list-header *ngIf="assessmentListScheduled.length == 0 && assessmentListUnscheduled.length == 0">
+      Assessments  
+    </ion-list-header>
+
+    <ion-item *ngIf="assessmentListScheduled.length == 0 && assessmentListUnscheduled.length == 0">
+      <div class="no-data-container">
+        <ion-icon
+          color="medium"
+          name="cube"
+          class="no-data"
+        >
+        </ion-icon>
+        <h3>No scheduled or unscheduled assessments found</h3>
+      </div>
+    </ion-item>
+
+    <ion-list-header *ngIf="assessmentListScheduled.length > 0">
       Scheduled Assessments  
     </ion-list-header>
 
@@ -32,7 +48,7 @@
       </ion-label>
     </ion-item>
     <br/>
-    <ion-list-header>
+    <ion-list-header *ngIf="assessmentListUnscheduled.length > 0">
       Unscheduled Assessments  
     </ion-list-header>
 
