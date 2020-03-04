@@ -10,7 +10,7 @@ import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src
   templateUrl: './doctor-assessments.page.html',
   styleUrls: ['./doctor-assessments.page.scss'],
 })
-export class DoctorAssessmentsPage implements OnInit {
+export class DoctorAssessmentsPage {
 
   public assessmentRequestsLastUpdated: Date;
   public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
@@ -25,10 +25,6 @@ export class DoctorAssessmentsPage implements OnInit {
     private assessmentService: AmhpAssessmentService,
     private loadingController: LoadingController,
     private toastController: ToastController) { }
-
-  ngOnInit() {
-    this.refreshPage();
-  }
 
   ionViewDidEnter() {
     this.refreshPage();
@@ -65,10 +61,9 @@ export class DoctorAssessmentsPage implements OnInit {
           this.closeLoading();
           this.closeRefreshing($event);
         }, error => {
-          this.showErrorToast(error)
+          this.showErrorToast(error);
           this.closeLoading();
           this.closeRefreshing($event);
-
         }
       );
   }
