@@ -79,9 +79,6 @@ export class DoctorAssessmentsPage {
   assessmentIsScheduled(assessment: AmhpAssessmentRequest): boolean {
     return assessment.referralStatusId === ASSESSMENTSCHEDULED;
   }
-  doctorIsAllocated(assessment: AmhpAssessmentRequest): boolean {
-    return assessment.doctorStatusId === DOCTORSTATUSALLOCATED;
-  }
 
   closeLoading() {
     if (this.loading) {
@@ -93,6 +90,10 @@ export class DoctorAssessmentsPage {
     if ($event) {
       $event.target.complete();
     }
+  }
+
+  doctorIsAllocated(assessment: AmhpAssessmentRequest): boolean {
+    return assessment.doctorStatusId === DOCTORSTATUSALLOCATED;
   }
 
   nothingToDisplay(): boolean {
