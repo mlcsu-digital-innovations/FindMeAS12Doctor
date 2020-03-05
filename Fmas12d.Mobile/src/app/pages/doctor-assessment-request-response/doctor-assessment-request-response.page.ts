@@ -16,11 +16,13 @@ import { UserDetails } from 'src/app/interfaces/user-details';
 })
 export class DoctorAssessmentRequestResponsePage implements OnInit {
 
+  
+  public alreadyAllocated: boolean;
   private assessmentId: number;
-  private loading: HTMLIonLoadingElement;
   public assessmentRequest: AssessmentRequestDetails;
-  private userDetails: UserDetails;
   public expectedLocation: string;
+  private loading: HTMLIonLoadingElement;
+  private userDetails: UserDetails;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
@@ -59,11 +61,16 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
             result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
           }
 
+          this.alreadyAllocated =
+            result.doctorsAllocated.find(doctor => doctor.doctorId === this.userDetails.id) !== null;
+
+          console.log(result.doctorsAllocated.find(doctor => doctor.doctorId === this.userDetails.id));
+
           this.expectedLocation
             = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
             ? this.assessmentRequest.doctorDetails.knownLocation.postcode
             : this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName;
-
+          console.log(result);
           this.closeLoading();
         }, error => {
           this.showErrorToast('Unable to retrieve assessment details');

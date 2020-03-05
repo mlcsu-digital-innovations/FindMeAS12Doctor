@@ -3,7 +3,7 @@ import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-ass
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src/app/constants/app.constants';
+import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW, DOCTORSTATUSSELECTED, DOCTORSTATUSALLOCATED } from 'src/app/constants/app.constants';
 
 @Component({
   selector: 'app-doctor-assessments',
@@ -78,6 +78,9 @@ export class DoctorAssessmentsPage {
   }
   assessmentIsScheduled(assessment: AmhpAssessmentRequest): boolean {
     return assessment.referralStatusId === ASSESSMENTSCHEDULED;
+  }
+  doctorIsAllocated(assessment: AmhpAssessmentRequest): boolean {
+    return assessment.doctorStatusId === DOCTORSTATUSALLOCATED;
   }
 
   closeLoading() {

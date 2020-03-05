@@ -1,5 +1,6 @@
 export const DOCTORSTATUSSELECTED = 1;
 export const DOCTORSTATUSACCEPTED = 2;
+export const DOCTORSTATUSALLOCATED = 2;
 export const REFERRALSTATUSASSESSMENTSCHEDULED = 6;
 export const AVAILABLE = 1;
 export const UNAVAILABLE = 2;
