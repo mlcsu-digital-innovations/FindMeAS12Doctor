@@ -16,6 +16,7 @@ import { RequestInterceptor } from './models/request-interceptor.model';
 import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FCM } from '@ionic-native/fcm/ngx';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
     Network,
     StatusBar,
     SplashScreen,
+    FCM,
     {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy

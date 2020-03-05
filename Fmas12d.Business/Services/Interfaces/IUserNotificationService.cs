@@ -8,5 +8,14 @@ namespace Fmas12d.Business.Services
   {
     Task<IEnumerable<UserAssessmentNotification>> Get(
       int userId, bool asNoTracking, bool activeOnly);
+
+    Task<IEnumerable<UserAssessmentNotification>> SendAssessmentNotifications
+    (
+      IEnumerable<UserAssessmentNotification> notifications      
+    );
+    
+    Task<UserAssessmentNotification> SendClaimNotification (
+      Data.Entities.UserAssessmentClaim claim
+    );
   }
 }

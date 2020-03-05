@@ -19,19 +19,22 @@ namespace Fmas12d.Business.Services
     private readonly IUserService _userService;
     private readonly IContactDetailTypeService _contactDetailTypeService;
     private readonly ILocationDetailService _locationDetailService;
+    private readonly IUserNotificationService _notificationService;
 
     public FinanceAssessmentClaimService(
       ApplicationContext context,
       IUserService userService,
       IUserClaimsService userClaimsService,
       IContactDetailTypeService contactDetailTypeService,
-      ILocationDetailService locationDetailService
+      ILocationDetailService locationDetailService,
+      IUserNotificationService notificationService
     )
       : base(context, userClaimsService)
     {
       _contactDetailTypeService = contactDetailTypeService;
       _locationDetailService = locationDetailService;
       _userService = userService;
+      _notificationService = notificationService;
     }
 
     public async Task<FinanceAssessmentClaim> GetClaimByIdAsync(int claimId) {
@@ -70,6 +73,8 @@ namespace Fmas12d.Business.Services
     {
       Entities.UserAssessmentClaim entity = await _context
         .UserAssessmentClaims
+        .Include(uac => uac.ClaimStatus)
+        .Include(uac => uac.User)
         .Where(uac => uac.Id == model.Id)
         .WhereIsActiveOrActiveOnly(true)
         .SingleOrDefaultAsync();
@@ -85,6 +90,8 @@ namespace Fmas12d.Business.Services
       UpdateModified(entity);
 
       await _context.SaveChangesAsync();
+
+      await _notificationService.SendClaimNotification(entity);
 
       return await GetClaimByIdAsync(model.Id);
     }

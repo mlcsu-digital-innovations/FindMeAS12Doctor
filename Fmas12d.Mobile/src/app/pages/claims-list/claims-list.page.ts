@@ -30,6 +30,10 @@ export class ClaimsListPage {
     this.refreshPage();
   }
 
+  ionViewDidEnter() {
+    this.refreshPage();
+  }
+
   refreshPage($event?: any) {
     const request = this.assessmentClaimService.getList();
     this.showLoading();
