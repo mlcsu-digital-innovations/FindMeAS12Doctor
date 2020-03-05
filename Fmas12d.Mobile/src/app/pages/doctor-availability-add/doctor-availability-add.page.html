@@ -108,14 +108,13 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-button 
+  <ion-tab-bar>
+    <ion-tab-button 
       (click)="saveAvailability()"
       [disabled]="!isDataValid()"
-      color="primary"
-      expand="block"
-     >
-      Save
-    </ion-button>
-  </ion-toolbar>
+    >
+      <ion-icon color="primary" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="primary">Save</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

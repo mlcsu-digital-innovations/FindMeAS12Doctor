@@ -7,11 +7,11 @@
   
   <ion-list>
 
-    <ion-list-header *ngIf="availableList.length == 0 && unavailableList.length ==0">
+    <ion-list-header *ngIf="nothingToDisplay()">
       Availability
     </ion-list-header>
 
-    <ion-item *ngIf="availableList.length == 0 && unavailableList.length ==0">
+    <ion-item *ngIf="nothingToDisplay()">
 
       <div class="no-data-container">
         <ion-icon
@@ -97,14 +97,13 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-button 
+  <ion-tab-bar>
+    <ion-tab-button 
       [routerLink]="['/doctor-availability-add/']"
       routerDirection="forward"
-      color="primary"
-      expand="block"
-     >
-      Add
-    </ion-button>
-  </ion-toolbar>
+    >
+      <ion-icon color="primary" name="add-circle-outline"></ion-icon>
+      <ion-label color="primary">Add</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

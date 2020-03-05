@@ -16,6 +16,7 @@ export class DoctorAvailabilityViewPage {
   public fullList: UserAvailability[] = [];
   private loading: HTMLIonLoadingElement;
   public unavailableList: UserAvailability[] = [];
+  private hasData: boolean;
 
   constructor(
     public alertController: AlertController,
@@ -82,11 +83,19 @@ export class DoctorAvailabilityViewPage {
     await alert.present();
   }
 
+  nothingToDisplay(): boolean {
+    return this.availableList.length === 0
+      && this.unavailableList.length === 0
+      && this.hasData;
+  }
+
   refreshList($event?: any) {
     this.showLoading();
     this.userAvailabilityService.getListForUser()
       .subscribe(
         (result: UserAvailability[]) => {
+
+          this.hasData = true;
 
           if (result && result.length > 0) {
             this.availableList = result.filter(item => item.statusId === AVAILABLE);

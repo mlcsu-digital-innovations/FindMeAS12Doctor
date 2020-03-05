@@ -13,13 +13,14 @@ import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src
 export class DoctorAssessmentsPage {
 
   public assessmentRequestsLastUpdated: Date;
-  public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
+  // public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
 
   public allAssessments: AmhpAssessmentRequest[] = [];
   public assessmentRequests: AmhpAssessmentRequest[] = [];
   public scheduledAssessments: AmhpAssessmentRequest[] = [];
 
   private loading: HTMLIonLoadingElement;
+  private hasData: boolean;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
@@ -40,6 +41,7 @@ export class DoctorAssessmentsPage {
       .subscribe(
         result => {
 
+          this.hasData = true;
           this.allAssessments = result;
 
           if (result && result.length > 0) {
@@ -88,6 +90,12 @@ export class DoctorAssessmentsPage {
     if ($event) {
       $event.target.complete();
     }
+  }
+
+  nothingToDisplay(): boolean {
+    return this.scheduledAssessments.length === 0
+      && this.assessmentRequests.length === 0
+      && this.hasData;
   }
 
   async showLoading() {

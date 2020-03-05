@@ -7,11 +7,11 @@
   <br/>
   <ion-list>
 
-    <ion-list-header *ngIf="scheduledAssessments.length == 0 && assessmentRequests.length == 0">
+    <ion-list-header *ngIf="nothingToDisplay()">
       Assessments  
     </ion-list-header>
 
-    <ion-item *ngIf="scheduledAssessments.length == 0 && assessmentRequests.length == 0">
+    <ion-item *ngIf="nothingToDisplay()">
       <div class="no-data-container">
         <ion-icon
           color="medium"

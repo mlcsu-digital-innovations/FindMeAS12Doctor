@@ -132,14 +132,14 @@
   </ion-list>
 </ion-content>
 
-<ion-footer *ngIf="assessmentView?.canUpdateOutcome">
-  <ion-toolbar>
-    <ion-button 
+<ion-footer>
+  <ion-tab-bar>
+    <ion-tab-button 
+      *ngIf="assessmentView?.canUpdateOutcome"
       (click)="this.updateAssessment()"
-      color="warning"
-      expand="block"
     >
-      Update Status
-    </ion-button>  
-  </ion-toolbar>
+      <ion-icon color="primary" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="primary">Update Status</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

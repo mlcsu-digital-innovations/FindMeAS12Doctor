@@ -32,7 +32,7 @@
 
     <ion-item>
       <ion-label>
-        <ion-button expand="block" color="primary" (click)="getCoordinates()">
+        <ion-button expand="block" color="primary" fill="outline" (click)="getCoordinates()">
           <ion-icon name="compass"></ion-icon> 
           Use Device Location
         </ion-button>
@@ -41,31 +41,22 @@
         <h3 *ngIf="this.longitude !== undefined">Longitude: {{this.longitude | number:'.4-4'}}</h3> 
       </ion-label>
     </ion-item>
-
   </ion-list>
-
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-button 
-      (click)="cancelAcceptance()"
-      color="primary"
-      expand="block"
-      slot="start"
-      fill="outline"
-     >
-     <ion-icon name="close-circle-outline"></ion-icon>
-      Cancel
-    </ion-button>
-    <ion-button 
-      (click)="confirmRequest()"
-      color="primary"
-      expand="block"
-      slot="end"
+  <ion-tab-bar>
+    <ion-tab-button
+      (click)="confirmRequest()"      
     >
-      <ion-icon name="checkmark-circle-outline"></ion-icon>
-       Confirm
-    </ion-button>
-  </ion-toolbar>
+      <ion-icon color="success" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="success">Confirm</ion-label>
+    </ion-tab-button>
+    <ion-tab-button
+      (click)="cancelAcceptance()"
+    >
+      <ion-icon color="danger" name="close-circle-outline"></ion-icon>
+      <ion-label color="danger">Cancel</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

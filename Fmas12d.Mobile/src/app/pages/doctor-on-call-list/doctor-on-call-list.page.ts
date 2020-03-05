@@ -14,6 +14,7 @@ export class DoctorOnCallListPage {
   public onCallDoctorsUnconfirmed: OnCallDoctor[] = [];
   public onCallDoctorsRejected: OnCallDoctor[] = [];
   private loading: HTMLIonLoadingElement;
+  private hasData: boolean;
 
   constructor(
     private onCallService: OnCallService,
@@ -24,7 +25,8 @@ export class DoctorOnCallListPage {
     return (
       this.onCallDoctorsConfirmed.length +
       this.onCallDoctorsUnconfirmed.length +
-      this.onCallDoctorsRejected.length) > 0;
+      this.onCallDoctorsRejected.length) > 0
+      && this.hasData;
   }
 
   ionViewWillEnter() {
@@ -35,6 +37,7 @@ export class DoctorOnCallListPage {
     this.showLoading();
 
     this.onCallService.getListForUser().subscribe((result: OnCallDoctor[]) => {
+      this.hasData = true;
       if (result && result.length > 0) {
         this.onCallDoctorsConfirmed = result
           .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);

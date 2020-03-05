@@ -58,39 +58,24 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-
-    <ion-row>
-      <ion-col
-        *ngIf="assessmentRequest.doctorDetails.hasAccepted == null
-        || !assessmentRequest.doctorDetails.hasAccepted
-        || !assessmentRequest.doctorDetails.hasResponded"
-      >
-        <ion-button 
-          (click)="acceptRequest()"
-          color="primary"
-          expand="block"
-        >
-          <ion-icon name="checkmark-circle-outline"></ion-icon>
-          Accept
-        </ion-button>
-      </ion-col>
-      <ion-col
-        *ngIf="assessmentRequest.doctorDetails.hasAccepted == null 
-        || assessmentRequest.doctorDetails.hasAccepted
-        || !assessmentRequest.doctorDetails.hasResponded"
-      >
-        <ion-button 
-        (click)="declineRequest()"
-        color="primary"
-        expand="block"
-        fill="outline"
-        >
-        <ion-icon name="close-circle-outline"></ion-icon> 
-          Decline
-        </ion-button> 
-      </ion-col>
-    </ion-row>    
-   
-  </ion-toolbar>
+  <ion-tab-bar>
+    <ion-tab-button 
+      *ngIf="assessmentRequest.doctorDetails.hasAccepted == null
+      || !assessmentRequest.doctorDetails.hasAccepted
+      || !assessmentRequest.doctorDetails.hasResponded"
+      (click)="acceptRequest()"
+    >
+      <ion-icon color="success" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="success">Accept</ion-label>
+    </ion-tab-button>
+    <ion-tab-button
+      *ngIf="assessmentRequest.doctorDetails.hasAccepted == null 
+      || assessmentRequest.doctorDetails.hasAccepted
+      || !assessmentRequest.doctorDetails.hasResponded"
+      (click)="declineRequest()"
+    >
+      <ion-icon color="danger" name="close-circle-outline"></ion-icon>
+      <ion-label color="danger">Decline</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

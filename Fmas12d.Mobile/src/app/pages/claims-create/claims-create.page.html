@@ -133,23 +133,20 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-button 
-      (click)="validateClaim()"
-      color="primary"
-      expand="block"
+  <ion-tab-bar>
+    <ion-tab-button 
       *ngIf="!hasValidClaim"
+      (click)="validateClaim()"
     >
-      Register Claim
-    </ion-button>
-    <ion-button 
-      (click)="confirmClaim()"
-      color="primary"
-      expand="block"
+      <ion-icon color="primary" name="add-circle-outline"></ion-icon>
+      <ion-label color="primary">Register Claim</ion-label>
+    </ion-tab-button>
+    <ion-tab-button
       *ngIf="hasValidClaim"
+      (click)="confirmClaim()"
     >
-      Confirm Claim
-    </ion-button>    
-  </ion-toolbar>
+      <ion-icon color="primary" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="primary">Confirm Claim</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>
-

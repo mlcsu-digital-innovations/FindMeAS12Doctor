@@ -80,14 +80,13 @@
 </ion-content>
 
 <ion-footer *ngIf="assessment.hasBeenReviewed">
-  <ion-toolbar>
-    <ion-button 
+  <ion-tab-bar>
+    <ion-tab-button 
       [routerLink]="['/claims-create/', assessment.id]" 
       routerDirection="forward"
-      color="primary"
-      expand="block"
     >
-      Create Claim
-    </ion-button>  
-  </ion-toolbar>
+      <ion-icon color="primary" name="add-circle-outline"></ion-icon>
+      <ion-label color="primary">Create Claim</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

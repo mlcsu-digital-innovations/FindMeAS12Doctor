@@ -96,14 +96,13 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-button 
+  <ion-tab-bar>
+    <ion-tab-button 
       (click)="updateAvailability()"
       [disabled]="!doctorAvailability.isValid()"
-      color="primary"
-      expand="block"
-     >
-      Update
-    </ion-button>
-  </ion-toolbar>
+    >
+      <ion-icon color="primary" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="primary">Update</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-footer>

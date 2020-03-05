@@ -5,11 +5,11 @@
     <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-list-header *ngIf="claimsList.length == 0 && assessmentList.length == 0">
+    <ion-list-header *ngIf="nothingToDisplay()">
       Claims  
     </ion-list-header>
 
-    <ion-item *ngIf="claimsList.length == 0 && assessmentList.length == 0">
+    <ion-item *ngIf="nothingToDisplay()">
       <div class="no-data-container">
         <ion-icon
           color="medium"
