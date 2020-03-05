@@ -4,130 +4,113 @@
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content refreshingSpinner="none"></ion-refresher-content>
   </ion-refresher>
-  <ion-card>
-    <ion-card-header>
-      <ion-icon color="warning" size="large" name="help" class="icon"></ion-icon>
-      <span class="v-text"><strong>Unconfirmed</strong></span>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item-sliding class="item yellow-item" 
-                          *ngFor="let item of onCallDoctorsUnconfirmed" 
-                          detail="false"
-                          #slidingItem                          
+
+  <ion-list>
+
+    <ion-list-header *ngIf="!hasOncallDetails()">
+      On Call
+    </ion-list-header>
+
+    <ion-item *ngIf="!hasOncallDetails()">
+
+      <div class="no-data-container">
+        <ion-icon
+          color="medium"
+          name="cube"
+          class="no-data"
         >
-          <ion-item>
-            <ion-grid>
-              <ion-row>
-                Start:
-                {{item.start | date: 'dd MMM yy'}}
-                {{item.start | date: 'HH:mm'}}
-                <br />
-                End:
-                {{item.end | date: 'dd MMM yy'}}
-                {{item.end | date: 'HH:mm'}}              
-              </ion-row>
-              <ion-row class="location">
-                Location:&nbsp;
-                <span *ngIf="item.location.type === 'ContactDetail'">
-                  {{item.location.contactDetailTypeName}}
-                </span>
-                <span *ngIf="item.location.type === 'Postcode'">
-                  {{item.location.postcode}}                  
-                </span>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="primary" (click)="confirmOrReject(item, slidingItem)">              
-              Confirm /<br />
-              Reject
-            </ion-item-option>                                  
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-icon color="success" size="large" name="checkmark-circle" class="icon"></ion-icon>
-      <span class="v-text"><strong>Confirmed</strong></span>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item-sliding class="item green-item" 
-                          *ngFor="let item of onCallDoctorsConfirmed" 
-                          detail="false"
-                          #slidingItem>
-          <ion-item>
-            <ion-grid>
-              <ion-row>
-                Start: {{item.start | date: 'dd MMM yy'}}
-                {{item.start | date: 'HH:mm'}}
-                <br />
-                End:
-                {{item.end | date: 'dd MMM yy'}}
-                {{item.end | date: 'HH:mm'}}
-                <br />
-                Request sent:
-                {{item.onCallConfirmationSentAt | date: 'dd MMM yy'}}
-                {{item.onCallConfirmationSentAt | date: 'HH:mm'}}
-              </ion-row>
-              <ion-row class="location">
-                Location:&nbsp;
-                <span *ngIf="item.location.type === 'ContactDetail'">
-                  {{item.location.contactDetailTypeName}}
-                </span>
-                <span *ngIf="item.location.type === 'Postcode'">
-                  {{item.location.postcode}}
-                </span>
-              </ion-row>
-            </ion-grid>
-          </ion-item>          
-        </ion-item-sliding>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-icon color="danger" size="large" name="close-circle" class="icon"></ion-icon>
-      <span class="v-text"><strong>Rejected</strong></span>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item-sliding class="item red-item" 
-                          *ngFor="let item of onCallDoctorsRejected" 
-                          detail="false"
-                          #slidingItem
+        </ion-icon>
+        <h3>No on call details found</h3>
+      </div>
+    </ion-item>
+
+    <ion-list-header *ngIf="onCallDoctorsUnconfirmed.length > 0">
+      Unconfirmed Oncall  
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let item of onCallDoctorsUnconfirmed"
+      detail="false"
+      (click)="confirmOrReject(item)"
+    >
+      <ion-avatar slot="start">
+        <ion-icon
+          color="warning"
+          size="large"
+          name="help-circle"
         >
-          <ion-item>
-            <ion-grid>
-              <ion-row>
-                Start:
-                {{item.start | date: 'dd MMM yy'}}
-                {{item.start | date: 'HH:mm'}}
-                <br />
-                End:
-                {{item.end | date: 'dd MMM yy'}}
-                {{item.end | date: 'HH:mm'}}
-                <br />
-                Request sent:
-                {{item.onCallConfirmationSentAt | date: 'dd MMM yy'}}
-                {{item.onCallConfirmationSentAt | date: 'HH:mm'}}
-              </ion-row>
-              <ion-row class="location">
-                Location:&nbsp;
-                <span *ngIf="item.location.type === 'ContactDetail'">
-                  {{item.location.contactDetailTypeName}}
-                </span>
-                <span *ngIf="item.location.type === 'Postcode'">
-                  {{item.location.postcode}}                  
-                </span>
-              </ion-row>
-            </ion-grid>
-          </ion-item>         
-        </ion-item-sliding>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+        </ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h3>Start: {{item.start | date: 'dd MMMM yyyy'}} {{item.start | date: 'HH:mm'}}</h3>
+        <h3>End:   {{item.end | date: 'dd MMMM yyyy'}} {{item.end | date: 'HH:mm'}}</h3>
+        <h3 *ngIf="item.location.type === 'ContactDetail'">
+          Location: {{item.location.contactDetailTypeName}}
+        </h3>
+        <h3 *ngIf="item.location.type === 'Postcode'">
+          Location: {{item.location.postcode}}
+        </h3>
+      </ion-label>
+    </ion-item>
+    <br/>
+
+    <ion-list-header *ngIf="onCallDoctorsConfirmed.length > 0">
+      Confirmed Oncall  
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let item of onCallDoctorsConfirmed"
+      detail="false"
+    >
+      <ion-avatar slot="start">
+        <ion-icon
+          color="success"
+          size="large"
+          name="checkmark-circle"
+        >
+        </ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h3>Start: {{item.start | date: 'dd MMMM yyyy'}} {{item.start | date: 'HH:mm'}}</h3>
+        <h3>End:   {{item.end | date: 'dd MMMM yyyy'}} {{item.end | date: 'HH:mm'}}</h3>
+        <h3 *ngIf="item.location.type === 'ContactDetail'">
+          Location: {{item.location.contactDetailTypeName}}
+        </h3>
+        <h3 *ngIf="item.location.type === 'Postcode'">
+          Location: {{item.location.postcode}}
+        </h3>
+      </ion-label>
+    </ion-item>
+    <br/>
+
+    <ion-list-header *ngIf="onCallDoctorsRejected.length > 0">
+      Rejected Oncall  
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let item of onCallDoctorsRejected"
+      detail="false"
+    >
+      <ion-avatar slot="start">
+        <ion-icon
+          color="danger"
+          size="large"
+          name="close-circle"
+        >
+        </ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h3>Start: {{item.start | date: 'dd MMMM yyyy'}} {{item.start | date: 'HH:mm'}}</h3>
+        <h3>End:   {{item.end | date: 'dd MMMM yyyy'}} {{item.end | date: 'HH:mm'}}</h3>
+        <h3 *ngIf="item.location.type === 'ContactDetail'">
+          Location: {{item.location.contactDetailTypeName}}
+        </h3>
+        <h3 *ngIf="item.location.type === 'Postcode'">
+          Location: {{item.location.postcode}}
+        </h3>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
 </ion-content>
