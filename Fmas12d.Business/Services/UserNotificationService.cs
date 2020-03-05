@@ -10,32 +10,31 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace Fmas12d.Business.Services
 {
   public class UserNotificationService
    : ServiceBase<Entities.UserAssessmentNotification>, IUserNotificationService
-  {  
-    private HttpClient client;
-    private readonly IConfiguration _configuration;
-    private readonly string fcmEndpoint;
-    
+  {
+    private readonly string _fcmEndpoint;
+    private readonly string _fcmKey;
+
     public UserNotificationService(
       ApplicationContext context,
       IUserClaimsService userClaimsService,
       IConfiguration config)
       : base(context, userClaimsService)
     {
-      client = new HttpClient();
-      _configuration = config;
+      _fcmEndpoint = config.GetValue("FcmEndpoint", "https://fcm.googleapis.com/fcm/send");
+      Serilog.Log.Debug("FcmEndpoint config {FcmEndpoint}", _fcmEndpoint);
 
-      IConfigurationSection fcmConfig = _configuration.GetSection("FCM");
-      fcmEndpoint = _configuration.GetValue("FcmEndpoint","https://fcm.googleapis.com/fcm/send");
-      string fcmKey = _configuration.GetValue("FcmKey","");
-
-      client.DefaultRequestHeaders.Authorization =
-          new System.Net.Http.Headers.AuthenticationHeaderValue("Key", fcmKey);
-
+      _fcmKey = config.GetValue("FcmKey", "");
+      Serilog.Log.Debug("FcmKey config {FcmKey}", _fcmKey);
+      if (string.IsNullOrWhiteSpace(_fcmKey))
+      {
+        Serilog.Log.Error("FcmKey in configuration file is blank");
+      }
     }
 
     public async Task<IEnumerable<UserAssessmentNotification>> Get(
@@ -90,11 +89,12 @@ namespace Fmas12d.Business.Services
       return await GetAsync(notification.Id);
     }
 
-    public async Task<IEnumerable<UserAssessmentNotification>> SendAssessmentNotifications (
+    public async Task<IEnumerable<UserAssessmentNotification>> SendAssessmentNotifications(
       IEnumerable<UserAssessmentNotification> notifications
     )
     {
-      foreach(UserAssessmentNotification notification in notifications) {
+      foreach (UserAssessmentNotification notification in notifications)
+      {
         await SendAssessmentNotification(notification);
       }
 
@@ -105,16 +105,17 @@ namespace Fmas12d.Business.Services
       UserAssessmentNotification assessmentNotification
     )
     {
-       Data.Entities.UserAssessmentNotification notification = await _context
-      .UserAssessmentNotifications
-      .Include(uan => uan.NotificationText)
-      .Include(uan => uan.User)
-      .Include(uan => uan.Assessment)
-      .Where(uan => uan.Id == assessmentNotification.Id)
-      .SingleOrDefaultAsync();
-      
+      Data.Entities.UserAssessmentNotification notification = await _context
+     .UserAssessmentNotifications
+     .Include(uan => uan.NotificationText)
+     .Include(uan => uan.User)
+     .Include(uan => uan.Assessment)
+     .Where(uan => uan.Id == assessmentNotification.Id)
+     .SingleOrDefaultAsync();
+
       // send the notification using FCM
-      if (notification != null) {
+      if (notification != null)
+      {
 
         DateTimeOffset? assessmentDate =
           notification.Assessment.MustBeCompletedBy.HasValue
@@ -126,16 +127,19 @@ namespace Fmas12d.Business.Services
           .Replace("{0}", notification.Assessment.Postcode);
 
         string timePrefix =
-          notification.Assessment.MustBeCompletedBy.HasValue 
+          notification.Assessment.MustBeCompletedBy.HasValue
           ? "to be completed by "
           : "scheduled at ";
-        messageBody = messageBody.Replace("{1}", timePrefix + assessmentDate.Value.ToString("dd/MM/yyyy HH:mm"));
+        messageBody = messageBody.Replace(
+          "{1}", timePrefix + assessmentDate.Value.ToString("dd/MM/yyyy HH:mm"));
 
-        if (notification.User.FcmToken != null) {
-          bool messageSent =
-            await SendFcmNotification(notification.NotificationText.Name, messageBody, notification.User.FcmToken);
+        if (notification.User.FcmToken != null)
+        {
+          bool messageSent = await SendFcmNotification(
+            notification.NotificationText.Name, messageBody, notification.User.FcmToken);
 
-          if (messageSent == true) {
+          if (messageSent == true)
+          {
             notification.SentAt = DateTimeOffset.Now;
             UpdateModified(notification);
 
@@ -153,12 +157,13 @@ namespace Fmas12d.Business.Services
       int notificationTextId
     )
     {
-      Entities.UserAssessmentNotification notification = new Entities.UserAssessmentNotification();
-
-      notification.IsActive = true;
-      notification.AssessmentId = assessmentId;
-      notification.UserId = userId;
-      notification.NotificationTextId = notificationTextId;
+      Entities.UserAssessmentNotification notification = new Entities.UserAssessmentNotification
+      {
+        IsActive = true,
+        AssessmentId = assessmentId,
+        UserId = userId,
+        NotificationTextId = notificationTextId
+      };
 
       UpdateModified(notification);
 
@@ -199,48 +204,73 @@ namespace Fmas12d.Business.Services
       .AsNoTracking(asNoTracking)
       .Select(UserAssessmentNotification.ProjectFromEntity)
       .SingleOrDefaultAsync();
-  
+
       return notification;
     }
 
-    private async Task<bool> SendFcmNotification
-    (
+    private async Task<bool> SendFcmNotification(
       string messageTitle,
       string messageBody,
       string fcmToken
     )
     {
-      int messagesSuccessfullySent = 0;
+      FcmNotification fcmNotifications = new FcmNotification();
+      fcmNotifications.Notification.Title = messageTitle;
+      fcmNotifications.Notification.Body = messageBody;
+      fcmNotifications.To = fcmToken;
+      fcmNotifications.Data.NotificationMessage = messageBody;
+      fcmNotifications.Data.NotificationTitle = messageTitle;
 
-      FcmNotification fcmNotification = new FcmNotification();
+      string messageJson = LowercaseJsonSerializer.SerializeObject(fcmNotifications);
 
-      fcmNotification.Notification.Title = messageTitle;
-      fcmNotification.Notification.Body = messageBody;
-      fcmNotification.To = fcmToken;
-      fcmNotification.Data.NotificationMessage = messageBody;
-      fcmNotification.Data.NotificationTitle = messageTitle;
+      Serilog.Log.Debug("Sending FCM notification message {messageJson}", messageJson);
 
-      try
+      StringContent content = new StringContent(messageJson, Encoding.Default, "application/json");
+
+      HttpRequestMessage request = new HttpRequestMessage
       {
-        string messageJson = LowercaseJsonSerializer.SerializeObject(fcmNotification);
+        Content = content,
+        Method = HttpMethod.Post,
+        RequestUri = new Uri(_fcmEndpoint),
+      };
+      request.Headers.TryAddWithoutValidation("Authorization", $"key={_fcmKey}");
 
-        var response = await client.PostAsync(
-          fcmEndpoint,
-          new StringContent(messageJson, Encoding.UTF8, "application/json")
-        );
+      HttpResponseMessage response;
+      using (HttpClient client = new HttpClient())
+      {
+        response = await client.SendAsync(request);
+      }
 
-        string responseBody = await response.Content.ReadAsStringAsync();
+      Serilog.Log.Debug(
+        "Sent FCM notification response status code {statusCode}", response.StatusCode);
+
+      string responseBody = await response.Content.ReadAsStringAsync();
+
+      if (response.StatusCode == HttpStatusCode.OK)
+      {
+        Serilog.Log.Debug("Sent FCM notification response body {body}", responseBody);
 
         FcmNotificationResponse notificationResponse =
           JsonConvert.DeserializeObject<FcmNotificationResponse>(responseBody);
-        messagesSuccessfullySent = notificationResponse.Success;
-      }
-      catch
-      {
-        messagesSuccessfullySent = 0;
-      }
 
-      return messagesSuccessfullySent > 0;
+        if (notificationResponse.Success > 0)
+        {
+          Serilog.Log.Debug(
+            "Sent FCM notification response {@notificationResponse}", notificationResponse);
+          return true;
+        }
+        else
+        {
+          Serilog.Log.Error(
+            "Sent FCM notification failed {@notificationResponse}", notificationResponse);  
+          return false;
+        }
+      }
+      else
+      {
+        Serilog.Log.Error("Send FCM notification post failed {responseBody}", responseBody);
+        return false;
+      }
     }
   }
 }
