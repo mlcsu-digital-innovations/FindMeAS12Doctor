@@ -8,6 +8,15 @@
       Assessment Request  
     </ion-list-header>
 
+    <ion-item *ngIf="alreadyAllocated">
+      <ion-avatar slot="start">
+        <ion-icon size="large" name="information-circle" color="secondary" ></ion-icon>
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <h3>You have been directly allocated to this assessment</h3>
+      </ion-label>
+    </ion-item>
+
     <ion-item>
       <ion-label>
         <h3 class="bold">Postcode</h3>
@@ -51,15 +60,6 @@
         </h3>
         <h3 *ngIf="assessmentRequest.detailTypes.length == 0">None</h3>
       </ion-label>            
-    </ion-item>
-
-    <ion-item *ngIf="alreadyAllocated">
-      <ion-avatar slot="start">
-        <ion-icon size="large" name="information-circle" color="secondary" ></ion-icon>
-      </ion-avatar>
-      <ion-label class="ion-text-wrap">
-        <h3>You have been directly allocated to this assessment</h3>
-      </ion-label>
     </ion-item>
 
   </ion-list>
