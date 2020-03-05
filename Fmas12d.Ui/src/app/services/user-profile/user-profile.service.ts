@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { UserProfile } from 'src/app/interfaces/user-profile';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserProfileService {
+  private _loading$ = new BehaviorSubject<boolean>(true);
+  private _user: UserProfile;
 
-  constructor() { }
-
-  GetUser(): Observable<UserProfile> {
-    let user: UserProfile = {
+  constructor() { 
+    this._user = {
       contactDetails: [
         {
           address1: '27 Church Street',
@@ -68,22 +68,32 @@ export class UserProfileService {
       section12ApprovalStatusId: 1,
       section12ExpiryDate: new Date(),
       telephoneNumber: '01256 435822',
-      userSpecialities: [
+      specialities: [
         {
-          id: 11,
-          userId: 555,
-          specialityId: 2
+          name: 'Children',
+          id: 2,
+          resultText: null            
         },
         {
-          id: 12,
-          userId: 555,
-          specialityId: 3
+          name: 'Learning Disability',
+          id: 3,
+          resultText: null    
         },
       ]
     };
-
-    return of(user);
   }
 
+  get loading$() { return this._loading$.asObservable(); }
+
+  GetUser(): Observable<UserProfile> {
+    this._loading$.next(true);    
+    this._loading$.next(false);
+    return of(this._user);
+  }
+
+  UpdateUser(user: UserProfile): Observable<UserProfile> {
+    this._user = user;
+    return of(this._user);
+  }
 
 }

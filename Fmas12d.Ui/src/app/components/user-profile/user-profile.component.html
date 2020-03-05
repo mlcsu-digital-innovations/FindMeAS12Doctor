@@ -57,9 +57,9 @@
               <div class="col-md-4 mb-2 offset-md-2">
                 <div
                   class="invalid-field"
-                  *ngIf="displayNameField.errors && displayNameField.errors.InvalidDisplayName"
+                  *ngIf="controls.displayName.errors && controls.displayName.errors.required"
                 >
-                  <span>* Invalid Display Name</span>
+                  <span>* Display Name is required</span>
                 </div>        
               </div>
             </div>
@@ -77,9 +77,15 @@
                 <label class="required-field">Gender: </label>             
               </div>
               <div class="col-md-3">
-                <select class="custom-select custom-select-lg mb-2 form-control" formControlName="genderTypeId"
-                  #genderTypeId id="genderTypeId">                  
-                  <option *ngFor="let gender of genderTypes$ | async" [value]="gender.id" [selected]="gender.id==genderTypeIdField.value">
+                <select 
+                  class="custom-select custom-select-lg mb-2 form-control" 
+                  formControlName="genderTypeId"
+                  #genderTypeId id="genderTypeId"
+                >                  
+                  <option 
+                    *ngFor="let gender of genderTypes$ | async" 
+                    [value]="gender.id" [selected]="gender.id==controls.genderTypeId.value"
+                  >
                     {{gender.name}}
                   </option>
                 </select>
@@ -88,7 +94,13 @@
                 <label>S12 Approved: </label>             
               </div>
               <div class="col-md-3" *ngIf="userProfile.isDoctor">
-                <label>{{S12Status()}}</label>
+                <label>
+                  {{
+                    userProfile.section12ApprovalStatusId === section12Approved 
+                    ? 'Approved' 
+                    : 'Not Approved'
+                  }}
+                </label>
               </div>
             </div>
             <!-- GenderType Errors -->
@@ -96,9 +108,9 @@
               <div class="col-md-4 mb-2 offset-md-2">
                 <div
                   class="invalid-field"
-                  *ngIf="genderTypeIdField.errors && genderTypeIdField.errors.InvalidGenderType"
+                  *ngIf="controls.genderTypeId.errors && controls.genderTypeId.errors.required"
                 >
-                  <span>* Please select a gender </span>
+                  <span>* Gender is required </span>
                 </div>        
               </div>
             </div>
@@ -115,20 +127,26 @@
               </div>
             </div>            
             <!-- Email Errors -->
-            <div class="form-row">
+            <div class="form-row" *ngIf="controls.emailAddress.errors">
               <div class="col-md-4 mb-2 offset-md-2">
                 <div
                   class="invalid-field"
-                  *ngIf="emailAddressField.errors && emailAddressField.errors.InvalidEmailAddress"
+                  *ngIf="controls.emailAddress.errors.required"
                 >
-                  <span>* Invalid Email Address</span>
+                  <span>* Email Address is required</span>
+                </div>
+                <div
+                  class="invalid-field"
+                  *ngIf="controls.emailAddress.errors.email"
+                >
+                  <span>* Must be an email address</span>
                 </div>        
               </div>
             </div>
             <!-- Mobile Number -->
             <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
-                <label [class]="MobileNumberIsMandatory() ? 'required-field' : ''">Mobile: </label>             
+                <label [class]="userProfile.isAmhp ? 'required-field' : ''">Mobile: </label>             
               </div>
               <div class="col-md-3">
                 <input class="form-control"
@@ -142,9 +160,9 @@
               <div class="col-md-4 mb-2 offset-md-2">
                 <div
                   class="invalid-field"
-                  *ngIf="mobileNumberField.errors && mobileNumberField.errors.InvalidMobileNumber"
+                  *ngIf="controls.mobileNumber.errors && controls.mobileNumber.errors.required"
                 >
-                  <span>* Invalid Mobile Number</span>
+                  <span>* Mobile Number is required</span>
                 </div>        
               </div>
             </div>
@@ -169,9 +187,7 @@
                 <ng-multiselect-dropdown 
                   formControlName="specialities" 
                   [settings]="dropdownSettings"
-                  [data]="specialities" 
-                  (onSelect)="OnItemSelect($event)" 
-                  (onDeSelect)="OnItemDeselect($event)">
+                  [data]="allSpecialities$ | async">
                 </ng-multiselect-dropdown>
               </div>
               <div class="col-md-2" *ngIf="userProfile.isDoctor">
@@ -186,9 +202,9 @@
               <div class="col-md-4 mb-2 offset-md-2">
                 <div
                   class="invalid-field"
-                  *ngIf="!(selectedSpecialities && selectedSpecialities.length > 0)"
+                  *ngIf="controls.specialities.errors && controls.specialities.errors.required"
                 >
-                  <span>* Please select a speciality</span>
+                  <span>* Please select one or more specialities</span>
                 </div>        
               </div>
             </div>
@@ -239,13 +255,15 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="contact-detail-row" *ngFor="let contactDetail of userProfile.contactDetails">
+                    <tr class="contact-detail-row" *ngFor="let contactDetail of controls.contactDetails.value">
                       <td>
                         <ngb-highlight result="{{contactDetail.name}}">
                         </ngb-highlight>
                       </td>
                       <td>
-                        <ngb-highlight result="{{FullAddress(contactDetail)}}">
+                        <ngb-highlight result="{{contactDetail.address1 ? contactDetail.address1 : ''}}
+                        {{contactDetail.address1 && contactDetail.town ? ', ' : ''}}
+                        {{contactDetail.town ? contactDetail.town : ''}}">
                         </ngb-highlight>
                       </td>
                       <td>
@@ -278,14 +296,14 @@
               </div>
             </div>
             <!-- Contact Details Errors -->
-            <div class="form-row">
-              <div class="col-md-4 mb-2">
+            <div class="form-row" *ngIf="controls.contactDetails.errors">
+              <div class="col-md-4 mb-2">             
                 <div
                   class="invalid-field"
-                  *ngIf="!(userProfile.contactDetails && userProfile.contactDetails.length > 0)"
+                  *ngIf="controls.contactDetails.errors.baseRequired"
                 >
-                  <span>* Please add a contact detail</span>
-                </div>        
+                  <span>* Please add a Base contact detail</span>
+                </div>      
               </div>
             </div>
             <div *ngIf="userProfile.isDoctor" class="form-row user-row">
@@ -370,6 +388,8 @@
     </div>
   </div>
 </div>
+
+<app-delay-spinner *ngIf="userProfileService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 

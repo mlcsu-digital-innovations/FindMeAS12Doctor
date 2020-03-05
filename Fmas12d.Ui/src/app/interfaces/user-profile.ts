@@ -1,7 +1,7 @@
 import { BankDetailsProfile } from './bank-details-profile';
 import { ContactDetailProfile } from './contact-detail-profile';
+import { NameIdList } from './name-id-list';
 import { User } from './user';
-import { UserSpeciality } from './user-speciality';
 
 export interface UserProfile extends User {
   contactDetails: ContactDetailProfile[];
@@ -19,5 +19,5 @@ export interface UserProfile extends User {
 	section12ApprovalStatusId?: number;
 	section12ExpiryDate?: Date;
 	telephoneNumber: string;	
-	userSpecialities?: UserSpeciality[];	
+	specialities?: NameIdList[];	
 }

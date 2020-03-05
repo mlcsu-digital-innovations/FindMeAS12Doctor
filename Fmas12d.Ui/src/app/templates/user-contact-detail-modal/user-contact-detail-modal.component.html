@@ -126,7 +126,7 @@
                 [closeDelay]="500"
                 tooltipClass="subtle-tooltip"
                 (click)="ValidatePostcode()"
-                [disabled]="controls.postcode.errors.required"
+                [disabled]="controls.postcode.errors && controls.postcode.errors.required"
               >
                 {{ isSearchingForPostcode ? "Searching" : "Validate" }}
                 <span

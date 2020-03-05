@@ -1,7 +1,7 @@
 import { BankDetailsProfile } from 'src/app/interfaces/bank-details-profile';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ContactDetailProfile } from 'src/app/interfaces/contact-detail-profile';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, ValidatorFn, AbstractControl } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
@@ -22,9 +22,10 @@ export class UserProfileComponent implements OnInit {
   deleteModal: NgbModalRef;
   dropdownSettings: IDropdownSettings;
   genderTypes$: Observable<NameIdList[]>
+  readonly section12Approved: number = SECTION12_APPROVED;
   selectedContactDetail: ContactDetailProfile;
   selectedFinanceDetail: BankDetailsProfile;
-  selectedSpecialities: NameIdList[];
+  allSpecialities$: Observable<NameIdList[]>;
   specialities: NameIdList[];
   userProfile: UserProfile;
   userProfileForm: FormGroup;
@@ -43,7 +44,7 @@ export class UserProfileComponent implements OnInit {
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
     private toastService: ToastService,
-    private userProfileService: UserProfileService
+    public userProfileService: UserProfileService
   ) { }
   
   ngOnInit() {
@@ -54,66 +55,53 @@ export class UserProfileComponent implements OnInit {
       itemsShowLimit: 5,
       singleSelection: false,
       textField: 'name',
-    };
+    };                
 
-    this.userProfileService.GetUser().subscribe((result: UserProfile) => {
-      this.userProfile = result;     
-    });
-    this.genderTypes$ = this.nameIdListService.GetListData('gendertype');
-    
+    this.genderTypes$ = this.nameIdListService.GetListData('gendertype');    
+    this.allSpecialities$ = this.nameIdListService.GetListData('speciality');              
 
-    this.userProfileForm = this.formBuilder.group({
-      displayName: this.userProfile.displayName,      
-      genderTypeId: this.userProfile.genderTypeId,
-      emailAddress: this.userProfile.emailAddress,
-      mobileNumber: this.userProfile.mobileNumber,
-      telephoneNumber: this.userProfile.telephoneNumber,
-      gmcNumber: this.userProfile.gmcNumber,
-      specialities: ['']
+    this.userProfileService.GetUser().subscribe((result: UserProfile) => {      
+      this.PopulateFormFields(result);
     });
     
-    this.selectedSpecialities = [];
-    this.nameIdListService.GetListData('speciality').subscribe((result: NameIdList[]) => {
-      this.specialities = result;
-      this.specialities.forEach((specialityType: NameIdList) => {
-        if (this.userProfile.userSpecialities && this.userProfile.userSpecialities.find(item => item.specialityId === specialityType.id)) {
-          const speciality = { id: specialityType.id, name: specialityType.name } as NameIdList;
-          this.selectedSpecialities.push(speciality);
-        }      
-      });
-      this.userProfileForm.controls.specialities.setValue(this.selectedSpecialities);
-    });    
   }
 
-  get displayNameField() {
-    return this.userProfileForm.controls.displayName;
+  PopulateFormFields(userProfile: UserProfile) {    
+    this.userProfile = userProfile;    
+    if (this.userProfileForm) {
+      this.userProfileForm.patchValue(this.userProfile);
+    }       
+    else {
+      this.userProfileForm = this.formBuilder.group({
+        displayName: [this.userProfile.displayName, Validators.required],      
+        genderTypeId: [this.userProfile.genderTypeId, Validators.required],
+        emailAddress: [this.userProfile.emailAddress, !this.userProfile.isDoctor 
+          ? [Validators.required, Validators.email] 
+          : null],
+        mobileNumber: [this.userProfile.mobileNumber, this.userProfile.isAmhp ? Validators.required : null],
+        telephoneNumber: this.userProfile.telephoneNumber,
+        gmcNumber: [this.userProfile.gmcNumber, this.userProfile.isDoctor ? Validators.required : null],
+        specialities: [this.userProfile.specialities, this.userProfile.isDoctor ? Validators.required : null],
+        contactDetails: [this.userProfile.contactDetails, this.userProfile.isDoctor ? this.ContactDetailsBaseRequired : null],
+        financeDetails: [this.userProfile.financeDetails, this.userProfile.isDoctor ? Validators.required : null]
+      });  
+    }    
   }
 
-  get emailAddressField() {
-    return this.userProfileForm.controls.emailAddress;
-  }
+  get controls() {
+    return this.userProfileForm.controls;
+  }   
 
-  get genderTypeIdField() {
-    return this.userProfileForm.controls.genderTypeId;
+  ContactDetailsBaseRequired(control: AbstractControl) {       
+    if (!control.value || 
+      control.value.length === 0 || 
+      !control.value.find((item: ContactDetailProfile) => item.contactDetailTypeId == CONTACT_DETAIL_TYPE_BASE)) {
+      return { baseRequired: true };
+    }
+    else {
+      return null;
+    }  
   }
-
-  get mobileNumberField() {
-    return this.userProfileForm.controls.mobileNumber;
-  }
-
-  get telephoneNumberField() {
-    return this.userProfileForm.controls.telephoneNumber;
-  }
-
-  public S12Status() {
-    return this.userProfile.section12ApprovalStatusId === SECTION12_APPROVED 
-      ? 'Approved' 
-      : 'Not Approved';
-  }
-
-  public FullAddress(contactDetail: ContactDetailProfile) {
-    return `${contactDetail.address1 ? contactDetail.address1 : ''}${contactDetail.town ? ', ' + contactDetail.town : ''}`;
-  }  
 
   AddContactDetail() {
     this.userContactDetailModal = this.modalService.open(
@@ -163,80 +151,33 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-  OnItemDeselect(item: any) {
-    this.selectedSpecialities =
-      this.selectedSpecialities.filter(obj => obj.id !== item.id);
-  }
-
-  OnItemSelect(item: NameIdList) {
-    this.selectedSpecialities.push(item);
-  }  
-
-  MobileNumberIsMandatory() {
-    return this.userProfile.isAmhp;
-  }
-
   UserHasAllContactDetails() {
-    return this.userProfile.contactDetails.find(item => item.contactDetailTypeId === CONTACT_DETAIL_TYPE_BASE) &&
-    this.userProfile.contactDetails.find(item => item.contactDetailTypeId === CONTACT_DETAIL_TYPE_HOME);
+    return this.controls.contactDetails.value.find(item => item.contactDetailTypeId === CONTACT_DETAIL_TYPE_BASE) &&
+    this.controls.contactDetails.value.find(item => item.contactDetailTypeId === CONTACT_DETAIL_TYPE_HOME);
   }
 
   Cancel() {
 
   }
 
-  Save() {
-    let canContinue: boolean = true;
-
-    // check displayname
-    if (!this.displayNameField.value) {
-      this.displayNameField.setErrors({ InvalidDisplayName: true });
-      canContinue = false;
-    }
-
-    // check gender
-    if (!this.genderTypeIdField.value) {
-      this.genderTypeIdField.setErrors({ InvalidGenderType: true });
-      canContinue = false;
-    }
-
-    if (this.userProfile.isDoctor) {
-      // check specialities
-      if (this.selectedSpecialities.length === 0) {        
-        canContinue = false;
-      }
-
-      // check GMC number
-
-      // check contact details
-      if (!this.userProfile.contactDetails || this.userProfile.contactDetails.length === 0 || 
-         (this.userProfile.contactDetails.length === 1 &&
-          this.userProfile.contactDetails[0].contactDetailTypeId !== CONTACT_DETAIL_TYPE_BASE)) {
-        canContinue = false;
-      }
+  Save() {   
+    if (this.userProfileForm.valid) {      
+      const result: UserProfile = this.GetUserProfileFromForm();      
+      console.log('Updated', result);
+      this.userProfile = result;    
+      this.UpdateUser('User Profile', 'updated', 'update error');     
     }
     else {
-      // check email
-      if (!this.emailAddressField.value) {
-        this.emailAddressField.setErrors({ InvalidEmailAddress: true });
-        canContinue = false;
-      }
-
-      if (this.userProfile.isAmhp) {
-        if (!this.mobileNumberField.value) {
-          this.mobileNumberField.setErrors({ InvalidMobileNumber: true });
-          canContinue = false;
-        }
-      }
+      console.log('Invalid', this.userProfileForm.value);
     }
   }
 
   OnContactDetailModalActionAdd(userContactDetail: ContactDetailProfile) {
     this.userContactDetailModal.close();
     if (userContactDetail)
-    { 
-      this.userProfile.contactDetails.push(userContactDetail);
-      this.toastService.displaySuccess({ message: "Contact Detail added" });
+    {            
+      this.userProfile.contactDetails.push(userContactDetail);  
+      this.UpdateUser('Contact detail', 'added', 'add error');    
     }
     else {
       this.toastService.displayInfo({ message: "Contact Detail add has been cancelled" });      
@@ -246,10 +187,10 @@ export class UserProfileComponent implements OnInit {
   OnContactDetailModalActionEdit(userContactDetail: ContactDetailProfile) {
     this.userContactDetailModal.close();
     if (userContactDetail)
-    {      
-      this.toastService.displaySuccess({ message: "Contact Detail updated" });
-      let i: number = this.userProfile.contactDetails.findIndex(item => item.id === userContactDetail.id);
-      this.userProfile.contactDetails[i] = userContactDetail;
+    {                          
+      let i = this.userProfile.contactDetails.findIndex(item => item.id === userContactDetail.id);
+      this.userProfile.contactDetails[i] = userContactDetail;       
+      this.UpdateUser('Contact Detail', 'updated', 'update error');     
     }
     else {
       this.toastService.displayInfo({ message: "Contact Detail update has been cancelled" });      
@@ -260,9 +201,9 @@ export class UserProfileComponent implements OnInit {
     this.deleteModal.close();
 
     if (action) {      
-      this.toastService.displaySuccess({ message: "Contact Detail deleted" });                   
       this.userProfile.contactDetails = this.userProfile.contactDetails
         .filter(item => item.contactDetailTypeId !== this.selectedContactDetail.contactDetailTypeId);
+      this.UpdateUser('Contact Detail', 'deleted', 'delete error'); 
     }    
     else {
       this.toastService.displayInfo({ message: "Contact Detail delete has been cancelled" }); 
@@ -273,8 +214,8 @@ export class UserProfileComponent implements OnInit {
     this.userFinanceDetailModal.close();
     if (userFinanceDetail)
     { 
-      this.userProfile.financeDetails.push(userFinanceDetail);
-      this.toastService.displaySuccess({ message: "Contact Detail added" });
+      this.userProfile.financeDetails.push(userFinanceDetail);         
+      this.UpdateUser('Finance Detail', 'added', 'add error');         
     }
     else {
       this.toastService.displayInfo({ message: "Finance Detail add has been cancelled" });      
@@ -284,10 +225,10 @@ export class UserProfileComponent implements OnInit {
   OnFinanceDetailModalActionEdit(userFinanceDetail: BankDetailsProfile) {
     this.userFinanceDetailModal.close();
     if (userFinanceDetail)
-    {      
-      this.toastService.displaySuccess({ message: "Contact Detail updated" });
+    {            
       let i: number = this.userProfile.financeDetails.findIndex(item => item.id === userFinanceDetail.id);
       this.userProfile.financeDetails[i] = userFinanceDetail;
+      this.UpdateUser('Finance Detail', 'updated', 'update error'); 
     }
     else {
       this.toastService.displayInfo({ message: "Finance Detail update has been cancelled" });      
@@ -297,17 +238,40 @@ export class UserProfileComponent implements OnInit {
   OnDeleteFinanceDetailAction(action: boolean) {
     this.deleteModal.close();
 
-    if (action) {      
-      this.toastService.displaySuccess({ message: "Finance Detail deleted" });                   
+    if (action) {                             
       this.userProfile.financeDetails = this.userProfile.financeDetails
         .filter(item => 
           !(item.id === this.selectedFinanceDetail.id && 
             item.ccgId === this.selectedFinanceDetail.ccgId)
         );
+      this.UpdateUser('Finance Detail', 'deleted', 'delete error'); 
     }    
     else {
       this.toastService.displayInfo({ message: "Finance Detail delete has been cancelled" }); 
     }
   }
 
+  GetUserProfileFromForm(): UserProfile {
+    let result = this.userProfileForm.value as UserProfile;
+    result.contactDetailTypeId = this.userProfile.contactDetailTypeId;      
+    result.id = this.userProfile.id;
+    result.isAmhp = this.userProfile.isAmhp;
+    result.isDoctor = this.userProfile.isDoctor;
+    result.isFinance = this.userProfile.isFinance;    
+    result.organisationName = this.userProfile.organisationName;
+    result.profileTypeId = this.userProfile.profileTypeId;
+    result.section12ApprovalStatusId = this.userProfile.section12ApprovalStatusId;
+    result.section12ExpiryDate = this.userProfile.section12ExpiryDate;    
+
+    return result;
+  }
+
+  private UpdateUser(elementUpdated: string, success: string, error: string): void {
+    this.userProfileService.UpdateUser(this.userProfile).subscribe(result => {
+      this.PopulateFormFields(result);
+      this.toastService.displaySuccess({ message: `${elementUpdated} ${success}`});
+    }, err => {
+      this.toastService.displayError({ message: `${elementUpdated} ${error}`});
+    }); 
+  }
 }
