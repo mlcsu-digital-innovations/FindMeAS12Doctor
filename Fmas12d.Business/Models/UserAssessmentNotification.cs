@@ -13,7 +13,7 @@ namespace Fmas12d.Business.Models
       
       // TODO Assessment
       AssessmentId = entity.AssessmentId;
-      // TODO NotificationText
+      NotificationText = new NotificationText(entity.NotificationText);
       NotificationTextId = entity.NotificationTextId;
       SentAt = entity.SentAt;
       User = entity.User == null ? null : new User(entity.User);
@@ -39,6 +39,18 @@ namespace Fmas12d.Business.Models
       {
         return entity => new UserAssessmentNotification(entity);
       }
+    }
+    internal Data.Entities.UserAssessmentNotification MapToEntity()
+    {
+      Data.Entities.UserAssessmentNotification entity = new Data.Entities.UserAssessmentNotification()
+      {
+        AssessmentId = AssessmentId,
+        UserId = UserId,
+        NotificationTextId = NotificationTextId
+      };
+
+      BaseMapToEntity(entity);
+      return entity;
     }
   }
 }
