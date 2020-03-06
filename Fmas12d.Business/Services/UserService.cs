@@ -128,7 +128,10 @@ namespace Fmas12d.Business.Services
     {
       User model = await _context
         .Users
+        .Include(u => u.BankDetails)
+          .ThenInclude(bd => bd.Ccg)
         .Include(u => u.ContactDetails)
+          .ThenInclude(cd => cd.ContactDetailType)
         .Include(u => u.GenderType)
         .Include(u => u.ProfileType)
         .Include(u => u.UserSpecialities)

@@ -8,6 +8,7 @@ namespace Fmas12d.Business.Models
 
       AccountNumber = entity.AccountNumber;
       BankName = entity.BankName;
+      Ccg = new Ccg(entity.Ccg);
       CcgId = entity.CcgId;
       NameOnAccount = entity.NameOnAccount;
       SortCode= entity.SortCode;

@@ -40,15 +40,15 @@ export class UserFinanceDetailModalComponent implements OnInit {
       this.userProfileService.GetUser().subscribe((result: UserProfile) => {
         this.userProfile = result;     
         
-        let selectedFinanceDetail: BankDetailsProfile = this.userProfile.financeDetails
+        let selectedFinanceDetail: BankDetailsProfile = this.userProfile.bankDetails
           .find(item => item.id === this.financeDetail.id);
         
         if (selectedFinanceDetail) {
           this.financeDetail = selectedFinanceDetail;
         }
         
-        this.controls.ccg.setValue({ id: this.financeDetail.ccgId, resultText: this.financeDetail.ccgName });
-        this.controls.vsrNumber.setValue(this.financeDetail.VsrNumber);
+        this.controls.ccg.setValue({ id: this.financeDetail.ccgId, resultText: this.financeDetail.ccg.name });
+        this.controls.vsrNumber.setValue(this.financeDetail.vsrNumber);
       });
     }
   }
@@ -90,8 +90,8 @@ export class UserFinanceDetailModalComponent implements OnInit {
     if (this.financeDetailForm.valid) {      
       const result = {} as BankDetailsProfile;
       result.ccgId = this.controls.ccg.value.id;
-      result.ccgName = this.controls.ccg.value.resultText;
-      result.VsrNumber = this.controls.vsrNumber.value;
+      result.ccg.name = this.controls.ccg.value.resultText;
+      result.vsrNumber = this.controls.vsrNumber.value;
 
       if (this.financeDetail) {
         result.id = this.financeDetail.id;

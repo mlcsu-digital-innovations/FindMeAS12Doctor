@@ -173,8 +173,8 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       Add(
         end,
-        contactDetail.Latitude,
-        contactDetail.Longitude,
+        contactDetail.Latitude.HasValue ? contactDetail.Latitude.Value : 0,
+        contactDetail.Longitude.HasValue ? contactDetail.Longitude.Value : 0,
         start,
         Models.UserAvailabilityStatus.AVAILABLE,
         userDisplayName,

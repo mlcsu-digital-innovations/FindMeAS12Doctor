@@ -23,6 +23,7 @@ namespace Fmas12d.Business.Models
       Latitude = entity.Latitude;
       Longitude = entity.Longitude;
       Id = entity.Id;
+      MobileNumber = entity.MobileNumber;
       Postcode = entity.Postcode;
       TelephoneNumber = entity.TelephoneNumber;
       Town = entity.Town;
@@ -43,8 +44,9 @@ namespace Fmas12d.Business.Models
     public int ContactDetailTypeId { get; set; }
     [MaxLength(100)]
     public string EmailAddress { get; set; }
-    public decimal Latitude { get; set; }
-    public decimal Longitude { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
+    public string MobileNumber { get; set; }
     [MaxLength(10)]
     public string Postcode { get; set; }
     public string TelephoneNumber { get; set; }

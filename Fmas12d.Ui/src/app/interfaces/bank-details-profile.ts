@@ -1,7 +1,8 @@
-import { BankDetails } from './bank-details';
+import { Ccg } from './ccg';
 
-export interface BankDetailsProfile extends BankDetails {
+export interface BankDetailsProfile {
   id: number;
-  ccgId: number;
-  ccgName: string;  
+  ccg: Ccg;  
+  ccgId: number;  
+  vsrNumber: number;
 }

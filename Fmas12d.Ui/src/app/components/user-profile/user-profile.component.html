@@ -14,7 +14,7 @@
             </h6>
           </div>
         </div>
-        <div class="card-body offset-md-1">
+        <div class="card-body offset-md-1" *ngIf="userProfileForm">
           <form [formGroup]="userProfileForm" novalidate>
             <div class="form-row user-row">
               <div class="required-field col-md-3 mb-3 text-left">
@@ -257,13 +257,13 @@
                   <tbody>
                     <tr class="contact-detail-row" *ngFor="let contactDetail of controls.contactDetails.value">
                       <td>
-                        <ngb-highlight result="{{contactDetail.name}}">
+                        <ngb-highlight result="{{contactDetail.contactDetailTypeName}}">
                         </ngb-highlight>
                       </td>
                       <td>
-                        <ngb-highlight result="{{contactDetail.address1 ? contactDetail.address1 : ''}}
-                        {{contactDetail.address1 && contactDetail.town ? ', ' : ''}}
-                        {{contactDetail.town ? contactDetail.town : ''}}">
+                        <ngb-highlight result="{{(contactDetail.address1 ? contactDetail.address1 : '') +
+                        (contactDetail.address1 && contactDetail.town ? ', ' : '') +
+                        (contactDetail.town ? contactDetail.town : '')}}">
                         </ngb-highlight>
                       </td>
                       <td>
@@ -271,7 +271,7 @@
                         </ngb-highlight>
                       </td>
                       <td>
-                        <ngb-highlight result="{{contactDetail.email}}">
+                        <ngb-highlight result="{{contactDetail.emailAddress}}">
                         </ngb-highlight>
                       </td>
                       <td>
@@ -340,13 +340,13 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="contact-detail-row" *ngFor="let financeDetail of userProfile.financeDetails">
+                    <tr class="contact-detail-row" *ngFor="let financeDetail of userProfile.bankDetails">
                       <td>
-                        <ngb-highlight result="{{financeDetail.ccgName}}">
+                        <ngb-highlight result="{{financeDetail.ccg.name}}">
                         </ngb-highlight>
                       </td>
                       <td>
-                        <ngb-highlight result="{{financeDetail.VsrNumber}}">
+                        <ngb-highlight result="{{financeDetail.vsrNumber}}">
                         </ngb-highlight>
                       </td> 
                       <td class="text-right">                     

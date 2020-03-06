@@ -859,8 +859,8 @@ namespace Fmas12d.Business.Services
             $"for a User with an id of {model.DoctorUserId}");
         }
         doctor.ContactDetailId = contactDetail.Id;
-        doctor.Latitude = contactDetail.Latitude;
-        doctor.Longitude = contactDetail.Longitude;
+        doctor.Latitude = contactDetail.Latitude.HasValue ? contactDetail.Latitude.Value : 0;
+        doctor.Longitude = contactDetail.Longitude.HasValue ? contactDetail.Longitude.Value : 0;
         doctor.Postcode = null;
       }
       else if (!string.IsNullOrWhiteSpace(model.Postcode))
@@ -1124,11 +1124,11 @@ namespace Fmas12d.Business.Services
       assessmentDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
         assessment.Latitude,
         assessment.Longitude,
-        contactDetail.Latitude,
-        contactDetail.Longitude
+        contactDetail.Latitude.HasValue ? contactDetail.Latitude.Value : 0,
+        contactDetail.Longitude.HasValue ? contactDetail.Longitude.Value : 0
       );
-      assessmentDoctor.Latitude = contactDetail.Latitude;
-      assessmentDoctor.Longitude = contactDetail.Longitude;
+      assessmentDoctor.Latitude = contactDetail.Latitude.HasValue ? contactDetail.Latitude.Value : 0;
+      assessmentDoctor.Longitude = contactDetail.Longitude.HasValue ? contactDetail.Longitude.Value : 0;
 
       return true;
     }

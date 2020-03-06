@@ -7,6 +7,7 @@ namespace Fmas12d.Api.ViewModels
       if (model == null) return;
 
       AccountNumber = model.AccountNumber;
+      Ccg = new Ccg(model.Ccg);
       CcgId = model.CcgId;
       NameOnAccount = model.NameOnAccount;
       SortCode = model.SortCode;

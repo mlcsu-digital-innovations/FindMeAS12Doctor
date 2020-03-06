@@ -60,8 +60,12 @@ export class UserProfileComponent implements OnInit {
     this.genderTypes$ = this.nameIdListService.GetListData('gendertype');    
     this.allSpecialities$ = this.nameIdListService.GetListData('speciality');              
 
+    this.userProfileService.loading(true);
     this.userProfileService.GetUser().subscribe((result: UserProfile) => {      
       this.PopulateFormFields(result);
+      this.userProfileService.loading(false);
+    }, err => {
+      this.userProfileService.loading(false);
     });
     
   }
@@ -81,9 +85,9 @@ export class UserProfileComponent implements OnInit {
         mobileNumber: [this.userProfile.mobileNumber, this.userProfile.isAmhp ? Validators.required : null],
         telephoneNumber: this.userProfile.telephoneNumber,
         gmcNumber: [this.userProfile.gmcNumber, this.userProfile.isDoctor ? Validators.required : null],
-        specialities: [this.userProfile.specialities, this.userProfile.isDoctor ? Validators.required : null],
+        specialities: [this.userProfile.userSpecialities, this.userProfile.isDoctor ? Validators.required : null],
         contactDetails: [this.userProfile.contactDetails, this.userProfile.isDoctor ? this.ContactDetailsBaseRequired : null],
-        financeDetails: [this.userProfile.financeDetails, this.userProfile.isDoctor ? Validators.required : null]
+        bankDetails: [this.userProfile.bankDetails, this.userProfile.isDoctor ? Validators.required : null]
       });  
     }    
   }
@@ -214,7 +218,7 @@ export class UserProfileComponent implements OnInit {
     this.userFinanceDetailModal.close();
     if (userFinanceDetail)
     { 
-      this.userProfile.financeDetails.push(userFinanceDetail);         
+      this.userProfile.bankDetails.push(userFinanceDetail);         
       this.UpdateUser('Finance Detail', 'added', 'add error');         
     }
     else {
@@ -226,8 +230,8 @@ export class UserProfileComponent implements OnInit {
     this.userFinanceDetailModal.close();
     if (userFinanceDetail)
     {            
-      let i: number = this.userProfile.financeDetails.findIndex(item => item.id === userFinanceDetail.id);
-      this.userProfile.financeDetails[i] = userFinanceDetail;
+      let i: number = this.userProfile.bankDetails.findIndex(item => item.id === userFinanceDetail.id);
+      this.userProfile.bankDetails[i] = userFinanceDetail;
       this.UpdateUser('Finance Detail', 'updated', 'update error'); 
     }
     else {
@@ -239,7 +243,7 @@ export class UserProfileComponent implements OnInit {
     this.deleteModal.close();
 
     if (action) {                             
-      this.userProfile.financeDetails = this.userProfile.financeDetails
+      this.userProfile.bankDetails = this.userProfile.bankDetails
         .filter(item => 
           !(item.id === this.selectedFinanceDetail.id && 
             item.ccgId === this.selectedFinanceDetail.ccgId)

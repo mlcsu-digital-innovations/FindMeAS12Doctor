@@ -40,7 +40,7 @@ export class UserContactDetailModalComponent implements OnInit {
         '1',
         Validators.required
       ],
-      email: ['', Validators.email],
+      emailAddress: ['', Validators.email],
       latitude: new FormControl({ value: '', disabled: true}),
       longitude: new FormControl({ value: '', disabled: true}),
       mobileNumber: [''],
