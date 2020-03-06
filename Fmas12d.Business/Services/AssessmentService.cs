@@ -714,8 +714,15 @@ namespace Fmas12d.Business.Services
         );
       }
 
+      // check if referral status needs to be updated
+      if (entity.Doctors.Where(d => d.StatusId != AssessmentDoctorStatus.REMOVED).Count() == 0) 
+      {
+        entity.Referral.ReferralStatusId = ReferralStatus.SELECTING_DOCTORS;
+      }
+
       await _context.SaveChangesAsync();
       await SendUnsentNotifications(entity.UserAssessmentNotifications);
+
       return true;
     }
 
