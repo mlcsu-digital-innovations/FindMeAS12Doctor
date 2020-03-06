@@ -10,7 +10,7 @@ import { REFERRALSTATUSASSESSMENTSCHEDULED } from 'src/app/constants/app.constan
   styleUrls: ['./amhp-assessment-list.page.scss'],
 })
 export class AmhpAssessmentListPage implements OnInit {
-  public assessmentListLastUpdated: Date;  
+  public assessmentListLastUpdated: Date;
   public assessmentListScheduled: AmhpAssessmentList[] = [];
   public assessmentListUnscheduled: AmhpAssessmentList[] = [];
   private loading: HTMLIonLoadingElement;
@@ -18,12 +18,15 @@ export class AmhpAssessmentListPage implements OnInit {
   constructor(
     private assessmentService: AmhpAssessmentService,
     private loadingController: LoadingController
-    ) { }
+  ) { }
 
-  ngOnInit() {        
+  ngOnInit() {
     this.refreshPage();
   }
 
+  ionViewWillEnter() {
+    this.refreshPage();
+  }
 
   refreshPage($event?: any) {
     const request = this.assessmentService.getList();
@@ -40,8 +43,8 @@ export class AmhpAssessmentListPage implements OnInit {
     }, error => {
       this.closeLoading();
       this.closeRefreshing($event);
-    });    
-  }  
+    });
+  }
 
   closeLoading() {
     if (this.loading) {
@@ -59,7 +62,7 @@ export class AmhpAssessmentListPage implements OnInit {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
       spinner: 'lines',
-      duration: 5000
+      duration: 3000
     });
     await this.loading.present();
   }

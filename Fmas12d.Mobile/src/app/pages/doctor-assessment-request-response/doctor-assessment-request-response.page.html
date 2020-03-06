@@ -1,0 +1,81 @@
+<app-navbar title="Assessment Request"></app-navbar>
+
+<ion-content fullscreen>
+
+  <ion-list>
+
+    <ion-list-header>
+      Assessment Request  
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Postcode</h3>
+        <h3>{{assessmentRequest.postcode}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">{{assessmentRequest.isPlanned ? 'Scheduled' : 'Complete By'}}</h3>
+        <h3>{{assessmentRequest.dateTime | date: "dd MMMM yyyy HH:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">AMHP</h3>
+        <h3>{{assessmentRequest.amhpUserName}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="expectedLocation != null">
+      <ion-label>
+        <h3 class="bold">Known Location</h3>
+        <h3>{{expectedLocation}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="assessmentRequest.doctorDetails.distance != null">
+      <ion-label>
+        <h3 class="bold">Distance</h3>
+        <h3>{{assessmentRequest.doctorDetails.distance | number:'.1-1'}} miles</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="assessmentRequest?.detailTypes">
+      <ion-label>
+        <h3 class="bold">Further Information / Risks</h3>
+        <h3 *ngFor="let detail of assessmentRequest.detailTypes">
+          {{detail.name}}
+        </h3>
+        <h3 *ngIf="assessmentRequest.detailTypes.length == 0">None</h3>
+      </ion-label>            
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-tab-bar>
+    <ion-tab-button 
+      *ngIf="assessmentRequest.doctorDetails.hasAccepted == null
+      || !assessmentRequest.doctorDetails.hasAccepted
+      || !assessmentRequest.doctorDetails.hasResponded"
+      (click)="acceptRequest()"
+    >
+      <ion-icon color="success" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="success">Accept</ion-label>
+    </ion-tab-button>
+    <ion-tab-button
+      *ngIf="assessmentRequest.doctorDetails.hasAccepted == null 
+      || assessmentRequest.doctorDetails.hasAccepted
+      || !assessmentRequest.doctorDetails.hasResponded"
+      (click)="declineRequest()"
+    >
+      <ion-icon color="danger" name="close-circle-outline"></ion-icon>
+      <ion-label color="danger">Decline</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

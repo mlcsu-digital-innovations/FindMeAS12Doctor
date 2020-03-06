@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="showConfirm()">
-        <ion-icon name="arrow-back"></ion-icon>Back
+        <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title class="toolbar-title">
@@ -12,16 +12,13 @@
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
-  <div class="nav-info">
+
+  <div class="nav-info" *ngIf="lastUpdated">
     <ion-row>
-      <ion-col>
-        {{title}}
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="lastUpdated">
       <ion-col>
         <span class="last-updated">Last Updated {{lastUpdated | date: "dd/MM/yyyy HH:mm:ss"}}</span>
       </ion-col>
     </ion-row>
   </div>
+
 </ion-header>
