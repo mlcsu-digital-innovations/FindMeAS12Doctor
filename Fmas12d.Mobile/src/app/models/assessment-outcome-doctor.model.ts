@@ -1,4 +1,4 @@
-export class AmhpAssessmentOutcomeDoctor {
+export class AssessmentOutcomeDoctor {
   attended?: boolean;
   id: number;  
 

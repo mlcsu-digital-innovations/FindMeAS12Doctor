@@ -1,6 +1,6 @@
 import { KnownLocation } from './known-location.model';
 
-export class AmhpAssessmentSelectedDoctor {  
+export class AssessmentSelectedDoctor {
   displayName: string;
   distance: number;
   doctorId: number;

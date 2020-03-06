@@ -1,4 +1,4 @@
-import { AmhpAssessmentRequestDetails } from 'src/app/models/amhp-assessment-request-details.model';
+import { AssessmentRequestDetails } from 'src/app/models/assessment-request-details.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastController, NavController } from '@ionic/angular';
@@ -8,13 +8,13 @@ import { ContactDetailService } from 'src/app/services/contact-details/contact-d
 import { NameId } from 'src/app/interfaces/name-id.interface';
 
 @Component({
-  selector: 'app-amhp-assessment-accept-request',
-  templateUrl: './amhp-assessment-accept-request.page.html',
-  styleUrls: ['./amhp-assessment-accept-request.page.scss'],
+  selector: 'app-doctor-assessment-accept-request',
+  templateUrl: './doctor-assessment-accept-request.page.html',
+  styleUrls: ['./doctor-assessment-accept-request.page.scss'],
 })
-export class AmhpAssessmentAcceptRequestPage implements OnInit {
+export class DoctorAssessmentAcceptRequestPage implements OnInit {
 
-  public assessmentRequest: AmhpAssessmentRequestDetails;
+  public assessmentRequest: AssessmentRequestDetails;
   public currentLocationId: number;
   public latitude: number;
   public longitude: number;
@@ -35,7 +35,7 @@ export class AmhpAssessmentAcceptRequestPage implements OnInit {
           this.assessmentRequest = this.router.getCurrentNavigation().extras.state.assessment;
           this.getContactDetails();
         } else {
-          this.assessmentRequest = new AmhpAssessmentRequestDetails();
+          this.assessmentRequest = new AssessmentRequestDetails();
           // show an error page !
         }
       }

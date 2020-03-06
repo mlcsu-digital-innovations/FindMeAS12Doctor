@@ -10,24 +10,22 @@ import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src
   templateUrl: './doctor-assessments.page.html',
   styleUrls: ['./doctor-assessments.page.scss'],
 })
-export class DoctorAssessmentsPage implements OnInit {
+export class DoctorAssessmentsPage {
 
   public assessmentRequestsLastUpdated: Date;
-  public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
-  
+  // public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
+
   public allAssessments: AmhpAssessmentRequest[] = [];
   public assessmentRequests: AmhpAssessmentRequest[] = [];
   public scheduledAssessments: AmhpAssessmentRequest[] = [];
 
   private loading: HTMLIonLoadingElement;
+  private hasData: boolean;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
     private loadingController: LoadingController,
     private toastController: ToastController) { }
-
-  ngOnInit() {
-  }
 
   ionViewDidEnter() {
     this.refreshPage();
@@ -43,6 +41,7 @@ export class DoctorAssessmentsPage implements OnInit {
       .subscribe(
         result => {
 
+          this.hasData = true;
           this.allAssessments = result;
 
           if (result && result.length > 0) {
@@ -64,10 +63,9 @@ export class DoctorAssessmentsPage implements OnInit {
           this.closeLoading();
           this.closeRefreshing($event);
         }, error => {
-          this.showErrorToast(error)
+          this.showErrorToast(error);
           this.closeLoading();
           this.closeRefreshing($event);
-          
         }
       );
   }
@@ -94,6 +92,12 @@ export class DoctorAssessmentsPage implements OnInit {
     }
   }
 
+  nothingToDisplay(): boolean {
+    return this.scheduledAssessments.length === 0
+      && this.assessmentRequests.length === 0
+      && this.hasData;
+  }
+
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
@@ -118,5 +122,5 @@ export class DoctorAssessmentsPage implements OnInit {
       position: 'top'
     });
     await toast.present();
-  }  
+  }
 }

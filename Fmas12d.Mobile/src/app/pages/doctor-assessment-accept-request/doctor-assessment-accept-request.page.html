@@ -1,0 +1,62 @@
+<app-navbar title="Confirm Acceptance"></app-navbar>
+
+<ion-content fullscreen>
+
+  <ion-list>
+    <ion-list-header>
+      Accept Assessment Request  
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment Date / Time</h3>
+        <h3>{{assessmentRequest.dateTime | date: "dd MMMM yyyy HH:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment Postcode</h3>
+        <h3>{{assessmentRequest.postcode}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="contactDetails.length > 0">
+      <ion-label>
+        <h3 class="bold">Update Current Location</h3>
+      </ion-label>
+      <ion-select [(ngModel)]="currentLocationId" (ionChange)="contactChanged()">
+        <ion-select-option *ngFor="let contact of contactDetails" value={{contact.id}}>{{contact.name}}</ion-select-option>
+      </ion-select>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <ion-button expand="block" color="primary" fill="outline" (click)="getCoordinates()">
+          <ion-icon name="compass"></ion-icon> 
+          Use Device Location
+        </ion-button>
+        <br/>
+        <h3 *ngIf="this.latitude !== undefined">Latitude: {{this.latitude | number:'.4-4'}}</h3> 
+        <h3 *ngIf="this.longitude !== undefined">Longitude: {{this.longitude | number:'.4-4'}}</h3> 
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-tab-bar>
+    <ion-tab-button
+      (click)="confirmRequest()"      
+    >
+      <ion-icon color="success" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="success">Confirm</ion-label>
+    </ion-tab-button>
+    <ion-tab-button
+      (click)="cancelAcceptance()"
+    >
+      <ion-icon color="danger" name="close-circle-outline"></ion-icon>
+      <ion-label color="danger">Cancel</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
