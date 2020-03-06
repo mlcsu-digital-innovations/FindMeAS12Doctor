@@ -451,7 +451,9 @@ namespace Fmas12d.Business.Services
         // don't include doctors that are already selected or allocated
         model.AvailableDoctors =
          model.AvailableDoctors
-         .Where(d1 => !entity.Doctors.Any(d2 => d1.UserId == d2.DoctorUserId));
+         .Where(d1 => !entity.Doctors.Any(
+           d2 => d1.UserId == d2.DoctorUserId && d2.StatusId != AssessmentDoctorStatus.REMOVED)
+          );
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
         {
