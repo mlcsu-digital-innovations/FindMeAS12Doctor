@@ -73,19 +73,25 @@
           color="success"
           size="large"
           name="checkmark-circle"
-          *ngIf="assessment.doctorHasAccepted == true">
+          *ngIf="assessment.doctorHasAccepted == true && !doctorIsAllocated(assessment)">
         </ion-icon>
         <ion-icon
           color="warning"
           size="large"
           name="help-circle"
-          *ngIf="assessment.doctorHasAccepted == null">
+          *ngIf="assessment.doctorHasAccepted == null && !doctorIsAllocated(assessment)">
         </ion-icon>
         <ion-icon
           color="danger"
           size="large"
           name="close-circle"
-          *ngIf="assessment.doctorHasAccepted == false">
+          *ngIf="assessment.doctorHasAccepted == false && !doctorIsAllocated(assessment)">
+        </ion-icon>
+        <ion-icon
+          color="primary"
+          size="large"
+          name="alert"
+          *ngIf="doctorIsAllocated(assessment)">
         </ion-icon>
       </ion-avatar>
       <ion-label>

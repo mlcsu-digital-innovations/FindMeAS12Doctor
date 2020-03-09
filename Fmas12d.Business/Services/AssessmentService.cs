@@ -1442,7 +1442,8 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Doctors)
           .ThenInclude(d => d.DoctorUser)
         .Include(a => a.Referral)
-        .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
+        .Where(a => a.Doctors.Any
+          (d => d.DoctorUser.Id == doctorUserId && d.StatusId != AssessmentDoctorStatus.REMOVED))
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);
 
