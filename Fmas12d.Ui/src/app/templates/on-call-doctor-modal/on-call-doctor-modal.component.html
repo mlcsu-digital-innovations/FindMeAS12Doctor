@@ -7,13 +7,13 @@
     <div class="form-row">
       <div class="col-md-10">
         <label for="doctorSearch">Search for Doctor</label>
-        <div class="row" name="doctorSearch">          
-          <div class="col-md-6">            
+        <div class="row" name="doctorSearch">
+          <div class="col-md-6">
             <input
               type="search"
               class="form-control"
               id="doctorSearch"
-              #doctorSearch              
+              #doctorSearch
               formControlName="doctorSearch"
               [ngbTypeahead]="RegisteredDoctorSearch"
               [resultFormatter]="FormatTypeAheadResults"
@@ -28,20 +28,23 @@
             <button
               type="button"
               class="btn btn-primary"
-              (click)="ValidateRegisteredDoctor()"              
+              (click)="ValidateRegisteredDoctor()"
             >
               <i class="fas fa-bolt"></i>
               Validate
             </button>
-          </div>      
-        </div> 
-      </div>           
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Doctor Search Errors-->
     <div class="form-row" *ngIf="doctorSearchField.errors">
       <div class="col-md-12 mb-2">
         <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
           <span>* No Results Found </span>
+        </div>
+        <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
+          <span>* Invalid doctor </span>
         </div>
       </div>
     </div>
@@ -77,6 +80,7 @@
           </div>
         </div>
       </div>
+      <br/>
     </div>
     <!-- Start Date -->
     <div class="form-row">
@@ -118,7 +122,7 @@
           *ngIf="startDateField.errors && startDateField.errors.DatePickerFormat"
         >
           <span>* Invalid Date Format</span>
-        </div>        
+        </div>
       </div>
     </div>
     <!-- End Date -->
@@ -155,19 +159,19 @@
     </div>
     <!-- End Date Format Errors-->
     <div class="form-row">
-      <div class="col-md-4 mb-2 reduced-top-margin">
+      <div class="col-md-6 mb-2 reduced-top-margin">
         <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat">
           <span>* Invalid Date Format</span>
         </div>
         <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
-          <span>* End date is earlier than the start date</span>
+          <span>* End date must be greater than start date</span>
         </div>
       </div>
     </div>
 
     <!-- Location -->
     <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
-      <div class="col-md-10">        
+      <div class="col-md-10">
         <div class="row" name="location">
           <div class="col-md-6">
             <label for="contactDetail">Location</label>
@@ -176,8 +180,8 @@
               formControlName="contactDetail"
               #contactDetail
               id="contactDetail"
-            >              
-              <option *ngFor="let contactDetail of contactDetails" 
+            >
+              <option *ngFor="let contactDetail of contactDetails"
                 [disabled]="contactDetail.id===null"
                 [selected]="contactDetail.id===locationField.value"
                 [value]="contactDetail.id"
@@ -185,13 +189,13 @@
                 {{contactDetail.name}}
               </option>
             </select>
-          </div>      
-        </div>                      
+          </div>
+        </div>
       </div>
     </div>
     <!-- Location Errors-->
     <div class="form-row">
-      <div class="col-md-4 mb-2 reduced-top-margin">        
+      <div class="col-md-4 mb-2 reduced-top-margin">
         <div
           class="invalid-field"
           *ngIf="locationField.errors && locationField.errors.NoLocationSelected"
@@ -199,13 +203,13 @@
           <span>* Please select a location</span>
         </div>
       </div>
-    </div> 
+    </div>
     <!-- Postcode -->
     <div class="form-row" *ngIf="locationField.value == 0">
       <div class="col-md-10">
         <label for="locationPostcode">Location Postcode</label>
         <div class="row" name="locationPostcode">
-          <div class="col-md-4">            
+          <div class="col-md-4">
             <input
               type="search"
               maxlength="8"
@@ -242,11 +246,11 @@
                   *ngIf="IsSearchingForPostcode()"
                 >
                 </span>
-              </button>                                      
+              </button>
             </div>
-          </div>       
+          </div>
         </div>
-      </div>      
+      </div>
     </div>
     <!-- Postcode Errors-->
    <div class="form-row">
@@ -256,20 +260,20 @@
           *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
         >
           <span>* Invalid Postcode</span>
-        </div>        
+        </div>
       </div>
-    </div>   
+    </div>
     <div class="form-row">
       <div class="col-md-4 offset-md-8 text-right cancelOrSave">
         <button
           type="button"
           class="btn btn-standard btn-cancel"
-          (click)="Cancel()"          
+          (click)="Cancel()"
         >Cancel</button>
         <button
           type="button"
           class="btn btn-primary btn-standard"
-          (click)="SaveOnCallDoctor()"          
+          (click)="SaveOnCallDoctor()"
         >Save</button>
       </div>
     </div>
