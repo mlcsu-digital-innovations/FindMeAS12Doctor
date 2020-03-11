@@ -1,9 +1,16 @@
 using System;
+using System.Net;
+using System.IO;
+using Fmas12d.Business.Models;
+using Newtonsoft.Json;
 
 namespace Fmas12d.Business.Helpers
 {
   public static class Distance
   {
+    public static string GoogleDistanceMatrixKey { get; set; }
+    public static string GoogleDistanceMatrixEndpoint { get; set; }
+
     private static double ConvertDegreesToRadians(decimal? degrees)
     {
       return (double)degrees * Math.PI / 180.0;
@@ -38,5 +45,35 @@ namespace Fmas12d.Business.Helpers
 
       return (decimal)miles;
     }
+
+    public static decimal CalculateDistanceByRoad(
+      decimal startLatitude,
+      decimal startLongitude,
+      decimal endLatitude,
+      decimal endlongitude
+    )
+    {
+
+      string url = $"{GoogleDistanceMatrixEndpoint}?units=imperial&origins={startLatitude},{startLongitude}&destinations={endLatitude},{endlongitude}&key={GoogleDistanceMatrixKey}";
+
+      WebRequest request = WebRequest.Create(url);
+
+      WebResponse response = request.GetResponse();
+
+      Stream data = response.GetResponseStream();
+
+      StreamReader reader = new StreamReader(data);
+
+      // json-formatted string from maps api
+      string responseFromServer = reader.ReadToEnd();
+
+      response.Close();
+
+      GoogleDistanceMatrixResult json = JsonConvert.DeserializeObject<GoogleDistanceMatrixResult>(responseFromServer);
+
+      return (decimal)(Int32.Parse(json.Rows[0].Elements[0].Distance.Value) / 1609.34);
+
+    }
   }
 }
+

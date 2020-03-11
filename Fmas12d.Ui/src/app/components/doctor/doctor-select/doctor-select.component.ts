@@ -66,6 +66,7 @@ export class DoctorSelectComponent implements OnInit {
                 this.referralId = assessment.referralId;
                 this.assessmentId = assessment.id;
                 this.allDoctors = assessment.availableDoctors;
+                console.log(assessment);
                 this.DisplayDoctorsWithinSearchRadius(this.doctorDistance.value);
                 return assessment;
               })

@@ -457,7 +457,7 @@ namespace Fmas12d.Business.Services
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
         {
-          availabilityDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+          availabilityDoctor.Distance = Distance.CalculateDistanceByRoad(
             entity.Latitude,
             entity.Longitude,
             availabilityDoctor.Location.Latitude,

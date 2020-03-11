@@ -2,6 +2,7 @@
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
+using Fmas12d.Business.Helpers;
 using Fmas12d.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Policy;
@@ -227,6 +228,9 @@ namespace Fmas12d.Api
       });
 
       Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);
+
+      Distance.GoogleDistanceMatrixKey = Configuration["GoogleDistanceMatrixKey"];
+      Distance.GoogleDistanceMatrixEndpoint = Configuration["GoogleDistanceMatrixEndpoint"];
     }
   }
 }
