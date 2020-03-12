@@ -45,35 +45,6 @@ namespace Fmas12d.Business.Helpers
 
       return (decimal)miles;
     }
-
-    public static decimal CalculateDistanceByRoad(
-      decimal startLatitude,
-      decimal startLongitude,
-      decimal endLatitude,
-      decimal endlongitude
-    )
-    {
-
-      string url = $"{GoogleDistanceMatrixEndpoint}?units=imperial&origins={startLatitude},{startLongitude}&destinations={endLatitude},{endlongitude}&key={GoogleDistanceMatrixKey}";
-
-      WebRequest request = WebRequest.Create(url);
-
-      WebResponse response = request.GetResponse();
-
-      Stream data = response.GetResponseStream();
-
-      StreamReader reader = new StreamReader(data);
-
-      // json-formatted string from maps api
-      string responseFromServer = reader.ReadToEnd();
-
-      response.Close();
-
-      GoogleDistanceMatrixResult json = JsonConvert.DeserializeObject<GoogleDistanceMatrixResult>(responseFromServer);
-
-      return (decimal)(Int32.Parse(json.Rows[0].Elements[0].Distance.Value) / 1609.34);
-
-    }
   }
 }
 
