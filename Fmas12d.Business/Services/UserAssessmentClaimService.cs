@@ -19,8 +19,8 @@ namespace Fmas12d.Business.Services
     private readonly IUserService _userService;
     private readonly IContactDetailTypeService _contactDetailTypeService;
     private readonly ILocationDetailService _locationDetailService;
-
     private readonly IUserNotificationService _notificationService;
+    private readonly IDistanceCalculationService _distanceCalculationService;
 
     public UserAssessmentClaimService(
       ApplicationContext context,
@@ -366,7 +366,7 @@ namespace Fmas12d.Business.Services
         ? startLocation 
         : await _locationDetailService.GetPostcodeDetailsAsync(model.EndPostcode);
 
-      decimal outDistance = Distance.CalculateDistanceAsCrowFlies(
+      decimal outDistance = await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
         startLocation.Latitude,
         startLocation.Longitude,
         assessmentLocation.Latitude,
@@ -376,7 +376,7 @@ namespace Fmas12d.Business.Services
       decimal inDistance =
         model.StartPostcode == model.EndPostcode
         ? outDistance
-        : Distance.CalculateDistanceAsCrowFlies(
+        : await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
           assessmentLocation.Latitude,
           assessmentLocation.Longitude,
           endLocation.Latitude,
