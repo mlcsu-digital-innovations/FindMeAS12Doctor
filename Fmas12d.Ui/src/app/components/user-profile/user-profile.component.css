@@ -21,12 +21,7 @@
   font-size: smaller;
 }
 
-.table-contact-details th:nth-child(n-5) {  
-  background-color:#0dadb7;
-  color: white;
-}
-
-.table-contact-details th:nth-child(n+5) {  
+.table-contact-details th {  
   background-color:#0dadb7;
   color: white;
 }
@@ -37,8 +32,4 @@
 
 .table-contact-details td a {
   font-weight: bold;
-}
-
-.table-contact-details th:nth-child(n-1) {
-  width: 40px;
 }

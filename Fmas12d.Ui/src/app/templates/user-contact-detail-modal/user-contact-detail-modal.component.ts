@@ -6,8 +6,6 @@ import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.se
 import { PostcodeRegex } from 'src/app/constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserProfile } from 'src/app/interfaces/user-profile';
-import { UserProfileService } from 'src/app/services/user-profile/user-profile.service';
 
 @Component({
   selector: 'app-user-contact-detail-modal',
@@ -15,20 +13,19 @@ import { UserProfileService } from 'src/app/services/user-profile/user-profile.s
   styleUrls: ['./user-contact-detail-modal.component.css']
 })
 export class UserContactDetailModalComponent implements OnInit {
-  @Output() actioned = new EventEmitter<any>();
+  @Output() actioned = new EventEmitter<ContactDetailProfile>();
   @Input() public contactDetail: ContactDetailProfile;
+  @Input() contactDetails: ContactDetailProfile[];
    
   contactDetailForm: FormGroup;
   contactDetailTypes: NameIdList[];
-  isSearchingForPostcode: boolean;
-  userProfile: UserProfile;
+  isSearchingForPostcode: boolean;  
 
   constructor(
     private formBuilder: FormBuilder,
     private nameIdListService: NameIdListService,
     private postcodeValidationService: PostcodeValidationService,
-    private toastService: ToastService,
-    private userProfileService: UserProfileService
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {    
@@ -56,31 +53,28 @@ export class UserContactDetailModalComponent implements OnInit {
       telephoneNumber: [''],
       town: ['']
     });
-
-    this.userProfileService.GetUser().subscribe((result: UserProfile) => {
-      this.userProfile = result;     
-
-      this.nameIdListService.GetListData('contactdetailtype').subscribe((result: NameIdList[]) => {
-        this.contactDetailTypes = result;
+  
+    this.nameIdListService.GetListData('contactdetailtype')
+      .subscribe((contactDetailTypeList: NameIdList[]) => {
+        this.contactDetailTypes = contactDetailTypeList;
         if (this.contactDetail) {
           this.controls.contactDetailTypeId.disable();
 
-          if (this.contactDetail.id) {
-            this.contactDetail = this.userProfile.contactDetails
+          if (this.contactDetail.id && this.contactDetails) {
+            this.contactDetail = this.contactDetails
               .find(item => item.contactDetailTypeId === this.contactDetail.contactDetailTypeId);
           }
           
           this.contactDetailForm.patchValue(this.contactDetail);         
         }
-        else if (this.userProfile.contactDetails && this.userProfile.contactDetails.length === 1) {
+        else if (this.contactDetails && this.contactDetails.length === 1) {
           let remainingContactDetailTypeId: number = this.contactDetailTypes
-            .find(item => item.id != this.userProfile.contactDetails[0].contactDetailTypeId).id;
+            .find(item => item.id != this.contactDetails[0].contactDetailTypeId).id;
           this.contactDetailTypes = this.contactDetailTypes
             .filter(item => item.id == remainingContactDetailTypeId);
           this.controls.contactDetailTypeId.setValue(remainingContactDetailTypeId);            
         }
       });
-    });      
   }
 
   get controls() {
@@ -110,15 +104,15 @@ export class UserContactDetailModalComponent implements OnInit {
     this.FormatPostcode();
 
     this.postcodeValidationService.validatePostcode(this.controls.postcode.value)
-      .subscribe((result: any) => {        
+      .subscribe((postcodeDetails: any) => {        
         this.isSearchingForPostcode = false;
-        this.controls.latitude.setValue(result.latitude);
-        this.controls.longitude.setValue(result.longitude);
+        this.controls.latitude.setValue(postcodeDetails.latitude);
+        this.controls.longitude.setValue(postcodeDetails.longitude);
         this.controls.postcode.setErrors(null);
         this.toastService.displaySuccess({          
           message: 'Postcode is valid'
         });
-      }, (err) => {
+      }, (error) => {
         this.isSearchingForPostcode = false;
         this.controls.latitude.reset();
         this.controls.longitude.reset();
@@ -139,11 +133,11 @@ export class UserContactDetailModalComponent implements OnInit {
       this.controls.contactDetailTypeId.enable();
       this.controls.latitude.enable();
       this.controls.longitude.enable();
-      const result = this.contactDetailForm.value as ContactDetailProfile;
-      result.id = this.contactDetail ? this.contactDetail.id : 0;
-      result.name = this.contactDetailTypes
-        .find(item => item.id == result.contactDetailTypeId).name;
-      this.actioned.emit(result);
+      const contactDetail = this.contactDetailForm.value as ContactDetailProfile;
+      contactDetail.id = this.contactDetail ? this.contactDetail.id : 0;
+      contactDetail.contactDetailTypeName = this.contactDetailTypes
+        .find(item => item.id == contactDetail.contactDetailTypeId).name;
+      this.actioned.emit(contactDetail);
     }        
   }
 }

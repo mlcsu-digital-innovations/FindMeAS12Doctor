@@ -340,7 +340,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="contact-detail-row" *ngFor="let financeDetail of userProfile.bankDetails">
+                    <tr class="contact-detail-row" *ngFor="let financeDetail of controls.bankDetails.value">
                       <td>
                         <ngb-highlight result="{{financeDetail.ccg.name}}">
                         </ngb-highlight>
@@ -371,11 +371,12 @@
             </div>            
             <div class="form-row mt-more-2">              
               <div class="col-md-2 mb-2 {{userProfile.isDoctor ? 'offset-md-8' : 'offset-md-4'}} text-right">
-                <button class="btn btn-standard btn-cancel" type="button" (click)="Cancel()">
+                <button class="btn btn-standard btn-cancel" type="button" [routerLink]="Cancel()">
                   <i class="far fa-times-circle"></i>
                   Cancel
                 </button>
                 <button class="btn btn-primary btn-standard btn-spaced" type="button"
+                  [disabled]="!userProfileForm.valid"
                   (click)="Save()">
                   <i class="fas fa-check"></i>
                   Save
@@ -395,7 +396,8 @@
 
 <ng-template #addUserContactDetailModal>
   <app-user-contact-detail-modal    
-  (actioned)="OnContactDetailModalActionAdd($event)"  
+  (actioned)="OnContactDetailModalActionAdd($event)" 
+  [contactDetails]="controls.contactDetails.value" 
   >
   </app-user-contact-detail-modal>
 </ng-template>
@@ -404,6 +406,7 @@
   <app-user-contact-detail-modal    
   (actioned)="OnContactDetailModalActionEdit($event)"  
   [contactDetail]="selectedContactDetail"
+  [contactDetails]="controls.contactDetails.value"
   >
   </app-user-contact-detail-modal>
 </ng-template>
@@ -418,6 +421,7 @@
 <ng-template #addUserFinanceDetailModal>
   <app-user-finance-detail-modal    
   (actioned)="OnFinanceDetailModalActionAdd($event)"  
+  [financeDetails]="controls.bankDetails.value"
   >
   </app-user-finance-detail-modal>
 </ng-template>
@@ -426,6 +430,7 @@
   <app-user-finance-detail-modal    
   (actioned)="OnFinanceDetailModalActionEdit($event)"  
   [financeDetail]="selectedFinanceDetail"
+  [financeDetails]="controls.bankDetails.value"
   >
   </app-user-finance-detail-modal>
 </ng-template>
@@ -434,5 +439,12 @@
   <app-cancel-action-modal [modalTitle]="'Confirm Finance Detail Delete'"
     [modalBody]="'Please confirm that you wish to delete this finance detail.'"
     (actioned)="OnDeleteFinanceDetailAction($event)">
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #saveUserProfileModal>
+  <app-cancel-action-modal [modalTitle]="'Confirm User Update'"
+    [modalBody]="'Please confirm that you wish to update this user.'"
+    (actioned)="OnSaveUserProfileAction($event)">
   </app-cancel-action-modal>
 </ng-template>

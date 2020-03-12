@@ -1,12 +1,11 @@
 import { BankDetailsProfile } from 'src/app/interfaces/bank-details-profile';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { UserProfile } from 'src/app/interfaces/user-profile';
-import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserProfileService } from 'src/app/services/user-profile/user-profile.service';
-import { Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
+import { Ccg } from 'src/app/interfaces/ccg';
 import { CcgListService } from 'src/app/services/ccg-list/ccg-list.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { ToastService } from 'src/app/services/toast/toast.service';
+import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-finance-detail-modal',
@@ -15,19 +14,18 @@ import { CcgListService } from 'src/app/services/ccg-list/ccg-list.service';
 })
 export class UserFinanceDetailModalComponent implements OnInit {
   @Input() public financeDetail: BankDetailsProfile;
+  @Input() financeDetails: BankDetailsProfile[];
   @Output() actioned = new EventEmitter<any>();
 
   financeDetailForm: FormGroup;  
   hasCcgSearchFailed: boolean;
   isCcgSearching: boolean;
   unknownCcgId: number;
-  userProfile: UserProfile;
 
   constructor(
     private ccgListService: CcgListService,
     private formBuilder: FormBuilder,
-    private toastService: ToastService,
-    private userProfileService: UserProfileService
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -36,20 +34,20 @@ export class UserFinanceDetailModalComponent implements OnInit {
       vsrNumber: ['', Validators.required]      
     });
 
-    if (this.financeDetail) {   
-      this.userProfileService.GetUser().subscribe((result: UserProfile) => {
-        this.userProfile = result;     
-        
-        let selectedFinanceDetail: BankDetailsProfile = this.userProfile.bankDetails
-          .find(item => item.id === this.financeDetail.id);
-        
-        if (selectedFinanceDetail) {
-          this.financeDetail = selectedFinanceDetail;
-        }
-        
-        this.controls.ccg.setValue({ id: this.financeDetail.ccgId, resultText: this.financeDetail.ccg.name });
-        this.controls.vsrNumber.setValue(this.financeDetail.vsrNumber);
+    if (this.financeDetail) {               
+      let selectedFinanceDetail: BankDetailsProfile = this.financeDetails
+        .find(item => item.ccgId === this.financeDetail.ccgId);
+      
+      if (selectedFinanceDetail) {
+        this.financeDetail = selectedFinanceDetail;
+      }
+      
+      this.controls.ccg.setValue({ 
+        id: this.financeDetail.ccgId, 
+        resultText: this.financeDetail.ccg.name 
       });
+      this.controls.vsrNumber.setValue(this.financeDetail.vsrNumber);
+      this.controls.ccg.disable();
     }
   }
 
@@ -87,17 +85,27 @@ export class UserFinanceDetailModalComponent implements OnInit {
   }
 
   SaveFinanceDetail() {
-    if (this.financeDetailForm.valid) {      
-      const result = {} as BankDetailsProfile;
-      result.ccgId = this.controls.ccg.value.id;
-      result.ccg.name = this.controls.ccg.value.resultText;
-      result.vsrNumber = this.controls.vsrNumber.value;
+    if (this.financeDetailForm.valid) {               
+      const bankDetail = {} as BankDetailsProfile;
+      bankDetail.ccgId = this.controls.ccg.value.id;
+      bankDetail.ccg = {} as Ccg;
+      bankDetail.ccg.id = bankDetail.ccgId;
+      bankDetail.ccg.name = this.controls.ccg.value.resultText;
+      bankDetail.vsrNumber = this.controls.vsrNumber.value;
 
       if (this.financeDetail) {
-        result.id = this.financeDetail.id;
+        bankDetail.id = this.financeDetail.id;
       }
 
-      this.actioned.emit(result);
+      let ccgAlreadyInFinanceDetails = this.financeDetails 
+        ? this.financeDetails.find(item => item.ccgId == this.controls.ccg.value.id) 
+        : null;
+      if (ccgAlreadyInFinanceDetails && bankDetail.id !== ccgAlreadyInFinanceDetails.id) {
+        this.controls.ccg.setErrors({ uniqueCCGsRequired: true });
+      }
+      else {
+        this.actioned.emit(bankDetail);
+      }
     }    
   }
 

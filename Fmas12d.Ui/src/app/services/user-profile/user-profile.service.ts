@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { UserProfile } from 'src/app/interfaces/user-profile';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { UserProfile } from 'src/app/interfaces/user-profile';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -21,7 +21,8 @@ export class UserProfileService {
   }
 
   UpdateUser(user: UserProfile): Observable<UserProfile> {
-    return of({} as UserProfile);
+    let endpoint = environment.apiEndpoint + '/userprofile';    
+    return this.http.put<UserProfile>(endpoint, user);
   }
 
 }

@@ -25,18 +25,49 @@ namespace Fmas12d.Api.Controllers
     [HttpGet]
     public async Task<ActionResult<ViewModels.UserProfile>> Get()
     {
-      Business.Models.User model = await Service.GetAsync(GetUserId(), true, true);
-      
-      if (model == null)
+      try
       {
-        return NoContent();    
+        Business.Models.User model = await Service.GetAsync(GetUserId(), true, true);
+        
+        if (model == null)
+        {
+          return NoContent();    
+        }
+        else
+        {
+          ViewModels.UserProfile viewModel = new ViewModels.UserProfile(model);        
+          return Ok(viewModel);
+        }
       }
-      else
+      catch (Exception ex)
       {
-        ViewModels.UserProfile viewModel = new ViewModels.UserProfile(model);        
-        return Ok(viewModel);
+        return ProcessException(ex);
       }
     }
+
+    [HttpPut]
+    [Route("")]
+    public async Task<ActionResult<ViewModels.UserProfile>> Put(
+      [FromBody] RequestModels.UserProfilePut requestModel
+    )
+    {
+      try
+      {
+        Business.Models.UserProfileUpdate businessModel = new Business.Models.UserProfileUpdate
+        {
+          Id = GetUserId()
+        };
+        requestModel.MapToBusinessModel(businessModel);
+        Business.Models.User userModel = await Service.UpdateAsync(businessModel);
+        ViewModels.UserProfile viewModel = new ViewModels.UserProfile(userModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }     
+    }   
 
     private IUserService Service { get { return _service as IUserService; } }
   }

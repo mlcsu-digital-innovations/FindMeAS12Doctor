@@ -7,9 +7,11 @@ export interface ContactDetailProfile extends ContactDetail {
   contactDetailTypeId: number;
   contactDetailTypeName: string;
   emailAddress: string;
+  id: number;
   latitude?: number;
   longitude?: number;
   mobileNumber: string;
   postcode: string;
+  telephoneNumber: string;
   town: string;  
 }

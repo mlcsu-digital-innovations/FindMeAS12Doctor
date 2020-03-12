@@ -262,5 +262,59 @@ namespace Fmas12d.Business.Services
 
       return models;
     }
+
+    public async Task<User> UpdateAsync(IUserProfileUpdate model) {
+      Entities.User entity = _context
+        .Users
+        .Include(u => u.BankDetails)
+        .Include(u => u.ContactDetails)
+        .Include(u => u.UserSpecialities)
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(false)
+        .SingleOrDefault(u => u.Id == model.Id);
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"Unable to find a User with an Id of {model.Id}");
+      }
+
+      model.MapToEntity(entity);
+      UpdateModifiedAll(entity);      
+
+      await _context.SaveChangesAsync();
+
+      User userModel = await _context.Users
+                      .Include(u => u.BankDetails)
+                      .ThenInclude(bd => bd.Ccg)
+                      .Include(u => u.ContactDetails)
+                        .ThenInclude(cd => cd.ContactDetailType)
+                      .Include(u => u.GenderType)
+                      .Include(u => u.ProfileType)
+                      .Include(u => u.UserSpecialities)
+                        .ThenInclude(us => us.Speciality)
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(User.ProjectFromEntity)
+                      .SingleAsync();
+
+      return userModel;
+    }
+
+    private void UpdateModifiedAll(Data.Entities.User entity) {
+      UpdateModified(entity);
+      foreach (Data.Entities.BankDetail bankDetailEntity in entity.BankDetails) {
+        bankDetailEntity.ModifiedByUserId = entity.ModifiedByUserId;
+        bankDetailEntity.ModifiedAt = entity.ModifiedAt;
+      }
+      foreach (Data.Entities.ContactDetail contactDetailEntity in entity.ContactDetails) {
+        contactDetailEntity.ModifiedByUserId = entity.ModifiedByUserId;
+        contactDetailEntity.ModifiedAt = entity.ModifiedAt;
+      }
+      foreach (Data.Entities.UserSpeciality userSpeciality in entity.UserSpecialities) {
+        userSpeciality.ModifiedByUserId = entity.ModifiedByUserId;
+        userSpeciality.ModifiedAt = entity.ModifiedAt;
+      }
+    } 
   }
 }
