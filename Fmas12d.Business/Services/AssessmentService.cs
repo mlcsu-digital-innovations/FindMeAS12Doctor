@@ -899,7 +899,7 @@ namespace Fmas12d.Business.Services
         doctor.Postcode = null;
       }
 
-      doctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+      doctor.Distance = await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
         entity.Latitude,
         entity.Longitude,
         doctor.Latitude,
@@ -1135,7 +1135,7 @@ namespace Fmas12d.Business.Services
       );
 
       assessmentDoctor.ContactDetailId = contactDetail.Id;
-      assessmentDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+      assessmentDoctor.Distance = await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
         assessment.Latitude,
         assessment.Longitude,
         contactDetail.Latitude,
