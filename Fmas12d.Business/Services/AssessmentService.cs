@@ -1108,7 +1108,7 @@ namespace Fmas12d.Business.Services
       if (userAvailability != null &&
           userAvailability.StatusId != UserAvailabilityStatus.UNAVAILABLE)
       {
-        assessmentDoctor.Distance = Distance.CalculateDistanceAsCrowFlies(
+        assessmentDoctor.Distance = await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
           entity.Latitude,
           entity.Longitude,
           userAvailability.Location.Latitude,
