@@ -22,6 +22,7 @@ namespace Fmas12d.Business.Services
     private readonly IUserService _userService;
     private readonly IUserAvailabilityService _userAvailabilityService;
     private readonly IUserNotificationService _userNotificationService;
+    private readonly IDistanceCalculationService _distanceCalculationService;
 
     public AssessmentService(
       ApplicationContext context,
@@ -31,7 +32,8 @@ namespace Fmas12d.Business.Services
       IUserService userService,
       IUserAvailabilityService userAvailabilityService,
       IUserClaimsService userClaimsService,
-      IUserNotificationService notificationService
+      IUserNotificationService notificationService,
+      IDistanceCalculationService distanceCalculationService
     )
       : base(context, userClaimsService)
     {
@@ -41,6 +43,7 @@ namespace Fmas12d.Business.Services
       _userService = userService;
       _userAvailabilityService = userAvailabilityService;
       _userNotificationService = notificationService;
+      _distanceCalculationService = distanceCalculationService;
     }
 
     public async Task<IAssessmentDoctorsUpdate> AllocateUnregisteredDoctorAsync(
@@ -457,12 +460,14 @@ namespace Fmas12d.Business.Services
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
         {
-          availabilityDoctor.Distance = Distance.CalculateDistanceByRoad(
-            entity.Latitude,
-            entity.Longitude,
-            availabilityDoctor.Location.Latitude,
-            availabilityDoctor.Location.Longitude
-          );
+
+          availabilityDoctor.Distance =
+            await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+              availabilityDoctor.Location.Latitude,
+              availabilityDoctor.Location.Longitude,
+              entity.Latitude,
+              entity.Longitude
+            );
         }
 
         return model;

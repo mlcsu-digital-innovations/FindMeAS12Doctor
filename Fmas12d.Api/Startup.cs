@@ -181,6 +181,7 @@ namespace Fmas12d.Api
       services.AddScoped<IUserService, UserService>();
       services.AddScoped<IUserAssessmentClaimService, UserAssessmentClaimService>();
       services.AddScoped<IFinanceAssessmentClaimService, FinanceAssessmentClaimService>();
+      services.AddScoped<IDistanceCalculationService, DistanceCalculationService>();
 
       services.AddHttpContextAccessor();
 
@@ -228,9 +229,6 @@ namespace Fmas12d.Api
       });
 
       Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);
-
-      Distance.GoogleDistanceMatrixKey = Configuration["GoogleDistanceMatrixKey"];
-      Distance.GoogleDistanceMatrixEndpoint = Configuration["GoogleDistanceMatrixEndpoint"];
     }
   }
 }
