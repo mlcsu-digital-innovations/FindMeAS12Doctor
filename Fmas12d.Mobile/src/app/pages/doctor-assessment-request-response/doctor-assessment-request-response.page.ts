@@ -1,26 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
-import { AmhpAssessmentRequestDetails } from 'src/app/models/amhp-assessment-request-details.model';
-import { AmhpAssessmentSelectedDoctor } from 'src/app/models/amhp-assessment-selected-doctor.model';
+import { AssessmentRequestDetails } from 'src/app/models/assessment-request-details.model';
+import { AssessmentSelectedDoctor } from 'src/app/models/assessment-selected-doctor.model';
+import { Component, OnInit } from '@angular/core';
 import { KnownLocation } from 'src/app/models/known-location.model';
-import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
+import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { UserDetails } from 'src/app/interfaces/user-details';
+import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 
 @Component({
-  selector: 'app-amhp-assessment-request-response',
-  templateUrl: './amhp-assessment-request-response.page.html',
-  styleUrls: ['./amhp-assessment-request-response.page.scss'],
+  selector: 'app-doctor-assessment-request-response',
+  templateUrl: './doctor-assessment-request-response.page.html',
+  styleUrls: ['./doctor-assessment-request-response.page.scss'],
 })
-export class AmhpAssessmentRequestResponsePage implements OnInit {
+export class DoctorAssessmentRequestResponsePage implements OnInit {
 
+  
+  public alreadyAllocated: boolean;
   private assessmentId: number;
-  private loading: HTMLIonLoadingElement;
-  public assessmentRequest: AmhpAssessmentRequestDetails;
-  private userDetails: UserDetails;
+  public assessmentRequest: AssessmentRequestDetails;
   public expectedLocation: string;
+  private loading: HTMLIonLoadingElement;
+  private userDetails: UserDetails;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
@@ -36,8 +38,8 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
     this.assessmentId = +this.route.snapshot.paramMap.get('id');
     const request = this.assessmentService.getView(this.assessmentId);
 
-    this.assessmentRequest = new AmhpAssessmentRequestDetails();
-    this.assessmentRequest.doctorDetails = new AmhpAssessmentSelectedDoctor();
+    this.assessmentRequest = new AssessmentRequestDetails();
+    this.assessmentRequest.doctorDetails = new AssessmentSelectedDoctor();
     this.assessmentRequest.doctorDetails.knownLocation = new KnownLocation();
 
     this.userDetails = this.userDetailsService.fetchUserDetails();
@@ -51,11 +53,16 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
+          this.assessmentRequest.amhpUserName = result.amhpUserName;
+          this.assessmentRequest.isPlanned = result.isPlanned;
 
-          if (this.userDetails) {
+          if (this.userDetails && result.doctorsSelected !== null) {
             this.assessmentRequest.doctorDetails =
             result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
           }
+
+          this.alreadyAllocated =
+            result.doctorsAllocated.find(doctor => doctor.doctorId === this.userDetails.id) !== null;
 
           this.expectedLocation
             = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
@@ -77,7 +84,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
       }
     };
 
-    this.router.navigate(['/amhp-assessment-accept-request'], navigationExtras);
+    this.router.navigate(['/doctor-assessment-accept-request'], navigationExtras);
   }
 
   closeLoading() {
@@ -92,7 +99,7 @@ export class AmhpAssessmentRequestResponsePage implements OnInit {
       .subscribe(
         result => {
           this.showSuccessToast('Request declined');
-          this.router.navigateByUrl('/amhp-assessment-requests');
+          this.router.navigateByUrl('/doctor-assessments');
         },
         error => {
           this.showErrorToast('Unable to decline request');

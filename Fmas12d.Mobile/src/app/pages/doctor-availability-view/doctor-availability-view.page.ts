@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { ToastController, AlertController, IonItemSliding, LoadingController } from '@ionic/angular';
@@ -10,12 +10,13 @@ import { Router, NavigationExtras } from '@angular/router';
   templateUrl: './doctor-availability-view.page.html',
   styleUrls: ['./doctor-availability-view.page.scss'],
 })
-export class DoctorAvailabilityViewPage implements OnInit {
+export class DoctorAvailabilityViewPage {
 
   public availableList: UserAvailability[] = [];
   public fullList: UserAvailability[] = [];
   private loading: HTMLIonLoadingElement;
-  public unavailableList: UserAvailability[] = [];  
+  public unavailableList: UserAvailability[] = [];
+  private hasData: boolean;
 
   constructor(
     public alertController: AlertController,
@@ -25,7 +26,8 @@ export class DoctorAvailabilityViewPage implements OnInit {
     private userAvailabilityService: UserAvailabilityService
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
+    this.refreshList();
   }
 
   closeLoading() {
@@ -38,7 +40,7 @@ export class DoctorAvailabilityViewPage implements OnInit {
     if ($event) {
       $event.target.complete();
     }
-  }  
+  }
 
   editAvailability(item: UserAvailability, slidingItem: IonItemSliding) {
     slidingItem.close();
@@ -81,8 +83,10 @@ export class DoctorAvailabilityViewPage implements OnInit {
     await alert.present();
   }
 
-  ionViewDidEnter() {
-    this.refreshList();
+  nothingToDisplay(): boolean {
+    return this.availableList.length === 0
+      && this.unavailableList.length === 0
+      && this.hasData;
   }
 
   refreshList($event?: any) {
@@ -90,6 +94,8 @@ export class DoctorAvailabilityViewPage implements OnInit {
     this.userAvailabilityService.getListForUser()
       .subscribe(
         (result: UserAvailability[]) => {
+
+          this.hasData = true;
 
           if (result && result.length > 0) {
             this.availableList = result.filter(item => item.statusId === AVAILABLE);
@@ -118,7 +124,7 @@ export class DoctorAvailabilityViewPage implements OnInit {
       spinner: 'lines'
     });
     await this.loading.present();
-  }  
+  }
 
   showSuccessToast(msg: string) {
     this.showToast(msg, 'success', 'Success');

@@ -451,7 +451,9 @@ namespace Fmas12d.Business.Services
         // don't include doctors that are already selected or allocated
         model.AvailableDoctors =
          model.AvailableDoctors
-         .Where(d1 => !entity.Doctors.Any(d2 => d1.UserId == d2.DoctorUserId));
+         .Where(d1 => !entity.Doctors.Any(
+           d2 => d1.UserId == d2.DoctorUserId && d2.StatusId != AssessmentDoctorStatus.REMOVED)
+          );
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
         {
@@ -712,8 +714,15 @@ namespace Fmas12d.Business.Services
         );
       }
 
+      // check if referral status needs to be updated
+      if (entity.Doctors.Where(d => d.StatusId != AssessmentDoctorStatus.REMOVED).Count() == 0) 
+      {
+        entity.Referral.ReferralStatusId = ReferralStatus.SELECTING_DOCTORS;
+      }
+
       await _context.SaveChangesAsync();
       await SendUnsentNotifications(entity.UserAssessmentNotifications);
+
       return true;
     }
 
@@ -1433,7 +1442,8 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Doctors)
           .ThenInclude(d => d.DoctorUser)
         .Include(a => a.Referral)
-        .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
+        .Where(a => a.Doctors.Any
+          (d => d.DoctorUser.Id == doctorUserId && d.StatusId != AssessmentDoctorStatus.REMOVED))
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);
 

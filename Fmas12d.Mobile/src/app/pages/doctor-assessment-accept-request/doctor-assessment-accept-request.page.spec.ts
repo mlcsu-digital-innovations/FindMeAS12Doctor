@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AmhpAssessmentAcceptRequestPage } from './amhp-assessment-accept-request.page';
+import { DoctorAssessmentAcceptRequestPage } from './doctor-assessment-accept-request.page';
 
-describe('AmhpAssessmentAcceptRequestPage', () => {
-  let component: AmhpAssessmentAcceptRequestPage;
-  let fixture: ComponentFixture<AmhpAssessmentAcceptRequestPage>;
+describe('DoctorAssessmentAcceptRequestPage', () => {
+  let component: DoctorAssessmentAcceptRequestPage;
+  let fixture: ComponentFixture<DoctorAssessmentAcceptRequestPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AmhpAssessmentAcceptRequestPage ],
+      declarations: [ DoctorAssessmentAcceptRequestPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AmhpAssessmentAcceptRequestPage);
+    fixture = TestBed.createComponent(DoctorAssessmentAcceptRequestPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

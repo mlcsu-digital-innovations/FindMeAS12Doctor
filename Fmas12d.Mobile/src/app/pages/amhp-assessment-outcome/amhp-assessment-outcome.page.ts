@@ -2,7 +2,7 @@ import { AlertController, NavController, LoadingController } from '@ionic/angula
 import { AmhpAssessmentOutcome } from 'src/app/models/amhp-assessment-outcome.model';
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service';
 import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
-import { AmhpAssessmentViewDoctor } from 'src/app/models/amhp-assessment-view-doctor.model';
+import { AssessmentViewDoctor } from 'src/app/models/assessment-view-doctor.model';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UnsuccessfulAssessmentType } from 'src/app/models/unsuccessful-assessment-type.model';
@@ -38,7 +38,7 @@ export class AmhpAssessmentOutcomePage implements OnInit {
     this.assessmentView = this.assessmentService.retrieveView();
 
     if (this.assessmentView.doctorsAllocated) {
-      this.assessmentView.doctorsAllocated.forEach((doctor: AmhpAssessmentViewDoctor) => 
+      this.assessmentView.doctorsAllocated.forEach((doctor: AssessmentViewDoctor) => 
         doctor.attended = true);
     }
 
@@ -51,15 +51,15 @@ export class AmhpAssessmentOutcomePage implements OnInit {
 
         let success: UnsuccessfulAssessmentType = new UnsuccessfulAssessmentType();
         success.id = 0;
-        success.name = "Successful";
-        success.description = "Successful";
+        success.name = 'Successful';
+        success.description = 'Successful';
 
-        this.assessmentStatusList.unshift(success);        
+        this.assessmentStatusList.unshift(success);
         this.closeLoading();
       }, error => {
         this.toastService.displayError({
-          message: "Unable to retrieve unsuccessful assessment types"
-        });        
+          message: 'Unable to retrieve unsuccessful assessment types'
+        });
         this.closeLoading();
       });
   }
@@ -68,10 +68,19 @@ export class AmhpAssessmentOutcomePage implements OnInit {
     if (this.loading) {
       this.loading.dismiss();
     }
-  }  
+  }
 
   public async confirmSave() {
-    let alert = await this.alertCtrl.create({
+
+    if (this.attendingDoctors.length === 0) {
+      this.toastService.displayError({
+        header: 'Error',
+        message: 'Unable to save assessment with no confirmed attending doctors'
+      });
+      return;
+    }
+
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Outcome',
       message: this.confirmMessage(),
       cssClass: 'amhp-assessment-outcome-alert',
@@ -105,36 +114,36 @@ export class AmhpAssessmentOutcomePage implements OnInit {
   private getAssessmentStatusName(): string {
     if (this.assessmentStatusId) {
       return this.assessmentStatusList.filter((assessmentStatus: UnsuccessfulAssessmentType) =>
-        this.assessmentStatusId == assessmentStatus.id)[0].name;
+        this.assessmentStatusId === assessmentStatus.id)[0].name;
     }
     return '';
   }
 
   private getDoctorsAllocatedNames(): string {
-    let attendingDoctors: AmhpAssessmentViewDoctor[] = this.attendingDoctors();
+    const attendingDoctors: AssessmentViewDoctor[] = this.attendingDoctors();
 
     if (attendingDoctors && attendingDoctors.length > 0) {
-      return attendingDoctors.map(doctor => doctor.displayName).join(", ");
+      return attendingDoctors.map(doctor => doctor.displayName).join(', ');
     }
 
     return 'none';
   }
 
   private save(): void {
-    let assessmentOutcome: AmhpAssessmentOutcome =
+    const assessmentOutcome: AmhpAssessmentOutcome =
       new AmhpAssessmentOutcome(
         new Date(),
         this.assessmentView.doctorsAllocated,
         this.assessmentView.id,
         this.assessmentStatusId === 0 ? null : this.assessmentStatusId);
-            
+
     this.assessmentService.putOutcome(assessmentOutcome, this.assessmentView.id, this.assessmentStatusId === 0)
       .subscribe(
         result => {
-          this.toastService.displaySuccess({            
+          this.toastService.displaySuccess({
             message: 'Assessment Outcome Updated'
           });
-          this.navCtrl.navigateRoot("amhp-assessment-list");
+          this.navCtrl.navigateRoot('amhp-assessment-list');
         },
         error => {
           this.toastService.displayError({
@@ -153,9 +162,9 @@ export class AmhpAssessmentOutcomePage implements OnInit {
     await this.loading.present();
   }
 
-  private attendingDoctors(): AmhpAssessmentViewDoctor[] {
+  private attendingDoctors(): AssessmentViewDoctor[] {
     if (this.assessmentView.doctorsAllocated) {
-      return this.assessmentView.doctorsAllocated.filter((doctor: AmhpAssessmentViewDoctor) => 
+      return this.assessmentView.doctorsAllocated.filter((doctor: AssessmentViewDoctor) =>
         doctor.attended);
     }
     return [];

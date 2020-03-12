@@ -87,14 +87,19 @@ export class OnCallDoctorModalComponent implements OnInit {
     if (this.onCallDoctor) {
       this.onCallDoctorExists = true;
       this.InitialiseForm();
-    }
-    else {
-      let currentDateTime: Date = new Date();
+    } else {
+      const currentDateTime: Date = new Date();
+      const futureDateTime: Date = new Date();
+
+      futureDateTime.setHours(futureDateTime.getHours() + 1);
+
       this.startDateField.setValue(this.ConvertToDateStruct(currentDateTime));
       this.startTimeField.setValue(this.ConvertToTimeStruct(currentDateTime));
-      this.endDateField.setValue(this.ConvertToDateStruct(currentDateTime));
-      this.endTimeField.setValue(this.ConvertToTimeStruct(currentDateTime));
+      this.endDateField.setValue(this.ConvertToDateStruct(futureDateTime));
+      this.endTimeField.setValue(this.ConvertToTimeStruct(futureDateTime));
     }
+
+    this.OnChanges();
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
@@ -110,7 +115,10 @@ export class OnCallDoctorModalComponent implements OnInit {
 
   ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
 
-    const momentDate = moment(dateValue);
+    // round up to the next 5 minute interval
+    const start = moment(dateValue);
+    const remainder = 5 - (start.minute() % 5);
+    const momentDate = moment(start).add(remainder, 'minutes');
     const timeStruct = {} as NgbTimeStruct;
     timeStruct.hour = momentDate.hour();
     timeStruct.minute = momentDate.minutes();
@@ -226,7 +234,7 @@ export class OnCallDoctorModalComponent implements OnInit {
   ): boolean {
 
     const endDate = this.CreateDateFromPickerObjects(endDateField.value, endTimeField.value);
-    const startDate = this.CreateDateFromPickerObjects(startDateField.value, startDateField.value);
+    const startDate = this.CreateDateFromPickerObjects(startDateField.value, startTimeField.value);
 
     const endDateIsBeforeStartDate =
       moment(endDate).isBefore(moment(startDate));
@@ -260,6 +268,49 @@ export class OnCallDoctorModalComponent implements OnInit {
     );
   }
 
+  IsStartDateBeforeEndDate(): boolean {
+    const startDate =
+      this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
+    const endDate =
+      this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
+
+    return startDate < endDate;
+  }
+
+  CheckDates() {
+    if (!this.IsStartDateBeforeEndDate()) {
+      this.endDateField.setErrors({InvalidEndDate: true});
+    } else {
+      this.endDateField.setErrors({InvalidEndDate: false});
+    }
+  }
+
+  OnChanges(): void {
+    this.onCallDoctorForm.get('startDate').valueChanges.subscribe(
+      val => {
+        this.CheckDates();
+      }
+    );
+
+    this.onCallDoctorForm.get('startTime').valueChanges.subscribe(
+      val => {
+        this.CheckDates();
+      }
+    );
+
+    this.onCallDoctorForm.get('endDate').valueChanges.subscribe(
+      val => {
+        this.CheckDates();
+      }
+    );
+
+    this.onCallDoctorForm.get('endTime').valueChanges.subscribe(
+      val => {
+        this.CheckDates();
+      }
+    );
+  }
+
   RegisteredDoctorSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -281,7 +332,7 @@ export class OnCallDoctorModalComponent implements OnInit {
   SaveOnCallDoctor() {
     let canContinue: boolean = true;
 
-    // check doctor 
+    // check doctor
     if (!this.doctorName || !this.doctorGmcNumber) {
       canContinue = false;
       this.doctorSearchField.setErrors({ InvalidDoctor: true });
@@ -320,7 +371,7 @@ export class OnCallDoctorModalComponent implements OnInit {
     }
 
     // check postcode if location is Other
-    if (this.locationField.value == 0 && !this.HasValidPostcode()) {
+    if (this.locationField.value === 0 && !this.HasValidPostcode()) {
       canContinue = false;
       this.locationPostcodeField.setErrors({ InvalidPostcode: true });
     }
