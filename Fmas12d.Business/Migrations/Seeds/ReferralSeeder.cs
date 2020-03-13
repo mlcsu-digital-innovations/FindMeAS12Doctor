@@ -1,9 +1,7 @@
 using Fmas12d.Business.Helpers;
-using Fmas12d.Business.Services;
 using Fmas12d.Data.Entities;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
@@ -16,8 +14,8 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string ASSESSMENT_SCHEDULED_ADDRESS4 = null;
     internal const decimal ASSESSMENT_SCHEDULED_LATITUDE = 53.008785m;
     internal const decimal ASSESSMENT_SCHEDULED_LONGITUDE = -2.178602m;
-    internal const string ASSESSMENT_SCHEDULED_MEETING_ARRGANEMENT_COMMENT =
-      "Assessment Scheduled Arangement Comment";
+    internal const string ASSESSMENT_SCHEDULED_MEETING_ARRANGEMENT_COMMENT =
+      "Assessment Scheduled Arrangement Comment";
     internal readonly DateTimeOffset ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY =
       new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                          17, 00, 00, 00, DateTimeOffset.Now.Offset);
@@ -28,9 +26,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string AWAITING_RESPONSES_ADDRESS3 = "Baldwin's Gate";
     internal const string AWAITING_RESPONSES_ADDRESS4 = "Newcastle";
     internal const decimal AWAITING_RESPONSES_LATITUDE = 52.958925m;
-    internal const decimal AWAITING_RESPONSES_LONGITUDE = -2.307405m;    
+    internal const decimal AWAITING_RESPONSES_LONGITUDE = -2.307405m;
     internal const string AWAITING_RESPONSES_MEETING_ARRANGEMENT_COMMENT =
-      "Allocating Meeting Arangement Comment";
+      "Allocating Meeting Arrangement Comment";
     internal readonly DateTimeOffset AWAITING_RESPONSES_MUST_BE_COMPLETED_BY =
       new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                          16, 30, 00, 00, DateTimeOffset.Now.Offset);
@@ -41,9 +39,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string RESPONSES_PARTIAL_ADDRESS3 = null;
     internal const string RESPONSES_PARTIAL_ADDRESS4 = null;
     internal const decimal RESPONSES_PARTIAL_LATITUDE = 52.973132m;
-    internal const decimal RESPONSES_PARTIAL_LONGITUDE = -2.104617m;      
-    internal const string RESPONSES_PARTIAL_MEETING_ARRGANEMENT_COMMENT =
-      "Responses Partial Arangement Comment";
+    internal const decimal RESPONSES_PARTIAL_LONGITUDE = -2.104617m;
+    internal const string RESPONSES_PARTIAL_MEETING_ARRANGEMENT_COMMENT =
+      "Responses Partial Arrangement Comment";
     internal readonly DateTimeOffset RESPONSES_PARTIAL_MUST_BE_COMPLETED_BY =
       new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                          17, 30, 00, 00, DateTimeOffset.Now.Offset);
@@ -54,9 +52,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string SELECTING_DOCTORS_ADDRESS3 = null;
     internal const string SELECTING_DOCTORS_ADDRESS4 = null;
     internal const decimal SELECTING_DOCTORS_LATITUDE = 52.989739m;
-    internal const decimal SELECTING_DOCTORS_LONGITUDE = -2.222786m;      
+    internal const decimal SELECTING_DOCTORS_LONGITUDE = -2.222786m;
     internal const string SELECTING_DOCTORS_MEETING_ARRANGEMENT_COMMENT =
-      "Selecting Doctors Arangement Comment";
+      "Selecting Doctors Arrangement Comment";
     internal readonly DateTimeOffset SELECTING_DOCTORS_MUST_BE_COMPLETED_BY =
       new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                          15, 00, 00, 00, DateTimeOffset.Now.Offset);
@@ -68,8 +66,6 @@ namespace Fmas12d.Business.Migrations.Seeds
     private readonly AssessmentSeeder _assessmentSeeder = new AssessmentSeeder();
     private readonly UserAssessmentNotificationSeeder _userAssessmentNotificationSeeder =
       new UserAssessmentNotificationSeeder();
-
-    private readonly IDistanceCalculationService _distanceCalculationService;
 
     /// <summary>
     /// Deletes all the following seeds because updating is too difficult:
@@ -101,7 +97,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       AddOpenReferralWithPreviousReferral();
     }
 
-    private async Task AddResponsesPartialReferral()
+    private void AddResponsesPartialReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -117,17 +113,17 @@ namespace Fmas12d.Business.Migrations.Seeds
           notificationTextId: Models.NotificationText.SELECTED_FOR_ASSESSMENT,
           userName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE
         )
-      };      
+      };
 
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             RESPONSES_PARTIAL_LATITUDE,
             RESPONSES_PARTIAL_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_BASE
-          ),          
+          ),
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_BASE,
@@ -135,13 +131,13 @@ namespace Fmas12d.Business.Migrations.Seeds
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             RESPONSES_PARTIAL_LATITUDE,
             RESPONSES_PARTIAL_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE
-          ),          
-          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,          
+          ),
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE,
           postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,
@@ -159,7 +155,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           ccgName: CcgSeeder.STOKE_ON_TRENT,
           createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
           doctors: assessmentDoctors,
-          meetingArrangementComment: RESPONSES_PARTIAL_MEETING_ARRGANEMENT_COMMENT,
+          meetingArrangementComment: RESPONSES_PARTIAL_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: RESPONSES_PARTIAL_MUST_BE_COMPLETED_BY,
           postcode: RESPONSES_PARTIAL_POSTCODE,
           specialityId: Models.Speciality.LEARNING_DISABILITY,
@@ -178,7 +174,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     }
 
-    private async Task AddAwaitingResponsesReferral()
+    private void AddAwaitingResponsesReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -199,20 +195,20 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             AWAITING_RESPONSES_LATITUDE,
             AWAITING_RESPONSES_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE
           ),
-          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,          
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,          
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
-        _assessmentDoctorSeeder.Create(          
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+        _assessmentDoctorSeeder.Create(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             AWAITING_RESPONSES_LATITUDE,
             AWAITING_RESPONSES_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
@@ -221,7 +217,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_BASE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_BASE,          
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_BASE,
           statusId: Models.AssessmentDoctorStatus.SELECTED
         )
       };
@@ -253,7 +249,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
     }
 
-    private async Task AddAssessmentScheduledReferral()
+    private void AddAssessmentScheduledReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -282,7 +278,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
@@ -291,20 +287,20 @@ namespace Fmas12d.Business.Migrations.Seeds
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_MALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_MALE_BASE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_BASE,          
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_MALE_BASE,
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE
-          ),          
+          ),
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,          
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,
           statusId: Models.AssessmentDoctorStatus.ALLOCATED
         )
       };
@@ -319,7 +315,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           ccgName: CcgSeeder.STOKE_ON_TRENT,
           createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
           doctors: assessmentDoctors,
-          meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRGANEMENT_COMMENT,
+          meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY,
           postcode: ASSESSMENT_SCHEDULED_POSTCODE,
           specialityId: Models.Speciality.LEARNING_DISABILITY,
@@ -389,7 +385,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     }
 
-    private async Task AddOpenReferralWithPreviousReferral()
+    private void AddOpenReferralWithPreviousReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -414,16 +410,16 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
+          distance: Distance.CalculateDistanceAsCrowFlies(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
             ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE
-          ),          
+          ),
           doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
           latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
           longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE,
-          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,          
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,
           statusId: Models.AssessmentDoctorStatus.ATTENDED
         )
       };
@@ -442,14 +438,14 @@ namespace Fmas12d.Business.Migrations.Seeds
           completionConfirmationByUserName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
           doctors: assessmentDoctors,
           isSuccessful: false,
-          meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRGANEMENT_COMMENT,
+          meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRANGEMENT_COMMENT,
           mustBeCompletedBy: ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY,
           postcode: ASSESSMENT_SCHEDULED_POSTCODE,
           specialityId: Models.Speciality.LEARNING_DISABILITY,
           userAssessmentNotifications: userAssessmentNotifications,
           unsuccessfulAssessmentTypeId: Models.UnsuccessfulAssessmentType.REFUSED_ENTRY
         )
-      };      
+      };
 
       AddReferral(
         assessments: assessments,
