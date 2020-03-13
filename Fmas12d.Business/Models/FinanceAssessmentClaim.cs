@@ -9,10 +9,10 @@ namespace Fmas12d.Business.Models
   public class FinanceAssessmentClaim : UserAssessmentClaim
   {
     public FinanceAssessmentClaim(Data.Entities.UserAssessmentClaim entity) : base(entity) {
-
+      ClaimStatusId = entity.ClaimStatusId;
       Ccg = new Ccg(entity.Assessment.Ccg);
       Claimant = new User(entity.User);
-      Claimant.BankDetails = Claimant.BankDetails.Where(bd => bd.CcgId == Ccg.Id).ToList();
+      Claimant.BankDetails = Claimant.BankDetails?.Where(bd => bd.CcgId == Ccg.Id).ToList();
     }
 
     public User Claimant { get; set; }

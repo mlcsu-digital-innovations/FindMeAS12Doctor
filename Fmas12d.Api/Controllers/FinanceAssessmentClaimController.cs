@@ -103,5 +103,32 @@ namespace Fmas12d.Api.Controllers
         return ProcessException(ex);
       }
     }
+
+    
+
+    [HttpPut]
+    [Route("bulkupdate")]
+    public virtual async Task<ActionResult<IEnumerable<ViewModels.FinanceAssessmentClaim>>> BulkUpdate(
+      [FromBody] RequestModels.FinanceAssessmentClaimUpdate requestModel)
+    {
+      try
+      {
+        Business.Models.FinanceAssessmentClaimUpdate businessModel =
+          new Business.Models.FinanceAssessmentClaimUpdate();
+        requestModel.MapToBusinessModel(businessModel);
+        IEnumerable<Business.Models.FinanceAssessmentClaim> updateModel = await Service.BulkUpdateClaimStatusAsync(businessModel);
+        
+        IEnumerable<ViewModels.FinanceAssessmentClaim> viewModels =
+          updateModel
+          .Select(ViewModels.FinanceAssessmentClaim.ProjectFromModel).ToList();
+
+        return Ok(viewModels);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
   }
 }

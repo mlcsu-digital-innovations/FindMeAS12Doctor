@@ -108,3 +108,8 @@
 <app-delay-spinner *ngIf="claimsService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<ng-template #selectCcg let-selectedCcgs>
+  <app-ccg-selection-modal [selectedCcgs]="availableCcgs" (actioned)="OnCcgSelection($event)">
+  </app-ccg-selection-modal>
+</ng-template>

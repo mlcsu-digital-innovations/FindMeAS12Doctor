@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { map, delay } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { ClaimView } from 'src/app/interfaces/claim-view';
-import { CLAIM_STATUS_PROCESSING, CLAIM_STATUS_QUERY } from 'src/app/constants/Constants';
+import { CLAIM_STATUS_PROCESSING, CLAIM_STATUS_QUERY, CLAIM_STATUS_APPROVED } from 'src/app/constants/Constants';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,27 @@ export class FinanceClaimService {
 
   public updateClaimStatusToQuerying(claimId: number): Observable<ClaimView> {
     return this.updateClaimStatus(claimId, CLAIM_STATUS_QUERY);
+  }
+
+  public updateClaimStatusToApproved(claimId: number): Observable<ClaimView> {
+    return this.updateClaimStatus(claimId, CLAIM_STATUS_APPROVED);
+  }
+
+  public bulkUpdateClaimStatusToApproved(claimIds: number[]): Observable<ClaimView> {
+    return this.bulkUpdateClaimStatus(claimIds, CLAIM_STATUS_APPROVED);
+  }
+
+  private bulkUpdateClaimStatus(claimIds: number[], claimStatusId: number): Observable<any> {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    const requestBody = {claimStatusId, claimIds};
+
+    return this.httpClient.put(
+      `${environment.apiEndpoint}/financeassessmentclaim/bulkupdate`,
+      requestBody,
+      { headers }
+    );
   }
 
   private updateClaimStatus(id: number, claimStatusId: number): Observable<any> {

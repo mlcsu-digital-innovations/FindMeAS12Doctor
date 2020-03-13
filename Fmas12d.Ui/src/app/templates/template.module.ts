@@ -1,9 +1,10 @@
 import { AllocationCompleteModalComponent } from './allocation-complete-modal/allocation-complete-modal.component';
 import { CancelActionModalComponent } from './cancel-action-modal/cancel-action-modal.component';
+import { CcgSelectionModalComponent } from './ccg-selection/ccg-selection-modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgModule } from '@angular/core';
 import { OnCallDoctorModalComponent } from './on-call-doctor-modal/on-call-doctor-modal.component';
 import { PatientResultsModalComponent } from './patient-results-modal/patient-results-modal.component';
 import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unregistered-users-modal.component';
@@ -12,8 +13,9 @@ import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unre
   declarations: [
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
+    CcgSelectionModalComponent,
     OnCallDoctorModalComponent,
-    PatientResultsModalComponent,    
+    PatientResultsModalComponent,
     UnregisteredUsersModalComponent
   ],
   imports: [
@@ -26,6 +28,7 @@ import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unre
   exports: [
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
+    CcgSelectionModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
     UnregisteredUsersModalComponent

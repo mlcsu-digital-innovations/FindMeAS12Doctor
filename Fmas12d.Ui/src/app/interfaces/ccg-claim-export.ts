@@ -1,10 +1,11 @@
 export interface CcgClaimExport {
-  claimReference: number;
   assessmentDate: Date;
+  assessmentPayment: number;
   assessmentPostcode: string;
-  successfulAssessment: boolean;
+  claimReference: number;
+  id: number;
   mileage: number;
   mileagePayment: number;
-  assessmentPayment: number;
+  successfulAssessment: boolean;
   totalPayment: number;
 }
