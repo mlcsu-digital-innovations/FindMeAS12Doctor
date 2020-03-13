@@ -27,7 +27,7 @@ namespace Fmas12d.Business.Models
       HasReadTermsAndConditions = entity.HasReadTermsAndConditions;
       IdentityServerIdentifier = entity.IdentityServerIdentifier;
       // TODO OnCallUsers
-      // TODO Organisation
+      Organisation = new Organisation(entity.Organisation);
       OrganisationId = entity.OrganisationId;
       // TODO PaymentMethods
       ProfileType = new ProfileType(entity.ProfileType);

@@ -7,6 +7,7 @@ import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
+import { RouterService } from 'src/app/services/router/router.service';
 import { SECTION12_APPROVED, CONTACT_DETAIL_TYPE_BASE, CONTACT_DETAIL_TYPE_HOME } from 'src/app/constants/Constants';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserProfile } from 'src/app/interfaces/user-profile';
@@ -19,6 +20,7 @@ import { UserProfileService } from 'src/app/services/user-profile/user-profile.s
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
+  cancelModal: NgbModalRef;
   deleteModal: NgbModalRef;
   dropdownSettings: IDropdownSettings;
   genderTypes$: Observable<NameIdList[]>
@@ -40,11 +42,13 @@ export class UserProfileComponent implements OnInit {
   @ViewChild('editUserFinanceDetailModal', null) editUserFinanceDetailTemplate;
   @ViewChild('deleteUserFinanceDetailModal', null) deleteUserFinanceDetailTemplate;
   @ViewChild('saveUserProfileModal', null) saveUserProfileTemplate;
+  @ViewChild('cancelUserProfileModal', null) cancelUserProfileTemplate;
 
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private nameIdListService: NameIdListService,
+    private routerService: RouterService,
     private toastService: ToastService,
     public userProfileService: UserProfileService
   ) { }
@@ -99,7 +103,12 @@ export class UserProfileComponent implements OnInit {
         ],
         telephoneNumber: this.userProfile.telephoneNumber,
         gmcNumber: [
-          this.userProfile.gmcNumber, this.userProfile.isDoctor ? Validators.required : null
+          this.userProfile.gmcNumber, this.userProfile.isDoctor 
+          ? [
+            Validators.required,             
+            Validators.pattern(/^\d{7}$/)
+          ]
+          : null
         ],
         specialities: [this.userProfile.userSpecialities, 
           this.userProfile.isDoctor ? 
@@ -120,7 +129,7 @@ export class UserProfileComponent implements OnInit {
 
   get controls() {
     return this.userProfileForm.controls;
-  }   
+  }     
 
   ContactDetailsBaseRequired(control: AbstractControl) {       
     if (!control.value || control.value.length === 0 || 
@@ -190,8 +199,16 @@ export class UserProfileComponent implements OnInit {
       .find(item => item.contactDetailTypeId == CONTACT_DETAIL_TYPE_HOME);
   }
 
-  Cancel(): string {     
-    return '/referral/list';   
+  Cancel(): void {       
+    if (this.userProfileForm.dirty) {
+      this.cancelModal = this.modalService.open(this.cancelUserProfileTemplate, {
+        size: 'lg'
+      });
+    }
+    else {      
+      // TODO replace with switch statement
+      this.routerService.navigate(['/referral']);
+    }
   }
 
   Save(): void {   
@@ -199,6 +216,15 @@ export class UserProfileComponent implements OnInit {
       this.saveModal = this.modalService.open(this.saveUserProfileTemplate, {
         size: 'lg'
       });
+    }
+  }
+
+  OnCancelModalAction(action: boolean) {
+    this.cancelModal.close();
+
+    if (action) {
+      this.toastService.displayInfo({ message: "User Update has been cancelled" }); 
+      this.routerService.navigate(['/referral']);
     }
   }
 
@@ -218,7 +244,8 @@ export class UserProfileComponent implements OnInit {
   OnContactDetailModalActionEdit(userContactDetail: ContactDetailProfile) {
     this.userContactDetailModal.close();
     if (userContactDetail)
-    {                                
+    {                               
+      console.log(userContactDetail); 
       let formContactDetails: ContactDetailProfile[] = this.controls.contactDetails.value;
       let updatedContactDetailIndex: number = formContactDetails
         .findIndex(item => item.contactDetailTypeId === userContactDetail.contactDetailTypeId)
@@ -301,10 +328,11 @@ export class UserProfileComponent implements OnInit {
     if (action) {                             
       const userProfile: UserProfile = this.GetUserProfileFromForm();            
       this.userProfileService.loading(true);  
-      this.userProfileService.UpdateUser(userProfile).subscribe((userProfile: UserProfile) => {
-        this.toastService.displaySuccess({ message: "User Updated"});                
-        this.PopulateFormFields(userProfile); 
+      this.userProfileService.UpdateUser(userProfile).subscribe(() => {
+        this.toastService.displaySuccess({ message: "User Updated"});        
         this.userProfileService.loading(false);
+        // TODO replace with switch statement
+        this.routerService.navigate(['/referral']);
       }, error => {                
         if (error.error && error.error.title) {
           this.toastService.displayError(

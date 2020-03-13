@@ -61,6 +61,12 @@ namespace Fmas12d.Api.RequestModels
               new[] { "GMCNumber" }
           );
         }
+        else if (GmcNumber.Value.ToString().Length < 7 || GmcNumber.Value.ToString().Length > 7) {
+          yield return new ValidationResult(
+              "A GMC number must be 7 digits.",
+              new[] { "GMCNumber" }
+          );
+        }
 
         if (UserSpecialities == null || UserSpecialities.Count == 0) {
           yield return new ValidationResult(

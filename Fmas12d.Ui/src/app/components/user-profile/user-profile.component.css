@@ -7,18 +7,20 @@
   padding-top: 10px;
 }
 
+.table-row {
+  border-radius: 0.25rem;
+  color: #495057; 
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
 .required-field::after {
   color: red;
   content: " *";
 }
 
-.contact-detail-row {
-  background-color: #b8dbf9;
-}
-
 .table-contact-details {  
   background-color: #fff;
-  font-size: smaller;
 }
 
 .table-contact-details th {  
@@ -26,10 +28,17 @@
   color: white;
 }
 
-.table-contact-details td {
-  font-size: 1.2em;
-}
-
 .table-contact-details td a {
   font-weight: bold;
+}
+
+.table-contact-details td button {
+  color:#0dadb7;
+  border-color:#0dadb7;;
+}
+
+.table-contact-details td button:hover {
+  background-color: #0dadb7;
+  border-color: #0dadb7;
+  color: #fff;
 }
