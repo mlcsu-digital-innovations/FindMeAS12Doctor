@@ -1,7 +1,9 @@
 using Fmas12d.Business.Helpers;
+using Fmas12d.Business.Services;
 using Fmas12d.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
@@ -67,6 +69,8 @@ namespace Fmas12d.Business.Migrations.Seeds
     private readonly UserAssessmentNotificationSeeder _userAssessmentNotificationSeeder =
       new UserAssessmentNotificationSeeder();
 
+    private readonly IDistanceCalculationService _distanceCalculationService;
+
     /// <summary>
     /// Deletes all the following seeds because updating is too difficult:
     /// UserAssessmentNotification
@@ -97,7 +101,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       AddOpenReferralWithPreviousReferral();
     }
 
-    private void AddResponsesPartialReferral()
+    private async Task AddResponsesPartialReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -118,7 +122,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             RESPONSES_PARTIAL_LATITUDE,
             RESPONSES_PARTIAL_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
@@ -131,7 +135,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             RESPONSES_PARTIAL_LATITUDE,
             RESPONSES_PARTIAL_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
@@ -174,7 +178,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     }
 
-    private void AddAwaitingResponsesReferral()
+    private async Task AddAwaitingResponsesReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -195,7 +199,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             AWAITING_RESPONSES_LATITUDE,
             AWAITING_RESPONSES_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
@@ -208,7 +212,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(          
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             AWAITING_RESPONSES_LATITUDE,
             AWAITING_RESPONSES_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
@@ -249,7 +253,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
     }
 
-    private void AddAssessmentScheduledReferral()
+    private async Task AddAssessmentScheduledReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -278,7 +282,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_MALE_BASE,
@@ -291,7 +295,7 @@ namespace Fmas12d.Business.Migrations.Seeds
           statusId: Models.AssessmentDoctorStatus.SELECTED
         ),
         _assessmentDoctorSeeder.Create(
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
@@ -385,7 +389,7 @@ namespace Fmas12d.Business.Migrations.Seeds
 
     }
 
-    private void AddOpenReferralWithPreviousReferral()
+    private async Task AddOpenReferralWithPreviousReferral()
     {
       List<UserAssessmentNotification> userAssessmentNotifications =
         new List<UserAssessmentNotification>() {
@@ -410,7 +414,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
       {
         _assessmentDoctorSeeder.Create(
-          distance: Distance.CalculateDistanceAsCrowFlies(
+          distance: await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
             ASSESSMENT_SCHEDULED_LATITUDE,
             ASSESSMENT_SCHEDULED_LONGITUDE,
             ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
