@@ -1,6 +1,6 @@
 import { AmhpAssessmentList } from '../../models/amhp-assessment-list.model';
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { REFERRALSTATUSASSESSMENTSCHEDULED } from 'src/app/constants/app.constants';
 
@@ -9,7 +9,7 @@ import { REFERRALSTATUSASSESSMENTSCHEDULED } from 'src/app/constants/app.constan
   templateUrl: './amhp-assessment-list.page.html',
   styleUrls: ['./amhp-assessment-list.page.scss'],
 })
-export class AmhpAssessmentListPage implements OnInit {
+export class AmhpAssessmentListPage {
   public assessmentListLastUpdated: Date;
   public assessmentListScheduled: AmhpAssessmentList[] = [];
   public assessmentListUnscheduled: AmhpAssessmentList[] = [];
@@ -20,11 +20,7 @@ export class AmhpAssessmentListPage implements OnInit {
     private loadingController: LoadingController
   ) { }
 
-  ngOnInit() {
-    this.refreshPage();
-  }
-
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.refreshPage();
   }
 
@@ -48,7 +44,7 @@ export class AmhpAssessmentListPage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 

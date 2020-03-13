@@ -29,7 +29,7 @@ export class DoctorOnCallListPage {
       && this.hasData;
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.refreshPage();
   }
 
@@ -66,7 +66,7 @@ export class DoctorOnCallListPage {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -79,8 +79,7 @@ export class DoctorOnCallListPage {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
+      spinner: 'lines'
     });
     await this.loading.present();
   }
