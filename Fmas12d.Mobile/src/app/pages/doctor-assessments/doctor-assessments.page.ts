@@ -82,7 +82,7 @@ export class DoctorAssessmentsPage {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 

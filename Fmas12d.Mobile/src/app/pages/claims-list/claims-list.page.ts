@@ -26,10 +26,6 @@ export class ClaimsListPage {
     private loadingController: LoadingController
   ) { }
 
-  ionViewWillEnter() {
-    this.refreshPage();
-  }
-
   ionViewDidEnter() {
     this.refreshPage();
   }
@@ -54,7 +50,7 @@ export class ClaimsListPage {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -114,8 +110,7 @@ export class ClaimsListPage {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
+      spinner: 'lines'
     });
     await this.loading.present();
   }

@@ -87,7 +87,7 @@ export class ClaimsCreatePage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -95,6 +95,7 @@ export class ClaimsCreatePage implements OnInit {
     this.assessmentClaimService.confirmClaim(this.assessmentId, this.claim)
     .subscribe((result: UserAssessmentClaimResponse) => {
       this.claimResponse = result;
+      this.closeLoading();
       this.hasValidClaim = true;
       this.toastService.displaySuccess({
         message: 'Claim Submitted'
@@ -145,8 +146,7 @@ export class ClaimsCreatePage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
+      spinner: 'lines'
     });
     await this.loading.present();
   }
