@@ -98,9 +98,21 @@ export class UserProfileComponent implements OnInit {
           : null],
         mobileNumber: [
           this.userProfile.mobileNumber,
-          this.userProfile.isAmhp ? Validators.required : null
+          this.userProfile.isAmhp
+          ? [
+             Validators.required,
+             Validators.pattern(/^[0-9\s]*$/)
+            ]
+          : [
+            Validators.pattern(/^[0-9\s]*$/)
+            ]
         ],
-        telephoneNumber: this.userProfile.telephoneNumber,
+        telephoneNumber: [
+          this.userProfile.telephoneNumber,
+          [
+            Validators.pattern(/^[0-9\s]*$/)
+          ]
+        ],
         gmcNumber: [
           this.userProfile.gmcNumber, this.userProfile.isDoctor
           ? [
@@ -123,6 +135,7 @@ export class UserProfileComponent implements OnInit {
           this.userProfile.isDoctor ? Validators.required : null
         ]
       });
+
     }
   }
 
@@ -310,23 +323,6 @@ export class UserProfileComponent implements OnInit {
 
   OnSaveUserProfileAction(action: boolean) {
     this.saveModal.close();
-
-    const regex = /^[0-9\s]*$/;
-    const mobile = this.userProfileForm.controls['mobileNumber'].value;
-
-    if (mobile !== null && mobile.match(regex) == null) {
-      this.userProfileForm.controls['mobileNumber'].setErrors({InvalidFormat: true});
-      return;
-    }
-
-    const telephone = this.userProfileForm.controls['telephoneNumber'].value;
-
-    if (telephone !== null && telephone.match(regex) == null) {
-      this.userProfileForm.controls['telephoneNumber'].setErrors({InvalidFormat: true});
-      return;
-    }
-
-
 
     if (action) {
       const userProfile: UserProfile = this.GetUserProfileFromForm();

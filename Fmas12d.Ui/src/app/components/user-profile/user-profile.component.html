@@ -184,7 +184,7 @@
                 </div>
                 <div
                 class="invalid-field"
-                *ngIf="controls.mobileNumber.errors.InvalidFormat"
+                *ngIf="controls.mobileNumber.errors.pattern"
               >
                 <span>* Mobile number must be digits only</span>
               </div>
@@ -207,7 +207,7 @@
                 <div class="col-md-4 mb-2 offset-md-2">
                   <div
                     class="invalid-field"
-                    *ngIf="controls.telephoneNumber.errors.InvalidFormat"
+                    *ngIf="controls.telephoneNumber.errors.pattern"
                   >
                     <span>* Telephone number must be digits only</span>
                   </div>
