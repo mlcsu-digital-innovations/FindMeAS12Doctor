@@ -65,6 +65,7 @@ namespace Fmas12d.Business
 
     public virtual DbSet<BankDetail> BankDetails { get; set; }
     public virtual DbSet<BankDetailAudit> BankDetailsAudit { get; set; }
+    public virtual DbSet<CalculatedDistance> CalculatedDistances { get; set; }
     public virtual DbSet<Ccg> Ccgs { get; set; }
     public virtual DbSet<CcgAudit> CcgAudits { get; set; }
     public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }
@@ -159,6 +160,10 @@ namespace Fmas12d.Business
 
     private void ConfigureUniqueIndexes(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<CalculatedDistance>()
+        .HasIndex( cd => new {cd.StartLatitude, cd.StartLongitude, cd.EndLatitude, cd.EndLongitude})
+        .IsUnique();
+
       modelBuilder.Entity<Ccg>()
         .HasIndex(c => c.Name)
         .IsUnique();
