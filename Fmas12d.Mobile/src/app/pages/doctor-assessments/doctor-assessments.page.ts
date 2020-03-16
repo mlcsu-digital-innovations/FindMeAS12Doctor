@@ -1,10 +1,8 @@
 import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW, DOCTORSTATUSSELECTED, DOCTORSTATUSALLOCATED, REFERRALSTATUSOPEN } from 'src/app/constants/app.constants';
+import { Component } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src/app/constants/app.constants';
-
 @Component({
   selector: 'app-doctor-assessments',
   templateUrl: './doctor-assessments.page.html',
@@ -52,8 +50,10 @@ export class DoctorAssessmentsPage {
             this.scheduledAssessments = this.allAssessments.filter
               (assessment => scheduled.includes(assessment.referralStatusId));
 
-            this.assessmentRequests = this.allAssessments.filter
-              (assessment => !scheduled.includes(assessment.referralStatusId));
+            this.assessmentRequests = this.allAssessments
+            .filter(assessment => !scheduled.includes(assessment.referralStatusId))
+            .filter(assessment => assessment.referralStatusId !== REFERRALSTATUSOPEN);
+
           } else {
             this.scheduledAssessments = [];
             this.assessmentRequests = [];
@@ -82,7 +82,7 @@ export class DoctorAssessmentsPage {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -90,6 +90,10 @@ export class DoctorAssessmentsPage {
     if ($event) {
       $event.target.complete();
     }
+  }
+
+  doctorIsAllocated(assessment: AmhpAssessmentRequest): boolean {
+    return assessment.doctorStatusId === DOCTORSTATUSALLOCATED;
   }
 
   nothingToDisplay(): boolean {

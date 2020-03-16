@@ -7,8 +7,9 @@
     string Address3 { get; set; }
     int ContactDetailTypeId { get; set; }
     string EmailAddress { get; set; }
-    decimal Latitude { get; set; }
-    decimal Longitude { get; set; }
+    decimal? Latitude { get; set; }
+    decimal? Longitude { get; set; }
+    string MobileNumber { get;set; }
     string Postcode { get; set; }
     string TelephoneNumber { get; set; }
     string Town { get; set; }

@@ -66,12 +66,21 @@ export class AmhpAssessmentOutcomePage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
-  }  
+  }
 
   public async confirmSave() {
-    let alert = await this.alertCtrl.create({
+
+    if (this.attendingDoctors.length === 0) {
+      this.toastService.displayError({
+        header: 'Error',
+        message: 'Unable to save assessment with no confirmed attending doctors'
+      });
+      return;
+    }
+
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Outcome',
       message: this.confirmMessage(),
       cssClass: 'amhp-assessment-outcome-alert',
@@ -105,29 +114,29 @@ export class AmhpAssessmentOutcomePage implements OnInit {
   private getAssessmentStatusName(): string {
     if (this.assessmentStatusId) {
       return this.assessmentStatusList.filter((assessmentStatus: UnsuccessfulAssessmentType) =>
-        this.assessmentStatusId == assessmentStatus.id)[0].name;
+        this.assessmentStatusId === assessmentStatus.id)[0].name;
     }
     return '';
   }
 
   private getDoctorsAllocatedNames(): string {
-    let attendingDoctors: AssessmentViewDoctor[] = this.attendingDoctors();
+    const attendingDoctors: AssessmentViewDoctor[] = this.attendingDoctors();
 
     if (attendingDoctors && attendingDoctors.length > 0) {
-      return attendingDoctors.map(doctor => doctor.displayName).join(", ");
+      return attendingDoctors.map(doctor => doctor.displayName).join(', ');
     }
 
     return 'none';
   }
 
   private save(): void {
-    let assessmentOutcome: AmhpAssessmentOutcome =
+    const assessmentOutcome: AmhpAssessmentOutcome =
       new AmhpAssessmentOutcome(
         new Date(),
         this.assessmentView.doctorsAllocated,
         this.assessmentView.id,
         this.assessmentStatusId === 0 ? null : this.assessmentStatusId);
-            
+
     this.assessmentService.putOutcome(assessmentOutcome, this.assessmentView.id, this.assessmentStatusId === 0)
       .subscribe(
         result => {
@@ -147,8 +156,7 @@ export class AmhpAssessmentOutcomePage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 5000
+      spinner: 'lines'
     });
     await this.loading.present();
   }

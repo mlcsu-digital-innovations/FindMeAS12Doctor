@@ -454,8 +454,8 @@ namespace Fmas12d.Business.Services
             $"ContactDetailId of {model.Location.ContactDetailId}");
         }
         model.Location.ContactDetail = contactDetail;
-        model.Location.Latitude = contactDetail.Latitude;
-        model.Location.Longitude = contactDetail.Longitude;
+        model.Location.Latitude = contactDetail.Latitude.HasValue ? contactDetail.Latitude.Value : 0;
+        model.Location.Longitude = contactDetail.Longitude.HasValue ? contactDetail.Longitude.Value : 0;
       }
 
       return true;

@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
 import { AssessmentRequestDetails } from 'src/app/models/assessment-request-details.model';
 import { AssessmentSelectedDoctor } from 'src/app/models/assessment-selected-doctor.model';
+import { Component, OnInit } from '@angular/core';
 import { KnownLocation } from 'src/app/models/known-location.model';
-import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
+import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { UserDetails } from 'src/app/interfaces/user-details';
+import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 
 @Component({
   selector: 'app-doctor-assessment-request-response',
@@ -16,11 +16,13 @@ import { UserDetails } from 'src/app/interfaces/user-details';
 })
 export class DoctorAssessmentRequestResponsePage implements OnInit {
 
+  
+  public alreadyAllocated: boolean;
   private assessmentId: number;
-  private loading: HTMLIonLoadingElement;
   public assessmentRequest: AssessmentRequestDetails;
-  private userDetails: UserDetails;
   public expectedLocation: string;
+  private loading: HTMLIonLoadingElement;
+  private userDetails: UserDetails;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
@@ -59,6 +61,9 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
             result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
           }
 
+          this.alreadyAllocated =
+            result.doctorsAllocated.find(doctor => doctor.doctorId === this.userDetails.id) !== null;
+
           this.expectedLocation
             = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
             ? this.assessmentRequest.doctorDetails.knownLocation.postcode
@@ -84,7 +89,7 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -104,8 +109,7 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 5000
+      spinner: 'lines'
     });
     await this.loading.present();
   }

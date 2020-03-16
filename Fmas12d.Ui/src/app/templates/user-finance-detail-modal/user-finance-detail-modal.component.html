@@ -1,0 +1,86 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> {{financeDetail ? "Edit": "Add"}} Finance Detail</h4>
+</div>
+<div class="modal-body offset-md-1">
+  <form [formGroup]="financeDetailForm" class="form-style" (ngSubmit)="SaveFinanceDetail()">
+    <!-- CCG -->
+    <div class="form-row">
+      <div class="col-md-8 mb-2">
+        <label class="required-field" for="ccg">Clinical Commissioning Group</label>
+        <input type="search" class="form-control" id="ccg" #ccg
+          [class.is-invalid]="hasCcgSearchFailed" formControlName="ccg" [ngbTypeahead]="CcgSearch"
+          [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
+      </div>
+    </div>
+    <!-- CCG Errors-->
+    <div class="form-row" *ngIf="controls.ccg.errors">
+      <div class="col-md-12 mb-2">
+        <div *ngIf="controls.ccg.errors.required" class="invalid-field">
+          <span>* CCG is required</span>
+        </div>
+        <div *ngIf="controls.ccg.errors.NoMatchingResults" class="invalid-field">
+          <span>* No Results Found </span>
+        </div>
+        <div *ngIf="controls.ccg.errors.uniqueCCGsRequired" class="invalid-field">
+          <span>* A finance detail already exists for this CCG </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-8 mb-2">
+        <span *ngIf="isCcgSearching">searching...</span>
+        <div class="invalid-field" *ngIf="hasCcgSearchFailed">
+          Sorry, suggestions could not be loaded.
+        </div>
+      </div>
+    </div>
+    <!-- VSR Number -->
+    <div class="form-row">
+      <div class="col-md-12">
+        <div class="row" name="vsrNumber">
+          <div class="col-md-6">
+            <label for="town">VSR Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="vsrNumber"
+              #vsrNumber
+              formControlName="vsrNumber"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- VSR Number Errors -->
+    <div class="form-row" *ngIf="controls.vsrNumber.errors">
+      <div class="col-md-12 mb-2">
+        <div *ngIf="controls.vsrNumber.errors.required" class="invalid-field">
+          <span>* VSR number is required</span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-2">
+        <div *ngIf="controls.vsrNumber.errors.maxlength" class="invalid-field">
+          <span>* Maximum of 10 digits</span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-2">
+        <div *ngIf="controls.vsrNumber.errors.pattern" class="invalid-field">
+          <span>* Invalid format</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-4 offset-md-8 text-right cancelOrSave">
+        <button
+          type="button"
+          class="btn btn-standard btn-cancel"
+          (click)="Cancel()"
+        >Cancel</button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-standard"
+        >Save</button>
+      </div>
+    </div>
+  </form>
+</div>

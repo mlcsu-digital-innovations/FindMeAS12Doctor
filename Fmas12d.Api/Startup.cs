@@ -2,6 +2,7 @@
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
+using Fmas12d.Business.Helpers;
 using Fmas12d.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Policy;
@@ -180,6 +181,7 @@ namespace Fmas12d.Api
       services.AddScoped<IUserService, UserService>();
       services.AddScoped<IUserAssessmentClaimService, UserAssessmentClaimService>();
       services.AddScoped<IFinanceAssessmentClaimService, FinanceAssessmentClaimService>();
+      services.AddScoped<IDistanceCalculationService, DistanceCalculationService>();
 
       services.AddHttpContextAccessor();
 

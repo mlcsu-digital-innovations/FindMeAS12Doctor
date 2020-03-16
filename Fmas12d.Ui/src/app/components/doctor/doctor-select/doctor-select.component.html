@@ -118,7 +118,7 @@
                   <option value="20">20 Miles</option>
                   <option value="30">30 Miles</option>
                   <option value="40">40 Miles</option>
-                  <option value="200">More than 40 Miles</option>
+                  <option value="1000">More than 40 Miles</option>
                 </select>
               </div>
             </div>
@@ -150,7 +150,7 @@
                     </th>
                     <th class="text-center" scope="col" sortable="section12ExpiryDate" (sort)="OnSort($event)">
                       S12 Expiry Date
-                    </th>                    
+                    </th>
                     <th class="text-center" scope="col">
                       Speciality
                     </th>
@@ -178,13 +178,13 @@
                     </td>
                     <td>
                       {{availableDoctor.type}}
-                    </td>                    
+                    </td>
                     <td>
                       {{availableDoctor.section12ApprovalStatusName}}
                     </td>
                     <td>
                       {{availableDoctor.section12ExpiryDate | date:'dd/MM/yyyy'}}
-                    </td>                    
+                    </td>
                     <td>
                       <span *ngFor="let speciality of availableDoctor.specialityNames; last as isLast">
                         {{speciality}}<span *ngIf="!isLast">, </span>
@@ -257,8 +257,8 @@
                   class="btn btn-standard btn-cancel"
                   (click)="Cancel()"
                   >
-                  <em class="far fa-times-circle"></em>
-                  Cancel
+                  <em class="fas fa-arrow-left"></em>
+                  Assessment
                 </button>
                 <button
                   type="button"
