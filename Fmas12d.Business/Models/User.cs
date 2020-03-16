@@ -79,6 +79,21 @@ namespace Fmas12d.Business.Models
 
     public string GenderName { get { return GenderType?.Name; } }
 
+    public bool IsAdmin
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdAnAdmin(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsAdmin;
+        }
+      }
+    }
+
     public bool IsAmhp
     {
       get

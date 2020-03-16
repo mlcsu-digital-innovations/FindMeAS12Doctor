@@ -20,6 +20,7 @@ namespace Fmas12d.Api.ViewModels
       GenderTypeId = model.GenderTypeId;
       GmcNumber = model.GmcNumber;      
       Id = model.Id;
+      IsAdmin = model.IsAdmin;
       IsAmhp = model.IsAmhp;
       IsDoctor = model.IsDoctor;
       IsFinance = model.IsFinance;      
@@ -44,6 +45,7 @@ namespace Fmas12d.Api.ViewModels
     public string EmailAddress { get; set; }
     public int? GenderTypeId { get; set; }
     public int? GmcNumber { get; set; }
+    public bool IsAdmin { get; set; }
     public bool IsAmhp { get; set; }
     public bool IsDoctor { get; set; }
     public bool IsFinance { get; set; }

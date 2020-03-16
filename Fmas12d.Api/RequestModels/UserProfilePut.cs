@@ -19,6 +19,7 @@ namespace Fmas12d.Api.RequestModels
     public int GenderTypeId { get; set; }
     public int? GmcNumber { get; set; }    
     public int Id { get; set; }
+    public bool IsAdmin { get; set; }
     public bool IsAmhp { get; set; }
     public bool IsDoctor { get; set; }
     public bool IsFinance { get; set; }  
@@ -29,9 +30,9 @@ namespace Fmas12d.Api.RequestModels
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {      
-      if ((IsAmhp || IsFinance) && string.IsNullOrEmpty(EmailAddress)) {
+      if ((IsAmhp || IsFinance || IsAdmin) && string.IsNullOrEmpty(EmailAddress)) {
         yield return new ValidationResult(
-            "An email address is required for an AMHP or a Finance user.",
+            "An email address is required for an AMHP, Finance or Admin user.",
             new[] { "EmailAddress" }
         );
       }
@@ -96,6 +97,7 @@ namespace Fmas12d.Api.RequestModels
         model.GenderTypeId = GenderTypeId;
         model.GmcNumber = GmcNumber;
         model.Id = Id;
+        model.IsAdmin = IsAdmin;
         model.IsAmhp = IsAmhp;
         model.IsDoctor = IsDoctor;
         model.IsFinance = IsFinance;

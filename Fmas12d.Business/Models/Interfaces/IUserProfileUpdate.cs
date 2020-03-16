@@ -12,6 +12,7 @@ namespace Fmas12d.Business.Models
       int GenderTypeId { get; set; }
       int? GmcNumber { get; set; }    
       int Id { get; set; }
+      bool IsAdmin { get; set; }
       bool IsAmhp { get; set; }
       bool IsDoctor { get; set; }
       bool IsFinance { get; set; }  

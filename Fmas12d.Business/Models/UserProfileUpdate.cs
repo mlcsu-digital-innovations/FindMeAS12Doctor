@@ -12,6 +12,7 @@ namespace Fmas12d.Business.Models
       public int GenderTypeId { get; set; }
       public int? GmcNumber { get; set; }    
       public int Id { get; set; }
+      public bool IsAdmin { get; set; }
       public bool IsAmhp { get; set; }
       public bool IsDoctor { get; set; }
       public bool IsFinance { get; set; }  
@@ -36,7 +37,7 @@ namespace Fmas12d.Business.Models
           entity.UserSpecialities = new List<Data.Entities.UserSpeciality>();
         }
 
-        if (IsAmhp || IsFinance) {
+        if (IsAmhp || IsFinance || IsAdmin) {
           Data.Entities.ContactDetail contactDetailEntity = entity.ContactDetails
             .FirstOrDefault(cd => cd.ContactDetailTypeId == Business.Models.ContactDetailType.BASE);
 
