@@ -28,7 +28,8 @@ namespace Fmas12d.Business.Services
       IUserClaimsService userClaimsService,
       IContactDetailTypeService contactDetailTypeService,
       ILocationDetailService locationDetailService,
-      IUserNotificationService notificationService
+      IUserNotificationService notificationService,
+      IDistanceCalculationService distanceCalculationService
     )
       : base(context, userClaimsService)
     {
@@ -36,6 +37,7 @@ namespace Fmas12d.Business.Services
       _locationDetailService = locationDetailService;
       _userService = userService;
       _notificationService = notificationService;
+      _distanceCalculationService = distanceCalculationService;
     }
 
     public async Task<UserAssessmentClaimDetail> GetAssessmentAndContactAsync(int assessmentId, int userId)
