@@ -385,7 +385,7 @@ namespace Fmas12d.Business.Services
           endLocation.Longitude
           );
 
-      return Decimal.ToInt32(outDistance) + Decimal.ToInt32(inDistance);
+      return (int)(Decimal.Round(outDistance) + Decimal.Round(inDistance));
     }
   }
 }
