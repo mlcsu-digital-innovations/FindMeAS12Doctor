@@ -1,33 +1,29 @@
 import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW, DOCTORSTATUSSELECTED, DOCTORSTATUSALLOCATED, REFERRALSTATUSOPEN } from 'src/app/constants/app.constants';
+import { Component } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW } from 'src/app/constants/app.constants';
-
 @Component({
   selector: 'app-doctor-assessments',
   templateUrl: './doctor-assessments.page.html',
   styleUrls: ['./doctor-assessments.page.scss'],
 })
-export class DoctorAssessmentsPage implements OnInit {
+export class DoctorAssessmentsPage {
 
   public assessmentRequestsLastUpdated: Date;
-  public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
-  
+  // public assessmentRequests$: Observable<AmhpAssessmentRequest[]>;
+
   public allAssessments: AmhpAssessmentRequest[] = [];
   public assessmentRequests: AmhpAssessmentRequest[] = [];
   public scheduledAssessments: AmhpAssessmentRequest[] = [];
 
   private loading: HTMLIonLoadingElement;
+  private hasData: boolean;
 
   constructor(
     private assessmentService: AmhpAssessmentService,
     private loadingController: LoadingController,
     private toastController: ToastController) { }
-
-  ngOnInit() {
-  }
 
   ionViewDidEnter() {
     this.refreshPage();
@@ -43,6 +39,7 @@ export class DoctorAssessmentsPage implements OnInit {
       .subscribe(
         result => {
 
+          this.hasData = true;
           this.allAssessments = result;
 
           if (result && result.length > 0) {
@@ -53,8 +50,10 @@ export class DoctorAssessmentsPage implements OnInit {
             this.scheduledAssessments = this.allAssessments.filter
               (assessment => scheduled.includes(assessment.referralStatusId));
 
-            this.assessmentRequests = this.allAssessments.filter
-              (assessment => !scheduled.includes(assessment.referralStatusId));
+            this.assessmentRequests = this.allAssessments
+            .filter(assessment => !scheduled.includes(assessment.referralStatusId))
+            .filter(assessment => assessment.referralStatusId !== REFERRALSTATUSOPEN);
+
           } else {
             this.scheduledAssessments = [];
             this.assessmentRequests = [];
@@ -64,10 +63,9 @@ export class DoctorAssessmentsPage implements OnInit {
           this.closeLoading();
           this.closeRefreshing($event);
         }, error => {
-          this.showErrorToast(error)
+          this.showErrorToast(error);
           this.closeLoading();
           this.closeRefreshing($event);
-          
         }
       );
   }
@@ -84,7 +82,7 @@ export class DoctorAssessmentsPage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -92,6 +90,16 @@ export class DoctorAssessmentsPage implements OnInit {
     if ($event) {
       $event.target.complete();
     }
+  }
+
+  doctorIsAllocated(assessment: AmhpAssessmentRequest): boolean {
+    return assessment.doctorStatusId === DOCTORSTATUSALLOCATED;
+  }
+
+  nothingToDisplay(): boolean {
+    return this.scheduledAssessments.length === 0
+      && this.assessmentRequests.length === 0
+      && this.hasData;
   }
 
   async showLoading() {
@@ -118,5 +126,5 @@ export class DoctorAssessmentsPage implements OnInit {
       position: 'top'
     });
     await toast.present();
-  }  
+  }
 }

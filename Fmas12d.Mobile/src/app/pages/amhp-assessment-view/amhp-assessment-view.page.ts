@@ -14,7 +14,7 @@ export class AmhpAssessmentViewPage implements OnInit {
   public assessmentLastUpdated: Date;
   public assessmentView: AmhpAssessmentView;
   public displayDoctors: boolean;
-  private loading: HTMLIonLoadingElement;  
+  private loading: HTMLIonLoadingElement;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,8 +25,10 @@ export class AmhpAssessmentViewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.displayDoctors = false;    
+    this.displayDoctors = false;
     const assessmentId = +this.route.snapshot.paramMap.get('id');
+    this.assessmentView = {} as AmhpAssessmentView;
+    this.assessmentView.detailTypes = [];
 
     if (assessmentId) {
       const request = this.assessmentService.getView(assessmentId);
@@ -36,17 +38,16 @@ export class AmhpAssessmentViewPage implements OnInit {
         this.assessmentLastUpdated = new Date();
         this.assessmentView = result;
 
-        if (this.assessmentView.doctorsAllocated && this.assessmentView.doctorsAllocated.length > 0 || 
+        if (this.assessmentView.doctorsAllocated && this.assessmentView.doctorsAllocated.length > 0 ||
           this.assessmentView.doctorsSelected && this.assessmentView.doctorsSelected.length > 0)
         {
           this.displayDoctors = true;
         }
-        
         this.closeLoading();
-      }, error => {        
+      }, error => {
         this.closeLoading();
         this.toastService.displayError({
-          message: "Unable to retrieve assessment details"
+          message: 'Unable to retrieve assessment details'
         });
       });
     }
@@ -55,15 +56,14 @@ export class AmhpAssessmentViewPage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 5000
+      spinner: 'lines'
     });
     await this.loading.present();
   }

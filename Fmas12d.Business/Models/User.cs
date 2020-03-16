@@ -14,6 +14,7 @@ namespace Fmas12d.Business.Models
       if (entity == null) return;
       // TODO AmhpReferrals
       // TODO BankDetails
+      BankDetails = entity.BankDetails?.Select(bd => new BankDetail(bd)).ToList();
       // TODO CompletedAssessments
       // TODO CompletionConfirmationAssessments
       ContactDetails = entity.ContactDetails?.Select(cd => new ContactDetail(cd, false)).ToList();
@@ -73,6 +74,8 @@ namespace Fmas12d.Business.Models
     public virtual IList<UserAssessmentClaim> UserAssessmentClaims { get; set; }
     public virtual IList<UserAssessmentClaim> UserAssessmentClaimSelections { get; set; }
     public virtual IList<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
+
+    public string FcmToken { get; set; }
 
     public string GenderName { get { return GenderType?.Name; } }
 

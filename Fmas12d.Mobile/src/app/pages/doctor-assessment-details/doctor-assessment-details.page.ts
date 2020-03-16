@@ -45,15 +45,14 @@ export class DoctorAssessmentDetailsPage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 5000
+      spinner: 'lines'
     });
     await this.loading.present();
   }

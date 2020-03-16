@@ -151,11 +151,9 @@ form {
   content: 'X';
   font-weight: 600;
   height: 10px;
-  left: 40%;
-  left: 9px;
+  left: 30%;
   position: absolute;
-  top: 10%;
-  top: 5px;
+  top: 5%;
   transform: translate(-50%, -50%);
   width: 5px;
 }

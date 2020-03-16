@@ -21,15 +21,14 @@ export class DoctorOnCallConfirmRejectPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService
-  ) { 
+  ) {
     this.isConfirmed = true;
     this.route.queryParams.subscribe(
       params => {
         if (this.router.getCurrentNavigation().extras.state) {
-          this.onCallDoctor = this.router.getCurrentNavigation().extras.state.onCallDoctor;          
-          console.log(this.onCallDoctor);
+          this.onCallDoctor = this.router.getCurrentNavigation().extras.state.onCallDoctor;
         } else {
-          this.onCallDoctor = {} as OnCallDoctor;          
+          this.onCallDoctor = {} as OnCallDoctor;
         }
       }
     );
@@ -39,8 +38,8 @@ export class DoctorOnCallConfirmRejectPage implements OnInit {
   }
 
   async saveDialog() {
-    let alert = await this.alertCtrl.create({
-      header: `${this.isConfirmed ? "Confirm" : "Reject"} On Call Doctor?`,
+    const alert = await this.alertCtrl.create({
+      header: `${this.isConfirmed ? 'Confirm' : 'Reject'} On Call Doctor?`,
       buttons: [
         {
           text: 'Cancel',
@@ -62,10 +61,9 @@ export class DoctorOnCallConfirmRejectPage implements OnInit {
     if (this.isConfirmed) {
       this.onCallService.confirm(this.onCallDoctor.id).subscribe(result => {
         this.toastService.displaySuccess({message: 'On Call Doctor Confirmed'});
-        this.router.navigateByUrl('doctor-on-call-list');     
+        this.router.navigateByUrl('doctor-on-call-list');
       });
-    }
-    else {
+    } else {
       this.onCallService.reject(this.onCallDoctor.id, { reason: this.reasonAndDetails })
         .subscribe(result => {
           this.toastService.displaySuccess({message: 'On Call Doctor Rejected'});
@@ -73,5 +71,4 @@ export class DoctorOnCallConfirmRejectPage implements OnInit {
       });
     }
   }
-
 }

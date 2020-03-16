@@ -1,63 +1,72 @@
 <app-navbar title="Assessment Claim: {{claim?.claimReference}}"></app-navbar>
-<ion-content>
-  <ion-grid>
-    <ion-card>
-      <ion-card-content>
-        <ion-row>
-          <ion-col>
-            Assessment: 
-            <strong>{{claim?.assessment.completedTime | date: "d MMMM yyyy H:mm"}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Location: 
-            <strong>{{claim?.assessment.address1}}, {{claim?.assessment.postcode}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            AMHP: <strong>{{claim?.assessment?.amhpUser?.displayName}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Assessment Status: 
-            <strong>{{claim?.assessment?.isSuccessful ? "Success" : "Failed"}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="!claim?.assessment.isSuccessful">
-          <ion-col>
-            Reason: <strong>{{claim?.assessment?.unsuccessfulAssessmentType?.name}}</strong>
-          </ion-col>
-        </ion-row>
-        <hr/>
-        <ion-row>
-          <ion-col>
-            Reference: <strong>{{claim?.claimReference}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Last Updated: <strong>{{claim?.lastUpdated | date: "d MMMM yyyy H:mm"}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Assessment Claim: <strong>{{claim?.assessmentPayment | currency: 'GBP'}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Mileage Claim: <strong>{{claim?.mileagePayment | currency: 'GBP'}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Claim Status: <strong>{{claim?.claimStatus}}</strong>
-          </ion-col>
-        </ion-row>                                
-      </ion-card-content>
-    </ion-card>
-  </ion-grid>
+<ion-content fullscreen>
+
+  <ion-list>
+
+    <ion-list-header>
+      Assessment Claim: {{claim?.claimReference}} 
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment</h3>
+        <h3>{{claim?.assessment.completedTime | date: "d MMMM yyyy H:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Address</h3>
+        <h3>{{claim?.assessment.address1}}</h3>
+        <h3>{{claim?.assessment.address2}}</h3>
+        <h3>{{claim?.assessment.address3}}</h3>
+        <h3>{{claim?.assessment.address4}}</h3>
+        <h3>{{claim?.assessment.postcode}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">AMHP</h3>
+        <h3>{{claim?.assessment?.amhpUser?.displayName}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment Outcome</h3>
+        <h3>{{claim?.assessment?.isSuccessful ? "Success" : "Failed"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Last Updated</h3>
+        <h3>{{claim?.lastUpdated | date: "d MMMM yyyy H:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment Claim</h3>
+        <h3>{{claim?.assessmentPayment | currency: 'GBP'}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Mileage Claim</h3>
+        <h3>{{claim?.mileagePayment | currency: 'GBP'}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Claim Status</h3>
+        <h3>{{claim?.claimStatus.name}}</h3>
+      </ion-label>            
+    </ion-item>
+
+  </ion-list>
+  
 </ion-content>

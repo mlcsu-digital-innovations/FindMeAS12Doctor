@@ -11,6 +11,7 @@ namespace Fmas12d.Api.ViewModels
     {
       if (model == null) return;
 
+      BankDetails = model.BankDetails?.Select(bd => new BankDetail(bd)).ToList();
       ContactDetailBase = new ContactDetail(model.GetContactDetailTypeBase());
       DisplayName = model.DisplayName;
       GenderName = model.GenderName;
@@ -29,12 +30,18 @@ namespace Fmas12d.Api.ViewModels
       UserSpecialityNames = model.UserSpecialities?.Select(us => us.Speciality?.Name).ToList();
     }
 
+    public List<BankDetail> BankDetails { get; set; }
     public ContactDetail ContactDetailBase { get; set; }
     public string DisplayName { get; set; }
     public string GenderName { get; set; }
     public int? GenderTypeId { get; set; }
     public int? GmcNumber { get; set; }
     public bool HasReadTermsAndConditions { get; set; }
+    public bool HasBankDetails { 
+      get {
+        return BankDetails?.Count() > 0;
+      }
+    }
     public bool IsAmhp { get; set; }
     public bool IsDoctor { get; set; }
     public bool IsFinance { get; set; }

@@ -5,6 +5,14 @@ namespace Fmas12d.Api.ViewModels
 {
   public class Ccg : BaseViewModel
   {
+    public Ccg(Business.Models.Ccg model) {
+      if (model == null) return;
+
+      Id = model.Id;
+      Name = model.Name;
+      IsPaymentApprovalRequired = model.IsPaymentApprovalRequired; 
+    }
+
     public virtual IList<BankDetail> BankDetails { get; set; }
     public virtual IList<ContactDetail> ContactDetails { get; set; }
     public int CostCentre { get; set; }

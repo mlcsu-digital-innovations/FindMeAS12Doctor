@@ -3034,6 +3034,10 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<string>("FcmToken")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
                     b.Property<int?>("GenderTypeId")
                         .HasColumnType("int");
 

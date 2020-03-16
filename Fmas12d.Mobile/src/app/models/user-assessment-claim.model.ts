@@ -1,11 +1,12 @@
 import { Assessment } from './assessment.model';
+import { ClaimStatus } from './claim-status.model';
 
 export class UserAssessmentClaim {
 
   assessment: Assessment;
   assessmentPayment?: number;
   claimReference?: number;
-  claimStatus: string;
+  claimStatus: ClaimStatus;
   claimStatusId?: number;
   hasClaim: boolean;
   id: number;

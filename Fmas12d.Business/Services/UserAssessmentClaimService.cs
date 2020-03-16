@@ -20,18 +20,22 @@ namespace Fmas12d.Business.Services
     private readonly IContactDetailTypeService _contactDetailTypeService;
     private readonly ILocationDetailService _locationDetailService;
 
+    private readonly IUserNotificationService _notificationService;
+
     public UserAssessmentClaimService(
       ApplicationContext context,
       IUserService userService,
       IUserClaimsService userClaimsService,
       IContactDetailTypeService contactDetailTypeService,
-      ILocationDetailService locationDetailService
+      ILocationDetailService locationDetailService,
+      IUserNotificationService notificationService
     )
       : base(context, userClaimsService)
     {
       _contactDetailTypeService = contactDetailTypeService;
       _locationDetailService = locationDetailService;
       _userService = userService;
+      _notificationService = notificationService;
     }
 
     public async Task<UserAssessmentClaimDetail> GetAssessmentAndContactAsync(int assessmentId, int userId)
@@ -204,12 +208,28 @@ namespace Fmas12d.Business.Services
       return await CreateUserAssessmentClaimAsync(assessmentClaim);
     }
 
+    public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
+      int userId
+    ) {
+      IEnumerable<UserAssessmentClaim> claims = await _context
+      .UserAssessmentClaims
+      .Include(uac => uac.Assessment)
+      .Include(uac => uac.ClaimStatus)
+      .WhereIsActiveOrActiveOnly(true)
+      .Where(uac => uac.UserId == userId)
+      .Select(uac => new UserAssessmentClaim(uac))
+      .ToListAsync(); 
+
+      return claims;
+    }
+
     public async Task<UserAssessmentClaim> CreateUserAssessmentClaimAsync(UserAssessmentClaim model)
     {
       Entities.UserAssessmentClaim entity = model.MapToEntity();
 
       entity.Id = 0;
       entity.IsActive = true;
+      entity.ClaimStatusId = ClaimStatus.SUBMITTED;
 
       UpdateModified(entity);
 

@@ -1,159 +1,152 @@
 <app-navbar title="{{hasValidClaim ? 'Confirm Claim' : 'Create Claim'}}"></app-navbar>
-<ion-content>
-  <ion-grid>
-    <ion-card>
-      <ion-card-content class="grey">
-        <ion-row>
-          <ion-col>
-            Assessment: 
-            <strong>{{assessment?.scheduledTime | date: "d MMMM yyyy H:mm"}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Location: 
-            <strong>{{assessment?.address1}}, {{assessment?.postcode}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            AMHP: <strong>{{assessment?.amhpUserName}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Assessment Status: 
-            <strong>{{assessment?.isSuccessful ? "Success" : "Failed"}}</strong>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="!assessment?.isSuccessful">
-          <ion-col>
-            Reason: <strong>{{assessment?.unsuccessfulAssessmentTypeName}}</strong>
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-      <!-- create claim card -->
-      <ion-card-content *ngIf="!hasValidClaim">
-        <ion-row *ngIf="startLocations.length > 0">
-          <ion-item>
-            <ion-label>Start Location</ion-label>
-            <ion-select [(ngModel)]="startLocation">
-              <ion-select-option 
-                *ngFor="let location of startLocations" 
-                [value]="location"
-               
-              >
-                {{location.address1 | ellipsis: 15}} {{location.postcode}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                <ion-label>Different return destination</ion-label>
-                <ion-checkbox [(ngModel)]="differentReturnDestination"></ion-checkbox>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="endLocations.length > 0 && differentReturnDestination">
-          <ion-item>
-            <ion-label>End Location</ion-label>
-            <ion-select [(ngModel)]="endLocation">
-              <ion-select-option 
-                *ngFor="let location of endLocations" 
-                [value]="location"
-              >
-                {{location.address1 | ellipsis: 15}} {{location.postcode}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                <ion-label>My patient</ion-label>
-                <ion-checkbox [(ngModel)]="ownPatient"></ion-checkbox>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row> 
-        <br/>
-        <ion-row>
-          <ion-col style="text-align: center;">
-            <ion-button 
-              (click)="validateClaim()"
-              color="primary"
-            >
-              <ion-icon name="add-circle-outline"></ion-icon>&nbsp; 
-              Create Claim
-            </ion-button>  
-          </ion-col> 
-        </ion-row>                                         
-      </ion-card-content>
-      <!-- confirm claim card-->
-      <ion-card-content *ngIf="hasValidClaim">
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                Start Postcode: <strong>{{claim?.startPostcode}}</strong>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                End Postcode: <strong>{{claim?.endPostcode}}</strong>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                Distance: <strong>{{claimResponse?.mileage}} miles</strong>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                Assessment Payment: <strong>{{claimResponse?.assessmentPayment | currency: 'GBP'}}</strong>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-item>
-                Mileage Payment: <strong>{{claimResponse?.mileagePayment | currency: 'GBP'}}</strong>
-              </ion-item>
-            </ion-list>
-          </ion-col>
-        </ion-row>                  
-        <ion-row>
-          <ion-col style="text-align: center;">
-            <ion-button 
-              (click)="confirmClaim()"
-              color="primary"
-            >
-              <ion-icon name="checkmark-circle"></ion-icon>&nbsp; 
-              Confirm Claim
-            </ion-button>  
-          </ion-col> 
-        </ion-row>                                         
-      </ion-card-content>
-    </ion-card>
-  </ion-grid>
+<ion-content fullscreen>
+
+  <ion-list>
+
+    <ion-list-header>
+      Assessment  
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment</h3>
+        <h3>{{assessment?.scheduledTime | date: "d MMMM yyyy H:mm"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Address</h3>
+        <h3>{{assessment?.address1}}</h3>
+        <h3>{{assessment?.address2}}</h3>
+        <h3>{{assessment?.address3}}</h3>
+        <h3>{{assessment?.address4}}</h3>
+        <h3>{{assessment?.postcode}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">AMHP</h3>
+        <h3>{{assessment?.amhpUserName}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3 class="bold">Assessment Outcome</h3>
+        <h3>{{assessment?.isSuccessful ? "Success" : "Failed"}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="!assessment?.isSuccessful">
+      <ion-label>
+        <h3 class="bold">Reason</h3>
+        <h3>{{assessment?.unsuccessfulAssessmentTypeName}}</h3>
+      </ion-label>            
+    </ion-item>
+    <br/>
+    <ion-list-header>
+      Claim 
+    </ion-list-header>
+
+    <ion-item *ngIf="startLocations.length > 0 && !hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Start Location</h3>
+      </ion-label> 
+      <ion-select [(ngModel)]="startLocation">
+        <ion-select-option 
+          *ngFor="let location of startLocations" 
+          [value]="location"
+        >
+          {{location.address1 | ellipsis: 15}} {{location.postcode}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="!hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Different return destination</h3>
+      </ion-label> 
+      <ion-checkbox [(ngModel)]="differentReturnDestination"></ion-checkbox>
+    </ion-item>
+
+    <ion-item *ngIf="endLocations.length > 0 && differentReturnDestination && !hasValidClaim">
+      <ion-label>
+        <h3 class="bold">End Location</h3>
+      </ion-label> 
+      <ion-select [(ngModel)]="endLocation">
+        <ion-select-option 
+          *ngFor="let location of endLocations" 
+          [value]="location"
+        >
+          {{location.address1 | ellipsis: 15}} {{location.postcode}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="!hasValidClaim">
+      <ion-label>
+        <h3 class="bold">My Patient</h3>
+      </ion-label> 
+      <ion-checkbox [(ngModel)]="ownPatient"></ion-checkbox>
+    </ion-item>
+
+    <!-- fields shown when claim is being confirmed -->
+
+    <ion-item *ngIf="hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Start Postcode</h3>
+        <h3>{{claim?.startPostcode}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="hasValidClaim">
+      <ion-label>
+        <h3 class="bold">End Postcode</h3>
+        <h3>{{claim?.endPostcode}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Distance</h3>
+        <h3>{{claimResponse?.mileage}} miles</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Assessment Payment</h3>
+        <h3>{{claimResponse?.assessmentPayment | currency: 'GBP'}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item *ngIf="hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Mileage Payment</h3>
+        <h3>{{claimResponse?.mileagePayment | currency: 'GBP'}}</h3>
+      </ion-label>            
+    </ion-item>
+
+  </ion-list>
 </ion-content>
 
+<ion-footer>
+  <ion-tab-bar>
+    <ion-tab-button 
+      *ngIf="!hasValidClaim"
+      (click)="validateClaim()"
+    >
+      <ion-icon color="primary" name="add-circle-outline"></ion-icon>
+      <ion-label color="primary">Register Claim</ion-label>
+    </ion-tab-button>
+    <ion-tab-button
+      *ngIf="hasValidClaim"
+      (click)="confirmClaim()"
+    >
+      <ion-icon color="primary" name="checkmark-circle-outline"></ion-icon>
+      <ion-label color="primary">Confirm Claim</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

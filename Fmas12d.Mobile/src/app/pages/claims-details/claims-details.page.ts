@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
-import { LoadingController } from '@ionic/angular';
-import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
 import { ActivatedRoute } from '@angular/router';
+import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
+import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
+import { Component } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
 
 @Component({
@@ -10,7 +10,7 @@ import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model'
   templateUrl: './claims-details.page.html',
   styleUrls: ['./claims-details.page.scss'],
 })
-export class ClaimsDetailsPage implements OnInit {
+export class ClaimsDetailsPage {
 
   public lastUpdated: Date;
   private loading: HTMLIonLoadingElement;
@@ -26,7 +26,7 @@ export class ClaimsDetailsPage implements OnInit {
     private loadingController: LoadingController
   ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.claimId = +this.route.snapshot.paramMap.get('claimId');
     this.refreshPage();
   }
@@ -38,6 +38,7 @@ export class ClaimsDetailsPage implements OnInit {
     request.subscribe((result: UserAssessmentClaim) => {
       this.lastUpdated = new Date();
       this.claim = result;
+      this.closeLoading();
     }, error => {
       this.closeLoading();
       this.closeRefreshing($event);
@@ -46,7 +47,7 @@ export class ClaimsDetailsPage implements OnInit {
 
   closeLoading() {
     if (this.loading) {
-      this.loading.dismiss();
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
@@ -59,8 +60,7 @@ export class ClaimsDetailsPage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
+      spinner: 'lines'
     });
     await this.loading.present();
   }

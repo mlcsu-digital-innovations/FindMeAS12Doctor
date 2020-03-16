@@ -188,6 +188,36 @@ namespace Fmas12d.Business.Services
       return profileTypeId;
     }
 
+    public async Task<bool> RefreshFcmToken(
+      int id,
+      string token
+    )
+    {
+      Entities.User entity = await _context
+      .Users
+      .Where(u => u.Id == id)
+      .WhereIsActiveOrActiveOnly(true)
+      .SingleOrDefaultAsync();
+
+      if (entity == null)
+      {
+        throw new ModelStateException(
+          "id",
+          $"Unable to find an active User Id of {id}."
+        );
+      }
+
+      if (entity.FcmToken != token) 
+      {
+        entity.FcmToken = token;
+        UpdateModified(entity);
+
+        await _context.SaveChangesAsync();
+      }
+
+      return true;
+    }
+
     private async Task<User> CheckUserIsAsync(
       int id,
       string modelPropertyName,

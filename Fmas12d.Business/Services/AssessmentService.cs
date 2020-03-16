@@ -21,6 +21,7 @@ namespace Fmas12d.Business.Services
     private readonly IReferralService _referralService;
     private readonly IUserService _userService;
     private readonly IUserAvailabilityService _userAvailabilityService;
+    private readonly IUserNotificationService _userNotificationService;
 
     public AssessmentService(
       ApplicationContext context,
@@ -29,7 +30,8 @@ namespace Fmas12d.Business.Services
       IReferralService referralService,
       IUserService userService,
       IUserAvailabilityService userAvailabilityService,
-      IUserClaimsService userClaimsService
+      IUserClaimsService userClaimsService,
+      IUserNotificationService notificationService
     )
       : base(context, userClaimsService)
     {
@@ -38,6 +40,7 @@ namespace Fmas12d.Business.Services
       _referralService = referralService;
       _userService = userService;
       _userAvailabilityService = userAvailabilityService;
+      _userNotificationService = notificationService;
     }
 
     public async Task<IAssessmentDoctorsUpdate> AllocateUnregisteredDoctorAsync(
@@ -181,6 +184,7 @@ namespace Fmas12d.Business.Services
 
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return new AssessmentDoctorsUpdate()
       {
@@ -228,6 +232,7 @@ namespace Fmas12d.Business.Services
       }
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return new AssessmentDoctorsUpdate()
       {
@@ -302,6 +307,7 @@ namespace Fmas12d.Business.Services
       }
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return new AssessmentDoctorsUpdate()
       {
@@ -317,6 +323,8 @@ namespace Fmas12d.Business.Services
       Entities.Assessment entity = await _context
         .Assessments
         .Include(a => a.Referral)
+        .Include(a => a.Doctors)
+        .Include(a => a.UserAssessmentNotifications)
         .Where(a => a.Id == id)
         .WhereIsActiveOrActiveOnly(true)
         .SingleOrDefaultAsync();
@@ -342,7 +350,19 @@ namespace Fmas12d.Business.Services
       entity.CompletionConfirmationByUserId = _userClaimsService.GetUserId();
       UpdateModified(entity);
 
+      foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
+      {
+        if (assessmentDoctor.StatusId != AssessmentDoctorStatus.REMOVED)
+        {
+          AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_COMPLETED);
+        }
+      }
+
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       return true; 
     }
@@ -376,6 +396,7 @@ namespace Fmas12d.Business.Services
         model.AmhpUserId,
         NotificationText.ALLOCATED_TO_ASSESSMENT
       );
+
       await AddLatitudeAndLongitudeAsync(model.Postcode, entity);
       _context.Add(entity);
 
@@ -383,6 +404,7 @@ namespace Fmas12d.Business.Services
       referral.ReferralStatusId = ReferralStatus.SELECTING_DOCTORS;
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       model = _context.Assessments
                       .Include(e => e.Details)
@@ -429,7 +451,9 @@ namespace Fmas12d.Business.Services
         // don't include doctors that are already selected or allocated
         model.AvailableDoctors =
          model.AvailableDoctors
-         .Where(d1 => !entity.Doctors.Any(d2 => d1.UserId == d2.DoctorUserId));
+         .Where(d1 => !entity.Doctors.Any(
+           d2 => d1.UserId == d2.DoctorUserId && d2.StatusId != AssessmentDoctorStatus.REMOVED)
+          );
 
         foreach (IUserAvailabilityDoctor availabilityDoctor in model.AvailableDoctors)
         {
@@ -690,7 +714,15 @@ namespace Fmas12d.Business.Services
         );
       }
 
+      // check if referral status needs to be updated
+      if (entity.Doctors.Where(d => d.StatusId != AssessmentDoctorStatus.REMOVED).Count() == 0) 
+      {
+        entity.Referral.ReferralStatusId = ReferralStatus.SELECTING_DOCTORS;
+      }
+
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
+
       return true;
     }
 
@@ -748,13 +780,21 @@ namespace Fmas12d.Business.Services
           );
           assessmentDoctor.StatusId = AssessmentDoctorStatus.NOT_ALLOCATED;
         }
+        else
+        {
+            AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_SCHEDULED
+          );
+        }
       }
 
       entity.ScheduledTime = scheduledTime;
       entity.Referral.ReferralStatusId = ReferralStatus.ASSESSMENT_SCHEDULED;
       UpdateModified(entity.Referral);
       await _context.SaveChangesAsync();
-
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
       return true;
     }
 
@@ -898,6 +938,8 @@ namespace Fmas12d.Business.Services
 
       CheckAssessmentCanBeUpdated(entity);
 
+      bool amhpChanged = CheckForChangeOfAmphpUser(model, entity);
+
       if (entity == null)
       {
         throw new ModelStateException("Id",
@@ -908,18 +950,25 @@ namespace Fmas12d.Business.Services
       model.MapToEntity(entity);
       UpdateModified(entity);
 
-      AddUserAssessmentNotification(
-        entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      if (!amhpChanged)
+      {
+        AddUserAssessmentNotification(
+          entity, model.AmhpUserId, NotificationText.ASSESSMENT_UPDATED);
+      }
 
       foreach (Entities.AssessmentDoctor assessmentDoctor in entity.Doctors)
       {
-        AddUserAssessmentNotification(
-          entity,
-          assessmentDoctor.DoctorUserId,
-          NotificationText.ASSESSMENT_UPDATED);
+        if (assessmentDoctor.StatusId != AssessmentDoctorStatus.REMOVED)
+        {
+          AddUserAssessmentNotification(
+            entity,
+            assessmentDoctor.DoctorUserId,
+            NotificationText.ASSESSMENT_UPDATED);
+        }
       }
 
       await _context.SaveChangesAsync();
+      await SendUnsentNotifications(entity.UserAssessmentNotifications);
 
       model = _context.Assessments
                       .Include(e => e.Details)
@@ -1023,6 +1072,21 @@ namespace Fmas12d.Business.Services
         }
       }
     }
+
+    private bool CheckForChangeOfAmphpUser(AssessmentUpdate model, Entities.Assessment entity) {
+
+      bool amhpChanged = model.AmhpUserId != entity.AmhpUserId;
+
+      if (amhpChanged) {
+        AddUserAssessmentNotification(
+          entity, model.AmhpUserId, NotificationText.ALLOCATED_TO_ASSESSMENT);
+
+        AddUserAssessmentNotification(
+            entity, entity.AmhpUserId, NotificationText.REMOVED_FROM_ASSESSMENT);
+      }
+
+      return amhpChanged;
+    } 
 
     private async Task<bool> AddDoctorAvailabilityToAssessmentDoctorIfAvailableAsync(
       Entities.AssessmentDoctor assessmentDoctor,
@@ -1247,6 +1311,19 @@ namespace Fmas12d.Business.Services
       }
     }
 
+    private async Task<IEnumerable<UserAssessmentNotification>> SendUnsentNotifications
+    (
+      IList<Data.Entities.UserAssessmentNotification> notifications
+    ) {  
+       IEnumerable<UserAssessmentNotification> unsentNotifications =
+        notifications.Where(uan => uan.SentAt == null)
+        .Select(u => new UserAssessmentNotification(){
+          Id = u.Id
+        });
+
+      return await _userNotificationService.SendAssessmentNotifications(unsentNotifications);
+    }
+
     private void CheckSelectedDoctorsAreNotAlreadySelected(
       Assessment assessment,
       IEnumerable<int> userIds
@@ -1365,7 +1442,8 @@ namespace Fmas12d.Business.Services
         .Include(a => a.Doctors)
           .ThenInclude(d => d.DoctorUser)
         .Include(a => a.Referral)
-        .Where(a => a.Doctors.Any(d => d.DoctorUser.Id == doctorUserId))
+        .Where(a => a.Doctors.Any
+          (d => d.DoctorUser.Id == doctorUserId && d.StatusId != AssessmentDoctorStatus.REMOVED))
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking);
 
