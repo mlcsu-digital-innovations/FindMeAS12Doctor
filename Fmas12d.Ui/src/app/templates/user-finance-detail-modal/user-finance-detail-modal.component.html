@@ -7,10 +7,10 @@
     <div class="form-row">
       <div class="col-md-8 mb-2">
         <label class="required-field" for="ccg">Clinical Commissioning Group</label>
-        <input type="search" class="form-control" id="ccg" #ccg 
+        <input type="search" class="form-control" id="ccg" #ccg
           [class.is-invalid]="hasCcgSearchFailed" formControlName="ccg" [ngbTypeahead]="CcgSearch"
           [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
-      </div>      
+      </div>
     </div>
     <!-- CCG Errors-->
     <div class="form-row" *ngIf="controls.ccg.errors">
@@ -25,7 +25,7 @@
           <span>* A finance detail already exists for this CCG </span>
         </div>
       </div>
-    </div>    
+    </div>
     <div class="form-row">
       <div class="col-md-8 mb-2">
         <span *ngIf="isCcgSearching">searching...</span>
@@ -38,17 +38,17 @@
     <div class="form-row">
       <div class="col-md-12">
         <div class="row" name="vsrNumber">
-          <div class="col-md-6">  
-            <label for="town">VSR Number</label>                 
+          <div class="col-md-6">
+            <label for="town">VSR Number</label>
             <input
-              type="text"             
-              class="form-control"   
+              type="text"
+              class="form-control"
               id="vsrNumber"
-              #vsrNumber              
-              formControlName="vsrNumber"           
+              #vsrNumber
+              formControlName="vsrNumber"
             />
-          </div>             
-        </div>  
+          </div>
+        </div>
       </div>
     </div>
     <!-- VSR Number Errors -->
@@ -58,19 +58,29 @@
           <span>* VSR number is required</span>
         </div>
       </div>
+      <div class="col-md-12 mb-2">
+        <div *ngIf="controls.vsrNumber.errors.maxlength" class="invalid-field">
+          <span>* Maximum of 10 digits</span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-2">
+        <div *ngIf="controls.vsrNumber.errors.pattern" class="invalid-field">
+          <span>* Invalid format</span>
+        </div>
+      </div>
     </div>
     <div class="form-row">
       <div class="col-md-4 offset-md-8 text-right cancelOrSave">
         <button
           type="button"
           class="btn btn-standard btn-cancel"
-          (click)="Cancel()"          
+          (click)="Cancel()"
         >Cancel</button>
         <button
           type="submit"
-          class="btn btn-primary btn-standard"          
+          class="btn btn-primary btn-standard"
         >Save</button>
       </div>
-    </div> 
+    </div>
   </form>
 </div>

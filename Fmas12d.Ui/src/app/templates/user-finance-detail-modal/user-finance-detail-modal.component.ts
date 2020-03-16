@@ -31,7 +31,14 @@ export class UserFinanceDetailModalComponent implements OnInit {
   ngOnInit() {
     this.financeDetailForm = this.formBuilder.group({
       ccg: ['', Validators.required],
-      vsrNumber: ['', Validators.required]
+      vsrNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(10),
+          Validators.pattern(/^\d{0,10}$/)
+        ]
+      ]
     });
 
     if (this.financeDetail) {
@@ -85,6 +92,7 @@ export class UserFinanceDetailModalComponent implements OnInit {
   }
 
   SaveFinanceDetail() {
+
     if (this.financeDetailForm.valid) {
       const bankDetail = {} as BankDetailsProfile;
       bankDetail.ccgId = this.controls.ccg.value.id;
