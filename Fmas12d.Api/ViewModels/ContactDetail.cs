@@ -16,6 +16,7 @@ namespace Fmas12d.Api.ViewModels
       EmailAddress = model.EmailAddress;
       Latitude = model.Latitude;
       Longitude = model.Longitude;
+      MobileNumber = model.MobileNumber;
       Postcode = model.Postcode;
       TelephoneNumber = model.TelephoneNumber;
       Town = model.Town;
@@ -31,8 +32,9 @@ namespace Fmas12d.Api.ViewModels
     public string ContactDetailTypeName { get; set; }
     public int ContactDetailTypeId { get; set; }
     public string EmailAddress { get; set; }
-    public decimal Latitude { get; set; }
-    public decimal Longitude { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
+    public string MobileNumber { get; set; }
     public string Postcode { get; set; }
     public string TelephoneNumber { get; set; }
     public string Town { get; set; }

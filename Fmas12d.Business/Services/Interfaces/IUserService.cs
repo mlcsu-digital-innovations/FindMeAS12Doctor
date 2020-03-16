@@ -42,5 +42,7 @@ namespace Fmas12d.Business.Services
     Task<int> GetByProfileTypeIdAsync(int userId, bool asNoTracking, bool activeOnly);
 
     Task<bool> RefreshFcmToken(int userId, string token);
+
+    Task<User> UpdateAsync(IUserProfileUpdate model);
   }
 }

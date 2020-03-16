@@ -27,7 +27,7 @@ namespace Fmas12d.Business.Models
       HasReadTermsAndConditions = entity.HasReadTermsAndConditions;
       IdentityServerIdentifier = entity.IdentityServerIdentifier;
       // TODO OnCallUsers
-      // TODO Organisation
+      Organisation = new Organisation(entity.Organisation);
       OrganisationId = entity.OrganisationId;
       // TODO PaymentMethods
       ProfileType = new ProfileType(entity.ProfileType);
@@ -78,6 +78,21 @@ namespace Fmas12d.Business.Models
     public string FcmToken { get; set; }
 
     public string GenderName { get { return GenderType?.Name; } }
+
+    public bool IsAdmin
+    {
+      get
+      {
+        if (ProfileType == null)
+        {
+          return ProfileType.IsIdAnAdmin(ProfileTypeId);
+        }
+        else
+        {
+          return ProfileType.IsAdmin;
+        }
+      }
+    }
 
     public bool IsAmhp
     {
