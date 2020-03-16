@@ -8,9 +8,6 @@ namespace Fmas12d.Business.Helpers
 {
   public static class Distance
   {
-    public static string GoogleDistanceMatrixKey { get; set; }
-    public static string GoogleDistanceMatrixEndpoint { get; set; }
-
     private static double ConvertDegreesToRadians(decimal? degrees)
     {
       return (double)degrees * Math.PI / 180.0;
