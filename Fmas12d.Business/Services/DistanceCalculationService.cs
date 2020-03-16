@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Fmas12d.Business.Helpers;
 
 namespace Fmas12d.Business.Services
 {
@@ -60,7 +61,7 @@ namespace Fmas12d.Business.Services
         decimal endLongitude
         ) {
 
-          decimal distance = 999;
+          decimal distance = 0;
 
           // query db
           Entities.CalculatedDistance entity =
@@ -118,13 +119,26 @@ namespace Fmas12d.Business.Services
                 Serilog.Log.Debug($"Distance saved to DB");
 
               } else {
-                Serilog.Log.Error($"Unable to parse: {result.Status}");
+                Serilog.Log.Error($"Unable to parse: {result.Status}. Use Distance Helper Method");
+                distance = Distance.CalculateDistanceAsCrowFlies(
+                  startLatitude,
+                  startLongitude,
+                  endLatitude,
+                  endLongitude
+                );
               }             
 
             } catch  {
                 Serilog.Log.Error
                   ($"{distanceMatrixResult.Status} {distanceMatrixResult.Error_Message}");
-                // throw new GoogleDistanceMatrixException(distanceMatrixResult.Status);
+                //throw new GoogleDistanceMatrixException(distanceMatrixResult.Status);
+
+                distance = Distance.CalculateDistanceAsCrowFlies(
+                  startLatitude,
+                  startLongitude,
+                  endLatitude,
+                  endLongitude
+                );
             } 
           }          
 
