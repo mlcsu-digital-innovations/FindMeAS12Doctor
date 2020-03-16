@@ -17,7 +17,7 @@ export class UserFinanceDetailModalComponent implements OnInit {
   @Input() financeDetails: BankDetailsProfile[];
   @Output() actioned = new EventEmitter<any>();
 
-  financeDetailForm: FormGroup;  
+  financeDetailForm: FormGroup;
   hasCcgSearchFailed: boolean;
   isCcgSearching: boolean;
   unknownCcgId: number;
@@ -30,21 +30,21 @@ export class UserFinanceDetailModalComponent implements OnInit {
 
   ngOnInit() {
     this.financeDetailForm = this.formBuilder.group({
-      ccg: ['', Validators.required],      
-      vsrNumber: ['', Validators.required]      
+      ccg: ['', Validators.required],
+      vsrNumber: ['', Validators.required]
     });
 
-    if (this.financeDetail) {               
-      let selectedFinanceDetail: BankDetailsProfile = this.financeDetails
+    if (this.financeDetail) {
+      const selectedFinanceDetail: BankDetailsProfile = this.financeDetails
         .find(item => item.ccgId === this.financeDetail.ccgId);
-      
+
       if (selectedFinanceDetail) {
         this.financeDetail = selectedFinanceDetail;
       }
-      
-      this.controls.ccg.setValue({ 
-        id: this.financeDetail.ccgId, 
-        resultText: this.financeDetail.ccg.name 
+
+      this.controls.ccg.setValue({
+        id: this.financeDetail.ccgId,
+        resultText: this.financeDetail.ccg.name
       });
       this.controls.vsrNumber.setValue(this.financeDetail.vsrNumber);
       this.controls.ccg.disable();
@@ -53,7 +53,7 @@ export class UserFinanceDetailModalComponent implements OnInit {
 
   get controls() {
     return this.financeDetailForm.controls;
-  }  
+  }
 
   CcgSearch = (text$: Observable<string>) =>
     text$.pipe(
@@ -85,7 +85,7 @@ export class UserFinanceDetailModalComponent implements OnInit {
   }
 
   SaveFinanceDetail() {
-    if (this.financeDetailForm.valid) {               
+    if (this.financeDetailForm.valid) {
       const bankDetail = {} as BankDetailsProfile;
       bankDetail.ccgId = this.controls.ccg.value.id;
       bankDetail.ccg = {} as Ccg;
@@ -97,16 +97,15 @@ export class UserFinanceDetailModalComponent implements OnInit {
         bankDetail.id = this.financeDetail.id;
       }
 
-      let ccgAlreadyInFinanceDetails = this.financeDetails 
-        ? this.financeDetails.find(item => item.ccgId == this.controls.ccg.value.id) 
+      const ccgAlreadyInFinanceDetails = this.financeDetails
+        ? this.financeDetails.find(item => item.ccgId === this.controls.ccg.value.id)
         : null;
       if (ccgAlreadyInFinanceDetails && bankDetail.id !== ccgAlreadyInFinanceDetails.id) {
         this.controls.ccg.setErrors({ uniqueCCGsRequired: true });
-      }
-      else {
+      } else {
         this.actioned.emit(bankDetail);
       }
-    }    
+    }
   }
 
   ValidateTypeAheadResults(results: any[], fieldName: string) {

@@ -311,10 +311,26 @@ export class UserProfileComponent implements OnInit {
   OnSaveUserProfileAction(action: boolean) {
     this.saveModal.close();
 
+    const regex = /^[0-9\s]*$/;
+    const mobile = this.userProfileForm.controls['mobileNumber'].value;
+
+    if (mobile !== null && mobile.match(regex) == null) {
+      this.userProfileForm.controls['mobileNumber'].setErrors({InvalidFormat: true});
+      return;
+    }
+
+    const telephone = this.userProfileForm.controls['telephoneNumber'].value;
+
+    if (telephone !== null && telephone.match(regex) == null) {
+      this.userProfileForm.controls['telephoneNumber'].setErrors({InvalidFormat: true});
+      return;
+    }
+
+
+
     if (action) {
       const userProfile: UserProfile = this.GetUserProfileFromForm();
       this.userProfileService.loading(true);
-      console.log(userProfile);
       this.userProfileService.UpdateUser(userProfile).subscribe(() => {
         this.toastService.displaySuccess({ message: 'User Updated'});
         this.userProfileService.loading(false);
