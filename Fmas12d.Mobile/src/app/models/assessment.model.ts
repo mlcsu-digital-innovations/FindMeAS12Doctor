@@ -5,6 +5,9 @@ import { UserDetails } from '../interfaces/user-details';
 export class Assessment {
 
   address1: string;
+  address2: string;
+  address3: string;
+  address4: string;
   amhpUser: UserDetails;
   completedTime: Date;
   hasBeenCompleted: boolean;
