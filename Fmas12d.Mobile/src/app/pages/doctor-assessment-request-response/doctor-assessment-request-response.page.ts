@@ -61,8 +61,10 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
             result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
           }
 
-          this.alreadyAllocated =
-            result.doctorsAllocated.find(doctor => doctor.doctorId === this.userDetails.id) !== null;
+          this.alreadyAllocated = result.doctorsAllocated === null
+            ? false
+            : result.doctorsAllocated
+              .find(doctor => doctor.doctorId === this.userDetails.id) !== null;
 
           this.expectedLocation
             = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
