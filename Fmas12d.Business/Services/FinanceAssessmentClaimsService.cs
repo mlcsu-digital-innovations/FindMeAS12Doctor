@@ -71,9 +71,6 @@ namespace Fmas12d.Business.Services
 
     public async Task<IEnumerable<FinanceAssessmentClaim>> BulkUpdateClaimStatusAsync(FinanceAssessmentClaimUpdate model) {
 
-      IList<FinanceAssessmentClaim> financeAssessmentClaims =
-        new List<FinanceAssessmentClaim>();
-
       IEnumerable<Entities.UserAssessmentClaim> claims = await _context
       .UserAssessmentClaims
       .Include(uac => uac.ClaimStatus)
@@ -87,16 +84,9 @@ namespace Fmas12d.Business.Services
       });
 
       await _context.SaveChangesAsync();
+      await _notificationService.SendClaimUpdateNotifications(claims);
 
-      // send claim update notifications once all data is saved
-      claims.ToList().ForEach(claim => {
-         _notificationService.SendClaimNotification(claim);
-         FinanceAssessmentClaim financeClaim = new FinanceAssessmentClaim(claim);
-         financeAssessmentClaims.Add(financeClaim);
-        }
-      );
-
-      return financeAssessmentClaims;
+      return claims.ToList().Select(claim => new FinanceAssessmentClaim(claim)).ToList();;
     }
 
     public async Task<FinanceAssessmentClaim> UpdateClaimStatusAsync(FinanceAssessmentClaimUpdate model)

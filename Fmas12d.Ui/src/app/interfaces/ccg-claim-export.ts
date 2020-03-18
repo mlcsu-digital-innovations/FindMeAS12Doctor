@@ -1,11 +1,12 @@
+// do not order this class alphabetically !
 export interface CcgClaimExport {
-  assessmentDate: Date;
-  assessmentPayment: number;
-  assessmentPostcode: string;
   claimReference: number;
-  id: number;
+  assessmentDate: Date;
+  assessmentPostcode: string;
+  successfulAssessment: boolean;
+  id?: number;
   mileage: number;
   mileagePayment: number;
-  successfulAssessment: boolean;
+  assessmentPayment: number;
   totalPayment: number;
 }

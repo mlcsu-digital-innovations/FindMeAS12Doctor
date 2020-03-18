@@ -27,6 +27,7 @@ export class ClaimListComponent implements OnInit {
   availableCcgs: SelectableCcg[] = [];
   hasVisibleData: boolean;
   activeClaims: FinanceClaim[] = [];
+  processedClaimIds: number[] = [];
 
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
   @ViewChild('selectCcg', { static: true }) ccgSelectionTemplate;
@@ -42,42 +43,47 @@ export class ClaimListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.claimsList$ = this.claimsService.getClaims(true);
-    this.total$ = this.claimsService.total$;
+    this.getData(true);
+  }
 
-    this.claimsList$.subscribe(
-      result => {
-        this.availableCcgs =
-          result.map(this.getCcgFromClaim)
-          .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);
+  getData(refresh: boolean = false) {
+    if (refresh || ! this.claimsList$) {
+      this.claimsList$ = this.claimsService.getClaims(refresh);
+      this.total$ = this.claimsService.total$;
 
-        this.hasVisibleData = result.length > 0;
-        this.activeClaims = result;
-      },
-      error => {
-        this.toastService.displayError({
-          title: 'Error',
-          message: error
-        });
-      }
-    );
+      this.claimsList$.subscribe(
+        result => {
+          this.availableCcgs =
+            result.map(this.getCcgFromClaim)
+            .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);
+
+          this.hasVisibleData = result.length > 0;
+          this.activeClaims = result;
+        },
+        error => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: error
+          });
+        }
+      );
+    }
   }
 
   createCcgExportEntry(claim): CcgClaimExport {
     return {
-      assessmentDate: moment(claim.assessment.scheduledTime).toDate(),
-      assessmentPayment: claim.assessmentPayment,
-      assessmentPostcode: claim.assessment.postcode,
       claimReference: claim.claimReference,
-      id: claim.id,
+      assessmentDate: moment(claim.assessment.scheduledTime).toDate(),
+      assessmentPostcode: claim.assessment.postcode,
+      successfulAssessment: claim.assessment.isSuccessful,
       mileage: claim.mileage,
       mileagePayment: claim.mileagePayment,
-      successfulAssessment: claim.assessment.isSuccessful,
+      assessmentPayment: claim.assessmentPayment,
       totalPayment: claim.mileagePayment + claim.assessmentPayment
     };
   }
 
-  exportCcgClaims(ccg: SelectableCcg) {
+  exportCcgClaims(ccg: SelectableCcg): number {
 
     const claimsForCcg = this.activeClaims
       .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
@@ -94,14 +100,14 @@ export class ClaimListComponent implements OnInit {
       {cell: 'H1', title: 'Claim Total'},
     ];
 
+    console.log(exportData);
+
     if (exportData.length > 0) {
 
       this.excelService
-        .exportAsCcgExcelFile(exportData, ccg.shortCode, columnHeaders)
+        .exportAsCcgExcelFile(exportData, ccg.shortCode, ccg.name, columnHeaders)
         .subscribe(result => {
-
-          // update claims successfully exported to approved
-          const claimIds: number[] = exportData.map(claim => claim.id);
+          const claimIds = this.processedClaimIds.concat(exportData.map(claim => claim.id));
           this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
           .subscribe(x => {
             console.log(x);
@@ -118,6 +124,7 @@ export class ClaimListComponent implements OnInit {
           });
         });
     }
+    return exportData.length;
   }
 
   exportCcgData() {
@@ -134,9 +141,17 @@ export class ClaimListComponent implements OnInit {
     this.ccgModal.close();
     if (action) {
       const exportCcgs = this.availableCcgs.filter(ccg => ccg.selected === true);
-      exportCcgs.forEach(ccg => this.exportCcgClaims(ccg));
-      console.log('refresh');
-      this.refreshData();
+
+      exportCcgs.forEach(ccg => {
+        if (this.exportCcgClaims(ccg) === 0) {
+          this.toastService.displayInfo({
+            title: 'Information',
+            message: `No claims exported for ${ccg.name}`
+          });
+        }
+      });
+
+      setTimeout(() => this.getData(true), 2000);
     }
   }
 

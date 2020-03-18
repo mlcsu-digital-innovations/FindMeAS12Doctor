@@ -18,6 +18,7 @@ export class ExcelService {
    public exportAsCcgExcelFile(
      json: any[],
      shortCode: string,
+     name: string,
      cols: {cell: string, title: string}[]
      ): Observable<any> {
 
@@ -38,7 +39,7 @@ export class ExcelService {
         const workbook: XLSX.WorkBook = { Sheets: { 'claims': worksheet }, SheetNames: ['claims'] };
         const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         this.saveAsExcelFile(excelBuffer, fileName);
-        observer.next(shortCode);
+        observer.next(`[${shortCode}] ${name}`);
         observer.complete();
 
       } catch (error) {

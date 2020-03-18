@@ -11,7 +11,7 @@ namespace Fmas12d.Api.Controllers
 {
   [Route("[controller]")]
   [ApiController]
-  [Authorize(Policy = "User")]
+  [Authorize(Policy = "Finance")]
   public class FinanceAssessmentClaimController : ModelControllerDeletePatchBase
   {
     private IFinanceAssessmentClaimService Service { 
@@ -117,7 +117,7 @@ namespace Fmas12d.Api.Controllers
           new Business.Models.FinanceAssessmentClaimUpdate();
         requestModel.MapToBusinessModel(businessModel);
         IEnumerable<Business.Models.FinanceAssessmentClaim> updateModel = await Service.BulkUpdateClaimStatusAsync(businessModel);
-        
+
         IEnumerable<ViewModels.FinanceAssessmentClaim> viewModels =
           updateModel
           .Select(ViewModels.FinanceAssessmentClaim.ProjectFromModel).ToList();
