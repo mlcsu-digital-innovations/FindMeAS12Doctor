@@ -3,6 +3,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -16,7 +17,7 @@ export class ExcelService {
    }
 
    public exportAsCcgExcelFile(
-     json: any[],
+     json: InvoicePaymentFile[],
      shortCode: string,
      name: string,
      cols: {cell: string, title: string}[]
@@ -24,16 +25,17 @@ export class ExcelService {
 
     const createExportFile = new Observable((observer) => {
       try {
+
+        // remove the id column
+        json.forEach(row => {
+          delete row['id'];
+        });
+
         const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
         const fileName = `FMAS12D_ClaimExport_${shortCode}`;
 
         cols.forEach(col => {
           worksheet[col.cell].v = col.title;
-        });
-
-        let i = 2;
-        json.forEach(v => {
-        worksheet['B' + (i++).toString()].z = 'dd/mm/yyyy';
         });
 
         const workbook: XLSX.WorkBook = { Sheets: { 'claims': worksheet }, SheetNames: ['claims'] };

@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
+import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
 
 @Component({
   selector: 'app-claim-list',
@@ -70,16 +71,27 @@ export class ClaimListComponent implements OnInit {
     }
   }
 
-  createCcgExportEntry(claim): CcgClaimExport {
+  createCcgExportEntry(claim): InvoicePaymentFile {
     return {
-      claimReference: claim.claimReference,
-      assessmentDate: moment(claim.assessment.scheduledTime).toDate(),
-      assessmentPostcode: claim.assessment.postcode,
-      successfulAssessment: claim.assessment.isSuccessful,
-      mileage: claim.mileage,
-      mileagePayment: claim.mileagePayment,
-      assessmentPayment: claim.assessmentPayment,
-      totalPayment: claim.mileagePayment + claim.assessmentPayment
+      TransactionDescription: '',
+      VendorCode: '',
+      InvoiceNumber: '',
+      InvoiceDate: moment().toDate(),
+      InvoiceReceivedDate: moment().toDate(),
+      PaymentTerms: '7 DAYS NET',
+      TransactionType: 'STANDARD',
+      CostCentre: claim.ccg.costCentre,
+      Subjective: '',
+      Analysis1: '00000',
+      Analysis2: '00000',
+      Analysis3: '00000',
+      ItemDescription: '',
+      ItemType: 'ITEM',
+      LineAmount: claim.mileagePayment + claim.assessmentPayment,
+      UnitAmount: 1.00,
+      TaxCode: 'EXEMPT',
+      LineValid: 'VALID',
+      id: claim.id
     };
   }
 
@@ -90,17 +102,25 @@ export class ClaimListComponent implements OnInit {
     const exportData = (claimsForCcg.map(this.createCcgExportEntry));
 
     const columnHeaders = [
-      {cell: 'A1', title: 'Claim Reference'},
-      {cell: 'B1', title: 'Assessment Date'},
-      {cell: 'C1', title: 'Assessment Postcode'},
-      {cell: 'D1', title: 'Successful Assessment'},
-      {cell: 'E1', title: 'Miles Travelled'},
-      {cell: 'F1', title: 'Mileage Payment'},
-      {cell: 'G1', title: 'Assessment Payment'},
-      {cell: 'H1', title: 'Claim Total'},
+      {cell: 'A1', title: 'Transaction Description'},
+      {cell: 'B1', title: 'Vendor Code'},
+      {cell: 'C1', title: 'Invoice Number'},
+      {cell: 'D1', title: 'Invoice Date'},
+      {cell: 'E1', title: 'Invoice Received Date'},
+      {cell: 'F1', title: 'Payment Terms'},
+      {cell: 'G1', title: 'Transaction Type'},
+      {cell: 'H1', title: 'Cost Centre'},
+      {cell: 'I1', title: 'Subjective'},
+      {cell: 'J1', title: 'Analysis 1'},
+      {cell: 'K1', title: 'Analysis 2'},
+      {cell: 'L1', title: 'Analysis 3'},
+      {cell: 'M1', title: 'Item Description'},
+      {cell: 'N1', title: 'Item Type'},
+      {cell: 'O1', title: 'Line Amount'},
+      {cell: 'P1', title: 'Unit Amount'},
+      {cell: 'Q1', title: 'Tax Code'},
+      {cell: 'R1', title: 'Line Valid'},
     ];
-
-    console.log(exportData);
 
     if (exportData.length > 0) {
 
