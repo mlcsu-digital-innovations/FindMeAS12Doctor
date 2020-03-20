@@ -88,8 +88,15 @@ namespace Fmas12d.Business.Services
       entity.ClaimStatusId = model.ClaimStatusId;
 
       UpdateModified(entity);
-
       await _context.SaveChangesAsync();
+
+      entity = await _context
+        .UserAssessmentClaims
+        .Include(uac => uac.ClaimStatus)
+        .Include(uac => uac.User)
+        .Where(uac => uac.Id == model.Id)
+        .WhereIsActiveOrActiveOnly(true)
+        .SingleOrDefaultAsync();
 
       await _notificationService.SendClaimNotification(entity);
 

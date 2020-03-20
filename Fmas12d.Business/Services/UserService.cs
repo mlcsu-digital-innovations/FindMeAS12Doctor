@@ -3,6 +3,7 @@ using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -220,6 +221,37 @@ namespace Fmas12d.Business.Services
       }
 
       return true;
+    }
+
+    public async Task<User> UpdateVsrAsync(
+      VsrUpdate vsrDetails 
+    )
+    {
+      Entities.BankDetail entity = await _context
+      .BankDetails
+      .Where(bd => bd.UserId == vsrDetails.UserId)
+      .Where(bd => bd.CcgId == vsrDetails.CcgId)
+      .SingleOrDefaultAsync();
+
+      if (entity == null) {
+        Entities.BankDetail bankDetail = new Entities.BankDetail(){
+          UserId = vsrDetails.UserId,
+          CcgId = vsrDetails.CcgId,
+          VsrNumber = vsrDetails.VsrNumber,
+          ModifiedByUserId = _userClaimsService.GetUserId(),
+          ModifiedAt = DateTimeOffset.Now,
+          IsActive = true
+        };
+        _context.Add(bankDetail);
+      } else {
+        entity.VsrNumber = vsrDetails.VsrNumber;
+        entity.ModifiedByUserId = _userClaimsService.GetUserId();
+        entity.ModifiedAt = DateTimeOffset.Now;
+      }
+
+      await _context.SaveChangesAsync();
+
+      return await GetAsync(vsrDetails.UserId, true, true);
     }
 
     private async Task<User> CheckUserIsAsync(

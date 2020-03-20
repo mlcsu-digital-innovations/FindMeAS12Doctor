@@ -69,6 +69,29 @@ namespace Fmas12d.Api.Controllers
       }     
     }   
 
+    [HttpPut]
+    [Route("updatevsr")]
+    public async Task<ActionResult<ViewModels.UserProfile>> UpdateVsr(
+      [FromBody] RequestModels.VsrUpdate requestModel
+    )
+    {
+      try
+      {
+        Business.Models.VsrUpdate businessModel = new Business.Models.VsrUpdate();
+
+        requestModel.MapToBusinessModel(businessModel);
+
+        Business.Models.User userModel = await Service.UpdateVsrAsync(businessModel);
+        ViewModels.UserProfile viewModel = new ViewModels.UserProfile(userModel);
+
+        return Ok(viewModel);
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }     
+    }  
+
     private IUserService Service { get { return _service as IUserService; } }
   }
 }
