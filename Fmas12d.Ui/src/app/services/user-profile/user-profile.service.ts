@@ -26,7 +26,7 @@ export class UserProfileService {
   }
 
   UpdateUserVsrNumber(userId: number, vsrNumber: number, ccgId: number): Observable<any> {
-    const endpoint = `${environment.apiEndpoint}/userprofile/updatevsr`;
+    const endpoint = `${environment.apiEndpoint}/userprofile/updatevsrnumber`;
     return this.http.put<UserProfile>(endpoint, {vsrNumber, ccgId, userId});
   }
 }

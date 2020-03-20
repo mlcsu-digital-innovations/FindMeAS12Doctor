@@ -223,35 +223,32 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
-    public async Task<User> UpdateVsrAsync(
-      VsrUpdate vsrDetails 
+    public async Task<User> UpdateVsrNumberAsync(
+      VsrNumberUpdate model 
     )
     {
       Entities.BankDetail entity = await _context
       .BankDetails
-      .Where(bd => bd.UserId == vsrDetails.UserId)
-      .Where(bd => bd.CcgId == vsrDetails.CcgId)
+      .Where(bd => bd.UserId == model.UserId)
+      .Where(bd => bd.CcgId == model.CcgId)
       .SingleOrDefaultAsync();
 
       if (entity == null) {
-        Entities.BankDetail bankDetail = new Entities.BankDetail(){
-          UserId = vsrDetails.UserId,
-          CcgId = vsrDetails.CcgId,
-          VsrNumber = vsrDetails.VsrNumber,
-          ModifiedByUserId = _userClaimsService.GetUserId(),
-          ModifiedAt = DateTimeOffset.Now,
+        entity = new Entities.BankDetail(){
+          UserId = model.UserId,
+          CcgId = model.CcgId,
+          VsrNumber = model.VsrNumber,
           IsActive = true
         };
-        _context.Add(bankDetail);
+        _context.Add(entity);
       } else {
-        entity.VsrNumber = vsrDetails.VsrNumber;
-        entity.ModifiedByUserId = _userClaimsService.GetUserId();
-        entity.ModifiedAt = DateTimeOffset.Now;
+        entity.VsrNumber = model.VsrNumber;
       }
-
+      
+      UpdateModified(entity);
       await _context.SaveChangesAsync();
 
-      return await GetAsync(vsrDetails.UserId, true, true);
+      return await GetAsync(model.UserId, true, true);
     }
 
     private async Task<User> CheckUserIsAsync(

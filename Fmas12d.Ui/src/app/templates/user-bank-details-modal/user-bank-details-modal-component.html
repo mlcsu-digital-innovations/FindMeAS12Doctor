@@ -2,7 +2,7 @@
   <h4 class="modal-title"><i class="fas fa-info-circle"></i> Update VSR</h4>
 </div>
 <div class="modal-body offset-md-1">
-  <form [formGroup]="vsrForm" class="form-style">
+  <form [formGroup]="vsrNumberForm" class="form-style">
     <!-- UserName -->
     <div class="form-row">
       <div class="col-md-12">
@@ -42,7 +42,7 @@
       <div class="col-md-12">
         <div class="row" name="vsrNumber">
           <div class="col-md-6">
-            <label for="town">VSR Number</label>
+            <label for="vsrNumber">VSR Number</label>
             <input
               type="text"
               class="form-control"
@@ -55,19 +55,19 @@
       </div>
     </div>
     <!-- VSR Number Errors -->
-    <div class="form-row" *ngIf="vsrField.errors">
+    <div class="form-row" *ngIf="vsrNumberField.errors">
       <div class="col-md-12 mb-2">
-        <div *ngIf="vsrField.errors.required" class="invalid-field">
+        <div *ngIf="vsrNumberField.errors.required" class="invalid-field">
           <span>* VSR number is required</span>
         </div>
       </div>
       <div class="col-md-12 mb-2">
-        <div *ngIf="vsrField.errors.maxlength" class="invalid-field">
+        <div *ngIf="vsrNumberField.errors.maxlength" class="invalid-field">
           <span>* Maximum of 10 digits</span>
         </div>
       </div>
       <div class="col-md-12 mb-2">
-        <div *ngIf="vsrField.errors.pattern" class="invalid-field">
+        <div *ngIf="vsrNumberField.errors.pattern" class="invalid-field">
           <span>* Invalid format</span>
         </div>
       </div>
@@ -83,7 +83,7 @@
           type="submit"
           class="btn btn-primary btn-standard"
           (click)="modalAction(true)"
-          [disabled]="vsrField.hasError()"
+          [disabled]="vsrNumberField.hasError()"
         >Save</button>
       </div>
     </div>

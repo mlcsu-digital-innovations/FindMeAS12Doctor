@@ -16,9 +16,9 @@ export class UserBankDetailsModalComponent implements OnInit {
 
   @Input() ccg: Ccg;
 
-  @Output() actioned = new EventEmitter<{ok: boolean, vsr: string}>();
+  @Output() actioned = new EventEmitter<{ok: boolean, vsrNumber: number}>();
 
-  vsrForm: FormGroup;
+  vsrNumberForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder
@@ -26,7 +26,7 @@ export class UserBankDetailsModalComponent implements OnInit {
 
   ngOnInit() {
 
-    this.vsrForm = this.formBuilder.group({
+    this.vsrNumberForm = this.formBuilder.group({
       claimant: [
         {
           value: this.claimant.displayName,
@@ -52,12 +52,12 @@ export class UserBankDetailsModalComponent implements OnInit {
 
   modalAction(action: boolean) {
     this.actioned.emit(
-      {ok: action, vsr: this.vsrField.value}
+      {ok: action, vsrNumber: parseInt(this.vsrNumberField.value, 10)}
     );
   }
 
-  get vsrField() {
-    return this.vsrForm.controls.vsrNumber;
+  get vsrNumberField() {
+    return this.vsrNumberForm.controls.vsrNumber;
   }
 
 }

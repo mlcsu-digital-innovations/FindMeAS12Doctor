@@ -45,6 +45,6 @@ namespace Fmas12d.Business.Services
 
     Task<User> UpdateAsync(IUserProfileUpdate model);
 
-    Task<User> UpdateVsrAsync(VsrUpdate vsrDetails);
+    Task<User> UpdateVsrNumberAsync(VsrNumberUpdate model);
   }
 }

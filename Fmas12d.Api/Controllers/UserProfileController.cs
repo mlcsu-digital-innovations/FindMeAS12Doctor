@@ -70,18 +70,18 @@ namespace Fmas12d.Api.Controllers
     }   
 
     [HttpPut]
-    [Route("updatevsr")]
-    public async Task<ActionResult<ViewModels.UserProfile>> UpdateVsr(
-      [FromBody] RequestModels.VsrUpdate requestModel
+    [Route("updatevsrnumber")]
+    public async Task<ActionResult<ViewModels.UserProfile>> UpdateVsrNumber(
+      [FromBody] RequestModels.VsrNumberPut requestModel
     )
     {
       try
       {
-        Business.Models.VsrUpdate businessModel = new Business.Models.VsrUpdate();
+        Business.Models.VsrNumberUpdate businessModel = new Business.Models.VsrNumberUpdate();
 
         requestModel.MapToBusinessModel(businessModel);
 
-        Business.Models.User userModel = await Service.UpdateVsrAsync(businessModel);
+        Business.Models.User userModel = await Service.UpdateVsrNumberAsync(businessModel);
         ViewModels.UserProfile viewModel = new ViewModels.UserProfile(userModel);
 
         return Ok(viewModel);

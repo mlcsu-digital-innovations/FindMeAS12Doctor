@@ -25,11 +25,11 @@ export class ClaimViewComponent implements OnInit {
   claim$: Observable<ClaimView | any>;
   claimForm: FormGroup;
   claimId: number;
-  vsrModal: NgbModalRef;
+  vsrNumberModal: NgbModalRef;
   claimant: Claimant;
   ccg: Ccg;
 
-  @ViewChild('updateVsr', null) vsrTemplate;
+  @ViewChild('updateVsr', null) vsrNumberTemplate;
 
   constructor(
     private claimsService: FinanceClaimService,
@@ -58,8 +58,8 @@ export class ClaimViewComponent implements OnInit {
   }
 
   AddVsr() {
-    this.vsrModal = this.modalService.open(
-      this.vsrTemplate,
+    this.vsrNumberModal = this.modalService.open(
+      this.vsrNumberTemplate,
       { size: 'lg' }
     );
   }
@@ -115,12 +115,12 @@ export class ClaimViewComponent implements OnInit {
     return claim.claimStatus.id === CLAIM_STATUS_QUERY;
   }
 
-  OnUpdateVsrAction(action: {ok: boolean, vsr: string}) {
+  OnUpdateVsrAction(action: {ok: boolean, vsrNumber: number}) {
 
-    this.vsrModal.close();
+    this.vsrNumberModal.close();
 
     if (action.ok) {
-      this.userProfileService.UpdateUserVsrNumber(this.claimant.id, parseInt(action.vsr, 10), this.ccg.id)
+      this.userProfileService.UpdateUserVsrNumber(this.claimant.id, action.vsrNumber, this.ccg.id)
       .subscribe((result: UserProfile) => {
         this.toastService.displaySuccess({
           message: 'VSR number Updated'
@@ -150,7 +150,7 @@ export class ClaimViewComponent implements OnInit {
         this.toastService.displaySuccess({
           message: 'Claim Updated'
         });
-        if (navigateToList){
+        if (navigateToList) {
           this.routerService.navigateByUrl('/finance/claims/list');
         }
       },
