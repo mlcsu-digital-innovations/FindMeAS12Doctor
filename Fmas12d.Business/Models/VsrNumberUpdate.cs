@@ -1,6 +1,6 @@
 namespace Fmas12d.Business.Models
 {
-    public class VsrUpdate : IVsrUpdate
+    public class VsrNumberUpdate : IVsrNumberUpdate
     {
         public int CcgId { get; set; }
         public int UserId { get; set; }
