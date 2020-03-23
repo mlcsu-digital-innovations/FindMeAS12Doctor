@@ -119,8 +119,16 @@ namespace Fmas12d.Business.Services
         }
       }
       await _context.SaveChangesAsync();
-
       entity = await GetClaimAsync(model.Id);
+
+      entity = await _context
+        .UserAssessmentClaims
+        .Include(uac => uac.ClaimStatus)
+        .Include(uac => uac.User)
+        .Where(uac => uac.Id == model.Id)
+        .WhereIsActiveOrActiveOnly(true)
+        .SingleOrDefaultAsync();
+
       await _notificationService.SendClaimNotification(entity);
 
       return await GetClaimByIdAsync(model.Id);

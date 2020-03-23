@@ -19,6 +19,7 @@ export const PROFILE_TYPE_UNREGISTERED = 6;
 
 export const SECTION12_APPROVED = 1;
 
+export const CLAIM_STATUS_SUBMITTED = 1;
 export const CLAIM_STATUS_PROCESSING = 2;
 export const CLAIM_STATUS_QUERY = 3;
 export const CLAIM_STATUS_APPROVED = 4;

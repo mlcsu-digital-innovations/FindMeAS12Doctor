@@ -89,7 +89,7 @@ namespace Fmas12d.Business.Services
           notification.NotificationText.MessageTemplate
           .Replace("{0}", claim.ClaimReference.ToString());
 
-        messageBody = messageBody.Replace("{1}", claim.ClaimStatus.Name);
+        messageBody = messageBody.Replace("{1}", claim.ClaimStatus?.Name);
 
         bool messageSent =
           await SendFcmNotification(

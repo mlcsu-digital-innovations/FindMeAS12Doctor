@@ -44,5 +44,7 @@ namespace Fmas12d.Business.Services
     Task<bool> RefreshFcmToken(int userId, string token);
 
     Task<User> UpdateAsync(IUserProfileUpdate model);
+
+    Task<User> UpdateVsrNumberAsync(VsrNumberUpdate model);
   }
 }
