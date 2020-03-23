@@ -1,15 +1,15 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
-  public partial class NotificationEmail : NameDescription, INotificationEmail
+  [Table("NotificationEmailsAudit")]
+  public partial class NotificationEmailAudit : NameDescriptionAudit, INotificationEmail
   {
     [Required]
     public string MessageTemplate { get; set; }
     [MaxLength(255)]
     [Required]
     public string SubjectTemplate { get; set; }
-    public virtual IList<UserNotificationEmail> UserNotificationEmails { get; set; }
   }
 }
