@@ -9,9 +9,9 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal const string DESCRIPTION_MISSING_VSR_NUMBER =
       "Missing VSR number template";
     internal const string SUBJECT_MISSING_VSR_NUMBER =
-      "Allocated to assessment description";
+      "Missing VSR number";
     internal const string MESSAGE_TEMPLATE_MISSING_VSR_NUMBER =
-      "<html><head><title>Missing VSR number</title></head><body>Missing VSR number for CCG {0}</body></html>";
+      "<html><head><title>Missing VSR number</title></head><body>Missing VSR number for {0}</body></html>";
     internal const string NAME_MISSING_VSR_NUMBER = "Missing VSR number";
     #endregion
 
