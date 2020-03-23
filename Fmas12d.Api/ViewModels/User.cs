@@ -19,6 +19,7 @@ namespace Fmas12d.Api.ViewModels
       GmcNumber = model.GmcNumber;
       HasReadTermsAndConditions = model.HasReadTermsAndConditions;
       Id = model.Id;
+      IsAdmin = model.IsAdmin;
       IsAmhp = model.IsAmhp;
       IsDoctor = model.IsDoctor;
       IsFinance = model.IsFinance;
@@ -42,6 +43,7 @@ namespace Fmas12d.Api.ViewModels
         return BankDetails?.Count() > 0;
       }
     }
+    public bool IsAdmin { get; set; }
     public bool IsAmhp { get; set; }
     public bool IsDoctor { get; set; }
     public bool IsFinance { get; set; }
