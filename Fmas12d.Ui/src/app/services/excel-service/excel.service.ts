@@ -10,6 +10,8 @@ import * as Style from './excel.style';
 
 import { MHA_BATCH_TEMPLATE, MHA_BATCH_COLUMN_COLOURS } from './mha-batch-template';
 import { MhaTemplate } from 'src/app/interfaces/mha-template';
+import { MedExamLogA } from 'src/app/interfaces/med-exam-log';
+import { MED_EXAM_LOG_A_TEMPLATE, MED_EXAM_LOG_A_FORMATS } from './med-exam-log-a-template';
 
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -24,6 +26,73 @@ export class ExcelService {
    }
 
    worksheet: Worksheet;
+
+   public createMedExamLogExport(
+    json: MedExamLogA[],
+    shortCode: string,
+    name: string
+    ): Observable<any> {
+    const createExportFile = new Observable((observer) => {
+      try {
+        const workbook = new Workbook();
+        this.worksheet = workbook.addWorksheet('Sheet1');
+        const fileName = `${shortCode} Med Exam Log A`;
+
+        MED_EXAM_LOG_A_TEMPLATE.forEach(cell => {
+          this.addCell(cell);
+        });
+
+        const startDataRow = this.worksheet.rowCount;
+
+        json.forEach(row => {
+          const data = [];
+          for (const key in row) {
+            if (row.hasOwnProperty(key)) {
+              data.push(row[key]);
+            }
+          }
+          this.worksheet.addRow(data);
+        });
+
+        const endDataRow = this.worksheet.rowCount;
+
+        for (let i = startDataRow + 1; i <= endDataRow; i++) {
+          MED_EXAM_LOG_A_FORMATS.forEach(entry => {
+            const cellRC = `${entry.column}${i.toString()}`;
+
+            if (entry.format) {
+              this.worksheet.getCell(cellRC).numFmt = entry.format;
+            }
+
+            if (entry.dateFormat) {
+              const cell = this.worksheet.getCell(cellRC);
+
+              if (cell.value != null) {
+                cell.value = moment(cell.value.toString()).toDate();
+                cell.numFmt = entry.dateFormat;
+              }
+            }
+          });
+        }
+
+        MED_EXAM_LOG_A_FORMATS.forEach(column => {
+          if (column.width) {
+            this.worksheet.getColumn(column.column).width = column.width;
+          }
+        });
+
+        workbook.xlsx.writeBuffer()
+        .then((data) => {
+          const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheet.sheet'});
+          this.saveAsExcelFile(blob, fileName);
+        });
+      } catch (error) {
+        console.log(error);
+        observer.error(`Failed to create export file for ${shortCode} ${name}`);
+      }
+    });
+    return createExportFile;
+  }
 
    public createMhaBatchExport(
     json: InvoicePaymentFile[],
@@ -102,7 +171,7 @@ export class ExcelService {
 
     const cl = this.worksheet.getCell(cell.rc);
     cl.value = cell.value;
-    cl.alignment = cell.alignment;
+    cl.alignment = cell.alignment ? cell.alignment : Style.ALIGNMENT_CENTRE;
     cl.border = cell.borders;
     cl.fill = cell.fill;
     cl.font = cell.font ? cell.font : Style.FONT_STANDARD;
@@ -111,7 +180,6 @@ export class ExcelService {
       this.worksheet.mergeCells(cell.merge);
     }
   }
-
 
    public exportAsCcgExcelFile(
      json: InvoicePaymentFile[],

@@ -13,6 +13,8 @@ import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
 import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
+import { MedExamLogA } from 'src/app/interfaces/med-exam-log';
+import { BankDetails } from 'src/app/interfaces/bank-details';
 
 @Component({
   selector: 'app-claim-list',
@@ -71,7 +73,8 @@ export class ClaimListComponent implements OnInit {
     }
   }
 
-  createCcgExportEntry(claim): InvoicePaymentFile {
+  createCcgExportEntryForInvoicePaymentFile(claim: FinanceClaim): InvoicePaymentFile {
+
     return {
       TransactionDescription: '',
       VendorCode: '',
@@ -95,56 +98,77 @@ export class ClaimListComponent implements OnInit {
     };
   }
 
+  createCcgExportForMedExamLogFile(claim: FinanceClaim): MedExamLogA {
+
+    claim.claimant.bankDetails.forEach(detail => {
+      console.log(detail);
+    });
+
+    const bankDetail: BankDetails = claim.claimant.bankDetails.find(detail => detail.ccgId === claim.ccg.id);
+
+    return {
+      dateLogged: null,
+      lastActionDate: claim.lastUpdated,
+      ccgCode: claim.ccg.shortCode,
+      doctorName: claim.claimant.displayName,
+      vsrNUmber: bankDetail.vsrNumber,
+      dateOfExam: claim.assessment.scheduledTime,
+      patientIdentifer: '',
+      dateReceived: null,
+      value: claim.assessmentPayment,
+      mileage: claim.mileagePayment,
+      total: claim.assessmentPayment + claim.mileagePayment,
+      loggedBy: '',
+      status: '',
+      ipfTransactionDescription: '',
+      invoiceNumber: '',
+      payRef: null,
+      ipfFile: '',
+      notes: ''
+    };
+  }
+
   exportCcgClaims(ccg: SelectableCcg): number {
 
     const claimsForCcg = this.activeClaims
       .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
-    const exportData = (claimsForCcg.map(this.createCcgExportEntry));
+    const exportDataForIPF = (claimsForCcg.map(this.createCcgExportEntryForInvoicePaymentFile));
+    const exportDataForMedExamLog = (claimsForCcg.map(this.createCcgExportForMedExamLogFile));
 
-    const columnHeaders = [
-      {cell: 'A1', title: 'Transaction Description'},
-      {cell: 'B1', title: 'Vendor Code'},
-      {cell: 'C1', title: 'Invoice Number'},
-      {cell: 'D1', title: 'Invoice Date'},
-      {cell: 'E1', title: 'Invoice Received Date'},
-      {cell: 'F1', title: 'Payment Terms'},
-      {cell: 'G1', title: 'Transaction Type'},
-      {cell: 'H1', title: 'Cost Centre'},
-      {cell: 'I1', title: 'Subjective'},
-      {cell: 'J1', title: 'Analysis 1'},
-      {cell: 'K1', title: 'Analysis 2'},
-      {cell: 'L1', title: 'Analysis 3'},
-      {cell: 'M1', title: 'Item Description'},
-      {cell: 'N1', title: 'Item Type'},
-      {cell: 'O1', title: 'Line Amount'},
-      {cell: 'P1', title: 'Unit Amount'},
-      {cell: 'Q1', title: 'Tax Code'},
-      {cell: 'R1', title: 'Line Valid'},
-    ];
+    // ToDo: confirm format of files, populate missing fields
 
-    if (exportData.length > 0) {
-
+    // Medical Examination Log Export
+    if (exportDataForMedExamLog.length > 0) {
       this.excelService
-        .exportAsCcgExcelFile(exportData, ccg.shortCode, ccg.name, columnHeaders)
+      .createMedExamLogExport(exportDataForMedExamLog, ccg.shortCode, ccg.name)
+      .subscribe(result => {
+
+        this.toastService.displaySuccess({
+                title: 'Success',
+                message: `Med Exam Log file created for ${result}`
+              });
+      });
+    }
+
+    // MHA Batch Update files
+    if (exportDataForIPF.length > 0) {
+      this.excelService
+        .createMhaBatchExport(exportDataForIPF, ccg.shortCode, ccg.name)
         .subscribe(result => {
-          const claimIds = this.processedClaimIds.concat(exportData.map(claim => claim.id));
+
+          const claimIds = this.processedClaimIds.concat(exportDataForIPF.map(claim => claim.id));
           this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
-          .subscribe(x => {
-            console.log(x);
+            .subscribe(x => {
+              console.log(x);
           });
 
           this.toastService.displaySuccess({
-            title: 'Success',
-            message: `Export file created for ${result}`
-          });
-        }, err => {
-          this.toastService.displayError({
-            title: 'Error',
-            message: err
-          });
+                  title: 'Success',
+                  message: `Export file created for ${result}`
+                });
         });
     }
-    return exportData.length;
+    return exportDataForIPF.length;
   }
 
   exportCcgData() {

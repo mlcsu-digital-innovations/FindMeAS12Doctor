@@ -81,7 +81,6 @@ export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
   {
     rc: 'B2',
     value: '',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREEN,
     font: Style.FONT_EXTRA_LARGE,
     borders: Style.BORDER_MD_MD_N_MD,
@@ -90,7 +89,6 @@ export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
   {
     rc: 'B5',
     value: 'Enter Trust-Code Above',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
     borders: Style.BORDER_TN_MD_MD_MD,
     merge: 'B5:D5'
@@ -98,7 +96,6 @@ export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
   {
     rc: 'G2',
     value: 'Invoice Payments File',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
     font: Style.FONT_LARGE,
     borders: Style.BORDER_MD_MD_N_MD,
@@ -107,7 +104,6 @@ export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
   {
     rc: 'G5',
     value: 'FMAS12D File Generator',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
     borders: Style.BORDER_N_MD_MD_MD,
     merge: 'G5:L5'
@@ -133,175 +129,134 @@ export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
   {
     rc: 'M13',
     value: '',
-    alignment: Style.ALIGNMENT_CENTRE,
     borders: Style.BORDER_ALL,
     merge: 'M13:P15'
   },
   {
     rc: 'B17',
     value: 'Transaction Data',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'B17:H17'
   },
   {
     rc: 'I17',
     value: 'Account Code',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'I17:M17'
   },
   {
     rc: 'B18',
     value: 'Transaction Description',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'C18',
     value: 'Vendor Code',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'D18',
     value: 'Invoice Number',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'E18',
     value: 'Invoice Date',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'F18',
     value: 'Invoice Received Date',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'G18',
     value: 'Payment Terms',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'H18',
     value: 'Transaction Type',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'I18',
     value: 'Cost Centre',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'J18',
     value: 'Subjective',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'K18',
     value: 'Analysis 1',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'L18',
     value: 'Analysis 2',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'M18',
     value: 'Analysis 3',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL
   },
   {
     rc: 'N17',
     value: 'Item Description (Max 240 char)',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'N17:N18'
   },
   {
     rc: 'O17',
     value: 'Item Type',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'O17:O18'
   },
   {
     rc: 'P17',
     value: 'Line Amount',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'P17:P18'
   },
   {
     rc: 'Q17',
     value: 'Unit Amount',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'Q17:Q18'
   },
   {
     rc: 'R17',
     value: 'Tax Code',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'R17:R18'
   },
   {
     rc: 'S17',
     value: 'Line Valid',
-    alignment: Style.ALIGNMENT_CENTRE,
     fill: Style.FILL_GREY,
-    font: Style.FONT_STANDARD,
     borders: Style.BORDER_ALL,
     merge: 'S17:S18'
   }

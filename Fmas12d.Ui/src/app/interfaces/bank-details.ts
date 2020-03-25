@@ -1,3 +1,4 @@
 export interface BankDetails {
-  VsrNumber: number;
+  vsrNumber: number;
+  ccgId: number;
 }

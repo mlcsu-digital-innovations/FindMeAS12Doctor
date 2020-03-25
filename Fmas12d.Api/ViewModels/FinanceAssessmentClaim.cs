@@ -31,6 +31,7 @@ namespace Fmas12d.Api.ViewModels
           ClaimStatusId = financeAssessmentClaim.ClaimStatusId,
           Claimant = new User(financeAssessmentClaim.Claimant),
           Id = financeAssessmentClaim.Id,
+          LastUpdated = financeAssessmentClaim.LastUpdated,
           Mileage = financeAssessmentClaim.Mileage,
           MileagePayment = financeAssessmentClaim.MileagePayment
         };

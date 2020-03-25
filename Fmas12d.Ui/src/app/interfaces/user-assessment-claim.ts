@@ -8,4 +8,6 @@ export interface UserAssessmentClaim {
   mileage: number;
   mileagePayment: number;
   assessmentPayment: number;
+  id: number;
+  lastUpdated: Date;
 }

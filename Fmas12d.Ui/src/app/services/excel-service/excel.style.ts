@@ -31,6 +31,11 @@ export const FILL_YELLOW: Fill = {
   pattern: 'solid',
   fgColor: { argb: 'FFFFFF99'}, bgColor: { argb: 'FFFFFF99'}
 };
+export const FILL_ORANGE: Fill = {
+  type: 'pattern',
+  pattern: 'solid',
+  fgColor: { argb: 'FFFFC000'}, bgColor: { argb: 'FFFFC000'}
+};
 
 // ALIGNMENT
 export const  ALIGNMENT_CENTRE: Partial<Alignment> = {horizontal: 'center', vertical: 'middle'};

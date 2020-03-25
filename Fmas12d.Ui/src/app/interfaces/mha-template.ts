@@ -8,4 +8,5 @@ export interface MhaTemplate {
   borders?: Partial<Borders>;
   alignment?: Partial<Alignment>;
   merge?: string;
+  format?: string;
 }

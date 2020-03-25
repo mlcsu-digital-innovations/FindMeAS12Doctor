@@ -13,6 +13,7 @@ namespace Fmas12d.Business.Models
       Ccg = new Ccg(entity.Assessment.Ccg);
       Claimant = new User(entity.User);
       Claimant.BankDetails = Claimant.BankDetails?.Where(bd => bd.CcgId == Ccg.Id).ToList();
+      LastUpdated = entity.ModifiedAt;     
     }
 
     public User Claimant { get; set; }
