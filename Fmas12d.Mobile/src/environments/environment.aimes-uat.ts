@@ -9,9 +9,9 @@ export const environment = {
   postLogoutRedirectUrl: 'https://findmeans12doctor.co.uk/home'
 };
 
-export const ProtectedResourceMap: [string, string[]][] = 
-[  
-  [ "https://findmeans12doctor.co.uk", ["User.Read", "offline_access"] ] 
+export const ProtectedResourceMap: [string, string[]][] =
+[
+  [ 'https://findmeans12doctor.co.uk', ['User.Read', 'offline_access'] ]
 ];
 
 /*
