@@ -15,27 +15,27 @@
             <ion-icon name="home"></ion-icon> Home
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="user.isDoctor && userIsLoggedIn">
           <ion-item routerLink="/doctor-assessments" routerDirection="forward">
             <ion-icon name="list"></ion-icon> Assessments
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="user.isDoctor && userIsLoggedIn">
           <ion-item routerLink="/claims-list" routerDirection="forward">
             <ion-icon name="pricetag"></ion-icon> Claims
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isAmhp">
+        <ion-menu-toggle *ngIf="user.isAmhp && userIsLoggedIn">
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
             <ion-icon name="folder-open"></ion-icon> AMHP Assessments
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="user.isDoctor && userIsLoggedIn">
           <ion-item routerLink="/doctor-availability-view" routerDirection="forward">
             <ion-icon name="search"></ion-icon> Availability
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="user.isDoctor && userIsLoggedIn">
           <ion-item routerLink="/doctor-on-call-list" routerDirection="forward">
             <ion-icon name="list"></ion-icon> On Call
           </ion-item>
@@ -45,9 +45,9 @@
             <ion-icon name="help"></ion-icon> Help
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="userIsLoggedIn">
           <ion-item (click)="logOff()">
-            <ion-icon name="exit"></ion-icon> Log Off
+            <ion-icon name="log-out"></ion-icon> Log Off
           </ion-item>
         </ion-menu-toggle>
       </ion-list>

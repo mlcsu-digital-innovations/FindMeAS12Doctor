@@ -9,7 +9,6 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root'
 })
 export class RouteGuardService implements CanActivate {
-  
 
   constructor(
     private authService: AuthService,
@@ -19,38 +18,36 @@ export class RouteGuardService implements CanActivate {
   ) { }
 
   canActivate(): Observable<boolean> {
-    if (this.platform.is("cordova")) {
+    if (this.platform.is('cordova')) {
       return this.storageService.getAccessToken().map(token => {
         if (!token) {
           this.authService.loginMsAdal().subscribe(result => {
-            this.navCtrl.navigateRoot("home");
+            this.navCtrl.navigateRoot('home');
           }, error => {
-            this.navCtrl.navigateRoot("home");
+            this.navCtrl.navigateRoot('home');
           });
-          return false;          
-        }        
+          return false;
+        }
         return true;
       }, error => {
         this.authService.loginMsAdal().subscribe(result => {
-          this.navCtrl.navigateRoot("home");
+          this.navCtrl.navigateRoot('home');
         }, error => {
-          this.navCtrl.navigateRoot("home");
+          this.navCtrl.navigateRoot('home');
         });
         return false;
       });
-    }
-    else {
+    } else {
       return this.storageService.getAccessToken().map(token => {
-        if (!token) {          
+        if (!token) {
           this.authService.loginMsal();
           return false;
         }
-        return true;        
+        return true;
       }, error => {
         this.authService.loginMsal();
         return false;
       });
     }
   }
-
 }

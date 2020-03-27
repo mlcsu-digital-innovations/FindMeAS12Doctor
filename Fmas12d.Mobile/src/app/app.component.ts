@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
 
   userName: string;
   user = {} as UserDetails;
+  userIsLoggedIn: boolean;
 
   constructor(
     private alertController: AlertController,
@@ -75,15 +76,16 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
         // TODO: Process the login failure
+        this.userIsLoggedIn = false;
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
+        this.userIsLoggedIn = true;
         this.storageService.storeAccessToken(payload.token);
         this.setUserDetails(payload.token);
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
-        
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
@@ -96,6 +98,7 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
         this.storageService.storeAccessToken(payload.accessToken);
+        this.userIsLoggedIn = true;
         this.setUserDetails(payload.accessToken);
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
@@ -124,6 +127,7 @@ export class AppComponent implements OnInit {
     } else {
       this.authService.logoutMsal();
     }
+    this.userIsLoggedIn = false;
   }
 
   private async presentAlertConfirm(title: string, message: string) {

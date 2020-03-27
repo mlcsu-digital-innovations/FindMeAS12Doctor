@@ -28,12 +28,12 @@ const routes: Routes = [
   },
   {
     path: 'help',
-    canActivate: [RouteGuardService],
+    // canActivate: [RouteGuardService],
     loadChildren: './pages/help/help.module#HelpPageModule'
   },
   {
     path: 'home',
-    canActivate: [RouteGuardService],
+    // canActivate: [RouteGuardService],
     loadChildren: () => import('./pages/home/home.module')
       .then(m => m.HomePageModule)
   },
