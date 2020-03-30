@@ -99,6 +99,13 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
         this.storageService.storeAccessToken(payload.accessToken);
         this.userIsLoggedIn = true;
+
+        this.toastService.displaySuccess(
+          {
+            message: 'Signed In'
+          }
+        );
+
         this.setUserDetails(payload.accessToken);
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
@@ -128,6 +135,12 @@ export class AppComponent implements OnInit {
       this.authService.logoutMsal();
     }
     this.userIsLoggedIn = false;
+
+    this.toastService.displayMessage(
+      {
+        message: 'You have been signed out'
+      }
+    );
   }
 
   private async presentAlertConfirm(title: string, message: string) {

@@ -17,6 +17,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
+import { PinDialog } from '@ionic-native/pin-dialog/ngx';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
     Geolocation,
     MSAdal,
     Network,
+    PinDialog,
     StatusBar,
     SplashScreen,
     FCM,

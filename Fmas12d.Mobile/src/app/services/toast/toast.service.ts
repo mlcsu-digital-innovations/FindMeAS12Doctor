@@ -10,7 +10,7 @@ export class ToastService {
 
   public displayError(options: ToastOptions) {
     options.duration = 5000;
-    options.color = 'danger'
+    options.color = 'danger';
     this.show(options);
   }
 

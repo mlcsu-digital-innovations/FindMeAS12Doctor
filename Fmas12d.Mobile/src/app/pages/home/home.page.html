@@ -15,10 +15,30 @@
     <ion-row>
       <img src="../../../assets/img/icon.png" alt="Find Me An S12 Doctor" class="logo"/>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="!askForPin">
       <ion-button fill="outline" (click)="logOn()" *ngIf="!loggedIn" class="signin">
         Sign In
       </ion-button>
+    </ion-row>
+    <ion-row *ngIf="askForPin && !loggedIn" class="user-details">
+      <ion-col>
+        <label color="primary" class="user-details">
+          <ion-icon name="lock"></ion-icon>
+          {{userName}}
+        </label>
+      </ion-col>      
+    </ion-row>
+    <ion-row  *ngIf="askForPin && !loggedIn">
+      <ion-col>
+        <ion-button fill="outline" (click)="logOn()">
+          Sign In
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button fill="outline" (click)="logOff()">
+          Sign Out
+        </ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
 
