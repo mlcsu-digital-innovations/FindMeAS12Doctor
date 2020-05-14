@@ -8,7 +8,7 @@ import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
 import { Workbook, Worksheet, Border, Borders, Fill, Alignment, Font } from 'exceljs';
 import * as Style from './excel.style';
 
-import { MHA_BATCH_TEMPLATE, MHA_BATCH_COLUMN_COLOURS } from './mha-batch-template';
+import { MHA_BATCH_TEMPLATE, MHA_BATCH_COLUMN_COLOURS, MHA_BATCH_COLUMN_WIDTHS } from './mha-batch-template';
 import { MhaTemplate } from 'src/app/interfaces/mha-template';
 import { MedExamLogA } from 'src/app/interfaces/med-exam-log';
 import { MED_EXAM_LOG_A_TEMPLATE, MED_EXAM_LOG_A_FORMATS } from './med-exam-log-a-template';
@@ -143,6 +143,12 @@ export class ExcelService {
             this.setCellColour(cell, fill.fill);
           });
         }
+
+        MHA_BATCH_COLUMN_WIDTHS.forEach(column => {
+          if (column.width) {
+            this.worksheet.getColumn(column.column).width = column.width;
+          }
+        });
 
         workbook.xlsx.writeBuffer()
         .then((data) => {

@@ -77,6 +77,78 @@ export const MHA_BATCH_COLUMN_COLOURS: {column: string, fill: Fill}[] = [
   }
 ]
 
+export const MHA_BATCH_COLUMN_WIDTHS: {column: string, width: number}[] = [
+  {
+    column: 'B',
+    width: 22
+  },
+  {
+    column: 'C',
+    width: 12
+  },
+  {
+    column: 'D',
+    width: 16
+  },
+  {
+    column: 'E',
+    width: 12
+  },
+  {
+    column: 'F',
+    width: 12
+  },
+  {
+    column: 'G',
+    width: 16
+  },
+  {
+    column: 'H',
+    width: 16
+  },
+  {
+    column: 'I',
+    width: 12
+  },
+  {
+    column: 'J',
+    width: 12
+  },
+  {
+    column: 'K',
+    width: 12
+  },
+  {
+    column: 'L',
+    width: 12
+  },
+  {
+    column: 'N',
+    width: 32
+  },
+  {
+    column: 'O',
+    width: 12
+  },
+  {
+    column: 'P',
+    width: 12
+  },
+  {
+    column: 'Q',
+    width: 12
+  },
+  {
+    column: 'R',
+    width: 12
+  },
+  {
+    column: 'S',
+    width: 12
+  }
+
+]
+
 export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
   {
     rc: 'B2',
