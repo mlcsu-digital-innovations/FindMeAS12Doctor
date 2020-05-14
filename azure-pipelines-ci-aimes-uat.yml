@@ -15,7 +15,7 @@ steps:
 - task: UseDotNet@2
   displayName: 'Install dotnet core SDK 3.1.200'
   inputs:
-    version: '3.1.200'
+    version: '3.0.100'
 
 - task: DotNetCoreCLI@2
   displayName: Install dotnet-ef
