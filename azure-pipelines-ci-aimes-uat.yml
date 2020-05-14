@@ -21,6 +21,13 @@ steps:
     modifyOutputPath: false
     arguments: '-c AimesUat -r win-x64 --output ./Deployment/AimesUat/Fmas12d.Api -p:Version=$(build.buildNumber)'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'custom'
+    projects: './Fmas12d.Api/Fmas12d.Api.csproj'
+    custom: 'ef migrations script'
+    arguments: '-i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
+
 - task: Npm@1
   displayName: 'Fmas12d.Ui - Install npm packages'
   inputs:
