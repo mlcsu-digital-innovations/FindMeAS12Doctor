@@ -18,18 +18,19 @@ steps:
     version: '3.0.100'
 
 - task: DotNetCoreCLI@2
-  displayName: Install dotnet-ef
+  displayName: Install dotnet-ef 3.0.0
   inputs:
     command: 'custom'
     custom: 'tool'
-    arguments: 'install --global dotnet-ef'
+    arguments: 'install --global dotnet-ef --version 3.0.0'
+    
 
 - task: DotNetCoreCLI@2
   displayName: Check dotnet-ef version
   inputs:
     command: 'custom'
     custom: 'ef'
-    arguments: '--version'
+    arguments: '--version'    
 
 - task: DotNetCoreCLI@2
   displayName: 'Fmas12d.Api - Create Deployment'
