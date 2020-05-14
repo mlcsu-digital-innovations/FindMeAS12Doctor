@@ -17,5 +17,9 @@ namespace Fmas12d.Business.Services
     Task<UserAssessmentNotification> SendClaimNotification (
       Data.Entities.UserAssessmentClaim claim
     );
+
+    Task<IEnumerable<UserAssessmentNotification>> SendClaimUpdateNotifications(
+      IEnumerable<Data.Entities.UserAssessmentClaim> claims
+    );
   }
 }

@@ -1,10 +1,10 @@
-import { BankDetailsProfile } from './bank-details-profile';
 import { ContactDetailProfile } from './contact-detail-profile';
 import { NameIdList } from './name-id-list';
 import { User } from './user';
+import { BankDetails } from './bank-details';
 
 export interface UserProfile extends User {
-  bankDetails: BankDetailsProfile[];
+  bankDetails: BankDetails[];
   contactDetails: ContactDetailProfile[];
   contactDetailTypeId: number;
   emailAddress: string;

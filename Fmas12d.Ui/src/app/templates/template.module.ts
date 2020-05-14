@@ -1,5 +1,6 @@
 import { AllocationCompleteModalComponent } from './allocation-complete-modal/allocation-complete-modal.component';
 import { CancelActionModalComponent } from './cancel-action-modal/cancel-action-modal.component';
+import { CcgSelectionModalComponent } from './ccg-selection/ccg-selection-modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +16,7 @@ import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/use
   declarations: [
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
+    CcgSelectionModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
     UnregisteredUsersModalComponent,
@@ -32,6 +34,7 @@ import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/use
   exports: [
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
+    CcgSelectionModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
     UnregisteredUsersModalComponent,

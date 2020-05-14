@@ -26,7 +26,9 @@
                   type="search"
                   name="searchTerm"
                   [(ngModel)]="claimsService.searchTerm" />
+                <small class="form-text text-muted">The table can be filtered by typing into the box above</small>
               </div>
+
             </div>
             <div class="form-row">
             <table class="table">
@@ -69,6 +71,18 @@
               </tbody>
             </table>
           </div>
+          <div class="d-flex justify-content-between p-2">
+              &nbsp;
+              <button
+                class="btn btn-primary btn-standard"
+                type="button"
+                (click)="exportCcgData()"
+                [disabled]="!hasVisibleData"
+              >
+                <i class="fas fa-download"></i>
+                CCG Export
+              </button>
+          </div>
 
 
           <div class="d-flex justify-content-between p-2">
@@ -94,3 +108,8 @@
 <app-delay-spinner *ngIf="claimsService.loading$ | async" [delayMessage]="'Loading...'"></app-delay-spinner>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<ng-template #selectCcg let-selectedCcgs>
+  <app-ccg-selection-modal [selectedCcgs]="availableCcgs" (actioned)="OnCcgSelection($event)">
+  </app-ccg-selection-modal>
+</ng-template>

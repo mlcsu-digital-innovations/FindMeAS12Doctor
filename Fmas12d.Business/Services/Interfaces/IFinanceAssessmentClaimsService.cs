@@ -9,5 +9,7 @@ namespace Fmas12d.Business.Services
       Task<IEnumerable<FinanceAssessmentClaim>> GetListAsync();
       Task<FinanceAssessmentClaim> GetClaimByIdAsync(int claimId);
       Task<FinanceAssessmentClaim> UpdateClaimStatusAsync(FinanceAssessmentClaimUpdate model);
+
+      Task<IEnumerable<FinanceAssessmentClaim>> BulkUpdateClaimStatusAsync(FinanceAssessmentClaimUpdate model);
     }
 }

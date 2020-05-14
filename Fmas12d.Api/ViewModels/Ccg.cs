@@ -10,7 +10,8 @@ namespace Fmas12d.Api.ViewModels
 
       Id = model.Id;
       Name = model.Name;
-      IsPaymentApprovalRequired = model.IsPaymentApprovalRequired; 
+      IsPaymentApprovalRequired = model.IsPaymentApprovalRequired;
+      ShortCode = model.ShortCode; 
     }
 
     public virtual IList<BankDetail> BankDetails { get; set; }
