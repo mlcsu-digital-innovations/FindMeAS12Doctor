@@ -3,6 +3,7 @@ using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -220,6 +221,34 @@ namespace Fmas12d.Business.Services
       }
 
       return true;
+    }
+
+    public async Task<User> UpdateVsrNumberAsync(
+      VsrNumberUpdate model 
+    )
+    {
+      Entities.BankDetail entity = await _context
+      .BankDetails
+      .Where(bd => bd.UserId == model.UserId)
+      .Where(bd => bd.CcgId == model.CcgId)
+      .SingleOrDefaultAsync();
+
+      if (entity == null) {
+        entity = new Entities.BankDetail(){
+          UserId = model.UserId,
+          CcgId = model.CcgId,
+          VsrNumber = model.VsrNumber,
+          IsActive = true
+        };
+        _context.Add(entity);
+      } else {
+        entity.VsrNumber = model.VsrNumber;
+      }
+      
+      UpdateModified(entity);
+      await _context.SaveChangesAsync();
+
+      return await GetAsync(model.UserId, true, true);
     }
 
     private async Task<User> CheckUserIsAsync(
