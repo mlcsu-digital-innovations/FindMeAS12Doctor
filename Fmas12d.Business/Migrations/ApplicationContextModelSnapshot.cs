@@ -636,10 +636,11 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountNumber")
+                    b.Property<int>("AccountNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("BankName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -656,10 +657,11 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NameOnAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int?>("SortCode")
+                    b.Property<int>("SortCode")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -686,7 +688,7 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountNumber")
+                    b.Property<int>("AccountNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("AuditAction")
@@ -705,6 +707,7 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("BankName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -724,10 +727,11 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NameOnAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<int?>("SortCode")
+                    b.Property<int>("SortCode")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -1010,6 +1014,7 @@ namespace Fmas12d.Business.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -1031,14 +1036,11 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("Latitude")
+                    b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(8,6)");
 
-                    b.Property<decimal?>("Longitude")
+                    b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(9,6)");
-
-                    b.Property<string>("MobileNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("ModifiedAt")
                         .HasColumnType("datetimeoffset");
@@ -1078,6 +1080,7 @@ namespace Fmas12d.Business.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
@@ -1120,14 +1123,11 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("Latitude")
+                    b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(8,6)");
 
-                    b.Property<decimal?>("Longitude")
+                    b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(9,6)");
-
-                    b.Property<string>("MobileNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("ModifiedAt")
                         .HasColumnType("datetimeoffset");
