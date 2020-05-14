@@ -77,7 +77,7 @@ export const MHA_BATCH_COLUMN_COLOURS: {column: string, fill: Fill}[] = [
   }
 ]
 
-export const MHA_BATCH_COLUMN_WIDTHS: {column: string, width: number}[] = [
+export const MHA_BATCH_COLUMN_FORMAT: {column: string, width?: number, format?: string, dateFormat?: string}[] = [
   {
     column: 'B',
     width: 22
@@ -92,11 +92,13 @@ export const MHA_BATCH_COLUMN_WIDTHS: {column: string, width: number}[] = [
   },
   {
     column: 'E',
-    width: 12
+    width: 16,
+    dateFormat: 'dd/mm/yyyy'
   },
   {
     column: 'F',
-    width: 12
+    width: 16,
+    dateFormat: 'dd/mm/yyyy'
   },
   {
     column: 'G',
@@ -123,6 +125,10 @@ export const MHA_BATCH_COLUMN_WIDTHS: {column: string, width: number}[] = [
     width: 12
   },
   {
+    column: 'M',
+    width: 12
+  },
+  {
     column: 'N',
     width: 32
   },
@@ -132,7 +138,8 @@ export const MHA_BATCH_COLUMN_WIDTHS: {column: string, width: number}[] = [
   },
   {
     column: 'P',
-    width: 12
+    width: 12,
+    format: '0.00'
   },
   {
     column: 'Q',

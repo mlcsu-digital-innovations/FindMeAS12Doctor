@@ -8,7 +8,7 @@ import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
 import { Workbook, Worksheet, Border, Borders, Fill, Alignment, Font } from 'exceljs';
 import * as Style from './excel.style';
 
-import { MHA_BATCH_TEMPLATE, MHA_BATCH_COLUMN_COLOURS, MHA_BATCH_COLUMN_WIDTHS } from './mha-batch-template';
+import { MHA_BATCH_TEMPLATE, MHA_BATCH_COLUMN_COLOURS, MHA_BATCH_COLUMN_FORMAT } from './mha-batch-template';
 import { MhaTemplate } from 'src/app/interfaces/mha-template';
 import { MedExamLogA } from 'src/app/interfaces/med-exam-log';
 import { MED_EXAM_LOG_A_TEMPLATE, MED_EXAM_LOG_A_FORMATS } from './med-exam-log-a-template';
@@ -142,9 +142,27 @@ export class ExcelService {
             const cell = `${fill.column}${i.toString()}`;
             this.setCellColour(cell, fill.fill);
           });
+
+          MHA_BATCH_COLUMN_FORMAT.forEach(column => {
+
+            const cellId = `${column.column}${i.toString()}`;
+
+            if (column.format) {
+              this.worksheet.getCell(cellId).numFmt = column.format;
+            }
+
+            if (column.dateFormat) {
+              const cell = this.worksheet.getCell(cellId);
+              if (cell.value != null) {
+                cell.value = moment(cell.value.toString()).toDate();
+                cell.numFmt = column.dateFormat;
+              }
+            }
+          });
+
         }
 
-        MHA_BATCH_COLUMN_WIDTHS.forEach(column => {
+        MHA_BATCH_COLUMN_FORMAT.forEach(column => {
           if (column.width) {
             this.worksheet.getColumn(column.column).width = column.width;
           }
