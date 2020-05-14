@@ -24,13 +24,12 @@ steps:
     custom: 'tool'
     arguments: 'install --global dotnet-ef --version 3.0.0'
     
-
 - task: DotNetCoreCLI@2
-  displayName: Check dotnet-ef version
-  inputs:
+  displayName: 'Create database update script'
+  inputs:  
     command: 'custom'
-    custom: 'ef'
-    arguments: '--version'    
+    custom: 'ef migrations script'
+    arguments: '--project ./Fmas12d.Api/Fmas12d.Api.csproj -i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
 
 - task: DotNetCoreCLI@2
   displayName: 'Fmas12d.Api - Create Deployment'
@@ -41,13 +40,6 @@ steps:
     zipAfterPublish: false
     modifyOutputPath: false
     arguments: '-c AimesUat -r win-x64 --output ./Deployment/AimesUat/Fmas12d.Api -p:Version=$(build.buildNumber)'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'custom'
-    projects: './Fmas12d.Api/Fmas12d.Api.csproj'
-    custom: 'ef migrations script'
-    arguments: '-i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
 
 - task: Npm@1
   displayName: 'Fmas12d.Ui - Install npm packages'
