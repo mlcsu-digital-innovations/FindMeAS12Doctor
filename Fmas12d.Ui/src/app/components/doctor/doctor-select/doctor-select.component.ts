@@ -111,8 +111,7 @@ export class DoctorSelectComponent implements OnInit {
 
   DisplayDoctorsWithinSearchRadius(searchRadius: number) {
     this.filteredDoctorList = this.allDoctors.filter(doctor => doctor.distance <= searchRadius);
-    this.OnSort({column: 'distance', direction: 'desc'});
-    // this.UpdateAvailableDoctorList();
+    this.OnSort({column: 'distance', direction: 'asc'});
   }
 
   get doctorDistance() {
