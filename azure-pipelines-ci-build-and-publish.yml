@@ -28,7 +28,7 @@ steps:
   inputs:  
     command: 'custom'
     custom: 'ef'
-    arguments: 'migrations script --project=./Fmas12d.Api/Fmas12d.Api.csproj -i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
+    arguments: 'migrations script --project=./Fmas12d.Api/Fmas12d.Api.csproj -i -o ./Deployment/AimesDevelopment/Fmas12d.Api/update.sql'
 
 - task: DotNetCoreCLI@2
   displayName: 'Fmas12d.Api - Create Deployment'
