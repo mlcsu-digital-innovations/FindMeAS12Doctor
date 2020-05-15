@@ -16,6 +16,7 @@ import { TableHeaderSortable } from '../directives/table-header-sortable/table-h
 import { TemplateModule } from '../templates/template.module';
 import { ToastsComponent } from './toasts/toasts.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     TableHeaderSortable,
     ToastsComponent,
     UnauthorizedComponent,
+    UserProfileComponent,
     WelcomeComponent
   ],
   imports: [

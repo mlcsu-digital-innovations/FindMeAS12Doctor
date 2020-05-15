@@ -39,6 +39,8 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       new NonPaymentLocationTypesSeeder().SeedData();
 
+      new NotificationEmailsSeeder().SeedData();
+      
       new NotificationTextsSeeder().SeedData();
 
       new PaymentMethodTypesSeeder().SeedData();

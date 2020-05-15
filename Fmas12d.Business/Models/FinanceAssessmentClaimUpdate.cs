@@ -4,5 +4,7 @@ namespace Fmas12d.Business.Models
     {
         public int ClaimStatusId { get; set; }
         public int Id { get; set; }
+
+        public int[] ClaimIds {get; set;}
     }
 }

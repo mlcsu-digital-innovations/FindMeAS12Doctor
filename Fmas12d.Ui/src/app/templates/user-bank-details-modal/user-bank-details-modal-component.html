@@ -1,0 +1,92 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> Update VSR</h4>
+</div>
+<div class="modal-body offset-md-1">
+  <form [formGroup]="vsrNumberForm" class="form-style">
+    <!-- UserName -->
+    <div class="form-row">
+      <div class="col-md-12">
+        <div class="row" name="claimant">
+          <div class="col-md-6">
+            <label for="claimant">User</label>
+            <input
+              type="text"
+              class="form-control"
+              id="claimant"
+              #claimant
+              formControlName="claimant"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Ccg -->
+    <div class="form-row">
+      <div class="col-md-12">
+        <div class="row" name="claimant">
+          <div class="col-md-10">
+            <label for="claimant">CCG</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ccg"
+              #ccg
+              formControlName="ccg"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- VSR Number -->
+    <div class="form-row">
+      <div class="col-md-12">
+        <div class="row" name="vsrNumber">
+          <div class="col-md-6">
+            <label for="vsrNumber">VSR Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="vsrNumber"
+              #vsrNumber
+              formControlName="vsrNumber"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- VSR Number Errors -->
+    <div class="form-row" *ngIf="vsrNumberField.errors">
+      <div class="col-md-12 mb-2">
+        <div *ngIf="vsrNumberField.errors.required" class="invalid-field">
+          <span>* VSR number is required</span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-2">
+        <div *ngIf="vsrNumberField.errors.maxlength" class="invalid-field">
+          <span>* Maximum of 10 digits</span>
+        </div>
+      </div>
+      <div class="col-md-12 mb-2">
+        <div *ngIf="vsrNumberField.errors.pattern" class="invalid-field">
+          <span>* Invalid format</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-4 offset-md-8 text-right cancelOrSave">
+        <button
+          type="button"
+          class="btn btn-standard btn-cancel"
+          (click)="modalAction(false)"
+        >Cancel</button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-standard"
+          (click)="modalAction(true)"
+          [disabled]="vsrNumberField.errors"
+        >Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+

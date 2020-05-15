@@ -65,6 +65,7 @@ namespace Fmas12d.Business
 
     public virtual DbSet<BankDetail> BankDetails { get; set; }
     public virtual DbSet<BankDetailAudit> BankDetailsAudit { get; set; }
+    public virtual DbSet<CalculatedDistance> CalculatedDistances { get; set; }
     public virtual DbSet<Ccg> Ccgs { get; set; }
     public virtual DbSet<CcgAudit> CcgAudits { get; set; }
     public virtual DbSet<ClaimStatus> ClaimStatuses { get; set; }
@@ -98,6 +99,8 @@ namespace Fmas12d.Business
     public virtual DbSet<NonPaymentLocationAudit> NonPaymentLocationAudits { get; set; }
     public virtual DbSet<NonPaymentLocationType> NonPaymentLocationTypes { get; set; }
     public virtual DbSet<NonPaymentLocationTypeAudit> NonPaymentLocationTypeAudits { get; set; }
+    public virtual DbSet<NotificationEmail> NotificationEmails { get; set; }
+    public virtual DbSet<NotificationEmailAudit> NotificationEmailAudits { get; set; }
     public virtual DbSet<NotificationText> NotificationTexts { get; set; }
     public virtual DbSet<NotificationTextAudit> NotificationTextAudits { get; set; }
     public virtual DbSet<Organisation> Organisations { get; set; }
@@ -135,6 +138,8 @@ namespace Fmas12d.Business
     public virtual DbSet<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
     public virtual DbSet<UserAssessmentNotificationAudit> UserAssessmentNotificationAudits 
       { get; set; }
+    public virtual DbSet<UserNotificationEmail> UserNotificationEmails { get; set; }
+    public virtual DbSet<UserNotificationEmailAudit> UserNotificationEmailAudits { get; set; }
     public virtual DbSet<UserSpeciality> UserSpecialities { get; set; }
     public virtual DbSet<UserSpecialityAudit> UserSpecialitieAudits { get; set; }
 
@@ -159,6 +164,10 @@ namespace Fmas12d.Business
 
     private void ConfigureUniqueIndexes(ModelBuilder modelBuilder)
     {
+      modelBuilder.Entity<CalculatedDistance>()
+        .HasIndex( cd => new {cd.StartLatitude, cd.StartLongitude, cd.EndLatitude, cd.EndLongitude})
+        .IsUnique();
+
       modelBuilder.Entity<Ccg>()
         .HasIndex(c => c.Name)
         .IsUnique();
@@ -194,6 +203,10 @@ namespace Fmas12d.Business
         .IsUnique();      
 
       modelBuilder.Entity<NonPaymentLocationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<NotificationEmail>()
         .HasIndex(c => c.Name)
         .IsUnique();
 

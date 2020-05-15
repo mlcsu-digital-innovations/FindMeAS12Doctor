@@ -15,9 +15,9 @@ import { UnsuccessfulAssessmentTypeService } from
   styleUrls: ['./amhp-assessment-outcome.page.scss'],
 })
 export class AmhpAssessmentOutcomePage implements OnInit {
-  public assessmentLastUpdated: Date;  
+  public assessmentLastUpdated: Date;
   public assessmentView: AmhpAssessmentView;
-  private loading: HTMLIonLoadingElement; 
+  private loading: HTMLIonLoadingElement;
   public assessmentStatusId?: number;
   public assessmentStatusList: UnsuccessfulAssessmentType[] = [];
   public assessmentStatusName: string;
@@ -33,7 +33,7 @@ export class AmhpAssessmentOutcomePage implements OnInit {
 
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.showLoading();
     this.assessmentView = this.assessmentService.retrieveView();
 
@@ -72,7 +72,7 @@ export class AmhpAssessmentOutcomePage implements OnInit {
 
   public async confirmSave() {
 
-    if (this.attendingDoctors.length === 0) {
+    if (this.attendingDoctors().length === 0) {
       this.toastService.displayError({
         header: 'Error',
         message: 'Unable to save assessment with no confirmed attending doctors'
@@ -162,6 +162,7 @@ export class AmhpAssessmentOutcomePage implements OnInit {
   }
 
   private attendingDoctors(): AssessmentViewDoctor[] {
+
     if (this.assessmentView.doctorsAllocated) {
       return this.assessmentView.doctorsAllocated.filter((doctor: AssessmentViewDoctor) =>
         doctor.attended);

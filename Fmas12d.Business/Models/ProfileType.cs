@@ -20,9 +20,17 @@ namespace Fmas12d.Business.Models
     }
 
     public virtual IList<User> Users { get; set; }
+    public bool IsAdmin { get { return IsIdAnAdmin(Id); } }
     public bool IsAmhp { get { return IsIdAnAmhp(Id); } }
     public bool IsDoctor { get { return IsIdADoctor(Id); } }
     public bool IsFinance { get { return IsIdFinance(Id); } }
+
+
+    public static bool IsIdAnAdmin(int profileTypeId)
+    {
+      return profileTypeId == ADMIN;
+    }
+
     public static bool IsIdAnAmhp(int profileTypeId)
     {
       return profileTypeId == AMHP;

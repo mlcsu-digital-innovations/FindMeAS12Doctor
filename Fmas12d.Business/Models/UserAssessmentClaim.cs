@@ -15,6 +15,7 @@ namespace Fmas12d.Business.Models
       Assessment = new Assessment(entity.Assessment);
       AssessmentId = entity.AssessmentId;
       ClaimReference = entity.ClaimReference;
+      LastUpdated = entity.ModifiedAt;
       MileagePayment = entity.MileagePayment;
       Mileage = entity.Mileage;
       AssessmentPayment = entity.AssessmentPayment;
@@ -35,6 +36,7 @@ namespace Fmas12d.Business.Models
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
     public bool? IsUsersPatient { get; set; }
+    public DateTimeOffset LastUpdated { get; set; }
     public int? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
     public int? NextAssessmentId { get; set; }

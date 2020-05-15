@@ -3,6 +3,7 @@ using Fmas12d.Business.Exceptions;
 using Fmas12d.Business.Extensions;
 using Fmas12d.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -128,8 +129,12 @@ namespace Fmas12d.Business.Services
     {
       User model = await _context
         .Users
+        .Include(u => u.BankDetails)
+          .ThenInclude(bd => bd.Ccg)
         .Include(u => u.ContactDetails)
+          .ThenInclude(cd => cd.ContactDetailType)
         .Include(u => u.GenderType)
+        .Include(u => u.Organisation)
         .Include(u => u.ProfileType)
         .Include(u => u.UserSpecialities)
           .ThenInclude(us => us.Speciality)
@@ -218,6 +223,34 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
+    public async Task<User> UpdateVsrNumberAsync(
+      VsrNumberUpdate model 
+    )
+    {
+      Entities.BankDetail entity = await _context
+      .BankDetails
+      .Where(bd => bd.UserId == model.UserId)
+      .Where(bd => bd.CcgId == model.CcgId)
+      .SingleOrDefaultAsync();
+
+      if (entity == null) {
+        entity = new Entities.BankDetail(){
+          UserId = model.UserId,
+          CcgId = model.CcgId,
+          VsrNumber = model.VsrNumber,
+          IsActive = true
+        };
+        _context.Add(entity);
+      } else {
+        entity.VsrNumber = model.VsrNumber;
+      }
+      
+      UpdateModified(entity);
+      await _context.SaveChangesAsync();
+
+      return await GetAsync(model.UserId, true, true);
+    }
+
     private async Task<User> CheckUserIsAsync(
       int id,
       string modelPropertyName,
@@ -259,5 +292,60 @@ namespace Fmas12d.Business.Services
 
       return models;
     }
+
+    public async Task<User> UpdateAsync(IUserProfileUpdate model) {
+      Entities.User entity = _context
+        .Users
+        .Include(u => u.BankDetails)
+        .Include(u => u.ContactDetails)
+        .Include(u => u.UserSpecialities)
+        .WhereIsActiveOrActiveOnly(true)
+        .AsNoTracking(false)
+        .SingleOrDefault(u => u.Id == model.Id);
+
+      if (entity == null)
+      {
+        throw new ModelStateException("id",
+          $"Unable to find a User with an Id of {model.Id}");
+      }
+
+      model.MapToEntity(entity);
+      UpdateModifiedAll(entity);      
+
+      await _context.SaveChangesAsync();
+
+      User userModel = await _context.Users
+                      .Include(u => u.BankDetails)
+                      .ThenInclude(bd => bd.Ccg)
+                      .Include(u => u.ContactDetails)
+                        .ThenInclude(cd => cd.ContactDetailType)
+                      .Include(u => u.GenderType)
+                      .Include(u => u.Organisation)
+                      .Include(u => u.ProfileType)
+                      .Include(u => u.UserSpecialities)
+                        .ThenInclude(us => us.Speciality)
+                      .Where(u => u.IsActive)
+                      .Where(u => u.Id == entity.Id)
+                      .Select(User.ProjectFromEntity)
+                      .SingleAsync();
+
+      return userModel;
+    }
+
+    private void UpdateModifiedAll(Data.Entities.User entity) {
+      UpdateModified(entity);
+      foreach (Data.Entities.BankDetail bankDetailEntity in entity.BankDetails) {
+        bankDetailEntity.ModifiedByUserId = entity.ModifiedByUserId;
+        bankDetailEntity.ModifiedAt = entity.ModifiedAt;
+      }
+      foreach (Data.Entities.ContactDetail contactDetailEntity in entity.ContactDetails) {
+        contactDetailEntity.ModifiedByUserId = entity.ModifiedByUserId;
+        contactDetailEntity.ModifiedAt = entity.ModifiedAt;
+      }
+      foreach (Data.Entities.UserSpeciality userSpeciality in entity.UserSpecialities) {
+        userSpeciality.ModifiedByUserId = entity.ModifiedByUserId;
+        userSpeciality.ModifiedAt = entity.ModifiedAt;
+      }
+    } 
   }
 }
