@@ -99,6 +99,8 @@ namespace Fmas12d.Business
     public virtual DbSet<NonPaymentLocationAudit> NonPaymentLocationAudits { get; set; }
     public virtual DbSet<NonPaymentLocationType> NonPaymentLocationTypes { get; set; }
     public virtual DbSet<NonPaymentLocationTypeAudit> NonPaymentLocationTypeAudits { get; set; }
+    public virtual DbSet<NotificationEmail> NotificationEmails { get; set; }
+    public virtual DbSet<NotificationEmailAudit> NotificationEmailAudits { get; set; }
     public virtual DbSet<NotificationText> NotificationTexts { get; set; }
     public virtual DbSet<NotificationTextAudit> NotificationTextAudits { get; set; }
     public virtual DbSet<Organisation> Organisations { get; set; }
@@ -136,6 +138,8 @@ namespace Fmas12d.Business
     public virtual DbSet<UserAssessmentNotification> UserAssessmentNotifications { get; set; }
     public virtual DbSet<UserAssessmentNotificationAudit> UserAssessmentNotificationAudits 
       { get; set; }
+    public virtual DbSet<UserNotificationEmail> UserNotificationEmails { get; set; }
+    public virtual DbSet<UserNotificationEmailAudit> UserNotificationEmailAudits { get; set; }
     public virtual DbSet<UserSpeciality> UserSpecialities { get; set; }
     public virtual DbSet<UserSpecialityAudit> UserSpecialitieAudits { get; set; }
 
@@ -199,6 +203,10 @@ namespace Fmas12d.Business
         .IsUnique();      
 
       modelBuilder.Entity<NonPaymentLocationType>()
+        .HasIndex(c => c.Name)
+        .IsUnique();
+
+      modelBuilder.Entity<NotificationEmail>()
         .HasIndex(c => c.Name)
         .IsUnique();
 

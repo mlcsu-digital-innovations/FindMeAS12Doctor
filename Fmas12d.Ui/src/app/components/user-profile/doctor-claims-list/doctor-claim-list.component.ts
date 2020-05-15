@@ -78,7 +78,20 @@ export class DoctorClaimListComponent implements OnInit {
       {cell: 'I1', title: 'Claim Total'},
     ];
 
-    this.excelService.exportAsExcelFile(this.exportData, 'FMAS12D_ClaimExport', columnHeaders);
+    this.excelService
+    .exportAsExcelFile(this.exportData, 'FMAS12D_ClaimExport', columnHeaders)
+    .subscribe(result => {
+      this.toastService.displaySuccess({
+        title: 'Export Successful',
+        message: 'Claims export file created'
+      });
+    }, err => {
+      this.toastService.displayError({
+        title: 'Error',
+        message: 'Error creating claims export file !'
+      });
+    });
+
   }
 
   onSort({column, direction, columnType}: SortEvent) {

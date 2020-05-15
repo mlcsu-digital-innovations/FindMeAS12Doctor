@@ -51,6 +51,28 @@ namespace Fmas12d.Business.Services
       return notifications;
     }
 
+    public async Task<IEnumerable<UserAssessmentNotification>> SendClaimUpdateNotifications(
+      IEnumerable<Entities.UserAssessmentClaim> claims
+    )
+    {
+      List<int> claimIds = claims.Select(c => c.Id).ToList();
+
+      List<UserAssessmentNotification> notifications = new List<UserAssessmentNotification>();
+
+       IEnumerable<Entities.UserAssessmentClaim> claimsWithStatus = await _context
+      .UserAssessmentClaims
+      .Include(uac => uac.ClaimStatus)
+      .Where(uac => claimIds.Contains(uac.Id))
+      .ToListAsync();
+
+      foreach(Entities.UserAssessmentClaim claim in claimsWithStatus) {
+        UserAssessmentNotification notification = await SendClaimNotification(claim);
+        notifications.Add(notification);
+      }
+
+      return notifications;
+    }
+
     public async Task<UserAssessmentNotification> SendClaimNotification(
       Entities.UserAssessmentClaim claim
     )
@@ -67,7 +89,7 @@ namespace Fmas12d.Business.Services
           notification.NotificationText.MessageTemplate
           .Replace("{0}", claim.ClaimReference.ToString());
 
-        messageBody = messageBody.Replace("{1}", claim.ClaimStatus.Name);
+        messageBody = messageBody.Replace("{1}", claim.ClaimStatus?.Name);
 
         bool messageSent =
           await SendFcmNotification(
@@ -93,11 +115,12 @@ namespace Fmas12d.Business.Services
       IEnumerable<UserAssessmentNotification> notifications
     )
     {
-      foreach (UserAssessmentNotification notification in notifications)
-      {
-        await SendAssessmentNotification(notification);
+      if (notifications.Count() > 0) {
+        foreach (UserAssessmentNotification notification in notifications)
+        {
+          await SendAssessmentNotification(notification);
+        }
       }
-
       return notifications;
     }
 

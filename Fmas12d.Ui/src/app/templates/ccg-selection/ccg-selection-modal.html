@@ -1,0 +1,42 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> Select CCGs for export</h4>
+</div>
+<div class="modal-body">
+
+  <table>
+    <tr>
+      <th id="ccg">CCG</th>
+      <th id="selected">
+        <label class="container">
+          <input
+            type="checkbox"
+            (change)="ToggleAllSelection()" />
+            <span class="checkmark"></span>
+        </label>
+      </th>
+    </tr>
+    <tr *ngFor="let ccg of selectedCcgs; let i=index">
+      <td>{{ccg.name}}</td>
+      <td>
+        <label class="container">
+          <input
+            type="checkbox"
+            [attr.id]="'selected' + i"
+            [checked]="ccg.selected"
+            (change)="ToggleSelection(i)" />
+            <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+
+  </table>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-cancel" (click)="modalAction(false)">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" (click)="modalAction(true)">
+    Export
+  </button>
+</div>

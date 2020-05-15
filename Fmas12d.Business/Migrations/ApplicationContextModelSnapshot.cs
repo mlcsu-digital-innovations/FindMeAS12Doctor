@@ -1720,6 +1720,109 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("NonPaymentLocationTypesAudit");
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.NotificationEmail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageTemplate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("SubjectTemplate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("NotificationEmails");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.NotificationEmailAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageTemplate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("SubjectTemplate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("NotificationEmailsAudit");
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.NotificationText", b =>
                 {
                     b.Property<int>("Id")
@@ -3688,6 +3791,118 @@ namespace Fmas12d.Business.Migrations
                     b.ToTable("UserAvailabilityStatusesAudit");
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserNotificationEmail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateSent")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("EmailContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NotificationEmailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("NotificationEmailId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotificationEmails");
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserNotificationEmailAudit", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuditAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuditErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuditResult")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AuditSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateSent")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("EmailContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NotificationEmailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("NotificationEmailId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotificationEmailAudit");
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.UserSpeciality", b =>
                 {
                     b.Property<int>("Id")
@@ -4054,6 +4269,15 @@ namespace Fmas12d.Business.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Fmas12d.Data.Entities.NotificationEmail", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Fmas12d.Data.Entities.NotificationText", b =>
                 {
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
@@ -4353,6 +4577,42 @@ namespace Fmas12d.Business.Migrations
                     b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
                         .WithMany()
                         .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserNotificationEmail", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.NotificationEmail", "NotificationEmail")
+                        .WithMany("UserNotificationEmails")
+                        .HasForeignKey("NotificationEmailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fmas12d.Data.Entities.UserNotificationEmailAudit", b =>
+                {
+                    b.HasOne("Fmas12d.Data.Entities.NotificationEmail", "NotificationEmail")
+                        .WithMany()
+                        .HasForeignKey("NotificationEmailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fmas12d.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
