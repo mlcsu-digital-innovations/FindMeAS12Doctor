@@ -84,7 +84,6 @@ export class DoctorSelectComponent implements OnInit {
         return of(emptyAssessment);
       })
     );
-
     this.OnChanges();
   }
 
@@ -112,7 +111,7 @@ export class DoctorSelectComponent implements OnInit {
 
   DisplayDoctorsWithinSearchRadius(searchRadius: number) {
     this.filteredDoctorList = this.allDoctors.filter(doctor => doctor.distance <= searchRadius);
-    this.UpdateAvailableDoctorList();
+    this.OnSort({column: 'distance', direction: 'asc'});
   }
 
   get doctorDistance() {
