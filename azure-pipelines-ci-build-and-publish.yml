@@ -11,6 +11,25 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Install dotnet core SDK 3.0.100'
+  inputs:
+    version: '3.0.100'
+
+- task: DotNetCoreCLI@2
+  displayName: Install dotnet-ef 3.0.0
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef --version 3.0.0'
+    
+- task: DotNetCoreCLI@2
+  displayName: 'Create database update script'
+  inputs:  
+    command: 'custom'
+    custom: 'ef'
+    arguments: 'migrations script --project=./Fmas12d.Api/Fmas12d.Api.csproj -i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
+
 - task: DotNetCoreCLI@2
   displayName: 'Fmas12d.Api - Create Deployment'
   inputs:
