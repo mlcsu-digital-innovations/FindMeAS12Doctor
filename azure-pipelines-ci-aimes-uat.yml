@@ -28,8 +28,8 @@ steps:
   displayName: 'Create database update script'
   inputs:  
     command: 'custom'
-    custom: 'ef migrations script'
-    arguments: '--project=./Fmas12d.Api/Fmas12d.Api.csproj -i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
+    custom: 'ef'
+    arguments: 'migrations script --project=./Fmas12d.Api/Fmas12d.Api.csproj -i -o ./Deployment/AimesUat/Fmas12d.Api/update.sql'
 
 - task: DotNetCoreCLI@2
   displayName: 'Fmas12d.Api - Create Deployment'
