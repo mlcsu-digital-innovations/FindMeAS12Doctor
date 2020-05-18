@@ -156,11 +156,21 @@ export class ClaimListComponent implements OnInit {
         .createMhaBatchExport(exportDataForIPF, ccg.shortCode, ccg.name)
         .subscribe(result => {
 
-          const claimIds = this.processedClaimIds.concat(exportDataForIPF.map(claim => claim.id));
-          this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
+          const claimIds = this.processedClaimIds.concat(
+            claimsForCcg.map(claim => claim.id)
+          );
+
+          if (ccg.requiresApproval) {
+            this.updateClaimsService.bulkUpdateClaimStatusToAwaitingCcgApproval(claimIds)
             .subscribe(x => {
-              console.log(x);
+              console.log(`${x} claims updated to awaiting approval`);
+            });
+          } else {
+            this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
+            .subscribe(x => {
+              console.log(`${x} claims updated to approved`);
           });
+          }
 
           this.toastService.displaySuccess({
                   title: 'Success',
@@ -178,7 +188,13 @@ export class ClaimListComponent implements OnInit {
   }
 
   getCcgFromClaim(claim: FinanceClaim) {
-    return {id: claim.ccg.id, name: claim.ccg.name, shortCode: claim.ccg.shortCode, selected: true};
+    return {
+      id: claim.ccg.id,
+      name: claim.ccg.name,
+      shortCode: claim.ccg.shortCode,
+      selected: true,
+      requiresApproval: claim.ccg.isPaymentApprovalRequired
+    };
   }
 
   OnCcgSelection(action: boolean) {

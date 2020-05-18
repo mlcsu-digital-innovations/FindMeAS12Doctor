@@ -3,4 +3,5 @@ export interface Ccg {
   name: string;
   shortCode: string;
   costCentre: number;
+  isPaymentApprovalRequired: boolean;
 }

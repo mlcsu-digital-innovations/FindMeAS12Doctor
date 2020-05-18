@@ -85,6 +85,8 @@ export class ExcelService {
         .then((data) => {
           const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheet.sheet'});
           this.saveAsExcelFile(blob, fileName);
+          observer.next(shortCode);
+          observer.complete();
         });
       } catch (error) {
         console.log(error);
@@ -172,6 +174,8 @@ export class ExcelService {
         .then((data) => {
           const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheet.sheet'});
           this.saveAsExcelFile(blob, fileName);
+          observer.next(shortCode);
+          observer.complete();
         });
       } catch (error) {
         console.log(error);

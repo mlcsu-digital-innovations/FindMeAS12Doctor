@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { map, delay } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { ClaimView } from 'src/app/interfaces/claim-view';
-import { CLAIM_STATUS_PROCESSING, CLAIM_STATUS_QUERY, CLAIM_STATUS_APPROVED, CLAIM_STATUS_SUBMITTED } from 'src/app/constants/Constants';
+import { CLAIM_STATUS_PROCESSING, CLAIM_STATUS_QUERY, CLAIM_STATUS_APPROVED, CLAIM_STATUS_SUBMITTED, CLAIM_STATUS_AWAITING_CCG } from 'src/app/constants/Constants';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +40,10 @@ export class FinanceClaimService {
 
   public bulkUpdateClaimStatusToApproved(claimIds: number[]): Observable<ClaimView> {
     return this.bulkUpdateClaimStatus(claimIds, CLAIM_STATUS_APPROVED);
+  }
+
+  public bulkUpdateClaimStatusToAwaitingCcgApproval(claimIds: number[]): Observable<ClaimView> {
+    return this.bulkUpdateClaimStatus(claimIds, CLAIM_STATUS_AWAITING_CCG);
   }
 
   private bulkUpdateClaimStatus(claimIds: number[], claimStatusId: number): Observable<any> {
