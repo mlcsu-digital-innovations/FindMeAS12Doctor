@@ -21,7 +21,7 @@ export class HomePage implements OnInit, OnDestroy {
   public askForPin: boolean;
   public connection: boolean;
   public loggedIn: boolean;
-  public userName: string = 'Doctor Male';
+  public userName: string;
 
   constructor(
     private authService: AuthService,
@@ -59,7 +59,6 @@ export class HomePage implements OnInit, OnDestroy {
             this.userName = userInfo.displayableId;
             this.pin = this.getPin(userInfo.userId);
 
-            console.log(this.userName, this.pin);
             this.askForPin = true;
           }
         });
