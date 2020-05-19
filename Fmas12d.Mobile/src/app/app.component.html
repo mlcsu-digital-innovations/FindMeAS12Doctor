@@ -8,12 +8,19 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle>
+
           <ion-item>
+            <ion-icon *ngIf="!userIsLoggedIn" name="person"></ion-icon> {{userName}}
+          </ion-item>
+
+          <ion-item *ngIf="userIsLoggedIn" routerLink="/user-profile" routerDirection="forward">
             <ion-icon name="person"></ion-icon> {{userName}}
           </ion-item>
+
           <ion-item routerLink="/home" routerDirection="root">
             <ion-icon name="home"></ion-icon> Home
           </ion-item>
+          
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="user.isDoctor && userIsLoggedIn">
           <ion-item routerLink="/doctor-assessments" routerDirection="forward">

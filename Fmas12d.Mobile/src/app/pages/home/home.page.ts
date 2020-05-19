@@ -45,25 +45,36 @@ export class HomePage implements OnInit, OnDestroy {
       this.loggedIn = status;
     });
 
-    if (this.platform.is('cordova')) {
-      const authContext: AuthenticationContext = this.msAdal
-      .createAuthenticationContext(OAuthSettings.authority);
+    this.platform.ready().then(() => {
 
-      if (authContext.tokenCache !== null ) {
-        authContext.tokenCache.readItems()
-        .then((items: TokenCacheItem[]) => {
-
-          if (items.length > 0) {
-            const userInfo = items[items.length - 1].userInfo;
-
-            this.userName = userInfo.displayableId;
-            this.pin = this.getPin(userInfo.userId);
-
-            this.askForPin = true;
-          }
-        });
+      if (this.platform.is('cordova')) {
+        const authContext: AuthenticationContext = this.msAdal
+        .createAuthenticationContext(OAuthSettings.authority);
+  
+        console.log('platform is cordova ...');
+        this.askForPin = false;
+  
+        if (authContext.tokenCache !== null ) {
+          authContext.tokenCache.readItems()
+          .then((items: TokenCacheItem[]) => {
+  
+            console.log(`items in cache = ${items.length}`);
+  
+            if (items.length > 0) {
+              const userInfo = items[items.length - 1].userInfo;
+  
+              this.userName = userInfo.displayableId;
+              this.pin = this.getPin(userInfo.userId);
+              console.log(userInfo);
+              console.log(`pin ${this.pin}`);
+  
+              console.log('askForPin = true');
+              this.askForPin = true;
+            }
+          });
+        }
       }
-    }
+    });
   }
 
   ngOnDestroy() {
@@ -72,6 +83,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   public logOn(): void {
     if (this.platform.is('cordova')) {
+
+      console.log('cordova ....');
+      console.log('askForPin', this.askForPin);
 
       if (this.askForPin) {
 
