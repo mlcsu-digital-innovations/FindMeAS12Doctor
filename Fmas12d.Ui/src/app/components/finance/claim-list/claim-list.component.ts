@@ -83,7 +83,7 @@ export class ClaimListComponent implements OnInit {
       PaymentTerms: '7 DAYS NET',
       TransactionType: 'STANDARD',
       CostCentre: claim.ccg.costCentre,
-      Subjective: '',
+      Subjective: claim.ccg.subjectiveCode,
       Analysis1: '00000',
       Analysis2: '000000',
       Analysis3: '000000',
