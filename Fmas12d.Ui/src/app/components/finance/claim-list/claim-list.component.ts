@@ -73,6 +73,7 @@ export class ClaimListComponent implements OnInit {
 
   createCcgExportEntryForInvoicePaymentFile(claim: FinanceClaim): InvoicePaymentFile {
 
+    // Analysis codes should NOT be changed !
     return {
       TransactionDescription: '',
       VendorCode: '',
@@ -84,8 +85,8 @@ export class ClaimListComponent implements OnInit {
       CostCentre: claim.ccg.costCentre,
       Subjective: '',
       Analysis1: '00000',
-      Analysis2: '00000',
-      Analysis3: '00000',
+      Analysis2: '000000',
+      Analysis3: '000000',
       ItemDescription: '',
       ItemType: 'ITEM',
       LineAmount: claim.mileagePayment + claim.assessmentPayment,
