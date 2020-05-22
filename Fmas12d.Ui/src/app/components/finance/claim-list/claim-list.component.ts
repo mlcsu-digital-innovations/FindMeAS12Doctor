@@ -1,20 +1,18 @@
+import { CcgClaimExport } from 'src/app/interfaces/ccg-claim-export';
+import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
 import { Component, QueryList, ViewChildren, OnInit, ViewChild } from '@angular/core';
+import { ExcelService } from 'src/app/services/excel-service/excel.service';
 import { FinanceClaim } from 'src/app/interfaces/finance-claim';
 import { FinanceClaimListService } from 'src/app/services/finance-claim-list/finance-claim-list.service';
-import { Observable } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
-import { ToastService } from '../../../services/toast/toast.service';
-import { SelectableCcg } from 'src/app/interfaces/selectableCcg';
-import { ExcelService } from 'src/app/services/excel-service/excel.service';
-import { CcgClaimExport } from 'src/app/interfaces/ccg-claim-export';
-import * as moment from 'moment';
-import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
 import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
-import { MedExamLogA } from 'src/app/interfaces/med-exam-log';
-import { BankDetails } from 'src/app/interfaces/bank-details';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { SelectableCcg } from 'src/app/interfaces/selectableCcg';
+import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
+import { ToastService } from '../../../services/toast/toast.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-claim-list',
@@ -98,57 +96,13 @@ export class ClaimListComponent implements OnInit {
     };
   }
 
-  createCcgExportForMedExamLogFile(claim: FinanceClaim): MedExamLogA {
-
-    claim.claimant.bankDetails.forEach(detail => {
-      console.log(detail);
-    });
-
-    const bankDetail: BankDetails = claim.claimant.bankDetails.find(detail => detail.ccgId === claim.ccg.id);
-
-    return {
-      dateLogged: null,
-      lastActionDate: claim.lastUpdated,
-      ccgCode: claim.ccg.shortCode,
-      doctorName: claim.claimant.displayName,
-      vsrNUmber: bankDetail.vsrNumber,
-      dateOfExam: claim.assessment.scheduledTime,
-      patientIdentifer: '',
-      dateReceived: null,
-      value: claim.assessmentPayment,
-      mileage: claim.mileagePayment,
-      total: claim.assessmentPayment + claim.mileagePayment,
-      loggedBy: '',
-      status: '',
-      ipfTransactionDescription: '',
-      invoiceNumber: '',
-      payRef: null,
-      ipfFile: '',
-      notes: ''
-    };
-  }
-
   exportCcgClaims(ccg: SelectableCcg): number {
 
     const claimsForCcg = this.activeClaims
       .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
     const exportDataForIPF = (claimsForCcg.map(this.createCcgExportEntryForInvoicePaymentFile));
-    const exportDataForMedExamLog = (claimsForCcg.map(this.createCcgExportForMedExamLogFile));
 
     // ToDo: confirm format of files, populate missing fields
-
-    // Medical Examination Log Export
-    if (exportDataForMedExamLog.length > 0) {
-      this.excelService
-      .createMedExamLogExport(exportDataForMedExamLog, ccg.shortCode, ccg.name)
-      .subscribe(result => {
-
-        this.toastService.displaySuccess({
-                title: 'Success',
-                message: `Med Exam Log file created for ${result}`
-              });
-      });
-    }
 
     // MHA Batch Update files
     if (exportDataForIPF.length > 0) {
