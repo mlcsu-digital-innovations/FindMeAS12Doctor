@@ -45,6 +45,7 @@
                 <th scope="col" sortable="ccg.name" (sort)="onSort($event)">CCG</th>
                 <th scope="col" sortable="claimant.displayName" (sort)="onSort($event)">Claimant</th>
                 <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
+                <th scope="col" sortable="exportedDate" (sort)="onSort($event)">Exported</th>
               </thead>
               <tbody>
                 <tr
@@ -66,6 +67,9 @@
                   </td>
                   <td>
                     <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
+                  </td>
+                  <td class="tick">
+                    <em *ngIf="claim.exportedDate" class="fas fa-check-square"></em>
                   </td>
                 </tr>
               </tbody>

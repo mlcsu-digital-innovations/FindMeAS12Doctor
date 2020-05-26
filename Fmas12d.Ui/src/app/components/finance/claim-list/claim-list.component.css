@@ -44,3 +44,9 @@ td {
   border: 1px solid #dee2e6;
 }
 
+.tick {
+  text-align: center;
+  font-size: 1.4em;
+  color: #0dadb7;
+}
+
