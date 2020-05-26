@@ -54,6 +54,7 @@ export class ClaimListComponent implements OnInit {
 
       this.claimsList$.subscribe(
         result => {
+          console.log(result);
           this.availableCcgs =
             result.map(this.getCcgFromClaim)
             .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);

@@ -33,7 +33,8 @@ namespace Fmas12d.Api.ViewModels
           Id = financeAssessmentClaim.Id,
           LastUpdated = financeAssessmentClaim.LastUpdated,
           Mileage = financeAssessmentClaim.Mileage,
-          MileagePayment = financeAssessmentClaim.MileagePayment
+          MileagePayment = financeAssessmentClaim.MileagePayment,
+          ExportedDate = financeAssessmentClaim.ExportedDate
         };
       }
     }
