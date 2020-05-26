@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200522150622_AddSubjectiveCodeToCcgAudit")]
-    partial class AddSubjectiveCodeToCcgAudit
+    [Migration("20200526081103_AddSubjectiveCodeToCcg")]
+    partial class AddSubjectiveCodeToCcg
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -825,8 +825,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
-                    b.Property<int>("SubjectiveCode")
-                        .HasColumnType("int");
+                    b.Property<string>("SubjectiveCode")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<decimal>("SuccessfulAssessmentPayment")
                         .HasColumnType("decimal(18,2)");
@@ -911,8 +912,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
-                    b.Property<int>("SubjectiveCode")
-                        .HasColumnType("int");
+                    b.Property<string>("SubjectiveCode")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");

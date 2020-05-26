@@ -823,8 +823,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
-                    b.Property<int>("SubjectiveCode")
-                        .HasColumnType("int");
+                    b.Property<string>("SubjectiveCode")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<decimal>("SuccessfulAssessmentPayment")
                         .HasColumnType("decimal(18,2)");
@@ -909,8 +910,9 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
-                    b.Property<int>("SubjectiveCode")
-                        .HasColumnType("int");
+                    b.Property<string>("SubjectiveCode")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<decimal>("SuccessfulPencePerMile")
                         .HasColumnType("decimal(18,2)");

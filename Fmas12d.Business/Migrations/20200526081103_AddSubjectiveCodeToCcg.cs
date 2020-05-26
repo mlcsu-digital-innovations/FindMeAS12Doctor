@@ -2,15 +2,21 @@
 
 namespace Fmas12d.Business.Migrations
 {
-    public partial class AddSubjectiveCodeToCcgAudit : Migration
+    public partial class AddSubjectiveCodeToCcg : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<string>(
                 name: "SubjectiveCode",
                 table: "CcgsAudit",
-                nullable: false,
-                defaultValue: 0);
+                maxLength: 10,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "SubjectiveCode",
+                table: "Ccgs",
+                maxLength: 10,
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -18,6 +24,10 @@ namespace Fmas12d.Business.Migrations
             migrationBuilder.DropColumn(
                 name: "SubjectiveCode",
                 table: "CcgsAudit");
+
+            migrationBuilder.DropColumn(
+                name: "SubjectiveCode",
+                table: "Ccgs");
         }
     }
 }

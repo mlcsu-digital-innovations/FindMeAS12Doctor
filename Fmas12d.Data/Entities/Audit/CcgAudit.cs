@@ -17,7 +17,8 @@ namespace Fmas12d.Data.Entities
     public string Name { get; set; }
     [MaxLength(5)]
     public string ShortCode { get; set; } 
-    public int SubjectiveCode { get; set; }   
+    [MaxLength(10)]
+    public string SubjectiveCode { get; set; }    
     [Column(TypeName = "decimal(18,2)")]
     public decimal SuccessfulPencePerMile { get; set; }
     [Column(TypeName = "decimal(18,2)")]

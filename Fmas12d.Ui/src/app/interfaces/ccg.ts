@@ -4,5 +4,5 @@ export interface Ccg {
   isPaymentApprovalRequired: boolean;
   name: string;
   shortCode: string;
-  subjectiveCode: number;
+  subjectiveCode: string;
 }

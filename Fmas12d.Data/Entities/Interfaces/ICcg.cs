@@ -7,7 +7,7 @@
     bool IsPaymentApprovalRequired { get; set; }
     string LongCode {get; set;}    
     string Name { get; set; }
-    int SubjectiveCode { get; set;}
+    string SubjectiveCode { get; set;}
     string ShortCode {get; set;}
     decimal SuccessfulPencePerMile { get; set; }
     decimal UnsuccessfulPencePerMile { get; set; }    

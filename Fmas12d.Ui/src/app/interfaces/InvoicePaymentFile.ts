@@ -7,7 +7,7 @@ export interface InvoicePaymentFile {
   PaymentTerms: string;
   TransactionType: string;
   CostCentre: number;
-  Subjective: number;
+  Subjective: string;
   Analysis1: string;
   Analysis2: string;
   Analysis3: string;
