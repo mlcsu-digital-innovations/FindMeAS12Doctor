@@ -128,6 +128,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       ccg.SuccessfulAssessmentPayment = 0.0m;
       ccg.SuccessfulPencePerMile = 0.0m;
       ccg.UnsuccessfulPencePerMile = 0.0m;
+      ccg.SubjectiveCode = "52161002";
       PopulateActiveAndModifiedWithSystemUser(ccg);
     }
   }
