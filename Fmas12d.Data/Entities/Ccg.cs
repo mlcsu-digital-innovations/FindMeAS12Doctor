@@ -24,7 +24,10 @@ namespace Fmas12d.Data.Entities
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
     public virtual IList<PaymentRuleSet> PaymentRuleSets { get; set; }
     [MaxLength(5)]
-    public string ShortCode {get; set;}    
+    public string ShortCode {get; set;}
+    [MaxLength(100)]
+    [Required]
+    public string SubjectiveCode { get; set; }    
     [Column(TypeName = "decimal(18,2)")]
     public decimal SuccessfulAssessmentPayment { get; set; }
     public decimal SuccessfulPencePerMile { get; set; }

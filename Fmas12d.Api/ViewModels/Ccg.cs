@@ -11,7 +11,8 @@ namespace Fmas12d.Api.ViewModels
       Id = model.Id;
       Name = model.Name;
       IsPaymentApprovalRequired = model.IsPaymentApprovalRequired;
-      ShortCode = model.ShortCode; 
+      ShortCode = model.ShortCode;
+      SubjectiveCode = model.SubjectiveCode; 
     }
 
     public virtual IList<BankDetail> BankDetails { get; set; }
@@ -28,6 +29,7 @@ namespace Fmas12d.Api.ViewModels
     public virtual IList<Patient> Patients { get; set; }
     public virtual IList<PaymentMethod> PaymentMethods { get; set; }
     public virtual IList<PaymentRuleSet> PaymentRuleSets { get; set; }
+    public string SubjectiveCode { get; set; }
     public decimal SuccessfulPencePerMile { get; set; }
     public decimal UnsuccessfulPencePerMile { get; set; }
     [MaxLength(5)]

@@ -3,4 +3,5 @@ export interface SelectableCcg {
   name: string;
   shortCode: string;
   selected: boolean;
+  requiresApproval: boolean;
 }

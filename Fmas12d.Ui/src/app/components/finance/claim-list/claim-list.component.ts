@@ -1,20 +1,18 @@
+import { CcgClaimExport } from 'src/app/interfaces/ccg-claim-export';
+import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
 import { Component, QueryList, ViewChildren, OnInit, ViewChild } from '@angular/core';
+import { ExcelService } from 'src/app/services/excel-service/excel.service';
 import { FinanceClaim } from 'src/app/interfaces/finance-claim';
 import { FinanceClaimListService } from 'src/app/services/finance-claim-list/finance-claim-list.service';
-import { Observable } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
-import { ToastService } from '../../../services/toast/toast.service';
-import { SelectableCcg } from 'src/app/interfaces/selectableCcg';
-import { ExcelService } from 'src/app/services/excel-service/excel.service';
-import { CcgClaimExport } from 'src/app/interfaces/ccg-claim-export';
-import * as moment from 'moment';
-import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
 import { InvoicePaymentFile } from 'src/app/interfaces/InvoicePaymentFile';
-import { MedExamLogA } from 'src/app/interfaces/med-exam-log';
-import { BankDetails } from 'src/app/interfaces/bank-details';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { SelectableCcg } from 'src/app/interfaces/selectableCcg';
+import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
+import { ToastService } from '../../../services/toast/toast.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-claim-list',
@@ -75,6 +73,7 @@ export class ClaimListComponent implements OnInit {
 
   createCcgExportEntryForInvoicePaymentFile(claim: FinanceClaim): InvoicePaymentFile {
 
+    // Analysis codes should NOT be changed !
     return {
       TransactionDescription: '',
       VendorCode: '',
@@ -84,10 +83,10 @@ export class ClaimListComponent implements OnInit {
       PaymentTerms: '7 DAYS NET',
       TransactionType: 'STANDARD',
       CostCentre: claim.ccg.costCentre,
-      Subjective: '',
+      Subjective: claim.ccg.subjectiveCode,
       Analysis1: '00000',
-      Analysis2: '00000',
-      Analysis3: '00000',
+      Analysis2: '000000',
+      Analysis3: '000000',
       ItemDescription: '',
       ItemType: 'ITEM',
       LineAmount: claim.mileagePayment + claim.assessmentPayment,
@@ -98,57 +97,13 @@ export class ClaimListComponent implements OnInit {
     };
   }
 
-  createCcgExportForMedExamLogFile(claim: FinanceClaim): MedExamLogA {
-
-    claim.claimant.bankDetails.forEach(detail => {
-      console.log(detail);
-    });
-
-    const bankDetail: BankDetails = claim.claimant.bankDetails.find(detail => detail.ccgId === claim.ccg.id);
-
-    return {
-      dateLogged: null,
-      lastActionDate: claim.lastUpdated,
-      ccgCode: claim.ccg.shortCode,
-      doctorName: claim.claimant.displayName,
-      vsrNUmber: bankDetail.vsrNumber,
-      dateOfExam: claim.assessment.scheduledTime,
-      patientIdentifer: '',
-      dateReceived: null,
-      value: claim.assessmentPayment,
-      mileage: claim.mileagePayment,
-      total: claim.assessmentPayment + claim.mileagePayment,
-      loggedBy: '',
-      status: '',
-      ipfTransactionDescription: '',
-      invoiceNumber: '',
-      payRef: null,
-      ipfFile: '',
-      notes: ''
-    };
-  }
-
   exportCcgClaims(ccg: SelectableCcg): number {
 
     const claimsForCcg = this.activeClaims
       .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
     const exportDataForIPF = (claimsForCcg.map(this.createCcgExportEntryForInvoicePaymentFile));
-    const exportDataForMedExamLog = (claimsForCcg.map(this.createCcgExportForMedExamLogFile));
 
     // ToDo: confirm format of files, populate missing fields
-
-    // Medical Examination Log Export
-    if (exportDataForMedExamLog.length > 0) {
-      this.excelService
-      .createMedExamLogExport(exportDataForMedExamLog, ccg.shortCode, ccg.name)
-      .subscribe(result => {
-
-        this.toastService.displaySuccess({
-                title: 'Success',
-                message: `Med Exam Log file created for ${result}`
-              });
-      });
-    }
 
     // MHA Batch Update files
     if (exportDataForIPF.length > 0) {
@@ -156,11 +111,21 @@ export class ClaimListComponent implements OnInit {
         .createMhaBatchExport(exportDataForIPF, ccg.shortCode, ccg.name)
         .subscribe(result => {
 
-          const claimIds = this.processedClaimIds.concat(exportDataForIPF.map(claim => claim.id));
-          this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
+          const claimIds = this.processedClaimIds.concat(
+            claimsForCcg.map(claim => claim.id)
+          );
+
+          if (ccg.requiresApproval) {
+            this.updateClaimsService.bulkUpdateClaimStatusToAwaitingCcgApproval(claimIds)
             .subscribe(x => {
-              console.log(x);
+              console.log(`${x} claims updated to awaiting approval`);
+            });
+          } else {
+            this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
+            .subscribe(x => {
+              console.log(`${x} claims updated to approved`);
           });
+          }
 
           this.toastService.displaySuccess({
                   title: 'Success',
@@ -178,7 +143,13 @@ export class ClaimListComponent implements OnInit {
   }
 
   getCcgFromClaim(claim: FinanceClaim) {
-    return {id: claim.ccg.id, name: claim.ccg.name, shortCode: claim.ccg.shortCode, selected: true};
+    return {
+      id: claim.ccg.id,
+      name: claim.ccg.name,
+      shortCode: claim.ccg.shortCode,
+      selected: true,
+      requiresApproval: claim.ccg.isPaymentApprovalRequired
+    };
   }
 
   OnCcgSelection(action: boolean) {
