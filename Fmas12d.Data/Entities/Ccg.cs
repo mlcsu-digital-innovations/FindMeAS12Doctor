@@ -25,7 +25,7 @@ namespace Fmas12d.Data.Entities
     public virtual IList<PaymentRuleSet> PaymentRuleSets { get; set; }
     [MaxLength(5)]
     public string ShortCode {get; set;}
-    [MaxLength(10)]
+    [MaxLength(100)]
     [Required]
     public string SubjectiveCode { get; set; }    
     [Column(TypeName = "decimal(18,2)")]
