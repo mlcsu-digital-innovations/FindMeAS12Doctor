@@ -16,6 +16,7 @@ namespace Fmas12d.Data.Entities
     public int AssessmentId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal? AssessmentPayment { get; set; }
+    public DateTimeOffset? ExportedDate { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
     public bool? IsUsersPatient { get; set; }

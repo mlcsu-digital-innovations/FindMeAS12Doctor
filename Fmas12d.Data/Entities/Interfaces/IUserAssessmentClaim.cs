@@ -8,6 +8,7 @@ namespace Fmas12d.Data.Entities
     int? ClaimReference { get; set; }
     int? ClaimStatusId { get; set; }
     string EndPostcode { get; set; }
+    DateTimeOffset? ExportedDate { get; set; }
     int AssessmentId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     decimal? AssessmentPayment { get; set; }

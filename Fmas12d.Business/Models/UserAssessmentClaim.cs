@@ -15,6 +15,7 @@ namespace Fmas12d.Business.Models
       Assessment = new Assessment(entity.Assessment);
       AssessmentId = entity.AssessmentId;
       ClaimReference = entity.ClaimReference;
+      ExportedDate = entity.ExportedDate;
       LastUpdated = entity.ModifiedAt;
       MileagePayment = entity.MileagePayment;
       Mileage = entity.Mileage;
@@ -30,6 +31,7 @@ namespace Fmas12d.Business.Models
     [MaxLength(10)]
     [Required]
     public string EndPostcode { get; set; }
+    public DateTimeOffset? ExportedDate { get; set; }
     public virtual Assessment Assessment { get; set; }
     public int AssessmentId { get; set; }
     public decimal? AssessmentPayment { get; set; }
