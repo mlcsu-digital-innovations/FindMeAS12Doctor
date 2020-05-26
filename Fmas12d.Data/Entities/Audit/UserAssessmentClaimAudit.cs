@@ -12,6 +12,7 @@ namespace Fmas12d.Data.Entities
     [MaxLength(10)]
     [Required]
     public string EndPostcode { get; set; }
+    public DateTimeOffset? ExportedDate { get; set; }
     public int AssessmentId { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal? AssessmentPayment { get; set; }
