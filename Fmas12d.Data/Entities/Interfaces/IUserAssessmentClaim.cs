@@ -10,13 +10,11 @@ namespace Fmas12d.Data.Entities
     string EndPostcode { get; set; }
     DateTimeOffset? ExportedDate { get; set; }
     int AssessmentId { get; set; }
-    [Column(TypeName = "decimal(18,2)")]
     decimal? AssessmentPayment { get; set; }
     bool IsAttendanceConfirmed { get; set; }
     bool? IsClaimable { get; set; }
     bool? IsUsersPatient { get; set; }
-    int? Mileage { get; set; }
-    [Column(TypeName = "decimal(18,2)")]
+    decimal? Mileage { get; set; }
     decimal? MileagePayment { get; set; }
     DateTimeOffset? PaymentDate { get; set; }
     string StartPostcode { get; set; }

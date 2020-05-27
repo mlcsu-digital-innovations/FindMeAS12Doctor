@@ -140,6 +140,9 @@ namespace Fmas12d.Business.Migrations.Seeds
       {
         new ReferralSeeder().SeedData();
         Context.SaveChanges();
+
+        new UserAssessmentClaimsSeeder().SeedData();
+        Context.SaveChanges();        
       }    
       
       new BankDetailsSeeder().SeedData();
@@ -161,12 +164,13 @@ namespace Fmas12d.Business.Migrations.Seeds
       Context.SaveChanges();
 
       new UserSpecialitiesSeeder().SeedData();
-      Context.SaveChanges();  
+      Context.SaveChanges();
+
     }
 
     public void RemoveSeedTestAll()
     {
-      ResetModifiedByUserIds();
+      ResetModifiedByUserIds();  
 
       new UserSpecialitiesSeeder().DeleteSeeds();
       Context.SaveChanges();

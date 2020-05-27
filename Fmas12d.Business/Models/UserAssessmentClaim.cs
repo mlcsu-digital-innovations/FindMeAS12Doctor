@@ -39,7 +39,7 @@ namespace Fmas12d.Business.Models
     public bool? IsClaimable { get; set; }
     public bool? IsUsersPatient { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
-    public int? Mileage { get; set; }
+    public decimal? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
     public int? NextAssessmentId { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }

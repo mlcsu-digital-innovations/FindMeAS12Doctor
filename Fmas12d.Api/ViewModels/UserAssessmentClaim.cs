@@ -29,7 +29,7 @@ namespace Fmas12d.Api.ViewModels
     public DateTimeOffset? ExportedDate { get; set; }
     public int Id { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
-    public int? Mileage { get; set; }
+    public decimal? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
 
     public static Func<Business.Models.UserAssessmentClaim, UserAssessmentClaim> ProjectFromModel

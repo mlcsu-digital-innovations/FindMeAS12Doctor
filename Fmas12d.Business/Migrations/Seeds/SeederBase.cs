@@ -2,6 +2,7 @@ using Fmas12d.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
@@ -11,6 +12,14 @@ namespace Fmas12d.Business.Migrations.Seeds
     private User _systemAdminUser = null;
 
     public SeederBase() { }
+
+    protected List<Ccg> GetKnownCcgs() 
+    {
+      string[] knownCcgShortCodes = new string[]
+        {"03W","04C","04V","04Y","05D","05G","05Q","05V","05W","00Q","01A","01K"};
+
+      return Context.Ccgs.Where(c => knownCcgShortCodes.Contains(c.ShortCode)).ToList();
+    }
 
     protected TEntity AddOrUpdateNameDescriptionEntityById(int id, string name, string description)
     {
