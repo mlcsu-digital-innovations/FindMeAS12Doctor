@@ -12,8 +12,20 @@ namespace Fmas12d.Business.Migrations.Seeds
   internal class CcgSeeder : SeederBase<Ccg>
   {
     #region Constants
+    internal const string BLACKBURN_WITH_DARWEN = "NHS Blackburn with Darwen CCG";
+    internal const string CANNOCK_CHASE = "NHS Cannock Chase CCG";
+    internal const string EAST_LANCASHIRE = "NHS East Lancashire CCG";
+    internal const string EAST_LEICESTERSHIRE_AND_RUTLAND = 
+      "NHS East Leicestershire and Rutland CCG";
+    internal const string EAST_STAFFORDSHIRE = "NHS East Staffordshire CCG";
+    internal const string LEICESTER_CITY = "NHS Leicester City CCG";
+    internal const string MORECAMBE_BAY = "NHS Morecambe Bay CCG";
     internal const string NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
+    internal const string SOUTH_EAST_STAFFORDSHIRE_AND_SEISDON_PENINSULA = 
+      "NHS South East Staffordshire and Seisdon Peninsula CCG";
+    internal const string STAFFORD_AND_SURROUNDS = "NHS Stafford and Surrounds CCG";
     internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
+    internal const string WEST_LEICESTERSHIRE = "NHS West Leicestershire CCG";
     #endregion
 
     bool _hasExistingCcgs = false;
@@ -149,7 +161,8 @@ namespace Fmas12d.Business.Migrations.Seeds
       decimal consultantSuccessfulAssessmentPayment,
       decimal consultantFailedAssessmentPayment,
       decimal successfulPencePerMile,
-      decimal unsuccessfulPencePerMile
+      decimal unsuccessfulPencePerMile,
+      bool isPaymentApprovalRequired
     )
     {
       Ccg ccg = GetCcgByShortCode(shortCode);
@@ -159,31 +172,44 @@ namespace Fmas12d.Business.Migrations.Seeds
       ccg.FailedAssessmentPayment = consultantFailedAssessmentPayment;
       ccg.SuccessfulPencePerMile = successfulPencePerMile;
       ccg.UnsuccessfulPencePerMile = unsuccessfulPencePerMile;
+      ccg.IsPaymentApprovalRequired = isPaymentApprovalRequired;
     }
 
 
     private void UpdateKnownCcgs()
     {
       // Leicester
-      UpdateKnownCcg("03W", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
-      UpdateKnownCcg("04C", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
-      UpdateKnownCcg("04V", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+      UpdateKnownCcg("03W", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0, true);
+      UpdateKnownCcg("04C", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0, true);
+      UpdateKnownCcg("04V", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0, true);
 
       // Staffordshire
-      UpdateKnownCcg("04Y", 280526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
-      UpdateKnownCcg("05D", 298026, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
-      UpdateKnownCcg("05G", 373526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
-      UpdateKnownCcg("05Q", 373501, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
-      UpdateKnownCcg("05V", 393526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
-      UpdateKnownCcg("05W", 396026, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+      UpdateKnownCcg(
+        "04Y", 280526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m, false
+      );
+      UpdateKnownCcg(
+        "05D", 298026, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m, false
+      );
+      UpdateKnownCcg(
+        "05G", 373526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m, false
+      );
+      UpdateKnownCcg(
+        "05Q", 373501, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m, false
+      );
+      UpdateKnownCcg(
+        "05V", 393526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m, false
+      );
+      UpdateKnownCcg(
+        "05W", 396026, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m, false
+      );
 
       // Lancashire
-      UpdateKnownCcg("00Q", 476056, "52161002", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
-      UpdateKnownCcg("01A", 508531, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
-      UpdateKnownCcg("01K", 543711, "52161002", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+      UpdateKnownCcg("00Q", 476056, "52161002", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0, false);
+      UpdateKnownCcg("01A", 508531, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0, false);
+      UpdateKnownCcg("01K", 543711, "52161002", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0, false);
 
       // TODO -- Cumbria CCG Seed
-      //UpdateKnownCcg("01K", 543711, "52161002", 100m, 100m, 230m, 230m, 0.45m, 0.45m);
+      //UpdateKnownCcg("01K", 543711, "52161002", 100m, 100m, 230m, 230m, 0.45m, 0.45m, false);
 
     }
   }
