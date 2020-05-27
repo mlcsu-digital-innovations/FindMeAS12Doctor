@@ -1,0 +1,33 @@
+<div class="full-height">
+
+
+<div class="btn-group mr-3 middle" >
+  <button type="button" class="btn" [ngClass]="{'filtered': filtering}">{{title}}</button>
+  <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+    <button class="btn dropdown-toggle-split" ngbDropdownToggle></button>
+    <div class="dropdown-menu" ngbDropdownMenu>
+      <ul >
+        <li *ngFor="let status of filterList; let i=index">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            (click)="service.filterChanged()"
+            [(ngModel)]="status.selected"
+            name="status{{i}}"
+            >
+          <label class="form-check-label">{{status.name}}</label>
+        </li>
+      </ul>
+      <div class="clear-btn">
+        <button
+          class="btn"
+          (click)="service.clearFilter(filterList)"
+          [disabled]=!filtering
+          >
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
