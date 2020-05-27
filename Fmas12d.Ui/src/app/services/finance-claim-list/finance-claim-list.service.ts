@@ -134,8 +134,8 @@ export class FinanceClaimListService {
         .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
 
         this._exportedFilter = [];
-        this._exportedFilter.push({id: 1, name: 'True', selected: false});
-        this._exportedFilter.push({id: 2, name: 'False', selected: false});
+        this._exportedFilter.push({id: 1, name: 'Yes', selected: false});
+        this._exportedFilter.push({id: 2, name: 'No', selected: true});
 
         this._search$.next();
       });
