@@ -19,7 +19,7 @@
           <form>
             <div class="form-row">
               <div class="col-md-4">
-                <label for="searchTerm">Claim search:</label>
+                <label for="searchTerm">Filter by Keyword:</label>
                 <input
                   class="form-control"
                   id="searchTerm"
@@ -28,6 +28,47 @@
                   [(ngModel)]="claimsService.searchTerm" />
                 <small class="form-text text-muted">The table can be filtered by typing into the box above</small>
               </div>
+
+              <div class="col-md-2">
+                <app-list-filter
+                  [filterList]=claimsService.activeCcgs
+                  [filtering]=claimsService.filteringOnCcg
+                  [service]=claimsService
+                  title='CCG'
+                  >
+                </app-list-filter>
+              </div>
+
+              <div class="col-md-2">
+                <app-list-filter
+                  [filterList]=claimsService.activeClaimants
+                  [filtering]=claimsService.filteringOnClaimant
+                  [service]=claimsService
+                  title='Claimant'
+                  >
+                </app-list-filter>
+              </div>
+
+              <div class="col-md-2">
+                <app-list-filter
+                  [filterList]=claimsService.activeStatuses
+                  [filtering]=claimsService.filteringOnStatus
+                  [service]=claimsService
+                  title='Status'
+                  >
+                </app-list-filter>
+              </div>
+
+              <div class="col-md-2">
+                <app-list-filter
+                  [filterList]=claimsService.activeExported
+                  [filtering]=claimsService.filteringOnExported
+                  [service]=claimsService
+                  title='Exported'
+                  >
+                </app-list-filter>
+              </div>
+
 
             </div>
             <div class="form-row">
@@ -80,14 +121,13 @@
               <button
                 class="btn btn-primary btn-standard"
                 type="button"
-                (click)="exportCcgData()"
+                (click)="exportData()"
                 [disabled]="!hasVisibleData"
               >
                 <i class="fas fa-download"></i>
-                CCG Export
+                Export
               </button>
           </div>
-
 
           <div class="d-flex justify-content-between p-2">
             <ngb-pagination
@@ -100,7 +140,6 @@
               <option [ngValue]="9999999">All items</option>
             </select>
           </div>
-
         </form>
 
         </div>
@@ -113,7 +152,7 @@
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
-<ng-template #selectCcg let-selectedCcgs>
-  <app-ccg-selection-modal [selectedCcgs]="availableCcgs" (actioned)="OnCcgSelection($event)">
-  </app-ccg-selection-modal>
+<ng-template #confirmExport let-exportClaims>
+  <app-finance-export-modal [exportClaims]="activeClaims" (actioned)="OnExportConfirmed($event)">
+  </app-finance-export-modal>
 </ng-template>

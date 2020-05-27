@@ -1,5 +1,5 @@
 import { CcgClaimExport } from 'src/app/interfaces/ccg-claim-export';
-import { CLAIM_STATUS_PROCESSING } from 'src/app/constants/Constants';
+import { CLAIM_STATUS_PROCESSING, CLAIM_STATUS_QUERY } from 'src/app/constants/Constants';
 import { Component, QueryList, ViewChildren, OnInit, ViewChild } from '@angular/core';
 import { ExcelService } from 'src/app/services/excel-service/excel.service';
 import { FinanceClaim } from 'src/app/interfaces/finance-claim';
@@ -13,6 +13,8 @@ import { SelectableCcg } from 'src/app/interfaces/selectableCcg';
 import { TableHeaderSortable, SortEvent } from '../../../directives/table-header-sortable/table-header-sortable.directive';
 import { ToastService } from '../../../services/toast/toast.service';
 import * as moment from 'moment';
+import { FilterItem } from 'src/app/interfaces/filterItem';
+import { Ccg } from 'src/app/interfaces/ccg';
 
 @Component({
   selector: 'app-claim-list',
@@ -21,7 +23,7 @@ import * as moment from 'moment';
 })
 export class ClaimListComponent implements OnInit {
 
-  ccgModal: NgbModalRef;
+  confirmationModal: NgbModalRef;
   claimsList$: Observable<FinanceClaim[]>;
   error: any;
   total$: Observable<number>;
@@ -30,8 +32,10 @@ export class ClaimListComponent implements OnInit {
   activeClaims: FinanceClaim[] = [];
   processedClaimIds: number[] = [];
 
+  activeStatuses: FilterItem[] = [];
+
   @ViewChildren(TableHeaderSortable) headers: QueryList<TableHeaderSortable>;
-  @ViewChild('selectCcg', { static: true }) ccgSelectionTemplate;
+  @ViewChild('confirmExport', { static: true }) confirmExportTemplate;
 
   constructor(
     private excelService: ExcelService,
@@ -97,10 +101,14 @@ export class ClaimListComponent implements OnInit {
     };
   }
 
-  exportCcgClaims(ccg: SelectableCcg): number {
+  exportCcgClaims(ccg: Ccg): number {
+
+    // const claimsForCcg = this.activeClaims
+    //   .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
 
     const claimsForCcg = this.activeClaims
-      .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
+      .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id !== CLAIM_STATUS_QUERY);
+
     const exportDataForIPF = (claimsForCcg.map(this.createCcgExportEntryForInvoicePaymentFile));
 
     // ToDo: confirm format of files, populate missing fields
@@ -115,7 +123,7 @@ export class ClaimListComponent implements OnInit {
             claimsForCcg.map(claim => claim.id)
           );
 
-          if (ccg.requiresApproval) {
+          if (ccg.isPaymentApprovalRequired) {
             this.updateClaimsService.bulkUpdateClaimStatusToAwaitingCcgApproval(claimIds)
             .subscribe(x => {
               console.log(`${x} claims updated to awaiting approval`);
@@ -136,10 +144,18 @@ export class ClaimListComponent implements OnInit {
     return exportDataForIPF.length;
   }
 
-  exportCcgData() {
-    this.ccgModal = this.modalService.open(this.ccgSelectionTemplate, {
+  exportData() {
+    this.confirmationModal = this.modalService.open(this.confirmExportTemplate, {
       size: 'lg'
     });
+  }
+
+  getClaimStatus(claim: FinanceClaim): FilterItem {
+    return {
+      id: claim.claimStatus.id,
+      name: claim.claimStatus.name,
+      selected: true
+    };
   }
 
   getCcgFromClaim(claim: FinanceClaim) {
@@ -152,10 +168,33 @@ export class ClaimListComponent implements OnInit {
     };
   }
 
-  OnCcgSelection(action: boolean) {
-    this.ccgModal.close();
+  // OnCcgSelection(action: boolean) {
+  //   this.ccgModal.close();
+  //   if (action) {
+  //     const exportCcgs = this.availableCcgs.filter(ccg => ccg.selected === true);
+
+  //     exportCcgs.forEach(ccg => {
+  //       if (this.exportCcgClaims(ccg) === 0) {
+  //         this.toastService.displayInfo({
+  //           title: 'Information',
+  //           message: `No claims exported for ${ccg.name}`
+  //         });
+  //       }
+  //     });
+
+  //     setTimeout(() => this.getData(true), 2000);
+  //   }
+  // }
+
+  OnExportConfirmed(action: boolean) {
+    this.confirmationModal.close();
     if (action) {
-      const exportCcgs = this.availableCcgs.filter(ccg => ccg.selected === true);
+
+      const exportCcgs =
+        this.activeClaims.map((x: FinanceClaim) => x.ccg)
+        .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);
+
+      console.log(exportCcgs);
 
       exportCcgs.forEach(ccg => {
         if (this.exportCcgClaims(ccg) === 0) {
@@ -167,8 +206,10 @@ export class ClaimListComponent implements OnInit {
       });
 
       setTimeout(() => this.getData(true), 2000);
+
     }
   }
+
 
   onSort({column, direction, columnType}: SortEvent) {
     this.headers.forEach(header => {

@@ -80,6 +80,7 @@ namespace Fmas12d.Business.Services
 
       claims.ToList().ForEach(claim => {
         claim.ClaimStatusId = model.ClaimStatusId;
+        claim.ExportedDate = DateTimeOffset.Now;
         UpdateModified(claim);
       });
 
