@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using System;
 
 namespace Fmas12d.Business.Migrations.Seeds
 {
@@ -12,7 +13,7 @@ namespace Fmas12d.Business.Migrations.Seeds
   {
     #region Constants
     internal const string NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
-    internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";    
+    internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
     #endregion
 
     bool _hasExistingCcgs = false;
@@ -45,7 +46,14 @@ namespace Fmas12d.Business.Migrations.Seeds
         );
       }
 
-      // Add missing CCG Hubs
+      AddMissingCcgHubs();
+
+      UpdateKnownCcgs();
+
+    }
+
+    private void AddMissingCcgHubs()
+    {
       PopulateCcgNameShortCodeLongCodeDefaults("Cheshire, Warrington and Wirral Commissioning Hub", "12G", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Durham, Darlington and Tees Commissioning Hub", "12H", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub 1", "12J", null);
@@ -88,7 +96,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       PopulateCcgNameShortCodeLongCodeDefaults("South East Commissioning Hub", "14G", null);
       PopulateCcgNameShortCodeLongCodeDefaults("South Central Commissioning Hub", "14H", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Greater Manchester Commissioning Hub 2", "14J", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub 2", "14K", null);      
+      PopulateCcgNameShortCodeLongCodeDefaults("Lancashire Commissioning Hub 2", "14K", null);
       PopulateCcgNameShortCodeLongCodeDefaults("London - H&J Commissioning Hub", "14M", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Yorkshire and Humber - H&J Commissioning Hub", "14N", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Cumbria and North East - H&J Commissioning Hub", "14P", null);
@@ -113,7 +121,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       if (
         !_hasExistingCcgs ||
         (ccg = Context.Ccgs
-                       .SingleOrDefault(c => c.ShortCode == shortCode)) == null)
+                      .SingleOrDefault(c => c.ShortCode == shortCode)) == null)
       {
         ccg = new Ccg();
         Context.Add(ccg);
@@ -122,14 +130,61 @@ namespace Fmas12d.Business.Migrations.Seeds
       ccg.Name = name;
       ccg.ShortCode = shortCode;
       ccg.LongCode = longCode;
-      ccg.CostCentre = 1;
+      ccg.CostCentre = 0;
       ccg.FailedAssessmentPayment = 0.0m;
       ccg.IsPaymentApprovalRequired = true;
       ccg.SuccessfulAssessmentPayment = 0.0m;
       ccg.SuccessfulPencePerMile = 0.0m;
       ccg.UnsuccessfulPencePerMile = 0.0m;
-      ccg.SubjectiveCode = "52161002";
+      ccg.SubjectiveCode = "";
       PopulateActiveAndModifiedWithSystemUser(ccg);
+    }
+
+    private void UpdateKnownCcg(
+      string shortCode,
+      int costCentre,
+      string subjectiveCode,
+      decimal gpSuccessfulAssessmentPayment,
+      decimal gpFailedAssessmentPayment,
+      decimal consultantSuccessfulAssessmentPayment,
+      decimal consultantFailedAssessmentPayment,
+      decimal successfulPencePerMile,
+      decimal unsuccessfulPencePerMile
+    )
+    {
+      Ccg ccg = GetCcgByShortCode(shortCode);
+      ccg.CostCentre = costCentre;
+      ccg.SubjectiveCode = subjectiveCode;
+      ccg.SuccessfulAssessmentPayment = consultantSuccessfulAssessmentPayment;
+      ccg.FailedAssessmentPayment = consultantFailedAssessmentPayment;
+      ccg.SuccessfulPencePerMile = successfulPencePerMile;
+      ccg.UnsuccessfulPencePerMile = unsuccessfulPencePerMile;
+    }
+
+
+    private void UpdateKnownCcgs()
+    {
+      // Leicester
+      UpdateKnownCcg("03W", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+      UpdateKnownCcg("04C", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+      UpdateKnownCcg("04V", 411146, "52114013", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+
+      // Staffordshire
+      UpdateKnownCcg("04Y", 280526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+      UpdateKnownCcg("05D", 298026, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+      UpdateKnownCcg("05G", 373526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+      UpdateKnownCcg("05Q", 373501, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+      UpdateKnownCcg("05V", 393526, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+      UpdateKnownCcg("05W", 396026, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0.23m, 0.23m);
+
+      // Lancashire
+      UpdateKnownCcg("00Q", 476056, "52161002", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+      UpdateKnownCcg("01A", 508531, "52161003", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+      UpdateKnownCcg("01K", 543711, "52161002", 53.76m, 53.76m, 173.37m, 173.37m, 0, 0);
+
+      // TODO -- Cumbria CCG Seed
+      //UpdateKnownCcg("01K", 543711, "52161002", 100m, 100m, 230m, 230m, 0.45m, 0.45m);
+
     }
   }
 }

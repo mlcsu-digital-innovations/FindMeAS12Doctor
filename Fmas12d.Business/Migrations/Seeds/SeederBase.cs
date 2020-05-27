@@ -66,6 +66,20 @@ namespace Fmas12d.Business.Migrations.Seeds
       }
     }
 
+    protected Ccg GetCcgByShortCode(string shortCode)
+    {
+      try
+      {
+        return Context.Ccgs.Single(ccg => ccg.ShortCode == shortCode);
+      }
+      catch (Exception ex)
+      {
+        throw new ArgumentException(
+          $"Cannot find a CCG with the short code of {shortCode} in Ccgs", ex
+        );
+      }
+    }
+
     protected int GetClaimStatusIdByClaimStatusName(string ClaimStatusName)
     {
       try
