@@ -231,12 +231,11 @@ namespace Fmas12d.Business.Services
 
     public static string CreateClaimReference(int assessmentId, DateTimeOffset assessmentDate, string assessmentPostcode)
     {
-      assessmentPostcode = assessmentPostcode.Replace(" ", string.Empty);
-      string inwardCode = assessmentPostcode.Substring(assessmentPostcode.Length - 3, 3);
-
-      string paddedId = assessmentId.ToString("D5");
-
-      return $"{inwardCode}{assessmentDate.Day.ToString("D2")}{assessmentDate.Month.ToString("D2")}{paddedId}";
+      string inwardCode = assessmentPostcode.Replace(" ", string.Empty);
+      inwardCode = inwardCode.Length > 3 
+        ? inwardCode.Substring(inwardCode.Length - 3, 3)
+        : inwardCode;
+      return $"{inwardCode}{assessmentDate.Day:D2}{assessmentDate.Month:D2}{assessmentId:D5}";
     }  
 
     public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
