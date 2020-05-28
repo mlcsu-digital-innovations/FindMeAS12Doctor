@@ -25,7 +25,7 @@ namespace Fmas12d.Business.Models
       UserId = entity.UserId;
       
     }
-    public int? ClaimReference { get; set; }
+    public string ClaimReference { get; set; }
     public virtual ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
     [MaxLength(10)]
