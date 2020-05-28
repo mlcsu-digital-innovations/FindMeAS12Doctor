@@ -79,16 +79,11 @@ export class ClaimListComponent implements OnInit {
     const vsrNumber = activeAccount.length > 0 ? activeAccount[0].vsrNumber.toString() : '';
 
     const assessmentDate = moment(claim.assessment.completedTime).format('DD-MM-YYYY');
-    const invoiceDate = moment(claim.assessment.completedTime).format('DDMMM').toUpperCase();
     const postcode = claim.assessment.postcode.replace(' ', '');
     const incode = postcode.substr(postcode.length - 3, 3);
-
-    const currentDate = moment().format('MMMM DD');
-
     const transactionDescription = `MHA/${incode}/${assessmentDate}`;
 
-    const invoiceNumber = `${incode}${invoiceDate}${claim.claimReference}`;
-
+    const currentDate = moment().format('MMMM DD');
     const itemDescription = `${currentDate} Batch Med Exams`;
 
 
@@ -96,7 +91,7 @@ export class ClaimListComponent implements OnInit {
     return {
       TransactionDescription: transactionDescription,
       VendorCode: vsrNumber,
-      InvoiceNumber: invoiceNumber,
+      InvoiceNumber: claim.claimReference,
       InvoiceDate: moment().toDate(),
       InvoiceReceivedDate: moment().toDate(),
       PaymentTerms: '7 DAYS NET',

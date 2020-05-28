@@ -69,7 +69,7 @@ export class FinanceClaimListService {
   }
 
   matches(claim: FinanceClaim, term: string, pipe: PipeTransform) {
-    return pipe.transform(claim.claimReference).includes(term.toLowerCase())
+    return claim.claimReference.toLowerCase().includes(term.toLowerCase())
       || claim.claimant.displayName.toLowerCase().includes(term.toLowerCase())
       || claim.ccg.name.toLowerCase().includes(term.toLowerCase())
       || claim.claimStatus.name.toLowerCase().includes(term.toLowerCase());

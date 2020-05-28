@@ -46,7 +46,9 @@ namespace Fmas12d.Business.Migrations.Seeds
       );
       userAssessmentClaim.ClaimReference = UserAssessmentClaimService.CreateClaimReference(
         assessmentId,
-        assessmentDoctor.DoctorUserId
+        userAssessmentClaim.Assessment.CompletedTime.Value,
+        userAssessmentClaim.Assessment.Postcode
+
       );
       userAssessmentClaim.ClaimStatusId = Models.ClaimStatus.SUBMITTED;
       userAssessmentClaim.EndPostcode = userAssessmentClaim.Assessment.Postcode;
