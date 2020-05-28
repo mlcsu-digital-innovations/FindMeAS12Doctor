@@ -1,5 +1,5 @@
 export interface DoctorClaimExport {
-  claimReference: number;
+  claimReference: string;
   claimStatus: string;
   assessmentDate: Date;
   assessmentPostcode: string;
