@@ -58,10 +58,6 @@ export class ClaimListComponent implements OnInit {
 
       this.claimsList$.subscribe(
         result => {
-          this.availableCcgs =
-            result.map(this.getCcgFromClaim)
-            .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);
-
           this.hasVisibleData = result.length > 0;
           this.activeClaims = result;
         },
@@ -77,11 +73,26 @@ export class ClaimListComponent implements OnInit {
 
   createCcgExportEntryForInvoicePaymentFile(claim: FinanceClaim): InvoicePaymentFile {
 
+    const activeAccount =
+      claim.claimant.bankDetails.filter(account => account.ccgId === claim.ccg.id);
+
+    const vsrNumber = activeAccount.length > 0 ? activeAccount[0].vsrNumber.toString() : '';
+
+    const assessmentDate = moment(claim.assessment.completedTime).format('DD-MM-YYYY');
+    const invoiceDate = moment(claim.assessment.completedTime).format('DDMMM').toUpperCase();
+    const postcode = claim.assessment.postcode.replace(' ', '');
+    const incode = postcode.substr(postcode.length - 3, 3);
+
+    const transactionDescription = `MHA/${incode}/${assessmentDate}`;
+
+    const invoiceNumber = `${incode}${invoiceDate}${claim.claimReference}`;
+
+
     // Analysis codes should NOT be changed !
     return {
-      TransactionDescription: '',
-      VendorCode: '',
-      InvoiceNumber: '',
+      TransactionDescription: transactionDescription,
+      VendorCode: vsrNumber,
+      InvoiceNumber: invoiceNumber,
       InvoiceDate: moment().toDate(),
       InvoiceReceivedDate: moment().toDate(),
       PaymentTerms: '7 DAYS NET',
@@ -102,9 +113,6 @@ export class ClaimListComponent implements OnInit {
   }
 
   exportCcgClaims(ccg: Ccg): number {
-
-    // const claimsForCcg = this.activeClaims
-    //   .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id === CLAIM_STATUS_PROCESSING);
 
     const claimsForCcg = this.activeClaims
       .filter(claim => claim.ccg.id === ccg.id && claim.claimStatus.id !== CLAIM_STATUS_QUERY);
