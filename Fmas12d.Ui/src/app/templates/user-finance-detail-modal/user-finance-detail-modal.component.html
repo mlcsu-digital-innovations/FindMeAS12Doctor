@@ -5,17 +5,17 @@
   <form [formGroup]="financeDetailForm" class="form-style" (ngSubmit)="SaveFinanceDetail()">
     <!-- CCG -->
     <div class="form-row">
-      <div class="col-md-8 mb-2">
+      <div class="col-md-10 mb-2">
         <label class="required-field" for="ccg">Clinical Commissioning Group</label>
         <input type="search" class="form-control" id="ccg" #ccg
           [class.is-invalid]="hasCcgSearchFailed" formControlName="ccg" [ngbTypeahead]="CcgSearch"
           [resultFormatter]="FormatTypeAheadResults" [inputFormatter]="FormatTypeAheadResults" />
       </div>
     </div>
-    <!-- CCG Errors-->
+    <!-- CCG Errors -->
     <div class="form-row" *ngIf="controls.ccg.errors">
       <div class="col-md-12 mb-2">
-        <div *ngIf="controls.ccg.errors.required" class="invalid-field">
+        <div *ngIf="submitted && controls.ccg.errors.required" class="invalid-field">
           <span>* CCG is required</span>
         </div>
         <div *ngIf="controls.ccg.errors.NoMatchingResults" class="invalid-field">
@@ -52,7 +52,7 @@
       </div>
     </div>
     <!-- VSR Number Errors -->
-    <div class="form-row" *ngIf="controls.vsrNumber.errors">
+    <div class="form-row" *ngIf="submitted && controls.vsrNumber.errors">
       <div class="col-md-12 mb-2">
         <div *ngIf="controls.vsrNumber.errors.required" class="invalid-field">
           <span>* VSR number is required</span>
@@ -69,8 +69,8 @@
         </div>
       </div>
     </div>
-    <div class="form-row">
-      <div class="col-md-4 offset-md-8 text-right cancelOrSave">
+    <div class="form-row mt-more-2">
+      <div class="col-md-4 offset-md-6 text-right cancelOrSave">
         <button
           type="button"
           class="btn btn-standard btn-cancel"
@@ -78,7 +78,7 @@
         >Cancel</button>
         <button
           type="submit"
-          class="btn btn-primary btn-standard"
+          class="btn btn-primary btn-standard btn-spaced"
         >Save</button>
       </div>
     </div>
