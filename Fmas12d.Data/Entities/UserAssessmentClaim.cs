@@ -20,7 +20,8 @@ namespace Fmas12d.Data.Entities
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
     public bool? IsUsersPatient { get; set; }
-    public int? Mileage { get; set; }
+    [Column(TypeName = "decimal(9,6)")]
+    public decimal? Mileage { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal? MileagePayment { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }

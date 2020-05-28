@@ -186,29 +186,59 @@ namespace Fmas12d.Business.Services
 
       assessmentClaim.UserId = userId;
       assessmentClaim.ClaimStatusId = ClaimStatus.SUBMITTED;
+      
+      assessmentClaim.ClaimReference = CreateClaimReference(assessmentId, userId);
 
-      // ToDo: temp value until it is determined where this value comes from
-      bool testParse =
-        int.TryParse(
-          DateTime.Now.Day.ToString() +
-          DateTime.Now.Month.ToString() +
-          assessmentId.ToString() +
-          userId.ToString(),
-          out int tempReference
-        );
+      assessmentClaim.MileagePayment = CalculateMileagePayment(
+        assessment.IsSuccessful.Value,
+        assessment.Ccg.SuccessfulPencePerMile,
+        assessment.Ccg.UnsuccessfulPencePerMile,
+        assessmentClaim.Mileage.Value
+      );
 
-      assessmentClaim.ClaimReference = testParse ? tempReference : assessmentId;
-
-      assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
-        ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile
-        : assessmentClaim.Mileage * assessment.Ccg.UnsuccessfulPencePerMile;
-
-      assessmentClaim.AssessmentPayment = assessment.IsSuccessful == true
-        ? assessment.Ccg.SuccessfulAssessmentPayment
-        : assessment.Ccg.FailedAssessmentPayment;
+      assessmentClaim.AssessmentPayment = CalculateAssessmentPayment(
+        assessment.IsSuccessful.Value,
+        assessment.Ccg.SuccessfulAssessmentPayment,
+        assessment.Ccg.FailedAssessmentPayment
+      );
 
       return await CreateUserAssessmentClaimAsync(assessmentClaim);
     }
+
+    public static decimal CalculateAssessmentPayment(
+      bool assessmentSuccessful,
+      decimal ccgSuccessfulAssessmentPayment,
+      decimal ccgFailedAssessmentPayment
+    )
+    {
+      return assessmentSuccessful 
+        ? ccgSuccessfulAssessmentPayment
+        : ccgFailedAssessmentPayment;
+    }    
+
+    public static decimal CalculateMileagePayment(
+      bool assessmentSuccessful,
+      decimal ccgSuccessfulPencePerMile,
+      decimal ccgUnsuccessfulPencePerMile,
+      decimal mileage
+    )
+    {
+      return assessmentSuccessful 
+        ? mileage * ccgSuccessfulPencePerMile
+        : mileage * ccgUnsuccessfulPencePerMile;
+    }
+
+    public static int CreateClaimReference(int assessmentId, int userId)
+    {
+      // ToDo: temp value until it is determined where this value comes from
+      bool isClaimReferenceParsed =
+        int.TryParse(
+          $"{DateTime.Now.Day}{DateTime.Now.Month}{assessmentId}{userId}",
+          out int claimReference
+        );  
+
+      return isClaimReferenceParsed ? claimReference : assessmentId;
+    }  
 
     public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
       int userId

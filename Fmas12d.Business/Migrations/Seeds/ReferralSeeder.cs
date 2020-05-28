@@ -66,9 +66,12 @@ namespace Fmas12d.Business.Migrations.Seeds
     private readonly AssessmentSeeder _assessmentSeeder = new AssessmentSeeder();
     private readonly UserAssessmentNotificationSeeder _userAssessmentNotificationSeeder =
       new UserAssessmentNotificationSeeder();
+    private readonly UserAssessmentClaimsSeeder _userAssessmentClaimsSeeder =
+      new UserAssessmentClaimsSeeder();
 
     /// <summary>
     /// Deletes all the following seeds because updating is too difficult:
+    /// UserAssessmentClaims
     /// UserAssessmentNotification
     /// Assessment Doctor
     /// Assessment Details
@@ -78,6 +81,7 @@ namespace Fmas12d.Business.Migrations.Seeds
     internal void SeedData()
     {
 
+      _userAssessmentClaimsSeeder.DeleteSeeds();
       _userAssessmentNotificationSeeder.DeleteSeeds();
       _assessmentDoctorSeeder.DeleteSeeds();
       _assessmentSeeder.DeleteSeeds();
@@ -95,6 +99,90 @@ namespace Fmas12d.Business.Migrations.Seeds
       AddAssessmentScheduledReferral();
 
       AddOpenReferralWithPreviousReferral();
+
+      AddReferralsWithSuccessfulAssessment();
+    }
+
+    private void AddReferralsWithSuccessfulAssessment()
+    {
+      string[] ccgNames = new string[]
+      {
+        CcgSeeder.BLACKBURN_WITH_DARWEN,
+        CcgSeeder.CANNOCK_CHASE,
+        CcgSeeder.EAST_LANCASHIRE,
+        CcgSeeder.EAST_LEICESTERSHIRE_AND_RUTLAND,
+        CcgSeeder.EAST_STAFFORDSHIRE,
+        CcgSeeder.LEICESTER_CITY,
+        CcgSeeder.MORECAMBE_BAY,
+        CcgSeeder.NORTH_STAFFORDSHIRE,
+        CcgSeeder.SOUTH_EAST_STAFFORDSHIRE_AND_SEISDON_PENINSULA,
+        CcgSeeder.STAFFORD_AND_SURROUNDS,
+        CcgSeeder.STOKE_ON_TRENT,
+        CcgSeeder.WEST_LEICESTERSHIRE
+      };
+
+      for (int i = 0; i < ccgNames.Length; i++)
+      {
+        AddReferralWithSuccessfulAssessment(ccgNames[i], DateTimeOffset.Now.AddDays(i));
+      }
+
+    }
+
+    private void AddReferralWithSuccessfulAssessment(
+      string ccgName,
+      DateTimeOffset assessmentCompletedTime
+    )
+    {
+      int amhpUserId = GetUserByDisplayName(UserSeeder.DISPLAY_NAME_AMHP_FEMALE).Id;
+
+      List<AssessmentDoctor> assessmentDoctors = new List<AssessmentDoctor>
+      {
+        _assessmentDoctorSeeder.Create(
+          attendanceConfirmedByUserId: amhpUserId,
+          distance: Distance.CalculateDistanceAsCrowFlies(
+            ASSESSMENT_SCHEDULED_LATITUDE,
+            ASSESSMENT_SCHEDULED_LONGITUDE,
+            ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
+            ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE
+          ),
+          doctorUserName: UserSeeder.DISPLAY_NAME_DOCTOR_FEMALE,
+          hasExcepted: true,
+          latitude: ContactDetailsSeeder.LATITUDE_DOCTOR_FEMALE_BASE,
+          longitude: ContactDetailsSeeder.LONGITUDE_DOCTOR_FEMALE_BASE,
+          postcode: ContactDetailsSeeder.POSTCODE_DOCTOR_FEMALE_BASE,
+          respondedAt: assessmentCompletedTime.AddHours(-2),
+          statusId: Models.AssessmentDoctorStatus.ATTENDED
+        )
+      };
+
+      List<Assessment> assessments = new List<Assessment> {
+        _assessmentSeeder.Create(
+          address1: ASSESSMENT_SCHEDULED_ADDRESS1,
+          address2: ASSESSMENT_SCHEDULED_ADDRESS2,
+          address3: ASSESSMENT_SCHEDULED_ADDRESS3,
+          address4: ccgName,
+          amhpUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
+          ccgName: ccgName,
+          createdByUserName: UserSeeder.DISPLAY_NAME_AMHP_FEMALE,
+          completedTime: assessmentCompletedTime,
+          doctors: assessmentDoctors,
+          meetingArrangementComment: ASSESSMENT_SCHEDULED_MEETING_ARRANGEMENT_COMMENT,
+          mustBeCompletedBy: ASSESSMENT_SCHEDULED_MUST_BE_COMPLETED_BY,
+          postcode: ASSESSMENT_SCHEDULED_POSTCODE,
+          specialityId: Models.Speciality.LEARNING_DISABILITY,
+          isSuccessful: true,
+          scheduledTime: assessmentCompletedTime.AddHours(-1)
+        )
+      };
+
+      AddReferral(
+        alternativeIdentifier:
+          PatientSeeder.ALTERNATIVE_IDENTIFIER_FOR_ASSESSMENT_SCHEDULED_REFERRAL,
+        createdAt: assessmentCompletedTime.AddHours(-3),
+        assessments: assessments,
+        leadAmhpName: UserSeeder.DISPLAY_NAME_AMHP_MALE,
+        referralStatusId: Models.ReferralStatus.ASSESSMENT_SCHEDULED
+      );
     }
 
     private void AddResponsesPartialReferral()

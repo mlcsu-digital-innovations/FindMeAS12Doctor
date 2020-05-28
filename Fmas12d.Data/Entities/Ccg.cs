@@ -30,6 +30,7 @@ namespace Fmas12d.Data.Entities
     public string SubjectiveCode { get; set; }    
     [Column(TypeName = "decimal(18,2)")]
     public decimal SuccessfulAssessmentPayment { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal SuccessfulPencePerMile { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal UnsuccessfulPencePerMile { get; set; }
