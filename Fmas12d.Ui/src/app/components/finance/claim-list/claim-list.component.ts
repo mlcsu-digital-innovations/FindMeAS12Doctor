@@ -83,9 +83,13 @@ export class ClaimListComponent implements OnInit {
     const postcode = claim.assessment.postcode.replace(' ', '');
     const incode = postcode.substr(postcode.length - 3, 3);
 
+    const currentDate = moment().format('MMMM DD');
+
     const transactionDescription = `MHA/${incode}/${assessmentDate}`;
 
     const invoiceNumber = `${incode}${invoiceDate}${claim.claimReference}`;
+
+    const itemDescription = `${currentDate} Batch Med Exams`;
 
 
     // Analysis codes should NOT be changed !
@@ -102,7 +106,7 @@ export class ClaimListComponent implements OnInit {
       Analysis1: '00000',
       Analysis2: '000000',
       Analysis3: '000000',
-      ItemDescription: '',
+      ItemDescription: itemDescription,
       ItemType: 'ITEM',
       LineAmount: claim.mileagePayment + claim.assessmentPayment,
       UnitAmount: 1.00,
