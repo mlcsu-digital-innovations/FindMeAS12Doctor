@@ -137,15 +137,15 @@ export class ClaimListComponent implements OnInit {
             });
           } else {
             this.updateClaimsService.bulkUpdateClaimStatusToApproved(claimIds)
-            .subscribe(x => {
-              console.log(`${x} claims updated to approved`);
-          });
+              .subscribe(x => {
+                console.log(`${x} claims updated to approved`);
+            });
           }
 
           this.toastService.displaySuccess({
-                  title: 'Success',
-                  message: `Export file created for ${result}`
-                });
+            title: 'Success',
+            message: `Export file created for ${result}`
+          });
         });
     }
     return exportDataForIPF.length;

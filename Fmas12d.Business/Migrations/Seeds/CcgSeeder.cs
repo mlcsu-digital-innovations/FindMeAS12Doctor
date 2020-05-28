@@ -52,7 +52,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       foreach (OgpServiceFeature ccgResult in ogpServiceResult.Features)
       {
         PopulateCcgNameShortCodeLongCodeDefaults(
-          name: ccgResult.Attributes.CCG19NM,
+          name: ccgResult.Attributes.CCG19NM.Replace("NHS ","").Replace(" CCG", ""),
           shortCode: ccgResult.Attributes.CCG19CDH,
           longCode: ccgResult.Attributes.CCG19CD
         );
