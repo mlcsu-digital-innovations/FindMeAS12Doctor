@@ -122,15 +122,22 @@ export class FinanceClaimListService {
         this.rawClaimsList = result;
 
         this._statusFilter =
-        result.map((x: FinanceClaim) => ({id: x.claimStatus.id, name: x.claimStatus.name, selected: false}))
+        result.map((x: FinanceClaim) => (
+          {id: x.claimStatus.id, name: x.claimStatus.name, selected: false})
+        )
+        .sort((a, b) => a.name.localeCompare(b.name))
         .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
 
         this._ccgFilter =
         result.map((x: FinanceClaim) => ({id: x.ccg.id, name: x.ccg.name, selected: false}))
+        .sort((a, b) => a.name.localeCompare(b.name))
         .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
 
         this._claimantFilter =
-        result.map((x: FinanceClaim) => ({id: x.claimant.id, name: x.claimant.displayName, selected: false}))
+        result.map((x: FinanceClaim) => (
+          {id: x.claimant.id, name: x.claimant.displayName, selected: false})
+        )
+        .sort((a, b) => a.name.localeCompare(b.name))
         .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
 
         this._exportedFilter = [];
@@ -201,28 +208,33 @@ export class FinanceClaimListService {
 
     // 3. filter by items
 
-    const activeStatusFilters = this._statusFilter.filter(status => status.selected === true).map(status => status.id);
+    const activeStatusFilters = this._statusFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
     if (activeStatusFilters.length > 0) {
-      claims =
-        claims.filter(claim => activeStatusFilters.includes(claim.claimStatus.id));
+      claims = claims.filter(claim => activeStatusFilters.includes(claim.claimStatus.id));
       this._filteringOnStatus = true;
     }
 
-    const activeCcgFilters = this._ccgFilter.filter(status => status.selected === true).map(status => status.id);
+    const activeCcgFilters = this._ccgFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
     if (activeCcgFilters.length > 0) {
-      claims =
-        claims.filter(claim => activeCcgFilters.includes(claim.ccg.id));
+      claims = claims.filter(claim => activeCcgFilters.includes(claim.ccg.id));
       this._filteringOnCcg = true;
     }
 
-    const activeClaimantFilters = this._claimantFilter.filter(status => status.selected === true).map(status => status.id);
+    const activeClaimantFilters = this._claimantFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
     if (activeClaimantFilters.length > 0) {
-      claims =
-        claims.filter(claim => activeClaimantFilters.includes(claim.claimant.id));
+      claims = claims.filter(claim => activeClaimantFilters.includes(claim.claimant.id));
       this._filteringOnClaimant = true;
     }
 
-    const activeExportedFilters = this._exportedFilter.filter(status => status.selected === true).map(status => status.id);
+    const activeExportedFilters = this._exportedFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
     if (activeExportedFilters.length === 1) {
       if (activeExportedFilters.includes(1)) {
         claims = claims.filter(claim => claim.exportedDate !== null);
