@@ -7,7 +7,8 @@ namespace Fmas12d.Data.Entities
   [Table("UserAssessmentClaimsAudit")]
   public partial class UserAssessmentClaimAudit : BaseAudit, IUserAssessmentClaim
   {
-    public int? ClaimReference { get; set; }
+    [MaxLength(50)]
+    public string ClaimReference { get; set; }
     public int? ClaimStatusId { get; set; }
     [MaxLength(10)]
     [Required]

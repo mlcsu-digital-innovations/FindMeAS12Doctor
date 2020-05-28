@@ -5,7 +5,7 @@ namespace Fmas12d.Data.Entities
 {
   public interface IUserAssessmentClaim
   {
-    int? ClaimReference { get; set; }
+    string ClaimReference { get; set; }
     int? ClaimStatusId { get; set; }
     string EndPostcode { get; set; }
     DateTimeOffset? ExportedDate { get; set; }

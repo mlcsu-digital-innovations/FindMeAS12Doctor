@@ -4,14 +4,16 @@ using Fmas12d.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200528103342_UpdateClaimReference")]
+    partial class UpdateClaimReference
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3266,8 +3268,7 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ClaimReference")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
@@ -3371,8 +3372,7 @@ namespace Fmas12d.Business.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ClaimReference")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");

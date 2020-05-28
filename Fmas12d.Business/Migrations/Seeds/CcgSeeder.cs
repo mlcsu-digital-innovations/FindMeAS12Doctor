@@ -12,20 +12,20 @@ namespace Fmas12d.Business.Migrations.Seeds
   internal class CcgSeeder : SeederBase<Ccg>
   {
     #region Constants
-    internal const string BLACKBURN_WITH_DARWEN = "NHS Blackburn with Darwen CCG";
-    internal const string CANNOCK_CHASE = "NHS Cannock Chase CCG";
-    internal const string EAST_LANCASHIRE = "NHS East Lancashire CCG";
+    internal const string BLACKBURN_WITH_DARWEN = "Blackburn with Darwen";
+    internal const string CANNOCK_CHASE = "Cannock Chase";
+    internal const string EAST_LANCASHIRE = "East Lancashire";
     internal const string EAST_LEICESTERSHIRE_AND_RUTLAND = 
-      "NHS East Leicestershire and Rutland CCG";
-    internal const string EAST_STAFFORDSHIRE = "NHS East Staffordshire CCG";
-    internal const string LEICESTER_CITY = "NHS Leicester City CCG";
-    internal const string MORECAMBE_BAY = "NHS Morecambe Bay CCG";
-    internal const string NORTH_STAFFORDSHIRE = "NHS North Staffordshire CCG";
+      "East Leicestershire and Rutland";
+    internal const string EAST_STAFFORDSHIRE = "East Staffordshire";
+    internal const string LEICESTER_CITY = "Leicester City";
+    internal const string MORECAMBE_BAY = "Morecambe Bay";
+    internal const string NORTH_STAFFORDSHIRE = "North Staffordshire";
     internal const string SOUTH_EAST_STAFFORDSHIRE_AND_SEISDON_PENINSULA = 
-      "NHS South East Staffordshire and Seisdon Peninsula CCG";
-    internal const string STAFFORD_AND_SURROUNDS = "NHS Stafford and Surrounds CCG";
-    internal const string STOKE_ON_TRENT = "NHS Stoke on Trent CCG";
-    internal const string WEST_LEICESTERSHIRE = "NHS West Leicestershire CCG";
+      "South East Staffordshire and Seisdon Peninsula";
+    internal const string STAFFORD_AND_SURROUNDS = "Stafford and Surrounds";
+    internal const string STOKE_ON_TRENT = "Stoke on Trent";
+    internal const string WEST_LEICESTERSHIRE = "West Leicestershire";
     #endregion
 
     bool _hasExistingCcgs = false;
@@ -52,7 +52,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       foreach (OgpServiceFeature ccgResult in ogpServiceResult.Features)
       {
         PopulateCcgNameShortCodeLongCodeDefaults(
-          name: ccgResult.Attributes.CCG19NM,
+          name: ccgResult.Attributes.CCG19NM.Replace("NHS ","").Replace(" CCG", ""),
           shortCode: ccgResult.Attributes.CCG19CDH,
           longCode: ccgResult.Attributes.CCG19CD
         );
@@ -93,7 +93,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       PopulateCcgNameShortCodeLongCodeDefaults("Surrey and Sussex Commissioning Hub", "13L", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Thames Valley Commissioning Hub", "13M", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Wessex Commissioning Hub", "13N", null);
-      PopulateCcgNameShortCodeLongCodeDefaults("NHS Birmingham Crosscity CCG", "13P", null);
+      PopulateCcgNameShortCodeLongCodeDefaults("Birmingham Crosscity", "13P", null);
       PopulateCcgNameShortCodeLongCodeDefaults("National Commissioning Hub 1", "13Q", null);
       PopulateCcgNameShortCodeLongCodeDefaults("London Commissioning Hub", "13R", null);
       PopulateCcgNameShortCodeLongCodeDefaults("Yorkshire and Humber Commissioning Hub", "13V", null);

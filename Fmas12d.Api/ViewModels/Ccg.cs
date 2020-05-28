@@ -8,9 +8,11 @@ namespace Fmas12d.Api.ViewModels
     public Ccg(Business.Models.Ccg model) {
       if (model == null) return;
 
-      Id = model.Id;
-      Name = model.Name;
+      CostCentre = model.CostCentre;
+      Id = model.Id;      
       IsPaymentApprovalRequired = model.IsPaymentApprovalRequired;
+      LongCode = model.LongCode;
+      Name = model.Name;
       ShortCode = model.ShortCode;
       SubjectiveCode = model.SubjectiveCode; 
     }

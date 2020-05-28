@@ -11,12 +11,14 @@ import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unre
 import { UserBankDetailsModalComponent } from './user-bank-details-modal/user-bank-details-modal-component';
 import { UserContactDetailModalComponent } from './user-contact-detail-modal/user-contact-detail-modal.component';
 import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/user-finance-detail-modal.component';
+import { FinanceExportModalComponent } from './finance-export/finance-export-modal';
 
 @NgModule({
   declarations: [
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
     CcgSelectionModalComponent,
+    FinanceExportModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
     UnregisteredUsersModalComponent,
@@ -35,6 +37,7 @@ import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/use
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
     CcgSelectionModalComponent,
+    FinanceExportModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
     UnregisteredUsersModalComponent,

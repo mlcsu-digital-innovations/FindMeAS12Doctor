@@ -4,6 +4,7 @@ export interface Assessment {
   address3?: string;
   address4?: string;
   amhpUserId: number;
+  completedTime: Date;
   detailTypeIds: number[];
   id: number;
   isPlanned: boolean;

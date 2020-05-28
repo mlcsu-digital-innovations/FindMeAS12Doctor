@@ -6,7 +6,8 @@ namespace Fmas12d.Data.Entities
 {
   public partial class UserAssessmentClaim : BaseEntity, IUserAssessmentClaim
   {
-    public int? ClaimReference { get; set; }
+    [MaxLength(50)]
+    public string ClaimReference { get; set; }
     public virtual ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
     [MaxLength(10)]

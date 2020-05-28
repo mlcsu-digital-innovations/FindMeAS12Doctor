@@ -4,7 +4,7 @@ import { NameIdList } from './name-id-list';
 export interface UserAssessmentClaim {
   assessment: Assessment;
   assessmentPayment: number;
-  claimReference: number;
+  claimReference: string;
   claimStatus: NameIdList;
   exportedDate: Date;
   id: number;

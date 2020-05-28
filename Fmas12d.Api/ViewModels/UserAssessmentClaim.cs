@@ -25,7 +25,7 @@ namespace Fmas12d.Api.ViewModels
     public decimal? AssessmentPayment { get; set; }
     public ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
-    public int? ClaimReference { get; set; }
+    public string ClaimReference { get; set; }
     public DateTimeOffset? ExportedDate { get; set; }
     public int Id { get; set; }
     public DateTimeOffset LastUpdated { get; set; }

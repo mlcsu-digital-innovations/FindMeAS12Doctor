@@ -187,7 +187,8 @@ namespace Fmas12d.Business.Services
       assessmentClaim.UserId = userId;
       assessmentClaim.ClaimStatusId = ClaimStatus.SUBMITTED;
       
-      assessmentClaim.ClaimReference = CreateClaimReference(assessmentId, userId);
+      assessmentClaim.ClaimReference =
+        CreateClaimReference(assessmentId, assessment.CompletedTime.Value, assessment.Postcode);
 
       assessmentClaim.MileagePayment = CalculateMileagePayment(
         assessment.IsSuccessful.Value,
@@ -228,16 +229,13 @@ namespace Fmas12d.Business.Services
         : mileage * ccgUnsuccessfulPencePerMile;
     }
 
-    public static int CreateClaimReference(int assessmentId, int userId)
+    public static string CreateClaimReference(int assessmentId, DateTimeOffset assessmentDate, string assessmentPostcode)
     {
-      // ToDo: temp value until it is determined where this value comes from
-      bool isClaimReferenceParsed =
-        int.TryParse(
-          $"{DateTime.Now.Day}{DateTime.Now.Month}{assessmentId}{userId}",
-          out int claimReference
-        );  
-
-      return isClaimReferenceParsed ? claimReference : assessmentId;
+      string inwardCode = assessmentPostcode.Replace(" ", string.Empty);
+      inwardCode = inwardCode.Length > 3 
+        ? inwardCode.Substring(inwardCode.Length - 3, 3)
+        : inwardCode;
+      return $"{inwardCode}{assessmentDate.Day:D2}{assessmentDate.Month:D2}{assessmentId:D5}";
     }  
 
     public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
