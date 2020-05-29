@@ -176,7 +176,7 @@ namespace Fmas12d.Business.Services
       
       assessmentClaim.AssessmentId = assessmentId;
       assessmentClaim.EndPostcode = model.EndPostcode;
-      assessmentClaim.IsUsersPatient = model.OwnPatient;
+      assessmentClaim.IsWithinContract = model.WithinContract;
       assessmentClaim.NextAssessmentId = model.NextAssessmentId;
       assessmentClaim.PreviousAssessmentId = model.PreviousAssessmentId;
       assessmentClaim.StartPostcode = model.StartPostcode;

@@ -37,7 +37,7 @@ namespace Fmas12d.Business.Models
     public decimal? AssessmentPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
-    public bool? IsUsersPatient { get; set; }
+    public bool? IsWithinContract { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     public decimal? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
@@ -70,7 +70,7 @@ namespace Fmas12d.Business.Models
         ClaimStatusId = ClaimStatusId,
         EndPostcode = EndPostcode,
         IsClaimable = IsClaimable,
-        IsUsersPatient = IsUsersPatient,
+        IsWithinContract = IsWithinContract,
         IsAttendanceConfirmed = IsAttendanceConfirmed,
         Mileage = Mileage,
         MileagePayment = MileagePayment,
