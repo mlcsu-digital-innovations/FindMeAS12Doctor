@@ -7,8 +7,8 @@ import { RouterService } from './services/router/router.service';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate, CanLoad {
-  
-  constructor(private routerService: RouterService, 
+
+  constructor(private routerService: RouterService,
               private oidcSecurityService: OidcSecurityService) { }
 
   canActivate(
@@ -27,7 +27,21 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
       tap((isAuthorized: boolean) => {
         if (!isAuthorized) {
           this.routerService.navigate(['/unauthorized']);
+          return false;
         }
+
+        this.oidcSecurityService.getUserData().subscribe(user => {
+          console.log(user);
+
+          const key = `userAppData_${user.oid}`;
+
+          console.log('check session storage ...');
+          
+
+        }
+        );
+
+        return false;
       })
     );
   }
