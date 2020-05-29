@@ -4,14 +4,16 @@ using Fmas12d.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200527135843_UpdateMileageColumnToDecimal")]
+    partial class UpdateMileageColumnToDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3265,9 +3267,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<decimal?>("AssessmentPayment")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ClaimReference")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<int?>("ClaimReference")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
@@ -3289,7 +3290,7 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool?>("IsClaimable")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsWithinContract")
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Mileage")
@@ -3370,9 +3371,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool>("AuditSuccess")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ClaimReference")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<int?>("ClaimReference")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ClaimStatusId")
                         .HasColumnType("int");
@@ -3397,7 +3397,7 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool?>("IsClaimable")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsWithinContract")
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Mileage")

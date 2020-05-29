@@ -16,6 +16,7 @@ export class UserAssessmentClaim {
   mileagePayment: number;
   paymentDate?: Date;
   travelComments?: string;
+  isWithinContract?: boolean;
 
   constructor() { }
 }

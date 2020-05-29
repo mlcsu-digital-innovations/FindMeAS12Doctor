@@ -19,18 +19,20 @@ namespace Fmas12d.Api.ViewModels
       LastUpdated = model.ModifiedAt;
       Mileage = model.Mileage;
       MileagePayment = model.MileagePayment;
+      IsWithinContract = model.IsWithinContract;
     }
 
     public Assessment Assessment { get; set; }
     public decimal? AssessmentPayment { get; set; }
     public ClaimStatus ClaimStatus { get; set; }
     public int? ClaimStatusId { get; set; }
-    public int? ClaimReference { get; set; }
+    public string ClaimReference { get; set; }
     public DateTimeOffset? ExportedDate { get; set; }
     public int Id { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
-    public int? Mileage { get; set; }
+    public decimal? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
+    public bool? IsWithinContract { get; set; }
 
     public static Func<Business.Models.UserAssessmentClaim, UserAssessmentClaim> ProjectFromModel
     {
@@ -44,7 +46,8 @@ namespace Fmas12d.Api.ViewModels
           ClaimStatus = new ClaimStatus(userAssessmentClaim.ClaimStatus),
           Id = userAssessmentClaim.Id,
           Mileage = userAssessmentClaim.Mileage,
-          MileagePayment = userAssessmentClaim.MileagePayment
+          MileagePayment = userAssessmentClaim.MileagePayment,
+          IsWithinContract = userAssessmentClaim.IsWithinContract
         };
       }
     }

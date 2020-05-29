@@ -9,7 +9,7 @@ export const MHA_BATCH_COLUMN_COLOURS: {column: string, fill: Fill}[] = [
   },
   {
     column: 'C',
-    fill: null
+    fill: Style.FILL_GREEN
   },
   {
     column: 'D',
@@ -97,7 +97,7 @@ export const MHA_BATCH_COLUMN_FORMAT: {column: string, width?: number, format?: 
   },
   {
     column: 'F',
-    width: 16,
+    width: 20,
     dateFormat: 'dd/mm/yyyy'
   },
   {
@@ -187,156 +187,156 @@ export const MHA_BATCH_TEMPLATE: MhaTemplate[] = [
     borders: Style.BORDER_N_MD_MD_MD,
     merge: 'G5:L5'
   },
+  // {
+  //   rc: 'B7',
+  //   value: '',
+  //   borders: Style.BORDER_ALL,
+  //   merge: 'B7:F15'
+  // },
+  // {
+  //   rc: 'H7',
+  //   value: '',
+  //   borders: Style.BORDER_ALL,
+  //   merge: 'H7:L15'
+  // },
+  // {
+  //   rc: 'M7',
+  //   value: '',
+  //   borders: Style.BORDER_ALL,
+  //   merge: 'M7:P12'
+  // },
+  // {
+  //   rc: 'M13',
+  //   value: '',
+  //   borders: Style.BORDER_ALL,
+  //   merge: 'M13:P15'
+  // },
   {
     rc: 'B7',
-    value: '',
-    borders: Style.BORDER_ALL,
-    merge: 'B7:F15'
-  },
-  {
-    rc: 'H7',
-    value: '',
-    borders: Style.BORDER_ALL,
-    merge: 'H7:L15'
-  },
-  {
-    rc: 'M7',
-    value: '',
-    borders: Style.BORDER_ALL,
-    merge: 'M7:P12'
-  },
-  {
-    rc: 'M13',
-    value: '',
-    borders: Style.BORDER_ALL,
-    merge: 'M13:P15'
-  },
-  {
-    rc: 'B17',
     value: 'Transaction Data',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'B17:H17'
+    merge: 'B7:H7'
   },
   {
-    rc: 'I17',
+    rc: 'I7',
     value: 'Account Code',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'I17:M17'
+    merge: 'I7:M7'
   },
   {
-    rc: 'B18',
+    rc: 'B8',
     value: 'Transaction Description',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'C18',
+    rc: 'C8',
     value: 'Vendor Code',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'D18',
+    rc: 'D8',
     value: 'Invoice Number',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'E18',
+    rc: 'E8',
     value: 'Invoice Date',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'F18',
+    rc: 'F8',
     value: 'Invoice Received Date',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'G18',
+    rc: 'G8',
     value: 'Payment Terms',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'H18',
+    rc: 'H8',
     value: 'Transaction Type',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'I18',
+    rc: 'I8',
     value: 'Cost Centre',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'J18',
+    rc: 'J8',
     value: 'Subjective',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'K18',
+    rc: 'K8',
     value: 'Analysis 1',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'L18',
+    rc: 'L8',
     value: 'Analysis 2',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'M18',
+    rc: 'M8',
     value: 'Analysis 3',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL
   },
   {
-    rc: 'N17',
+    rc: 'N7',
     value: 'Item Description (Max 240 char)',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'N17:N18'
+    merge: 'N7:N8'
   },
   {
-    rc: 'O17',
+    rc: 'O7',
     value: 'Item Type',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'O17:O18'
+    merge: 'O7:O8'
   },
   {
-    rc: 'P17',
+    rc: 'P7',
     value: 'Line Amount',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'P17:P18'
+    merge: 'P7:P8'
   },
   {
-    rc: 'Q17',
+    rc: 'Q7',
     value: 'Unit Amount',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'Q17:Q18'
+    merge: 'Q7:Q8'
   },
   {
-    rc: 'R17',
+    rc: 'R7',
     value: 'Tax Code',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'R17:R18'
+    merge: 'R7:R8'
   },
   {
-    rc: 'S17',
+    rc: 'S7',
     value: 'Line Valid',
     fill: Style.FILL_GREY,
     borders: Style.BORDER_ALL,
-    merge: 'S17:S18'
+    merge: 'S7:S8'
   }
 ];

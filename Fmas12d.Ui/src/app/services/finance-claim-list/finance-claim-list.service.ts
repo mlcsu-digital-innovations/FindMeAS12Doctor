@@ -9,6 +9,7 @@ import { SortDirection } from 'src/app/directives/table-header-sortable/table-he
 import { State } from 'src/app/interfaces/state';
 import { tap, debounceTime, switchMap, delay } from 'rxjs/operators';
 import * as moment from 'moment';
+import { FilterItem } from 'src/app/interfaces/filterItem';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,16 @@ export class FinanceClaimListService {
   _search$ = new Subject<void>();
   _total$ = new BehaviorSubject<number>(0);
   rawClaimsList: FinanceClaim[] = [];
+
+  _statusFilter: FilterItem[];
+  _ccgFilter: FilterItem[];
+  _claimantFilter: FilterItem[];
+  _exportedFilter: FilterItem[];
+
+  private _filteringOnStatus: boolean;
+  private _filteringOnCcg: boolean;
+  private _filteringOnClaimant: boolean;
+  private _filteringOnExported: boolean;
 
   private _state: State = {
     page: 1,
@@ -58,7 +69,7 @@ export class FinanceClaimListService {
   }
 
   matches(claim: FinanceClaim, term: string, pipe: PipeTransform) {
-    return pipe.transform(claim.claimReference).includes(term.toLowerCase())
+    return claim.claimReference.toLowerCase().includes(term.toLowerCase())
       || claim.claimant.displayName.toLowerCase().includes(term.toLowerCase())
       || claim.ccg.name.toLowerCase().includes(term.toLowerCase())
       || claim.claimStatus.name.toLowerCase().includes(term.toLowerCase());
@@ -109,11 +120,46 @@ export class FinanceClaimListService {
         `${environment.apiEndpoint}/financeassessmentclaim/list`
       ).subscribe((result: FinanceClaim[]) => {
         this.rawClaimsList = result;
+
+        this._statusFilter =
+        result.map((x: FinanceClaim) => (
+          {id: x.claimStatus.id, name: x.claimStatus.name, selected: false})
+        )
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+
+        this._ccgFilter =
+        result.map((x: FinanceClaim) => ({id: x.ccg.id, name: x.ccg.name, selected: false}))
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+
+        this._claimantFilter =
+        result.map((x: FinanceClaim) => (
+          {id: x.claimant.id, name: x.claimant.displayName, selected: false})
+        )
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+
+        this._exportedFilter = [];
+        this._exportedFilter.push({id: 1, name: 'Yes', selected: false});
+        this._exportedFilter.push({id: 2, name: 'No', selected: true});
+
         this._search$.next();
       });
 
     }
     return this._claims$.asObservable();
+  }
+
+  clearFilter(list: FilterItem[]) {
+    list.forEach(item => {
+      item.selected = false;
+    });
+    this._search$.next();
+  }
+
+  filterChanged() {
+    this._search$.next();
   }
 
   get claims$() { return this._claims$.asObservable(); }
@@ -122,6 +168,16 @@ export class FinanceClaimListService {
   get page() { return this._state.page; }
   get pageSize() { return this._state.pageSize; }
   get searchTerm() { return this._state.searchTerm; }
+
+  get activeStatuses() { return this._statusFilter; }
+  get activeCcgs() { return this._ccgFilter; }
+  get activeClaimants() { return this._claimantFilter; }
+  get activeExported() { return this._exportedFilter; }
+
+  get filteringOnStatus() { return this._filteringOnStatus; }
+  get filteringOnCcg() { return this._filteringOnCcg; }
+  get filteringOnClaimant() { return this._filteringOnClaimant; }
+  get filteringOnExported() { return this._filteringOnExported; }
 
   set page(page: number) { this._set({page}); }
   set pageSize(pageSize: number) { this._set({pageSize}); }
@@ -138,14 +194,59 @@ export class FinanceClaimListService {
   private _search(): Observable<ClaimSearchResult> {
     const {sortColumn, sortDirection, sortColumnType, pageSize, page, searchTerm} = this._state;
 
+    // turn off filter indicators
+    this._filteringOnStatus = false;
+    this._filteringOnCcg = false;
+    this._filteringOnClaimant = false;
+    this._filteringOnExported = false;
+
     // 1. sort
     let claims = this.sort(this.rawClaimsList, sortColumn, sortDirection, sortColumnType);
 
-    // 2. filter
+    // 2. filter by keyword
     claims = claims.filter(claim => this.matches(claim, searchTerm, this.pipe));
+
+    // 3. filter by items
+
+    const activeStatusFilters = this._statusFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
+    if (activeStatusFilters.length > 0) {
+      claims = claims.filter(claim => activeStatusFilters.includes(claim.claimStatus.id));
+      this._filteringOnStatus = true;
+    }
+
+    const activeCcgFilters = this._ccgFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
+    if (activeCcgFilters.length > 0) {
+      claims = claims.filter(claim => activeCcgFilters.includes(claim.ccg.id));
+      this._filteringOnCcg = true;
+    }
+
+    const activeClaimantFilters = this._claimantFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
+    if (activeClaimantFilters.length > 0) {
+      claims = claims.filter(claim => activeClaimantFilters.includes(claim.claimant.id));
+      this._filteringOnClaimant = true;
+    }
+
+    const activeExportedFilters = this._exportedFilter
+      .filter(status => status.selected === true)
+      .map(status => status.id);
+    if (activeExportedFilters.length === 1) {
+      if (activeExportedFilters.includes(1)) {
+        claims = claims.filter(claim => claim.exportedDate !== null);
+      } else {
+        claims = claims.filter(claim => claim.exportedDate === null);
+      }
+      this._filteringOnExported = true;
+    }
+
     const total = claims.length;
 
-    // 3. paginate
+    // 4. paginate
     claims = claims.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
     return of({claims, total});
   }

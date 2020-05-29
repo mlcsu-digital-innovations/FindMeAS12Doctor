@@ -18,6 +18,7 @@ import { ToastsComponent } from './toasts/toasts.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { ListFilterComponent } from 'src/app/components/list-filter/list-filter.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     DelaySpinnerComponent,
     DisableControlDirective,
     FocusOnShowDirective,
-    NavbarComponent,    
+    ListFilterComponent,
+    NavbarComponent,
     TableHeaderSortable,
     ToastsComponent,
     UnauthorizedComponent,
@@ -49,6 +51,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     DisableControlDirective,
     FocusOnShowDirective,
     FormsModule,
+    ListFilterComponent,
     NavbarComponent,
     NgMultiSelectDropDownModule,
     NgbModule,

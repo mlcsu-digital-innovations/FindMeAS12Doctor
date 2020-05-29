@@ -4,14 +4,16 @@ using Fmas12d.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fmas12d.Business.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200528112332_ChangeClaimReferenceLength")]
+    partial class ChangeClaimReferenceLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3289,7 +3291,7 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool?>("IsClaimable")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsWithinContract")
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Mileage")
@@ -3397,7 +3399,7 @@ namespace Fmas12d.Business.Migrations
                     b.Property<bool?>("IsClaimable")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsWithinContract")
+                    b.Property<bool?>("IsUsersPatient")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Mileage")

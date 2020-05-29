@@ -5,18 +5,16 @@ namespace Fmas12d.Data.Entities
 {
   public interface IUserAssessmentClaim
   {
-    int? ClaimReference { get; set; }
+    string ClaimReference { get; set; }
     int? ClaimStatusId { get; set; }
     string EndPostcode { get; set; }
     DateTimeOffset? ExportedDate { get; set; }
     int AssessmentId { get; set; }
-    [Column(TypeName = "decimal(18,2)")]
     decimal? AssessmentPayment { get; set; }
     bool IsAttendanceConfirmed { get; set; }
     bool? IsClaimable { get; set; }
-    bool? IsUsersPatient { get; set; }
-    int? Mileage { get; set; }
-    [Column(TypeName = "decimal(18,2)")]
+    bool? IsWithinContract { get; set; }
+    decimal? Mileage { get; set; }
     decimal? MileagePayment { get; set; }
     DateTimeOffset? PaymentDate { get; set; }
     string StartPostcode { get; set; }

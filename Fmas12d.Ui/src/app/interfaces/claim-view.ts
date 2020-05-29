@@ -6,7 +6,7 @@ import { NameIdList } from './name-id-list';
 export interface ClaimView {
   assessment: Assessment;
   assessmentPayment: number;
-  claimReference: number;
+  claimReference: string;
   claimStatus: NameIdList;
   ccg: Ccg;
   claimant: Claimant;

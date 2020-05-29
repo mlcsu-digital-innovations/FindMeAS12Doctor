@@ -176,7 +176,7 @@ namespace Fmas12d.Business.Services
       
       assessmentClaim.AssessmentId = assessmentId;
       assessmentClaim.EndPostcode = model.EndPostcode;
-      assessmentClaim.IsUsersPatient = model.OwnPatient;
+      assessmentClaim.IsWithinContract = model.WithinContract;
       assessmentClaim.NextAssessmentId = model.NextAssessmentId;
       assessmentClaim.PreviousAssessmentId = model.PreviousAssessmentId;
       assessmentClaim.StartPostcode = model.StartPostcode;
@@ -186,29 +186,57 @@ namespace Fmas12d.Business.Services
 
       assessmentClaim.UserId = userId;
       assessmentClaim.ClaimStatusId = ClaimStatus.SUBMITTED;
+      
+      assessmentClaim.ClaimReference =
+        CreateClaimReference(assessmentId, assessment.CompletedTime.Value, assessment.Postcode);
 
-      // ToDo: temp value until it is determined where this value comes from
-      bool testParse =
-        int.TryParse(
-          DateTime.Now.Day.ToString() +
-          DateTime.Now.Month.ToString() +
-          assessmentId.ToString() +
-          userId.ToString(),
-          out int tempReference
-        );
+      assessmentClaim.MileagePayment = CalculateMileagePayment(
+        assessment.IsSuccessful.Value,
+        assessment.Ccg.SuccessfulPencePerMile,
+        assessment.Ccg.UnsuccessfulPencePerMile,
+        assessmentClaim.Mileage.Value
+      );
 
-      assessmentClaim.ClaimReference = testParse ? tempReference : assessmentId;
-
-      assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
-        ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile
-        : assessmentClaim.Mileage * assessment.Ccg.UnsuccessfulPencePerMile;
-
-      assessmentClaim.AssessmentPayment = assessment.IsSuccessful == true
-        ? assessment.Ccg.SuccessfulAssessmentPayment
-        : assessment.Ccg.FailedAssessmentPayment;
+      assessmentClaim.AssessmentPayment = CalculateAssessmentPayment(
+        assessment.IsSuccessful.Value,
+        assessment.Ccg.SuccessfulAssessmentPayment,
+        assessment.Ccg.FailedAssessmentPayment
+      );
 
       return await CreateUserAssessmentClaimAsync(assessmentClaim);
     }
+
+    public static decimal CalculateAssessmentPayment(
+      bool assessmentSuccessful,
+      decimal ccgSuccessfulAssessmentPayment,
+      decimal ccgFailedAssessmentPayment
+    )
+    {
+      return assessmentSuccessful 
+        ? ccgSuccessfulAssessmentPayment
+        : ccgFailedAssessmentPayment;
+    }    
+
+    public static decimal CalculateMileagePayment(
+      bool assessmentSuccessful,
+      decimal ccgSuccessfulPencePerMile,
+      decimal ccgUnsuccessfulPencePerMile,
+      decimal mileage
+    )
+    {
+      return assessmentSuccessful 
+        ? mileage * ccgSuccessfulPencePerMile
+        : mileage * ccgUnsuccessfulPencePerMile;
+    }
+
+    public static string CreateClaimReference(int assessmentId, DateTimeOffset assessmentDate, string assessmentPostcode)
+    {
+      string inwardCode = assessmentPostcode.Replace(" ", string.Empty);
+      inwardCode = inwardCode.Length > 3 
+        ? inwardCode.Substring(inwardCode.Length - 3, 3)
+        : inwardCode;
+      return $"{inwardCode}{assessmentDate.Day:D2}{assessmentDate.Month:D2}{assessmentId:D5}";
+    }  
 
     public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
       int userId

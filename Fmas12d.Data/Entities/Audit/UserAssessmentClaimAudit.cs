@@ -7,7 +7,8 @@ namespace Fmas12d.Data.Entities
   [Table("UserAssessmentClaimsAudit")]
   public partial class UserAssessmentClaimAudit : BaseAudit, IUserAssessmentClaim
   {
-    public int? ClaimReference { get; set; }
+    [MaxLength(50)]
+    public string ClaimReference { get; set; }
     public int? ClaimStatusId { get; set; }
     [MaxLength(10)]
     [Required]
@@ -18,8 +19,9 @@ namespace Fmas12d.Data.Entities
     public decimal? AssessmentPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
-    public bool? IsUsersPatient { get; set; }
-    public int? Mileage { get; set; }
+    public bool? IsWithinContract { get; set; }
+    [Column(TypeName = "decimal(9,2)")]
+    public decimal? Mileage { get; set; }
     [Column(TypeName = "decimal(18,2)")]
     public decimal? MileagePayment { get; set; }
     public DateTimeOffset? PaymentDate { get; set; }
