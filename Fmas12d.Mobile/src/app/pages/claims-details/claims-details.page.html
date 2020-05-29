@@ -48,6 +48,13 @@
 
     <ion-item>
       <ion-label>
+        <h3 class="bold">Claim Status</h3>
+        <h3>{{claim?.claimStatus.name}}</h3>
+      </ion-label>            
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
         <h3 class="bold">Assessment Claim</h3>
         <h3>{{claim?.assessmentPayment | currency: 'GBP'}}</h3>
       </ion-label>            
@@ -62,10 +69,12 @@
 
     <ion-item>
       <ion-label>
-        <h3 class="bold">Claim Status</h3>
-        <h3>{{claim?.claimStatus.name}}</h3>
+        <h3 class="bold">Within Contractual Requirements</h3>
+        <h3 *ngIf="claim?.isWithinContract">Yes</h3>
+        <h3 *ngIf="!claim?.isWithinContract">No</h3>
       </ion-label>            
     </ion-item>
+
 
   </ion-list>
   

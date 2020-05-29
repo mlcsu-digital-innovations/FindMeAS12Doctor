@@ -23,7 +23,7 @@ export class ClaimsCreatePage implements OnInit {
   public claimResponse: UserAssessmentClaimResponse;
   public differentReturnDestination: boolean;
   public hasValidClaim: boolean;
-  public ownPatient: boolean;
+  public withinContract: boolean;
   public startLocation = {} as AssessmentLocation;
   public endLocation: AssessmentLocation;
 
@@ -112,12 +112,18 @@ export class ClaimsCreatePage implements OnInit {
 
   validateClaim() {
     this.claim.assessmentId = this.assessmentId;
-    this.claim.ownPatient = this.ownPatient || false;
 
     if ((this.startLocation.postcode === undefined) ||
        (this.differentReturnDestination && this.endLocation.postcode === undefined)) {
       return;
     }
+
+    // user must answer contractual requirements 
+    if (this.withinContract === undefined) {
+      return;
+    }
+
+    this.claim.withinContract = this.withinContract;
 
     this.claim.startPostcode = this.startLocation.postcode;
     this.claim.endPostcode =

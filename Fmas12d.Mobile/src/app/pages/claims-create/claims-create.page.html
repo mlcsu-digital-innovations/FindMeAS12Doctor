@@ -87,12 +87,23 @@
 
     <ion-item *ngIf="!hasValidClaim">
       <ion-label>
-        <h3 class="bold">My Patient</h3>
+        <h3 class="bold">Within contractual requirements?</h3>
       </ion-label> 
-      <ion-checkbox [(ngModel)]="ownPatient"></ion-checkbox>
+      <ion-select [(ngModel)]="withinContract">
+        <ion-select-option [value]=true>Yes</ion-select-option>
+        <ion-select-option [value]=false>No</ion-select-option>
+      </ion-select>  
     </ion-item>
 
     <!-- fields shown when claim is being confirmed -->
+
+    <ion-item *ngIf="hasValidClaim">
+      <ion-label>
+        <h3 class="bold">Within Contractual Requirements</h3>
+        <h3 *ngIf="claim?.withinContract">Yes</h3>
+        <h3 *ngIf="!claim?.withinContract">No</h3>
+      </ion-label>            
+    </ion-item>
 
     <ion-item *ngIf="hasValidClaim">
       <ion-label>

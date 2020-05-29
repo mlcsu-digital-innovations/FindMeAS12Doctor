@@ -14,13 +14,14 @@ namespace Fmas12d.Business.Models
       
       Assessment = new Assessment(entity.Assessment);
       AssessmentId = entity.AssessmentId;
-      ClaimReference = entity.ClaimReference;
-      ExportedDate = entity.ExportedDate;
-      LastUpdated = entity.ModifiedAt;
-      MileagePayment = entity.MileagePayment;
-      Mileage = entity.Mileage;
       AssessmentPayment = entity.AssessmentPayment;
+      ClaimReference = entity.ClaimReference;
       ClaimStatus = new ClaimStatus(entity.ClaimStatus);
+      ExportedDate = entity.ExportedDate;
+      IsWithinContract = entity.IsWithinContract;
+      LastUpdated = entity.ModifiedAt;
+      Mileage = entity.Mileage;
+      MileagePayment = entity.MileagePayment;
       User = entity.User == null ? null : new User(entity.User);
       UserId = entity.UserId;
       

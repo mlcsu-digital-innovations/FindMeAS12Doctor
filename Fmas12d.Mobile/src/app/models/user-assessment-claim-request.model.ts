@@ -1,6 +1,6 @@
 export class UserAssessmentClaimRequest {
   assessmentId: number;
-  ownPatient: boolean;
+  withinContract: boolean;
   startPostcode: string;
   endPostcode: string;
   previousAssessmentId?: number;
