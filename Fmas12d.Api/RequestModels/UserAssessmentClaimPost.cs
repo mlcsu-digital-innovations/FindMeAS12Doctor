@@ -2,7 +2,7 @@ namespace Fmas12d.Api.RequestModels
 {
   public class UserAssessmentClaimPost
   {
-    public bool OwnPatient { get; set; }
+    public bool WithinContract { get; set; }
     public string EndPostcode { get; set; }
     public string StartPostcode { get; set; }
     public int? PreviousAssessmentId { get; set; }
@@ -11,7 +11,7 @@ namespace Fmas12d.Api.RequestModels
     internal virtual void MapToBusinessModel(Business.Models.UserAssessmentClaimCreate model)
     {
       model.EndPostcode = EndPostcode;
-      model.OwnPatient = OwnPatient;
+      model.WithinContract = WithinContract;
       model.StartPostcode = StartPostcode;
       model.PreviousAssessmentId = PreviousAssessmentId;
       model.NextAssessmentId = NextAssessmentId;

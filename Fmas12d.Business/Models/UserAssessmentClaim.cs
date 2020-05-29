@@ -14,13 +14,14 @@ namespace Fmas12d.Business.Models
       
       Assessment = new Assessment(entity.Assessment);
       AssessmentId = entity.AssessmentId;
-      ClaimReference = entity.ClaimReference;
-      ExportedDate = entity.ExportedDate;
-      LastUpdated = entity.ModifiedAt;
-      MileagePayment = entity.MileagePayment;
-      Mileage = entity.Mileage;
       AssessmentPayment = entity.AssessmentPayment;
+      ClaimReference = entity.ClaimReference;
       ClaimStatus = new ClaimStatus(entity.ClaimStatus);
+      ExportedDate = entity.ExportedDate;
+      IsWithinContract = entity.IsWithinContract;
+      LastUpdated = entity.ModifiedAt;
+      Mileage = entity.Mileage;
+      MileagePayment = entity.MileagePayment;
       User = entity.User == null ? null : new User(entity.User);
       UserId = entity.UserId;
       
@@ -37,7 +38,7 @@ namespace Fmas12d.Business.Models
     public decimal? AssessmentPayment { get; set; }
     public bool IsAttendanceConfirmed { get; set; }
     public bool? IsClaimable { get; set; }
-    public bool? IsUsersPatient { get; set; }
+    public bool? IsWithinContract { get; set; }
     public DateTimeOffset LastUpdated { get; set; }
     public decimal? Mileage { get; set; }
     public decimal? MileagePayment { get; set; }
@@ -70,7 +71,7 @@ namespace Fmas12d.Business.Models
         ClaimStatusId = ClaimStatusId,
         EndPostcode = EndPostcode,
         IsClaimable = IsClaimable,
-        IsUsersPatient = IsUsersPatient,
+        IsWithinContract = IsWithinContract,
         IsAttendanceConfirmed = IsAttendanceConfirmed,
         Mileage = Mileage,
         MileagePayment = MileagePayment,

@@ -55,7 +55,7 @@ namespace Fmas12d.Business.Migrations.Seeds
       userAssessmentClaim.IsActive = true;
       userAssessmentClaim.IsAttendanceConfirmed = true;
       userAssessmentClaim.IsClaimable = true;
-      userAssessmentClaim.IsUsersPatient = false;
+      userAssessmentClaim.IsWithinContract = false;
       userAssessmentClaim.Mileage = assessmentDoctor.Distance;
       userAssessmentClaim.MileagePayment = UserAssessmentClaimService.CalculateMileagePayment(
         true, 

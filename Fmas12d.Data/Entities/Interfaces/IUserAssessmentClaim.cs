@@ -13,7 +13,7 @@ namespace Fmas12d.Data.Entities
     decimal? AssessmentPayment { get; set; }
     bool IsAttendanceConfirmed { get; set; }
     bool? IsClaimable { get; set; }
-    bool? IsUsersPatient { get; set; }
+    bool? IsWithinContract { get; set; }
     decimal? Mileage { get; set; }
     decimal? MileagePayment { get; set; }
     DateTimeOffset? PaymentDate { get; set; }
