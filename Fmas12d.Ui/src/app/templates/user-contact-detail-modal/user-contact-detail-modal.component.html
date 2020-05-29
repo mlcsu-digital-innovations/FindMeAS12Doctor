@@ -8,7 +8,7 @@
       <div class="col-md-10">        
         <div class="row" name="contactDetailTypeId">
           <div class="col-md-6">
-            <label for="contactDetailTypeId">Contact Detail Type</label>
+            <label class="required-field" for="contactDetailTypeId">Contact Detail Type</label>
             <select
               class="custom-select custom-select-lg mb-2 form-control"
               formControlName="contactDetailTypeId"
@@ -40,7 +40,7 @@
     <!-- Postcode -->
     <div class="form-row">
       <div class="col-md-10">
-        <label for="postcode">Postcode</label>
+        <label class="required-field" for="postcode">Postcode</label>
         <div class="row" name="postcode">
           <div class="col-md-4">            
             <input
@@ -127,9 +127,9 @@
     </div>
     <!-- Address-->
     <div class="form-row" *ngIf="!controls.postcode.errors">
-      <div class="col-md-10 mb-2">
+      <div class="col-md-10">
         <label class="required-field" for="address">Address</label>
-        <select class="custom-select custom-select-lg mb-2 form-control"           
+        <select class="custom-select custom-select-lg form-control"           
           id="address"
           formControlName="address"
           #address  
@@ -148,13 +148,13 @@
       <div class="col-md-4 mb-2">
         <div
           class="invalid-field"
-          *ngIf="controls.address.errors.required"
+          *ngIf="!controls.postcode.errors && controls.address.errors.required"
         >
           <span>* Address is required</span>
         </div> 
         <div
           class="invalid-field"
-          *ngIf="controls.address.errors.SelectAddress"
+          *ngIf="!controls.postcode.errors && controls.address.errors.SelectAddress"
         >
           <span>* Please select an address</span>
         </div>               
@@ -192,7 +192,7 @@
       <div class="col-md-12">
         <div class="row" name="emailAddress">
           <div class="col-md-10">
-            <label for="email">Email</label>                     
+            <label class="required-field" for="email">Email</label>                     
             <input
               type="text"             
               class="form-control"   

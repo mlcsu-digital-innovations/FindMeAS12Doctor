@@ -5,7 +5,7 @@
   <form [formGroup]="financeDetailForm" class="form-style" (ngSubmit)="SaveFinanceDetail()">
     <!-- CCG -->
     <div class="form-row">
-      <div class="col-md-10 mb-2">
+      <div class="col-md-10">
         <label class="required-field" for="ccg">Clinical Commissioning Group</label>
         <input type="search" class="form-control" id="ccg" #ccg
           [class.is-invalid]="hasCcgSearchFailed" formControlName="ccg" [ngbTypeahead]="CcgSearch"
@@ -39,7 +39,7 @@
       <div class="col-md-12">
         <div class="row" name="vsrNumber">
           <div class="col-md-6">
-            <label for="town">VSR Number</label>
+            <label class="required-field" for="town">VSR Number</label>
             <input
               type="text"
               class="form-control"

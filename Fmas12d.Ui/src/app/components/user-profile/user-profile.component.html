@@ -56,12 +56,12 @@
             </div>
             <!-- DisplayName & GMC Number Errors -->
             <div class="form-row" *ngIf="submitted && (controls.displayName.errors || controls.gmcNumber.errors)">
-              <div class="col-md-4 offset-md-{{userProfile.isDoctor ? '2' : '5'}}" *ngIf="controls.displayName.errors">
+              <div class="col-md-4 mb-2 offset-md-{{userProfile.isDoctor ? '2' : '5'}}" *ngIf="controls.displayName.errors">
                 <div
                   class="invalid-field"
                   *ngIf="controls.displayName.errors.required"
                 >
-                  <span>* Display Name is required</span>
+                  <span>&nbsp;&nbsp;* Display Name is required</span>
                 </div>
               </div>
               <div
@@ -71,13 +71,13 @@
                   class="invalid-field"
                   *ngIf="controls.gmcNumber.errors.required"
                 >
-                  <span>* GMC Number is required</span>
+                  <span>&nbsp;* GMC Number is required</span>
                 </div>
                 <div
                   class="invalid-field"
                   *ngIf="controls.gmcNumber.errors.pattern"
                 >
-                  <span>* GMC Number must be 7 digits</span>
+                  <span>&nbsp;* GMC Number must be 7 digits</span>
                 </div>
               </div>
             </div>
@@ -96,7 +96,7 @@
               </div>
               <div class="col-md-4">
                 <select
-                  class="custom-select custom-select-lg mb-2 form-control"
+                  class="custom-select custom-select-lg form-control"
                   formControlName="genderTypeId"
                   #genderTypeId id="genderTypeId"
                 >
@@ -128,7 +128,7 @@
                   class="invalid-field"
                   *ngIf="controls.genderTypeId.errors.required"
                 >
-                  <span>* Gender is required </span>
+                  <span>&nbsp;&nbsp;* Gender is required </span>
                 </div>
               </div>
             </div>
@@ -151,13 +151,13 @@
                   class="invalid-field"
                   *ngIf="controls.emailAddress.errors.required"
                 >
-                  <span>* Email Address is required</span>
+                  <span>&nbsp;&nbsp;* Email Address is required</span>
                 </div>
                 <div
                   class="invalid-field"
                   *ngIf="controls.emailAddress.errors.email"
                 >
-                  <span>* Must be an email address</span>
+                  <span>&nbsp;&nbsp;* Must be an email address</span>
                 </div>
               </div>
             </div>
@@ -180,13 +180,13 @@
                   class="invalid-field"
                   *ngIf="controls.mobileNumber.errors.required"
                 >
-                  <span>* Mobile Number is required</span>
+                  <span>&nbsp;&nbsp;* Mobile Number is required</span>
                 </div>
                 <div
                 class="invalid-field"
                 *ngIf="controls.mobileNumber.errors.pattern"
               >
-                <span>* Mobile number must be digits only</span>
+                <span>&nbsp;&nbsp;* Mobile number must be digits only</span>
               </div>
               </div>
             </div>
@@ -216,7 +216,7 @@
             <!-- Specialities -->
             <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
-                <label class="required-field">Specialities</label>
+                <label class="required-field">Specialities:</label>
               </div>
               <div class="col-md-4">
                 <ng-multiselect-dropdown
@@ -239,7 +239,7 @@
                   class="invalid-field"
                   *ngIf="controls.specialities.errors.required"
                 >
-                  <span>* Please select one or more specialities</span>
+                  <span>&nbsp;&nbsp;* Please select one or more specialities</span>
                 </div>
               </div>
             </div>
@@ -339,7 +339,7 @@
                   class="invalid-field"
                   *ngIf="controls.contactDetails.errors.baseRequired"
                 >
-                  <span>* Please add a Base contact detail</span>
+                  <span>&nbsp;&nbsp;* Please add a Base contact detail</span>
                 </div>
               </div>
             </div>

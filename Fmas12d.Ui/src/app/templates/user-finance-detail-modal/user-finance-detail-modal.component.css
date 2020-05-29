@@ -1,3 +1,8 @@
+.required-field::after {
+  color: red;
+  content: " *";
+}
+
 .btn-spaced {
   margin-left: 10px;
 }
