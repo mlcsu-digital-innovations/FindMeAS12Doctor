@@ -58,8 +58,12 @@ export class ClaimListComponent implements OnInit {
 
       this.claimsList$.subscribe(
         result => {
-          this.hasVisibleData = result.length > 0;
-          this.activeClaims = result;
+          if (result !== null) {
+            this.hasVisibleData = result.length > 0;
+            this.activeClaims = result;
+          } else {
+            this.hasVisibleData = false;
+          }
         },
         error => {
           this.toastService.displayError({
