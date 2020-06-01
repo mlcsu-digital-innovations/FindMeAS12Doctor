@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { OidcSecurityService, AuthorizationResult, AuthorizationState } from 'angular-auth-oidc-client';
 import { RouterService } from './services/router/router.service';
+import { UserDetailsService } from './services/user/user-details.service';
+import { Observable } from 'rxjs';
+import { User } from './interfaces/user';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +12,11 @@ import { RouterService } from './services/router/router.service';
 })
 export class AppComponent {
   title = 'Fmas12d';
-
+  user$: Observable<User>;
+  
   constructor(public oidcSecurityService: OidcSecurityService,
-    private routerService: RouterService,
+              private routerService: RouterService,
+              private userDetailsService: UserDetailsService
   ) {
     if (this.oidcSecurityService.moduleSetup) {
       this.onOidcModuleSetup();
@@ -63,9 +68,18 @@ export class AppComponent {
   private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
     
     const path = this.read('redirect');
-    if (authorizationResult.authorizationState === AuthorizationState.authorized) {
+    if (authorizationResult.authorizationState === AuthorizationState.authorized) {      
       if (path === '/') {
-        this.routerService.navigate(['/referral/list']);
+        this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+          if (user.isDoctor) {
+            this.routerService.navigate(['/doctor/claims/list']);
+          }
+          else if (user.isFinance) {
+            this.routerService.navigate(['/finance/claims/list']);
+          } else {
+            this.routerService.navigate(['/referral/list']);
+          }
+        });        
       }
       else if (path) {        
         this.routerService.navigate([path]);
