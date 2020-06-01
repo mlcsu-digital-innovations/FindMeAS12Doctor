@@ -121,24 +121,26 @@ export class FinanceClaimListService {
       ).subscribe((result: FinanceClaim[]) => {
         this.rawClaimsList = result;
 
-        this._statusFilter =
-        result.map((x: FinanceClaim) => (
-          {id: x.claimStatus.id, name: x.claimStatus.name, selected: false})
-        )
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+        if (result !== null) {
+          this._statusFilter =
+          result.map((x: FinanceClaim) => (
+            {id: x.claimStatus.id, name: x.claimStatus.name, selected: false})
+          )
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
 
-        this._ccgFilter =
-        result.map((x: FinanceClaim) => ({id: x.ccg.id, name: x.ccg.name, selected: false}))
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+          this._ccgFilter =
+          result.map((x: FinanceClaim) => ({id: x.ccg.id, name: x.ccg.name, selected: false}))
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
 
-        this._claimantFilter =
-        result.map((x: FinanceClaim) => (
-          {id: x.claimant.id, name: x.claimant.displayName, selected: false})
-        )
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+          this._claimantFilter =
+          result.map((x: FinanceClaim) => (
+            {id: x.claimant.id, name: x.claimant.displayName, selected: false})
+          )
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter((status, i, arr) => arr.findIndex(t => t.id === status.id) === i);
+        }
 
         this._exportedFilter = [];
         this._exportedFilter.push({id: 1, name: 'Yes', selected: false});
@@ -203,51 +205,55 @@ export class FinanceClaimListService {
     // 1. sort
     let claims = this.sort(this.rawClaimsList, sortColumn, sortDirection, sortColumnType);
 
-    // 2. filter by keyword
-    claims = claims.filter(claim => this.matches(claim, searchTerm, this.pipe));
+    if (claims !== null) {
+      // 2. filter by keyword
+      claims = claims.filter(claim => this.matches(claim, searchTerm, this.pipe));
 
-    // 3. filter by items
+      // 3. filter by items
 
-    const activeStatusFilters = this._statusFilter
-      .filter(status => status.selected === true)
-      .map(status => status.id);
-    if (activeStatusFilters.length > 0) {
-      claims = claims.filter(claim => activeStatusFilters.includes(claim.claimStatus.id));
-      this._filteringOnStatus = true;
-    }
-
-    const activeCcgFilters = this._ccgFilter
-      .filter(status => status.selected === true)
-      .map(status => status.id);
-    if (activeCcgFilters.length > 0) {
-      claims = claims.filter(claim => activeCcgFilters.includes(claim.ccg.id));
-      this._filteringOnCcg = true;
-    }
-
-    const activeClaimantFilters = this._claimantFilter
-      .filter(status => status.selected === true)
-      .map(status => status.id);
-    if (activeClaimantFilters.length > 0) {
-      claims = claims.filter(claim => activeClaimantFilters.includes(claim.claimant.id));
-      this._filteringOnClaimant = true;
-    }
-
-    const activeExportedFilters = this._exportedFilter
-      .filter(status => status.selected === true)
-      .map(status => status.id);
-    if (activeExportedFilters.length === 1) {
-      if (activeExportedFilters.includes(1)) {
-        claims = claims.filter(claim => claim.exportedDate !== null);
-      } else {
-        claims = claims.filter(claim => claim.exportedDate === null);
+      const activeStatusFilters = this._statusFilter
+        .filter(status => status.selected === true)
+        .map(status => status.id);
+      if (activeStatusFilters.length > 0) {
+        claims = claims.filter(claim => activeStatusFilters.includes(claim.claimStatus.id));
+        this._filteringOnStatus = true;
       }
-      this._filteringOnExported = true;
+
+      const activeCcgFilters = this._ccgFilter
+        .filter(status => status.selected === true)
+        .map(status => status.id);
+      if (activeCcgFilters.length > 0) {
+        claims = claims.filter(claim => activeCcgFilters.includes(claim.ccg.id));
+        this._filteringOnCcg = true;
+      }
+
+      const activeClaimantFilters = this._claimantFilter
+        .filter(status => status.selected === true)
+        .map(status => status.id);
+      if (activeClaimantFilters.length > 0) {
+        claims = claims.filter(claim => activeClaimantFilters.includes(claim.claimant.id));
+        this._filteringOnClaimant = true;
+      }
+
+      const activeExportedFilters = this._exportedFilter
+        .filter(status => status.selected === true)
+        .map(status => status.id);
+      if (activeExportedFilters.length === 1) {
+        if (activeExportedFilters.includes(1)) {
+          claims = claims.filter(claim => claim.exportedDate !== null);
+        } else {
+          claims = claims.filter(claim => claim.exportedDate === null);
+        }
+        this._filteringOnExported = true;
+      }
+
+      // 4. paginate
+      claims = claims.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+
     }
 
-    const total = claims.length;
+    const total = claims !== null ? claims.length : 0;
 
-    // 4. paginate
-    claims = claims.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
     return of({claims, total});
   }
 }

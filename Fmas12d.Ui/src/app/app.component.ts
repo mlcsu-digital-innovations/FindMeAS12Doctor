@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { OidcSecurityService, AuthorizationResult, AuthorizationState } from 'angular-auth-oidc-client';
 import { RouterService } from './services/router/router.service';
-import { userInfo } from 'os';
 import { UserDetailsService } from './services/user/user-details.service';
 import { User } from './interfaces/user';
 
@@ -77,9 +76,17 @@ export class AppComponent {
     const path = this.read('redirect');
     if (authorizationResult.authorizationState === AuthorizationState.authorized) {
       if (path === '/') {
-        this.routerService.navigate(['/referral/list']);
-      }
-      else if (path) {
+        this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+          if (user.isDoctor) {
+            this.routerService.navigate(['/doctor/claims/list']);
+          }
+          else if (user.isFinance) {
+            this.routerService.navigate(['/finance/claims/list']);
+          } else {
+            this.routerService.navigate(['/referral/list']);
+          }
+        });
+      } else if (path) {
         this.routerService.navigate([path]);
       }
     } else {
