@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { RouterService } from './services/router/router.service';
+import { UserDetailsService } from './services/user/user-details.service';
+import { User } from './interfaces/user';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate, CanLoad {
 
   constructor(private routerService: RouterService,
-              private oidcSecurityService: OidcSecurityService) { }
+              private oidcSecurityService: OidcSecurityService,
+              private userDetailsService: UserDetailsService) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -23,6 +26,7 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
   }
 
   private checkUser(): any {
+
     return this.oidcSecurityService.getIsAuthorized().pipe(
       tap((isAuthorized: boolean) => {
         if (!isAuthorized) {
@@ -31,17 +35,24 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
         }
 
         this.oidcSecurityService.getUserData().subscribe(user => {
-          console.log(user);
 
+          // check session storage for user access
           const key = `userAppData_${user.oid}`;
+          const validatedUser = sessionStorage.getItem(key);
 
-          console.log('check session storage ...');
-          
-
-        }
-        );
-
-        return false;
+          if (validatedUser === null ) {
+            this.userDetailsService.getCurrentUserDetails().subscribe((usr: User) => {
+              sessionStorage.setItem(key, '');
+              return true;
+            }, err => {
+              // user isn't valid
+              this.routerService.navigate(['/unauthorized']);
+              return false;
+            });
+          } else {
+            return true;
+          }
+        });
       })
     );
   }

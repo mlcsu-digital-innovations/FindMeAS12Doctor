@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { OidcSecurityService, AuthorizationResult, AuthorizationState } from 'angular-auth-oidc-client';
 import { RouterService } from './services/router/router.service';
+import { userInfo } from 'os';
+import { UserDetailsService } from './services/user/user-details.service';
+import { User } from './interfaces/user';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +13,10 @@ import { RouterService } from './services/router/router.service';
 export class AppComponent {
   title = 'Fmas12d';
 
-  constructor(public oidcSecurityService: OidcSecurityService,
+  constructor(
+    public oidcSecurityService: OidcSecurityService,
     private routerService: RouterService,
+    private userDetailsService: UserDetailsService,
   ) {
     if (this.oidcSecurityService.moduleSetup) {
       this.onOidcModuleSetup();
@@ -42,6 +47,13 @@ export class AppComponent {
   }
 
   logout() {
+
+    // remove the user session data
+    this.oidcSecurityService.getUserData()
+    .subscribe(user => {
+      sessionStorage.removeItem(`userAppData_${user.oid}`);
+    });
+
     this.oidcSecurityService.logoff();
   }
 
