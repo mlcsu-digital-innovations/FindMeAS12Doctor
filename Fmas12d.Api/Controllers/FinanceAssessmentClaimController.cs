@@ -64,7 +64,7 @@ namespace Fmas12d.Api.Controllers
 
         if (businessModels == null || !businessModels.Any())
         {
-          return NoContent();
+          return Ok(new List<ViewModels.FinanceAssessmentClaim>());
         }
         else
         {
