@@ -821,7 +821,7 @@ export class ReferralEditComponent implements OnInit {
         this.residentialPostcodeField.value !==
           this.initialReferralDetails.patientResidentialPostcode) {
       this.residentialPostcodeField.setErrors({ NotValidated: true});
-      this.residentialPostcodeValidationMessage = 'Postcode has not been validated';
+      this.residentialPostcodeValidationMessage = '* Postcode has not been validated';
       canContinue = false;
     }
 
