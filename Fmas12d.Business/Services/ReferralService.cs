@@ -15,10 +15,12 @@ namespace Fmas12d.Business.Services
     IReferralService
   {
     private readonly IPatientService _patientService;
+    private readonly ILocationDetailService _locationDetailsService;
     private readonly IUserService _userService;
     public ReferralService(
       ApplicationContext context,
       IPatientService patientService,
+      ILocationDetailService locationDetailService,
       IUserClaimsService userClaimsService,
       IUserService userService
     )
@@ -26,6 +28,7 @@ namespace Fmas12d.Business.Services
     {
       _patientService = patientService;
       _userService = userService;
+      _locationDetailsService = locationDetailService;
     }
 
     public async Task<bool> CloseAsync(int id)
@@ -138,14 +141,33 @@ namespace Fmas12d.Business.Services
 
     public async Task<int?> GetCcgIdFromReferralPatient(int id)
     {
-      int? ccgId = await _context.Referrals
+      int? ccgId;
+      Entities.Referral referral = await _context.Referrals
                                  .Include(r => r.Patient)
                                  .Where(r => r.Id == id)
                                  .WhereIsActiveOrActiveOnly(true)
                                  .AsNoTracking(true)
-                                 .Select(r => r.Patient.CcgId)
                                  .SingleOrDefaultAsync();
 
+      ccgId = referral.Patient.CcgId;
+
+      // if ccgId cannot be obtained from the referral then
+      // try to obtain it from the patients residential postcode
+      if (ccgId == null && referral.Patient.ResidentialPostcode != null) {
+
+        Location patientLocation =
+          await _locationDetailsService.GetPostcodeDetailsAsync(referral.Patient.ResidentialPostcode);
+
+        if (patientLocation.CcgShortCode != null) {
+          Entities.Ccg ccg = await _context.Ccgs
+            .Where(c => c.ShortCode == patientLocation.CcgShortCode)
+            .SingleOrDefaultAsync();
+
+          if (ccg != null) {
+            ccgId = ccg.Id;
+          }
+        }
+      }
       return ccgId;
     }
 

@@ -43,6 +43,7 @@ namespace Fmas12d.Business.Models.SearchModels
       public string Parish {get; set;}
       public string Parliamentary_Constituency {get; set;}
       public string Ccg {get; set;}
+      public string Ccg_Id { get; set; }
       public string Ced {get; set;}
       public string Nuts {get; set;}
     }

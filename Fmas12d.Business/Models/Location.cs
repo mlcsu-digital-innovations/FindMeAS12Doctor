@@ -8,7 +8,7 @@ namespace Fmas12d.Business.Models
     public Location(PostcodeIoResult model)
     {
       if (model == null) return;
-
+      CcgShortCode = model.Result.Codes.Ccg_Id;
       Latitude = model.Result.Latitude;
       Longitude = model.Result.Longitude;
       Postcode = model.Result.Postcode;
@@ -25,6 +25,7 @@ namespace Fmas12d.Business.Models
       Postcode = entity.Postcode;
     }
 
+    public string CcgShortCode { get; set; }
     public int? ContactDetailId { get; set; }
     public ContactDetail ContactDetail { get; set; }
     public bool HasContactDetailId { get { return ContactDetailId != null; } }
