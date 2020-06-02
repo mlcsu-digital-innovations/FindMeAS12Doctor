@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { UserDetailsService } from 'src/app/services/user/user-details.service.js';
 import { User } from 'src/app/interfaces/user.js';
 import { version } from '../../../../package.json';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -12,9 +13,10 @@ import { version } from '../../../../package.json';
 })
 export class NavbarComponent implements OnInit {
 
+  public homePageLink: string;
   public version: string = version;
   isAuthorized$: Observable<boolean>;
-  user$: Observable<User>;
+  user$: Observable<User>;  
 
   constructor(
     public oidcSecurityService: OidcSecurityService,
@@ -22,8 +24,18 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.isAuthorized$ = this.oidcSecurityService.getIsAuthorized();
+    this.isAuthorized$ = this.oidcSecurityService.getIsAuthorized();    
     this.user$ = this.userDetailsService.getCurrentUserDetails();
+    this.user$.subscribe((user: User) => {
+      if (user.isDoctor) {
+        this.homePageLink = '/doctor/claims/list';
+      }
+      else if (user.isFinance) {
+        this.homePageLink = '/finance/claims/list';
+      } else {
+        this.homePageLink = '/referral/list';
+      }
+    });
   }
 
   login() {
@@ -36,11 +48,5 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.oidcSecurityService.logoff();
-  }
-
-  home(): string {
-    // TODO: replace with switch
-    return '/referral/list';
-
   }
 }
