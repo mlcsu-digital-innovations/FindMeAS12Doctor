@@ -40,15 +40,14 @@ namespace Fmas12d.Business.Migrations.Seeds
 
       userAssessmentClaim.AssessmentId = assessmentId;
       userAssessmentClaim.AssessmentPayment = UserAssessmentClaimService.CalculateAssessmentPayment(
-        userAssessmentClaim.Assessment.IsSuccessful.Value,
+        userAssessmentClaim.Assessment.IsSuccessful,
         ccg.SuccessfulAssessmentPayment, 
-        ccg.UnsuccessfulPencePerMile
+        ccg.UnsuccessfulPencePerMile,
+        true
       );
       userAssessmentClaim.ClaimReference = UserAssessmentClaimService.CreateClaimReference(
         assessmentId,
-        userAssessmentClaim.Assessment.CompletedTime.Value,
-        userAssessmentClaim.Assessment.Postcode
-
+        assessmentDoctor.DoctorUserId        
       );
       userAssessmentClaim.ClaimStatusId = Models.ClaimStatus.SUBMITTED;
       userAssessmentClaim.EndPostcode = userAssessmentClaim.Assessment.Postcode;

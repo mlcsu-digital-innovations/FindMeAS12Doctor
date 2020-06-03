@@ -11,6 +11,11 @@ namespace Fmas12d.Business.Exceptions
     {
     }
 
+    public EntityNotFoundException(string typeName, string whereClause, string value)
+      : base($"{typeName} with an {whereClause} of {value} does not exist.")
+    {
+    }
+
     protected EntityNotFoundException(SerializationInfo info,
                                       StreamingContext context)
       : base(info, context)

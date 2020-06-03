@@ -33,7 +33,7 @@ namespace Fmas12d.Business.Services
       Serilog.Log.Debug("FcmKey config {FcmKey}", _fcmKey);
       if (string.IsNullOrWhiteSpace(_fcmKey))
       {
-        Serilog.Log.Error("FcmKey in configuration file is blank");
+        Serilog.Log.Warning("FcmKey in configuration file is blank");
       }
     }
 
