@@ -58,12 +58,12 @@ namespace Fmas12d.Business.Services
       }
 
       // get the available contact detail types
-      IEnumerable<ContactDetailType> contactDetailTypes = 
+      IEnumerable<ContactDetailType> contactDetailTypes =
         await _contactDetailTypeService.GetAsync(userId, true, true);
 
       model.UserContactDetailTypes = contactDetailTypes.Select(cd => cd).ToList();
 
-      IEnumerable<AssessmentLocation> otherAssessments = 
+      IEnumerable<AssessmentLocation> otherAssessments =
         await GetOtherAssessments(assessmentId, userId);
 
       model.PreviousAssessmentLocations =
@@ -103,29 +103,41 @@ namespace Fmas12d.Business.Services
       int assessmentId,
       int userId,
       UserAssessmentClaimCreate model
-    ) {
+    )
+    {
 
       Entities.Assessment assessment = await GetAssessmentAndCcgAsync(assessmentId);
       await GetPreviousClaimsCountAsync(userId, assessmentId);
 
       // ToDo: Sort out rules determining if claim can be made or not
 
-      UserAssessmentClaimResult assessmentClaim = new UserAssessmentClaimResult();
-      assessmentClaim.IsValidClaim = true; // ToDo: sort this!
-      assessmentClaim.Mileage = await CalculateDistanceAsync(assessment, model);
-      
-      assessmentClaim.MileagePayment = assessment.IsSuccessful == true 
-        ? assessmentClaim.Mileage * assessment.Ccg.SuccessfulPencePerMile
-        : assessmentClaim.Mileage * assessment.Ccg.UnsuccessfulPencePerMile;
+      UserAssessmentClaimResult assessmentClaim = new UserAssessmentClaimResult
+      {
+        // ToDo: Use payment rules to validate claims
+        IsValidClaim = true,
+        Mileage = await CalculateDistanceAsync(assessment, model)
+      };
 
-      assessmentClaim.AssessmentPayment = assessment.IsSuccessful == true
-        ? assessment.Ccg.SuccessfulAssessmentPayment
-        : assessment.Ccg.FailedAssessmentPayment;
+      assessmentClaim.MileagePayment = CalculateMileagePayment(
+        assessment.IsSuccessful,
+        assessment.Ccg.SuccessfulPencePerMile,
+        assessment.Ccg.UnsuccessfulPencePerMile,
+        assessmentClaim.Mileage
+      );
+
+      // ToDo: Payment rules to calculate payments within contract
+      assessmentClaim.AssessmentPayment = CalculateAssessmentPayment(
+        assessment.IsSuccessful,
+        assessment.Ccg.SuccessfulAssessmentPayment,
+        assessment.Ccg.FailedAssessmentPayment,
+        model.IsWithinContract
+      );
 
       return assessmentClaim;
     }
 
-    public async Task<UserAssessmentClaimList> GetAssessmentClaimsByUserIdAsync(int userId) {
+    public async Task<UserAssessmentClaimList> GetAssessmentClaimsByUserIdAsync(int userId)
+    {
 
       UserAssessmentClaimList userAssessmentClaimList = new UserAssessmentClaimList();
 
@@ -164,7 +176,8 @@ namespace Fmas12d.Business.Services
       int assessmentId,
       int userId,
       UserAssessmentClaimCreate model
-    ) {
+    )
+    {
 
       Entities.Assessment assessment = await GetAssessmentAndCcgAsync(assessmentId);
       await GetPreviousClaimsCountAsync(userId, assessmentId);
@@ -173,10 +186,10 @@ namespace Fmas12d.Business.Services
 
       UserAssessmentClaim assessmentClaim = new UserAssessmentClaim();
       assessmentClaim.Mileage = await CalculateDistanceAsync(assessment, model);
-      
+
       assessmentClaim.AssessmentId = assessmentId;
       assessmentClaim.EndPostcode = model.EndPostcode;
-      assessmentClaim.IsWithinContract = model.WithinContract;
+      assessmentClaim.IsWithinContract = model.IsWithinContract;
       assessmentClaim.NextAssessmentId = model.NextAssessmentId;
       assessmentClaim.PreviousAssessmentId = model.PreviousAssessmentId;
       assessmentClaim.StartPostcode = model.StartPostcode;
@@ -186,9 +199,8 @@ namespace Fmas12d.Business.Services
 
       assessmentClaim.UserId = userId;
       assessmentClaim.ClaimStatusId = ClaimStatus.SUBMITTED;
-      
-      assessmentClaim.ClaimReference =
-        CreateClaimReference(assessmentId, assessment.CompletedTime.Value, assessment.Postcode);
+
+      assessmentClaim.ClaimReference = CreateClaimReference(assessmentId, userId);
 
       assessmentClaim.MileagePayment = CalculateMileagePayment(
         assessment.IsSuccessful.Value,
@@ -198,49 +210,63 @@ namespace Fmas12d.Business.Services
       );
 
       assessmentClaim.AssessmentPayment = CalculateAssessmentPayment(
-        assessment.IsSuccessful.Value,
+        assessment.IsSuccessful,
         assessment.Ccg.SuccessfulAssessmentPayment,
-        assessment.Ccg.FailedAssessmentPayment
+        assessment.Ccg.FailedAssessmentPayment,
+        model.IsWithinContract
       );
 
       return await CreateUserAssessmentClaimAsync(assessmentClaim);
     }
 
     public static decimal CalculateAssessmentPayment(
-      bool assessmentSuccessful,
+      bool? assessmentSuccessful,
       decimal ccgSuccessfulAssessmentPayment,
-      decimal ccgFailedAssessmentPayment
+      decimal ccgFailedAssessmentPayment,
+      bool IsWithinContract
     )
     {
-      return assessmentSuccessful 
-        ? ccgSuccessfulAssessmentPayment
-        : ccgFailedAssessmentPayment;
-    }    
+      if (IsWithinContract)
+      {
+        return 0m;
+      }
+      else
+      {
+        return assessmentSuccessful == true
+          ? ccgSuccessfulAssessmentPayment
+          : ccgFailedAssessmentPayment;
+      }
+    }
 
     public static decimal CalculateMileagePayment(
-      bool assessmentSuccessful,
+      bool? assessmentSuccessful,
       decimal ccgSuccessfulPencePerMile,
       decimal ccgUnsuccessfulPencePerMile,
       decimal mileage
     )
     {
-      return assessmentSuccessful 
+      return assessmentSuccessful == true
         ? mileage * ccgSuccessfulPencePerMile
         : mileage * ccgUnsuccessfulPencePerMile;
     }
 
-    public static string CreateClaimReference(int assessmentId, DateTimeOffset assessmentDate, string assessmentPostcode)
+    public static string CreateClaimReference(int assessmentId, int userId)
     {
-      string inwardCode = assessmentPostcode.Replace(" ", string.Empty);
-      inwardCode = inwardCode.Length > 3 
-        ? inwardCode.Substring(inwardCode.Length - 3, 3)
-        : inwardCode;
-      return $"{inwardCode}{assessmentDate.Day:D2}{assessmentDate.Month:D2}{assessmentId:D5}";
-    }  
+      if (assessmentId > 999999)
+      {
+        assessmentId -= 999999;
+      }
+      if (userId > 999999)
+      {
+        userId -= 999999;
+      }
+      return $"{assessmentId:D6}{userId:D6}";
+    }
 
     public async Task<IEnumerable<UserAssessmentClaim>> GetAssessmentClaimsListByUserIdAsync(
       int userId
-    ) {
+    )
+    {
       IEnumerable<UserAssessmentClaim> claims = await _context
       .UserAssessmentClaims
       .Include(uac => uac.Assessment)
@@ -248,7 +274,7 @@ namespace Fmas12d.Business.Services
       .WhereIsActiveOrActiveOnly(true)
       .Where(uac => uac.UserId == userId)
       .Select(uac => new UserAssessmentClaim(uac))
-      .ToListAsync(); 
+      .ToListAsync();
 
       return claims;
     }
@@ -273,7 +299,8 @@ namespace Fmas12d.Business.Services
     private async Task<IEnumerable<AssessmentLocation>> GetOtherAssessments(
       int assessmentId,
       int userId
-    ) {
+    )
+    {
       IEnumerable<AssessmentLocation> otherAssessments = await _context
       .AssessmentDoctors
       .Include(ad => ad.Assessment)
@@ -281,15 +308,16 @@ namespace Fmas12d.Business.Services
       .Where(ad => ad.DoctorUserId == userId)
       .Where(ad => (ad.StatusId == AssessmentDoctorStatus.ALLOCATED) || (ad.StatusId == AssessmentDoctorStatus.ATTENDED))
       .Where(ad => ad.Assessment.Id != assessmentId)
-      .Select(ad => new AssessmentLocation {
+      .Select(ad => new AssessmentLocation
+      {
         Id = ad.AssessmentId,
         Address1 = ad.Assessment.Address1,
         Address2 = ad.Assessment.Address2,
         Address3 = ad.Assessment.Address3,
         Address4 = ad.Assessment.Address4,
-        AssessmentDate = 
-          ad.Assessment.ScheduledTime == null 
-          ? ad.Assessment.MustBeCompletedBy 
+        AssessmentDate =
+          ad.Assessment.ScheduledTime == null
+          ? ad.Assessment.MustBeCompletedBy
           : ad.Assessment.ScheduledTime,
         Postcode = ad.Assessment.Postcode
       })
@@ -316,7 +344,8 @@ namespace Fmas12d.Business.Services
       return userAssessmentClaim;
     }
 
-    private async Task<Entities.Assessment> GetAssessmentAndCcgAsync(int assessmentId) {
+    private async Task<Entities.Assessment> GetAssessmentAndCcgAsync(int assessmentId)
+    {
 
       Entities.Assessment assessment = await _context
       .Assessments
@@ -325,12 +354,14 @@ namespace Fmas12d.Business.Services
       .Where(a => a.Id == assessmentId)
       .SingleOrDefaultAsync();
 
-      if (assessment == null) 
+      if (assessment == null)
       {
         throw new ModelStateException("Id",
           $"An assessment with an id of {assessmentId} was not found.");
-      } else {
-        if (assessment.Ccg == null) 
+      }
+      else
+      {
+        if (assessment.Ccg == null)
         {
           throw new ModelStateException("Id",
             $"Unable to determine CCG for assessment with an id of {assessmentId}.");
@@ -340,7 +371,8 @@ namespace Fmas12d.Business.Services
       return assessment;
     }
 
-    private async Task<bool> ConfirmDoctorAssessmentAttendance(int userId, int assessmentId) {
+    private async Task<bool> ConfirmDoctorAssessmentAttendance(int userId, int assessmentId)
+    {
 
       bool attendanceConfirmed = await _context
       .AssessmentDoctors
@@ -351,7 +383,7 @@ namespace Fmas12d.Business.Services
       .Select(ad => ad.AttendanceConfirmedByUserId != null)
       .SingleOrDefaultAsync();
 
-      if (!attendanceConfirmed) 
+      if (!attendanceConfirmed)
       {
         throw new ModelStateException("Id",
          $"Unable to confirm attendance for user {userId} and assessment {assessmentId}.");
@@ -360,7 +392,8 @@ namespace Fmas12d.Business.Services
       return attendanceConfirmed;
     }
 
-    private async Task<int> GetPreviousClaimsCountAsync(int userId, int assessmentId) {
+    private async Task<int> GetPreviousClaimsCountAsync(int userId, int assessmentId)
+    {
 
       IEnumerable<Entities.UserAssessmentClaim> previousClaims = await _context
       .UserAssessmentClaims
@@ -373,7 +406,7 @@ namespace Fmas12d.Business.Services
       {
         throw new ModelStateException("Id",
           $"User {userId} has an existing claim for assessment with an id of {assessmentId}.");
-      } 
+      }
       else
       {
         return previousClaims.Count();
@@ -383,17 +416,18 @@ namespace Fmas12d.Business.Services
     private async Task<int> CalculateDistanceAsync(
       Entities.Assessment assessment,
       UserAssessmentClaimCreate model
-    ) {
-      Location assessmentLocation = 
+    )
+    {
+      Location assessmentLocation =
         await _locationDetailService.GetPostcodeDetailsAsync(assessment.Postcode);
-      Location startLocation = 
+      Location startLocation =
         await _locationDetailService.GetPostcodeDetailsAsync(model.StartPostcode);
-      
+
       Location endLocation;
 
       endLocation =
-        model.StartPostcode == model.EndPostcode 
-        ? startLocation 
+        model.StartPostcode == model.EndPostcode
+        ? startLocation
         : await _locationDetailService.GetPostcodeDetailsAsync(model.EndPostcode);
 
       decimal outDistance = await _distanceCalculationService.CalculateRoadDistanceBetweenPoints(
