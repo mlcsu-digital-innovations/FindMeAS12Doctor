@@ -14,11 +14,13 @@ namespace Fmas12d.Business.Services
     ServiceBase<Entities.Referral>,
     IReferralService
   {
+    private readonly ICcgService _ccgService;
     private readonly IPatientService _patientService;
     private readonly ILocationDetailService _locationDetailsService;
     private readonly IUserService _userService;
     public ReferralService(
       ApplicationContext context,
+      ICcgService ccgService,
       IPatientService patientService,
       ILocationDetailService locationDetailService,
       IUserClaimsService userClaimsService,
@@ -26,6 +28,7 @@ namespace Fmas12d.Business.Services
     )
       : base(context, userClaimsService)
     {
+      _ccgService = ccgService;
       _patientService = patientService;
       _userService = userService;
       _locationDetailsService = locationDetailService;
@@ -141,34 +144,49 @@ namespace Fmas12d.Business.Services
 
     public async Task<int?> GetCcgIdFromReferralPatient(int id)
     {
-      int? ccgId;
-      Entities.Referral referral = await _context.Referrals
+      Entities.Patient patient = await _context.Referrals
                                  .Include(r => r.Patient)
                                  .Where(r => r.Id == id)
                                  .WhereIsActiveOrActiveOnly(true)
                                  .AsNoTracking(true)
+                                 .Select(r => new Entities.Patient()
+                                 {
+                                   CcgId = r.Patient.CcgId,
+                                   Id = r.Patient.Id,
+                                   ResidentialPostcode = r.Patient.ResidentialPostcode
+                                 })
                                  .SingleOrDefaultAsync();
 
-      ccgId = referral.Patient.CcgId;
-
-      // if ccgId cannot be obtained from the referral then
-      // try to obtain it from the patients residential postcode
-      if (ccgId == null && referral.Patient.ResidentialPostcode != null) {
-
-        Location patientLocation =
-          await _locationDetailsService.GetPostcodeDetailsAsync(referral.Patient.ResidentialPostcode);
-
-        if (patientLocation.CcgShortCode != null) {
-          Entities.Ccg ccg = await _context.Ccgs
-            .Where(c => c.ShortCode == patientLocation.CcgShortCode)
-            .SingleOrDefaultAsync();
-
-          if (ccg != null) {
-            ccgId = ccg.Id;
+      if (patient.CcgId == null)
+      {
+        if (patient.ResidentialPostcode == null)
+        {
+          throw new ReferralServiceException(
+            $"Patient {patient.Id} does not have a CCG Id or a Residential Postcode and " +
+            "therefore the CCG Id for the assessment cannot be determined."
+          );
+        }
+        else
+        {
+          Location patientLocation =
+            await _locationDetailsService.GetPostcodeDetailsAsync(patient.ResidentialPostcode);
+          if (patientLocation.CcgShortCode == null)
+          {
+            throw new ReferralServiceException(
+              $"Postcode lookup for {patient.ResidentialPostcode} failed to find a CCG short " +
+              "code, therefore the CCG Id for the assessment cannot be determined."
+            );
+          }
+          else
+          {
+            return await _ccgService.GetIdFromShortCode(patientLocation.CcgShortCode);
           }
         }
       }
-      return ccgId;
+      else
+      {
+        return patient.CcgId;
+      }
     }
 
     public async Task<Referral> GetEditByIdAsync(
@@ -320,10 +338,10 @@ namespace Fmas12d.Business.Services
       if (entity.ReferralStatusId == ReferralStatus.CLOSED)
       {
         throw new ModelStateException(
-          "id", 
+          "id",
           $"Unable to close the referral with an id of {id} because it is already closed."
         );
-      }      
+      }
 
       return entity;
     }
