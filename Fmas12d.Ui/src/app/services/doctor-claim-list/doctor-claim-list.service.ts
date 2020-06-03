@@ -59,7 +59,7 @@ export class DoctorClaimListService {
   }
 
   matches(claim: UserAssessmentClaim, term: string, pipe: PipeTransform) {
-    return pipe.transform(claim.claimReference).includes(term.toLowerCase())
+    return claim.claimReference.toLowerCase().includes(term.toLowerCase())
       || claim.assessment.postcode.toLowerCase().includes(term.toLowerCase())
       || claim.claimStatus.name.toLowerCase().includes(term.toLowerCase());
   }
