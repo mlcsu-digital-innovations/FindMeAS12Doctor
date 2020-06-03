@@ -248,7 +248,6 @@ namespace Fmas12d.Business.Services
         .Include(ua => ua.ContactDetail.ContactDetailType)
         .Include(ua => ua.User)
         .Where(ua => ua.End >= from || ua.Start <= to)
-        .Where(ua => ua.UserAvailabilityStatusId == UserAvailabilityStatus.ON_CALL)
         .WhereIsActiveOrActiveOnly(activeOnly)
         .AsNoTracking(asNoTracking)
         .Select(UserOnCall.ProjectFromEntity)
