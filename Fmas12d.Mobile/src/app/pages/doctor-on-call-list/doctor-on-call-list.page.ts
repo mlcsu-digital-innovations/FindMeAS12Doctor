@@ -21,7 +21,7 @@ export class DoctorOnCallListPage {
     private router: Router,
     private loadingController: LoadingController) { }
 
-  hasOncallDetails() {
+  hasOnCallDetails() {
     return (
       this.onCallDoctorsConfirmed.length +
       this.onCallDoctorsUnconfirmed.length +
