@@ -48,6 +48,10 @@ form {
   background-color: #f7d7bb;
 }
 
+.on-call-doctor-row:hover td.notoncall {
+  background-color: lightgrey;
+}
+
 .table-on-call-doctor-list {  
   background-color: #fff;
   font-size: smaller;
