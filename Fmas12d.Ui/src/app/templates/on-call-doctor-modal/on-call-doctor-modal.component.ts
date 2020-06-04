@@ -10,6 +10,7 @@ import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor';
 import { OnCallDoctorList } from 'src/app/interfaces/on-call-doctor-list';
+import { OnCallDoctorListService } from 'src/app/services/on-call-doctor-list/on-call-doctor-list.service';
 import { PostcodeRegex } from 'src/app/constants/Constants';
 import { PostcodeValidationService }
   from 'src/app/services/postcode-validation/postcode-validation.service';
@@ -41,6 +42,8 @@ export class OnCallDoctorModalComponent implements OnInit {
   minDate: NgbDateStruct;
   onCallDoctorExists: boolean;
   onCallDoctorForm: FormGroup;
+  overlappingStart: Date;
+  overlappingEnd: Date;
   startDate: NgbDateStruct;
   startTime: NgbTimeStruct;
 
@@ -48,6 +51,7 @@ export class OnCallDoctorModalComponent implements OnInit {
     private contactDetailTypeService: ContactDetailTypeService,
     private doctorListService: DoctorListService,
     private formBuilder: FormBuilder,
+    private onCallDoctorListService: OnCallDoctorListService,
     private postcodeValidationService: PostcodeValidationService,
     private toastService: ToastService,
     private userDetailsService: UserDetailsService,
@@ -94,9 +98,9 @@ export class OnCallDoctorModalComponent implements OnInit {
       futureDateTime.setHours(futureDateTime.getHours() + 1);
 
       this.startDateField.setValue(this.ConvertToDateStruct(currentDateTime));
-      this.startTimeField.setValue(this.ConvertToTimeStruct(currentDateTime));
+      this.startTimeField.setValue(this.ConvertToTimeStruct(currentDateTime, true));
       this.endDateField.setValue(this.ConvertToDateStruct(futureDateTime));
-      this.endTimeField.setValue(this.ConvertToTimeStruct(futureDateTime));
+      this.endTimeField.setValue(this.ConvertToTimeStruct(futureDateTime, true));
     }
 
     this.OnChanges();
@@ -113,12 +117,16 @@ export class OnCallDoctorModalComponent implements OnInit {
     return dateStruct;
   }
 
-  ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
-
-    // round up to the next 5 minute interval
+  ConvertToTimeStruct(dateValue: Date, isCreating: boolean): NgbTimeStruct {
     const start = moment(dateValue);
-    const remainder = 5 - (start.minute() % 5);
-    const momentDate = moment(start).add(remainder, 'minutes');
+    let momentDate = moment(start);
+
+    if (isCreating) {
+      // round up to the next 5 minute interval      
+      const remainder = 5 - (start.minute() % 5);
+      momentDate = momentDate.add(remainder, 'minutes');
+    }
+    
     const timeStruct = {} as NgbTimeStruct;
     timeStruct.hour = momentDate.hour();
     timeStruct.minute = momentDate.minutes();
@@ -134,7 +142,7 @@ export class OnCallDoctorModalComponent implements OnInit {
       datePart.day,
       timePart.hour,
       timePart.minute,
-      timePart.second,
+      0,
       0
     );
   }
@@ -211,9 +219,9 @@ export class OnCallDoctorModalComponent implements OnInit {
     this.doctorSearchField.setValue(`${this.doctorName} - ${this.doctorGmcNumber}`);
     this.doctorIsValid = null;
     this.startDateField.setValue(this.ConvertToDateStruct(this.onCallDoctor.start));
-    this.startTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.start));
+    this.startTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.start, false));
     this.endDateField.setValue(this.ConvertToDateStruct(this.onCallDoctor.end));
-    this.endTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.end));
+    this.endTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.end, false));
 
     this.getContactDetails(this.onCallDoctor.userId);
     if (this.onCallDoctor.location.contactDetailId) {
@@ -435,6 +443,12 @@ export class OnCallDoctorModalComponent implements OnInit {
   }
 
   ValidateRegisteredDoctor() {
+    this.doctorName = null;
+    this.doctorGmcNumber = 0;
+    this.contactDetails = null;
+    this.locationField.setValue(null);
+    this.doctorSearchField.setErrors(null);
+
     this.userDetailsService.GetDoctorDetails(this.doctorSearchField.value.id)
       .subscribe((doctorDetails: UserDetails) => {
 
@@ -445,12 +459,23 @@ export class OnCallDoctorModalComponent implements OnInit {
           });
           this.doctorIsValid = false;
         } else {
-          this.doctorGmcNumber = doctorDetails.gmcNumber;
-          this.doctorId = doctorDetails.id;
-          this.doctorName = doctorDetails.displayName;
-          this.doctorIsValid = true;
-          this.locationField.setValue(null);
-          this.getContactDetails(doctorDetails.id);
+          let start: Date = this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
+          let end: Date = this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
+          let conflictingAvailabilities: OnCallDoctorList[] = this.onCallDoctorListService.availabilitiesForDoctor(doctorDetails.id, start, end);
+
+          if (conflictingAvailabilities.length > 0) {  
+            this.overlappingStart = new Date(conflictingAvailabilities[0].start);
+            this.overlappingEnd = new Date(conflictingAvailabilities[0].end);
+            this.doctorSearchField.setErrors({ OverlappingAvailability: true });
+          }
+          else {
+            this.doctorGmcNumber = doctorDetails.gmcNumber;
+            this.doctorId = doctorDetails.id;
+            this.doctorName = doctorDetails.displayName;
+            this.doctorIsValid = true;
+            this.locationField.setValue(null);
+            this.getContactDetails(doctorDetails.id);
+          }          
         }
       },
         (err) => {

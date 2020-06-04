@@ -131,6 +131,16 @@ export class OnCallDoctorListService {
   set sortDirection(sortDirection: SortDirection) { this._set({ sortDirection }); }
   set sortColumnType(sortColumnType: string) { this._set({ sortColumnType }); }  
 
+  availabilitiesForDoctor(userId: number, start: Date, end: Date): OnCallDoctorList[] {
+   return this._rawOnCallDoctorList.filter((onCallDoctorListItem: OnCallDoctorList) => 
+      userId == onCallDoctorListItem.userId &&
+      (
+        (start >= new Date(onCallDoctorListItem.start) && start <= new Date(onCallDoctorListItem.end)) || 
+        (end >= new Date(onCallDoctorListItem.start) && end <= new Date(onCallDoctorListItem.end))
+      )
+    );
+  }
+
   private _set(patch: Partial<State>) {
     if (this._rawOnCallDoctorList) {
       Object.assign(this._state, patch);

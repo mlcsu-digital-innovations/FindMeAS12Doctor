@@ -132,6 +132,11 @@
         <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
           <span>* Invalid doctor </span>
         </div>
+        <div *ngIf="doctorSearchField.errors.OverlappingAvailability" class="invalid-field">
+          <span>
+            * This on call period overlaps an existing availability period for this doctor: {{overlappingStart | date: 'dd/MM/yyyy HH:mm'}} to {{overlappingEnd | date: 'dd/MM/yyyy HH:mm'}}
+          </span>
+        </div>
       </div>
     </div>
     <div class="form-row">
