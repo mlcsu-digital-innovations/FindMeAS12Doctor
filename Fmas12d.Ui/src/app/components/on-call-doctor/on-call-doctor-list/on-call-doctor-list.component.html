@@ -23,7 +23,7 @@
                   class="btn btn-primary"
                   aria-disabled="true"
                   placement="top"
-                  ngbTooltip="Add a new on call doctor"
+                  ngbTooltip="Add a new On Call doctor"
                   [openDelay]="1000"
                   [closeDelay]="500"
                   tooltipClass="subtle-tooltip"
@@ -157,7 +157,7 @@
             </div>
             <div class="form-row" style="text-align: center;">
               <div class="col-md-12 empty-table" *ngIf="!onCallDoctorListService.loading$ && noOfOnCallDoctorsInList === 0">
-                There are currently no active on call doctors
+                There are currently no active On Call doctors
               </div>
             </div>
               <div class="d-flex justify-content-between p-2">
@@ -199,7 +199,7 @@
 
 <ng-template #deleteOnCallDoctorModal>
   <app-cancel-action-modal [modalTitle]="'Confirm On Call Doctor Delete'"
-    [modalBody]="'Please confirm that you wish to delete this on call doctor.'"
+    [modalBody]="'Please confirm that you wish to delete this On Call doctor.'"
     (actioned)="OnDeleteOnCallDoctorAction($event)">
   </app-cancel-action-modal>
 </ng-template>

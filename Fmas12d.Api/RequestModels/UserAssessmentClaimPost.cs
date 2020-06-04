@@ -11,7 +11,7 @@ namespace Fmas12d.Api.RequestModels
     internal virtual void MapToBusinessModel(Business.Models.UserAssessmentClaimCreate model)
     {
       model.EndPostcode = EndPostcode;
-      model.WithinContract = WithinContract;
+      model.IsWithinContract = WithinContract;
       model.StartPostcode = StartPostcode;
       model.PreviousAssessmentId = PreviousAssessmentId;
       model.NextAssessmentId = NextAssessmentId;

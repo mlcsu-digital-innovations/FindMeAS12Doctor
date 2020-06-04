@@ -110,7 +110,7 @@ export class OnCallDoctorListService {
       (error: any) => {
         this._loading$.next(false);
         this._onCallDoctorList$.error(
-          'Server Error: Unable to obtain on call doctor list! ' +
+          'Server Error: Unable to obtain On Call doctor list! ' +
           'Please try again in a few moments');
       }
     );  
