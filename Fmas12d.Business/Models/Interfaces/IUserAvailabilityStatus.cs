@@ -5,6 +5,7 @@ namespace Fmas12d.Business.Models
   {
     IList<UserAvailability> UserAvailabilities { get; set; }
 
+    bool IsOnCall { get; }
     string Name { get; set; }
   }
 }
