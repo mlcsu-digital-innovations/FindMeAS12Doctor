@@ -2,6 +2,6 @@
 <div class="page-content">
   <div class="jumbotron">
     <h1 class="display-4">You are not authorised to access the page.</h1>
-    <p>Please login to access the page.</p>
+    <p *ngIf="userUpn !== ''">The user account <strong>{{userUpn}}</strong> does not have access to this application.</p>
   </div>
 </div>
