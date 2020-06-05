@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { OidcSecurityService, AuthorizationResult, AuthorizationState } from 'angular-auth-oidc-client';
 import { RouterService } from './services/router/router.service';
 import { UserDetailsService } from './services/user/user-details.service';
-import { Observable } from 'rxjs';
 import { User } from './interfaces/user';
 
 @Component({
@@ -12,11 +11,11 @@ import { User } from './interfaces/user';
 })
 export class AppComponent {
   title = 'Fmas12d';
-  user$: Observable<User>;
-  
-  constructor(public oidcSecurityService: OidcSecurityService,
-              private routerService: RouterService,
-              private userDetailsService: UserDetailsService
+
+  constructor(
+    public oidcSecurityService: OidcSecurityService,
+    private routerService: RouterService,
+    private userDetailsService: UserDetailsService,
   ) {
     if (this.oidcSecurityService.moduleSetup) {
       this.onOidcModuleSetup();
@@ -47,6 +46,13 @@ export class AppComponent {
   }
 
   logout() {
+
+    // remove the user session data
+    this.oidcSecurityService.getUserData()
+    .subscribe(user => {
+      sessionStorage.removeItem(`userAppData_${user.oid}`);
+    });
+
     this.oidcSecurityService.logoff();
   }
 
@@ -54,7 +60,7 @@ export class AppComponent {
     if (window.location.hash) {
       this.oidcSecurityService.authorizedImplicitFlowCallback();
     } else {
-      if ('/autologin' !== window.location.pathname) {        
+      if ('/autologin' !== window.location.pathname) {
         this.write('redirect', window.location.pathname);
       }
       this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
@@ -66,9 +72,9 @@ export class AppComponent {
   }
 
   private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
-    
+
     const path = this.read('redirect');
-    if (authorizationResult.authorizationState === AuthorizationState.authorized) {      
+    if (authorizationResult.authorizationState === AuthorizationState.authorized) {
       if (path === '/') {
         this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
           if (user.isDoctor) {
@@ -79,9 +85,8 @@ export class AppComponent {
           } else {
             this.routerService.navigate(['/referral/list']);
           }
-        });        
-      }
-      else if (path) {        
+        });
+      } else if (path) {
         this.routerService.navigate([path]);
       }
     } else {
