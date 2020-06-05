@@ -2,7 +2,7 @@ import { AmhpAssessmentList } from '../../models/amhp-assessment-list.model';
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { REFERRALSTATUSASSESSMENTSCHEDULED } from 'src/app/constants/app.constants';
+import { REFERRALSTATUSASSESSMENTSCHEDULED, REFERRALSTATUS_SCHEDULED, REFERRALSTATUS_RESCHEDULING, REFERRALSTATUS_AWAITING_REVIEW, REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
 
 @Component({
   selector: 'app-amhp-assessment-list',
@@ -11,6 +11,7 @@ import { REFERRALSTATUSASSESSMENTSCHEDULED } from 'src/app/constants/app.constan
 })
 export class AmhpAssessmentListPage {
   public assessmentListLastUpdated: Date;
+  public assessmentListComplete: AmhpAssessmentList[] = [];
   public assessmentListScheduled: AmhpAssessmentList[] = [];
   public assessmentListUnscheduled: AmhpAssessmentList[] = [];
   private loading: HTMLIonLoadingElement;
@@ -28,12 +29,28 @@ export class AmhpAssessmentListPage {
     const request = this.assessmentService.getList();
     this.showLoading();
 
+    const scheduledStatuses: number[] =
+      [REFERRALSTATUS_SCHEDULED, REFERRALSTATUS_RESCHEDULING];
+
+    const completedStatuses: number[] =
+      [REFERRALSTATUS_AWAITING_REVIEW];
+
+    const unscheduledStatuses: number[] =
+      [REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
+      REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
+
     request.subscribe((result: AmhpAssessmentList[]) => {
       this.assessmentListLastUpdated = new Date();
+
       this.assessmentListScheduled = result
-        .filter(assessment => assessment.referralStatusId >= REFERRALSTATUSASSESSMENTSCHEDULED);
+        .filter(assessment => scheduledStatuses.includes(assessment.referralStatusId));
+
       this.assessmentListUnscheduled = result
-        .filter(assessment => assessment.referralStatusId < REFERRALSTATUSASSESSMENTSCHEDULED);
+        .filter(assessment => unscheduledStatuses.includes(assessment.referralStatusId));
+
+      this.assessmentListComplete = result
+        .filter(assessment => completedStatuses.includes(assessment.referralStatusId));
+
       this.closeLoading();
       this.closeRefreshing($event);
     }, error => {
