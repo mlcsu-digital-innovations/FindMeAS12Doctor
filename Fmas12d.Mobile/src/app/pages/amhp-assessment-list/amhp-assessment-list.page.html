@@ -62,7 +62,7 @@
         <ion-icon color="success" size="large" name="checkmark-circle"
           *ngIf="assessment.doctorHasAccepted === true">
         </ion-icon>
-        <ion-icon color="warning" size="large" name="help-circle" 
+        <ion-icon color="danger" size="large" name="help-circle" 
           *ngIf="assessment.doctorHasAccepted === null">
         </ion-icon>
         <ion-icon color="danger" size="large" name="close-circle"
@@ -75,6 +75,29 @@
         <h3>{{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
       </ion-label>
     </ion-item>
+
+    <br/>
+    <ion-list-header *ngIf="assessmentListComplete.length > 0">
+      Assessments Awaiting Review  
+    </ion-list-header>
+
+    <ion-item 
+      *ngFor="let assessment of assessmentListComplete"
+      detail="false"
+      [routerLink]="['/amhp-assessment-view/', assessment.id]"
+      routerDirection="forward"
+      >
+      <ion-avatar slot="start">
+        <ion-icon color="success" size="large" name="checkmark-circle">
+        </ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2><strong>{{assessment.postcode}}</strong></h2>
+        <h3>{{assessment.patientId}}</h3>
+        <h3>{{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
+      </ion-label>
+    </ion-item>
+
 
   </ion-list>
 
