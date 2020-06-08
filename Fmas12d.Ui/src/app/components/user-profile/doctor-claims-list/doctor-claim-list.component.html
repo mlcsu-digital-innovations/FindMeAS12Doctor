@@ -29,45 +29,47 @@
               </div>
             </div>
             <div class="form-row">
-            <table class="table">
-              <thead>
-                <th scope="col" sortable="claimReference" (sort)="onSort($event)">Claim Reference</th>
-                <th
-                  scope="col"
-                  sortable="assessment.scheduledTime"
-                  (sort)="onSort($event)"
-                  columnType='dateTime'
-                >
-                  Assessment Date
-                </th>
-                <th scope="col" sortable="assessment.postcode" (sort)="onSort($event)">Postcode</th>
-                <th scope="col">Claim Amount</th>
-                <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let claim of claimsList$ | async; index as i"
-                  routerLink="/doctor/claim/{{claim.id}}"
-                  class="clickable"
-                >
-                  <td>
-                    <ngb-highlight [result]="claim.claimReference" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.assessment.scheduledTime | date" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.assessment.postcode" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.mileagePayment + claim.assessmentPayment | currency: 'GBP'" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              <div class="table-responsive-xl">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <th scope="col" sortable="claimReference" (sort)="onSort($event)">Claim Reference</th>
+                    <th
+                      scope="col"
+                      sortable="assessment.scheduledTime"
+                      (sort)="onSort($event)"
+                      columnType='dateTime'
+                    >
+                      Assessment Date
+                    </th>
+                    <th scope="col" sortable="assessment.postcode" (sort)="onSort($event)">Postcode</th>
+                    <th scope="col">Claim Amount</th>
+                    <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let claim of claimsList$ | async; index as i"
+                      routerLink="/doctor/claim/{{claim.id}}"
+                      class="clickable"
+                    >
+                      <td>
+                        <ngb-highlight [result]="claim.claimReference" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.assessment.scheduledTime | date" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.assessment.postcode" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.mileagePayment + claim.assessmentPayment | currency: 'GBP'" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
           </div>
 
 

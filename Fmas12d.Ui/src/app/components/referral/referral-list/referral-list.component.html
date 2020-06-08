@@ -43,316 +43,318 @@
               </div>
             </div>
             <div class="form-row">
-              <table class="table table-bordered table-sm table-referral-list">
-                <thead>
-                  <tr>
-                    <th class="text-center" 
-                        scope="col" 
-                        sortable="referralId" 
-                        columnType='number' 
-                        (sort)="onSort($event)">
-                        Referral Id
-                    </th>
-                    <th class="text-center" 
-                        scope="col" 
-                        sortable="patientIdentifier" 
-                        columnType='string' 
-                        (sort)="onSort($event)">
-                        Patient Identifier
-                    </th>
-                    <th class="text-center" 
-                        scope="col" 
-                        sortable="leadAmhp" 
-                        columnType='string' 
-                        (sort)="onSort($event)">
-                        Lead AMHP
-                    </th>
-                    <th class="sm-col text-center" 
-                        scope="col" 
-                        sortable="numberOfAssessmentAttempts" 
-                        columnType='number' 
-                        (sort)="onSort($event)">
-                        Assessment Attempts
-                    </th>
-                    <th class="sm-col text-center" 
-                        scope="col" 
-                        sortable="assessmentLocationPostcode" 
-                        columnType='string' 
-                        (sort)="onSort($event)">
-                        Assessment Postcode
-                    </th>
-                    <th class="text-center" 
-                        scope="col" 
-                        sortable="specialityName" 
-                        columnType='string' 
-                        (sort)="onSort($event)">
-                        Speciality
-                    </th>
-                    <th class="text-center" 
-                        scope="col" 
-                        sortable="timescale" 
-                        columnType='dateTime' 
-                        (sort)="onSort($event)">
-                        Timescale
-                    </th>
-                    <th class="text-center" 
-                        scope="col" 
-                        sortable="statusName" 
-                        columnType='string' 
-                        (sort)="onSort($event)">
-                        Status
-                    </th>
-                    <th class="sm-col text-center" 
-                        scope="col">
-                      <span ngbTooltip="Received / Accepted"
-                            [openDelay]="1000"
-                            [closeDelay]="200">No. of Responses<br/>Rec. / Acc.</span>
-                    </th>
-                    <th class="sm-col text-center" 
-                        scope="col">
-                      <span ngbTooltip="Selected / Allocated / Attended"
-                            [openDelay]="1000"
-                            [closeDelay]="200">No. of Doctors<br/>Sel. / All. / Att.</span>                       
-                    </th>
-                    <th class="sm-col text-center" 
-                        scope="col">
-                      &nbsp;
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="referral-row" *ngFor="let referral of referralList$ | async">
-                    <td class="text-center referral-link">
-                      <a
-                        routerLink="/referral/edit/{{referral.referralId}}"
-                        class="clickable"
-                        placement="top"
-                        ngbTooltip="Edit Referral"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.referralId" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td class="referral-link">
-                      <a
-                        routerLink="/referral/edit/{{referral.referralId}}"
-                        class="clickable"
-                        placement="top"
-                        ngbTooltip="Edit Referral"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td>
-                      <a
-                        routerLink="/referral/edit/{{referral.referralId}}"
-                        class="clickable"
-                        placement="top"
-                        ngbTooltip="Edit Referral"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.leadAmhp" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
+              <div class="table-responsive-xl">
+                <table class="table table-bordered table-sm table-referral-list">
+                  <thead>
+                    <tr>
+                      <th class="text-center" 
+                          scope="col" 
+                          sortable="referralId" 
+                          columnType='number' 
+                          (sort)="onSort($event)">
+                          Referral Id
+                      </th>
+                      <th class="text-center" 
+                          scope="col" 
+                          sortable="patientIdentifier" 
+                          columnType='string' 
+                          (sort)="onSort($event)">
+                          Patient Identifier
+                      </th>
+                      <th class="text-center" 
+                          scope="col" 
+                          sortable="leadAmhp" 
+                          columnType='string' 
+                          (sort)="onSort($event)">
+                          Lead AMHP
+                      </th>
+                      <th class="sm-col text-center" 
+                          scope="col" 
+                          sortable="numberOfAssessmentAttempts" 
+                          columnType='number' 
+                          (sort)="onSort($event)">
+                          Assessment Attempts
+                      </th>
+                      <th class="sm-col text-center" 
+                          scope="col" 
+                          sortable="assessmentLocationPostcode" 
+                          columnType='string' 
+                          (sort)="onSort($event)">
+                          Assessment Postcode
+                      </th>
+                      <th class="text-center" 
+                          scope="col" 
+                          sortable="specialityName" 
+                          columnType='string' 
+                          (sort)="onSort($event)">
+                          Speciality
+                      </th>
+                      <th class="text-center" 
+                          scope="col" 
+                          sortable="timescale" 
+                          columnType='dateTime' 
+                          (sort)="onSort($event)">
+                          Timescale
+                      </th>
+                      <th class="text-center" 
+                          scope="col" 
+                          sortable="statusName" 
+                          columnType='string' 
+                          (sort)="onSort($event)">
+                          Status
+                      </th>
+                      <th class="sm-col text-center" 
+                          scope="col">
+                        <span ngbTooltip="Received / Accepted"
+                              [openDelay]="1000"
+                              [closeDelay]="200">No. of Responses<br/>Rec. / Acc.</span>
+                      </th>
+                      <th class="sm-col text-center" 
+                          scope="col">
+                        <span ngbTooltip="Selected / Allocated / Attended"
+                              [openDelay]="1000"
+                              [closeDelay]="200">No. of Doctors<br/>Sel. / All. / Att.</span>                       
+                      </th>
+                      <th class="sm-col text-center" 
+                          scope="col">
+                        &nbsp;
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="referral-row" *ngFor="let referral of referralList$ | async">
+                      <td class="text-center referral-link">
+                        <a
+                          routerLink="/referral/edit/{{referral.referralId}}"
+                          class="clickable"
+                          placement="top"
+                          ngbTooltip="Edit Referral"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.referralId" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td class="referral-link">
+                        <a
+                          routerLink="/referral/edit/{{referral.referralId}}"
+                          class="clickable"
+                          placement="top"
+                          ngbTooltip="Edit Referral"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.patientIdentifier" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          routerLink="/referral/edit/{{referral.referralId}}"
+                          class="clickable"
+                          placement="top"
+                          ngbTooltip="Edit Referral"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.leadAmhp" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
 
-                    <ng-template #tipContent>
-                      <span *ngIf="referral.currentAssessmentId == null">Create Assessment</span>
-                      <span *ngIf="referral.currentAssessmentId != null">View Assessment</span>
-                    </ng-template>
+                      <ng-template #tipContent>
+                        <span *ngIf="referral.currentAssessmentId == null">Create Assessment</span>
+                        <span *ngIf="referral.currentAssessmentId != null">View Assessment</span>
+                      </ng-template>
 
-                    <ng-template #assessmentTip>
-                      <span *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) == true">Allocate Doctors</span>
-                      <span *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) == false">View Assessment</span>
-                    </ng-template>
+                      <ng-template #assessmentTip>
+                        <span *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) == true">Allocate Doctors</span>
+                        <span *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) == false">View Assessment</span>
+                      </ng-template>
 
-                    <td class="text-center">
-                      <a
-                        [routerLink]="referral.currentAssessmentId == null
-                          ? ['/assessment/new/', referral.referralId]
-                          : ['/assessment/view', referral.referralId]"
-                        class="clickable"
-                        placement="top"
-                        [ngbTooltip]="tipContent"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.numberOfAssessmentAttempts" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td>
-                      <a
-                        [routerLink]="referral.currentAssessmentId == null
-                          ? ['/assessment/new/', referral.referralId]
-                          : ['/assessment/view', referral.referralId]"
-                        class="clickable"
-                        placement="top"
-                        [ngbTooltip]="tipContent"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.assessmentLocationPostcode" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td>
-                      <a
-                        [routerLink]="referral.currentAssessmentId == null
-                          ? ['/assessment/new/', referral.referralId]
-                          : ['/assessment/view', referral.referralId]"
-                        class="clickable"
-                        placement="top"
-                        [ngbTooltip]="tipContent"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.specialityName" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td>
-                      <a
-                        [routerLink]="referral.currentAssessmentId == null
-                          ? ['/assessment/new/', referral.referralId]
-                          : ['/assessment/view', referral.referralId]"
-                        class="clickable"
-                        placement="top"
-                        [ngbTooltip]="tipContent"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.timescale | date:'dd/MM/yyyy HH:mm'" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td>
-                      <a
-                        [routerLink]="referral.currentAssessmentId == null
-                          ? ['/assessment/new/', referral.referralId]
-                          : ['/assessment/view', referral.referralId]"
-                        class="clickable"
-                        placement="top"
-                        [ngbTooltip]="tipContent"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.statusName" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                    </td>
-                    <td class="text-center">
-                      <a
-                        [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
-                        ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
-                        : ['/assessment/view/', referral.referralId]"
-                        class="clickable"
-                        *ngIf="referral.responsesReceived > 0"
-                        placement="top"
-                        [ngbTooltip]="assessmentTip"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
-                        <ngb-highlight [result]="referral.responsesReceivedAccepted" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </a>
-                      <span class="zero-responses" *ngIf="referral.responsesReceived == 0">
-                        <ngb-highlight [result]="referral.responsesReceivedAccepted" [term]="referralListService.searchTerm">
-                        </ngb-highlight>
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <a
-                        [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
-                        ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
-                        : ['/assessment/view/', referral.referralId]"
-                        class="clickable"
-                        *ngIf="referral.doctorsAllocated > 0"
-                        placement="top"
-                        [ngbTooltip]="assessmentTip"
-                        [openDelay]="1000"
-                        [closeDelay]="200"
-                        tooltipClass="subtle-tooltip"
-                      >
+                      <td class="text-center">
+                        <a
+                          [routerLink]="referral.currentAssessmentId == null
+                            ? ['/assessment/new/', referral.referralId]
+                            : ['/assessment/view', referral.referralId]"
+                          class="clickable"
+                          placement="top"
+                          [ngbTooltip]="tipContent"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.numberOfAssessmentAttempts" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          [routerLink]="referral.currentAssessmentId == null
+                            ? ['/assessment/new/', referral.referralId]
+                            : ['/assessment/view', referral.referralId]"
+                          class="clickable"
+                          placement="top"
+                          [ngbTooltip]="tipContent"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.assessmentLocationPostcode" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          [routerLink]="referral.currentAssessmentId == null
+                            ? ['/assessment/new/', referral.referralId]
+                            : ['/assessment/view', referral.referralId]"
+                          class="clickable"
+                          placement="top"
+                          [ngbTooltip]="tipContent"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.specialityName" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          [routerLink]="referral.currentAssessmentId == null
+                            ? ['/assessment/new/', referral.referralId]
+                            : ['/assessment/view', referral.referralId]"
+                          class="clickable"
+                          placement="top"
+                          [ngbTooltip]="tipContent"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.timescale | date:'dd/MM/yyyy HH:mm'" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          [routerLink]="referral.currentAssessmentId == null
+                            ? ['/assessment/new/', referral.referralId]
+                            : ['/assessment/view', referral.referralId]"
+                          class="clickable"
+                          placement="top"
+                          [ngbTooltip]="tipContent"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.statusName" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      </td>
+                      <td class="text-center">
+                        <a
+                          [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
+                          ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
+                          : ['/assessment/view/', referral.referralId]"
+                          class="clickable"
+                          *ngIf="referral.responsesReceived > 0"
+                          placement="top"
+                          [ngbTooltip]="assessmentTip"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.responsesReceivedAccepted" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                        <span class="zero-responses" *ngIf="referral.responsesReceived == 0">
+                          <ngb-highlight [result]="referral.responsesReceivedAccepted" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <a
+                          [routerLink]="CanDoctorsBeAllocated(referral.referralStatusId)
+                          ? ['/assessment/', referral.currentAssessmentId, 'allocate-doctors']
+                          : ['/assessment/view/', referral.referralId]"
+                          class="clickable"
+                          *ngIf="referral.doctorsAllocated > 0"
+                          placement="top"
+                          [ngbTooltip]="assessmentTip"
+                          [openDelay]="1000"
+                          [closeDelay]="200"
+                          tooltipClass="subtle-tooltip"
+                        >
+                          <ngb-highlight [result]="referral.doctorsSelectedAllocatedAttended" [term]="referralListService.searchTerm">
+                          </ngb-highlight>
+                        </a>
+                      <span class="zero-responses" *ngIf="referral.doctorsAllocated == 0">
                         <ngb-highlight [result]="referral.doctorsSelectedAllocatedAttended" [term]="referralListService.searchTerm">
                         </ngb-highlight>
-                      </a>
-                    <span class="zero-responses" *ngIf="referral.doctorsAllocated == 0">
-                      <ngb-highlight [result]="referral.doctorsSelectedAllocatedAttended" [term]="referralListService.searchTerm">
-                      </ngb-highlight>
-                    </span>
-                    </td>
-                    <td class="text-center">
-                      <div ngbDropdown class="d-inline-block" >
-                        <button
-                          class="btn btn-outline-primary btn-small"
-                          id="dropdownBasic1"
-                          ngbDropdownToggle
-                        >
-                          <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                          <a
-                            [routerLink]="['/referral/edit', referral.referralId]"
+                      </span>
+                      </td>
+                      <td class="text-center">
+                        <div ngbDropdown class="d-inline-block" >
+                          <button
+                            class="btn btn-outline-primary btn-small"
+                            id="dropdownBasic1"
+                            ngbDropdownToggle
+                          >
+                            <i class="fas fa-ellipsis-h"></i>
+                          </button>
+                          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <a
+                              [routerLink]="['/referral/edit', referral.referralId]"
+                              class="clickable"
+                              ngbDropdownItem
+                            >
+                              Edit Referral
+                            </a>
+                            <a
+                            [routerLink]="['/assessment/view/', referral.referralId]"
                             class="clickable"
                             ngbDropdownItem
-                          >
-                            Edit Referral
-                          </a>
-                          <a
-                          [routerLink]="['/assessment/view/', referral.referralId]"
-                          class="clickable"
-                          ngbDropdownItem
-                          *ngIf="CanViewAssessment(referral.referralStatusId)"
-                          >
-                            View Assessment
-                          </a>
-                          <a
-                          [routerLink]="['/assessment/new/', referral.referralId]"
-                          class="clickable"
-                          ngbDropdownItem
-                          *ngIf="CanCreateNewAssessment(referral.referralStatusId)"
-                          >
-                            Create Assessment
-                          </a>
-                          <a
-                            [routerLink]="['/assessment/', referral.currentAssessmentId, 'select-doctors']"
+                            *ngIf="CanViewAssessment(referral.referralStatusId)"
+                            >
+                              View Assessment
+                            </a>
+                            <a
+                            [routerLink]="['/assessment/new/', referral.referralId]"
                             class="clickable"
                             ngbDropdownItem
-                            *ngIf="CanDoctorsBeSelected(referral.referralStatusId)"
-                          >
-                            Select Doctors
-                          </a>
-                          <a
-                            [routerLink]="['/assessment/', referral.currentAssessmentId, 'allocate-doctors']"
-                            class="clickable"
-                            ngbDropdownItem
-                            *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) &&
-                                  (referral.doctorsAllocated > 0 || referral.responsesReceived > 0)"
-                          >
-                            Allocate Doctors
-                          </a>
+                            *ngIf="CanCreateNewAssessment(referral.referralStatusId)"
+                            >
+                              Create Assessment
+                            </a>
+                            <a
+                              [routerLink]="['/assessment/', referral.currentAssessmentId, 'select-doctors']"
+                              class="clickable"
+                              ngbDropdownItem
+                              *ngIf="CanDoctorsBeSelected(referral.referralStatusId)"
+                            >
+                              Select Doctors
+                            </a>
+                            <a
+                              [routerLink]="['/assessment/', referral.currentAssessmentId, 'allocate-doctors']"
+                              class="clickable"
+                              ngbDropdownItem
+                              *ngIf="CanDoctorsBeAllocated(referral.referralStatusId) &&
+                                    (referral.doctorsAllocated > 0 || referral.responsesReceived > 0)"
+                            >
+                              Allocate Doctors
+                            </a>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="form-row" style="text-align: center;">
             <div class="col-md-12 empty-table" *ngIf="!referralListService.loading$ && noOfReferralsInList === 0">
