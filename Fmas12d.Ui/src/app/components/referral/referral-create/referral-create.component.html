@@ -300,20 +300,16 @@
                 <span>&nbsp;</span>
               </div>
             </div>
-            <div class="form-row">
-              <div class="col-md-2 mb-2 offset-md-8 text-right">
-                <button class="btn btn-standard btn-cancel" type="button" (click)="CancelReferral()">
-                  <i class="far fa-times-circle"></i>
-                  Cancel
-                </button>
-              </div>
-              <div class="col-md-2 mb-2 text-left">
-                <button class="btn btn-primary btn-standard" type="button" (click)="CreateReferral()"
-                  [disabled]="!IsPatientIdValidated()">
-                  <i class="fas fa-check"></i>
-                  Save
-                </button>
-              </div>
+            <div class="form-row float-right">
+              <button class="btn btn-standard btn-cancel" type="button" (click)="CancelReferral()">
+                <i class="far fa-times-circle"></i>
+                Cancel
+              </button>
+              <button class="btn btn-primary btn-standard" type="button" (click)="CreateReferral()"
+                [disabled]="!IsPatientIdValidated()">
+                <i class="fas fa-check"></i>
+                Save
+              </button>
             </div>
           </form>
         </div>
