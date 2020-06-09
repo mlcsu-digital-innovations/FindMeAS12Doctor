@@ -151,15 +151,15 @@ form {
   content: 'X';
   font-weight: 600;
   height: 10px;
-  left: 30%;
+  left: 15%;
   position: absolute;
-  top: 5%;
+  top: -30%;
   transform: translate(-50%, -50%);
   width: 5px;
 }
 
 .checkmark-content {
-  bottom: -10px;
+  bottom: -7px;
   margin-left: 15px;
   padding: 10px;
   position: absolute;
