@@ -1,0 +1,12 @@
+.error-container {
+  width:50%;
+  margin: 60px auto;
+  padding:20px;
+  color: #777;
+  text-align: center;
+}
+
+.error-header {
+  padding-left: 20px;
+}
+
