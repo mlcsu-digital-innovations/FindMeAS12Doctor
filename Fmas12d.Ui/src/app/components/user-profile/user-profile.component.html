@@ -85,8 +85,12 @@
               <div class="col-md-2 offset-md-3">
                 <label>Organisation: </label>
               </div>
-              <div class="col-md-3">
-              <label>{{userProfile.organisationName}}</label>
+              <div class="col-md-4">
+                <input class="form-control"
+                  formControlName="organisationName"
+                  #organisationName
+                  disabled="true"
+                  id="organisationName">
               </div>
             </div>
             <!-- Gender -->

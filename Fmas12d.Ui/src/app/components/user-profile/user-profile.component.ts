@@ -93,6 +93,7 @@ export class UserProfileComponent implements OnInit {
     } else {
       this.userProfileForm = this.formBuilder.group({
         displayName: [this.userProfile.displayName, Validators.required],
+        organisationName: [this.userProfile.organisationName],
         genderTypeId: [this.userProfile.genderTypeId, Validators.required],
         emailAddress: [this.userProfile.emailAddress, !this.userProfile.isDoctor
           ? [Validators.required, Validators.email]
