@@ -20,6 +20,7 @@ import { UserDetails } from 'src/app/interfaces/user-details';
 import { UserDetailsService } from 'src/app/services/user/user-details.service';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
+import { UserAvailabilityOverlapping } from 'src/app/interfaces/user-availability-overlapping';
 
 @Component({
   selector: 'app-on-call-doctor-modal',
@@ -443,6 +444,15 @@ export class OnCallDoctorModalComponent implements OnInit {
   }
 
   ValidateRegisteredDoctor() {
+    if (!this.doctorSearchField.value) {
+      this.toastService.displayError({
+        title: 'Error',
+        message: 'Please search for a doctor'
+      });
+      this.doctorIsValid = false;
+      return;
+    }
+
     this.doctorName = null;
     this.doctorGmcNumber = 0;
     this.contactDetails = null;
@@ -472,37 +482,36 @@ export class OnCallDoctorModalComponent implements OnInit {
           this.overlappingMessage = null;
 
           this.userAvailabilityService.checkOverlapping(availability)
-            .subscribe(() => {
-              this.doctorGmcNumber = doctorDetails.gmcNumber;
-              this.doctorId = doctorDetails.id;
-              this.doctorName = doctorDetails.displayName;
-              this.doctorIsValid = true;
-              this.locationField.setValue(null);
-              this.getContactDetails(doctorDetails.id);
-            }, error => {
-              this.doctorIsValid = false;
-              if (error.status === 400 && error.error && error.error.errors &&
-                error.error.errors.Message && error.error.errors.Message.length > 0) {
-                this.overlappingMessage = error.error.errors.Message[0];
-                this.doctorSearchField.setErrors({ OverlappingAvailability: true });  
+            .subscribe((result: UserAvailabilityOverlapping) => {
+              if (result.isOverlapping) {
+                this.doctorIsValid = false;
+                this.overlappingMessage = result.message;
+                this.doctorSearchField.setErrors({ OverlappingAvailability: true }); 
               }
               else {
-                let msg: string = 'Error Validating Doctor';
-                if (error.error && error.error.title) {                  
-                  msg = error.error.title;
-                }
-                this.toastService.displayError({
-                  title: 'Error',
-                  message: msg
-                });                
-              }           
-            });                   
+                this.doctorGmcNumber = doctorDetails.gmcNumber;
+                this.doctorId = doctorDetails.id;
+                this.doctorName = doctorDetails.displayName;
+                this.doctorIsValid = true;
+                this.locationField.setValue(null);
+                this.getContactDetails(doctorDetails.id);
+              }
+            }, error => {
+              let msg: string = 'Error Validating Doctor';
+              if (error.status === 400 && error.error) {                  
+                msg = error.error;
+              }
+              this.toastService.displayError({
+                title: 'Error',
+                message: msg
+              });
+          });
         }
       },
       (err) => {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving User Details'
+          message: 'Error Retrieving Doctor Details'
         });
         this.doctorIsValid = false;
       });

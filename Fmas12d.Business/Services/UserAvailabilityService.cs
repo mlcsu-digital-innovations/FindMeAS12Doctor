@@ -133,43 +133,53 @@ namespace Fmas12d.Business.Services
       return model;
     }    
 
-    public async Task<bool> IsOverlappingAsync(IUserAvailability userAvailability)
+    public async Task<UserAvailabilityOverlapping> CheckOverlapWithExisting(
+      int userId,
+      int userAvailabilityId,
+      DateTimeOffset start,
+      DateTimeOffset end
+      )
     {
       IQueryable<Entities.UserAvailability> query =
         _context.UserAvailabilities
-                .Where(u => userAvailability.UserId == u.UserId)
-                .Where(u => userAvailability.Start <= u.End)
-                .Where(u => userAvailability.End >= u.Start)
+                .Where(u => userId == u.UserId)
+                .Where(u => start <= u.End)
+                .Where(u => end >= u.Start)
                 .WhereIsActiveOrActiveOnly(true)
                 .AsNoTracking(true);
 
-      if (userAvailability.Id > 0)
+      if (userAvailabilityId > 0)
       {
-        query = query.Where(ua => ua.Id != userAvailability.Id);
+        query = query.Where(ua => ua.Id != userAvailabilityId);
       }
 
       List<UserAvailability> overlappingAvailabilities = await query
         .Select(UserAvailability.ProjectFromEntity)
         .ToListAsync();
 
+      UserAvailabilityOverlapping result = new UserAvailabilityOverlapping();
+
       if (overlappingAvailabilities.Count() == 1) {
-        throw new ModelStateException(new string[] { "Message" }, "This on call period overlaps an existing availability period for this doctor: " + 
-          $"{overlappingAvailabilities[0].Start.LocalDateTime.ToString("dd/MM/yyyy HH:mm")} to {overlappingAvailabilities[0].End.LocalDateTime.ToString("dd/MM/yyyy HH:mm")}"
-        );
+        result.IsOverlapping = true;
+        result.Message = "This on call period overlaps an existing availability period for this doctor: " + 
+          $"{overlappingAvailabilities[0].Start.LocalDateTime.ToString("dd/MM/yyyy HH:mm")} to " + 
+          $"{overlappingAvailabilities[0].End.LocalDateTime.ToString("dd/MM/yyyy HH:mm")}";
       }
       else if (overlappingAvailabilities.Count() > 1) {
-        string message = "This on call period overlaps existing availability periods for this doctor: ";
-        for (int i = 0; i < overlappingAvailabilities.Count; i++) {
-          message += $"{overlappingAvailabilities[i].Start.LocalDateTime.ToString("dd/MM/yyyy HH:mm")} to {overlappingAvailabilities[i].End.LocalDateTime.ToString("dd/MM/yyyy HH:mm")}";
-          if (i < overlappingAvailabilities.Count - 1) {
-            message += ", ";
-          }
-        }
+        result.IsOverlapping = true;
+        result.Message = "This on call period overlaps existing availability periods for this doctor: ";
 
-        throw new ModelStateException(new string[] { "Message" }, message); 
+        for (int i = 0; i < overlappingAvailabilities.Count; i++) {
+          result.Message += $"{overlappingAvailabilities[i].Start.LocalDateTime.ToString("dd/MM/yyyy HH:mm")} to " + 
+            $"{overlappingAvailabilities[i].End.LocalDateTime.ToString("dd/MM/yyyy HH:mm")}";
+          if (i < overlappingAvailabilities.Count - 1) {
+            result.Message += ", ";
+          }
+
+        }
       }
 
-      return false;
+      return result;
     }
 
     public async Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(

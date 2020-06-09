@@ -241,7 +241,6 @@
                 (click)="ValidatePostcode()"
                 [disabled]="locationPostcode.value == '' || locationPostcode.errors != null"
               >
-                <!-- <i class="fas fa-search-location"></i> -->
                 {{ IsSearchingForPostcode() ? "Searching" : "Validate" }}
                 <span
                   class="spinner-border spinner-border-sm"
