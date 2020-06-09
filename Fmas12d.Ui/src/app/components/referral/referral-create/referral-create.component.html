@@ -70,7 +70,7 @@
               <div class="col-md-3 mb-2 mt-less-1">
                 <div *ngIf="patient.nhsNumber.errors != null">
                   <div *ngIf="patient.nhsNumber.errors.NhsNumberValidFormat" class="invalid-field">
-                    <span>Invalid NHS Number</span>
+                    <span>* Invalid NHS Number</span>
                   </div>
                   <div *ngIf="patient.nhsNumber.errors.InvalidPatientIdentifier" class="invalid-field">
                     <span>* Invalid Patient Identifier</span>
@@ -79,7 +79,7 @@
               </div>
               <div class="col-md-4 mb-2 offset-md-1 reduced-top-margin">
                 <div *ngIf="patient.alternativeIdentifier.errors" class="invalid-field">
-                  <span>Invalid Alternative Identifier</span>
+                  <span>* Invalid Alternative Identifier</span>
                 </div>
               </div>
             </div>
