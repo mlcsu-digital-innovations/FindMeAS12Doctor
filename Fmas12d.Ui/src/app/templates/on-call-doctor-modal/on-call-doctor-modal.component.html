@@ -43,7 +43,7 @@
           class="invalid-field"
           *ngIf="startDateField.errors && startDateField.errors.DatePickerFormat"
         >
-          <span>* Invalid Date Format</span>
+          <span>Invalid Date Format</span>
         </div>
       </div>
     </div>
@@ -83,10 +83,10 @@
     <div class="form-row">
       <div class="col-md-6 mb-2 reduced-top-margin">
         <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat">
-          <span>* Invalid Date Format</span>
+          <span>Invalid Date Format</span>
         </div>
         <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
-          <span>* End date must be greater than start date</span>
+          <span>End date must be greater than start date</span>
         </div>
       </div>
     </div>
@@ -125,16 +125,16 @@
     </div>
     <!-- Doctor Search Errors-->
     <div class="form-row" *ngIf="doctorSearchField.errors">
-      <div class="col-md-12 mb-2">
+      <div class="col-md-8 mb-2">
         <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
-          <span>* No Results Found </span>
+          <span>No Results Found </span>
         </div>
         <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
-          <span>* Invalid doctor </span>
+          <span>Invalid doctor </span>
         </div>
         <div *ngIf="doctorSearchField.errors.OverlappingAvailability" class="invalid-field">
           <span>
-            * This on call period overlaps an existing availability period for this doctor: {{overlappingStart | date: 'dd/MM/yyyy HH:mm'}} to {{overlappingEnd | date: 'dd/MM/yyyy HH:mm'}}
+            {{overlappingMessage}}            
           </span>
         </div>
       </div>
@@ -204,7 +204,7 @@
           class="invalid-field"
           *ngIf="locationField.errors && locationField.errors.NoLocationSelected"
         >
-          <span>* Please select a location</span>
+          <span>Please select a location</span>
         </div>
       </div>
     </div>
@@ -263,7 +263,7 @@
           class="invalid-field"
           *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
         >
-          <span>* Invalid Postcode</span>
+          <span>Invalid Postcode</span>
         </div>
       </div>
     </div>

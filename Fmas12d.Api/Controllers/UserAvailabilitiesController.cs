@@ -58,6 +58,31 @@ namespace Fmas12d.Api.Controllers
     }
 
     [HttpPost]
+    [Route("overlapping/{userId:int}")]
+    public async Task<ActionResult> CheckOverlapping(
+      int userId,
+      [FromBody] RequestModels.UserAvailabilityOverlapping requestModel 
+    )
+    {
+      try
+      {               
+        Business.Models.IUserAvailability businessModel = new Business.Models.UserAvailability
+        {       
+          UserId = userId
+        };
+        requestModel.MapToBusinessModel(businessModel);
+
+        await Service.IsOverlappingAsync(businessModel);
+
+        return Ok();       
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      } 
+    }
+
+    [HttpPost]
     [Route("contactdetail")]
     public async Task<ActionResult<ViewModels.UserAvailability>> PostAvailableContactDetail(
       [FromBody] RequestModels.UserAvailabilityPostContactDetail requestModel

@@ -10,11 +10,12 @@ import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor';
 import { OnCallDoctorList } from 'src/app/interfaces/on-call-doctor-list';
-import { OnCallDoctorListService } from 'src/app/services/on-call-doctor-list/on-call-doctor-list.service';
 import { PostcodeRegex } from 'src/app/constants/Constants';
 import { PostcodeValidationService }
   from 'src/app/services/postcode-validation/postcode-validation.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { UserAvailability } from 'src/app/interfaces/user-availability';
+import { UserAvailabilityService } from 'src/app/services/user-avilability/user-availability.service';
 import { UserDetails } from 'src/app/interfaces/user-details';
 import { UserDetailsService } from 'src/app/services/user/user-details.service';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
@@ -41,9 +42,8 @@ export class OnCallDoctorModalComponent implements OnInit {
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
   onCallDoctorExists: boolean;
-  onCallDoctorForm: FormGroup;
-  overlappingStart: Date;
-  overlappingEnd: Date;
+  onCallDoctorForm: FormGroup;  
+  overlappingMessage: string;
   startDate: NgbDateStruct;
   startTime: NgbTimeStruct;
 
@@ -51,7 +51,7 @@ export class OnCallDoctorModalComponent implements OnInit {
     private contactDetailTypeService: ContactDetailTypeService,
     private doctorListService: DoctorListService,
     private formBuilder: FormBuilder,
-    private onCallDoctorListService: OnCallDoctorListService,
+    private userAvailabilityService: UserAvailabilityService,
     private postcodeValidationService: PostcodeValidationService,
     private toastService: ToastService,
     private userDetailsService: UserDetailsService,
@@ -459,32 +459,53 @@ export class OnCallDoctorModalComponent implements OnInit {
           });
           this.doctorIsValid = false;
         } else {
-          let start: Date = this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
-          let end: Date = this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
-          let conflictingAvailabilities: OnCallDoctorList[] = this.onCallDoctorListService.availabilitiesForDoctor(doctorDetails.id, start, end);
+          let startDateTime: Date = 
+            this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
+          let endDateTime: Date = 
+            this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
+          let availability: UserAvailability = {
+            start: startDateTime,
+            end: endDateTime,
+            id: this.onCallDoctor ? this.onCallDoctor.id : 0,
+            userId: doctorDetails.id
+          };          
+          this.overlappingMessage = null;
 
-          if (conflictingAvailabilities.length > 0) {  
-            this.overlappingStart = new Date(conflictingAvailabilities[0].start);
-            this.overlappingEnd = new Date(conflictingAvailabilities[0].end);
-            this.doctorSearchField.setErrors({ OverlappingAvailability: true });
-          }
-          else {
-            this.doctorGmcNumber = doctorDetails.gmcNumber;
-            this.doctorId = doctorDetails.id;
-            this.doctorName = doctorDetails.displayName;
-            this.doctorIsValid = true;
-            this.locationField.setValue(null);
-            this.getContactDetails(doctorDetails.id);
-          }          
+          this.userAvailabilityService.checkOverlapping(availability)
+            .subscribe(() => {
+              this.doctorGmcNumber = doctorDetails.gmcNumber;
+              this.doctorId = doctorDetails.id;
+              this.doctorName = doctorDetails.displayName;
+              this.doctorIsValid = true;
+              this.locationField.setValue(null);
+              this.getContactDetails(doctorDetails.id);
+            }, error => {
+              this.doctorIsValid = false;
+              if (error.status === 400 && error.error && error.error.errors &&
+                error.error.errors.Message && error.error.errors.Message.length > 0) {
+                this.overlappingMessage = error.error.errors.Message[0];
+                this.doctorSearchField.setErrors({ OverlappingAvailability: true });  
+              }
+              else {
+                let msg: string = 'Error Validating Doctor';
+                if (error.error && error.error.title) {                  
+                  msg = error.error.title;
+                }
+                this.toastService.displayError({
+                  title: 'Error',
+                  message: msg
+                });                
+              }           
+            });                   
         }
       },
-        (err) => {
-          this.toastService.displayError({
-            title: 'Error',
-            message: 'Error Retrieving User Details'
-          });
-          this.doctorIsValid = false;
+      (err) => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error Retrieving User Details'
         });
+        this.doctorIsValid = false;
+      });
   }
   ValidateTypeAheadResults(results: any[], fieldName: string) {
 
