@@ -47,6 +47,21 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
+      // MSAL
+      if (this.platform.is('cordova')) {
+
+
+
+        window.cordova.plugins.msalPlugin.msalInit(() => {
+
+        }, err => {
+          console.log(err);
+        });
+
+
+      }
+
+
       this.fcm.onTokenRefresh().subscribe(
         token => {
           // update the users table with the new token

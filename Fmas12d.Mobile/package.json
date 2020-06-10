@@ -42,6 +42,7 @@
     "cordova-android": "^8.1.0",
     "cordova-plugin-fcm-with-dependecy-updated": "^6.4.1",
     "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-msal": "^2.4.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^5.0.0",
     "core-js": "^2.5.4",
@@ -108,6 +109,11 @@
         "FCM_VERSION": "18.0.0",
         "GRADLE_TOOLS_VERSION": "3.5.0",
         "GOOGLE_SERVICES_VERSION": "4.2.0"
+      },
+      "cordova-plugin-msal": {
+        "CLIENT_ID": "9a667831-799d-4a8a-bce2-c168424cdabe",
+        "TENANT_ID": "common",
+        "KEY_HASH": "not-provided"
       }
     },
     "platforms": [
