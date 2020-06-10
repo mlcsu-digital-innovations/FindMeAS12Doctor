@@ -7,7 +7,7 @@ namespace Fmas12d.Api.RequestModels
     [Required]
     public int CcgId { get; set; }
     [Required]
-    public int VsrNumber { get; set; }  
+    public decimal? VsrNumber { get; set; }  
 
     public Business.Models.BankDetailUpdate BusinessModel { 
       get {
