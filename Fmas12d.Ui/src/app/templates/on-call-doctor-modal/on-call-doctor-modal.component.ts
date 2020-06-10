@@ -329,6 +329,7 @@ export class OnCallDoctorModalComponent implements OnInit {
         this.doctorListService.GetDoctorList(term, false).pipe(
           tap(() => (this.hasDoctorSearchFailed = false)),
           tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'doctorSearch'))),
+          tap((results: any[]) => (this.SortTypeAheadResults(results))),
           catchError(() => {
             this.hasDoctorSearchFailed = true;
             return of([]);
@@ -516,10 +517,17 @@ export class OnCallDoctorModalComponent implements OnInit {
         this.doctorIsValid = false;
       });
   }
+
   ValidateTypeAheadResults(results: any[], fieldName: string) {
 
     if (results == null) {
       this.onCallDoctorForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
+  }
+  
+  SortTypeAheadResults(results: any[]) {
+    if (results !== null && results.length > 0) {
+      results.sort((a, b) => (a.resultText > b.resultText) ? 1 : -1);
     }
   }
 }
