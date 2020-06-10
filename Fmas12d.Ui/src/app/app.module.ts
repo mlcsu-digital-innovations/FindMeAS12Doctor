@@ -20,6 +20,7 @@ import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
 import { UserProfileModule } from './components/user-profile/user-profile.module';
+import { SecurityService } from './services/security/security.service';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   // https://login.microsoftonline.com/damienbod.onmicrosoft.com/.well-known/openid-configuration
@@ -52,6 +53,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   providers: [
     AuthorizationGuard,
     OidcSecurityService,
+    SecurityService,
     OidcConfigService,
     {
       provide: APP_INITIALIZER,

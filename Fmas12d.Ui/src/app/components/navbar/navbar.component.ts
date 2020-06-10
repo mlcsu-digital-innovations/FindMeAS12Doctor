@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Observable } from 'rxjs';
-import { UserDetailsService } from 'src/app/services/user/user-details.service.js';
+import { SecurityService } from 'src/app/services/security/security.service';
 import { User } from 'src/app/interfaces/user.js';
+import { UserDetailsService } from 'src/app/services/user/user-details.service.js';
 import { version } from '../../../../package.json';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -16,21 +15,20 @@ export class NavbarComponent implements OnInit {
   public homePageLink: string;
   public version: string = version;
   isAuthorized$: Observable<boolean>;
-  user$: Observable<User>;  
+  user$: Observable<User>;
 
   constructor(
-    public oidcSecurityService: OidcSecurityService,
+    public securityService: SecurityService,
     private userDetailsService: UserDetailsService
   ) { }
 
   ngOnInit() {
-    this.isAuthorized$ = this.oidcSecurityService.getIsAuthorized();    
+    this.isAuthorized$ = this.securityService.getIsAuthorized();
     this.user$ = this.userDetailsService.getCurrentUserDetails();
     this.user$.subscribe((user: User) => {
       if (user.isDoctor) {
         this.homePageLink = '/doctor/claims/list';
-      }
-      else if (user.isFinance) {
+      } else if (user.isFinance) {
         this.homePageLink = '/finance/claims/list';
       } else {
         this.homePageLink = '/referral/list';
@@ -39,14 +37,14 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
-    this.oidcSecurityService.authorize();
+    this.securityService.login();
   }
 
   refreshSession() {
-    this.oidcSecurityService.authorize();
+    this.securityService.refreshSession();
   }
 
   logout() {
-    this.oidcSecurityService.logoff();
+    this.securityService.logout();
   }
 }
