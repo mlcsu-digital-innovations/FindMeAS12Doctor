@@ -22,6 +22,7 @@ export class UserContactDetailModalComponent implements OnInit {
   contactDetailForm: FormGroup;
   contactDetailTypes: NameIdList[];
   isSearchingForPostcode: boolean;  
+  submitted: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -180,6 +181,8 @@ export class UserContactDetailModalComponent implements OnInit {
   }
 
   SaveContactDetail() {
+    this.submitted = true;
+
     if (this.contactDetailForm.valid) {
       this.controls.contactDetailTypeId.enable();
       this.controls.latitude.enable();
