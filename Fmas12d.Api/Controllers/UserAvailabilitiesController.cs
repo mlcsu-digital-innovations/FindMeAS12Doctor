@@ -57,6 +57,41 @@ namespace Fmas12d.Api.Controllers
       }  
     }
 
+    [HttpGet]
+    [Route("overlapping/{userId:int}")]
+    public async Task<ActionResult<ViewModels.UserAvailabilityOverlapping>> CheckOverlapping(
+      int userId,
+      [FromQuery] int userAvailabilityId,
+      [FromQuery] DateTimeOffset? start,
+      [FromQuery] DateTimeOffset? end   
+    )
+    {
+      try
+      {
+        if (userId == 0) {
+          return BadRequest("Please select a doctor");
+        }
+        if (!start.HasValue) {
+          return BadRequest("Please select a start date");
+        }
+        if (!end.HasValue) {
+          return BadRequest("Please select an end date");
+        }
+
+        Business.Models.UserAvailabilityOverlapping businessModel = await Service
+          .CheckOverlapWithExisting(userId, userAvailabilityId, start.Value, end.Value);
+        ViewModels.UserAvailabilityOverlapping viewModel = 
+          new ViewModels.UserAvailabilityOverlapping(businessModel);
+
+
+        return Ok(viewModel);       
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      } 
+    }
+
     [HttpPost]
     [Route("contactdetail")]
     public async Task<ActionResult<ViewModels.UserAvailability>> PostAvailableContactDetail(

@@ -4,84 +4,6 @@
 <div class="modal-body">
   <!-- Doctor Search -->
   <form [formGroup]="onCallDoctorForm" class="form-style" novalidate>
-    <div class="form-row">
-      <div class="col-md-10">
-        <label for="doctorSearch">Search for Doctor</label>
-        <div class="row" name="doctorSearch">
-          <div class="col-md-6">
-            <input
-              type="search"
-              class="form-control"
-              id="doctorSearch"
-              #doctorSearch
-              formControlName="doctorSearch"
-              [ngbTypeahead]="RegisteredDoctorSearch"
-              [resultFormatter]="FormatTypeAheadResults"
-              [inputFormatter]="FormatTypeAheadResults"
-              [ngClass]="{
-                'is-invalid': doctorIsValid===false,
-                'is-valid': doctorIsValid===true,
-                '': doctorIsValid===null
-              }" />
-          </div>
-          <div class="col-md-3 mb-1">
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="ValidateRegisteredDoctor()"
-            >
-              <i class="fas fa-bolt"></i>
-              Validate
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Doctor Search Errors-->
-    <div class="form-row" *ngIf="doctorSearchField.errors">
-      <div class="col-md-12 mb-2">
-        <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
-          <span>* No Results Found </span>
-        </div>
-        <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
-          <span>* Invalid doctor </span>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
-        <span *ngIf="isRegisteredDoctorSearching">searching...</span>
-        <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
-          Sorry, suggestions could not be loaded.
-        </div>
-      </div>
-    </div>
-    <!-- Doctor Details -->
-    <div class="form-row" *ngIf="doctorName && doctorGmcNumber">
-      <div class="col-md-10">
-        <div class="row" name="doctorDetails">
-          <div class="col-md-5">
-            <label>Name</label>
-            <input
-              type="text"
-              disabled=true
-              class="form-control"
-              value={{doctorName}}
-            />
-          </div>
-          <div class="col-md-3">
-            <label>GMC Number</label>
-            <input
-              type="text"
-              disabled=true
-              class="form-control"
-              value={{doctorGmcNumber}}
-            />
-          </div>
-        </div>
-      </div>
-      <br/>
-    </div>
     <!-- Start Date -->
     <div class="form-row">
       <div class="col-md-8">
@@ -121,7 +43,7 @@
           class="invalid-field"
           *ngIf="startDateField.errors && startDateField.errors.DatePickerFormat"
         >
-          <span>* Invalid Date Format</span>
+          <span>Invalid Date Format</span>
         </div>
       </div>
     </div>
@@ -161,14 +83,96 @@
     <div class="form-row">
       <div class="col-md-6 mb-2 reduced-top-margin">
         <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat">
-          <span>* Invalid Date Format</span>
+          <span>Invalid Date Format</span>
         </div>
         <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
-          <span>* End date must be greater than start date</span>
+          <span>End date must be greater than start date</span>
         </div>
       </div>
     </div>
-
+    <div class="form-row">
+      <div class="col-md-10">
+        <label for="doctorSearch">Search for Doctor</label>
+        <div class="row" name="doctorSearch">
+          <div class="col-md-6">
+            <input
+              type="search"
+              class="form-control"
+              id="doctorSearch"
+              #doctorSearch
+              formControlName="doctorSearch"
+              [ngbTypeahead]="RegisteredDoctorSearch"
+              [resultFormatter]="FormatTypeAheadResults"
+              [inputFormatter]="FormatTypeAheadResults"
+              [ngClass]="{
+                'is-invalid': doctorIsValid===false,
+                'is-valid': doctorIsValid===true,
+                '': doctorIsValid===null
+              }" />
+          </div>
+          <div class="col-md-3 mb-1">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="ValidateRegisteredDoctor()"
+            >
+              <i class="fas fa-bolt"></i>
+              Validate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Doctor Search Errors-->
+    <div class="form-row" *ngIf="doctorSearchField.errors">
+      <div class="col-md-8 mb-2">
+        <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
+          <span>No Results Found </span>
+        </div>
+        <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
+          <span>Invalid doctor </span>
+        </div>
+        <div *ngIf="doctorSearchField.errors.OverlappingAvailability" class="invalid-field">
+          <span>
+            {{overlappingMessage}}            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
+        <span *ngIf="isRegisteredDoctorSearching">searching...</span>
+        <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
+          Sorry, suggestions could not be loaded.
+        </div>
+      </div>
+    </div>
+    <!-- Doctor Details -->
+    <div class="form-row" *ngIf="doctorName && doctorGmcNumber">
+      <div class="col-md-10">
+        <div class="row" name="doctorDetails">
+          <div class="col-md-5">
+            <label>Name</label>
+            <input
+              type="text"
+              disabled=true
+              class="form-control"
+              value={{doctorName}}
+            />
+          </div>
+          <div class="col-md-3">
+            <label>GMC Number</label>
+            <input
+              type="text"
+              disabled=true
+              class="form-control"
+              value={{doctorGmcNumber}}
+            />
+          </div>
+        </div>
+      </div>
+      <br/>
+    </div>
     <!-- Location -->
     <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
       <div class="col-md-10">
@@ -200,7 +204,7 @@
           class="invalid-field"
           *ngIf="locationField.errors && locationField.errors.NoLocationSelected"
         >
-          <span>* Please select a location</span>
+          <span>Please select a location</span>
         </div>
       </div>
     </div>
@@ -237,7 +241,6 @@
                 (click)="ValidatePostcode()"
                 [disabled]="locationPostcode.value == '' || locationPostcode.errors != null"
               >
-                <!-- <i class="fas fa-search-location"></i> -->
                 {{ IsSearchingForPostcode() ? "Searching" : "Validate" }}
                 <span
                   class="spinner-border spinner-border-sm"
@@ -259,7 +262,7 @@
           class="invalid-field"
           *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
         >
-          <span>* Invalid Postcode</span>
+          <span>Invalid Postcode</span>
         </div>
       </div>
     </div>

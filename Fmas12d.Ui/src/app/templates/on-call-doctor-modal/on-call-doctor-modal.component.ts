@@ -14,10 +14,13 @@ import { PostcodeRegex } from 'src/app/constants/Constants';
 import { PostcodeValidationService }
   from 'src/app/services/postcode-validation/postcode-validation.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { UserAvailability } from 'src/app/interfaces/user-availability';
+import { UserAvailabilityService } from 'src/app/services/user-avilability/user-availability.service';
 import { UserDetails } from 'src/app/interfaces/user-details';
 import { UserDetailsService } from 'src/app/services/user/user-details.service';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
+import { UserAvailabilityOverlapping } from 'src/app/interfaces/user-availability-overlapping';
 
 @Component({
   selector: 'app-on-call-doctor-modal',
@@ -40,7 +43,8 @@ export class OnCallDoctorModalComponent implements OnInit {
   isSearchingForPostcode: boolean;
   minDate: NgbDateStruct;
   onCallDoctorExists: boolean;
-  onCallDoctorForm: FormGroup;
+  onCallDoctorForm: FormGroup;  
+  overlappingMessage: string;
   startDate: NgbDateStruct;
   startTime: NgbTimeStruct;
 
@@ -48,6 +52,7 @@ export class OnCallDoctorModalComponent implements OnInit {
     private contactDetailTypeService: ContactDetailTypeService,
     private doctorListService: DoctorListService,
     private formBuilder: FormBuilder,
+    private userAvailabilityService: UserAvailabilityService,
     private postcodeValidationService: PostcodeValidationService,
     private toastService: ToastService,
     private userDetailsService: UserDetailsService,
@@ -94,9 +99,9 @@ export class OnCallDoctorModalComponent implements OnInit {
       futureDateTime.setHours(futureDateTime.getHours() + 1);
 
       this.startDateField.setValue(this.ConvertToDateStruct(currentDateTime));
-      this.startTimeField.setValue(this.ConvertToTimeStruct(currentDateTime));
+      this.startTimeField.setValue(this.ConvertToTimeStruct(currentDateTime, true));
       this.endDateField.setValue(this.ConvertToDateStruct(futureDateTime));
-      this.endTimeField.setValue(this.ConvertToTimeStruct(futureDateTime));
+      this.endTimeField.setValue(this.ConvertToTimeStruct(futureDateTime, true));
     }
 
     this.OnChanges();
@@ -113,12 +118,16 @@ export class OnCallDoctorModalComponent implements OnInit {
     return dateStruct;
   }
 
-  ConvertToTimeStruct(dateValue: Date): NgbTimeStruct {
-
-    // round up to the next 5 minute interval
+  ConvertToTimeStruct(dateValue: Date, isCreating: boolean): NgbTimeStruct {
     const start = moment(dateValue);
-    const remainder = 5 - (start.minute() % 5);
-    const momentDate = moment(start).add(remainder, 'minutes');
+    let momentDate = moment(start);
+
+    if (isCreating) {
+      // round up to the next 5 minute interval      
+      const remainder = 5 - (start.minute() % 5);
+      momentDate = momentDate.add(remainder, 'minutes');
+    }
+    
     const timeStruct = {} as NgbTimeStruct;
     timeStruct.hour = momentDate.hour();
     timeStruct.minute = momentDate.minutes();
@@ -134,7 +143,7 @@ export class OnCallDoctorModalComponent implements OnInit {
       datePart.day,
       timePart.hour,
       timePart.minute,
-      timePart.second,
+      0,
       0
     );
   }
@@ -211,9 +220,9 @@ export class OnCallDoctorModalComponent implements OnInit {
     this.doctorSearchField.setValue(`${this.doctorName} - ${this.doctorGmcNumber}`);
     this.doctorIsValid = null;
     this.startDateField.setValue(this.ConvertToDateStruct(this.onCallDoctor.start));
-    this.startTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.start));
+    this.startTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.start, false));
     this.endDateField.setValue(this.ConvertToDateStruct(this.onCallDoctor.end));
-    this.endTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.end));
+    this.endTimeField.setValue(this.ConvertToTimeStruct(this.onCallDoctor.end, false));
 
     this.getContactDetails(this.onCallDoctor.userId);
     if (this.onCallDoctor.location.contactDetailId) {
@@ -320,6 +329,7 @@ export class OnCallDoctorModalComponent implements OnInit {
         this.doctorListService.GetDoctorList(term, false).pipe(
           tap(() => (this.hasDoctorSearchFailed = false)),
           tap((results: any[]) => (this.ValidateTypeAheadResults(results, 'doctorSearch'))),
+          tap((results: any[]) => (this.SortTypeAheadResults(results))),
           catchError(() => {
             this.hasDoctorSearchFailed = true;
             return of([]);
@@ -435,6 +445,21 @@ export class OnCallDoctorModalComponent implements OnInit {
   }
 
   ValidateRegisteredDoctor() {
+    if (!this.doctorSearchField.value) {
+      this.toastService.displayError({
+        title: 'Error',
+        message: 'Please search for a doctor'
+      });
+      this.doctorIsValid = false;
+      return;
+    }
+
+    this.doctorName = null;
+    this.doctorGmcNumber = 0;
+    this.contactDetails = null;
+    this.locationField.setValue(null);
+    this.doctorSearchField.setErrors(null);
+
     this.userDetailsService.GetDoctorDetails(this.doctorSearchField.value.id)
       .subscribe((doctorDetails: UserDetails) => {
 
@@ -445,26 +470,64 @@ export class OnCallDoctorModalComponent implements OnInit {
           });
           this.doctorIsValid = false;
         } else {
-          this.doctorGmcNumber = doctorDetails.gmcNumber;
-          this.doctorId = doctorDetails.id;
-          this.doctorName = doctorDetails.displayName;
-          this.doctorIsValid = true;
-          this.locationField.setValue(null);
-          this.getContactDetails(doctorDetails.id);
+          let startDateTime: Date = 
+            this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
+          let endDateTime: Date = 
+            this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
+          let availability: UserAvailability = {
+            start: startDateTime,
+            end: endDateTime,
+            id: this.onCallDoctor ? this.onCallDoctor.id : 0,
+            userId: doctorDetails.id
+          };          
+          this.overlappingMessage = null;
+
+          this.userAvailabilityService.checkOverlapping(availability)
+            .subscribe((result: UserAvailabilityOverlapping) => {
+              if (result.isOverlapping) {
+                this.doctorIsValid = false;
+                this.overlappingMessage = result.message;
+                this.doctorSearchField.setErrors({ OverlappingAvailability: true }); 
+              }
+              else {
+                this.doctorGmcNumber = doctorDetails.gmcNumber;
+                this.doctorId = doctorDetails.id;
+                this.doctorName = doctorDetails.displayName;
+                this.doctorIsValid = true;
+                this.locationField.setValue(null);
+                this.getContactDetails(doctorDetails.id);
+              }
+            }, error => {
+              let msg: string = 'Error Validating Doctor';
+              if (error.status === 400 && error.error) {                  
+                msg = error.error;
+              }
+              this.toastService.displayError({
+                title: 'Error',
+                message: msg
+              });
+          });
         }
       },
-        (err) => {
-          this.toastService.displayError({
-            title: 'Error',
-            message: 'Error Retrieving User Details'
-          });
-          this.doctorIsValid = false;
+      (err) => {
+        this.toastService.displayError({
+          title: 'Error',
+          message: 'Error Retrieving Doctor Details'
         });
+        this.doctorIsValid = false;
+      });
   }
+
   ValidateTypeAheadResults(results: any[], fieldName: string) {
 
     if (results == null) {
       this.onCallDoctorForm.controls[fieldName].setErrors({ NoMatchingResults: true });
+    }
+  }
+  
+  SortTypeAheadResults(results: any[]) {
+    if (results !== null && results.length > 0) {
+      results.sort((a, b) => (a.resultText > b.resultText) ? 1 : -1);
     }
   }
 }
