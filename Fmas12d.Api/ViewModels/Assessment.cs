@@ -16,7 +16,7 @@ namespace Fmas12d.Api.ViewModels
       Address4 = model.Address4;
       AmhpUser = new User(model.AmhpUser);
       // AmhpUserId = entity.AmhpUserId;
-      // Ccg = new Ccg(entity.Ccg);
+      Ccg = new Ccg(model.Ccg);
       CcgId = model.CcgId;
       CompletedByUser = new User(model.CompletedByUser);
       CompletedByUserId = model.CompletedByUserId;
