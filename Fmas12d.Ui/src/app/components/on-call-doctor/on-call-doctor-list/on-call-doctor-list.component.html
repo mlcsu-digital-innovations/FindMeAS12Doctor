@@ -33,11 +33,11 @@
                 </a>
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row table-responsive">
               <table class="table table-bordered table-sm table-on-call-doctor-list">
                 <thead>
                   <tr>
-                    <th class="text-center" 
+                    <th class="text-center lg-col" 
                       scope="col" 
                       sortable="userName" 
                       columnType='string' 
@@ -107,43 +107,43 @@
                 </thead>
                 <tbody>
                   <tr class="on-call-doctor-row" *ngFor="let onCallDoctor of onCallDoctorList$ | async">
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 120px;">
                       <ngb-highlight [result]="onCallDoctor.userName">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 100px;">
                       <ngb-highlight [result]="onCallDoctor.gmcNumber">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 150px;">
                       <ngb-highlight result="{{onCallDoctor.start | date: 'dd/MM/yyyy HH:mm'}}">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 150px;">
                       <ngb-highlight result="{{onCallDoctor.end | date: 'dd/MM/yyyy HH:mm'}}">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 100px;">
                       <ngb-highlight [result]="onCallDoctor.status.name">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 100px;">
                       <ngb-highlight result="{{onCallDoctor.onCallConfirmationSentAt | date: 'dd/MM/yyyy HH:mm'}}">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 80px;">
                       <ngb-highlight result="{{onCallDoctor.location.contactDetailTypeName ? onCallDoctor.location.contactDetailTypeName : onCallDoctor.location.postcode}}">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 100px;">
                       <ngb-highlight result="{{onCallDoctor.onCallIsConfirmed === null ? '' : (onCallDoctor.onCallIsConfirmed ? 'Yes' : 'No') }}">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="width: 100px;">
                       <ngb-highlight [result]="onCallDoctor.onCallRejectedReason">
                       </ngb-highlight>
                     </td>
-                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="text-align: center;">
+                    <td class="{{onCallDoctor.status.isOnCall ? (onCallDoctor.onCallIsConfirmed ? 'confirmed' : 'unconfirmed') : 'notoncall'}}" style="text-align: center; width: 80px;">
                       <button *ngIf="onCallDoctor.status.isOnCall" class="btn btn-outline-primary btn-small" (click)="editOnCallDoctor(onCallDoctor)">
                         <i class="fas fa-edit"></i>
                       </button>
