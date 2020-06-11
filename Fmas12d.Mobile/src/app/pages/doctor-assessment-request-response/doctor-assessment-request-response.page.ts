@@ -49,6 +49,7 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
     request
       .subscribe(
         (result: AmhpAssessmentView) => {
+
           this.assessmentRequest.dateTime = result.dateTime;
           this.assessmentRequest.postcode = result.postcode;
           this.assessmentRequest.id = result.id;
@@ -56,15 +57,29 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.amhpUserName = result.amhpUserName;
           this.assessmentRequest.isPlanned = result.isPlanned;
 
-          if (this.userDetails && result.doctorsSelected !== null) {
-            this.assessmentRequest.doctorDetails =
-            result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
+          // user could be allocated OR selected
+          if (
+            this.userDetails &&
+            result.doctorsSelected !== null &&
+            result.doctorsSelected.map(ds => ds.doctorId).includes(this.userDetails.id)
+            ) {
+              this.assessmentRequest.doctorDetails =
+              result.doctorsSelected.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
+          }
+
+          if (
+            this.userDetails &&
+            result.doctorsAllocated !== null &&
+            result.doctorsAllocated.map(ds => ds.doctorId).includes(this.userDetails.id)
+            ) {
+              this.assessmentRequest.doctorDetails =
+              result.doctorsAllocated.filter(doctor => doctor.doctorId === this.userDetails.id)[0];
           }
 
           this.alreadyAllocated = result.doctorsAllocated === null
             ? false
             : result.doctorsAllocated
-              .find(doctor => doctor.doctorId === this.userDetails.id) !== null;
+              .find(doctor => doctor.doctorId === this.userDetails.id) !== undefined;
 
           this.expectedLocation
             = this.assessmentRequest.doctorDetails.knownLocation.contactDetailTypeName == null
