@@ -131,7 +131,10 @@
 
           <div class="d-flex justify-content-between p-2">
             <ngb-pagination
-              [collectionSize]="total$ | async" [(page)]="claimsService.page" [pageSize]="claimsService.pageSize">
+              [collectionSize]="total$ | async" 
+              [(page)]="claimsService.page" 
+              [pageSize]="claimsService.pageSize"
+              [maxSize]=5>
             </ngb-pagination>
 
             <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="claimsService.pageSize">
