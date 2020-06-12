@@ -4,281 +4,310 @@
 <div class="modal-body">
   <!-- Doctor Search -->
   <form [formGroup]="onCallDoctorForm" class="form-style" novalidate>
-    <!-- Start Date -->
-    <div class="form-row">
-      <div class="col-md-8">
-        <label for="startDatePicker">Start Date / Time</label>
-        <div class="row" name="startDatePicker">
-          <div class="col-md-5">
-            <input
-              class="form-control"
-              type="text"
-              formControlName='startDate'
-              placeholder="dd/mm/yyyy"
-              name="startDate"
-              [minDate]="minDate"
-              [startDate]='startDate'
-              ngbDatepicker
-              #s="ngbDatepicker"/>
-          </div>
-          <div class="col-md-1 padding-left-1">
-            <button
-              class="btn btn-outline-secondary calendar"
-              (click)="s.toggle()"
-              type="button">
-              <i class="far fa-calendar-alt"></i>
-            </button>
-          </div>
-          <div class="col-md-1 at">@</div>
-          <div class="col-md-4 mt-less-5 ml-less-2">
-            <ngb-timepicker formControlName="startTime" [minuteStep]="5"></ngb-timepicker>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Start Date Format Errors-->
-    <div class="form-row">
-      <div class="col-md-4 mb-2 reduced-top-margin">
-        <div
-          class="invalid-field"
-          *ngIf="startDateField.errors && startDateField.errors.DatePickerFormat"
-        >
-          <span>Invalid Date Format</span>
-        </div>
-      </div>
-    </div>
-    <!-- End Date -->
-    <div class="form-row">
-      <div class="col-md-8">
-        <label for="endDatePicker">End Date / Time</label>
-        <div class="row" name="endDatePicker">
-          <div class="col-md-5">
-            <input
-              class="form-control"
-              type="text"
-              formControlName='endDate'
-              placeholder="dd/mm/yyyy"
-              name="endDate"
-              [minDate]="minDate"
-              [startDate]='startDate'
-              ngbDatepicker
-              #t="ngbDatepicker"/>
-          </div>
-          <div class="col-md-1 padding-left-1">
-            <button
-              class="btn btn-outline-secondary calendar"
-              (click)="t.toggle()"
-              type="button">
-              <i class="far fa-calendar-alt"></i>
-            </button>
-          </div>
-          <div class="col-md-1 at">@</div>
-          <div class="col-md-4 mt-less-5 ml-less-2">
-            <ngb-timepicker formControlName="endTime" [minuteStep]="5"></ngb-timepicker>
+    <div class="col-md-12 offset-md-2">
+      <!-- Start Date -->
+      <div class="form-row">
+        <div class="col-md-8">
+          <label for="startDatePicker">Start Date / Time</label>
+          <div class="row" name="startDatePicker">
+            <div class="col-md-5">
+              <input
+                class="form-control"
+                type="text"
+                formControlName='startDate'
+                placeholder="dd/mm/yyyy"
+                name="startDate"
+                [minDate]="minDate"
+                [startDate]='startDate'
+                ngbDatepicker
+                #s="ngbDatepicker"/>
+            </div>
+            <div class="col-md-1 padding-left-1">
+              <button
+                class="btn btn-outline-secondary calendar"
+                (click)="s.toggle()"
+                type="button">
+                <i class="far fa-calendar-alt"></i>
+              </button>
+            </div>
+            <div class="col-md-1 at">@</div>
+            <div class="col-md-4 mt-less-5 ml-less-2">
+              <ngb-timepicker formControlName="startTime" [minuteStep]="5"></ngb-timepicker>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- End Date Format Errors-->
-    <div class="form-row">
-      <div class="col-md-6 mb-2 reduced-top-margin">
-        <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat">
-          <span>Invalid Date Format</span>
-        </div>
-        <div class="invalid-field" *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate">
-          <span>End date must be greater than start date</span>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-10">
-        <label for="doctorSearch">Search for Doctor</label>
-        <div class="row" name="doctorSearch">
-          <div class="col-md-6">
-            <input
-              type="search"
-              class="form-control"
-              id="doctorSearch"
-              #doctorSearch
-              formControlName="doctorSearch"
-              [ngbTypeahead]="RegisteredDoctorSearch"
-              [resultFormatter]="FormatTypeAheadResults"
-              [inputFormatter]="FormatTypeAheadResults"
-              [ngClass]="{
-                'is-invalid': doctorIsValid===false,
-                'is-valid': doctorIsValid===true,
-                '': doctorIsValid===null
-              }" />
+      <!-- Start Date Format Errors-->
+      <div class="form-row">
+        <div class="col-md-4 mb-2 reduced-top-margin">
+          <div
+            class="invalid-field"
+            *ngIf="startDateField.errors && startDateField.errors.DatePickerFormat"
+          >
+            <span>Invalid date format</span>
           </div>
-          <div class="col-md-3 mb-1">
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="ValidateRegisteredDoctor()"
-            >
-              <i class="fas fa-bolt"></i>
-              Validate
-            </button>
+          <div
+            class="invalid-field"
+            *ngIf="startDateField.errors && startDateField.errors.MissingDateTime"
+          >
+            <span>Please select a date and time</span>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Doctor Search Errors-->
-    <div class="form-row" *ngIf="doctorSearchField.errors">
-      <div class="col-md-8 mb-2">
-        <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
-          <span>No Results Found </span>
-        </div>
-        <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
-          <span>Invalid doctor </span>
-        </div>
-        <div *ngIf="doctorSearchField.errors.OverlappingAvailability" class="invalid-field">
-          <span>
-            {{overlappingMessage}}            
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
-        <span *ngIf="isRegisteredDoctorSearching">searching...</span>
-        <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
-          Sorry, suggestions could not be loaded.
-        </div>
-      </div>
-    </div>
-    <!-- Doctor Details -->
-    <div class="form-row" *ngIf="doctorName && doctorGmcNumber">
-      <div class="col-md-10">
-        <div class="row" name="doctorDetails">
-          <div class="col-md-5">
-            <label>Name</label>
-            <input
-              type="text"
-              disabled=true
-              class="form-control"
-              value={{doctorName}}
-            />
-          </div>
-          <div class="col-md-3">
-            <label>GMC Number</label>
-            <input
-              type="text"
-              disabled=true
-              class="form-control"
-              value={{doctorGmcNumber}}
-            />
+      <!-- End Date -->
+      <div class="form-row">
+        <div class="col-md-8">
+          <label for="endDatePicker">End Date / Time</label>
+          <div class="row" name="endDatePicker">
+            <div class="col-md-5">
+              <input
+                class="form-control"
+                type="text"
+                formControlName='endDate'
+                placeholder="dd/mm/yyyy"
+                name="endDate"
+                [minDate]="minDate"
+                [startDate]='startDate'
+                ngbDatepicker
+                #t="ngbDatepicker"/>
+            </div>
+            <div class="col-md-1 padding-left-1">
+              <button
+                class="btn btn-outline-secondary calendar"
+                (click)="t.toggle()"
+                type="button">
+                <i class="far fa-calendar-alt"></i>
+              </button>
+            </div>
+            <div class="col-md-1 at">@</div>
+            <div class="col-md-4 mt-less-5 ml-less-2">
+              <ngb-timepicker formControlName="endTime" [minuteStep]="5"></ngb-timepicker>
+            </div>
           </div>
         </div>
       </div>
-      <br/>
-    </div>
-    <!-- Location -->
-    <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
-      <div class="col-md-10">
-        <div class="row" name="location">
-          <div class="col-md-6">
-            <label for="contactDetail">Location</label>
-            <select
-              class="custom-select custom-select-lg mb-2 form-control"
-              formControlName="contactDetail"
-              #contactDetail
-              id="contactDetail"
-            >
-              <option *ngFor="let contactDetail of contactDetails"
-                [disabled]="contactDetail.id===null"
-                [selected]="contactDetail.id===locationField.value"
-                [value]="contactDetail.id"
-              >
-                {{contactDetail.name}}
-              </option>
-            </select>
+      <!-- End Date Format Errors-->
+      <div class="form-row">
+        <div class="col-md-6 mb-2 reduced-top-margin">
+          <div class="invalid-field" 
+            *ngIf="endDateField.errors && endDateField.errors.DatePickerFormat"
+          >
+            <span>Invalid date format</span>
+          </div>
+          <div class="invalid-field" 
+            *ngIf="endDateField.errors && endDateField.errors.InvalidEndDate"
+          >
+            <span>End date must be after start date</span>
+          </div>
+          <div class="invalid-field"
+            *ngIf="endDateField.errors && endDateField.errors.MissingDateTime"
+          >
+            <span>Please select a date and time</span>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Location Errors-->
-    <div class="form-row">
-      <div class="col-md-4 mb-2 reduced-top-margin">
-        <div
-          class="invalid-field"
-          *ngIf="locationField.errors && locationField.errors.NoLocationSelected"
-        >
-          <span>Please select a location</span>
-        </div>
-      </div>
-    </div>
-    <!-- Postcode -->
-    <div class="form-row" *ngIf="locationField.value == 0">
-      <div class="col-md-10">
-        <label for="locationPostcode">Location Postcode</label>
-        <div class="row" name="locationPostcode">
-          <div class="col-md-4">
-            <input
-              type="search"
-              maxlength="8"
-              minlength="6"
-              formControlName="locationPostcode"
-              #locationPostcode
-              id="locationPostcode"
-              oninput="this.value = this.value.toUpperCase()"
-              class="form-control"
-              [ngClass]="{
-                'is-invalid': HasInvalidPostcode(),
-                'is-valid': HasValidPostcode()
-              }" />
-          </div>
-          <div class="col-md-3">
-            <div class="button-container">
+      <div class="form-row">
+        <div class="col-md-10">
+          <label for="doctorSearch">Search for Doctor</label>
+          <div class="row" name="doctorSearch">
+            <div class="col-md-6">
+              <input
+                type="search"
+                class="form-control"
+                id="doctorSearch"
+                #doctorSearch
+                formControlName="doctorSearch"
+                [ngbTypeahead]="RegisteredDoctorSearch"
+                [resultFormatter]="FormatTypeAheadResults"
+                [inputFormatter]="FormatTypeAheadResults"
+                [ngClass]="{
+                  'is-invalid': doctorIsValid===false,
+                  'is-valid': doctorIsValid===true,
+                  '': doctorIsValid===null
+                }" />
+            </div>
+            <div class="col-md-3 mb-1">
               <button
                 type="button"
-                class="btn btn-primary .btn-validate-postcode"
-                placement="top"
-                ngbTooltip="Validate postcode"
-                [openDelay]="1000"
-                [closeDelay]="500"
-                tooltipClass="subtle-tooltip"
-                (click)="ValidatePostcode()"
-                [disabled]="locationPostcode.value == '' || locationPostcode.errors != null"
+                class="btn btn-primary"
+                (click)="ValidateRegisteredDoctor()"
               >
-                {{ IsSearchingForPostcode() ? "Searching" : "Validate" }}
-                <span
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                  *ngIf="IsSearchingForPostcode()"
-                >
-                </span>
+                <i class="fas fa-bolt"></i>
+                Validate
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Postcode Errors-->
-   <div class="form-row">
-      <div class="col-md-4 mb-2">
-        <div
-          class="invalid-field"
-          *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
-        >
-          <span>Invalid Postcode</span>
+      <!-- Doctor Search Errors-->
+      <div class="form-row" *ngIf="doctorSearchField.errors">
+        <div class="col-md-8 mb-2">
+          <div *ngIf="doctorSearchField.errors.NoMatchingResults" class="invalid-field">
+            <span>No Results Found</span>
+          </div>
+          <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
+            <span>Please search for and validate a doctor</span>
+          </div>
+          <div *ngIf="doctorSearchField.errors.OverlappingAvailability" class="invalid-field">
+            <span>
+              {{overlappingMessage}}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="col-md-4 offset-md-8 text-right cancelOrSave">
-        <button
-          type="button"
-          class="btn btn-standard btn-cancel"
-          (click)="Cancel()"
-        >Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary btn-standard"
-          (click)="SaveOnCallDoctor()"
-        >Save</button>
+      <div class="form-row">
+        <div class="col-md-4" *ngIf="isRegisteredDoctorSearching || hasDoctorSearchFailed">
+          <span *ngIf="isRegisteredDoctorSearching">searching...</span>
+          <div class="invalid-field" *ngIf="hasDoctorSearchFailed">
+            Sorry, suggestions could not be loaded.
+          </div>
+        </div>
       </div>
-    </div>
+      <!-- Doctor Details -->
+      <div class="form-row" *ngIf="doctorName && doctorGmcNumber">
+        <div class="col-md-10">
+          <div class="row" name="doctorDetails">
+            <div class="col-md-5">
+              <label>Name</label>
+              <input
+                type="text"
+                disabled=true
+                class="form-control"
+                value={{doctorName}}
+              />
+            </div>
+            <div class="col-md-3">
+              <label>GMC Number</label>
+              <input
+                type="text"
+                disabled=true
+                class="form-control"
+                value={{doctorGmcNumber}}
+              />
+            </div>
+          </div>
+        </div>
+        <br/>
+      </div>
+      <!-- Location -->
+      <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
+        <div class="col-md-10">
+          <div class="row" name="location">
+            <div class="col-md-6">
+              <label for="contactDetail">Location</label>
+              <select
+                class="custom-select custom-select-lg mb-2 form-control"
+                formControlName="contactDetail"
+                #contactDetail
+                id="contactDetail"
+              >
+                <option *ngFor="let contactDetail of contactDetails"
+                  [disabled]="contactDetail.id===null"
+                  [selected]="contactDetail.id===locationField.value"
+                  [value]="contactDetail.id"
+                >
+                  {{contactDetail.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Location Errors-->
+      <div class="form-row">
+        <div class="col-md-4 mb-2 reduced-top-margin">
+          <div
+            class="invalid-field"
+            *ngIf="contactDetails && contactDetails.length > 0 && locationField.errors && locationField.errors.NoLocationSelected"
+          >
+            <span>Please select a location</span>
+          </div>
+        </div>
+      </div>
+      <!-- Postcode -->
+      <div class="form-row" *ngIf="locationField.value == 0">
+        <div class="col-md-10">
+          <label for="locationPostcode">Location Postcode</label>
+          <div class="row" name="locationPostcode">
+            <div class="col-md-4">
+              <input
+                type="search"
+                maxlength="8"
+                minlength="6"
+                formControlName="locationPostcode"
+                #locationPostcode
+                id="locationPostcode"
+                oninput="this.value = this.value.toUpperCase()"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': HasInvalidPostcode(),
+                  'is-valid': HasValidPostcode()
+                }" />
+            </div>
+            <div class="col-md-3">
+              <div class="button-container">
+                <button
+                  type="button"
+                  class="btn btn-primary .btn-validate-postcode"
+                  placement="top"
+                  ngbTooltip="Validate postcode"
+                  [openDelay]="1000"
+                  [closeDelay]="500"
+                  tooltipClass="subtle-tooltip"
+                  (click)="ValidatePostcode()"
+                  [disabled]="locationPostcode.value == '' || locationPostcode.errors != null"
+                >
+                  {{ IsSearchingForPostcode() ? "Searching" : "Validate" }}
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    *ngIf="IsSearchingForPostcode()"
+                  >
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Postcode Errors-->
+    <div class="form-row">
+        <div class="col-md-6 mb-2">
+          <div
+            class="invalid-field"
+            *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
+          >
+            <span>Invalid postcode</span>
+          </div>
+          <div
+            class="invalid-field"
+            *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.MissingPostcode"
+          >
+            <span>Please enter and validate a postcode</span>
+          </div>
+          <div
+            class="invalid-field"
+            *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.PostcodeNotValidated"
+          >
+            <span>Please validate the postcode</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-4 offset-md-3 text-right cancelOrSave">
+          <button
+            type="button"
+            class="btn btn-standard btn-cancel"
+            (click)="Cancel()"
+          >Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary btn-standard"
+            (click)="SaveOnCallDoctor()"
+          >Save</button>
+        </div>
+      </div>
+    </div>    
   </form>
 </div>
