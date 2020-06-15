@@ -33,6 +33,7 @@ export class OnCallDoctorModalComponent implements OnInit {
 
   contactDetails: ContactDetail[];
   doctorGmcNumber: number;
+  doctorHasBeenValidated: boolean;
   doctorId: number;
   doctorIsValid?: boolean;
   doctorName: string;
@@ -94,8 +95,6 @@ export class OnCallDoctorModalComponent implements OnInit {
       this.endDateField.setValue(this.ConvertToDateStruct(futureDateTime));
       this.endTimeField.setValue(this.ConvertToTimeStruct(futureDateTime, true));
     }
-
-    this.OnChanges();
   }
 
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
@@ -278,49 +277,6 @@ export class OnCallDoctorModalComponent implements OnInit {
     );
   }
 
-  IsStartDateBeforeEndDate(): boolean {
-    const startDate =
-      this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
-    const endDate =
-      this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
-
-    return startDate < endDate;
-  }
-
-  CheckDates() {
-    if (!this.IsStartDateBeforeEndDate()) {
-      this.endDateField.setErrors({InvalidEndDate: true});
-    } else {
-      this.endDateField.setErrors({InvalidEndDate: false});
-    }
-  }
-
-  OnChanges(): void {
-    this.onCallDoctorForm.get('startDate').valueChanges.subscribe(
-      val => {
-        this.CheckDates();
-      }
-    );
-
-    this.onCallDoctorForm.get('startTime').valueChanges.subscribe(
-      val => {
-        this.CheckDates();
-      }
-    );
-
-    this.onCallDoctorForm.get('endDate').valueChanges.subscribe(
-      val => {
-        this.CheckDates();
-      }
-    );
-
-    this.onCallDoctorForm.get('endTime').valueChanges.subscribe(
-      val => {
-        this.CheckDates();
-      }
-    );
-  }
-
   RegisteredDoctorSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),
@@ -341,54 +297,23 @@ export class OnCallDoctorModalComponent implements OnInit {
     )
 
   SaveOnCallDoctor() {
-    let canContinue: boolean = true;
-
-    // check start date
-    if (!this.startDateField.value || !this.startTimeField.value) {
-      canContinue = false;
-      this.startDateField.setErrors({ MissingDateTime: true });
-    }
-    else if (DatePickerFormat((this.startDateField as FormControl))) {
-      canContinue = false;
-      this.startDateField.setErrors({ DatePickerFormat: true });
-    }
-    else {
-      this.startDateField.setErrors(null);
-    }
-
-    // check end date
-    if (!this.endDateField.value || !this.endTimeField.value) {
-      canContinue = false;
-      this.endDateField.setErrors({ MissingDateTime: true });
-    }
-    else if (DatePickerFormat((this.endDateField.value as FormControl))) {
-      canContinue = false;
-      this.endDateField.setErrors({ DatePickerFormat: true });
-    }
-    else {
-      this.endDateField.setErrors(null);
-    }
-
-    // check end date is after start date
-    if (this.startDateField.value && this.startTimeField.value && 
-      this.startDateField.errors === null && this.endDateField.value && 
-      this.endTimeField.value && this.endDateField.errors === null) {
-      if (this.IsEndDateBeforeStartDate(
-        this.endDateField,
-        this.endTimeField,
-        this.startDateField,
-        this.startTimeField
-      )) {
-        canContinue = false;
-        this.endDateField.setErrors({ InvalidEndDate: true });
-      }
-      else {
-        this.endDateField.setErrors(null);
-      }
-    }    
+    let canContinue = this.ValidateDateTimes();
 
     // check doctor
-    if (!this.doctorName || !this.doctorGmcNumber) {
+    if (this.startDateField.dirty || this.startTimeField.dirty ||
+      this.endDateField.dirty || this.endTimeField.dirty ||
+      this.doctorSearchField.dirty) {
+      canContinue = false;
+      this.doctorName = null;
+      this.doctorGmcNumber = 0;
+      if (this.doctorHasBeenValidated) {
+        this.doctorSearchField.setErrors({ ReValidateDoctor: true });
+      }
+      else {
+        this.doctorSearchField.setErrors({ InvalidDoctor: true });
+      }
+    }
+    else if (!this.doctorName || !this.doctorGmcNumber) {
       canContinue = false;
       this.doctorSearchField.setErrors({ InvalidDoctor: true });
     }
@@ -484,77 +409,139 @@ export class OnCallDoctorModalComponent implements OnInit {
   }
 
   ValidateRegisteredDoctor() {
-    if (!this.doctorSearchField.value) {
-      this.toastService.displayError({
-        title: 'Error',
-        message: 'Please search for a doctor'
-      });
-      this.doctorIsValid = false;
-      return;
-    }
+    this.doctorHasBeenValidated = true;
+    let canContinue: boolean = this.ValidateDateTimes();
 
-    this.doctorName = null;
-    this.doctorGmcNumber = 0;
-    this.contactDetails = null;
-    this.locationField.setValue(null);
-    this.doctorSearchField.setErrors(null);
-
-    this.userDetailsService.GetDoctorDetails(this.doctorSearchField.value.id)
-      .subscribe((doctorDetails: UserDetails) => {
-
-        if (doctorDetails === null) {
-          this.toastService.displayError({
-            title: 'Error',
-            message: 'Unable to retrieve doctor details'
-          });
-          this.doctorIsValid = false;
-        } else {
-          let startDateTime: Date = 
-            this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
-          let endDateTime: Date = 
-            this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
-          let availability: UserAvailability = {
-            start: startDateTime,
-            end: endDateTime,
-            id: this.onCallDoctor ? this.onCallDoctor.id : 0,
-            userId: doctorDetails.id
-          };          
-          this.overlappingMessage = null;
-
-          this.userAvailabilityService.checkOverlapping(availability)
-            .subscribe((result: UserAvailabilityOverlapping) => {
-              if (result.isOverlapping) {
-                this.doctorIsValid = false;
-                this.overlappingMessage = result.message;
-                this.doctorSearchField.setErrors({ OverlappingAvailability: true }); 
-              }
-              else {
-                this.doctorGmcNumber = doctorDetails.gmcNumber;
-                this.doctorId = doctorDetails.id;
-                this.doctorName = doctorDetails.displayName;
-                this.doctorIsValid = true;
-                this.locationField.setValue(null);
-                this.getContactDetails(doctorDetails.id);
-              }
-            }, error => {
-              let msg: string = 'Error Validating Doctor';
-              if (error.status === 400 && error.error) {                  
-                msg = error.error;
-              }
-              this.toastService.displayError({
-                title: 'Error',
-                message: msg
-              });
-          });
-        }
-      },
-      (err) => {
+    if (canContinue) {
+      if (!this.doctorSearchField.value) {
         this.toastService.displayError({
           title: 'Error',
-          message: 'Error Retrieving Doctor Details'
+          message: 'Please search for a doctor'
         });
         this.doctorIsValid = false;
-      });
+        canContinue = false;
+      }
+
+      this.doctorName = null;
+      this.doctorGmcNumber = 0;
+      this.contactDetails = null;
+      this.locationField.setValue(null);
+      this.doctorSearchField.setErrors(null);
+
+      this.userDetailsService.GetDoctorDetails(this.doctorSearchField.value.id)
+        .subscribe((doctorDetails: UserDetails) => {
+
+          if (doctorDetails === null) {
+            this.toastService.displayError({
+              title: 'Error',
+              message: 'Unable to retrieve doctor details'
+            });
+            this.doctorIsValid = false;
+          } else {
+            let startDateTime: Date = 
+              this.CreateDateFromPickerObjects(this.startDateField.value, this.startTimeField.value);
+            let endDateTime: Date = 
+              this.CreateDateFromPickerObjects(this.endDateField.value, this.endTimeField.value);
+            let availability: UserAvailability = {
+              start: startDateTime,
+              end: endDateTime,
+              id: this.onCallDoctor ? this.onCallDoctor.id : 0,
+              userId: doctorDetails.id
+            };
+            this.overlappingMessage = null;
+
+            this.userAvailabilityService.checkOverlapping(availability)
+              .subscribe((result: UserAvailabilityOverlapping) => {
+                if (result.isOverlapping) {
+                  this.doctorIsValid = false;
+                  this.overlappingMessage = result.message;
+                  this.doctorSearchField.setErrors({ OverlappingAvailability: true });
+                }
+                else {
+                  this.CleanDateAndDoctorFields();
+
+                  this.doctorGmcNumber = doctorDetails.gmcNumber;
+                  this.doctorId = doctorDetails.id;
+                  this.doctorName = doctorDetails.displayName;
+                  this.doctorIsValid = true;
+                  this.locationField.setValue(null);
+                  this.getContactDetails(doctorDetails.id);
+                }
+              }, error => {
+                let msg: string = 'Error Validating Doctor';
+                if (error.status === 400 && error.error) {
+                  msg = error.error;
+                }
+                this.toastService.displayError({
+                  title: 'Error',
+                  message: msg
+                });
+            });
+          }
+        },
+        (err) => {
+          this.toastService.displayError({
+            title: 'Error',
+            message: 'Error Retrieving Doctor Details'
+          });
+          this.doctorIsValid = false;
+        });
+    }
+  }
+
+  ValidateDateTimes(): boolean {
+    let canContinue: boolean = true;    
+
+    // check start date
+    if (!this.startDateField.value || !this.startTimeField.value) {
+      canContinue = false;
+      this.startDateField.setErrors({ MissingDateTime: true });
+    }
+    else {
+      let isStartDateValid = DatePickerFormat((this.startDateField as FormControl));
+      if (isStartDateValid && isStartDateValid.DatePickerFormat && 
+        isStartDateValid.DatePickerFormat.valid === false) {
+        canContinue = false;
+        this.startDateField.setErrors({ DatePickerFormat: true });
+      }
+      else {
+        this.startDateField.setErrors(null);
+      }
+    }
+
+    // check end date
+    if (!this.endDateField.value || !this.endTimeField.value) {
+      canContinue = false;
+      this.endDateField.setErrors({ MissingDateTime: true });
+    }
+    else {
+      let isEndDateValid = DatePickerFormat((this.endDateField as FormControl));
+      if (isEndDateValid && isEndDateValid.DatePickerFormat && 
+        isEndDateValid.DatePickerFormat.valid === false) {
+        canContinue = false;
+        this.endDateField.setErrors({ DatePickerFormat: true });
+      }
+      else {
+        this.endDateField.setErrors(null);
+      }
+    }    
+
+    // check end date is after start date
+    if (this.startDateField.value && this.startTimeField.value && 
+      this.startDateField.errors === null && this.endDateField.value && 
+      this.endTimeField.value && this.endDateField.errors === null) {
+      if (this.IsEndDateBeforeStartDate(
+        this.endDateField,
+        this.endTimeField,
+        this.startDateField,
+        this.startTimeField
+      )) {
+        canContinue = false;
+        this.endDateField.setErrors({ InvalidEndDate: true });
+      } 
+    } 
+
+    return canContinue;
   }
 
   ValidateTypeAheadResults(results: any[], fieldName: string) {
@@ -568,5 +555,13 @@ export class OnCallDoctorModalComponent implements OnInit {
     if (results !== null && results.length > 0) {
       results.sort((a, b) => (a.resultText > b.resultText) ? 1 : -1);
     }
+  }
+
+  CleanDateAndDoctorFields() {
+    this.startDateField.markAsPristine();
+    this.startTimeField.markAsPristine();
+    this.endDateField.markAsPristine();
+    this.endTimeField.markAsPristine();
+    this.doctorSearchField.markAsPristine();
   }
 }
