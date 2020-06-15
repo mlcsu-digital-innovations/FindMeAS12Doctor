@@ -60,7 +60,21 @@ function sort(
     return referralList;
   } else {
     return [...referralList].sort((a, b) => {
-      const res = compare(a[column], b[column], sortColumnType);
+      let res: number;
+
+      if (column.includes('.')) {
+
+        const childProperty = column.split('.')[0];
+        const grandChildProperty = column.split('.')[1];
+
+        const compare1 = a[childProperty][grandChildProperty];
+        const compare2 = b[childProperty][grandChildProperty];
+
+        res = compare(compare1, compare2, sortColumnType);
+
+      } else {
+        res = compare(a[column], b[column], sortColumnType);
+      }
       return direction === 'asc' ? res : -res;
     });
   }
