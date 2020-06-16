@@ -89,13 +89,13 @@
                     <th class="text-center" 
                       scope="col" 
                       sortable="onCallIsConfirmed" 
-                      columnType='boolean' 
+                      columnType='string' 
                       (sort)="onSort($event)">
                       Confirmation Status
                     </th>                    
                     <th class="text-center" 
                       scope="col" 
-                      sortable="location.onCallRejectedReason"
+                      sortable="onCallRejectedReason"
                       columnType='string' 
                       (sort)="onSort($event)">
                       If Confirmation Status is No, reason and details
