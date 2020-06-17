@@ -52,17 +52,17 @@ form {
   background-color: lightgrey;
 }
 
-.table-on-call-doctor-list {  
+.table-on-call-doctor-list {
   background-color: #fff;
   font-size: smaller;
 }
 
-.table-on-call-doctor-list th:nth-child(n-5) {  
+.table-on-call-doctor-list th:nth-child(n-5) {
   background-color:#0dadb7;
   color: white;
 }
 
-.table-on-call-doctor-list th:nth-child(n+5) {  
+.table-on-call-doctor-list th:nth-child(n+5) {
   background-color:#0dadb7;
   color: white;
 }
@@ -98,4 +98,9 @@ th[sortable].desc:before, th[sortable].asc:before {
 th[sortable].desc:before {
   transform: rotate(180deg);
   -ms-transform: rotate(180deg);
+}
+
+.table-responsive {
+  width: inherit !important;
+  overflow: inherit !important;
 }
