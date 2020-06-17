@@ -5,7 +5,7 @@ import { ContactDetailTypeService }
   from 'src/app/services/contact-detail-type/contact-detail-type.service';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { DoctorListService } from 'src/app/services/doctor-list/doctor-list.service';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor';
@@ -45,6 +45,7 @@ export class OnCallDoctorModalComponent implements OnInit {
   onCallDoctorExists: boolean;
   onCallDoctorForm: FormGroup;  
   overlappingMessage: string;
+  postcodeHasBeenValidated: boolean;
   startDate: NgbDateStruct;
   startTime: NgbTimeStruct;
 
@@ -63,20 +64,10 @@ export class OnCallDoctorModalComponent implements OnInit {
     this.onCallDoctorExists = false;
     this.contactDetails = [];
     this.onCallDoctorForm = this.formBuilder.group({
-      endDate: [
-        this.endDate,
-        [
-          DatePickerFormat
-        ]
-      ],
+      endDate: [this.endDate],     
       endTime: [this.endTime],
       doctorSearch: [''],
-      startDate: [
-        this.startDate,
-        [
-          DatePickerFormat
-        ]
-      ],
+      startDate: [this.startDate],     
       startTime: [this.startTime],
       contactDetail: null,
       locationPostcode: [
@@ -231,6 +222,9 @@ export class OnCallDoctorModalComponent implements OnInit {
     else {
       this.locationField.setValue(0);
       this.locationPostcodeField.setValue(this.onCallDoctor.location.postcode);
+      if (this.onCallDoctor.location.postcode) {
+        this.postcodeHasBeenValidated = true;
+      }
     }
   }
 
@@ -259,6 +253,13 @@ export class OnCallDoctorModalComponent implements OnInit {
 
   HasDoctorBeenSelected() {
     return (typeof this.doctorSearchField.value) === 'object';
+  }
+
+  HasMissingPostcode(): boolean {
+    return (
+      this.locationPostcodeField.value === '' ||
+      this.locationPostcodeField.value === null
+    );
   }
 
   HasInvalidPostcode(): boolean {
@@ -342,27 +343,36 @@ export class OnCallDoctorModalComponent implements OnInit {
   SaveOnCallDoctor() {
     let canContinue: boolean = true;
 
-    // check doctor
-    if (!this.doctorName || !this.doctorGmcNumber) {
-      canContinue = false;
-      this.doctorSearchField.setErrors({ InvalidDoctor: true });
-    }
-
     // check start date
-    if (!this.startDateField.value) {
+    if (!this.startDateField.value || !this.startTimeField.value) {
+      canContinue = false;
+      this.startDateField.setErrors({ MissingDateTime: true });
+    }
+    else if (DatePickerFormat((this.startDateField as FormControl))) {
       canContinue = false;
       this.startDateField.setErrors({ DatePickerFormat: true });
     }
+    else {
+      this.startDateField.setErrors(null);
+    }
 
     // check end date
-    if (!this.endDateField.value) {
+    if (!this.endDateField.value || !this.endTimeField.value) {
+      canContinue = false;
+      this.endDateField.setErrors({ MissingDateTime: true });
+    }
+    else if (DatePickerFormat((this.endDateField.value as FormControl))) {
       canContinue = false;
       this.endDateField.setErrors({ DatePickerFormat: true });
     }
+    else {
+      this.endDateField.setErrors(null);
+    }
 
     // check end date is after start date
-    if (this.startDateField.value && this.startTimeField &&
-      this.endDateField.value && this.endTimeField) {
+    if (this.startDateField.value && this.startTimeField.value && 
+      this.startDateField.errors === null && this.endDateField.value && 
+      this.endTimeField.value && this.endDateField.errors === null) {
       if (this.IsEndDateBeforeStartDate(
         this.endDateField,
         this.endTimeField,
@@ -372,6 +382,18 @@ export class OnCallDoctorModalComponent implements OnInit {
         canContinue = false;
         this.endDateField.setErrors({ InvalidEndDate: true });
       }
+      else {
+        this.endDateField.setErrors(null);
+      }
+    }    
+
+    // check doctor
+    if (!this.doctorName || !this.doctorGmcNumber) {
+      canContinue = false;
+      this.doctorSearchField.setErrors({ InvalidDoctor: true });
+    }
+    else {
+      this.doctorSearchField.setErrors(null);
     }
 
     // check location
@@ -379,11 +401,26 @@ export class OnCallDoctorModalComponent implements OnInit {
       canContinue = false;
       this.locationField.setErrors({ NoLocationSelected: true });
     }
-
+    else {
+      this.locationField.setErrors(null);
+    }
+    
     // check postcode if location is Other
-    if (this.locationField.value === 0 && !this.HasValidPostcode()) {
-      canContinue = false;
-      this.locationPostcodeField.setErrors({ InvalidPostcode: true });
+    if (this.locationField.value == 0) {
+      if (this.locationPostcodeField.errors && this.locationPostcodeField.errors.InvalidPostcode) {
+        canContinue = false;
+      }
+      else if (this.locationPostcodeField.value === null || this.locationPostcodeField.value === '') {
+        canContinue = false;
+        this.locationPostcodeField.setErrors({ MissingPostcode: true });
+      }
+      else if (!this.postcodeHasBeenValidated) {
+        canContinue = false;
+        this.locationPostcodeField.setErrors({ PostcodeNotValidated: true });
+      }     
+      else {
+        this.locationPostcodeField.setErrors(null);
+      }
     }
 
     if (canContinue) {
@@ -430,12 +467,14 @@ export class OnCallDoctorModalComponent implements OnInit {
     this.postcodeValidationService.validatePostcode(this.locationPostcodeField.value)
       .subscribe(result => {
         this.isSearchingForPostcode = false;
+        this.postcodeHasBeenValidated = true;
         this.locationPostcodeField.setErrors(null);
         this.toastService.displaySuccess({
           message: 'Postcode is valid'
         });
       }, (err) => {
         this.isSearchingForPostcode = false;
+        this.postcodeHasBeenValidated = false;
         this.locationPostcodeField.setErrors({ InvalidPostcode: true });
         this.toastService.displayError({
           title: 'Search Error',
