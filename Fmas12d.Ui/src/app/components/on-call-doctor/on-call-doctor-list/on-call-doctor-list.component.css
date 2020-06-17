@@ -76,7 +76,7 @@ form {
 }
 
 .table-on-call-doctor-list th:nth-child(n-1) {
-  width: 40px;
+  xwidth: 40px;
 }
 
 th[sortable] {
@@ -98,9 +98,4 @@ th[sortable].desc:before, th[sortable].asc:before {
 th[sortable].desc:before {
   transform: rotate(180deg);
   -ms-transform: rotate(180deg);
-}
-
-.table-responsive {
-  width: inherit !important;
-  overflow: inherit !important;
 }
