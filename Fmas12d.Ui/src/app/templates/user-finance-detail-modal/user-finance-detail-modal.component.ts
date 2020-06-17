@@ -21,6 +21,7 @@ export class UserFinanceDetailModalComponent implements OnInit {
   hasCcgSearchFailed: boolean;
   isCcgSearching: boolean;
   unknownCcgId: number;
+  submitted: boolean;
 
   constructor(
     private ccgListService: CcgListService,
@@ -92,6 +93,7 @@ export class UserFinanceDetailModalComponent implements OnInit {
   }
 
   SaveFinanceDetail() {
+    this.submitted = true;
 
     if (this.financeDetailForm.valid) {
       const bankDetail = {} as BankDetailsProfile;

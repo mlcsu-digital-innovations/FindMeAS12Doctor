@@ -19,6 +19,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ListFilterComponent } from 'src/app/components/list-filter/list-filter.component';
+import { SignOutComponent } from './sign-out/signout.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ListFilterComponent } from 'src/app/components/list-filter/list-filter.
     ToastsComponent,
     UnauthorizedComponent,
     UserProfileComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    SignOutComponent
   ],
   imports: [
     CommonModule,

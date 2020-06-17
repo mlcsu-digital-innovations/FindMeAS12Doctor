@@ -27,6 +27,12 @@ namespace Fmas12d.Business.Services
       bool asNoTracking,
       bool activeOnly
     );
+    Task<UserAvailabilityOverlapping> CheckOverlapWithExisting(
+      int userId,
+      int userAvailabilityId,
+      DateTimeOffset start,
+      DateTimeOffset end
+    );
     Task<IEnumerable<IUserAvailabilityDoctor>> GetAvailableDoctorsAsync(
       DateTimeOffset requiredDateTime,
       bool asNoTracking,

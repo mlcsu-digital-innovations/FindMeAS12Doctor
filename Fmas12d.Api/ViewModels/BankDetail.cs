@@ -25,6 +25,6 @@ namespace Fmas12d.Api.ViewModels
     public int? SortCode { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
-    public int VsrNumber { get; set; }
+    public decimal? VsrNumber { get; set; }
   }
 }

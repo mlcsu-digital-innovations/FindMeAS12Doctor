@@ -1,10 +1,9 @@
 import { ClaimView } from 'src/app/interfaces/claim-view';
 import { Component, OnInit } from '@angular/core';
-import { FinanceClaimService } from 'src/app/services/finance-claim/finance-claim.service';
+import { DoctorClaimService } from 'src/app/services/doctor-claim/doctor-claim-service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ParamMap, ActivatedRoute } from '@angular/router';
-
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import * as moment from 'moment';
@@ -21,7 +20,7 @@ export class DoctorClaimViewComponent implements OnInit {
   claimId: number;
 
   constructor(
-    private claimsService: FinanceClaimService,
+    private claimsService: DoctorClaimService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private toastService: ToastService
@@ -68,11 +67,6 @@ export class DoctorClaimViewComponent implements OnInit {
   InitialiseForm(claim: ClaimView) {
 
     this.claimId = claim.id;
-    this.claimForm.controls['claimReference'].setValue(claim.claimReference);
-    this.claimForm.controls['claimStatus'].setValue(claim.claimStatus.name);
-    this.claimForm.controls['ccg'].setValue(claim.ccg.name);
-    this.claimForm.controls['assessmentPayment'].setValue(claim.assessmentPayment);
-    this.claimForm.controls['mileagePayment'].setValue(claim.mileagePayment);
 
     let address = claim.assessment.address1;
     address += claim.assessment.address2 == null ? '' : `, ${claim.assessment.address2}`;
@@ -80,12 +74,16 @@ export class DoctorClaimViewComponent implements OnInit {
     address += claim.assessment.address4 == null ? '' : `, ${claim.assessment.address4}`;
     address += claim.assessment.postcode == null ? '' : `, ${claim.assessment.postcode}`;
 
-    this.claimForm.controls['assessmentAddress'].setValue(address);
-    this.claimForm.controls['assessmentDate']
-      .setValue(moment(claim.assessment.scheduledTime).format('DD MMM YYYY HH:mm'));
-
-    this.claimForm.controls['assessmentOutcome'].setValue(
-     claim.assessment.isSuccessful ? 'Successful Assessment' : 'Unsuccessful Assessment'
-    );
+    this.claimForm.patchValue({
+      claimReference: claim.claimReference,
+      claimStatus: claim.claimStatus.name,
+      assessmentPayment: claim.assessmentPayment,
+      mileagePayment: claim.mileagePayment,
+      ccg: claim.assessment.ccg.name,
+      assessmentAddress: address,
+      assessmentDate: moment(claim.assessment.scheduledTime).format('DD MMM YYYY HH:mm'),
+      assessmentOutcome: claim.assessment.isSuccessful ?
+        'Successful Assessment' : 'Unsuccessful Assessment'
+    });
   }
 }

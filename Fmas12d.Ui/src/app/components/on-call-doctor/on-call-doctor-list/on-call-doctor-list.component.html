@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
           <form novalidate>
-            <div class="form-row">              
+            <div class="form-row">
               <div class="col-md-2 offset-md-10 text-right mt-more-2">
                 <a
                   (click)="addOnCallDoctor()"
@@ -38,62 +38,62 @@
                 <table class="table table-bordered table-sm table-on-call-doctor-list">
                   <thead>
                     <tr>
-                      <th class="text-center" 
-                        scope="col" 
-                        sortable="userName" 
-                        columnType='string' 
+                      <th class="text-center"
+                        scope="col"
+                        sortable="userName"
+                        columnType='string'
                         (sort)="onSort($event)">
                         Doctor
                       </th>
-                      <th class="text-center" 
-                        scope="col" 
-                        sortable="gmcNumber" 
-                        columnType='number' 
+                      <th class="text-center"
+                        scope="col"
+                        sortable="gmcNumber"
+                        columnType='number'
                         (sort)="onSort($event)">
                         GMC Number
                       </th>
-                      <th class="text-center" 
-                        scope="col" 
-                        sortable="start" 
-                        columnType='string' 
+                      <th class="text-center"
+                        scope="col"
+                        sortable="start"
+                        columnType='string'
                         (sort)="onSort($event)">
                         Start Date / Time
                       </th>
-                      <th class="text-center" 
-                        scope="col" 
-                        sortable="end" 
-                        columnType='string' 
+                      <th class="text-center"
+                        scope="col"
+                        sortable="end"
+                        columnType='string'
                         (sort)="onSort($event)">
                         End Date / Time
                       </th>
-                      <th class="text-center" 
-                        scope="col" 
-                        sortable="onCallConfirmationSentAt" 
-                        columnType='string' 
+                      <th class="text-center"
+                        scope="col"
+                        sortable="onCallConfirmationSentAt"
+                        columnType='string'
                         (sort)="onSort($event)">
                         Confirmation Request Sent
                       </th>
-                      <th class="text-center" 
-                        scope="col" 
+                      <th class="text-center"
+                        scope="col"
                         sortable="location.contactDetailTypeName"
-                        columnType='string' 
+                        columnType='string'
                         (sort)="onSort($event)">
                         Location
-                      </th> 
-                      <th class="text-center" 
-                        scope="col" 
-                        sortable="onCallIsConfirmed" 
-                        columnType='boolean' 
+                      </th>
+                      <th class="text-center"
+                        scope="col"
+                        sortable="onCallIsConfirmed"
+                        columnType='boolean'
                         (sort)="onSort($event)">
                         Confirmation Status
-                      </th>                    
-                      <th class="text-center" 
-                        scope="col" 
+                      </th>
+                      <th class="text-center"
+                        scope="col"
                         sortable="location.onCallRejectedReason"
-                        columnType='string' 
+                        columnType='string'
                         (sort)="onSort($event)">
                         If Confirmation Status is No, reason and details
-                      </th>                     
+                      </th>
                       <th class="sm-col text-center" scope="col">
                         &nbsp; &nbsp;
                       </th>
@@ -174,14 +174,14 @@
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 
 <ng-template #addOnCallDoctorModal>
-  <app-on-call-doctor-modal    
+  <app-on-call-doctor-modal
   (actioned)="OnModalActionAdd($event)"
   >
   </app-on-call-doctor-modal>
 </ng-template>
 
 <ng-template #editOnCallDoctorModal>
-  <app-on-call-doctor-modal    
+  <app-on-call-doctor-modal
   (actioned)="OnModalActionEdit($event)"
   [onCallDoctor]="selectedOnCallDoctor"
   >

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fmas12d.Data.Entities
 {
@@ -14,6 +15,7 @@ namespace Fmas12d.Data.Entities
     public int? SortCode { get; set; }
     public virtual User User { get; set; }
     public int UserId { get; set; }
-    public int VsrNumber { get; set; }
+    [Column(TypeName = "decimal(10,0)")]
+    public decimal? VsrNumber { get; set; }
   }
 }

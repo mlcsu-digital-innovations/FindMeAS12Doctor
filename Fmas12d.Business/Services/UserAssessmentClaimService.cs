@@ -85,6 +85,8 @@ namespace Fmas12d.Business.Services
         .ThenInclude(a => a.CompletedByUser)
       .Include(uac => uac.Assessment)
         .ThenInclude(a => a.UnsuccessfulAssessmentType)
+      .Include(uac => uac.Assessment)
+        .ThenInclude(a => a.Ccg)
       .WhereIsActiveOrActiveOnly(true)
       .Where(a => a.Id == id)
       .Select(UserAssessmentClaim.ProjectFromEntity)

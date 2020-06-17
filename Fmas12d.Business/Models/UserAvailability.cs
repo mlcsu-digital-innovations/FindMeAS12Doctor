@@ -17,7 +17,7 @@ namespace Fmas12d.Business.Models
       End = entity.End;
       Location = new Location(entity);
       Start = entity.Start;
-      // TODO Status = ;
+      Status = new UserAvailabilityStatus(entity.UserAvailabilityStatus);
       StatusId = entity.UserAvailabilityStatusId;
       User = new User(entity.User);
       UserId = entity.UserId;

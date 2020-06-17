@@ -131,6 +131,7 @@ export class OnCallDoctorListService {
   set sortDirection(sortDirection: SortDirection) { this._set({ sortDirection }); }
   set sortColumnType(sortColumnType: string) { this._set({ sortColumnType }); }  
 
+
   private _set(patch: Partial<State>) {
     if (this._rawOnCallDoctorList) {
       Object.assign(this._state, patch);

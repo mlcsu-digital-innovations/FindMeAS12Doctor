@@ -6,7 +6,7 @@ namespace Fmas12d.Api.RequestModels
     {
       public int UserId { get; set; }
       public int CcgId { get; set; }
-      public int VsrNumber { get; set; }
+      public decimal? VsrNumber { get; set; }
 
       internal void MapToBusinessModel(Business.Models.IVsrNumberUpdate model)
       {      
