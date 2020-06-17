@@ -72,50 +72,52 @@
 
             </div>
             <div class="form-row">
-            <table class="table table-bordered table-sm">
-              <thead>
-                <th scope="col" sortable="claimReference" (sort)="onSort($event)">Claim Reference</th>
-                <th
-                  scope="col"
-                  sortable="assessment.scheduledTime"
-                  (sort)="onSort($event)"
-                  columnType='dateTime'
-                >
-                  Assessment Date
-                </th>
-                <th scope="col" sortable="ccg.name" (sort)="onSort($event)">CCG</th>
-                <th scope="col" sortable="claimant.displayName" (sort)="onSort($event)">Claimant</th>
-                <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
-                <th scope="col" sortable="exportedDate" (sort)="onSort($event)">Exported</th>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let claim of claimsList$ | async; index as i"
-                  routerLink="/finance/claim/{{claim.id}}"
-                  class="clickable"
-                >
-                  <td>
-                    <ngb-highlight [result]="claim.claimReference" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.assessment.scheduledTime | date" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.ccg.name" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.claimant.displayName" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td>
-                    <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
-                  </td>
-                  <td class="tick">
-                    <em *ngIf="claim.exportedDate" class="fas fa-check-square"></em>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <th scope="col" sortable="claimReference" (sort)="onSort($event)">Claim Reference</th>
+                    <th
+                      scope="col"
+                      sortable="assessment.scheduledTime"
+                      (sort)="onSort($event)"
+                      columnType='dateTime'
+                    >
+                      Assessment Date
+                    </th>
+                    <th scope="col" sortable="ccg.name" (sort)="onSort($event)">CCG</th>
+                    <th scope="col" sortable="claimant.displayName" (sort)="onSort($event)">Claimant</th>
+                    <th scope="col" sortable="claimStatus.name" (sort)="onSort($event)">Status</th>
+                    <th scope="col" sortable="exportedDate" (sort)="onSort($event)">Exported</th>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let claim of claimsList$ | async; index as i"
+                      routerLink="/finance/claim/{{claim.id}}"
+                      class="clickable"
+                    >
+                      <td>
+                        <ngb-highlight [result]="claim.claimReference" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.assessment.scheduledTime | date" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.ccg.name" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.claimant.displayName" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="claim.claimStatus.name" [term]="claimsService.searchTerm"></ngb-highlight>
+                      </td>
+                      <td class="tick">
+                        <em *ngIf="claim.exportedDate" class="fas fa-check-square"></em>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           <div class="d-flex justify-content-between p-2">
               &nbsp;
               <button
