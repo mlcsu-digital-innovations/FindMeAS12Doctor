@@ -14,6 +14,9 @@ import { UserDetailsService } from './services/user-details/user-details.service
 import * as jwt_decode from 'jwt-decode';
 import { FCM } from '@ionic-native/fcm/ngx';
 
+import { Msal } from 'ionic-msal-native';
+import { MsalService } from './services/msal/msal.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -23,6 +26,7 @@ export class AppComponent implements OnInit {
 
   userName: string;
   user = {} as UserDetails;
+  isAuthenticated: boolean;
 
   constructor(
     private alertController: AlertController,
@@ -38,7 +42,8 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private storageService: StorageService,
     private toastService: ToastService,
-    private userDetailsService: UserDetailsService
+    private userDetailsService: UserDetailsService,
+    private msal: MsalService
   ) {
   }
 
@@ -46,21 +51,12 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.msal.msalInit();
 
-      // MSAL
-      if (this.platform.is('cordova')) {
-
-
-
-        window.cordova.plugins.msalPlugin.msalInit(() => {
-
-        }, err => {
-          console.log(err);
-        });
-
-
-      }
-
+      this.authService.isAuthenticated().then((auth: boolean) => {
+        console.log('check authentication', auth);
+        this.isAuthenticated = auth;
+      });
 
       this.fcm.onTokenRefresh().subscribe(
         token => {
@@ -98,7 +94,6 @@ export class AppComponent implements OnInit {
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
-        
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
@@ -127,18 +122,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public logOff(): void {
-    if (this.platform.is('cordova')) {
-      this.authService.logoutMsAdal();
+  public logIn(): void {
+    this.authService.loginMsal();
+  }
 
-      if (this.router.url === '/home') {
-        this.authService.loginMsAdal();
-      } else {
-        this.navController.navigateRoot('home');
-      }
-    } else {
-      this.authService.logoutMsal();
-    }
+  public logOff(): void {
+    this.authService.logoutMsal();
   }
 
   private async presentAlertConfirm(title: string, message: string) {

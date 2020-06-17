@@ -40,12 +40,15 @@
     "@ionic/storage": "^2.2.0",
     "cordova": "^9.0.0",
     "cordova-android": "^8.1.0",
+    "cordova-plugin-androidx": "^2.0.0",
+    "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-fcm-with-dependecy-updated": "^6.4.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-msal": "^2.4.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^5.0.0",
     "core-js": "^2.5.4",
+    "ionic-msal-native": "^0.1.0",
     "jwt-decode": "^2.2.0",
     "native-run": "^0.2.9",
     "rxjs": "~6.5.1",
@@ -103,7 +106,6 @@
       },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-ms-adal-is-back": {},
       "cordova-plugin-fcm-with-dependecy-updated": {
         "FCM_CORE_VERSION": "16.0.9",
         "FCM_VERSION": "18.0.0",
@@ -111,10 +113,12 @@
         "GOOGLE_SERVICES_VERSION": "4.2.0"
       },
       "cordova-plugin-msal": {
+        "TENANT_ID": "f47807cf-afbc-4184-a579-8678bea3019a",
         "CLIENT_ID": "9a667831-799d-4a8a-bce2-c168424cdabe",
-        "TENANT_ID": "common",
-        "KEY_HASH": "not-provided"
-      }
+        "KEY_HASH": "IkVJg6dEM/du+l+g8RfIw9UZJAg="
+      },
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-androidx-adapter": {}
     },
     "platforms": [
       "android"

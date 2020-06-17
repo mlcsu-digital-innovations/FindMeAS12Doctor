@@ -7,7 +7,6 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
-import { MSAdal } from '@ionic-native/ms-adal/ngx';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { Network } from '@ionic-native/network/ngx';
 import { NgModule } from '@angular/core';
@@ -17,6 +16,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
+import { Msal } from 'ionic-msal-native';
 
 @NgModule({
   declarations: [
@@ -33,6 +33,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
     MsalModule.forRoot({
       clientID: OAuthSettings.appId,
       authority: OAuthSettings.authority,
+      validateAuthority: true,
       cacheLocation: 'localStorage',
       consentScopes: OAuthSettings.consentScopes,
       postLogoutRedirectUri: environment.postLogoutRedirectUrl,
@@ -42,11 +43,11 @@ import { FCM } from '@ionic-native/fcm/ngx';
   ],
   providers: [
     Geolocation,
-    MSAdal,
     Network,
     StatusBar,
     SplashScreen,
     FCM,
+    Msal,
     {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy

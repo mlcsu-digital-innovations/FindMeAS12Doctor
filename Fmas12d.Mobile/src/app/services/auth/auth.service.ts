@@ -1,67 +1,72 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { MSAdal, AuthenticationContext, AuthenticationResult } from '@ionic-native/ms-adal/ngx';
-import { MsalService, BroadcastService } from '@azure/msal-angular';
-import { OAuthSettings } from 'src/oauth';
-import { StorageService } from '../storage/storage.service';
-import { Subscription, Observable, from } from 'rxjs';
+import { Subscription, BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { MsalService } from '../msal/msal.service';
 import { ToastService } from '../toast/toast.service';
+import { StorageService } from '../storage/storage.service';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements OnDestroy {
-  private subscription: Subscription;
 
-  constructor(    
-    private broadcastService: BroadcastService,
-    private msAdal: MSAdal,
-    private msalService: MsalService,    
-    private storageService: StorageService,
-    private toastService: ToastService
-    ) 
-  {
-    this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
-      // TODO: Process acquire token failure
-    });
+  login: Subscription;
+  logout: Subscription;
+
+  public readonly authState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+
+  constructor(
+    private msal: MsalService,
+    private toastService: ToastService,
+    private storageService: StorageService
+    ) {
+      this.storageService.getAccessToken().map(token => {
+        if (!token) {
+          this.loginMsal();
+        }
+      }, error => {
+        this.loginMsal();
+      });
+    }
+
+  ngOnDestroy(): void {
+    this.login.unsubscribe();
+    this.logout.unsubscribe();
+  }
+
+  public async isAuthenticated(): Promise<boolean> {
+    return this.authState.asObservable().pipe(take(1)).toPromise();
   }
 
   public loginMsal(): void {
-    this.msalService.loginRedirect();  
+
+    this.login = this.msal.loginMsal().subscribe(success => {
+      this.authState.next(true);
+      this.toastService.displaySuccess({
+        header: 'Success',
+        message: 'Signed In'
+      });
+    }, error => {
+      this.authState.next(false);
+      this.toastService.displayError({
+        header: 'Error',
+        message: 'Unable to Sign In'
+      });
+    });
   }
-  
+
   public logoutMsal(): void {
-    this.msalService.logout();
-    this.storageService.clearAccessToken();
-  }
-
-  ngOnDestroy() {
-    this.broadcastService.getMSALSubject().next(1);
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-  
-  public loginMsAdal(): Observable<string> {
-    let authContext: AuthenticationContext = this.msAdal
-      .createAuthenticationContext(OAuthSettings.authority);        
-
-    return from(authContext.acquireTokenAsync(
-        OAuthSettings.appId, 
-        OAuthSettings.appId, 
-        OAuthSettings.redirectUrl,
-        null, 
-        null, 
-        null
-      ).then((authResponse: AuthenticationResult) => {               
-        this.broadcastService.broadcast('msadal:loginSuccess', authResponse);
-        return authResponse.accessToken;
-      }, error => {        
-        this.toastService.displayError({ message: error });
-        throw Promise.reject("Failed to authenticate: " + error);
-      }));
-  }
-
-  public logoutMsAdal() {
-    this.storageService.clearAccessToken();        
+    this.logout = this.msal.logoutMsal().subscribe(success => {
+      this.authState.next(false);
+      this.toastService.displaySuccess({
+        header: 'Success',
+        message: 'Signed Out'
+      });
+    }, error => {
+      this.toastService.displayError({
+        header: 'Error',
+        message: 'Unable to Sign Out'
+      });
+    });
   }
 }
