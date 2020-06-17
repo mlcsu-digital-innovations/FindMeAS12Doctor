@@ -148,6 +148,9 @@
           <div *ngIf="doctorSearchField.errors.InvalidDoctor" class="invalid-field">
             <span>Please search for and validate a doctor</span>
           </div>
+          <div *ngIf="doctorSearchField.errors.ReValidateDoctor" class="invalid-field">
+            <span>The interval has been changed. Please validate the doctor again.</span>
+          </div>
           <div *ngIf="doctorSearchField.errors.OverlappingAvailability" class="invalid-field">
             <span>
               {{overlappingMessage}}
@@ -164,7 +167,7 @@
         </div>
       </div>
       <!-- Doctor Details -->
-      <div class="form-row" *ngIf="doctorName && doctorGmcNumber">
+      <div class="form-row" *ngIf="!doctorSearchField.errors && doctorName && doctorGmcNumber">
         <div class="col-md-10">
           <div class="row" name="doctorDetails">
             <div class="col-md-5">
@@ -190,7 +193,7 @@
         <br/>
       </div>
       <!-- Location -->
-      <div class="form-row" *ngIf="contactDetails && contactDetails.length > 0">
+      <div class="form-row" *ngIf="!doctorSearchField.errors && contactDetails && contactDetails.length > 0">
         <div class="col-md-10">
           <div class="row" name="location">
             <div class="col-md-6">
@@ -218,14 +221,14 @@
         <div class="col-md-4 mb-2 reduced-top-margin">
           <div
             class="invalid-field"
-            *ngIf="contactDetails && contactDetails.length > 0 && locationField.errors && locationField.errors.NoLocationSelected"
+            *ngIf="!doctorSearchField.errors && contactDetails && contactDetails.length > 0 && locationField.errors && locationField.errors.NoLocationSelected"
           >
             <span>Please select a location</span>
           </div>
         </div>
       </div>
       <!-- Postcode -->
-      <div class="form-row" *ngIf="locationField.value == 0">
+      <div class="form-row" *ngIf="!doctorSearchField.errors && locationField.value == 0">
         <div class="col-md-10">
           <label for="locationPostcode">Location Postcode</label>
           <div class="row" name="locationPostcode">
@@ -276,19 +279,19 @@
         <div class="col-md-6 mb-2">
           <div
             class="invalid-field"
-            *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
+            *ngIf="!doctorSearchField.errors && locationPostcodeField.errors && locationPostcodeField.errors.InvalidPostcode"
           >
             <span>Invalid postcode</span>
           </div>
           <div
             class="invalid-field"
-            *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.MissingPostcode"
+            *ngIf="!doctorSearchField.errors && locationPostcodeField.errors && locationPostcodeField.errors.MissingPostcode"
           >
             <span>Please enter and validate a postcode</span>
           </div>
           <div
             class="invalid-field"
-            *ngIf="locationPostcodeField.errors && locationPostcodeField.errors.PostcodeNotValidated"
+            *ngIf="!doctorSearchField.errors && locationPostcodeField.errors && locationPostcodeField.errors.PostcodeNotValidated"
           >
             <span>Please validate the postcode</span>
           </div>
