@@ -240,43 +240,49 @@
               <span class="no-previous">No previous assessments recorded</span>
             </div>
             <div class="form-row" style="padding-top:10px; overflow: auto;" *ngIf="referral.previousAssessments.length > 0">
-              <table class="table table-bordered table-sm table-referral-list">
-                <thead>
-                  <tr>
-                    <th scope="col" sortable="dateTime" (sort)="onSort($event)">Scheduled Date/Time</th>
-                    <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Postcode</th>                    
-                    <th scope="col" sortable="assessmentStatus" (sort)="onSort($event)">Status</th>
-                    <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
-                    <th scope="col" sortable="amhp" (sort)="onSort($event)">AMHP</th>
-                    <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Attended</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let assessment of referral.previousAssessments">
-                    <td>
-                      <ngb-highlight [result]="assessment.scheduledTime | date:'dd/MM/yyyy HH:mm'" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="assessment.postcode" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="assessment.status" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="assessment.unsuccessfulAssessmentTypeName" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="assessment.amhpUserName" ></ngb-highlight>
-                    </td>
-                    <td>
-                      <ngb-highlight [result]="assessment.doctorAttendedNames" ></ngb-highlight>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm table-referral-list">
+                  <thead>
+                    <tr>
+                      <th scope="col" sortable="dateTime" (sort)="onSort($event)">Scheduled Date/Time</th>
+                      <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Postcode</th>                    
+                      <th scope="col" sortable="assessmentStatus" (sort)="onSort($event)">Status</th>
+                      <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
+                      <th scope="col" sortable="amhp" (sort)="onSort($event)">AMHP</th>
+                      <th scope="col" sortable="doctorsAllocated" (sort)="onSort($event)">Doctors Attended</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let assessment of referral.previousAssessments">
+                      <td>
+                        <ngb-highlight [result]="assessment.scheduledTime | date:'dd/MM/yyyy HH:mm'" ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="assessment.postcode" ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="assessment.status" ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="assessment.unsuccessfulAssessmentTypeName" ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="assessment.amhpUserName" ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight [result]="assessment.doctorAttendedNames" ></ngb-highlight>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="d-flex justify-content-between p-2" *ngIf="referral.previousAssessments.length > 0">
-              <ngb-pagination [collectionSize]="" [pageSize]=""></ngb-pagination>
+              <ngb-pagination 
+                [collectionSize]="" 
+                [pageSize]=""
+                [maxSize]=5>
+              </ngb-pagination>
               <select class="custom-select" style="width: auto" name="pageSize">
                 <option [ngValue]="5">5 items per page</option>
                 <option [ngValue]="10">10 items per page</option>

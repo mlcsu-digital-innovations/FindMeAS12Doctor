@@ -52,17 +52,17 @@ form {
   background-color: lightgrey;
 }
 
-.table-on-call-doctor-list {  
+.table-on-call-doctor-list {
   background-color: #fff;
   font-size: smaller;
 }
 
-.table-on-call-doctor-list th:nth-child(n-5) {  
+.table-on-call-doctor-list th:nth-child(n-5) {
   background-color:#0dadb7;
   color: white;
 }
 
-.table-on-call-doctor-list th:nth-child(n+5) {  
+.table-on-call-doctor-list th:nth-child(n+5) {
   background-color:#0dadb7;
   color: white;
 }
@@ -76,7 +76,7 @@ form {
 }
 
 .table-on-call-doctor-list th:nth-child(n-1) {
-  width: 40px;
+  xwidth: 40px;
 }
 
 th[sortable] {
