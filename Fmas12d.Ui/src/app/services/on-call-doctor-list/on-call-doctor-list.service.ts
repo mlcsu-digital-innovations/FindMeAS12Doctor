@@ -5,6 +5,7 @@ import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import { OnCallDoctorList } from 'src/app/interfaces/on-call-doctor-list';
 import { SortDirection } 
   from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
+import { USER_AVAILABILITY_LOCATION_TYPE_POSTCODE } from 'src/app/constants/Constants';
 import { environment } from 'src/environments/environment';
 import { tap, debounceTime, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -30,19 +31,19 @@ function compare(value1: any, value2: any, sortColumnType: string) {
     case 'dateTime':
       const defaultDate = new Date();
       defaultDate.setFullYear(2000);
-      value1 = moment(value1 === null ? defaultDate : value1);
-      value2 = moment(value2 === null ? defaultDate : value2);
+      value1 = moment((value1 === null || value1 === undefined) ? defaultDate : value1);
+      value2 = moment((value2 === null || value2 === undefined) ? defaultDate : value2);
       returnValue = moment(value1).isBefore(moment(value2)) ? -1 : 
         moment(value1).isAfter(moment(value2)) ? 1 : 0;
       break;
     case 'string':
-      value1 = value1 === (null || undefined) ? '' : String(value1);
-      value2 = value2 === (null || undefined) ? '' : String(value2);
+      value1 = (value1 === null || value1 === undefined) ? '' : String(value1);
+      value2 = (value2 === null || value2 === undefined) ? '' : String(value2);
       returnValue = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
       break;
     case 'number':
-      value1 = value1 === (null || undefined) ? 0 : +value1;
-      value2 = value2 === (null || undefined) ? 0 : +value2;
+      value1 = (value1 === null || value1 === undefined) ? 0 : +value1;
+      value2 = (value2 === null || value2 === undefined) ? 0 : +value2;
       returnValue = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
       break;
   }
@@ -60,7 +61,21 @@ function sort(
     return referralList;
   } else {
     return [...referralList].sort((a, b) => {
-      const res = compare(a[column], b[column], sortColumnType);
+      let res: number;
+
+      if (column.includes('.')) {
+
+        const childProperty = column.split('.')[0];
+        const grandChildProperty = column.split('.')[1];
+
+        const compare1 = a[childProperty][grandChildProperty];
+        const compare2 = b[childProperty][grandChildProperty];
+
+        res = compare(compare1, compare2, sortColumnType);
+
+      } else {
+        res = compare(a[column], b[column], sortColumnType);
+      }
       return direction === 'asc' ? res : -res;
     });
   }
@@ -105,6 +120,13 @@ export class OnCallDoctorListService {
     this.http.get<OnCallDoctorList[]>(endpoint).subscribe(
       (data: OnCallDoctorList[]) => {
         this._rawOnCallDoctorList = data;
+        if (this._rawOnCallDoctorList && this._rawOnCallDoctorList.length > 0) {
+          this._rawOnCallDoctorList.forEach((item: OnCallDoctorList) => {
+            if (item.location.type === USER_AVAILABILITY_LOCATION_TYPE_POSTCODE) {
+              item.location.contactDetailTypeName = item.location.postcode;
+            }
+          });
+        }        
         this._sort$.next();
       },
       (error: any) => {

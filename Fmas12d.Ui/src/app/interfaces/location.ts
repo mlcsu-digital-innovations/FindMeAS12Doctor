@@ -3,4 +3,5 @@ export interface Location {
   contactDetailTypeId?: number;
   contactDetailTypeName: string;
   postcode: string;
+  type: string;
 }
