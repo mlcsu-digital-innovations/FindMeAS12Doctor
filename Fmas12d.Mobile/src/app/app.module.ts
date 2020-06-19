@@ -7,10 +7,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
-import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { Network } from '@ionic-native/network/ngx';
 import { NgModule } from '@angular/core';
-import { OAuthSettings } from '../oauth';
 import { RequestInterceptor } from './models/request-interceptor.model';
 import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -30,16 +28,6 @@ import { Msal } from 'ionic-msal-native';
     HttpClientModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
-    MsalModule.forRoot({
-      clientID: OAuthSettings.appId,
-      authority: OAuthSettings.authority,
-      validateAuthority: true,
-      cacheLocation: 'localStorage',
-      consentScopes: OAuthSettings.consentScopes,
-      postLogoutRedirectUri: environment.postLogoutRedirectUrl,
-      protectedResourceMap: ProtectedResourceMap,
-      redirectUri: environment.redirectUri
-    })
   ],
   providers: [
     Geolocation,

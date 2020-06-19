@@ -112,13 +112,13 @@
         "GRADLE_TOOLS_VERSION": "3.5.0",
         "GOOGLE_SERVICES_VERSION": "4.2.0"
       },
-      "cordova-plugin-msal": {
-        "TENANT_ID": "f47807cf-afbc-4184-a579-8678bea3019a",
-        "CLIENT_ID": "9a667831-799d-4a8a-bce2-c168424cdabe",
-        "KEY_HASH": "IkVJg6dEM/du+l+g8RfIw9UZJAg="
-      },
       "cordova-plugin-androidx": {},
-      "cordova-plugin-androidx-adapter": {}
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-msal": {
+        "KEY_HASH": "IkVJg6dEM/du+l+g8RfIw9UZJAg=",
+        "TENANT_ID": "f47807cf-afbc-4184-a579-8678bea3019a",
+        "CLIENT_ID": "9a667831-799d-4a8a-bce2-c168424cdabe"
+      }
     },
     "platforms": [
       "android"

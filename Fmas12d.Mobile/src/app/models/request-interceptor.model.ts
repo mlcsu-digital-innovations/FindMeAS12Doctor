@@ -51,12 +51,16 @@ export class RequestInterceptor implements HttpInterceptor {
     //   ));
     // }
     // else {
-      // let scopes = this.msalService.getScopesForEndpoint(req.url);
+      // const scopes = this.msalService.getScopesForEndpoint(req.url);
       // this.msalService.verbose('Url: ' + req.url + ' maps to scopes: ' + scopes);
+
+      // console.log('scopes', scopes);
 
       // if (scopes === null) {
       //   return next.handle(req);
       // }
+
+      console.log('do something with access token');
 
       return this.storageService.getAccessToken()
         .pipe(
@@ -69,23 +73,28 @@ export class RequestInterceptor implements HttpInterceptor {
                 }
               });
 
+              console.log('Updated request', req);
+
               return next.handle(req).do(event => {}, err => {
-                if (err instanceof HttpErrorResponse && err.status === 401) {
-                  const scopes = this.msalService.getScopesForEndpoint(req.url);
-                  const tokenCached = this.msalService.getCachedTokenInternal(scopes);
 
-                  if (tokenStored && tokenCached && tokenCached.token &&
-                    tokenStored === tokenCached.token) {
-                    this.msalService.clearCacheForScope(tokenStored);
-                    this.storageService.clearAccessToken();
-                  }
+                console.log('Request Error', err);
 
-                  const msalError = new MSALError(JSON.stringify(err), '', JSON.stringify(scopes));
-                  this.broadcastService.broadcast('msal:notAuthorized', msalError);
-                }
+                // if (err instanceof HttpErrorResponse && err.status === 401) {
+                //   // const scopes = this.msalService.getScopesForEndpoint(req.url);
+                //   const tokenCached = this.msalService.getCachedTokenInternal(scopes);
+
+                //   if (tokenStored && tokenCached && tokenCached.token &&
+                //     tokenStored === tokenCached.token) {
+                //     this.msalService.clearCacheForScope(tokenStored);
+                //     this.storageService.clearAccessToken();
+                //   }
+
+                //   const msalError = new MSALError(JSON.stringify(err), '', JSON.stringify(scopes));
+                //   this.broadcastService.broadcast('msal:notAuthorized', msalError);
+                // }
               });
             } else {
-              this.msalService.loginRedirect();
+              // this.msalService.loginRedirect();
             }
           })
         );

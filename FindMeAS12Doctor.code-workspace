@@ -14,6 +14,9 @@
     "team.teamProject": "Find Me A S12 Doctor",
     "team.buildDefinitionId": 92,
     "editor.wrappingIndent": "indent",
-    "editor.rulers": [100]
+    "editor.rulers": [
+      100
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 	}
 }

@@ -6,10 +6,10 @@ import { Observable, from } from 'rxjs';
   providedIn: 'root'
 })
 export class StorageService {
-  private ACCESS_TOKEN_STORAGE_KEY: string = 'FMAS12DAccessTokenStorageKey';  
-  private API_STORAGE_KEY: string = 'FMAS12DMobileApiStorageKey';
-  private ERROR_STORAGE_KEY: string = "FMAS12DMobileErrorStorageKey";
-  private REQ_STORAGE_KEY: string = 'FMAS12DMobileMobileRequestStorageKey';
+  private ACCESS_TOKEN_STORAGE_KEY = 'FMAS12DAccessTokenStorageKey';
+  private API_STORAGE_KEY = 'FMAS12DMobileApiStorageKey';
+  private ERROR_STORAGE_KEY = 'FMAS12DMobileErrorStorageKey';
+  private REQ_STORAGE_KEY = 'FMAS12DMobileMobileRequestStorageKey';
 
   constructor(private storage: Storage) { }
 
@@ -18,13 +18,15 @@ export class StorageService {
   }
 
   public getAccessToken(): Observable<any> {
+    console.log('Get Access Token');
     return from(this.storage.get(this.ACCESS_TOKEN_STORAGE_KEY));
   }
 
   public storeAccessToken(accessToken: string): Observable<any> {
+    console.log('Store Access Token', accessToken);
     return from(this.storage.set(this.ACCESS_TOKEN_STORAGE_KEY, accessToken));
   }
-  
+
   public getApiRequestData(key: string): Observable<any> {
     return from(this.storage.get(`${this.API_STORAGE_KEY}-${key}`));
   }

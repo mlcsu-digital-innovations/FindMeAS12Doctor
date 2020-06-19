@@ -54,7 +54,6 @@ export class AppComponent implements OnInit {
       this.msal.msalInit();
 
       this.authService.isAuthenticated().then((auth: boolean) => {
-        console.log('check authentication', auth);
         this.isAuthenticated = auth;
       });
 
@@ -86,11 +85,13 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
         // TODO: Process the login failure
+        console.log('msal:loginFailure');
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
-        this.storageService.storeAccessToken(payload.token);
-        this.setUserDetails(payload.token);
+        console.log('msal:loginSuccess');
+        this.storageService.storeAccessToken(payload);
+        this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
@@ -98,18 +99,16 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
         // TODO: Process the acquire token success
+        console.log('msal:acquireTokenSuccess');
       });
 
       this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
         // TODO: Process the acquire token failure
+        console.log('msal:acquireTokenFailure');
       });
 
-      this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
-        this.storageService.storeAccessToken(payload.accessToken);
-        this.setUserDetails(payload.accessToken);
-        this.fcm.getToken().then(token => {
-          this.refreshFcmToken(token);
-        });
+      this.broadcastService.subscribe('msal:notAuthorized', (payload) => {
+        console.log('msal:notAuthorized');
       });
     });
 

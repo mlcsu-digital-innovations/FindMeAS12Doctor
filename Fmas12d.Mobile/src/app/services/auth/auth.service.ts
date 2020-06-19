@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription, BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { Subscription, ReplaySubject } from 'rxjs';
 import { MsalService } from '../msal/msal.service';
-import { ToastService } from '../toast/toast.service';
 import { StorageService } from '../storage/storage.service';
 import { take } from 'rxjs/operators';
 
@@ -17,15 +16,18 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private msal: MsalService,
-    private toastService: ToastService,
     private storageService: StorageService
     ) {
       this.storageService.getAccessToken().map(token => {
         if (!token) {
-          this.loginMsal();
+          // this.loginMsal();
+          console.log('No Token');
+        } else {
+          console.log('Have a token', token);
         }
       }, error => {
-        this.loginMsal();
+        // this.loginMsal();
+        console.log('Error getting token', error);
       });
     }
 
@@ -40,33 +42,22 @@ export class AuthService implements OnDestroy {
 
   public loginMsal(): void {
 
+    console.log('authService:login');
+
     this.login = this.msal.loginMsal().subscribe(success => {
       this.authState.next(true);
-      this.toastService.displaySuccess({
-        header: 'Success',
-        message: 'Signed In'
-      });
     }, error => {
       this.authState.next(false);
-      this.toastService.displayError({
-        header: 'Error',
-        message: 'Unable to Sign In'
-      });
     });
   }
 
   public logoutMsal(): void {
+
+    console.log('authService:logout');
+
     this.logout = this.msal.logoutMsal().subscribe(success => {
       this.authState.next(false);
-      this.toastService.displaySuccess({
-        header: 'Success',
-        message: 'Signed Out'
-      });
     }, error => {
-      this.toastService.displayError({
-        header: 'Error',
-        message: 'Unable to Sign Out'
-      });
     });
   }
 }
