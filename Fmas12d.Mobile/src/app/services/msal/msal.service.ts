@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BroadcastService } from '@azure/msal-angular';
-import { OAuthSettings } from 'src/oauth';
+import { OAuthSettingsMSAL } from 'src/oauth';
 import { StorageService } from '../storage/storage.service';
 import { Subscription, Observable, from } from 'rxjs';
 import { Msal, MsalLogLevel } from 'ionic-msal-native';
@@ -33,12 +33,13 @@ export class MsalService implements OnDestroy {
     console.log('Init MSAL');
 
     const options: any = {
-      authorities: OAuthSettings.authorities,
-      authorizationUserAgent: OAuthSettings.authorizationUserAgent,
-      scopes: OAuthSettings.scopes
+      authorities: OAuthSettingsMSAL.authorities,
+      authorizationUserAgent: OAuthSettingsMSAL.authorizationUserAgent,
+      scopes: OAuthSettingsMSAL.scopes
     };
 
     this.msal.msalInit(options).then((initResult) => {
+      console.log('MSAL Options', options);
       console.log('MSAL Configuration Success:', initResult);
       return initResult;
     },
@@ -93,6 +94,7 @@ export class MsalService implements OnDestroy {
     const msalSignout = new Observable((observer) => {
       this.msal.signOut().then(() => {
         this.storageService.clearAccessToken();
+        observer.next();
         observer.complete();
      },
      (error) =>  {

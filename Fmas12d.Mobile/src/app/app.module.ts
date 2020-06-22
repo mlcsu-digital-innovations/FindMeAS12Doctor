@@ -15,6 +15,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Msal } from 'ionic-msal-native';
+import { MsalModule } from '@azure/msal-angular';
+import { OAuthSettings } from 'src/oauth';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,15 @@ import { Msal } from 'ionic-msal-native';
     HttpClientModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
+    MsalModule.forRoot({
+      clientID: OAuthSettings.appId,
+      authority: OAuthSettings.authority,
+      cacheLocation: 'localStorage',
+      consentScopes: OAuthSettings.consentScopes,
+      postLogoutRedirectUri: environment.postLogoutRedirectUrl,
+      protectedResourceMap: ProtectedResourceMap,
+      redirectUri: environment.redirectUri
+    })
   ],
   providers: [
     Geolocation,

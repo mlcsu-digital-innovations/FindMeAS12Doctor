@@ -12,7 +12,7 @@ export class RequestInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private broadcastService: BroadcastService,
-    private msalService: MsalService,
+    // private msalService: MsalService,
     private platform: Platform,
     private storageService: StorageService
   ) {}
