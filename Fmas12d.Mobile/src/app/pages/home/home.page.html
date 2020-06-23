@@ -10,12 +10,16 @@
 </ion-header>
 
 <ion-content>
-  <ion-card> 
-    <ion-card-content>
-      <img src="../../../assets/img/icon.png" alt="Find Me An S12 Doctor" />
-    </ion-card-content>
-  </ion-card>
-  <ion-card-header>
 
-  </ion-card-header>
+  <ion-grid>
+    <ion-row>
+      <img src="../../../assets/img/icon.png" alt="Find Me An S12 Doctor" class="logo"/>
+    </ion-row>
+    <ion-row>
+      <ion-button fill="outline" (click)="logIn()" *ngIf="!isAuthenticated" class="signin">
+        Sign In
+      </ion-button>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

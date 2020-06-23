@@ -124,10 +124,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public logIn(): void {
-    this.authService.loginMsal();
-  }
-
   public logOff(): void {
     this.authService.logoutMsal();
   }

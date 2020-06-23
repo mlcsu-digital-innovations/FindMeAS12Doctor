@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 
@@ -8,19 +9,30 @@ import { NetworkService, ConnectionStatus } from 'src/app/services/network/netwo
 })
 export class HomePage implements OnInit {
   public connection: boolean;
+  public isAuthenticated: boolean;
 
   constructor(
-    private networkService: NetworkService, 
-    private changeRef: ChangeDetectorRef
-    ) { }
+    private authService: AuthService,
+    private changeRef: ChangeDetectorRef,
+    private networkService: NetworkService
+    ) {
 
-  ngOnInit() {  
+      this.authService.authState.subscribe(authState => {
+        this.isAuthenticated = authState;
+      });
+
+     }
+
+  ngOnInit() {
     this.connection = this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Online;
 
-    this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {    
-      this.connection = status === ConnectionStatus.Online; 
-      this.changeRef.detectChanges();      
+    this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
+      this.connection = status === ConnectionStatus.Online;
+      this.changeRef.detectChanges();
     });
   }
 
+  public logIn(): void {
+    this.authService.loginMsal();
+  }
 }

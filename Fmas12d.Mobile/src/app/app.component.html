@@ -45,11 +45,6 @@
             <ion-icon name="help"></ion-icon> Help
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="!isAuthenticated">
-          <ion-item (click)="logIn()">
-            <ion-icon name="log-in"></ion-icon> Log In
-          </ion-item>
-        </ion-menu-toggle>
         <ion-menu-toggle *ngIf="isAuthenticated">
           <ion-item (click)="logOff()">
             <ion-icon name="log-out"></ion-icon> Log Off
