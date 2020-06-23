@@ -49,8 +49,8 @@ export class AppComponent implements OnInit {
       this.splashScreen.hide();
       this.msal.msalInit();
 
-      this.authService.isAuthenticated().then((auth: boolean) => {
-        this.isAuthenticated = auth;
+      this.authService.authState.subscribe(authState => {
+        this.isAuthenticated = authState;
       });
 
       this.fcm.onTokenRefresh().subscribe(
@@ -81,16 +81,23 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
         // TODO: Process the login failure
-        console.log('msal:loginFailure');
+        console.log('msal:loginFailure', payload);
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
-        console.log('msal:loginSuccess');
         this.storageService.storeAccessToken(payload);
         this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
+      });
+
+      this.broadcastService.subscribe('msal:refreshToken', (payload) => {
+        this.msal.refreshTokenSilently();
+      });
+
+      this.broadcastService.subscribe('msal:tokenRefresh', (payload) => {
+        this.storageService.storeAccessToken(payload);
       });
 
       this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {

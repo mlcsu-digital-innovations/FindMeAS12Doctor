@@ -1,16 +1,16 @@
-import { Injectable, OnDestroy } from '@angular/core';
 import { BroadcastService } from '@azure/msal-angular';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Msal } from 'ionic-msal-native';
 import { OAuthSettingsMSAL } from 'src/oauth';
 import { StorageService } from '../storage/storage.service';
 import { Subscription, Observable } from 'rxjs';
-import { Msal } from 'ionic-msal-native';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class MsalService implements OnDestroy {
   private subscription: Subscription;
+  private refreshTimer: ReturnType<typeof setTimeout>;
 
   constructor(
     private broadcastService: BroadcastService,
@@ -60,6 +60,7 @@ export class MsalService implements OnDestroy {
       // try to sign in silently
       this.msal.signInSilent().then((jwt) => {
         this.broadcastService.broadcast('msal:loginSuccess', jwt);
+        this.startTokenRefresh();
         observer.next(jwt);
         observer.complete();
      },
@@ -68,6 +69,7 @@ export class MsalService implements OnDestroy {
        // try an interactive login
       this.msal.signInInteractive().then((jwt) => {
             this.broadcastService.broadcast('msal:loginSuccess', jwt);
+            this.startTokenRefresh();
             observer.next(jwt);
             observer.complete();
          },
@@ -80,7 +82,33 @@ export class MsalService implements OnDestroy {
     return msalSignin;
   }
 
+  private startTokenRefresh() {
+    // Refresh the token in 10 minutes.
+    this.refreshTimer =
+      setTimeout(() => {
+        this.broadcastService.broadcast('msal:refreshToken', null);
+      }, 10 * 60 * 1000);
+  }
+
+  public refreshTokenSilently() {
+
+    this.msal.signInSilent().then((jwt) => {
+      this.broadcastService.broadcast('msal:tokenRefresh', jwt);
+      this.startTokenRefresh();
+    },
+    () =>  {
+      console.log('failed to refresh token');
+      clearTimeout(this.refreshTimer);
+    });
+  }
+
+
   public logoutMsal(): Observable<any> {
+
+    console.log('logoutMsal');
+    console.log(this.refreshTimer);
+
+    clearTimeout(this.refreshTimer);
 
     const msalSignout = new Observable((observer) => {
       this.msal.signOut().then(() => {
@@ -101,6 +129,7 @@ export class MsalService implements OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    clearTimeout(this.refreshTimer);
   }
 
 }

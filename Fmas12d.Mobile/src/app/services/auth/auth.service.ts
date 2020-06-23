@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription, ReplaySubject } from 'rxjs';
+import { Subscription, ReplaySubject, Observable } from 'rxjs';
 import { MsalService } from '../msal/msal.service';
 import { StorageService } from '../storage/storage.service';
 import { take } from 'rxjs/operators';
