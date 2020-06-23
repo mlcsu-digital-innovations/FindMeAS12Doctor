@@ -25,3 +25,5 @@ export const CLAIM_STATUS_QUERY = 3;
 export const CLAIM_STATUS_APPROVED = 4;
 export const CLAIM_STATUS_AWAITING_CCG = 5;
 export const CLAIM_STATUS_REJECTED = 6;
+
+export const USER_AVAILABILITY_LOCATION_TYPE_POSTCODE = "Postcode";

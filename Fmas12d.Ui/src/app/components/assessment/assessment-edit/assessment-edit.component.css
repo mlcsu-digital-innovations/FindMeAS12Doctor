@@ -40,6 +40,10 @@ form {
   height: calc(1.5em + 1rem + 7px);
 }
 
+.doctor-name {
+  margin-left: 20px;
+}
+
 .doctor-list {
   border-radius: 0.25rem;
   border: 1px solid #ced4da;
@@ -142,27 +146,14 @@ form {
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  border-width: 0 0;
-  border: solid white;
+  -moz-transform: translate(-60%, -75%);
+  -ms-transform: translate(-60%, -75%);
+  -webkit-transform: translate(-60%, -75%);
   color: #f00;
   content: 'X';
   font-weight: 600;
-  height: 10px;
-  left: 30%;
-  position: absolute;
-  top: 5%;
-  transform: translate(-50%, -50%);
-  width: 5px;
-}
-
-.checkmark-content {
-  bottom: -10px;
-  margin-left: 15px;
-  padding: 10px;
-  position: absolute;
+  transform: none;
+  transform: translate(-60%, -75%);
 }
 
 .checkmark-content.less-space {

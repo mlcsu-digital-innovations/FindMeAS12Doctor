@@ -665,8 +665,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VsrNumber")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("VsrNumber")
+                        .HasColumnType("decimal(10,0)");
 
                     b.HasKey("Id");
 
@@ -733,8 +733,8 @@ namespace Fmas12d.Business.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VsrNumber")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("VsrNumber")
+                        .HasColumnType("decimal(10,0)");
 
                     b.HasKey("AuditId");
 

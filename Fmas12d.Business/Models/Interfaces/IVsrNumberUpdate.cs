@@ -4,6 +4,6 @@ namespace Fmas12d.Business.Models
     {
         int UserId { get; set; }
         int CcgId { get; set; }
-        int VsrNumber { get; set; }
+        decimal? VsrNumber { get; set; }
     }
 }

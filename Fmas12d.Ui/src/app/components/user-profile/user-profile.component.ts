@@ -34,6 +34,7 @@ export class UserProfileComponent implements OnInit {
   userProfileForm: FormGroup;
   userContactDetailModal: NgbModalRef;
   userFinanceDetailModal: NgbModalRef;
+  submitted: boolean;
 
   @ViewChild('addUserContactDetailModal', null) addUserContactDetailTemplate;
   @ViewChild('editUserContactDetailModal', null) editUserContactDetailTemplate;
@@ -92,6 +93,7 @@ export class UserProfileComponent implements OnInit {
     } else {
       this.userProfileForm = this.formBuilder.group({
         displayName: [this.userProfile.displayName, Validators.required],
+        organisationName: [this.userProfile.organisationName],
         genderTypeId: [this.userProfile.genderTypeId, Validators.required],
         emailAddress: [this.userProfile.emailAddress, !this.userProfile.isDoctor
           ? [Validators.required, Validators.email]
@@ -222,6 +224,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   Save(): void {
+    this.submitted = true;
+
     if (this.userProfileForm.valid) {
       this.saveModal = this.modalService.open(this.saveUserProfileTemplate, {
         size: 'lg'
@@ -231,9 +235,10 @@ export class UserProfileComponent implements OnInit {
 
   OnCancelModalAction(action: boolean) {
     this.cancelModal.close();
+    this.submitted = false;
 
     if (action) {
-      this.toastService.displayInfo({ message: 'User Update has been cancelled' });
+      this.toastService.displayInfo({ message: 'User Profile Update has been cancelled' });
       this.routerService.navigate(['/referral']);
     }
   }
@@ -328,7 +333,7 @@ export class UserProfileComponent implements OnInit {
       const userProfile: UserProfile = this.GetUserProfileFromForm();
       this.userProfileService.loading(true);
       this.userProfileService.UpdateUser(userProfile).subscribe(() => {
-        this.toastService.displaySuccess({ message: 'User Updated'});
+        this.toastService.displaySuccess({ message: 'User Profile Updated'});
         this.userProfileService.loading(false);
         // TODO replace with switch statement
         this.routerService.navigate(['/referral']);
@@ -341,12 +346,12 @@ export class UserProfileComponent implements OnInit {
             }
           );
         } else {
-          this.toastService.displayError({message: 'User Update error'});
+          this.toastService.displayError({message: 'User Profile Update error'});
         }
         this.userProfileService.loading(false);
       });
     } else {
-      this.toastService.displayInfo({ message: 'User Update has been cancelled' });
+      this.toastService.displayInfo({ message: 'User Profile Update has been cancelled' });
     }
   }
 

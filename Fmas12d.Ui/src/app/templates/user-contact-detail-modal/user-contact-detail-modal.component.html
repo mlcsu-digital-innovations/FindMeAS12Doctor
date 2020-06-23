@@ -8,7 +8,7 @@
       <div class="col-md-10">        
         <div class="row" name="contactDetailTypeId">
           <div class="col-md-6">
-            <label for="contactDetailTypeId">Contact Detail Type</label>
+            <label class="required-field" for="contactDetailTypeId">Contact Detail Type</label>
             <select
               class="custom-select custom-select-lg mb-2 form-control"
               formControlName="contactDetailTypeId"
@@ -27,7 +27,7 @@
       </div>
     </div>
     <!-- Contact Detail Type Errors -->
-    <div class="form-row" *ngIf="controls.contactDetailTypeId.errors">
+    <div class="form-row" *ngIf="submitted && controls.contactDetailTypeId.errors">
       <div class="col-md-4 mb-2">
         <div
           class="invalid-field"
@@ -40,7 +40,7 @@
     <!-- Postcode -->
     <div class="form-row">
       <div class="col-md-10">
-        <label for="postcode">Postcode</label>
+        <label class="required-field" for="postcode">Postcode</label>
         <div class="row" name="postcode">
           <div class="col-md-4">            
             <input
@@ -59,7 +59,7 @@
               }" 
               />
           </div>
-          <div class="col-md-5">
+          <div class="col-md-6">
             <div class="button-container">
               <button
                 type="button"
@@ -101,7 +101,7 @@
       <div class="col-md-4 mb-2">
         <div
           class="invalid-field"
-          *ngIf="controls.postcode.errors.required"
+          *ngIf="submitted && controls.postcode.errors.required"
         >
           <span>* Postcode is required</span>
         </div> 
@@ -127,9 +127,9 @@
     </div>
     <!-- Address-->
     <div class="form-row" *ngIf="!controls.postcode.errors">
-      <div class="col-md-8 mb-2">
+      <div class="col-md-10">
         <label class="required-field" for="address">Address</label>
-        <select class="custom-select custom-select-lg mb-2 form-control"           
+        <select class="custom-select custom-select-lg form-control"           
           id="address"
           formControlName="address"
           #address  
@@ -144,17 +144,17 @@
       </div>
     </div>
     <!-- Address Errors -->
-    <div class="form-row" *ngIf="!controls.postcode.errors && controls.address.errors">
+    <div class="form-row" *ngIf="submitted && controls.address.errors">
       <div class="col-md-4 mb-2">
         <div
           class="invalid-field"
-          *ngIf="controls.address.errors.required"
+          *ngIf="!controls.postcode.errors && controls.address.errors.required"
         >
           <span>* Address is required</span>
         </div> 
         <div
           class="invalid-field"
-          *ngIf="controls.address.errors.SelectAddress"
+          *ngIf="!controls.postcode.errors && controls.address.errors.SelectAddress"
         >
           <span>* Please select an address</span>
         </div>               
@@ -191,8 +191,8 @@
     <div class="form-row">
       <div class="col-md-12">
         <div class="row" name="emailAddress">
-          <div class="col-md-8">
-            <label for="email">Email</label>                     
+          <div class="col-md-10">
+            <label class="required-field" for="email">Email</label>                     
             <input
               type="text"             
               class="form-control"   
@@ -205,7 +205,7 @@
       </div>
     </div>
     <!-- Email Errors -->
-    <div class="form-row" *ngIf="controls.emailAddress.errors">
+    <div class="form-row" *ngIf="submitted && controls.emailAddress.errors">
       <div class="col-md-6 mb-2">
         <div
           class="invalid-field"
@@ -225,7 +225,7 @@
     <div class="form-row">
       <div class="col-md-8">
         <div class="row" name="telephoneNumber">
-          <div class="col-md-6">
+          <div class="col-md-10">
             <label for="telephoneNumber">Telephone</label>                     
             <input
               type="text"             
@@ -242,7 +242,7 @@
     <div class="form-row">
       <div class="col-md-8">
         <div class="row" name="mobileNumber">
-          <div class="col-md-6">  
+          <div class="col-md-10">  
             <label for="mobileNumber">Mobile</label>                   
             <input
               type="text"             
@@ -255,8 +255,8 @@
         </div>  
       </div>
     </div>
-    <div class="form-row">
-      <div class="col-md-4 offset-md-8 text-right cancelOrSave">
+    <div class="form-row mt-more-2">
+      <div class="col-md-4 offset-md-6 text-right cancelOrSave">
         <button
           type="button"
           class="btn btn-standard btn-cancel"
@@ -264,7 +264,7 @@
         >Cancel</button>
         <button
           type="submit"
-          class="btn btn-primary btn-standard"          
+          class="btn btn-primary btn-standard btn-spaced"          
         >Save</button>
       </div>
     </div>       

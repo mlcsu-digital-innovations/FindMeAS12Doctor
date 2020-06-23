@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
+import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor';
 import { OnCallDoctorList } from 'src/app/interfaces/on-call-doctor-list';
 import { OnCallDoctorListService } from 'src/app/services/on-call-doctor-list/on-call-doctor-list.service';
-import { ToastService } from 'src/app/services/toast/toast.service';
-import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor';
 import { OnCallDoctorService } from 'src/app/services/on-call-doctor/on-call-doctor.service';
-import { SortEvent, TableHeaderSortable } from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
 import { RouterService } from 'src/app/services/router/router.service';
+import { SortEvent, TableHeaderSortable } from 'src/app/directives/table-header-sortable/table-header-sortable.directive';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-on-call-doctor-list',

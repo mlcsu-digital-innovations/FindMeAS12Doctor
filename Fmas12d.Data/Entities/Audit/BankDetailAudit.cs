@@ -14,6 +14,7 @@ namespace Fmas12d.Data.Entities
     public string NameOnAccount { get; set; }
     public int? SortCode { get; set; }
     public int UserId { get; set; }
-    public int VsrNumber { get; set; }
+    [Column(TypeName = "decimal(10,0)")]
+    public decimal? VsrNumber { get; set; }
   }
 }

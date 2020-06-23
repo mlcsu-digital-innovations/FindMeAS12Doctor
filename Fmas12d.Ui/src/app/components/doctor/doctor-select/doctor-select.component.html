@@ -133,99 +133,101 @@
             </div>
             <app-delay-spinner [delayMessage]="'Retrieving Available Doctors'" *ngIf="isAvailableDoctorSearching"></app-delay-spinner>
             <div class="form-row" style="margin:10px; padding-top:10px; overflow: auto;">
-              <table class="table table-bordered table-sm table-referral-list">
-                <thead>
-                  <tr>
-                    <th class="text-center" scope="col" sortable="name" (sort)="OnSort($event)">
-                      Name
-                    </th>
-                    <th class="text-center" scope="col" sortable="genderName" (sort)="OnSort($event)">
-                      Gender
-                    </th>
-                    <th class="text-center" scope="col" sortable="type" (sort)="OnSort($event)">
-                      Type
-                    </th>
-                    <th class="text-center" scope="col" sortable="section12ApprovalStatusName" (sort)="OnSort($event)">
-                      S12 Status
-                    </th>
-                    <th class="text-center" scope="col" sortable="section12ExpiryDate" (sort)="OnSort($event)">
-                      S12 Expiry Date
-                    </th>                    
-                    <th class="text-center" scope="col" sortable="specialityNames" (sort)="OnSort($event)">
-                      Speciality
-                    </th>
-                    <th class="text-center sm-col" scope="col" sortable="activeAssessments" (sort)="OnSort($event)">
-                      Scheduled Assessments
-                    </th>
-                    <th class="text-center" scope="col" sortable="start" (sort)="OnSort($event)">
-                      Availability
-                    </th>
-                    <th class="text-center sm-col" scope="col" sortable="distance" (sort)="OnSort($event)">
-                      Distance (miles)
-                    </th>
-                    <th class="text-center" scope="col">
-                      Select
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let availableDoctor of availableDoctors">
-                    <td>
-                      {{availableDoctor.name}}
-                    </td>
-                    <td>
-                      {{availableDoctor.genderName}}
-                    </td>
-                    <td>
-                      {{availableDoctor.type}}
-                    </td>
-                    <td>
-                      {{availableDoctor.section12ApprovalStatusName}}
-                    </td>
-                    <td>
-                      {{availableDoctor.section12ExpiryDate | date:'dd/MM/yyyy'}}
-                    </td>
-                    <td>
-                      <span *ngFor="let speciality of availableDoctor.specialityNames; last as isLast">
-                        {{speciality}}<span *ngIf="!isLast">, </span>
-                      </span>
-                    </td>
-                    <ng-template #tipContent>
-                      <div class="assessment-tooltip" *ngFor="let assessment of availableDoctor.activeAssessments">
-                        <span>{{assessment.isScheduled === true ? 'Scheduled' : 'Allocated'}}</span>
-                        {{assessment.postcode}} @ {{assessment.dateTime | dateTimeFormat}}
-                      </div>
-                    </ng-template>
-                    <td class="text-center sm-col">
-                      <em
-                        class="fas fa-calendar-check scheduled"
-                        *ngIf="availableDoctor.activeAssessments.length > 0"
-                        [ngbTooltip]="tipContent"
-                        placement="right"
-                        tooltipClass="subtle-tooltip"
-                        [closeDelay]="500" [openDelay]="500"
-                        ></em>
-                    </td>
-                    <td class="text-center">
-                      {{availableDoctor.start | timeOnlyFormat}} - {{availableDoctor.end | timeOnlyFormat}}
-                    </td>
-                    <td class="text-center sm-col">
-                      {{availableDoctor.distance | number: '1.1-1'}}
-                    </td>
-                    <td class="checkmark-content text-center sm-col" style="position: relative">
-                      <label class="container">
-                        <input
-                          class=""
-                          type="checkbox"
-                          checked={{availableDoctor.isSelected}}
-                          (change)="ToggleSelection(availableDoctor.id, $event)"
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm table-referral-list">
+                  <thead>
+                    <tr>
+                      <th class="text-center" scope="col" sortable="name" (sort)="OnSort($event)">
+                        Name
+                      </th>
+                      <th class="text-center" scope="col" sortable="genderName" (sort)="OnSort($event)">
+                        Gender
+                      </th>
+                      <th class="text-center" scope="col" sortable="type" (sort)="OnSort($event)">
+                        Type
+                      </th>
+                      <th class="text-center" scope="col" sortable="section12ApprovalStatusName" (sort)="OnSort($event)">
+                        S12 Status
+                      </th>
+                      <th class="text-center" scope="col" sortable="section12ExpiryDate" (sort)="OnSort($event)">
+                        S12 Expiry Date
+                      </th>                    
+                      <th class="text-center" scope="col" sortable="specialityNames" (sort)="OnSort($event)">
+                        Speciality
+                      </th>
+                      <th class="text-center sm-col" scope="col" sortable="activeAssessments" (sort)="OnSort($event)">
+                        Scheduled Assessments
+                      </th>
+                      <th class="text-center" scope="col" sortable="start" (sort)="OnSort($event)">
+                        Availability
+                      </th>
+                      <th class="text-center sm-col" scope="col" sortable="distance" (sort)="OnSort($event)">
+                        Distance (miles)
+                      </th>
+                      <th class="text-center" scope="col">
+                        Select
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let availableDoctor of availableDoctors">
+                      <td>
+                        {{availableDoctor.name}}
+                      </td>
+                      <td>
+                        {{availableDoctor.genderName}}
+                      </td>
+                      <td>
+                        {{availableDoctor.type}}
+                      </td>
+                      <td>
+                        {{availableDoctor.section12ApprovalStatusName}}
+                      </td>
+                      <td>
+                        {{availableDoctor.section12ExpiryDate | date:'dd/MM/yyyy'}}
+                      </td>
+                      <td>
+                        <span *ngFor="let speciality of availableDoctor.specialityNames; last as isLast">
+                          {{speciality}}<span *ngIf="!isLast">, </span>
+                        </span>
+                      </td>
+                      <ng-template #tipContent>
+                        <div class="assessment-tooltip" *ngFor="let assessment of availableDoctor.activeAssessments">
+                          <span>{{assessment.isScheduled === true ? 'Scheduled' : 'Allocated'}}</span>
+                          {{assessment.postcode}} @ {{assessment.dateTime | dateTimeFormat}}
+                        </div>
+                      </ng-template>
+                      <td class="text-center sm-col">
+                        <em
+                          class="fas fa-calendar-check scheduled"
+                          *ngIf="availableDoctor.activeAssessments.length > 0"
+                          [ngbTooltip]="tipContent"
+                          placement="right"
+                          tooltipClass="subtle-tooltip"
+                          [closeDelay]="500" [openDelay]="500"
+                          ></em>
+                      </td>
+                      <td class="text-center">
+                        {{availableDoctor.start | timeOnlyFormat}} - {{availableDoctor.end | timeOnlyFormat}}
+                      </td>
+                      <td class="text-center sm-col">
+                        {{availableDoctor.distance | number: '1.1-1'}}
+                      </td>
+                      <td class="checkmark-content text-center sm-col" style="position: relative">
+                        <label class="container">
+                          <input
+                            class=""
+                            type="checkbox"
+                            checked={{availableDoctor.isSelected}}
+                            (change)="ToggleSelection(availableDoctor.id, $event)"
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <div class="empty-table" *ngIf="availableDoctors.length == 0">
                 No available doctors found within search radius
               </div>
@@ -237,7 +239,8 @@
                   [collectionSize]="collectionSize"
                   (pageChange)="PageChanged($event)"
                   [(page)]="page"
-                  [pageSize]="pageSize">
+                  [pageSize]="pageSize"
+                  [maxSize]=5>
                 </ngb-pagination>
               </div>
               <div class="col-md-4">

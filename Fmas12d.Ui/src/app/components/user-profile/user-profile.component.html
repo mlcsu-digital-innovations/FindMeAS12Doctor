@@ -14,19 +14,19 @@
             </h6>
           </div>
         </div>
-        <div class="card-body offset-md-1" *ngIf="userProfileForm">
+        <div class="card-body" *ngIf="userProfileForm">
           <form [formGroup]="userProfileForm" novalidate>
-            <div class="form-row user-row">
-              <div class="required-field col-md-3 mb-3 text-left">
-                <strong>Denotes mandatory field.</strong>
+            <div class="form-row">
+              <div class="required-field required-field-label col-md-3 mb-3 offset-md-{{userProfile.isDoctor ? '0' : '3'}} text-left">
+                <strong>Denotes required field.</strong>
               </div>
             </div>
             <!-- DisplayName -->
             <div class="form-row user-row">
-              <div class="col-md-2">
+              <div class="col-md-2 offset-md-{{userProfile.isDoctor ? '0' : '3'}}">
                 <label class="required-field">Display name: </label>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <input class="form-control"
                   formControlName="displayName"
                   #displayName
@@ -36,7 +36,7 @@
               <div class="col-md-2" *ngIf="userProfile.isDoctor">
                 <label class="required-field">GMC Number: </label>
               </div>
-              <div class="col-md-2" *ngIf="userProfile.isDoctor">
+              <div class="col-md-3" *ngIf="userProfile.isDoctor">
                 <input class="form-control"
                   formControlName="gmcNumber"
                   maxlength="7"
@@ -47,7 +47,7 @@
               <div class="col-md-1" *ngIf="userProfile.isDoctor">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  class="btn btn-primary btn-right"
                   (click)="VerifyGMCNumber()"
                 >
                   Verify
@@ -55,48 +55,52 @@
               </div>
             </div>
             <!-- DisplayName & GMC Number Errors -->
-            <div class="form-row" *ngIf="controls.displayName.errors || controls.gmcNumber.errors">
-              <div class="col-md-4 offset-md-2" *ngIf="controls.displayName.errors">
+            <div class="form-row" *ngIf="submitted && (controls.displayName.errors || controls.gmcNumber.errors)">
+              <div class="col-md-4 mb-2 offset-md-{{userProfile.isDoctor ? '2' : '5'}}" *ngIf="controls.displayName.errors">
                 <div
                   class="invalid-field"
                   *ngIf="controls.displayName.errors.required"
                 >
-                  <span>* Display Name is required</span>
+                  <span>&nbsp;&nbsp;* Display Name is required</span>
                 </div>
               </div>
               <div
-                class="col-md-4 offset-md-{{controls.displayName.errors ? '1' : '7'}}"
+                class="col-md-4 offset-md-{{controls.displayName.errors ? '2' : '8'}}"
                 *ngIf="controls.gmcNumber.errors">
                 <div
                   class="invalid-field"
                   *ngIf="controls.gmcNumber.errors.required"
                 >
-                  <span>* GMC Number is required</span>
+                  <span>&nbsp;* GMC Number is required</span>
                 </div>
                 <div
                   class="invalid-field"
                   *ngIf="controls.gmcNumber.errors.pattern"
                 >
-                  <span>* GMC Number must be 7 digits</span>
+                  <span>&nbsp;* GMC Number must be 7 digits</span>
                 </div>
               </div>
             </div>
             <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
-              <div class="col-md-2">
+              <div class="col-md-2 offset-md-3">
                 <label>Organisation: </label>
               </div>
-              <div class="col-md-3">
-              <label>{{userProfile.organisationName}}</label>
+              <div class="col-md-4">
+                <input class="form-control"
+                  formControlName="organisationName"
+                  #organisationName
+                  disabled="true"
+                  id="organisationName">
               </div>
             </div>
             <!-- Gender -->
             <div class="form-row user-row">
-              <div class="col-md-2">
+              <div class="col-md-2 offset-md-{{userProfile.isDoctor ? '0' : '3'}}">
                 <label class="required-field">Gender: </label>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <select
-                  class="custom-select custom-select-lg mb-2 form-control"
+                  class="custom-select custom-select-lg form-control"
                   formControlName="genderTypeId"
                   #genderTypeId id="genderTypeId"
                 >
@@ -122,22 +126,22 @@
               </div>
             </div>
             <!-- GenderType Errors -->
-            <div class="form-row" *ngIf="controls.genderTypeId.errors">
-              <div class="col-md-4 mb-2 offset-md-2">
+            <div class="form-row" *ngIf="submitted && controls.genderTypeId.errors">
+              <div class="col-md-4 mb-2 offset-md-{{userProfile.isDoctor ? '2' : '5'}}">
                 <div
                   class="invalid-field"
                   *ngIf="controls.genderTypeId.errors.required"
                 >
-                  <span>* Gender is required </span>
+                  <span>&nbsp;&nbsp;* Gender is required </span>
                 </div>
               </div>
             </div>
             <!-- Email -->
             <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
-              <div class="col-md-2">
+              <div class="col-md-2 offset-md-3">
                 <label class="required-field">Email: </label>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <input class="form-control"
                   formControlName="emailAddress"
                   #emailAddress
@@ -145,28 +149,28 @@
               </div>
             </div>
             <!-- Email Errors -->
-            <div class="form-row" *ngIf="controls.emailAddress.errors">
-              <div class="col-md-4 mb-2 offset-md-2">
+            <div class="form-row" *ngIf="submitted && controls.emailAddress.errors">
+              <div class="col-md-4 mb-2 offset-md-5">
                 <div
                   class="invalid-field"
                   *ngIf="controls.emailAddress.errors.required"
                 >
-                  <span>* Email Address is required</span>
+                  <span>&nbsp;&nbsp;* Email Address is required</span>
                 </div>
                 <div
                   class="invalid-field"
                   *ngIf="controls.emailAddress.errors.email"
                 >
-                  <span>* Must be an email address</span>
+                  <span>&nbsp;&nbsp;* Must be an email address</span>
                 </div>
               </div>
             </div>
             <!-- Mobile Number -->
             <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
-              <div class="col-md-2">
+              <div class="col-md-2 offset-md-3">
                 <label [class]="userProfile.isAmhp ? 'required-field' : ''">Mobile: </label>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <input class="form-control"
                   formControlName="mobileNumber"
                   #mobileNumber
@@ -174,28 +178,28 @@
               </div>
             </div>
             <!-- Mobile Number Errors -->
-            <div class="form-row" *ngIf="controls.mobileNumber.errors">
-              <div class="col-md-4 mb-2 offset-md-2">
+            <div class="form-row" *ngIf="submitted && controls.mobileNumber.errors">
+              <div class="col-md-4 mb-2 offset-md-5">
                 <div
                   class="invalid-field"
                   *ngIf="controls.mobileNumber.errors.required"
                 >
-                  <span>* Mobile Number is required</span>
+                  <span>&nbsp;&nbsp;* Mobile Number is required</span>
                 </div>
                 <div
                 class="invalid-field"
                 *ngIf="controls.mobileNumber.errors.pattern"
               >
-                <span>* Mobile number must be digits only</span>
+                <span>&nbsp;&nbsp;* Mobile number must be digits only</span>
               </div>
               </div>
             </div>
             <!-- Telephone Number -->
             <div *ngIf="!userProfile.isDoctor" class="form-row user-row">
-              <div class="col-md-2">
+              <div class="col-md-2 offset-md-3">
                 <label>Telephone: </label>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <input class="form-control"
                   formControlName="telephoneNumber"
                   #telephoneNumber
@@ -204,7 +208,7 @@
             </div>
             <!-- Telephone Number Errors -->
               <div class="form-row" *ngIf="controls.telephoneNumber.errors">
-                <div class="col-md-4 mb-2 offset-md-2">
+                <div class="col-md-4 mb-2 offset-md-5">
                   <div
                     class="invalid-field"
                     *ngIf="controls.telephoneNumber.errors.pattern"
@@ -216,9 +220,9 @@
             <!-- Specialities -->
             <div *ngIf="userProfile.isDoctor" class="form-row user-row">
               <div class="col-md-2">
-                <label class="required-field">Specialities</label>
+                <label class="required-field">Specialities:</label>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <ng-multiselect-dropdown
                   formControlName="specialities"
                   [settings]="dropdownSettings"
@@ -228,18 +232,18 @@
               <div class="col-md-2" *ngIf="userProfile.isDoctor">
                 <label>S12 Expiry Date: </label>
               </div>
-              <div class="col-md-3" *ngIf="userProfile.isDoctor">
+              <div class="col-md-4" *ngIf="userProfile.isDoctor">
                 <label>{{userProfile.section12ExpiryDate | date: 'd MMMM yyyy'}}</label>
               </div>
             </div>
             <!-- Specialities Errors -->
-            <div class="form-row" *ngIf="controls.specialities.errors">
+            <div class="form-row" *ngIf="submitted && controls.specialities.errors">
               <div class="col-md-4 mb-2 offset-md-2">
                 <div
                   class="invalid-field"
                   *ngIf="controls.specialities.errors.required"
                 >
-                  <span>* Please select one or more specialities</span>
+                  <span>&nbsp;&nbsp;* Please select one or more specialities</span>
                 </div>
               </div>
             </div>
@@ -251,101 +255,103 @@
             </div>
             <div *ngIf="userProfile.isDoctor" class="form-row table-row">
               <div class="col-md-10">
-                <table class="table table-bordered table-sm table-contact-details">
-                  <thead>
-                    <tr>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='string'>
-                        Contact Detail
-                      </th>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='number'>
-                        Address
-                      </th>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='string'>
-                        Postcode
-                      </th>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='string'>
-                        Email
-                      </th>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='string'>
-                        Telephone
-                      </th>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='string'>
-                        Mobile
-                      </th>
-                      <th class="sm-col text-center" scope="col">
-                        &nbsp; &nbsp;
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="contact-detail-row" *ngFor="let contactDetail of controls.contactDetails.value">
-                      <td>
-                        <ngb-highlight result="{{contactDetail.contactDetailTypeName}}">
-                        </ngb-highlight>
-                      </td>
-                      <td>
-                        <ngb-highlight result="{{(contactDetail.address1 ? contactDetail.address1 : '') +
-                        (contactDetail.address1 && contactDetail.address2 ? ', ' : '') +
-                        (contactDetail.address2 ? contactDetail.address2 : '') +
-                        (contactDetail.address2 && contactDetail.address3 ? ', ' : '') +
-                        (contactDetail.address3 ? contactDetail.address3 : '')}}">
-                        </ngb-highlight>
-                      </td>
-                      <td>
-                        <ngb-highlight result="{{contactDetail.postcode}}">
-                        </ngb-highlight>
-                      </td>
-                      <td>
-                        <ngb-highlight result="{{contactDetail.emailAddress}}">
-                        </ngb-highlight>
-                      </td>
-                      <td>
-                        <ngb-highlight result="{{contactDetail.telephoneNumber}}">
-                        </ngb-highlight>
-                      </td>
-                      <td>
-                        <ngb-highlight result="{{contactDetail.mobileNumber}}">
-                        </ngb-highlight>
-                      </td>
-                      <td class="text-right">
-                        <button class="btn btn-outline-primary btn-small" (click)="EditContactDetail(contactDetail)">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-primary btn-small" (click)="DeleteContactDetail(contactDetail)">
-                          <i class="fas fa-times"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm table-contact-details">
+                    <thead>
+                      <tr>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='string'>
+                          Contact Detail
+                        </th>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='number'>
+                          Address
+                        </th>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='string'>
+                          Postcode
+                        </th>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='string'>
+                          Email
+                        </th>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='string'>
+                          Telephone
+                        </th>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='string'>
+                          Mobile
+                        </th>
+                        <th class="sm-col text-center" scope="col">
+                          &nbsp; &nbsp;
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="contact-detail-row" *ngFor="let contactDetail of controls.contactDetails.value">
+                        <td>
+                          <ngb-highlight result="{{contactDetail.contactDetailTypeName}}">
+                          </ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight result="{{(contactDetail.address1 ? contactDetail.address1 : '') +
+                          (contactDetail.address1 && contactDetail.address2 ? ', ' : '') +
+                          (contactDetail.address2 ? contactDetail.address2 : '') +
+                          (contactDetail.address2 && contactDetail.address3 ? ', ' : '') +
+                          (contactDetail.address3 ? contactDetail.address3 : '')}}">
+                          </ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight result="{{contactDetail.postcode}}">
+                          </ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight result="{{contactDetail.emailAddress}}">
+                          </ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight result="{{contactDetail.telephoneNumber}}">
+                          </ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight result="{{contactDetail.mobileNumber}}">
+                          </ngb-highlight>
+                        </td>
+                        <td class="text-right">
+                          <button class="btn btn-outline-primary btn-small" (click)="EditContactDetail(contactDetail)">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button class="btn btn-outline-primary btn-small" (click)="DeleteContactDetail(contactDetail)">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             <!-- Contact Details Errors -->
-            <div class="form-row" *ngIf="controls.contactDetails.errors">
+            <div class="form-row" *ngIf="submitted && controls.contactDetails.errors">
               <div class="col-md-4 mb-2">
                 <div
                   class="invalid-field"
                   *ngIf="controls.contactDetails.errors.baseRequired"
                 >
-                  <span>* Please add a Base contact detail</span>
+                  <span>&nbsp;&nbsp;* Please add a Base contact detail</span>
                 </div>
               </div>
             </div>
             <div *ngIf="userProfile.isDoctor" class="form-row user-row">
-              <div class="col-md-1 offset-md-9">
-                <button class="btn btn-primary btn-standard btn-spaced" type="button" [disabled]="UserHasAllContactDetails()" (click)="AddContactDetail()">
+              <div class="col-md-1 offset-md-11">
+                <button class="btn btn-primary btn-standard btn-spaced btn-right" type="button" [disabled]="UserHasAllContactDetails()" (click)="AddContactDetail()">
                   Add
                 </button>
               </div>
@@ -358,65 +364,66 @@
             </div>
             <div *ngIf="userProfile.isDoctor" class="form-row table-row">
               <div class="col-md-10">
-                <table class="table table-bordered table-sm table-contact-details">
-                  <thead>
-                    <tr>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='string'>
-                        CCG Name
-                      </th>
-                      <th class="text-center"
-                        scope="col"
-                        columnType='number'>
-                        VSR Number
-                      </th>
-                      <th class="sm-col text-center" scope="col">
-                        &nbsp; &nbsp;
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="contact-detail-row" *ngFor="let financeDetail of controls.bankDetails.value">
-                      <td>
-                        <ngb-highlight result="{{financeDetail.ccg.name}}">
-                        </ngb-highlight>
-                      </td>
-                      <td>
-                        <ngb-highlight result="{{financeDetail.vsrNumber}}">
-                        </ngb-highlight>
-                      </td>
-                      <td class="text-right">
-                        <button class="btn btn-outline-primary btn-small" (click)="EditFinanceDetail(financeDetail)">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-primary btn-small" (click)="DeleteFinanceDetail(financeDetail)">
-                          <i class="fas fa-times"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm table-contact-details">
+                    <thead>
+                      <tr>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='string'>
+                          CCG Name
+                        </th>
+                        <th class="text-center"
+                          scope="col"
+                          columnType='number'>
+                          VSR Number
+                        </th>
+                        <th class="sm-col text-center" scope="col">
+                          &nbsp; &nbsp;
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="contact-detail-row" *ngFor="let financeDetail of controls.bankDetails.value">
+                        <td>
+                          <ngb-highlight result="{{financeDetail.ccg.name}}">
+                          </ngb-highlight>
+                        </td>
+                        <td>
+                          <ngb-highlight result="{{financeDetail.vsrNumber}}">
+                          </ngb-highlight>
+                        </td>
+                        <td class="text-right">
+                          <button class="btn btn-outline-primary btn-small" (click)="EditFinanceDetail(financeDetail)">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button class="btn btn-outline-primary btn-small" (click)="DeleteFinanceDetail(financeDetail)">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             <div *ngIf="userProfile.isDoctor" class="form-row user-row">
-              <div class="col-md-1 offset-md-9">
-                <button class="btn btn-primary btn-standard btn-spaced" type="button" (click)="AddFinanceDetail()">
+              <div class="col-md-1 offset-md-11">
+                <button class="btn btn-primary btn-standard btn-spaced btn-right" type="button" (click)="AddFinanceDetail()">
                   Add
                 </button>
               </div>
             </div>
             <div class="form-row mt-more-2">
-              <div class="col-md-2 mb-2 {{userProfile.isDoctor ? 'offset-md-8' : 'offset-md-4'}} text-right">
-                <button class="btn btn-standard btn-cancel" type="button" (click)="Cancel()">
-                  <i class="far fa-times-circle"></i>
-                  Cancel
-                </button>
-                <button class="btn btn-primary btn-standard btn-spaced" type="button"
-                  [disabled]="!userProfileForm.valid"
+              <div class="col-md-4 mb-2 offset-md-{{userProfile.isDoctor ? '8' : '5'}}">
+                <button class="btn btn-primary btn-standard btn-spaced btn-right {{userProfile.isDoctor ? '' : 'margin-right-clear'}}" type="button"
                   (click)="Save()">
                   <i class="fas fa-check"></i>
                   Save
+                </button>
+                <button class="btn btn-standard btn-cancel btn-right" type="button" (click)="Cancel()">
+                  <i class="far fa-times-circle"></i>
+                  Cancel
                 </button>
               </div>
             </div>
@@ -480,15 +487,15 @@
 </ng-template>
 
 <ng-template #saveUserProfileModal>
-  <app-cancel-action-modal [modalTitle]="'Confirm User Update'"
-    [modalBody]="'Please confirm that you wish to update this user.'"
+  <app-cancel-action-modal [modalTitle]="'Confirm User Profile Update'"
+    [modalBody]="'Please confirm that you wish to update this user profile.'"
     (actioned)="OnSaveUserProfileAction($event)">
   </app-cancel-action-modal>
 </ng-template>
 
 <ng-template #cancelUserProfileModal>
-  <app-cancel-action-modal [modalTitle]="'Cancel User Update'"
-    [modalBody]="'Do you wish to cancel this user update? All changes will be lost.'"
+  <app-cancel-action-modal [modalTitle]="'Cancel User Profile Update'"
+    [modalBody]="'Do you wish to cancel this user profile update? All changes will be lost.'"
     (actioned)="OnCancelModalAction($event)">
   </app-cancel-action-modal>
 </ng-template>
