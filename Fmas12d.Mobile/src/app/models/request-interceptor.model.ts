@@ -60,7 +60,6 @@ export class RequestInterceptor implements HttpInterceptor {
       //   return next.handle(req);
       // }
 
-      console.log('do something with access token');
 
       return this.storageService.getAccessToken()
         .pipe(
@@ -72,8 +71,6 @@ export class RequestInterceptor implements HttpInterceptor {
                   'Content-Type': 'application/json'
                 }
               });
-
-              console.log('Updated request', req);
 
               return next.handle(req).do(event => {}, err => {
 

@@ -57,7 +57,9 @@ export class AuthService implements OnDestroy {
 
     this.logout = this.msal.logoutMsal().subscribe(success => {
       this.authState.next(false);
+      console.log('logged out');
     }, error => {
+      console.log(error);
     });
   }
 }

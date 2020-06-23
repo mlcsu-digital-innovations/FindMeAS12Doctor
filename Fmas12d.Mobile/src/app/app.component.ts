@@ -1,6 +1,8 @@
 import { AuthService } from './services/auth/auth.service';
 import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit } from '@angular/core';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { MsalService } from './services/msal/msal.service';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
 import { Platform, NavController, AlertController } from '@ionic/angular';
@@ -12,10 +14,6 @@ import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
 import * as jwt_decode from 'jwt-decode';
-import { FCM } from '@ionic-native/fcm/ngx';
-
-import { Msal } from 'ionic-msal-native';
-import { MsalService } from './services/msal/msal.service';
 
 @Component({
   selector: 'app-root',
@@ -24,26 +22,24 @@ import { MsalService } from './services/msal/msal.service';
 })
 export class AppComponent implements OnInit {
 
-  userName: string;
-  user = {} as UserDetails;
   isAuthenticated: boolean;
+  user = {} as UserDetails;
+  userName: string;
 
   constructor(
     private alertController: AlertController,
     private authService: AuthService,
     private broadcastService: BroadcastService,
     private fcm: FCM,
-    private navController: NavController,
+    private msal: MsalService,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
     private platform: Platform,
-    private router: Router,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storageService: StorageService,
     private toastService: ToastService,
-    private userDetailsService: UserDetailsService,
-    private msal: MsalService
+    private userDetailsService: UserDetailsService
   ) {
   }
 

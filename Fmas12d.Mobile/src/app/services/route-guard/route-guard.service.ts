@@ -15,7 +15,6 @@ export class RouteGuardService implements CanActivate {
   ) { }
 
   async canActivate(): Promise<boolean> {
-    console.log('check canActivate');
     return this.authService.isAuthenticated();
   }
 

@@ -2,9 +2,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BroadcastService } from '@azure/msal-angular';
 import { OAuthSettingsMSAL } from 'src/oauth';
 import { StorageService } from '../storage/storage.service';
-import { Subscription, Observable, from } from 'rxjs';
-import { Msal, MsalLogLevel } from 'ionic-msal-native';
-import { Platform } from '@ionic/angular';
+import { Subscription, Observable } from 'rxjs';
+import { Msal } from 'ionic-msal-native';
 
 
 @Injectable({
@@ -12,7 +11,7 @@ import { Platform } from '@ionic/angular';
 })
 export class MsalService implements OnDestroy {
   private subscription: Subscription;
-  
+
   constructor(
     private broadcastService: BroadcastService,
     private msal: Msal,
@@ -30,8 +29,6 @@ export class MsalService implements OnDestroy {
 
   public msalInit() {
 
-    console.log('Init MSAL');
-
     const options: any = {
       authorities: OAuthSettingsMSAL.authorities,
       authorizationUserAgent: OAuthSettingsMSAL.authorizationUserAgent,
@@ -39,8 +36,6 @@ export class MsalService implements OnDestroy {
     };
 
     this.msal.msalInit(options).then((initResult) => {
-      console.log('MSAL Options', options);
-      console.log('MSAL Configuration Success:', initResult);
       return initResult;
     },
       (err) => {
@@ -48,25 +43,23 @@ export class MsalService implements OnDestroy {
     });
 
     // Cordova MSAL Plugin Log settings
-    this.msal.startLogger(MsalLogLevel.Verbose)
-      .subscribe(
-        (ok) => {
-          this.logSuccess(ok);
-        },
-        (err) => {
-          this.logFail(err);
-      }
-    );
+    // this.msal.startLogger(MsalLogLevel.Verbose)
+    //   .subscribe(
+    //     (ok) => {
+    //       this.logSuccess(ok);
+    //     },
+    //     (err) => {
+    //       this.logFail(err);
+    //   }
+    // );
   }
 
   public loginMsal(): Observable<any> {
 
     const msalSignin = new Observable((observer) => {
       // try to sign in silently
-      console.log('try to sign in silently');
       this.msal.signInSilent().then((jwt) => {
         this.broadcastService.broadcast('msal:loginSuccess', jwt);
-        console.log('silent signin ok');
         observer.next(jwt);
         observer.complete();
      },
@@ -75,13 +68,11 @@ export class MsalService implements OnDestroy {
        // try an interactive login
       this.msal.signInInteractive().then((jwt) => {
             this.broadcastService.broadcast('msal:loginSuccess', jwt);
-            console.log('interactive sign in ok');
             observer.next(jwt);
             observer.complete();
          },
          (err) =>  {
            this.broadcastService.broadcast('msal:loginFailure', err);
-           console.log('sign in error', err);
            observer.error(err);
          });
      });
