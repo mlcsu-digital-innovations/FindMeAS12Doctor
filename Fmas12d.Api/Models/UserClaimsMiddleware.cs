@@ -94,7 +94,7 @@ namespace Fmas12d.Models
             List<Claim> userClaims = new List<Claim>
             {
               new Claim(UserClaimsService.CLAIM_PROFILETYPEID, profileTypeId.ToString()),
-              new Claim(UserClaimsService.CLAIM_USERID, userId.ToString())
+              new Claim(UserClaimsService.CLAIM_TYPE_USERID, userId.ToString())
             };
 
             ClaimsIdentity appIdentity = new ClaimsIdentity(userClaims);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fmas12d.Business.Models;
 
@@ -10,6 +11,8 @@ namespace Fmas12d.Business.Services
       bool activeOnly,
       bool asNoTracking
     );
-    Task<Section12LiveRegisterEtl> PerformEtlAsync(string filePath);
+
+    Task<Section12LiveRegisterBatchUpdateResult> BatchUpdate(
+      List<Section12LiveRegister> businessModels);
   }
 }

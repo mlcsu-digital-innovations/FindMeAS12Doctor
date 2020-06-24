@@ -5,5 +5,6 @@ namespace Fmas12d.Business.Services
     int GetUserId();
     bool HasUserIdClaim();
     bool IsUserAdmin();
+    void SetUserAsSystemAdmin();
   }
 }
