@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Fmas12d.Api.RequestModels;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -52,31 +55,24 @@ namespace Fmas12d.Api.Controllers
       }
     }    
 
-    [HttpGet]
-    [Route("etl")]
-    [Authorize(Policy = "Admin")]
-    public async Task<ActionResult> Etl()
+    [HttpPatch]
+    [DisableRequestSizeLimit]
+    [Route("ops/batch-update")]
+    [AllowAnonymous]
+    public async Task<ActionResult> BatchUpdate(List<Section12LiveRegisterPatch> requestModels)
     {
-      const string MISSING = "missing";
-      const string CONFIGURATION_KEY = "Section12LiveRegisterCsvFilePath";
-
       try
       {
-        string section12LiveRegisterCsvFilePath =
-          _configuration.GetValue(CONFIGURATION_KEY, MISSING);
-
-        if (section12LiveRegisterCsvFilePath == MISSING)
-        {
-          throw new Exception($"Missing {CONFIGURATION_KEY} in app.setting.json");
-        }
-        else
-        {
-          Section12LiveRegisterEtl section12LiveRegisterEtl = await Service.PerformEtlAsync(
-            section12LiveRegisterCsvFilePath
-          );
-
-          return Ok(section12LiveRegisterEtl);
-        }
+        List<Section12LiveRegister> businessModels = new List<Section12LiveRegister>();
+        requestModels.ForEach(requestModel => {
+          Section12LiveRegister businessModel = new Section12LiveRegister();
+          requestModel.MapToBusinessModel(businessModel);
+          businessModels.Add(businessModel);
+        });
+        _userClaimsService.SetUserAsSystemAdmin();
+        Section12LiveRegisterBatchUpdateResult result = await Service.BatchUpdate(businessModels);
+        
+        return Ok(result);
       }
       catch (Exception ex)
       {

@@ -16,18 +16,27 @@ namespace Fmas12d.Business.Services
     ISection12LiveRegisterService
   {
 
-    private readonly Section12LiveRegisterEtl _section12LiveRegisterEtl;
+    private readonly Section12LiveRegisterBatchUpdateResult _section12LiveRegisterEtl;
 
     public Section12LiveRegisterService(
       ApplicationContext context,
       IUserClaimsService userClaimsService)
       : base(context, userClaimsService)
     {
-      _section12LiveRegisterEtl = new Section12LiveRegisterEtl()
+      _section12LiveRegisterEtl = new Section12LiveRegisterBatchUpdateResult()
       {
         LoadedDate = DateTimeOffset.Now
       };
     }
+
+    public async Task<Section12LiveRegisterBatchUpdateResult> BatchUpdate(
+      List<Section12LiveRegister> section12LiveRegisters)
+    {
+      await UpdateSection12LiveRegisters(section12LiveRegisters);
+      await UpdateUserSection12ApprovalStatus();
+
+      return _section12LiveRegisterEtl;      
+    }    
 
     public async Task<Section12LiveRegister> GetByGmcNumber(
       int gmcNumber,
@@ -44,14 +53,6 @@ namespace Fmas12d.Business.Services
         .SingleOrDefaultAsync();
 
       return section12LiveRegister;
-    }
-
-    public async Task<Section12LiveRegisterEtl> PerformEtlAsync(string filePath)
-    {
-      await EtlSection12RegisterReport(filePath);
-      await UpdateUserSection12ApprovalStatus();
-
-      return _section12LiveRegisterEtl;
     }
 
     private async Task<bool> UpdateUserSection12ApprovalStatus()
@@ -95,51 +96,44 @@ namespace Fmas12d.Business.Services
       return true;
     }
 
-    private async Task<bool> EtlSection12RegisterReport(string filePath)
+    private async Task<bool> UpdateSection12LiveRegisters(
+      List<Section12LiveRegister> section12LiveRegisters)
     {
-      using StreamReader streamReader = new StreamReader(filePath);
-      using CsvReader csvReader = new CsvReader(streamReader);
-
-      List<Section12LiveRegisterCsv> newRegistersFromCsv = csvReader
-        .GetRecords<Section12LiveRegisterCsv>()
-        .Where(r => !string.IsNullOrWhiteSpace(r.DateOfS12ExpiryString))
-        .Where(r => r.Prn.All(c => char.IsNumber(c)))
-        .ToList();
-      _section12LiveRegisterEtl.NoOfRowsInReport = newRegistersFromCsv.Count;
+      _section12LiveRegisterEtl.NoOfRowsInReport = section12LiveRegisters.Count;
 
       List<Entities.Section12LiveRegister> currentMatchingRegisters =
         await _context.Section12LiveRegisters
-                      .Where(s => newRegistersFromCsv.Select(c => c.GmcNumber)
-                                                     .Contains(s.GmcNumber))
+                      .Where(s => section12LiveRegisters.Select(c => c.GmcNumber)
+                                                        .Contains(s.GmcNumber))
                       .ToListAsync();
       _section12LiveRegisterEtl.NoOfRowsUpdated = currentMatchingRegisters.Count;
 
       currentMatchingRegisters.ForEach(cr =>
       {
-        Section12LiveRegisterCsv newRegister =
-          newRegistersFromCsv.Single(nr => nr.GmcNumber == cr.GmcNumber);
-        cr.ExpiryDate = newRegister.DateOfS12Expiry;
-        cr.FirstName = newRegister.FirstName;
-        cr.GmcNumber = newRegister.GmcNumber;
+        Section12LiveRegister updatedRegister =
+          section12LiveRegisters.Single(nr => nr.GmcNumber == cr.GmcNumber);
+        cr.ExpiryDate = updatedRegister.ExpiryDate;
+        cr.FirstName = updatedRegister.FirstName;
+        cr.GmcNumber = updatedRegister.GmcNumber;
         cr.IsActive = true;
-        cr.LastName = newRegister.LastName;
-        cr.Title = newRegister.Title;
+        cr.LastName = updatedRegister.LastName;
+        cr.Title = updatedRegister.Title;
         UpdateModified(cr);
       });
 
       List<Entities.Section12LiveRegister> newRegisters =
-        newRegistersFromCsv.Where(nr => !currentMatchingRegisters.Select(cr => cr.GmcNumber)
-                                                                 .Contains(nr.GmcNumber))
-                           .Select(nr => new Entities.Section12LiveRegister
-                           {
-                             ExpiryDate = nr.DateOfS12Expiry,
-                             FirstName = nr.FirstName,
-                             GmcNumber = nr.GmcNumber,
-                             IsActive = true,
-                             LastName = nr.LastName,
-                             Title = nr.Title
-                           })
-                           .ToList();
+        section12LiveRegisters.Where(nr => !currentMatchingRegisters.Select(cr => cr.GmcNumber)
+                                                                    .Contains(nr.GmcNumber))
+                              .Select(nr => new Entities.Section12LiveRegister
+                              {
+                                ExpiryDate = nr.ExpiryDate,
+                                FirstName = nr.FirstName,
+                                GmcNumber = nr.GmcNumber,
+                                IsActive = true,
+                                LastName = nr.LastName,
+                                Title = nr.Title
+                              })
+                              .ToList();
       _section12LiveRegisterEtl.NoOfRowsAdded = newRegisters.Count;
 
       newRegisters.ForEach(nr => { UpdateModified(nr); });
