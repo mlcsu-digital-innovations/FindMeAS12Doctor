@@ -16,7 +16,7 @@ namespace Fmas12d.Api.Controllers
 
   public abstract class ModelControllerBase : ControllerBase
   {
-    private readonly IUserClaimsService _userClaimsService;
+    protected readonly IUserClaimsService _userClaimsService;
     protected readonly IServiceBase _service;
 
     protected ModelControllerBase(
@@ -30,8 +30,8 @@ namespace Fmas12d.Api.Controllers
 
     protected string GetCreatedModelUri(int id)
     {
-      return $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}" +
-             $"{this.Request.PathBase.Value.ToString()}{this.Request.Path.Value}/view/{id}";
+      return $"{this.Request.Scheme}://{this.Request.Host.Value}" +
+             $"{this.Request.PathBase.Value}{this.Request.Path.Value}/view/{id}";
     } 
 
     protected int GetUserId()
