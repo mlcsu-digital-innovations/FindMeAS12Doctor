@@ -18,12 +18,10 @@ export class StorageService {
   }
 
   public getAccessToken(): Observable<any> {
-    console.log('Get Access Token');
     return from(this.storage.get(this.ACCESS_TOKEN_STORAGE_KEY));
   }
 
   public storeAccessToken(accessToken: string): Observable<any> {
-    console.log('Store Access Token', accessToken);
     return from(this.storage.set(this.ACCESS_TOKEN_STORAGE_KEY, accessToken));
   }
 
