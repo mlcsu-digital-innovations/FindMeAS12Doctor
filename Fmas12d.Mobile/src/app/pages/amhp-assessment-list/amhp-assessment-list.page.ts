@@ -1,8 +1,14 @@
 import { AmhpAssessmentList } from '../../models/amhp-assessment-list.model';
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service';
+import { BroadcastService } from '@azure/msal-angular';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { REFERRALSTATUSASSESSMENTSCHEDULED, REFERRALSTATUS_SCHEDULED, REFERRALSTATUS_RESCHEDULING, REFERRALSTATUS_AWAITING_REVIEW, REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
+import {
+  REFERRALSTATUSASSESSMENTSCHEDULED, REFERRALSTATUS_SCHEDULED, REFERRALSTATUS_RESCHEDULING,
+  REFERRALSTATUS_AWAITING_REVIEW, REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING,
+  REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL,
+  REFERRALSTATUS_RESPONSES_COMPLETE
+} from 'src/app/constants/app.constants';
 
 @Component({
   selector: 'app-amhp-assessment-list',
@@ -18,6 +24,7 @@ export class AmhpAssessmentListPage {
 
   constructor(
     private assessmentService: AmhpAssessmentService,
+    private broadcastService: BroadcastService,
     private loadingController: LoadingController
   ) { }
 
@@ -37,7 +44,7 @@ export class AmhpAssessmentListPage {
 
     const unscheduledStatuses: number[] =
       [REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
-      REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
+        REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
 
     request.subscribe((result: AmhpAssessmentList[]) => {
       this.assessmentListLastUpdated = new Date();
@@ -50,6 +57,9 @@ export class AmhpAssessmentListPage {
 
       this.assessmentListComplete = result
         .filter(assessment => completedStatuses.includes(assessment.referralStatusId));
+
+      this.broadcastService.broadcast('assessments:requiringaction',
+        this.assessmentListUnscheduled.length);
 
       this.closeLoading();
       this.closeRefreshing($event);

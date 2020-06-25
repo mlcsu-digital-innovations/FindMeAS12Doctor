@@ -1,6 +1,10 @@
+import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
+import { AmhpAssessmentService } from './services/amhp-assessment/amhp-assessment.service';
+import { AssessmentClaimService } from './services/assessment-claims/assessment-claims.service';
 import { AuthService } from './services/auth/auth.service';
 import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit } from '@angular/core';
+import { FCM } from '@ionic-native/fcm/ngx';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
 import { Platform, NavController, AlertController } from '@ionic/angular';
@@ -11,13 +15,11 @@ import { StorageService } from './services/storage/storage.service';
 import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
+import {
+  REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
+  REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE, DOCTORSTATUSSELECTED
+} from 'src/app/constants/app.constants';
 import * as jwt_decode from 'jwt-decode';
-import { FCM } from '@ionic-native/fcm/ngx';
-import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
-import { AmhpAssessmentService } from './services/amhp-assessment/amhp-assessment.service';
-import { REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
-import { AssessmentClaimService } from './services/assessment-claims/assessment-claims.service';
-
 
 @Component({
   selector: 'app-root',
@@ -37,6 +39,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private alertController: AlertController,
+    private assessmentClaimService: AssessmentClaimService,
+    private assessmentService: AmhpAssessmentService,
     private authService: AuthService,
     private broadcastService: BroadcastService,
     private fcm: FCM,
@@ -49,14 +53,8 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private storageService: StorageService,
     private toastService: ToastService,
-    private userDetailsService: UserDetailsService,
-    private assessmentService: AmhpAssessmentService,
-    private assessmentClaimService: AssessmentClaimService,
+    private userDetailsService: UserDetailsService
   ) {
-  }
-
-  ionViewDidEnter() {
-    this.ngOnInit();
   }
 
   ngOnInit() {
@@ -65,9 +63,11 @@ export class AppComponent implements OnInit {
       .subscribe(
         allRequests => {
           const filteredAssessments = allRequests.filter(
-            assessment => assessment.doctorStatusId === 1 && assessment.doctorHasAccepted === null
+            assessment => assessment.doctorStatusId === DOCTORSTATUSSELECTED &&
+              assessment.doctorHasAccepted === null
           );
           this.assessmentsRequiringAction = filteredAssessments.length;
+          console.log('Assessments = ' + this.assessmentsRequiringAction);
         }
       );
 
@@ -82,14 +82,20 @@ export class AppComponent implements OnInit {
             assessment => unscheduledStatuses.includes(assessment.referralStatusId)
           );
           this.amhpAssessmentsRequiringAction = filteredAmhpAssessments.length;
+          console.log('Amhp Assessments = ' + this.amhpAssessmentsRequiringAction);
         }
       );
 
     this.assessmentClaimService.getList()
       .subscribe(
         allRequests => {
-          const filteredClaims = allRequests.assessments.length;
-          this.claimsRequiringAction = filteredClaims;
+          if (allRequests.assessments.length !== 0) {
+            this.claimsRequiringAction = allRequests.assessments.length;
+          } else {
+            this.claimsRequiringAction = 0;
+          }
+          console.log('Claims = ' + this.claimsRequiringAction);
+          console.log(allRequests.assessments.length);
         }
       );
 
@@ -150,6 +156,18 @@ export class AppComponent implements OnInit {
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
+      });
+
+      this.broadcastService.subscribe('amhpassessments:requiringaction', (amhpassessmentsrequiringaction) => {
+        this.amhpAssessmentsRequiringAction = amhpassessmentsrequiringaction;
+      });
+
+      this.broadcastService.subscribe('assessments:requiringaction', (assessmentsrequiringaction) => {
+        this.assessmentsRequiringAction = assessmentsrequiringaction;
+      });
+
+      this.broadcastService.subscribe('claims:requiringaction', (claimsrequiringaction) => {
+        this.claimsRequiringAction = claimsrequiringaction;
       });
     });
 
