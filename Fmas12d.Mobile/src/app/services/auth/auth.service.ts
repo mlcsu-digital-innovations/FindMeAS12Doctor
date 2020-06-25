@@ -1,8 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subscription, ReplaySubject, Observable } from 'rxjs';
-import { MsalService } from '../msal/msal.service';
+import { MsalService } from '@azure/msal-angular';
+import { MsalService as CordovaMsalService } from '../msal/msal.service';
+import { Platform } from '@ionic/angular';
 import { StorageService } from '../storage/storage.service';
+import { Subscription, ReplaySubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +18,21 @@ export class AuthService implements OnDestroy {
   public readonly authState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   constructor(
-    private msal: MsalService,
-    private storageService: StorageService
+    private cordovaMsal: CordovaMsalService,
+    private msalService: MsalService,
+    private storageService: StorageService,
+    private platform: Platform,
+    private toastService: ToastService
     ) {
       this.storageService.getAccessToken().map(token => {
         if (!token) {
-          // this.loginMsal();
+          this.loginUsingMsal();
           console.log('No Token');
         } else {
           console.log('Have a token', token);
         }
       }, error => {
-        // this.loginMsal();
+        this.loginUsingMsal();
         console.log('Error getting token', error);
       });
     }
@@ -40,24 +46,46 @@ export class AuthService implements OnDestroy {
     return this.authState.asObservable().pipe(take(1)).toPromise();
   }
 
-  public loginMsal(): void {
+  private loginUsingMsal() {
+    if (this.platform.is('cordova')) {
+      this.loginCordovaMsal();
+    } else {
+      this.loginAzureMsal();
+    }
+  }
 
-    console.log('authService:login');
+  public logoutUsingMsal() {
+    if (this.platform.is('cordova')) {
+      this.logoutCordovaMsal();
+    } else {
+      this.logoutAzureMsal();
+    }
+  }
 
-    this.login = this.msal.loginMsal().subscribe(success => {
+  public loginAzureMsal(): void {
+    this.msalService.loginRedirect();
+  }
+
+  public logoutAzureMsal(): void {
+    this.msalService.logout();
+    this.toastService.displaySuccess({message: 'Signed out'});
+    this.storageService.clearAccessToken();
+  }
+
+  public loginCordovaMsal(): void {
+
+    this.login = this.cordovaMsal.loginMsal().subscribe(success => {
       this.authState.next(true);
     }, error => {
       this.authState.next(false);
     });
   }
 
-  public logoutMsal(): void {
+  public logoutCordovaMsal(): void {
 
-    console.log('authService:logout');
-
-    this.logout = this.msal.logoutMsal().subscribe(success => {
+    this.logout = this.cordovaMsal.logoutMsal().subscribe(success => {
       this.authState.next(false);
-      console.log('logged out');
+      this.toastService.displaySuccess({message: 'Signed out'});
     }, error => {
       console.log(error);
     });

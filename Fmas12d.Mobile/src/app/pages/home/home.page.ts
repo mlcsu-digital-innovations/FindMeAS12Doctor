@@ -1,6 +1,7 @@
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,8 @@ export class HomePage implements OnInit {
   constructor(
     private authService: AuthService,
     private changeRef: ChangeDetectorRef,
-    private networkService: NetworkService
+    private networkService: NetworkService,
+    private platform: Platform
     ) {
 
       this.authService.authState.subscribe(authState => {
@@ -33,6 +35,11 @@ export class HomePage implements OnInit {
   }
 
   public logIn(): void {
-    this.authService.loginMsal();
+
+    if (this.platform.is('cordova')) {
+      this.authService.loginCordovaMsal();
+    } else {
+      this.authService.loginAzureMsal();
+    }
   }
 }

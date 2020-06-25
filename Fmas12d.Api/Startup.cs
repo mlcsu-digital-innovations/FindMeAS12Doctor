@@ -18,7 +18,6 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Linq;
-using System.Text;
 
 namespace Fmas12d.Api
 {
@@ -59,20 +58,6 @@ namespace Fmas12d.Api
       {
         o.Authority = Configuration["jwtBearer:authority"];
         o.Audience = Configuration["jwtBearer:audience"];
-
-        o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-          ValidateIssuer = true,
-          ValidateAudience = true,
-          // ValidateLifetime = true,
-          // ValidateIssuerSigningKey = false,
-          ValidIssuer = Configuration["jwtBearer:Issuer"],
-          ValidAudience = Configuration["jwtBearer:Audience"],
-          // IssuerSigningKey =
-          //   new Microsoft.IdentityModel.Tokens
-          //   .SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwtBearer:Key"]))
-        };
-
 
         if (IsDevelopment)
         {
