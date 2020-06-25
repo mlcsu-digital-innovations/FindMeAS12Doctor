@@ -27,7 +27,6 @@ export class AuthService implements OnDestroy {
       this.storageService.getAccessToken().map(token => {
         if (!token) {
           this.loginUsingMsal();
-          console.log('No Token');
         } else {
           console.log('Have a token', token);
         }
@@ -70,6 +69,15 @@ export class AuthService implements OnDestroy {
     this.msalService.logout();
     this.toastService.displaySuccess({message: 'Signed out'});
     this.storageService.clearAccessToken();
+  }
+
+  public signinSilently(): void {
+    this.login = this.cordovaMsal.signinSilently()
+    .subscribe(success => {
+      this.authState.next(true);
+    }, error => {
+      this.authState.next(false);
+    });
   }
 
   public loginCordovaMsal(): void {

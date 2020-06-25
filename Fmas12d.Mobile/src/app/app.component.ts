@@ -5,7 +5,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { MsalService as CordovaMsalService } from './services/msal/msal.service';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
-import { Platform, NavController, AlertController } from '@ionic/angular';
+import { Platform, NavController, AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -27,12 +27,15 @@ export class AppComponent implements OnInit {
   user = {} as UserDetails;
   userName: string;
 
+  private loading: HTMLIonLoadingElement;
+
   constructor(
     private alertController: AlertController,
     private authService: AuthService,
     private broadcastService: BroadcastService,
     private cordovaMsalService: CordovaMsalService,
     private fcm: FCM,
+    private loadingController: LoadingController,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
     private platform: Platform,
@@ -50,7 +53,15 @@ export class AppComponent implements OnInit {
       this.splashScreen.hide();
 
       if (this.platform.is('cordova')) {
-        this.cordovaMsalService.msalInit();
+        this.showLoading();
+        this.cordovaMsalService.msalInit()
+        .subscribe(success => {
+          this.authService.signinSilently();
+          this.closeLoading();
+        }, (err) => {
+          console.log('Error initialising MSAL', err);
+          this.closeLoading();
+        });
       }
 
       this.authService.authState.subscribe(authState => {
@@ -86,6 +97,16 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:loginFailure', (payload) => {
         // TODO: Process the login failure
         console.log('msal:loginFailure', payload);
+      });
+
+
+      this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
+        this.authService.authState.next(true);
+        this.storageService.storeAccessToken(this.convertToken(payload));
+        this.setUserDetails(payload);
+        this.fcm.getToken().then(token => {
+          this.refreshFcmToken(token);
+        });
       });
 
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
@@ -133,7 +154,6 @@ export class AppComponent implements OnInit {
   }
 
   private isAuthenticationResult(object: any): object is MsalResult {
-
     return typeof object === 'string' ? false : '_token' in object;
   }
 
@@ -152,6 +172,21 @@ export class AppComponent implements OnInit {
 
   public logOff(): void {
     this.authService.logoutUsingMsal();
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines',
+      duration: 3000
+    });
+    await this.loading.present();
+  }
+
+  closeLoading() {
+    if (this.loading) {
+      setTimeout(() => { this.loading.dismiss(); }, 500);
+    }
   }
 
   private async presentAlertConfirm(title: string, message: string) {

@@ -27,7 +27,7 @@ export class MsalService implements OnDestroy {
     console.log('Success', entry);
   }
 
-  public msalInit() {
+  public msalInit(): Observable<any> {
 
     const options: any = {
       authorities: OAuthSettingsMSAL.authorities,
@@ -35,12 +35,18 @@ export class MsalService implements OnDestroy {
       scopes: OAuthSettingsMSAL.scopes
     };
 
-    this.msal.msalInit(options).then((initResult) => {
-      return initResult;
-    },
-      (err) => {
-        console.log('MSAL Configuration Error:', err);
+    const init = new Observable((observer) => {
+      this.msal.msalInit(options).then((initResult) => {
+        observer.next(initResult);
+        observer.complete();
+      },
+        (err) => {
+          console.log('MSAL Configuration Error:', err);
+          observer.error(err);
+      });
     });
+
+    return init;
 
     // Cordova MSAL Plugin Log settings
     // this.msal.startLogger(MsalLogLevel.Verbose)
@@ -65,7 +71,6 @@ export class MsalService implements OnDestroy {
         observer.complete();
      },
      () =>  {
-      console.log('failed to sign in silently');
        // try an interactive login
       this.msal.signInInteractive({prompt: 'LOGIN'}).then((jwt) => {
             this.broadcastService.broadcast('msal:loginSuccess', jwt);
@@ -100,6 +105,23 @@ export class MsalService implements OnDestroy {
       console.log('failed to refresh token');
       clearTimeout(this.refreshTimer);
     });
+  }
+
+  public signinSilently(): Observable<any> {
+
+    const msalSigninSilently = new Observable((observer) => {
+      // try to sign in silently
+      this.msal.signInSilent().then((jwt) => {
+        this.broadcastService.broadcast('msal:silentLoginSuccess', jwt);
+        this.startTokenRefresh();
+        observer.next(jwt);
+        observer.complete();
+     },
+     (err) =>  {
+        observer.error(err);
+     });
+    });
+    return msalSigninSilently;
   }
 
   public logoutMsal(): Observable<any> {
