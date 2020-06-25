@@ -67,7 +67,7 @@ export class MsalService implements OnDestroy {
      () =>  {
       console.log('failed to sign in silently');
        // try an interactive login
-      this.msal.signInInteractive().then((jwt) => {
+      this.msal.signInInteractive({prompt: 'LOGIN'}).then((jwt) => {
             this.broadcastService.broadcast('msal:loginSuccess', jwt);
             this.startTokenRefresh();
             observer.next(jwt);
@@ -102,11 +102,7 @@ export class MsalService implements OnDestroy {
     });
   }
 
-
   public logoutMsal(): Observable<any> {
-
-    console.log('logoutMsal');
-    console.log(this.refreshTimer);
 
     clearTimeout(this.refreshTimer);
 
