@@ -1,6 +1,10 @@
+import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
+import { AmhpAssessmentService } from './services/amhp-assessment/amhp-assessment.service';
+import { AssessmentClaimService } from './services/assessment-claims/assessment-claims.service';
 import { AuthService } from './services/auth/auth.service';
 import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit } from '@angular/core';
+import { FCM } from '@ionic-native/fcm/ngx';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
 import { Platform, NavController, AlertController } from '@ionic/angular';
@@ -12,20 +16,27 @@ import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
 import * as jwt_decode from 'jwt-decode';
-import { FCM } from '@ionic-native/fcm/ngx';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
+
 export class AppComponent implements OnInit {
 
-  userName: string;
+  public allAssessments: AmhpAssessmentRequest[] = [];
+  public amhpAssessmentsRequiringAction: number;
+  public assessmentsRequiringAction: number;
+  public claimsRequiringAction: number;
+
   user = {} as UserDetails;
+  userName: string;
 
   constructor(
     private alertController: AlertController,
+    private assessmentClaimService: AssessmentClaimService,
+    private assessmentService: AmhpAssessmentService,
     private authService: AuthService,
     private broadcastService: BroadcastService,
     private fcm: FCM,
@@ -40,9 +51,36 @@ export class AppComponent implements OnInit {
     private toastService: ToastService,
     private userDetailsService: UserDetailsService
   ) {
+
+    this.assessmentService.assessmentCount
+      .subscribe(count => {
+        this.assessmentsRequiringAction = count;
+      });
+
+    this.assessmentService.scheduledAssessmentCount
+      .subscribe(count => {
+        this.amhpAssessmentsRequiringAction = count;
+      });
+
+    this.assessmentClaimService.claimsCount
+      .subscribe(count => {
+        this.claimsRequiringAction = count;
+      });
   }
 
   ngOnInit() {
+
+    // Initial update of menu data.
+    this.assessmentService.getRequests()
+      .subscribe(
+        () => { }
+      );
+
+    this.assessmentClaimService.getList()
+      .subscribe(
+        () => { }
+      );
+
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
@@ -73,7 +111,7 @@ export class AppComponent implements OnInit {
         }
       });
 
-      this.broadcastService.subscribe('msal:loginFailure', (payload) => {
+      this.broadcastService.subscribe('msal:loginFailure', () => {
         // TODO: Process the login failure
       });
 
@@ -83,14 +121,14 @@ export class AppComponent implements OnInit {
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
-        
+
       });
 
-      this.broadcastService.subscribe('msal:acquireTokenSuccess', (payload) => {
+      this.broadcastService.subscribe('msal:acquireTokenSuccess', () => {
         // TODO: Process the acquire token success
       });
 
-      this.broadcastService.subscribe('msal:acquireTokenFailure', (payload) => {
+      this.broadcastService.subscribe('msal:acquireTokenFailure', () => {
         // TODO: Process the acquire token failure
       });
 
@@ -108,7 +146,7 @@ export class AppComponent implements OnInit {
         this.setUserDetails(token);
       }
     }, error => {
-      this.toastService.displayError({message: error});
+      this.toastService.displayError({ message: error });
     });
   }
 
@@ -132,7 +170,7 @@ export class AppComponent implements OnInit {
       header: title,
       message,
       buttons: [
-         {
+        {
           text: 'Ok',
           handler: () => {
             console.log('Confirm Okay');
@@ -148,7 +186,7 @@ export class AppComponent implements OnInit {
     console.log('Refreshing FCM token', token);
     if (token !== null && token !== '') {
       this.userDetailsService.refreshFcmToken(token)
-      .subscribe();
+        .subscribe();
     }
   }
 
@@ -161,9 +199,9 @@ export class AppComponent implements OnInit {
 
     if (details.oid) {
       this.userDetailsService.getUserDetails(details.oid)
-      .subscribe(user => {
+        .subscribe(user => {
           this.user = user;
-      });
+        });
     }
   }
 }
