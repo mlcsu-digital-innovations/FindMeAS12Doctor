@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { map, delay } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
-import { DOCTORSTATUSSELECTED, REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
+import { DOCTORSTATUSSELECTED, REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE, REFERRALSTATUSASSESSMENTSCHEDULED } from 'src/app/constants/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class AmhpAssessmentService {
   private assessmentView: AmhpAssessmentView;
 
   public readonly assessmentCount: ReplaySubject<number> = new ReplaySubject<number>(1);
+  public readonly scheduledAssessmentCount: ReplaySubject<number> = new ReplaySubject<number>(1);
 
   constructor(
     private apiService: ApiService
@@ -130,6 +131,8 @@ export class AmhpAssessmentService {
       [REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
         REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
 
+    const scheduledStatuses: number[] = [REFERRALSTATUSASSESSMENTSCHEDULED];
+
     const assessmentsAwaitingAction =
       assessmentList
         .filter(assessment => unscheduledStatuses.includes(assessment.referralStatusId))
@@ -137,6 +140,11 @@ export class AmhpAssessmentService {
 
     this.assessmentCount.next(assessmentsAwaitingAction.length);
 
+    const scheduledAssessments =
+        assessmentList
+          .filter(assessment => scheduledStatuses.includes(assessment.referralStatusId));
+
+    this.scheduledAssessmentCount.next(scheduledAssessments.length);
 
     return assessmentList.sort(
       (assessment1: AmhpAssessmentList, assessment2: AmhpAssessmentList) => {

@@ -57,6 +57,11 @@ export class AppComponent implements OnInit {
         this.assessmentsRequiringAction = count;
       });
 
+    this.assessmentService.scheduledAssessmentCount
+      .subscribe(count => {
+        this.amhpAssessmentsRequiringAction = count;
+      });
+
     this.assessmentClaimService.claimsCount
       .subscribe(count => {
         this.claimsRequiringAction = count;
