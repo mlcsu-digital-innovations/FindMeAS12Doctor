@@ -15,10 +15,6 @@ import { StorageService } from './services/storage/storage.service';
 import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
-import {
-  REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
-  REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE, DOCTORSTATUSSELECTED
-} from 'src/app/constants/app.constants';
 import * as jwt_decode from 'jwt-decode';
 
 @Component({
@@ -55,48 +51,29 @@ export class AppComponent implements OnInit {
     private toastService: ToastService,
     private userDetailsService: UserDetailsService
   ) {
+
+    this.assessmentService.assessmentCount
+      .subscribe(count => {
+        this.assessmentsRequiringAction = count;
+      });
+
+    this.assessmentClaimService.claimsCount
+      .subscribe(count => {
+        this.claimsRequiringAction = count;
+      });
   }
 
   ngOnInit() {
 
+    // Initial update of menu data.
     this.assessmentService.getRequests()
       .subscribe(
-        allRequests => {
-          const filteredAssessments = allRequests.filter(
-            assessment => assessment.doctorStatusId === DOCTORSTATUSSELECTED &&
-              assessment.doctorHasAccepted === null
-          );
-          this.assessmentsRequiringAction = filteredAssessments.length;
-          console.log('Assessments = ' + this.assessmentsRequiringAction);
-        }
-      );
-
-    const unscheduledStatuses: number[] =
-      [REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
-        REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
-
-    this.assessmentService.getList()
-      .subscribe(
-        allRequests => {
-          const filteredAmhpAssessments = allRequests.filter(
-            assessment => unscheduledStatuses.includes(assessment.referralStatusId)
-          );
-          this.amhpAssessmentsRequiringAction = filteredAmhpAssessments.length;
-          console.log('Amhp Assessments = ' + this.amhpAssessmentsRequiringAction);
-        }
+        () => { }
       );
 
     this.assessmentClaimService.getList()
       .subscribe(
-        allRequests => {
-          if (allRequests.assessments.length !== 0) {
-            this.claimsRequiringAction = allRequests.assessments.length;
-          } else {
-            this.claimsRequiringAction = 0;
-          }
-          console.log('Claims = ' + this.claimsRequiringAction);
-          console.log(allRequests.assessments.length);
-        }
+        () => { }
       );
 
     this.platform.ready().then(() => {
@@ -156,18 +133,6 @@ export class AppComponent implements OnInit {
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
-      });
-
-      this.broadcastService.subscribe('amhpassessments:requiringaction', (amhpassessmentsrequiringaction) => {
-        this.amhpAssessmentsRequiringAction = amhpassessmentsrequiringaction;
-      });
-
-      this.broadcastService.subscribe('assessments:requiringaction', (assessmentsrequiringaction) => {
-        this.assessmentsRequiringAction = assessmentsrequiringaction;
-      });
-
-      this.broadcastService.subscribe('claims:requiringaction', (claimsrequiringaction) => {
-        this.claimsRequiringAction = claimsrequiringaction;
       });
     });
 

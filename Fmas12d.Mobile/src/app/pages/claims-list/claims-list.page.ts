@@ -1,6 +1,5 @@
 import { Assessment } from 'src/app/models/assessment.model';
 import { AssessmentClaimService } from 'src/app/services/assessment-claims/assessment-claims.service';
-import { BroadcastService } from '@azure/msal-angular';
 import {
   CLAIMSTATUSSUBMITTED, CLAIMSTATUSPROCESSING, CLAIMSTATUSQUERY, CLAIMSTATUSAPPROVED,
   CLAIMSTATUSAWAITING, CLAIMSTATUSREJECTED
@@ -27,7 +26,6 @@ export class ClaimsListPage {
 
   constructor(
     private assessmentClaimService: AssessmentClaimService,
-    private broadcastService: BroadcastService,
     private loadingController: LoadingController
   ) { }
 
@@ -44,8 +42,6 @@ export class ClaimsListPage {
       this.listLastUpdated = new Date();
       this.claimsList = result.claims;
       this.assessmentList = result.assessments;
-
-      this.broadcastService.broadcast('claims:requiringaction', result.assessments.length);
 
       this.closeLoading();
       this.closeRefreshing($event);

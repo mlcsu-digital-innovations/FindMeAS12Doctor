@@ -1,6 +1,5 @@
 import { AmhpAssessmentList } from '../../models/amhp-assessment-list.model';
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service';
-import { BroadcastService } from '@azure/msal-angular';
 import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import {
@@ -24,7 +23,6 @@ export class AmhpAssessmentListPage {
 
   constructor(
     private assessmentService: AmhpAssessmentService,
-    private broadcastService: BroadcastService,
     private loadingController: LoadingController
   ) { }
 
@@ -57,9 +55,6 @@ export class AmhpAssessmentListPage {
 
       this.assessmentListComplete = result
         .filter(assessment => completedStatuses.includes(assessment.referralStatusId));
-
-      this.broadcastService.broadcast('assessments:requiringaction',
-        this.assessmentListUnscheduled.length);
 
       this.closeLoading();
       this.closeRefreshing($event);
