@@ -8,7 +8,7 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle>
-          <ion-item>
+          <ion-item *ngIf="isAuthenticated" routerLink="/user-profile" routerDirection="forward">
             <ion-icon name="person"></ion-icon> {{userName}}
           </ion-item>
           <ion-item routerLink="/home" routerDirection="root">

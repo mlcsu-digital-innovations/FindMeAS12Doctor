@@ -15,6 +15,7 @@ import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
 import * as jwt_decode from 'jwt-decode';
 import { MsalResult } from './interfaces/msal-result.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -56,8 +57,15 @@ export class AppComponent implements OnInit {
         this.showLoading();
         this.cordovaMsalService.msalInit()
         .subscribe(success => {
-          this.authService.signinSilently();
-          this.closeLoading();
+          this.hasPin()
+          .subscribe(pin => {
+            console.log('pin: ', pin);
+            if (!pin) {
+              // Sign in silently if the user hasn't set a PIN
+              this.authService.signinSilently();
+            }
+            this.closeLoading();
+          });
         }, (err) => {
           console.log('Error initialising MSAL', err);
           this.closeLoading();
@@ -153,6 +161,19 @@ export class AppComponent implements OnInit {
     });
   }
 
+  private hasPin(): Observable<any> {
+
+    const checkPin = new Observable((observer) => {
+
+      this.storageService.getPin()
+        .subscribe(pin => {
+          observer.next(pin !== null);
+          observer.complete();
+        });
+    });
+    return checkPin;
+  }
+
   private isAuthenticationResult(object: any): object is MsalResult {
     return typeof object === 'string' ? false : '_token' in object;
   }
@@ -227,6 +248,9 @@ export class AppComponent implements OnInit {
       .subscribe(user => {
           this.user = user;
       });
+
+      // Set a dummy PIN for testing.
+      this.storageService.storePin(details.oid, 1234).subscribe(() => {});
     }
   }
 }
