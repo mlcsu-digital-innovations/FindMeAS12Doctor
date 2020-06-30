@@ -42,6 +42,12 @@ const routes: Routes = [
     loadChildren: './pages/login/login.module#LoginPageModule' 
   },
   {
+    path: 'user-profile',
+    canActivate: [RouteGuardService],
+    loadChildren: './pages/user-profile/user-profile.module' +
+    '#UserProfilePageModule'
+  },
+  {
     path: 'doctor-assessments',
     canActivate: [RouteGuardService],
     loadChildren: './pages/doctor-assessments/doctor-assessments.module' +
