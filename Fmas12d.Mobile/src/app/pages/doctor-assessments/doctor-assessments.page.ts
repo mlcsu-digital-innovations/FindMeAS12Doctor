@@ -1,8 +1,13 @@
 import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW, DOCTORSTATUSSELECTED, DOCTORSTATUSALLOCATED, REFERRALSTATUSOPEN } from 'src/app/constants/app.constants';
+import {
+  ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW, DOCTORSTATUSSELECTED,
+  DOCTORSTATUSALLOCATED, REFERRALSTATUSOPEN
+} from 'src/app/constants/app.constants';
+import { BroadcastService } from '@azure/msal-angular';
 import { Component } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
+
 @Component({
   selector: 'app-doctor-assessments',
   templateUrl: './doctor-assessments.page.html',
@@ -22,8 +27,10 @@ export class DoctorAssessmentsPage {
 
   constructor(
     private assessmentService: AmhpAssessmentService,
+    private broadcastService: BroadcastService,
     private loadingController: LoadingController,
-    private toastController: ToastController) { }
+    private toastController: ToastController
+  ) { }
 
   ionViewDidEnter() {
     this.refreshPage();
@@ -51,13 +58,19 @@ export class DoctorAssessmentsPage {
               (assessment => scheduled.includes(assessment.referralStatusId));
 
             this.assessmentRequests = this.allAssessments
-            .filter(assessment => !scheduled.includes(assessment.referralStatusId))
-            .filter(assessment => assessment.referralStatusId !== REFERRALSTATUSOPEN);
+              .filter(assessment => !scheduled.includes(assessment.referralStatusId))
+              .filter(assessment => assessment.referralStatusId !== REFERRALSTATUSOPEN);
 
           } else {
             this.scheduledAssessments = [];
             this.assessmentRequests = [];
           }
+
+          this.broadcastService.broadcast('assessments:requiringaction',
+            this.assessmentRequests.filter(
+              assessment => assessment.doctorStatusId === DOCTORSTATUSSELECTED &&
+                assessment.doctorHasAccepted === null
+            ));
 
           this.assessmentRequestsLastUpdated = new Date();
           this.closeLoading();

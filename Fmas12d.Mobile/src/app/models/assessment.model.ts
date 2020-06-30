@@ -11,7 +11,7 @@ export class Assessment {
   amhpUser: UserDetails;
   completedTime: Date;
   hasBeenCompleted: boolean;
-  hasBeenReview: boolean;
+  hasBeenReviewed: boolean;
   isSuccessful: boolean;
   postcode: string;
   unsuccessfulAssessmentType: UnsuccessfulAssessmentType;

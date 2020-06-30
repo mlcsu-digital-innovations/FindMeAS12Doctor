@@ -3,17 +3,20 @@ import { AssessmentClaim } from 'src/app/models/assessment-claim.model';
 import { AssessmentContact } from 'src/app/models/assessment-contact.model';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { UserAssessmentClaim } from 'src/app/models/user-assessment-claim.model';
 import { UserAssessmentClaimResponse } from 'src/app/models/user-assessment-claim-response.model';
 import { UserAssessmentClaimRequest } from 'src/app/models/user-assessment-claim-request.model';
 import { UserAssessmentClaimList } from 'src/app/models/user-assessment-claim-list.model';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssessmentClaimService {
+
+  public readonly claimsCount: ReplaySubject<number> = new ReplaySubject<number>(1);
 
   constructor(
     private apiService: ApiService
@@ -57,7 +60,22 @@ export class AssessmentClaimService {
     return (this.apiService.get(
       `${environment.apiEndpoint}/assessmentclaim/list`,
       null
-    ));
+    ) as Observable<UserAssessmentClaimList>)
+    .pipe(
+      map(result => this.queryPossibleClaims(result)),
+    );
+  }
+
+  private queryPossibleClaims(claimsList: UserAssessmentClaimList): UserAssessmentClaimList {
+
+    if (typeof claimsList.assessments !== 'undefined') {
+      // Determine how many assessments can now have a claim made.
+      const completedAssessmentCount =
+        claimsList.assessments.filter(assessment => assessment.hasBeenReviewed === true).length;
+      this.claimsCount.next(completedAssessmentCount);
+    }
+
+    return claimsList;
   }
 
   private claimsListSort(claimList: AssessmentClaim[]): AssessmentClaim[] {
