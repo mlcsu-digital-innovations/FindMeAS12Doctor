@@ -1,67 +1,101 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { MSAdal, AuthenticationContext, AuthenticationResult } from '@ionic-native/ms-adal/ngx';
-import { MsalService, BroadcastService } from '@azure/msal-angular';
-import { OAuthSettings } from 'src/oauth';
+import { MsalService } from '@azure/msal-angular';
+import { MsalService as CordovaMsalService } from '../msal/msal.service';
+import { Platform } from '@ionic/angular';
 import { StorageService } from '../storage/storage.service';
-import { Subscription, Observable, from } from 'rxjs';
+import { Subscription, ReplaySubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements OnDestroy {
-  private subscription: Subscription;
 
-  constructor(    
-    private broadcastService: BroadcastService,
-    private msAdal: MSAdal,
-    private msalService: MsalService,    
+  login: Subscription;
+  logout: Subscription;
+
+  public readonly authState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+
+  constructor(
+    private cordovaMsal: CordovaMsalService,
+    private msalService: MsalService,
     private storageService: StorageService,
+    private platform: Platform,
     private toastService: ToastService
-    ) 
-  {
-    this.subscription = this.broadcastService.subscribe("msal:acquireTokenFailure", (payload) => {
-      // TODO: Process acquire token failure
-    });
+    ) {
+      this.storageService.getAccessToken().map(token => {
+        if (!token) {
+          this.loginUsingMsal();
+        } else {
+          console.log('Have a token', token);
+        }
+      }, error => {
+        this.loginUsingMsal();
+        console.log('Error getting token', error);
+      });
+    }
+
+  ngOnDestroy(): void {
+    this.login.unsubscribe();
+    this.logout.unsubscribe();
   }
 
-  public loginMsal(): void {
-    this.msalService.loginRedirect();  
+  public async isAuthenticated(): Promise<boolean> {
+    return this.authState.asObservable().pipe(take(1)).toPromise();
   }
-  
-  public logoutMsal(): void {
+
+  private loginUsingMsal() {
+    if (this.platform.is('cordova')) {
+      this.loginCordovaMsal();
+    } else {
+      this.loginAzureMsal();
+    }
+  }
+
+  public logoutUsingMsal() {
+    if (this.platform.is('cordova')) {
+      this.logoutCordovaMsal();
+    } else {
+      this.logoutAzureMsal();
+    }
+  }
+
+  public loginAzureMsal(): void {
+    this.msalService.loginRedirect();
+  }
+
+  public logoutAzureMsal(): void {
     this.msalService.logout();
+    this.toastService.displaySuccess({message: 'Signed out'});
     this.storageService.clearAccessToken();
   }
 
-  ngOnDestroy() {
-    this.broadcastService.getMSALSubject().next(1);
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-  
-  public loginMsAdal(): Observable<string> {
-    let authContext: AuthenticationContext = this.msAdal
-      .createAuthenticationContext(OAuthSettings.authority);        
-
-    return from(authContext.acquireTokenAsync(
-        OAuthSettings.appId, 
-        OAuthSettings.appId, 
-        OAuthSettings.redirectUrl,
-        null, 
-        null, 
-        null
-      ).then((authResponse: AuthenticationResult) => {               
-        this.broadcastService.broadcast('msadal:loginSuccess', authResponse);
-        return authResponse.accessToken;
-      }, error => {        
-        this.toastService.displayError({ message: error });
-        throw Promise.reject("Failed to authenticate: " + error);
-      }));
+  public signinSilently(): void {
+    this.login = this.cordovaMsal.signinSilently()
+    .subscribe(success => {
+      this.authState.next(true);
+    }, error => {
+      this.authState.next(false);
+    });
   }
 
-  public logoutMsAdal() {
-    this.storageService.clearAccessToken();        
+  public loginCordovaMsal(): void {
+
+    this.login = this.cordovaMsal.loginMsal().subscribe(success => {
+      this.authState.next(true);
+    }, error => {
+      this.authState.next(false);
+    });
+  }
+
+  public logoutCordovaMsal(): void {
+
+    this.logout = this.cordovaMsal.logoutMsal().subscribe(success => {
+      this.authState.next(false);
+      this.toastService.displaySuccess({message: 'Signed out'});
+    }, error => {
+      console.log(error);
+    });
   }
 }

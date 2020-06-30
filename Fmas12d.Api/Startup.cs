@@ -58,6 +58,7 @@ namespace Fmas12d.Api
       {
         o.Authority = Configuration["jwtBearer:authority"];
         o.Audience = Configuration["jwtBearer:audience"];
+
         if (IsDevelopment)
         {
           o.RequireHttpsMetadata = false;
@@ -217,9 +218,10 @@ namespace Fmas12d.Api
       app.UseExceptionHandler("/Error");
       app.UseSerilogRequestLogging();
       app.UseHttpsRedirection();
-      app.UseRouting();
+
       app.UseCors("AllowAnyOrigin");      
       app.UseAuthentication();
+      app.UseRouting();
       app.UseUserClaims();
       app.UseMiddleware<RequestResponseLoggingMiddleware>();
       app.UseAuthorization();            

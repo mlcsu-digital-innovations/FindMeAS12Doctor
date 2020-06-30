@@ -17,7 +17,7 @@
             <ion-label>Home</ion-label>
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="isAuthenticated && user.isDoctor">
           <ion-item routerLink="/doctor-assessments" routerDirection="forward">
             <ion-icon slot="start" name="list"></ion-icon>
             <ion-label>Assessments</ion-label>
@@ -26,7 +26,7 @@
             </ion-badge>
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="isAuthenticated && user.isDoctor">
           <ion-item routerLink="/claims-list" routerDirection="forward">
             <ion-icon slot="start" name="pricetag"></ion-icon>
             <ion-label>Claims</ion-label>
@@ -35,7 +35,7 @@
             </ion-badge>
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isAmhp">
+        <ion-menu-toggle *ngIf="isAuthenticated && user.isAmhp">
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
             <ion-icon slot="start" name="folder-open"></ion-icon>
             <ion-label>AMHP Assessments</ion-label>
@@ -44,13 +44,13 @@
             </ion-badge>
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="isAuthenticated && user.isDoctor">
           <ion-item routerLink="/doctor-availability-view" routerDirection="forward">
             <ion-icon slot="start" name="search"></ion-icon>
             <ion-label>Availability</ion-label>
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle *ngIf="user.isDoctor">
+        <ion-menu-toggle *ngIf="isAuthenticated && user.isDoctor">
           <ion-item routerLink="/doctor-on-call-list" routerDirection="forward">
             <ion-icon slot="start" name="list"></ion-icon>
             <ion-label>On Call</ion-label>
@@ -62,7 +62,7 @@
             <ion-label>Help</ion-label>
           </ion-item>
         </ion-menu-toggle>
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="isAuthenticated">
           <ion-item (click)="logOff()">
             <ion-icon slot="start" name="exit"></ion-icon>
             <ion-label>Log Off</ion-label>

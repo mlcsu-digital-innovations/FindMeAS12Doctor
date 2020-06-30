@@ -2,12 +2,14 @@ import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.mo
 import { AmhpAssessmentService } from './services/amhp-assessment/amhp-assessment.service';
 import { AssessmentClaimService } from './services/assessment-claims/assessment-claims.service';
 import { AuthService } from './services/auth/auth.service';
-import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit } from '@angular/core';
 import { FCM } from '@ionic-native/fcm/ngx';
+import { MsalResult } from './interfaces/msal-result.interface';
+import { MsalService as CordovaMsalService } from './services/msal/msal.service';
+import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
-import { Platform, NavController, AlertController } from '@ionic/angular';
+import { Platform, NavController, AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -25,13 +27,15 @@ import * as jwt_decode from 'jwt-decode';
 
 export class AppComponent implements OnInit {
 
+  user = {} as UserDetails;
+  userName: string;
+
+  private loading: HTMLIonLoadingElement;
   public allAssessments: AmhpAssessmentRequest[] = [];
   public amhpAssessmentsRequiringAction: number;
   public assessmentsRequiringAction: number;
   public claimsRequiringAction: number;
-
-  user = {} as UserDetails;
-  userName: string;
+  public isAuthenticated: boolean;
 
   constructor(
     private alertController: AlertController,
@@ -39,12 +43,12 @@ export class AppComponent implements OnInit {
     private assessmentService: AmhpAssessmentService,
     private authService: AuthService,
     private broadcastService: BroadcastService,
+    private cordovaMsalService: CordovaMsalService,
     private fcm: FCM,
-    private navController: NavController,
+    private loadingController: LoadingController,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
     private platform: Platform,
-    private router: Router,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storageService: StorageService,
@@ -85,6 +89,22 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
+      if (this.platform.is('cordova')) {
+        this.showLoading();
+        this.cordovaMsalService.msalInit()
+        .subscribe(success => {
+          this.authService.signinSilently();
+          this.closeLoading();
+        }, (err) => {
+          console.log('Error initialising MSAL', err);
+          this.closeLoading();
+        });
+      }
+
+      this.authService.authState.subscribe(authState => {
+        this.isAuthenticated = authState;
+      });
+
       this.fcm.onTokenRefresh().subscribe(
         token => {
           // update the users table with the new token
@@ -113,31 +133,46 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:loginFailure', () => {
         // TODO: Process the login failure
+        console.log('msal:loginFailure');
       });
 
-      this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
-        this.storageService.storeAccessToken(payload.token);
-        this.setUserDetails(payload.token);
+
+      this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
+        this.authService.authState.next(true);
+        this.storageService.storeAccessToken(this.convertToken(payload));
+        this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
-
       });
 
-      this.broadcastService.subscribe('msal:acquireTokenSuccess', () => {
-        // TODO: Process the acquire token success
+      this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
+
+        this.toastService.displaySuccess({message: 'Signed in'});
+
+        this.authService.authState.next(true);
+        this.storageService.storeAccessToken(this.convertToken(payload));
+        this.setUserDetails(payload);
+        this.fcm.getToken().then(token => {
+          this.refreshFcmToken(token);
+        });
+      });
+
+      this.broadcastService.subscribe('msal:refreshToken', (payload) => {
+        this.cordovaMsalService.refreshTokenSilently();
+      });
+
+      this.broadcastService.subscribe('msal:tokenRefresh', (payload) => {
+        this.storageService.storeAccessToken(this.convertToken(payload));
       });
 
       this.broadcastService.subscribe('msal:acquireTokenFailure', () => {
         // TODO: Process the acquire token failure
+        console.log('msal:acquireTokenFailure');
       });
 
-      this.broadcastService.subscribe('msadal:loginSuccess', (payload) => {
-        this.storageService.storeAccessToken(payload.accessToken);
-        this.setUserDetails(payload.accessToken);
-        this.fcm.getToken().then(token => {
-          this.refreshFcmToken(token);
-        });
+      this.broadcastService.subscribe('msal:notAuthorized', (payload) => {
+        console.log('msal:notAuthorized', payload);
       });
     });
 
@@ -150,17 +185,39 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public logOff(): void {
-    if (this.platform.is('cordova')) {
-      this.authService.logoutMsAdal();
+  private isAuthenticationResult(object: any): object is MsalResult {
+    return typeof object === 'string' ? false : '_token' in object;
+  }
 
-      if (this.router.url === '/home') {
-        this.authService.loginMsAdal();
-      } else {
-        this.navController.navigateRoot('home');
-      }
+  private convertToken(jwt: any): string {
+
+    let token: string;
+
+    if (this.isAuthenticationResult(jwt)) {
+      token = jwt._token;
     } else {
-      this.authService.logoutMsal();
+      token = jwt;
+    }
+
+    return token;
+  }
+
+  public logOff(): void {
+    this.authService.logoutUsingMsal();
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines',
+      duration: 3000
+    });
+    await this.loading.present();
+  }
+
+  closeLoading() {
+    if (this.loading) {
+      setTimeout(() => { this.loading.dismiss(); }, 500);
     }
   }
 
