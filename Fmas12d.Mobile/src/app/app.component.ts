@@ -57,15 +57,7 @@ export class AppComponent implements OnInit {
         this.showLoading();
         this.cordovaMsalService.msalInit()
         .subscribe(success => {
-          this.hasPin()
-          .subscribe(pin => {
-            console.log('pin: ', pin);
-            if (!pin) {
-              // Sign in silently if the user hasn't set a PIN
-              this.authService.signinSilently();
-            }
-            this.closeLoading();
-          });
+          this.closeLoading();
         }, (err) => {
           console.log('Error initialising MSAL', err);
           this.closeLoading();
@@ -165,7 +157,7 @@ export class AppComponent implements OnInit {
 
     const checkPin = new Observable((observer) => {
 
-      this.storageService.getPin()
+      this.storageService.hasPin()
         .subscribe(pin => {
           observer.next(pin !== null);
           observer.complete();
@@ -250,7 +242,7 @@ export class AppComponent implements OnInit {
       });
 
       // Set a dummy PIN for testing.
-      this.storageService.storePin(details.oid, 1234).subscribe(() => {});
+      // this.storageService.storePin(details.oid, 1234).subscribe(() => {});
     }
   }
 }
