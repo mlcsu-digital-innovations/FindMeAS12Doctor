@@ -5,6 +5,7 @@ import { PinDialog } from '@ionic-native/pin-dialog/ngx';
 import { Platform, AlertController, ToastController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +13,11 @@ import { ToastService } from 'src/app/services/toast/toast.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
+
+  public appVersion: string = version;
+  public canUsePin: boolean;
   public connection: boolean;
   public isAuthenticated: boolean;
-
-  public canUsePin: boolean;
   public lastUser: string;
 
   constructor(
@@ -59,7 +61,6 @@ export class HomePage implements OnInit {
         // Check to see if we have a stored pin for the logged in user.
         this.storageService.hasPin()
           .subscribe(pin => {
-            console.log('PIN - ', pin);
 
             // We have a stored PIN, can we sign in silently ?
             if (pin === true) {

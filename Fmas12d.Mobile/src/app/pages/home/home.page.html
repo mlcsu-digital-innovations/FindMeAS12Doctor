@@ -3,7 +3,7 @@
     <ion-title slot="start">
       {{connection ? "Online" : "Offline"}}
     </ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="isAuthenticated">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>     
   </ion-toolbar>
@@ -42,3 +42,9 @@
   </ion-grid>
 
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-tab-bar>
+    <ion-text class="version">Version {{appVersion}}</ion-text>
+  </ion-tab-bar>
+</ion-footer>
