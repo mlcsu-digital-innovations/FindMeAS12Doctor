@@ -101,6 +101,7 @@ export class AppComponent implements OnInit {
 
 
       this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
+        this.toastService.displaySuccess({message: 'Signed in'});
         this.authService.authState.next(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
@@ -112,7 +113,6 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
 
         this.toastService.displaySuccess({message: 'Signed in'});
-
         this.authService.authState.next(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
