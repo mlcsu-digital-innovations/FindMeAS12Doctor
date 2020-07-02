@@ -173,17 +173,13 @@ export class StorageService {
 
   public getUserNameFromToken(): Observable<any> {
 
-    console.log('getUserNameFromToken');
-
     const getUsername = new Observable((observer) => {
 
       this.storage.get(this.ACCESS_TOKEN_STORAGE_KEY)
       .then(token => {
 
-        console.log('token - ', token);
-
         if (token !== null) {
-          
+
           const details = jwt_decode(token);
 
           if (details.name) {
@@ -193,7 +189,7 @@ export class StorageService {
             observer.error();
           }
         } else {
-          console.log('token issue');
+          observer.error();
         }
       }, err => { console.log(err); } );
    });
