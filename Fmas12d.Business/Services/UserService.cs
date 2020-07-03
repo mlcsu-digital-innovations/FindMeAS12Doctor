@@ -100,6 +100,23 @@ namespace Fmas12d.Business.Services
        .Select(User.ProjectFromEntity)
        .ToListAsync();
 
+      if (includeUnregisteredDoctors) {
+        IEnumerable<User> s12Doctors = await _context.Section12LiveRegisters
+        .Where(s12 => s12.LastName.Contains(doctorName))
+        .Select(s => new User{
+          Id = s.Id,
+          GmcNumber = s.GmcNumber,
+          FromSection12LiveRegister = true,
+          DisplayName = $"{s.Title} {s.FirstName} {s.LastName}"
+        })
+        .ToListAsync();
+
+        if (s12Doctors != null) {
+          models = models.Concat(s12Doctors);
+        }
+      }  
+
+
       return models;
     }
 
@@ -118,6 +135,22 @@ namespace Fmas12d.Business.Services
        .AsNoTracking(asNoTracking)
        .Select(User.ProjectFromEntity)
        .ToListAsync();
+
+      if (includeUnregisteredDoctors) {
+        IEnumerable<User> s12Doctors = await _context.Section12LiveRegisters
+        .Where(s12 => s12.GmcNumber.ToString().Contains(gmcNumber.ToString()))
+        .Select(s => new User{
+          Id = s.Id,
+          GmcNumber = s.GmcNumber,
+          FromSection12LiveRegister = true,
+          DisplayName = $"{s.Title} {s.FirstName} {s.LastName}"
+        })
+        .ToListAsync();
+
+        if (s12Doctors != null) {
+          models = models.Concat(s12Doctors);
+        }
+      }      
 
       return models;
     }
@@ -191,6 +224,37 @@ namespace Fmas12d.Business.Services
         .SingleOrDefaultAsync();
 
       return profileTypeId;
+    }
+
+    public async Task<User> GetS12Async(
+      int id,
+      bool asNoTracking,
+      bool activeOnly)
+    {
+      User model = await _context
+        .Section12LiveRegisters
+        .Where(u => u.Id == id)
+        .WhereIsActiveOrActiveOnly(activeOnly)
+        .AsNoTracking(asNoTracking)
+        .Select(s12 => new User {
+          Id = s12.Id,
+          DisplayName = $"{s12.Title} {s12.FirstName} {s12.LastName}",
+          GmcNumber = s12.GmcNumber,
+          ProfileTypeId = ProfileType.UNREGISTERED_DOCTOR,
+          Section12ExpiryDate = s12.ExpiryDate,
+          Section12ApprovalStatusId = Section12ApprovalStatus.APPROVED
+        })
+        .SingleOrDefaultAsync();
+
+      if (model == null)
+      {
+        throw new ModelStateException(
+          "id",
+          $"Unable to find an {(activeOnly ? "" : "in")}active User Id of {id}."
+        );
+      }
+
+      return model;
     }
 
     public async Task<bool> RefreshFcmToken(

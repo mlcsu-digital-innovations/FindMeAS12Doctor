@@ -21,4 +21,10 @@ export class UserDetailsService {
       `${environment.apiEndpoint}/user/${doctorId}`
     );
   }
+
+  public GetS12DoctorDetails(doctorId: number) {
+    return this.httpClient.get(
+      `${environment.apiEndpoint}/user/s12register/${doctorId}`
+    );
+  }
 }

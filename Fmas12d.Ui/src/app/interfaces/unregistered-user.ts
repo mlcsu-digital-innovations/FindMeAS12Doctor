@@ -2,6 +2,7 @@ export interface UnregisteredUser {
   address: string;
   contact: string;
   displayName: string;
+  fromSection12LiveRegister: boolean;
   gender: string;
   genderId: number;
   gmcNumber: number;
