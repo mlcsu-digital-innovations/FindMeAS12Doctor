@@ -1,4 +1,5 @@
 ﻿using Fmas12d.Api.Extensions;
+using Fmas12d.Api.SignalR;
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
@@ -49,6 +50,8 @@ namespace Fmas12d.Api
       {
         services.AddSingleton<IPolicyEvaluator, DisableAuthenticationPolicyEvaluator>();
       }
+
+      services.AddSignalR();
 
       services.AddAuthentication(options =>
       {
@@ -228,6 +231,7 @@ namespace Fmas12d.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+        endpoints.MapHub<signalRHub>("/signalRHub");
       });
 
       Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);

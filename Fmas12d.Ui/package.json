@@ -25,6 +25,7 @@
     "@angular/platform-browser": "~8.2.4",
     "@angular/platform-browser-dynamic": "~8.2.4",
     "@angular/router": "~8.2.4",
+    "@aspnet/signalr": "^1.1.4",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@types/rx": "^4.1.2",
     "@uiowa/digit-only": "^1.1.1",
