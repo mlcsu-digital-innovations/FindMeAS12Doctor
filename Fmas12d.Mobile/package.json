@@ -119,7 +119,8 @@
         "KEY_HASH": "IkVJg6dEM/du+l+g8RfIw9UZJAg=",
         "TENANT_ID": "f47807cf-afbc-4184-a579-8678bea3019a",
         "CLIENT_ID": "9a667831-799d-4a8a-bce2-c168424cdabe"
-      }
+      },
+      "cordova-plugin-pin-dialog": {}
     },
     "platforms": [
       "android"
