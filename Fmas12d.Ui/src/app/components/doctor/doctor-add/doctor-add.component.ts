@@ -191,7 +191,8 @@ export class DoctorAddComponent implements OnInit {
 
       let canCreateNewUser = true;
 
-      if (newUser.contactDetailBase.telephoneNumber === '') {
+      if (newUser.contactDetailBase.telephoneNumber === ''
+          || newUser.contactDetailBase.telephoneNumber === null) {
         this.unregisteredUserError = '* Telephone Number must be supplied';
         canCreateNewUser = false;
       }
@@ -276,6 +277,17 @@ export class DoctorAddComponent implements OnInit {
       this.SetFieldFocus(`#${fieldName}`);
       this.unregisteredDoctorForm.markAsDirty();
     }
+  }
+
+  ClearUnregisteredDoctor() {
+    this.unregisteredDoctorForm.reset();
+    this.unregisteredDoctorField.enable();
+    this.unregisteredGmcNumberField.enable();
+    this.unregisteredDoctorField.setValue('');
+    this.unregisteredGmcNumberField.setValue('');
+
+    this.Delay(1000);
+    this.SetFieldFocus('#unregisteredName');
   }
 
   async Delay(milliseconds: number) {
@@ -501,7 +513,6 @@ export class DoctorAddComponent implements OnInit {
     if (this.unregisteredDoctorField.value === '' && this.unregisteredGmcNumberField.value === '') {
       return;
     }
-
     this.ResetAllFields();
 
     const searchTerm = this.unregisteredGmcNumberField.value === ''
