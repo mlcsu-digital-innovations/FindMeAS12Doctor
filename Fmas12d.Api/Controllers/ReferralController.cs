@@ -1,5 +1,4 @@
 using Fmas12d.Business.Services;
-using Fmas12d.Api.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,14 +12,12 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy = "User")]
   public class ReferralController : ModelControllerDeletePatchBase
-  {
-    private signalRHub hub = new signalRHub();
-
+   {
     public ReferralController(
       IReferralService service,
       IUserClaimsService userClaimsService)
       : base(userClaimsService, service)
-    {
+    {     
     }
 
     private IReferralService Service { get { return _service as IReferralService; } }
@@ -53,8 +50,6 @@ namespace Fmas12d.Api.Controllers
     [Route("list")]
     public async Task<ActionResult<IEnumerable<ViewModels.ReferralList>>> GetList()
     {
-      await hub.SendNotification("fred", "this is a message");
-
       return await GetListInternal(null, null);
     }
 

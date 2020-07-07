@@ -50,9 +50,7 @@ namespace Fmas12d.Api
       {
         services.AddSingleton<IPolicyEvaluator, DisableAuthenticationPolicyEvaluator>();
       }
-
-      services.AddSignalR();
-
+ 
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -200,6 +198,8 @@ namespace Fmas12d.Api
           }
         );
       });
+      
+      services.AddSignalR();
     }
 
     // This method gets called by the runtime. 
@@ -231,7 +231,7 @@ namespace Fmas12d.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
-        endpoints.MapHub<signalRHub>("/signalRHub");
+        endpoints.MapHub<NotificationHub>("/signalRHub");
       });
 
       Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);

@@ -16,7 +16,10 @@ export class SignalRService {
     console.log('start connection ' + `${environment.apiEndpoint}/signalRHub`);
     this.hubConnection =
       new signalR.HubConnectionBuilder()
-      .withUrl(`${environment.apiEndpoint}/signalRHub`)
+      .withUrl(`${environment.apiEndpoint}/signalRHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
       .build();
 
     this.hubConnection

@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('try to start signalR connection');
     this.signalRService.startConnection();
   }
 
