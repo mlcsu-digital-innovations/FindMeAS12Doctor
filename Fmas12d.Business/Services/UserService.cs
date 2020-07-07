@@ -100,9 +100,12 @@ namespace Fmas12d.Business.Services
        .Select(User.ProjectFromEntity)
        .ToListAsync();
 
+      var existingGmcNumbers = models.Select(x => x.GmcNumber).ToList();
+
       if (includeUnregisteredDoctors) {
         IEnumerable<User> s12Doctors = await _context.Section12LiveRegisters
-        .Where(s12 => s12.LastName.Contains(doctorName))
+        .Where(s12 => s12.LastName.Contains(doctorName) || s12.FirstName.Contains(doctorName))
+        .Where(s12 => !existingGmcNumbers.Contains(s12.GmcNumber))
         .Select(s => new User{
           Id = s.Id,
           GmcNumber = s.GmcNumber,
@@ -115,8 +118,6 @@ namespace Fmas12d.Business.Services
           models = models.Concat(s12Doctors);
         }
       }  
-
-
       return models;
     }
 
@@ -136,9 +137,12 @@ namespace Fmas12d.Business.Services
        .Select(User.ProjectFromEntity)
        .ToListAsync();
 
+      var existingGmcNumbers = models.Select(x => x.GmcNumber).ToList();
+
       if (includeUnregisteredDoctors) {
         IEnumerable<User> s12Doctors = await _context.Section12LiveRegisters
         .Where(s12 => s12.GmcNumber.ToString().Contains(gmcNumber.ToString()))
+        .Where(s12 => !existingGmcNumbers.Contains(s12.GmcNumber))
         .Select(s => new User{
           Id = s.Id,
           GmcNumber = s.GmcNumber,
@@ -150,8 +154,7 @@ namespace Fmas12d.Business.Services
         if (s12Doctors != null) {
           models = models.Concat(s12Doctors);
         }
-      }      
-
+      }    
       return models;
     }
 

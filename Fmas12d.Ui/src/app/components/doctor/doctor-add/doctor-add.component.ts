@@ -157,7 +157,7 @@ export class DoctorAddComponent implements OnInit {
 
   AllocateUnregisteredDoctor() {
 
-    if (this.selectedDoctor) {
+    if (this.selectedDoctor && !this.selectedDoctor.fromS12LiveRegister) {
       // have an existing unregistered user
       this.assessmentService
         .allocateDoctorDirectly(this.assessmentId, this.selectedDoctor.id)
@@ -210,10 +210,14 @@ export class DoctorAddComponent implements OnInit {
 
         // check that the GMC number is unique
         this.doctorListService.GetDoctorList(newUser.gmcNumber.toString(), true)
-          .subscribe((userList: NameIdList[]) => {
+          .subscribe((userList: DoctorSearchResult[]) => {
             if (userList === null) {
               userList = [];
             }
+
+            // Filter out the results from the S12 Live Register.
+            userList = userList.filter(user => user.fromSection12LiveRegister === false);
+
             if (userList.length > 0) {
               this.toastService.displayError({
                 title: 'Error',
@@ -312,6 +316,7 @@ export class DoctorAddComponent implements OnInit {
 
       } else {
         this.selectedDoctor = doctorDetails;
+        this.selectedDoctor.fromS12LiveRegister = isS12;
         this.unregisteredDoctorField.setValue(doctorDetails.displayName);
         this.unregisteredGmcNumberField.setValue(doctorDetails.gmcNumber);
         this.unregisteredGenderField.setValue(doctorDetails.genderTypeId);
@@ -459,7 +464,12 @@ export class DoctorAddComponent implements OnInit {
   }
 
   OnSelectUnregisteredUser(user: UnregisteredUser) {
-    this.FetchS12DoctorDetails(user.id);
+
+    if (user.fromSection12LiveRegister) {
+      this.FetchS12DoctorDetails(user.id);
+    } else {
+      this.FetchDoctorDetails(user.id);
+    }
     this.multipleUsersModal.close();
   }
 
