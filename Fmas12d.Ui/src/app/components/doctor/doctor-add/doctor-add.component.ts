@@ -293,8 +293,6 @@ export class DoctorAddComponent implements OnInit {
 
   ProcessDoctorDetails(doctorDetails: UserDetails, isS12: boolean) {
 
-    console.log(doctorDetails);
-
     if (doctorDetails === null) {
       this.toastService.displayError({
         title: 'Error',
