@@ -171,9 +171,10 @@ export class DoctorAddComponent implements OnInit {
           (err) => {
             console.log(err);
             const msg =
+              err.error.errors !== undefined &&
               err.error.errors.UserId !== undefined
                 ? 'Doctor is already allocated to this assessment'
-                : err.error.title;
+                : 'Unable to save doctor details';
 
             this.toastService.displayError({
               title: 'Error',
