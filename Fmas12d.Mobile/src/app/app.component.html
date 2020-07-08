@@ -12,42 +12,59 @@
             <ion-icon name="person"></ion-icon> {{userName}}
           </ion-item>
           <ion-item routerLink="/home" routerDirection="root">
-            <ion-icon name="home"></ion-icon> Home
+            <ion-icon slot="start" name="home"></ion-icon>
+            <ion-label>Home</ion-label>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="user.isDoctor">
           <ion-item routerLink="/doctor-assessments" routerDirection="forward">
-            <ion-icon name="list"></ion-icon> Assessments
+            <ion-icon slot="start" name="list"></ion-icon>
+            <ion-label>Assessments</ion-label>
+            <ion-badge *ngIf="assessmentsRequiringAction > 0" slot="end" color="danger">
+              {{assessmentsRequiringAction}}
+            </ion-badge>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="user.isDoctor">
           <ion-item routerLink="/claims-list" routerDirection="forward">
-            <ion-icon name="pricetag"></ion-icon> Claims
+            <ion-icon slot="start" name="pricetag"></ion-icon>
+            <ion-label>Claims</ion-label>
+            <ion-badge *ngIf="claimsRequiringAction > 0" slot="end" color="danger">
+              {{claimsRequiringAction}}
+            </ion-badge>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="user.isAmhp">
           <ion-item routerLink="/amhp-assessment-list" routerDirection="forward">
-            <ion-icon name="folder-open"></ion-icon> AMHP Assessments
+            <ion-icon slot="start" name="folder-open"></ion-icon>
+            <ion-label>AMHP Assessments</ion-label>
+            <ion-badge *ngIf="amhpAssessmentsRequiringAction > 0" slot="end" color="danger">
+              {{amhpAssessmentsRequiringAction}}
+            </ion-badge>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="user.isDoctor">
           <ion-item routerLink="/doctor-availability-view" routerDirection="forward">
-            <ion-icon name="search"></ion-icon> Availability
+            <ion-icon slot="start" name="search"></ion-icon>
+            <ion-label>Availability</ion-label>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="user.isDoctor">
           <ion-item routerLink="/doctor-on-call-list" routerDirection="forward">
-            <ion-icon name="list"></ion-icon> On Call
+            <ion-icon slot="start" name="list"></ion-icon>
+            <ion-label>On Call</ion-label>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-item routerLink="/help" routerDirection="forward">
-            <ion-icon name="help"></ion-icon> Help
+            <ion-icon slot="start" name="help"></ion-icon>
+            <ion-label>Help</ion-label>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-item (click)="logOff()">
-            <ion-icon name="log-out"></ion-icon> Log Off
+            <ion-icon slot="start" name="exit"></ion-icon>
+            <ion-label>Log Off</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
