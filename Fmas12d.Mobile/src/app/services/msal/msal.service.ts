@@ -87,6 +87,39 @@ export class MsalService implements OnDestroy {
     return msalSignin;
   }
 
+
+  public loginMsalInteractive(): Observable<any> {
+
+    const msalSignin = new Observable((observer) => {
+      // try to sign in silently
+      this.msal.signInInteractive({prompt: 'LOGIN'}).then((jwt) => {
+        this.broadcastService.broadcast('msal:loginSuccess', jwt);
+        this.startTokenRefresh();
+        observer.next(jwt);
+        observer.complete();
+     }, (err) =>  {
+           this.broadcastService.broadcast('msal:loginFailure', err);
+           observer.error(err);
+         });
+     });
+    return msalSignin;
+  }
+
+  public canSilentlyLogin(): Observable<boolean> {
+    const msalSigninTest = new Observable<boolean>((observer) => {
+      // try to sign in silently
+      this.msal.signInSilent().then((jwt) => {
+        observer.next(true);
+        observer.complete();
+     },
+     () =>  {
+      observer.next(false);
+      observer.complete();
+     });
+    });
+    return msalSigninTest;
+  }
+
   private startTokenRefresh() {
     // Refresh the token in 10 minutes.
     this.refreshTimer =

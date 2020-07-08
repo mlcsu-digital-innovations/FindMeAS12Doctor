@@ -71,6 +71,10 @@ export class AuthService implements OnDestroy {
     this.storageService.clearAccessToken();
   }
 
+  public canSignInSilently(): Observable<boolean> {
+    return this.cordovaMsal.canSilentlyLogin();
+  }
+
   public signinSilently(): void {
     this.login = this.cordovaMsal.signinSilently()
     .subscribe(success => {
@@ -82,7 +86,9 @@ export class AuthService implements OnDestroy {
 
   public loginCordovaMsal(): void {
 
-    this.login = this.cordovaMsal.loginMsal().subscribe(success => {
+    this.login =
+      this.cordovaMsal.loginMsalInteractive()
+      .subscribe(success => {
       this.authState.next(true);
     }, error => {
       this.authState.next(false);
