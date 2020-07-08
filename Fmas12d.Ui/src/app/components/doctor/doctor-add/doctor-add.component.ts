@@ -198,6 +198,15 @@ export class DoctorAddComponent implements OnInit {
         canCreateNewUser = false;
       }
 
+      if (newUser.contactDetailBase.telephoneNumber !== '') {
+        const isNum = /^\d+$/.test(newUser.contactDetailBase.telephoneNumber);
+
+        if (!isNum) {
+          this.unregisteredUserError = '* Telephone Number must only contain digits';
+          canCreateNewUser = false;
+        }
+      }
+
       if (newUser.gmcNumber.toString().length !== 7) {
         this.unregisteredUserError = '* GMC Number format incorrect';
         canCreateNewUser = false;
@@ -286,6 +295,8 @@ export class DoctorAddComponent implements OnInit {
     this.unregisteredGmcNumberField.enable();
     this.unregisteredDoctorField.setValue('');
     this.unregisteredGmcNumberField.setValue('');
+
+    this.unregisteredUserError = '';
 
     this.Delay(1000);
     this.SetFieldFocus('#unregisteredName');
