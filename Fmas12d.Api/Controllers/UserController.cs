@@ -54,7 +54,24 @@ namespace Fmas12d.Api.Controllers
         ViewModels.User viewModel = new ViewModels.User(model);        
         return Ok(viewModel);
       }
-    }        
+    }
+
+    [Route("s12register/{id}")]
+    [HttpGet]
+    public async Task<ActionResult<ViewModels.User>> GetS12(int id)
+    {
+      Business.Models.User model = await Service.GetS12Async(id, true, true);
+      
+      if (model == null)
+      {
+        return NoContent();    
+      }
+      else
+      {
+        ViewModels.User viewModel = new ViewModels.User(model);        
+        return Ok(viewModel);
+      }
+    }          
 
     [Route("identifier/{id}")]
     [HttpGet]
@@ -75,7 +92,7 @@ namespace Fmas12d.Api.Controllers
 
     [Route("search")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ViewModels.IdResultText>>> GetSearch(
+    public async Task<ActionResult<IEnumerable<ViewModels.DoctorSearchResult>>> GetSearch(
       [FromQuery] RequestModels.UserSearch search)
     {
       IEnumerable<Business.Models.User> models = null;
@@ -105,8 +122,8 @@ namespace Fmas12d.Api.Controllers
 
       if (models.Any())
       {
-        IEnumerable<ViewModels.IdResultText> viewModels = 
-          models.Select(ViewModels.IdResultText.ProjectFromUserModel).ToList();
+        IEnumerable<ViewModels.DoctorSearchResult> viewModels = 
+          models.Select(ViewModels.DoctorSearchResult.ProjectFromUserModel).ToList();
         return Ok(viewModels);
       }
       else
