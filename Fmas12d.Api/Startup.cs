@@ -20,6 +20,8 @@ using Serilog;
 using System;
 using System.Linq;
 
+using Microsoft.AspNetCore.SignalR;
+
 namespace Fmas12d.Api
 {
   public class Startup
@@ -162,6 +164,8 @@ namespace Fmas12d.Api
         }
       });
 
+      services.AddSignalR();
+      services.AddScoped<ISignalRMessenger, SignalRMessenger>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<IAssessmentService, AssessmentService>();
       services.AddScoped<ICcgService, CcgService>();
@@ -198,8 +202,7 @@ namespace Fmas12d.Api
           }
         );
       });
-      
-      services.AddSignalR();
+
     }
 
     // This method gets called by the runtime. 
@@ -231,7 +234,7 @@ namespace Fmas12d.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
-        endpoints.MapHub<NotificationHub>("/signalRHub");
+        endpoints.MapHub<SignalRHub>("/signalRHub");
       });
 
       Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);
