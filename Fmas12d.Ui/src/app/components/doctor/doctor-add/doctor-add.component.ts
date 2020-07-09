@@ -17,6 +17,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 import { UnregisteredUser } from 'src/app/interfaces/unregistered-user';
 import { UserDetails } from 'src/app/interfaces/user-details';
 import { UserDetailsService } from 'src/app/services/user/user-details.service';
+import { DoctorSearchResult } from 'src/app/interfaces/doctor-search-result';
 
 @Component({
   selector: 'app-doctor-add',
@@ -156,7 +157,7 @@ export class DoctorAddComponent implements OnInit {
 
   AllocateUnregisteredDoctor() {
 
-    if (this.selectedDoctor) {
+    if (this.selectedDoctor && !this.selectedDoctor.fromS12LiveRegister) {
       // have an existing unregistered user
       this.assessmentService
         .allocateDoctorDirectly(this.assessmentId, this.selectedDoctor.id)
@@ -170,9 +171,10 @@ export class DoctorAddComponent implements OnInit {
           (err) => {
             console.log(err);
             const msg =
+              err.error.errors !== undefined &&
               err.error.errors.UserId !== undefined
                 ? 'Doctor is already allocated to this assessment'
-                : err.error.title;
+                : 'Unable to save doctor details';
 
             this.toastService.displayError({
               title: 'Error',
@@ -190,9 +192,19 @@ export class DoctorAddComponent implements OnInit {
 
       let canCreateNewUser = true;
 
-      if (newUser.contactDetailBase.telephoneNumber === '') {
+      if (newUser.contactDetailBase.telephoneNumber === ''
+          || newUser.contactDetailBase.telephoneNumber === null) {
         this.unregisteredUserError = '* Telephone Number must be supplied';
         canCreateNewUser = false;
+      }
+
+      if (newUser.contactDetailBase.telephoneNumber !== '') {
+        const isNum = /^\d+$/.test(newUser.contactDetailBase.telephoneNumber);
+
+        if (!isNum) {
+          this.unregisteredUserError = '* Telephone Number must only contain digits';
+          canCreateNewUser = false;
+        }
       }
 
       if (newUser.gmcNumber.toString().length !== 7) {
@@ -209,10 +221,14 @@ export class DoctorAddComponent implements OnInit {
 
         // check that the GMC number is unique
         this.doctorListService.GetDoctorList(newUser.gmcNumber.toString(), true)
-          .subscribe((userList: NameIdList[]) => {
+          .subscribe((userList: DoctorSearchResult[]) => {
             if (userList === null) {
               userList = [];
             }
+
+            // Filter out the results from the S12 Live Register.
+            userList = userList.filter(user => user.fromSection12LiveRegister === false);
+
             if (userList.length > 0) {
               this.toastService.displayError({
                 title: 'Error',
@@ -273,6 +289,19 @@ export class DoctorAddComponent implements OnInit {
     }
   }
 
+  ClearUnregisteredDoctor() {
+    this.unregisteredDoctorForm.reset();
+    this.unregisteredDoctorField.enable();
+    this.unregisteredGmcNumberField.enable();
+    this.unregisteredDoctorField.setValue('');
+    this.unregisteredGmcNumberField.setValue('');
+
+    this.unregisteredUserError = '';
+
+    this.Delay(1000);
+    this.SetFieldFocus('#unregisteredName');
+  }
+
   async Delay(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
@@ -286,51 +315,75 @@ export class DoctorAddComponent implements OnInit {
     return this.unregisteredDoctorForm.controls[fieldName].disabled;
   }
 
-  FetchDoctorDetails(userId: number) {
-    this.userDetailsService.GetDoctorDetails(userId)
-      .subscribe((doctorDetails: UserDetails) => {
+  ProcessDoctorDetails(doctorDetails: UserDetails, isS12: boolean) {
 
-        if (doctorDetails === null) {
+    if (doctorDetails === null) {
+      this.toastService.displayError({
+        title: 'Error',
+        message: 'Unable to retrieve doctor details'
+      });
+    } else {
+
+      // if the doctor is registered then inform the user
+      if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
+        this.registeredDoctorDetails = doctorDetails;
+        this.isUnregisteredSearchComplete = false;
+        this.existingUserMessage =
+          `Allocate existing doctor '${doctorDetails.displayName} GMC# ${doctorDetails.gmcNumber}'
+       to this assessment ?`;
+
+        this.existingUserModal = this.modalService.open(this.confirmExistingUser, {
+          size: 'lg'
+        });
+
+      } else {
+        this.selectedDoctor = doctorDetails;
+        this.selectedDoctor.fromS12LiveRegister = isS12;
+        this.unregisteredDoctorField.setValue(doctorDetails.displayName);
+        this.unregisteredGmcNumberField.setValue(doctorDetails.gmcNumber);
+        this.unregisteredGenderField.setValue(doctorDetails.genderTypeId);
+
+        if (doctorDetails.section12ApprovalStatusId === SECTION12_APPROVED) {
+          this.unregisteredSection12Field.setValue(true);
+        }
+
+        this.unregisteredContactField.setValue(doctorDetails.contactDetailBase.telephoneNumber);
+
+        this.unregisteredDoctorField.disable();
+        this.unregisteredGmcNumberField.disable();
+        this.hasUnregisteredUser = true;
+
+        const existingDoctorMessage = isS12
+          ? 'Details retrieved from S12 live register'
+          : 'An existing unregistered doctor has been found';
+
+        this.toastService.displayInfo({
+          title: 'Information',
+          message: existingDoctorMessage
+        });
+      }
+    }
+  }
+
+  FetchS12DoctorDetails(userId: number) {
+
+    this.userDetailsService.GetS12DoctorDetails(userId)
+      .subscribe((doctorDetails: UserDetails) => {
+          this.ProcessDoctorDetails(doctorDetails, true);
+      },
+        (err) => {
           this.toastService.displayError({
             title: 'Error',
-            message: 'Unable to retrieve doctor details'
+            message: 'Error retrieving doctor details'
           });
-        } else {
+        });
+  }
 
-          // if the doctor is registered then inform the user
-          if (doctorDetails.profileTypeId !== PROFILE_TYPE_UNREGISTERED) {
-            this.registeredDoctorDetails = doctorDetails;
-            this.isUnregisteredSearchComplete = false;
-            this.existingUserMessage =
-              `Allocate existing doctor '${doctorDetails.displayName} GMC# ${doctorDetails.gmcNumber}'
-           to this assessment ?`;
+  FetchDoctorDetails(userId: number) {
 
-            this.existingUserModal = this.modalService.open(this.confirmExistingUser, {
-              size: 'lg'
-            });
-
-          } else {
-            this.selectedDoctor = doctorDetails;
-            this.unregisteredDoctorField.setValue(doctorDetails.displayName);
-            this.unregisteredGmcNumberField.setValue(doctorDetails.gmcNumber);
-            this.unregisteredGenderField.setValue(doctorDetails.genderTypeId);
-
-            if (doctorDetails.section12ApprovalStatusId === SECTION12_APPROVED) {
-              this.unregisteredSection12Field.setValue(true);
-            }
-
-            this.unregisteredContactField.setValue(doctorDetails.contactDetailBase.telephoneNumber);
-
-            this.unregisteredDoctorField.disable();
-            this.unregisteredGmcNumberField.disable();
-            this.hasUnregisteredUser = true;
-
-            this.toastService.displayInfo({
-              title: 'Information',
-              message: 'An existing unregistered doctor has been found'
-            });
-          }
-        }
+    this.userDetailsService.GetDoctorDetails(userId)
+      .subscribe((doctorDetails: UserDetails) => {
+          this.ProcessDoctorDetails(doctorDetails, false);
       },
         (err) => {
           this.toastService.displayError({
@@ -433,7 +486,12 @@ export class DoctorAddComponent implements OnInit {
   }
 
   OnSelectUnregisteredUser(user: UnregisteredUser) {
-    this.FetchDoctorDetails(user.id);
+
+    if (user.fromSection12LiveRegister) {
+      this.FetchS12DoctorDetails(user.id);
+    } else {
+      this.FetchDoctorDetails(user.id);
+    }
     this.multipleUsersModal.close();
   }
 
@@ -467,7 +525,6 @@ export class DoctorAddComponent implements OnInit {
     if (this.unregisteredDoctorField.value === '' && this.unregisteredGmcNumberField.value === '') {
       return;
     }
-
     this.ResetAllFields();
 
     const searchTerm = this.unregisteredGmcNumberField.value === ''
@@ -475,7 +532,7 @@ export class DoctorAddComponent implements OnInit {
       : this.unregisteredGmcNumberField.value;
 
     this.doctorListService.GetDoctorList(searchTerm, true)
-      .subscribe((userList: NameIdList[]) => {
+      .subscribe((userList: DoctorSearchResult[]) => {
         this.isUnregisteredSearchComplete = true;
 
         if (userList === null) {
@@ -502,7 +559,7 @@ export class DoctorAddComponent implements OnInit {
 
             break;
           case 1:
-            this.FetchDoctorDetails(userList[0].id);
+            this.FetchS12DoctorDetails(userList[0].id);
             break;
           default:
 
@@ -512,6 +569,7 @@ export class DoctorAddComponent implements OnInit {
             userList.forEach(user => {
               const tempUser = {} as UnregisteredUser;
               tempUser.id = user.id;
+              tempUser.fromSection12LiveRegister = user.fromSection12LiveRegister;
               const index = user.resultText.indexOf('-');
 
               if (index > 0) {

@@ -4,7 +4,16 @@
 }
 
 .signin {
-  margin: -20px auto;
+  margin: auto;
+  min-width: 200px;
+}
+
+ion-icon {
+  margin-right: 10px;
+}
+
+.top-space {
+  margin-top: 20px;
 }
 
 .user-details {
@@ -16,6 +25,11 @@
 
 .centered {
   margin: 15px auto;
+}
+
+.version {
+  color: #999;
+  font-size: 0.8em;
 }
 
 ion-col { text-align: center;}

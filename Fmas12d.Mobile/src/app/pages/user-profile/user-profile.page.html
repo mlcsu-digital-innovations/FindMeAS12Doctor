@@ -1,0 +1,45 @@
+<app-navbar title="User Profile"></app-navbar>
+
+<ion-content fullscreen>
+ 
+  <ion-list>
+
+  <ion-item>
+    <ion-avatar slot="start">
+      <ion-icon
+        size="large"
+        name="person"
+      >
+      </ion-icon>
+    </ion-avatar>
+    <ion-label>
+      <h3>{{currentUserName}}</h3>
+    </ion-label>            
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Use PIN</ion-label>
+    <ion-toggle [(ngModel)]="hasPin" (ionChange)="pinChanged()"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label class="full-width">
+      <ion-textarea>
+        <h3 class='grey'>Setting a PIN will let you sign in to the application without having to enter your credentials.
+        </h3>
+      </ion-textarea>
+    </ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="hasPin">
+    <ion-label>
+      <ion-button fill="outline" class='center' (click)="enterPin()">Set PIN</ion-button>
+    </ion-label>
+  </ion-item>
+
+
+  </ion-list>
+</ion-content>
+
+
+

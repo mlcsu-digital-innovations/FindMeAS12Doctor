@@ -18,6 +18,7 @@ import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
 import * as jwt_decode from 'jwt-decode';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -93,7 +94,6 @@ export class AppComponent implements OnInit {
         this.showLoading();
         this.cordovaMsalService.msalInit()
         .subscribe(success => {
-          this.authService.signinSilently();
           this.closeLoading();
         }, (err) => {
           console.log('Error initialising MSAL', err);
@@ -138,6 +138,7 @@ export class AppComponent implements OnInit {
 
 
       this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
+        this.toastService.displaySuccess({message: 'Signed in'});
         this.authService.authState.next(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
@@ -149,7 +150,6 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
 
         this.toastService.displaySuccess({message: 'Signed in'});
-
         this.authService.authState.next(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
@@ -183,6 +183,19 @@ export class AppComponent implements OnInit {
     }, error => {
       this.toastService.displayError({ message: error });
     });
+  }
+
+  private hasPin(): Observable<any> {
+
+    const checkPin = new Observable((observer) => {
+
+      this.storageService.hasPin()
+        .subscribe(pin => {
+          observer.next(pin !== null);
+          observer.complete();
+        });
+    });
+    return checkPin;
   }
 
   private isAuthenticationResult(object: any): object is MsalResult {

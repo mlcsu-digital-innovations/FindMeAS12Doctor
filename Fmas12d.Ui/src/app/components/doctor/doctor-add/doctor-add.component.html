@@ -219,7 +219,7 @@
                 </select>
               </div>
               <div class="col-md-4">
-                <label>Contact Number</label>
+                <label class="required-field">Contact Number</label>
                   <input
                     type="text"
                     class="form-control"
@@ -251,9 +251,20 @@
               <div class="col-md-12 text-left">
                 <button
                   type="button"
+                  class="btn btn-cancel btn-standard"
+                  (click)="ClearUnregisteredDoctor()"
+                  [disabled]="HasIncompleteUser()"
+                >
+                <i class="far fa-times-circle"></i>
+                Clear
+                </button>
+                <button
+                  type="button"
                   class="btn btn-primary btn-standard"
                   (click)="AllocateUnregisteredDoctor()"
                   [disabled]="HasIncompleteUser()"
+                  id="allocateUnregistered"
+                  #allocateUnregistered
                 >
                   <i class="far fa-check-circle"></i>
                   Allocate
