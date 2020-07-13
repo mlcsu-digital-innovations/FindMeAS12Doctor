@@ -6,7 +6,7 @@ import { DisableControlDirective } from '../directives/disable-control/disable-c
 import { FocusOnShowDirective } from '../directives/focus-on-show/focus-on-show.directive';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgbDateCustomParserFormatter } from '../components/datePicker-format/datePicker-format';
 import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
@@ -68,4 +68,15 @@ import { SignOutComponent } from './sign-out/signout.component';
     }
   ]
 })
-export class SharedComponentsModule {}
+export class SharedComponentsModule {
+  public static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SharedComponentsModule,
+      providers: [
+        {
+          provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter
+        }
+      ]
+    };
+  }
+}

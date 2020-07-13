@@ -1,8 +1,10 @@
-using System;
-using System.Threading.Tasks;
+using Fmas12d.Api.SignalR;
+using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace Fmas12d.Api.Controllers
 {
@@ -12,11 +14,15 @@ namespace Fmas12d.Api.Controllers
   
   public class AssessmentDoctorAcceptanceController : ModelControllerBase
   {
+    private readonly ISignalRMessenger _signalRMessenger;
+
     public AssessmentDoctorAcceptanceController(
       IUserClaimsService userClaimsService,
-      IAssessmentService service)
+      IAssessmentService service,
+      ISignalRMessenger signalRMessenger)
       : base(userClaimsService, service)
     {
+      _signalRMessenger = signalRMessenger;
     }
 
     [HttpPut]
@@ -174,6 +180,15 @@ namespace Fmas12d.Api.Controllers
       {
         Business.Models.AssessmentDoctor businessModel = requestModel.MapToBusinessModel();
         await Service.UpdateAssessmentDoctorAcceptance(businessModel);
+
+        Business.Models.Assessment assessment =
+            await Service.GetByIdAsync(businessModel.AssessmentId, true, true);
+
+        var message = $"Doctor acceptance update for {assessment.PatientIdentifier}";
+        _signalRMessenger.SendNotification(
+          message,
+          ProfileType.AMHP
+          );
 
         return Ok();
       }

@@ -26,8 +26,8 @@ export class ReferralListComponent implements OnInit {
   constructor(
     public referralListService: ReferralListService,
     public oidcSecurityService: OidcSecurityService,
-    private toastService: ToastService) {
-
+    private toastService: ToastService
+  ) {
   }
 
   ngOnInit() {

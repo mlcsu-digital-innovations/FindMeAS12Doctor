@@ -8,12 +8,14 @@ import { User } from 'src/app/interfaces/user';
   providedIn: 'root'
 })
 export class UserDetailsService {
-  constructor(private httpClient: HttpClient) {}
 
-  public getCurrentUserDetails(): Observable<User> {
-    return this.httpClient.get(
+  constructor(private httpClient: HttpClient) {
+  }
+
+ public getCurrentUserDetails(): Observable<User> {
+    return (this.httpClient.get(
       `${environment.apiEndpoint}/user`
-    ) as Observable<User>
+    ) as Observable<User>);
   }
 
   public GetDoctorDetails(doctorId: number) {

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using Fmas12d.Business.Services;
 
 namespace Fmas12d.Api.SignalR
 {
@@ -6,12 +7,14 @@ namespace Fmas12d.Api.SignalR
     {
         private readonly IHubContext<SignalRHub> _hubContext;
 
-        public SignalRMessenger(IHubContext<SignalRHub> hubContext) {
+        public SignalRMessenger(
+          IHubContext<SignalRHub> hubContext
+          ) {
           _hubContext = hubContext;
         }
 
-        public async void SendNotification(string message) {
-          await _hubContext.Clients.All.SendAsync("ReceiveNotification", "", message);
+        public async void SendNotification(string message, int profileType) {
+          await _hubContext.Clients.All.SendAsync("ReceiveNotification", profileType, message);
         } 
     }
 }

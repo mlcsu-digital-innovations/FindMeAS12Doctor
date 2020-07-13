@@ -9,19 +9,16 @@ namespace Fmas12d.Api.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-    
-        private IHubContext<NotificationHub> _hubContext;
+        private ISignalRMessenger _signalRMessenger;
 
-        public NotificationController(IHubContext<NotificationHub> hubContext) {
-          _hubContext = hubContext;
+        public NotificationController(ISignalRMessenger signalRMessenger) {
+          _signalRMessenger = signalRMessenger;
         }
 
     [HttpGet]
-    public async void TestNotification()
+    public void TestNotification()
     {
-      await _hubContext.Clients.All.SendAsync("ReceiveNotification", "fred", "bob");
-
-      return;
+      _signalRMessenger.SendNotification("Test Notification", 2);
     }
     }
 }

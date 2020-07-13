@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SignalRService } from './services/signalR/signalr.service';
+import { ToastService } from './services/toast/toast.service';
+import { SignalRMessage } from './interfaces/signalRMessage';
+import { ToastOptions } from './interfaces/toast-options';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +13,19 @@ export class AppComponent implements OnInit {
   title = 'Fmas12d';
 
   constructor(
-    public signalRService: SignalRService
+    private signalRService: SignalRService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
-    console.log('try to start signalR connection');
     this.signalRService.startConnection();
-  }
 
+    this.signalRService.notification
+    .subscribe((signalR: SignalRMessage) => {
+
+      const options: ToastOptions = {audience: signalR.profileType, message: signalR.message};
+      this.toastService.displayNotification(options);
+    });
+
+  }
 }

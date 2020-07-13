@@ -1,3 +1,5 @@
+using Fmas12d.Api.SignalR;
+using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +16,15 @@ namespace Fmas12d.Api.Controllers
   public class AssessmentController : ModelControllerDeletePatchBase
   {
     private IAssessmentService Service { get { return _service as IAssessmentService; } }
+    private readonly ISignalRMessenger _signalRMessenger;
 
     public AssessmentController(
       IUserClaimsService userClaimsService,
-      IAssessmentService service)
+      IAssessmentService service,
+      ISignalRMessenger signalRMessenger)
       : base(userClaimsService, service)
     {
+      _signalRMessenger = signalRMessenger;
     }
 
     [HttpGet]
@@ -426,6 +431,15 @@ namespace Fmas12d.Api.Controllers
         businessModel = await Service.UpdateOutcomeAsync(businessModel);
         ViewModels.AssessmentOutcomePut viewModel =
           new ViewModels.AssessmentOutcomePut(businessModel);
+
+        Business.Models.Assessment assessment =
+            await Service.GetByIdAsync(businessModel.Id, true, true);
+
+        var message = $"Assessment status update for {assessment.PatientIdentifier}";
+        _signalRMessenger.SendNotification(
+          message,
+          ProfileType.AMHP
+          );
 
         return Ok(viewModel);
       }
