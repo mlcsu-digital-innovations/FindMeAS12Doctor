@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ToastOptions } from 'src/app/interfaces/toast-options';
-import { UserDetailsService } from '../user/user-details.service';
-import { User } from 'src/app/interfaces/user';
 
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   toasts: any[] = [];
 
-  constructor(private userDetailsService: UserDetailsService) {
-
+  constructor() {
   }
 
   showWithOptions(options: ToastOptions, classname: string, iconClass: string) {
@@ -20,15 +17,6 @@ export class ToastService {
   show(options: any = {}) {
     options.classname += ' text-light fade-in toast-container';
     this.toasts.push({ ...options });
-  }
-
-  displayNotification(options: ToastOptions) {
-
-    this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
-      if (options.audience === user.profileTypeId) {
-        this.displayInfo(options);
-      }
-    });
   }
 
   displayError(options: ToastOptions) {
