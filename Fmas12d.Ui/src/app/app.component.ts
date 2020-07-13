@@ -3,6 +3,8 @@ import { SignalRService } from './services/signalR/signalr.service';
 import { ToastService } from './services/toast/toast.service';
 import { SignalRMessage } from './interfaces/signalRMessage';
 import { ToastOptions } from './interfaces/toast-options';
+import { UserDetailsService } from './services/user/user-details.service';
+import { User } from './interfaces/user';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +14,12 @@ import { ToastOptions } from './interfaces/toast-options';
 export class AppComponent implements OnInit {
   title = 'Fmas12d';
 
+  private userProfileTypeId: number;
+
   constructor(
     private signalRService: SignalRService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userDetails: UserDetailsService
   ) { }
 
   ngOnInit() {
@@ -23,9 +28,14 @@ export class AppComponent implements OnInit {
     this.signalRService.notification
     .subscribe((signalR: SignalRMessage) => {
 
-      const options: ToastOptions = {audience: signalR.profileType, message: signalR.message};
-      this.toastService.displayNotification(options);
+      if (this.userProfileTypeId === signalR.profileType) {
+        this.toastService.displayInfo({message: signalR.message});
+      }
     });
 
+    this.userDetails.userType
+    .subscribe(profileTypeId => {
+      this.userProfileTypeId = profileTypeId;
+    });
   }
 }
