@@ -25,7 +25,6 @@ export class ToastService {
   displayNotification(options: ToastOptions) {
 
     this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
-      console.log(options.audience, ' === ', user.profileTypeId);
       if (options.audience === user.profileTypeId) {
         this.displayInfo(options);
       }
