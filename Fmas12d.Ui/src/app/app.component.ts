@@ -28,14 +28,11 @@ export class AppComponent implements OnInit {
     this.signalRService.notification
     .subscribe((signalR: SignalRMessage) => {
 
+      this.userProfileTypeId =  this.userDetails.getCurrentUSerProfileType();
+
       if (this.userProfileTypeId === signalR.profileType) {
         this.toastService.displayInfo({message: signalR.message});
       }
-    });
-
-    this.userDetails.userType
-    .subscribe(profileTypeId => {
-      this.userProfileTypeId = profileTypeId;
     });
   }
 }
