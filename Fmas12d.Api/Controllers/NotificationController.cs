@@ -15,10 +15,14 @@ namespace Fmas12d.Api.Controllers
           _signalRMessenger = signalRMessenger;
         }
 
-    [HttpGet]
-    public void TestNotification()
+    [HttpPost]
+    [Route("{profileType:int}")]
+    public void TestNotification(
+      int profileType,
+      [FromBody] string message
+    )
     {
-      _signalRMessenger.SendNotification("Test Notification", 2);
+      _signalRMessenger.SendNotification(message, profileType);
     }
     }
 }
