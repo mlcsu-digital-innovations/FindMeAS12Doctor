@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { SignalRMessage } from './interfaces/signalRMessage';
 import { SignalRService } from './services/signalR/signalr.service';
 import { ToastService } from './services/toast/toast.service';
-import { SignalRMessage } from './interfaces/signalRMessage';
-import { ToastOptions } from './interfaces/toast-options';
 import { UserDetailsService } from './services/user/user-details.service';
-import { User } from './interfaces/user';
 
 @Component({
   selector: 'app-root',

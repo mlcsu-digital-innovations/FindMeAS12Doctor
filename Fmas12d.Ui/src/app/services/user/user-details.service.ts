@@ -19,15 +19,15 @@ export class UserDetailsService {
     return this.currentUserProfileTypeId;
   }
 
- public getCurrentUserDetails(): Observable<User> {
-  const userQuery =  (this.httpClient.get(`${environment.apiEndpoint}/user`) as Observable<User>);
-  return userQuery.pipe(
-    tap((user: User) => {
-      this.currentUserProfileTypeId = user.profileTypeId;
-    }),
-    map(user => user)
-  );
-}
+  public getCurrentUserDetails(): Observable<User> {
+    const userQuery =  (this.httpClient.get(`${environment.apiEndpoint}/user`) as Observable<User>);
+    return userQuery.pipe(
+      tap((user: User) => {
+        this.currentUserProfileTypeId = user.profileTypeId;
+      }),
+      map(user => user)
+    );
+  }
 
   public GetDoctorDetails(doctorId: number) {
     return this.httpClient.get(

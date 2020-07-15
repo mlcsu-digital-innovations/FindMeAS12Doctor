@@ -1,8 +1,8 @@
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import * as signalR from '@aspnet/signalr';
 import { ReplaySubject } from 'rxjs';
 import { SignalRMessage } from 'src/app/interfaces/signalRMessage';
+import * as signalR from '@aspnet/signalr';
 
 @Injectable({
   providedIn: 'root'
