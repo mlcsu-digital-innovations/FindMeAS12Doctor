@@ -39,7 +39,7 @@ export class HomePage implements OnInit {
   public lastUser: string;
   public onCallDoctorsConfirmed: OnCallDoctor[] = [];
   public onCallDoctorsRejected: OnCallDoctor[] = [];
-  public onCallDoctorsUnconfirmed: OnCallDoctor[] = [];
+  public onCallDoctorsUnconfirmedCount: number;
   public scheduledAssessments: AmhpAssessmentRequest[] = [];
   public unavailableList: UserAvailability[] = [];
 
@@ -160,6 +160,7 @@ export class HomePage implements OnInit {
             this.availableList = [];
             this.unavailableList = [];
           }
+          console.log(this.availableList.length);
           this.closeLoading();
           this.closeRefreshing($event);
         }, error => {
@@ -171,12 +172,27 @@ export class HomePage implements OnInit {
     this.onCallService.getListForUser().subscribe((result: OnCallDoctor[]) => {
       this.hasData = true;
       if (result && result.length > 0) {
+
+        const date = new Date();
+
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+
+
         this.onCallDoctorsConfirmed = result
           .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
-        this.onCallDoctorsUnconfirmed = result
-          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null);
-        this.onCallDoctorsRejected = result
-          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === false);
+          // .filter((onCall: OnCallDoctor) => onCall.start >= date);
+          
+
+        this.onCallDoctorsConfirmed.sort(this.compareFn);
+          console.log(this.onCallDoctorsConfirmed);
+          console.log(date);
+
+
+        this.onCallDoctorsUnconfirmedCount = result
+          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
+          console.log(this.onCallDoctorsUnconfirmedCount);
       }
 
       this.closeLoading();
@@ -185,6 +201,16 @@ export class HomePage implements OnInit {
       this.closeLoading();
       this.closeRefreshing($event);
     });
+  }
+
+  compareFn = (a: OnCallDoctor, b: OnCallDoctor) => {
+    if (a.start < b.start) {
+      return -1;
+    }
+    if (a.start > b.start) {
+      return 1;
+    }
+    return 0;
   }
 
   editAvailability(item: UserAvailability, slidingItem: IonItemSliding) {
