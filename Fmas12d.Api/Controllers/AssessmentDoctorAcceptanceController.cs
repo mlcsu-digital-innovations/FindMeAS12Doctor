@@ -188,7 +188,7 @@ namespace Fmas12d.Api.Controllers
         _signalRMessenger.SendNotification(
           message,
           ProfileType.AMHP
-          );
+        );
 
         return Ok();
       }
