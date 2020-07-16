@@ -115,9 +115,7 @@ export class HomePage implements OnInit {
     .then((result: {buttonIndex: number, input1: string}) => {
       if (result.buttonIndex === 1) {
 
-        const userPin = parseInt(result.input1, 10);
-
-        this.storageService.comparePin(userPin)
+        this.storageService.comparePin(result.input1)
         .subscribe((match: boolean) => {
           if (match) {
             this.authService.signinSilently();

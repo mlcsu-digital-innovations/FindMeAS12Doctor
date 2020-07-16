@@ -16,8 +16,8 @@ export class UserProfilePage implements OnInit {
   public currentUserName: string;
   public hasPin: boolean;
 
-  private pin1: number;
-  private pin2: number;
+  private pin1: string;
+  private pin2: string;
 
   constructor(
     private alertController: AlertController,
@@ -87,14 +87,14 @@ export class UserProfilePage implements OnInit {
     this.pinDialog.prompt('PIN', 'Set PIN', ['OK', 'Cancel'])
     .then((result: {buttonIndex: number, input1: string}) => {
       if (result.buttonIndex === 1) {
-        this.pin1 = parseInt(result.input1, 10);
+        this.pin1 = result.input1.trim();
 
-        if (this.pin1.toString().length >= 4) {
+        if (this.pin1.length >= 4) {
           this.confirmPin();
         } else {
           this.toastService.displayError({message: 'PIN must have at least 4 digits'});
-          this.pin1 = 0;
-          this.pin2 = 0;
+          this.pin1 = '';
+          this.pin2 = '';
         }
       } else {
         console.log('Cancelled');
@@ -106,14 +106,14 @@ export class UserProfilePage implements OnInit {
     this.pinDialog.prompt('PIN', 'Confirm PIN', ['OK', 'Cancel'])
     .then((result: {buttonIndex: number, input1: string}) => {
       if (result.buttonIndex === 1) {
-        this.pin2 = parseInt(result.input1, 10);
+        this.pin2 = result.input1.trim();
 
         if (this.pin1.valueOf() === this.pin2.valueOf()) {
           this.setPin();
         } else {
           this.toastService.displayError({message: 'PINs do not match'});
-          this.pin1 = 0;
-          this.pin2 = 0;
+          this.pin1 = '';
+          this.pin2 = '';
         }
       } else {
         console.log('Cancelled');
