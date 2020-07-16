@@ -158,8 +158,8 @@ export class StorageService {
           }
 
           this.storage.get(`${oid}-lock`)
-            .then(pin => {
-              observer.next(pin === userPin);
+            .then((pin: string) => {
+              observer.next(pin.toString().trim() === userPin.toString().trim());
               observer.complete();
             }, err => {
               observer.error(err);
