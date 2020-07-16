@@ -2,7 +2,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
-import { Platform, AlertController, ToastController } from '@ionic/angular';
+import { Platform, AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { version } from '../../../../package.json';
@@ -19,11 +19,13 @@ export class HomePage implements OnInit {
   public connection: boolean;
   public isAuthenticated: boolean;
   public lastUser: string;
+  private loading: HTMLIonLoadingElement;
 
   constructor(
     private alertController: AlertController,
     private authService: AuthService,
     private changeRef: ChangeDetectorRef,
+    private loadingController: LoadingController,
     private networkService: NetworkService,
     private pinDialog: PinDialog,
     private platform: Platform,
@@ -33,6 +35,7 @@ export class HomePage implements OnInit {
 
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
+        this.closeLoading();
       });
 
      }
@@ -76,6 +79,7 @@ export class HomePage implements OnInit {
 
   public logIn(): void {
 
+    this.showLoading();
     if (this.platform.is('cordova')) {
       this.authService.loginCordovaMsal();
     } else {
@@ -108,6 +112,21 @@ export class HomePage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines',
+      duration: 3000
+    });
+    await this.loading.present();
+  }
+
+  closeLoading() {
+    if (this.loading) {
+      setTimeout(() => { this.loading.dismiss(); }, 500);
+    }
   }
 
   public enterPin(): void {

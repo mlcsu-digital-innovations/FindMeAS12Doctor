@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
     private cordovaMsalService: CordovaMsalService,
     private fcm: FCM,
     private loadingController: LoadingController,
+    private navController: NavController,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
     private platform: Platform,
@@ -156,6 +157,15 @@ export class AppComponent implements OnInit {
         this.fcm.getToken().then(token => {
           this.refreshFcmToken(token);
         });
+      });
+
+      this.broadcastService.subscribe('msal:logoutSuccess', () => {
+        this.navController.navigateRoot('home');
+        this.authService.authState.next(false);
+      });
+
+      this.broadcastService.subscribe('msal:logoutFailure', () => {
+        console.log('signed out (failed)');
       });
 
       this.broadcastService.subscribe('msal:refreshToken', (payload) => {
