@@ -54,11 +54,11 @@ export class StorageService {
     return from(this.storage.set(this.REQ_STORAGE_KEY, requests));
   }
 
-  public storePin(oid: string, pin: number): Observable<any> {
+  public storePin(oid: string, pin: string): Observable<any> {
     return from(this.storage.set(`${oid}-lock`, pin));
   }
 
-  public setPin(pin: number): Observable<boolean> {
+  public setPin(pin: string): Observable<boolean> {
 
     let oid = '';
     const setPin = new Observable<boolean>((observer) => {
@@ -143,7 +143,7 @@ export class StorageService {
     return checkPin;
   }
 
-  public comparePin(userPin: number): Observable<any> {
+  public comparePin(userPin: string): Observable<any> {
 
     let oid = '';
     const comparePin = new Observable((observer) => {
