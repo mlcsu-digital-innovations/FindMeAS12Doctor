@@ -229,6 +229,32 @@ export class AppComponent implements OnInit {
     this.authService.logoutUsingMsal();
   }
 
+  public async confirmSignOut() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Sign Out ?',
+      message: `Please confirm sign out`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            this.isAuthenticated = false;
+            this.logOff();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',

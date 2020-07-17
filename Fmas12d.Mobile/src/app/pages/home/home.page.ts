@@ -117,8 +117,7 @@ export class HomePage implements OnInit {
   async showLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
+      spinner: 'lines'
     });
     await this.loading.present();
   }
