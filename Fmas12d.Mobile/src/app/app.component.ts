@@ -169,10 +169,12 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:refreshToken', (payload) => {
+        console.log('msal:refreshToken');
         this.cordovaMsalService.refreshTokenSilently();
       });
 
       this.broadcastService.subscribe('msal:tokenRefresh', (payload) => {
+        console.log('msal:tokenRefresh');
         this.storageService.storeAccessToken(this.convertToken(payload));
       });
 
