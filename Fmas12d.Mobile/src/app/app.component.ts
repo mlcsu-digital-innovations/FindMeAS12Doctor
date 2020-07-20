@@ -51,6 +51,7 @@ export class AppComponent implements OnInit {
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
     private platform: Platform,
+    private router: Router,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storageService: StorageService,
@@ -160,8 +161,14 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:logoutSuccess', () => {
-        this.navController.navigateRoot('home');
-        this.authService.authState.next(false);
+        console.log('msal:logoutSuccess');
+        console.log('navigateRoot - home');
+        //this.navController.navigateRoot('home');
+        this.router.navigate(['/home'])
+        .then(r => {
+          this.authService.authState.next(false);
+        });
+        
       });
 
       this.broadcastService.subscribe('msal:logoutFailure', () => {
@@ -228,6 +235,7 @@ export class AppComponent implements OnInit {
   }
 
   public logOff(): void {
+    console.log('app.component.logOff()');
     this.authService.logoutUsingMsal();
   }
 
@@ -245,7 +253,7 @@ export class AppComponent implements OnInit {
             console.log('Confirm Cancel: blah');
           }
         }, {
-          text: 'Okay',
+          text: 'Ok',
           handler: () => {
             this.isAuthenticated = false;
             this.logOff();

@@ -163,11 +163,17 @@ export class MsalService implements OnDestroy {
 
   public logoutMsal(): Observable<any> {
 
+    console.log('msal.service.logoutMsal()');
+    console.log('clear refresh timer');
+
     clearTimeout(this.refreshTimer);
 
     const msalSignout = new Observable((observer) => {
       this.msal.signOut().then(() => {
+        console.log('signed out');
+        console.log('clear access token');
         this.storageService.clearAccessToken();
+        console.log('broadcast success message');
         this.broadcastService.broadcast('msal:logoutSuccess', '');
         observer.next();
         observer.complete();
