@@ -161,9 +161,6 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:logoutSuccess', () => {
-        console.log('msal:logoutSuccess');
-        console.log('navigateRoot - home');
-        //this.navController.navigateRoot('home');
         this.router.navigate(['/home'])
         .then(r => {
           this.authService.authState.next(false);
@@ -176,12 +173,10 @@ export class AppComponent implements OnInit {
       });
 
       this.broadcastService.subscribe('msal:refreshToken', (payload) => {
-        console.log('msal:refreshToken');
         this.cordovaMsalService.refreshTokenSilently();
       });
 
       this.broadcastService.subscribe('msal:tokenRefresh', (payload) => {
-        console.log('msal:tokenRefresh');
         this.storageService.storeAccessToken(this.convertToken(payload));
       });
 
@@ -235,7 +230,6 @@ export class AppComponent implements OnInit {
   }
 
   public logOff(): void {
-    console.log('app.component.logOff()');
     this.authService.logoutUsingMsal();
   }
 

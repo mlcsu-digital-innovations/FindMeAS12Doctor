@@ -39,7 +39,6 @@ export class HomePage implements OnInit, OnDestroy {
 
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
-        console.log('Home page authState change = ', authState);
         this.closeLoading();
       });
 
@@ -55,7 +54,6 @@ export class HomePage implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.networkSubscription);
 
-    console.log('get userName ...');
     this.userSubscription = this.storageService.getUserNameFromToken()
     .subscribe(userName => {
       this.lastUser = userName;
@@ -67,16 +65,12 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('unsubscribe');
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
   }
 
   ionViewDidEnter() {
-    console.log('Home page entered');
-    console.log('current isAuthenticated = ', this.isAuthenticated);
-    console.log('checkForPin');
     this.checkForPin();
   }
 
@@ -90,7 +84,6 @@ export class HomePage implements OnInit, OnDestroy {
         // Check to see if we have a stored pin for the logged in user.
         this.storageService.hasPin()
           .subscribe(pin => {
-            console.log('home.page.checkForPin = ', pin);
             // We have a stored PIN, can we sign in silently ?
             if (pin === true) {
               this.authService.canSignInSilently()
