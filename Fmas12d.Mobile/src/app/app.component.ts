@@ -8,17 +8,18 @@ import { MsalResult } from './interfaces/msal-result.interface';
 import { MsalService as CordovaMsalService } from './services/msal/msal.service';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
+import { Observable } from 'rxjs';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
-import { Platform, NavController, AlertController, LoadingController } from '@ionic/angular';
+import { Platform, AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './services/storage/storage.service';
+import { take } from 'rxjs/operators';
 import { ToastService } from './services/toast/toast.service';
 import { UserDetails } from './interfaces/user-details';
 import { UserDetailsService } from './services/user-details/user-details.service';
 import * as jwt_decode from 'jwt-decode';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -47,7 +48,6 @@ export class AppComponent implements OnInit {
     private cordovaMsalService: CordovaMsalService,
     private fcm: FCM,
     private loadingController: LoadingController,
-    private navController: NavController,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
     private platform: Platform,
@@ -75,22 +75,28 @@ export class AppComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  refreshBadges() {
 
-    // Initial update of menu data.
     this.assessmentService.getRequests()
+      .pipe(take(1))
       .subscribe(
-        () => { }
+        () => {}
       );
 
     this.assessmentClaimService.getList()
+      .pipe(take(1))
       .subscribe(
-        () => { }
+        () => {}
       );
+  }
+
+  ngOnInit() {
 
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      this.refreshBadges();
 
       if (this.platform.is('cordova')) {
         this.showLoading();
@@ -117,6 +123,7 @@ export class AppComponent implements OnInit {
 
       this.fcm.onNotification().subscribe(
         data => {
+          this.refreshBadges();
           if (data.wasTapped) {
             // app is currently in background
             this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
@@ -141,6 +148,7 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
         this.toastService.displaySuccess({message: 'Signed in'});
+        this.refreshBadges();
         this.authService.authState.next(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
@@ -152,6 +160,7 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:loginSuccess', (payload) => {
 
         this.toastService.displaySuccess({message: 'Signed in'});
+        this.refreshBadges();
         this.authService.authState.next(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
@@ -165,7 +174,6 @@ export class AppComponent implements OnInit {
         .then(r => {
           this.authService.authState.next(false);
         });
-        
       });
 
       this.broadcastService.subscribe('msal:logoutFailure', () => {
