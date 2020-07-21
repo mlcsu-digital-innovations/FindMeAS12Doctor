@@ -125,7 +125,7 @@ export class MsalService implements OnDestroy {
     this.refreshTimer =
       setTimeout(() => {
         this.broadcastService.broadcast('msal:refreshToken', null);
-      }, 10 * 60 * 1000);
+      }, 1 * 60 * 1000);
   }
 
   public refreshTokenSilently() {
@@ -164,11 +164,13 @@ export class MsalService implements OnDestroy {
     const msalSignout = new Observable((observer) => {
       this.msal.signOut().then(() => {
         this.storageService.clearAccessToken();
+        this.broadcastService.broadcast('msal:logoutSuccess', '');
         observer.next();
         observer.complete();
      },
      (error) =>  {
-       observer.error(error);
+        this.broadcastService.broadcast('msal:logoutFailure', '');
+        observer.error(error);
      });
     });
 

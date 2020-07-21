@@ -1,29 +1,35 @@
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy  } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
-import { Platform, AlertController, ToastController } from '@ionic/angular';
+import { Platform, AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { version } from '../../../../package.json';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
   public appVersion: string = version;
   public canUsePin: boolean;
   public connection: boolean;
   public isAuthenticated: boolean;
   public lastUser: string;
+  private loading: HTMLIonLoadingElement;
+  private networkSubscription: Subscription;
+  private subscriptions: Subscription[] = [];
+  private userSubscription: Subscription;
 
   constructor(
     private alertController: AlertController,
     private authService: AuthService,
     private changeRef: ChangeDetectorRef,
+    private loadingController: LoadingController,
     private networkService: NetworkService,
     private pinDialog: PinDialog,
     private platform: Platform,
@@ -33,6 +39,7 @@ export class HomePage implements OnInit {
 
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
+        this.closeLoading();
       });
 
      }
@@ -40,18 +47,34 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.connection = this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Online;
 
-    this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
+    this.networkSubscription = this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
       this.connection = status === ConnectionStatus.Online;
       this.changeRef.detectChanges();
     });
 
-    this.storageService.getUserNameFromToken()
+    this.subscriptions.push(this.networkSubscription);
+
+    this.userSubscription = this.storageService.getUserNameFromToken()
     .subscribe(userName => {
       this.lastUser = userName;
     }, () => {
       this.lastUser = '';
     });
 
+    this.subscriptions.push(this.userSubscription);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  ionViewDidEnter() {
+    this.checkForPin();
+  }
+
+  private checkForPin() {
     this.platform.ready().then(() => {
 
       if (this.platform.is('cordova') && !this.isAuthenticated) {
@@ -61,7 +84,6 @@ export class HomePage implements OnInit {
         // Check to see if we have a stored pin for the logged in user.
         this.storageService.hasPin()
           .subscribe(pin => {
-
             // We have a stored PIN, can we sign in silently ?
             if (pin === true) {
               this.authService.canSignInSilently()
@@ -76,6 +98,7 @@ export class HomePage implements OnInit {
 
   public logIn(): void {
 
+    this.showLoading();
     if (this.platform.is('cordova')) {
       this.authService.loginCordovaMsal();
     } else {
@@ -108,6 +131,20 @@ export class HomePage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines'
+    });
+    await this.loading.present();
+  }
+
+  closeLoading() {
+    if (this.loading) {
+      setTimeout(() => { this.loading.dismiss(); }, 500);
+    }
   }
 
   public enterPin(): void {

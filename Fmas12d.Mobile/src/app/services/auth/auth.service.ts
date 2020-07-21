@@ -54,6 +54,7 @@ export class AuthService implements OnDestroy {
   }
 
   public logoutUsingMsal() {
+    console.log('auth.service.logoutUsingMsal()');
     if (this.platform.is('cordova')) {
       this.logoutCordovaMsal();
     } else {
@@ -97,7 +98,10 @@ export class AuthService implements OnDestroy {
 
   public logoutCordovaMsal(): void {
 
+    console.log('auth.service.logoutCordovaMsal()');
+
     this.logout = this.cordovaMsal.logoutMsal().subscribe(success => {
+      console.log('auth.service.logoutCordovaMsal().success');
       this.authState.next(false);
       this.toastService.displaySuccess({message: 'Signed out'});
     }, error => {
