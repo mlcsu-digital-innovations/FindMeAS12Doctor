@@ -1,15 +1,16 @@
 import { AVAILABLE, KNOWN_LOCATION_OTHER_ID, KNOWN_LOCATION_OTHER_NAME } from 'src/app/constants/app.constants';
+import { catchError, map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ContactDetailService } from 'src/app/services/contact-details/contact-detail.service';
+import { DoctorAvailability } from 'src/app/models/doctor-availability.model';
 import { NameId } from 'src/app/interfaces/name-id.interface';
 import { NavController, ToastController } from '@ionic/angular';
+import { Observable, of } from 'rxjs';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { DoctorAvailability } from 'src/app/models/doctor-availability.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-doctor-availability-edit',
@@ -38,14 +39,9 @@ export class DoctorAvailabilityEditPage implements OnInit {
   ngOnInit() {
     const now = new Date();
 
-    const min = new Date();
-    min.setHours(0, 0, 0, 0);
-
-    const max = new Date(now.setMonth(now.getMonth() + 6));
-    max.setHours(23, 55, 0, 0);
-
-    this.minDate = min.toISOString();
-    this.maxDate = max.toISOString();
+    this.minDate = moment().utc().startOf('day').toISOString();
+    this.maxDate =
+      moment().utc().startOf('day').add(6, 'M').add(23, 'h').add(55, 'm').toISOString();
 
     this.cachedUserAvailability =
       this.router.getCurrentNavigation().extras.state.availability;

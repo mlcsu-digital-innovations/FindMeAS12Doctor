@@ -3,10 +3,10 @@ import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.mo
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { ASSESSMENTRESCHEDULING, ASSESSMENTSCHEDULED, AWAITINGREVIEW, DOCTORSTATUSALLOCATED, REFERRALSTATUS_NEW, AVAILABLE } from 'src/app/constants/app.constants';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy  } from '@angular/core';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
-import { Platform, AlertController, LoadingController, IonItemSliding } from '@ionic/angular';
+import { Platform, AlertController, ToastController, LoadingController, IonItemSliding } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
@@ -15,13 +15,14 @@ import { version } from '../../../../package.json';
 import { NavigationExtras, Router } from '@angular/router';
 import { OnCallService } from 'src/app/services/on-call/on-call.service';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
   private hasData: boolean;
   private loading: HTMLIonLoadingElement;
@@ -37,6 +38,10 @@ export class HomePage implements OnInit {
   public connection: boolean;
   public isAuthenticated: boolean;
   public lastUser: string;
+  private networkSubscription: Subscription;
+  private subscriptions: Subscription[] = [];
+  private userSubscription: Subscription;
+
   public onCallDoctorsConfirmed: OnCallDoctor[] = [];
   public onCallDoctorsRejected: OnCallDoctor[] = [];
   public onCallDoctorsUnconfirmedCount: number;
@@ -59,32 +64,46 @@ export class HomePage implements OnInit {
     private userAvailabilityService: UserAvailabilityService
   ) {
 
-    this.authService.authState.subscribe(authState => {
-      this.isAuthenticated = authState;
-    });
+      this.authService.authState.subscribe(authState => {
+        this.isAuthenticated = authState;
+        this.closeLoading();
+      });
 
   }
 
   ionViewDidEnter() {
     this.refreshPage();
+    this.checkForPin();
   }
 
   ngOnInit() {
 
     this.connection = this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Online;
 
-    this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
+    this.networkSubscription = this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
       this.connection = status === ConnectionStatus.Online;
       this.changeRef.detectChanges();
     });
 
-    this.storageService.getUserNameFromToken()
-      .subscribe(userName => {
-        this.lastUser = userName;
-      }, () => {
-        this.lastUser = '';
-      });
+    this.subscriptions.push(this.networkSubscription);
 
+    this.userSubscription = this.storageService.getUserNameFromToken()
+    .subscribe(userName => {
+      this.lastUser = userName;
+    }, () => {
+      this.lastUser = '';
+    });
+
+    this.subscriptions.push(this.userSubscription);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  private checkForPin() {
     this.platform.ready().then(() => {
 
       if (this.platform.is('cordova') && !this.isAuthenticated) {
@@ -94,7 +113,6 @@ export class HomePage implements OnInit {
         // Check to see if we have a stored pin for the logged in user.
         this.storageService.hasPin()
           .subscribe(pin => {
-
             // We have a stored PIN, can we sign in silently ?
             if (pin === true) {
               this.authService.canSignInSilently()
@@ -182,17 +200,14 @@ export class HomePage implements OnInit {
 
         this.onCallDoctorsConfirmed = result
           .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
-          // .filter((onCall: OnCallDoctor) => onCall.start >= date);
-          
 
         this.onCallDoctorsConfirmed.sort(this.compareFn);
-          console.log(this.onCallDoctorsConfirmed);
-          console.log(date);
-
+        console.log(this.onCallDoctorsConfirmed);
+        console.log(date);
 
         this.onCallDoctorsUnconfirmedCount = result
           .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
-          console.log(this.onCallDoctorsUnconfirmedCount);
+        console.log(this.onCallDoctorsUnconfirmedCount);
       }
 
       this.closeLoading();
@@ -245,6 +260,7 @@ export class HomePage implements OnInit {
 
   public logIn(): void {
 
+    this.showLoading();
     if (this.platform.is('cordova')) {
       this.authService.loginCordovaMsal();
     } else {
@@ -279,31 +295,12 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  public enterPin(): void {
-    this.pinDialog.prompt('Enter PIN', 'Unlock', ['OK', 'Cancel'])
-      .then((result: { buttonIndex: number, input1: string }) => {
-        if (result.buttonIndex === 1) {
-
-          const userPin = parseInt(result.input1, 10);
-
-          this.storageService.comparePin(userPin)
-            .subscribe((match: boolean) => {
-              if (match) {
-                this.authService.signinSilently();
-              } else {
-                this.toastService.displayError({ message: 'Incorrect PIN' });
-              }
-            }, () => {
-              this.toastService.displayError({ message: 'Error verifying PIN' });
-            });
-        } else {
-          console.log('Cancelled');
-        }
-      });
-  }
-
-  doctorIsAllocated(assessment: AmhpAssessmentRequest): boolean {
-    return assessment.doctorStatusId === DOCTORSTATUSALLOCATED;
+  async showLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait',
+      spinner: 'lines'
+    });
+    await this.loading.present();
   }
 
   closeLoading() {
@@ -318,12 +315,25 @@ export class HomePage implements OnInit {
     }
   }
 
-  async showLoading() {
-    this.loading = await this.loadingController.create({
-      message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
+  public enterPin(): void {
+    this.pinDialog.prompt('Enter PIN', 'Unlock', ['OK', 'Cancel'])
+      .then((result: { buttonIndex: number, input1: string }) => {
+        if (result.buttonIndex === 1) {
+
+        this.storageService.comparePin(result.input1)
+        .subscribe((match: boolean) => {
+          if (match) {
+            this.authService.signinSilently();
+          } else {
+            this.toastService.displayError({message: 'Incorrect PIN'});
+          }
+        }, err => {
+          this.toastService.displayError({message: 'Error verifying PIN'});
+        });
+      } else {
+        console.log('Cancelled');
+      }
     });
-    await this.loading.present();
+    // this.loading.present();
   }
 }
