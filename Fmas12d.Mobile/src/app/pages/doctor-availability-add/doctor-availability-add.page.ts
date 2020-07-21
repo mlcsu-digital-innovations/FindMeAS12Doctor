@@ -8,6 +8,7 @@ import { UserAvailability } from 'src/app/interfaces/user-availability.interface
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
 import { AVAILABLE, UNAVAILABLE } from 'src/app/constants/app.constants';
 import { ContactDetail } from 'src/app/models/contact-detail.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-doctor-availability-add',
@@ -40,18 +41,11 @@ export class DoctorAvailabilityAddPage implements OnInit {
     this.userAvailability = {} as UserAvailability;
     this.userAvailability.location = {} as Location;
 
-    let now = new Date();
+    this.minDate = moment().utc().startOf('day').toISOString();
+    this.maxDate =
+      moment().utc().startOf('day').add(6, 'M').add(23, 'h').add(55, 'm').toISOString();
 
-    const min = new Date();
-    min.setHours(0, 0, 0, 0);
-
-    const max = new Date(now.setMonth(now.getMonth() + 6));
-    max.setHours(23, 55, 0, 0);
-
-    this.minDate = min.toISOString();
-    this.maxDate = max.toISOString();
-
-    now = new Date();
+    const now = new Date();
     now.setMinutes(now.getMinutes() - now.getMinutes() % 5, 0, 0);
 
     this.userAvailability.start = now.toISOString();
