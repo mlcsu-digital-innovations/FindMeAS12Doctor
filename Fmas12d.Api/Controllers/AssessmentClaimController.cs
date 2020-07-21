@@ -1,3 +1,4 @@
+using Fmas12d.Api.SignalR;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ namespace Fmas12d.Api.Controllers
   [Authorize(Policy = "User")]
   public class AssessmentClaimController : ModelControllerDeletePatchBase
   {
+    private readonly ISignalRMessenger _signalRMessenger;
     private IUserAssessmentClaimService Service { 
       get 
       { 
@@ -23,9 +25,11 @@ namespace Fmas12d.Api.Controllers
 
     public AssessmentClaimController(
       IUserClaimsService userClaimsService,
-      IUserAssessmentClaimService service)
+      IUserAssessmentClaimService service,
+      ISignalRMessenger signalRMessenger)
       : base(userClaimsService, service)
     {
+      _signalRMessenger = signalRMessenger;
     }
 
     [HttpGet]
@@ -186,6 +190,12 @@ namespace Fmas12d.Api.Controllers
 
         Business.Models.UserAssessmentClaim viewModel =
           await Service.ConfirmAssessmentClaimAsync(assessmentId, GetUserId(), businessModel);
+
+        var message = $"Claim created for {viewModel.User.DisplayName}";
+        _signalRMessenger.SendNotification(
+          message,
+          ProfileType.FINANCE
+        );
 
         return Created(GetCreatedModelUri(viewModel.Id), viewModel);
       }

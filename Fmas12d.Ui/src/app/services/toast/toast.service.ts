@@ -5,6 +5,9 @@ import { ToastOptions } from 'src/app/interfaces/toast-options';
 export class ToastService {
   toasts: any[] = [];
 
+  constructor() {
+  }
+
   showWithOptions(options: ToastOptions, classname: string, iconClass: string) {
     options.classname = classname;
     options.iconClass = iconClass;
