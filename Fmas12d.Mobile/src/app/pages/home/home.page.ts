@@ -16,6 +16,8 @@ import { NavigationExtras, Router } from '@angular/router';
 import { OnCallService } from 'src/app/services/on-call/on-call.service';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
 import { Subscription } from 'rxjs';
+import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
+import { UserDetails } from 'src/app/interfaces/user-details';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +28,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   private hasData: boolean;
   private loading: HTMLIonLoadingElement;
+  public currentUser = {isDoctor: false, isAmhp: false} as UserDetails;
 
   public allAssessments: AmhpAssessmentRequest[] = [];
   public appVersion: string = version;
@@ -37,10 +40,8 @@ export class HomePage implements OnInit, OnDestroy {
   public canUsePin: boolean;
   public connection: boolean;
   public isAuthenticated: boolean;
-  public lastUser: string;
   private networkSubscription: Subscription;
   private subscriptions: Subscription[] = [];
-  private userSubscription: Subscription;
 
   public onCallDoctorsConfirmed: OnCallDoctor[] = [];
   public onCallDoctorsRejected: OnCallDoctor[] = [];
@@ -61,7 +62,8 @@ export class HomePage implements OnInit, OnDestroy {
     private router: Router,
     private storageService: StorageService,
     private toastService: ToastService,
-    private userAvailabilityService: UserAvailabilityService
+    private userAvailabilityService: UserAvailabilityService,
+    private userDetailsService: UserDetailsService
   ) {
 
       this.authService.authState.subscribe(authState => {
@@ -69,6 +71,9 @@ export class HomePage implements OnInit, OnDestroy {
         this.closeLoading();
       });
 
+      this.userDetailsService.currentUser.subscribe(user => {
+        this.currentUser = user;
+      });
   }
 
   ionViewDidEnter() {
@@ -86,15 +91,6 @@ export class HomePage implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.networkSubscription);
-
-    this.userSubscription = this.storageService.getUserNameFromToken()
-    .subscribe(userName => {
-      this.lastUser = userName;
-    }, () => {
-      this.lastUser = '';
-    });
-
-    this.subscriptions.push(this.userSubscription);
   }
 
   ngOnDestroy() {
@@ -149,7 +145,7 @@ export class HomePage implements OnInit, OnDestroy {
             this.assessmentRequests = this.allAssessments
               .filter(assessment => !scheduled.includes(assessment.referralStatusId))
               .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW);
-            // .filter(assessment => assessment.dateTime >= new Date());
+              // .filter(assessment => assessment.dateTime >= new Date());
 
           } else {
             this.scheduledAssessments = [];
@@ -272,7 +268,7 @@ export class HomePage implements OnInit, OnDestroy {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Switch user ?',
-      message: `${this.lastUser} will be signed out`,
+      message: `${this.currentUser.displayName} will be signed out`,
       buttons: [
         {
           text: 'Cancel',
