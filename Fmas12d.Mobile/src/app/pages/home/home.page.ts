@@ -1,23 +1,24 @@
 import { AmhpAssessmentList } from 'src/app/models/amhp-assessment-list.model';
 import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { ASSESSMENTRESCHEDULING, ASSESSMENTSCHEDULED, AWAITINGREVIEW, DOCTORSTATUSALLOCATED, REFERRALSTATUS_NEW, AVAILABLE } from 'src/app/constants/app.constants';
+import { ASSESSMENTRESCHEDULING, ASSESSMENTSCHEDULED, AWAITINGREVIEW, DOCTORSTATUSALLOCATED, REFERRALSTATUS_NEW, AVAILABLE, UNAVAILABLE, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy  } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
+import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
+import { OnCallService } from 'src/app/services/on-call/on-call.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
 import { Platform, AlertController, ToastController, LoadingController, IonItemSliding } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { Subscription } from 'rxjs';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
-import { version } from '../../../../package.json';
-import { NavigationExtras, Router } from '@angular/router';
-import { OnCallService } from 'src/app/services/on-call/on-call.service';
-import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
-import { Subscription } from 'rxjs';
-import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 import { UserDetails } from 'src/app/interfaces/user-details';
+import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
+import { version } from '../../../../package.json';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +29,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   private hasData: boolean;
   private loading: HTMLIonLoadingElement;
-  public currentUser = {isDoctor: false, isAmhp: false} as UserDetails;
+  private networkSubscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
   public allAssessments: AmhpAssessmentRequest[] = [];
   public appVersion: string = version;
@@ -36,18 +38,24 @@ export class HomePage implements OnInit, OnDestroy {
   public assessmentListScheduled: AmhpAssessmentList[] = [];
   public assessmentRequests: AmhpAssessmentRequest[] = [];
   public assessmentRequestsLastUpdated: Date;
+  public availabilityList: UserAvailability[] =[];
   public availableList: UserAvailability[] = [];
   public canUsePin: boolean;
   public connection: boolean;
+  public currentAvailability: UserAvailability;
+  public currentOnCall: OnCallDoctor;
+  public currentUser = {isDoctor: false, isAmhp: false} as UserDetails;
   public isAuthenticated: boolean;
-  private networkSubscription: Subscription;
-  private subscriptions: Subscription[] = [];
-
+  public nextAvailability: UserAvailability;
+  public nextOnCall: OnCallDoctor;
   public onCallDoctorsConfirmed: OnCallDoctor[] = [];
   public onCallDoctorsRejected: OnCallDoctor[] = [];
   public onCallDoctorsUnconfirmedCount: number;
   public scheduledAssessments: AmhpAssessmentRequest[] = [];
+  public showAvailability: boolean;
+  public showOnCall: boolean;
   public unavailableList: UserAvailability[] = [];
+  public unscheduledAssessments: AmhpAssessmentRequest[] = [];
 
   constructor(
     private alertController: AlertController,
@@ -65,7 +73,6 @@ export class HomePage implements OnInit, OnDestroy {
     private userAvailabilityService: UserAvailabilityService,
     private userDetailsService: UserDetailsService
   ) {
-
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
         this.closeLoading();
@@ -121,6 +128,40 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
+  getStatusIcon(request: AmhpAssessmentRequest): string {
+    let icon = 'help-circle';
+
+    switch (request.doctorHasAccepted) {
+      case undefined:
+        icon = 'help-circle';
+        break;
+      case true:
+        icon = 'checkmark-circle';
+        break;
+      case false:
+        icon = 'close-circle';
+        break;
+    }
+    return icon;
+  }
+
+  getStatusColour(request: AmhpAssessmentRequest): string {
+    let colour = 'success';
+
+    switch (request.doctorHasAccepted) {
+      case undefined:
+        colour = 'warning';
+        break;
+      case true:
+        colour = 'success';
+        break;
+      case false:
+        colour = 'danger';
+        break;
+    }
+    return colour;
+  }
+
   refreshPage($event?: any) {
     // load data each time the page is shown
     // this may be changed if offline data is to be used
@@ -130,23 +171,32 @@ export class HomePage implements OnInit, OnDestroy {
     request
       .subscribe(
         result => {
-
           this.allAssessments = result;
 
           if (result && result.length > 0) {
 
+            const currentDate = moment().startOf('day');
             const scheduled = [ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW];
+            const unscheduled = [
+              REFERRALSTATUS_SELECTING,
+              REFERRALSTATUS_AWAITING_RESPONSES,
+              REFERRALSTATUS_RESPONSES_PARTIAL,
+              REFERRALSTATUS_RESPONSES_COMPLETE
+            ];
 
             // scheduled assessments will have a referralId of 6, 7 or 8
             this.scheduledAssessments = this.allAssessments
-              .filter(assessment => scheduled.includes(assessment.referralStatusId));
-            // .filter(assessment => assessment.dateTime >= new Date());
+              .filter(assessment => scheduled.includes(assessment.referralStatusId))
+              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+
+            this.unscheduledAssessments = this.allAssessments
+              .filter(assessment => unscheduled.includes(assessment.referralStatusId))
+              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
 
             this.assessmentRequests = this.allAssessments
               .filter(assessment => !scheduled.includes(assessment.referralStatusId))
-              .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW);
-              // .filter(assessment => assessment.dateTime >= new Date());
-
+              .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW)
+              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
           } else {
             this.scheduledAssessments = [];
             this.assessmentRequests = [];
@@ -164,17 +214,26 @@ export class HomePage implements OnInit, OnDestroy {
     this.userAvailabilityService.getListForUser()
       .subscribe(
         (result: UserAvailability[]) => {
-
           this.hasData = true;
 
           if (result && result.length > 0) {
-            this.availableList = result.filter(item => item.statusId === AVAILABLE);
-            this.unavailableList = result.filter(item => item.statusId === AVAILABLE);
-          } else {
-            this.availableList = [];
-            this.unavailableList = [];
+
+            this.showAvailability = true;
+            this.availabilityList = result.sort(this.compareAvailability);
+
+            const availabilityStatus = [AVAILABLE, UNAVAILABLE];
+            const currentDate = moment();
+
+            this.currentAvailability =
+              this.availabilityList.filter(av => availabilityStatus.includes(av.statusId))
+                .find(av => (
+                  moment(av.start).isBefore(currentDate)) && (moment(av.end).isAfter(currentDate)
+                ));
+
+            this.nextAvailability =
+               this.availabilityList.filter(av => av.statusId === AVAILABLE).find(av =>
+               (moment(av.start).isAfter(currentDate)));
           }
-          console.log(this.availableList.length);
           this.closeLoading();
           this.closeRefreshing($event);
         }, error => {
@@ -186,24 +245,24 @@ export class HomePage implements OnInit, OnDestroy {
     this.onCallService.getListForUser().subscribe((result: OnCallDoctor[]) => {
       this.hasData = true;
       if (result && result.length > 0) {
-
-        const date = new Date();
-
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
-
+        const currentDate = moment();
 
         this.onCallDoctorsConfirmed = result
           .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
 
-        this.onCallDoctorsConfirmed.sort(this.compareFn);
-        console.log(this.onCallDoctorsConfirmed);
-        console.log(date);
+        this.onCallDoctorsConfirmed.sort(this.compareOnCall);
+
+        this.showOnCall = this.onCallDoctorsConfirmed.length > 0;
+
+        this.currentOnCall = this.onCallDoctorsConfirmed
+          .find(ocd =>
+            (moment(ocd.start).isBefore(currentDate)) && (moment(ocd.end).isAfter(currentDate)));
+
+        this.nextOnCall = this.onCallDoctorsConfirmed
+          .find(ocd => moment(ocd.start).isAfter(currentDate));
 
         this.onCallDoctorsUnconfirmedCount = result
           .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
-        console.log(this.onCallDoctorsUnconfirmedCount);
       }
 
       this.closeLoading();
@@ -214,7 +273,17 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  compareFn = (a: OnCallDoctor, b: OnCallDoctor) => {
+  compareAvailability = (a: UserAvailability, b: UserAvailability) => {
+    if (a.start < b.start) {
+      return -1;
+    }
+    if (a.start > b.start) {
+      return 1;
+    }
+    return 0;
+  }
+
+  compareOnCall = (a: OnCallDoctor, b: OnCallDoctor) => {
     if (a.start < b.start) {
       return -1;
     }
