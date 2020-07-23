@@ -53,6 +53,9 @@
           <ion-item routerLink="/doctor-on-call-list" routerDirection="forward">
             <ion-icon slot="start" name="list"></ion-icon>
             <ion-label>On Call</ion-label>
+            <ion-badge *ngIf="unconfirmedOnCallCount > 0" slot="end" color="danger">
+              {{unconfirmedOnCallCount}}
+            </ion-badge>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle>

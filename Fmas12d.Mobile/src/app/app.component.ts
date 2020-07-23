@@ -10,6 +10,7 @@ import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { Observable } from 'rxjs';
 import { OfflineManagerService } from 'src/app/services/offline-manager/offline-manager.service';
+import { OnCallService } from './services/on-call/on-call.service';
 import { Platform, AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -33,11 +34,13 @@ export class AppComponent implements OnInit {
   userName: string;
 
   private loading: HTMLIonLoadingElement;
+
   public allAssessments: AmhpAssessmentRequest[] = [];
   public amhpAssessmentsRequiringAction: number;
   public assessmentsRequiringAction: number;
   public claimsRequiringAction: number;
   public isAuthenticated: boolean;
+  public unconfirmedOnCallCount: number;
 
   constructor(
     private alertController: AlertController,
@@ -50,6 +53,7 @@ export class AppComponent implements OnInit {
     private loadingController: LoadingController,
     private networkService: NetworkService,
     private offlineManager: OfflineManagerService,
+    private oncallService: OnCallService,
     private platform: Platform,
     private router: Router,
     private splashScreen: SplashScreen,
@@ -73,6 +77,11 @@ export class AppComponent implements OnInit {
       .subscribe(count => {
         this.claimsRequiringAction = count;
       });
+
+    this.oncallService.unconfirmedOnCall
+      .subscribe(count => {
+        this.unconfirmedOnCallCount = count;
+      });
   }
 
   refreshBadges() {
@@ -84,6 +93,12 @@ export class AppComponent implements OnInit {
       );
 
     this.assessmentClaimService.getList()
+      .pipe(take(1))
+      .subscribe(
+        () => {}
+      );
+
+    this.oncallService.getListForUser()
       .pipe(take(1))
       .subscribe(
         () => {}
