@@ -18,6 +18,7 @@ import { RequestInterceptor } from './models/request-interceptor.model';
 import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
     })
   ],
   providers: [
+    CallNumber,
     Geolocation,
     Network,
     StatusBar,
