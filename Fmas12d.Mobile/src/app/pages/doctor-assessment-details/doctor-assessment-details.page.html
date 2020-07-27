@@ -41,7 +41,13 @@
     <ion-label>
       <h3 class="bold">AMHP</h3>
       <h3>{{assessment.amhpUserName}}</h3>
+      <span *ngIf="assessment.amhpUserContact !== ''">
+        <ion-icon name="phone-portrait" class="icon">
+        </ion-icon>
+        <span class="text">{{assessment.amhpUserContact | contactNumber}}</span>
+      </span>  
     </ion-label>
+    <ion-icon name="keypad" slot="end" (click)="confirmCallContact(assessment.amhpUserContact)">Call</ion-icon>
   </ion-item>
 
   <ion-item *ngIf="assessment?.specialityName">
