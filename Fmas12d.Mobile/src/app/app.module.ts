@@ -1,6 +1,7 @@
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 import { ComponentsModule } from './components/components.module';
 import { environment, ProtectedResourceMap } from 'src/environments/environment';
 import { FCM } from '@ionic-native/fcm/ngx';
@@ -18,7 +19,6 @@ import { RequestInterceptor } from './models/request-interceptor.model';
 import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @NgModule({
   declarations: [
