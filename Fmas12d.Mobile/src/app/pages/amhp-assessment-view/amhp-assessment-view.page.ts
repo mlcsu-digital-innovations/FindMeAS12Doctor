@@ -2,8 +2,10 @@ import { ActivatedRoute } from '@angular/router'
 import { AmhpAssessmentService } from '../../services/amhp-assessment/amhp-assessment.service'
 import { AmhpAssessmentView } from '../../models/amhp-assessment-view.model';
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ModalController } from '@ionic/angular';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { AssessmentSelectedDoctor } from 'src/app/models/assessment-selected-doctor.model';
+import { UserContactModalPage } from '../user-contact-modal/user-contact-modal.page';
 
 @Component({
   selector: 'app-amhp-assessment-view',
@@ -15,10 +17,12 @@ export class AmhpAssessmentViewPage implements OnInit {
   public assessmentView: AmhpAssessmentView;
   public displayDoctors: boolean;
   private loading: HTMLIonLoadingElement;
+  private modal: HTMLIonModalElement;
 
   constructor(
     private route: ActivatedRoute,
     private assessmentService: AmhpAssessmentService,
+    private modalController: ModalController,
     private navCtrl: NavController,
     private loadingController: LoadingController,
     private toastService: ToastService
@@ -37,6 +41,8 @@ export class AmhpAssessmentViewPage implements OnInit {
       request.subscribe((result: AmhpAssessmentView) => {
         this.assessmentLastUpdated = new Date();
         this.assessmentView = result;
+
+        console.log(this.assessmentView);
 
         if (this.assessmentView.doctorsAllocated && this.assessmentView.doctorsAllocated.length > 0 ||
           this.assessmentView.doctorsSelected && this.assessmentView.doctorsSelected.length > 0)
@@ -58,6 +64,25 @@ export class AmhpAssessmentViewPage implements OnInit {
     if (this.loading) {
       setTimeout(() => { this.loading.dismiss(); }, 500);
     }
+  }
+
+  onModalAction(action: boolean) {
+    this.modal.dismiss();
+  }
+
+  async showContacts(doctor: AssessmentSelectedDoctor) {
+    console.log(doctor);
+
+    this.modal = await this.modalController.create({
+      component: UserContactModalPage,
+      componentProps: {
+        'userName': doctor.displayName,
+        'contactDetails': doctor.contactDetails,
+        'actioned': this.onModalAction
+      }
+    });
+
+    return await this.modal.present();
   }
 
   async showLoading() {

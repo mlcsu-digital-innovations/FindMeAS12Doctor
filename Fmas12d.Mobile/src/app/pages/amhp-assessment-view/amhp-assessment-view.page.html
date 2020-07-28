@@ -60,7 +60,7 @@
         <h3 class="bold">Selected Doctors</h3>
          
         <ion-list>
-          <ion-item *ngFor="let doctor of assessmentView.doctorsSelected">
+          <ion-item *ngFor="let doctor of assessmentView.doctorsSelected" (click)="showContacts(doctor)">
             <ion-avatar slot="start">
               <ion-icon
               color="warning"
