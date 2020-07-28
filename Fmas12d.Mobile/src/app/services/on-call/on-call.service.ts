@@ -21,10 +21,14 @@ export class OnCallService {
     ))
     .pipe(
       map((result: OnCallDoctor[]) => {
-        const unconfirmedOnCallRequests = result
-        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
 
-        this.unconfirmedOnCall.next(unconfirmedOnCallRequests);
+        if (result != null) {
+          const unconfirmedOnCallRequests = result
+          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
+
+          this.unconfirmedOnCall.next(unconfirmedOnCallRequests);
+        }
+
         return result;
       })
     );
