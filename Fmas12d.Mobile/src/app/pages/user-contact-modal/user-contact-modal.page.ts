@@ -3,11 +3,13 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Component, Input, OnInit } from '@angular/core';
 import { ContactDetail } from 'src/app/models/contact-detail.model';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { ContactNumberPipe } from 'src/app/pipes/contact-number.pipe';
 
 @Component({
   selector: 'user-contact-modal',
   templateUrl: './user-contact-modal.page.html',
   styleUrls: ['./user-contact-modal.page.scss'],
+  providers: [ContactNumberPipe]
 })
 export class UserContactModalPage implements OnInit {
 
@@ -17,7 +19,8 @@ export class UserContactModalPage implements OnInit {
     private alertController: AlertController,
     private callNumber: CallNumber,
     private modalController: ModalController,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private contactNumberPipe: ContactNumberPipe
   ) { }
 
   @Input() userName: string;
@@ -30,6 +33,10 @@ export class UserContactModalPage implements OnInit {
       .then(res => this.closeModal())
       .catch(err => this.toastService.displayError({message: 'Unable to launch dialler'}));
     }
+  }
+
+  transformNumber(contactNumber) {
+    return this.contactNumberPipe.transform(contactNumber);
   }
 
   public async confirmCallContact(contactNumber: string) {
@@ -66,12 +73,12 @@ export class UserContactModalPage implements OnInit {
 
       if (cd.telephoneNumber !== null) {
         this.contacts.push
-          ({'description': `${contactType} - Telephone`, 'contactNumber': cd.telephoneNumber});
+          ({description: `${contactType} - Telephone`, contactNumber: cd.telephoneNumber});
       }
 
       if (cd.mobileNumber !== null) {
         this.contacts.push
-          ({'description': `${contactType} - Mobile`, 'contactNumber': cd.mobileNumber});
+          ({description: `${contactType} - Mobile`, contactNumber: cd.mobileNumber});
       }
     });
   }
