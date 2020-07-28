@@ -539,6 +539,17 @@ namespace Fmas12d.Business.Services
                 .AsNoTracking(asNoTracking)
                 .SingleOrDefaultAsync(u => u.Id == id);
 
+      foreach(var x in entity.Doctors) {
+        Entities.User doctor = await 
+          _context.Users
+          .Include(u => u.ContactDetails)
+            .ThenInclude(c => c.ContactDetailType)
+          .Where(u => u.Id == x.DoctorUserId)
+          .SingleOrDefaultAsync();
+
+          x.DoctorUser.ContactDetails = doctor.ContactDetails;
+      };
+
       Assessment model = new Assessment(entity);
 
       return model;
