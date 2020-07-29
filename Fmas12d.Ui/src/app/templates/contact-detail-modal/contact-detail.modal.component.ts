@@ -1,9 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
 import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
+import { Component, Input, OnInit } from '@angular/core';
 import { CONTACT_DETAIL_TYPE_HOME, CONTACT_DETAIL_TYPE_BASE } from 'src/app/constants/Constants';
 import { ContactNumberPipe } from 'src/app/pipes/contact-number.pipe';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-contact-detail-modal',
