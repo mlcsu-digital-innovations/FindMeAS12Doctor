@@ -1,4 +1,5 @@
 ﻿using Fmas12d.Api.Extensions;
+using Fmas12d.Api.SignalR;
 using Fmas12d.Business;
 using Fmas12d.Business.Models;
 using Fmas12d.Business.Services;
@@ -18,6 +19,8 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Linq;
+
+using Microsoft.AspNetCore.SignalR;
 
 namespace Fmas12d.Api
 {
@@ -49,7 +52,7 @@ namespace Fmas12d.Api
       {
         services.AddSingleton<IPolicyEvaluator, DisableAuthenticationPolicyEvaluator>();
       }
-
+ 
       services.AddAuthentication(options =>
       {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -161,6 +164,8 @@ namespace Fmas12d.Api
         }
       });
 
+      services.AddSignalR();
+      services.AddScoped<ISignalRMessenger, SignalRMessenger>();
       services.AddScoped<IAssessmentDetailTypeService, AssessmentDetailTypeService>();
       services.AddScoped<IAssessmentService, AssessmentService>();
       services.AddScoped<ICcgService, CcgService>();
@@ -197,6 +202,7 @@ namespace Fmas12d.Api
           }
         );
       });
+
     }
 
     // This method gets called by the runtime. 
@@ -228,6 +234,7 @@ namespace Fmas12d.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+        endpoints.MapHub<SignalRHub>("/signalRHub");
       });
 
       Serilog.Log.Information(Configuration["ConnectionStrings:fmas12d"]);

@@ -18,7 +18,6 @@ namespace Fmas12d.Api.Controllers
   {
     protected readonly IUserClaimsService _userClaimsService;
     protected readonly IServiceBase _service;
-
     protected ModelControllerBase(
         IUserClaimsService userClaimsService,
         IServiceBase service

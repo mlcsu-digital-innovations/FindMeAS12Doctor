@@ -1,4 +1,5 @@
 export interface ToastOptions {
+  audience?: number;
   autohide?: boolean;
   classname?: string;
   delay?: number;
