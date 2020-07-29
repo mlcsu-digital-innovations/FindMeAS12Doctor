@@ -2,6 +2,8 @@ import { AllocationCompleteModalComponent } from './allocation-complete-modal/al
 import { CancelActionModalComponent } from './cancel-action-modal/cancel-action-modal.component';
 import { CcgSelectionModalComponent } from './ccg-selection/ccg-selection-modal';
 import { CommonModule } from '@angular/common';
+import { ContactDetailModalComponent } from './contact-detail-modal/contact-detail.modal.component';
+import { FinanceExportModalComponent } from './finance-export/finance-export-modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
@@ -11,13 +13,13 @@ import { UnregisteredUsersModalComponent } from './unregistered-users-modal/unre
 import { UserBankDetailsModalComponent } from './user-bank-details-modal/user-bank-details-modal-component';
 import { UserContactDetailModalComponent } from './user-contact-detail-modal/user-contact-detail-modal.component';
 import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/user-finance-detail-modal.component';
-import { FinanceExportModalComponent } from './finance-export/finance-export-modal';
 
 @NgModule({
   declarations: [
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
     CcgSelectionModalComponent,
+    ContactDetailModalComponent,
     FinanceExportModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,
@@ -37,6 +39,7 @@ import { FinanceExportModalComponent } from './finance-export/finance-export-mod
     AllocationCompleteModalComponent,
     CancelActionModalComponent,
     CcgSelectionModalComponent,
+    ContactDetailModalComponent,
     FinanceExportModalComponent,
     OnCallDoctorModalComponent,
     PatientResultsModalComponent,

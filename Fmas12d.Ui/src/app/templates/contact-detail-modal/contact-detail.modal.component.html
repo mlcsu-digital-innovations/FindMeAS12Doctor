@@ -1,0 +1,17 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> {{contact.name}}</h4>
+</div>
+<div class="modal-body">
+  <ul class="list-group">
+    <li *ngFor="let contact of contacts" class="list-group-item">
+      <span class="">{{contact.contactDescription}}</span>
+      <br/>
+      <span class="contact-number">{{transformNumber(contact.contactNumber)}}</span>
+    </li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="closeModal()">
+    Cancel
+  </button>
+</div>
