@@ -1,7 +1,9 @@
 import { ActiveAssessment } from './active-assessment';
+import { ContactDetail } from './contact-detail';
 
 export interface AvailableDoctor {
   activeAssessments: ActiveAssessment[];
+  contactDetails: ContactDetail[];
   distance: number;
   end: Date;
   genderName: string;

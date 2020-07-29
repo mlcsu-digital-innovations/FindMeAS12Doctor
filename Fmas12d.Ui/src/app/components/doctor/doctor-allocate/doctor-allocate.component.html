@@ -108,10 +108,10 @@
                     </th>
                     <th class="text-center" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
                       Responded
-                    </th>                      
+                    </th>
                     <th class="text-center" scope="col" sortable="hasAccepted" (sort)="OnSort($event)">
                       Accepted
-                    </th>                    
+                    </th>
                     <th class="text-center" scope="col">
                       Allocate
                     </th>
@@ -120,6 +120,9 @@
                 <tbody>
                   <tr *ngFor="let selectedDoctor of selectedDoctors">
                     <td>
+                      <span (click)="DisplayDoctorContactDetails(selectedDoctor)">
+                        <em class="fa fa-phone-square phone-icon" aria-hidden="true"></em>
+                      </span>
                       {{selectedDoctor.name}}
                     </td>
                     <td>
@@ -138,12 +141,12 @@
                     </td>
                     <td  class="text-center sm-col">
                       {{selectedDoctor.hasResponded ? "Yes" : "No"}}
-                    </td>                       
+                    </td>
                     <td  class="text-center sm-col">
                       {{selectedDoctor.hasResponded ? (selectedDoctor.hasAccepted ? "Yes" : "No") : ""}}
-                    </td>                    
+                    </td>
                     <td class="checkmark-content text-center sm-col" style="position: relative">
-                      
+
                       <label class="container"
                               *ngIf="selectedDoctor.hasAccepted">
                         <input

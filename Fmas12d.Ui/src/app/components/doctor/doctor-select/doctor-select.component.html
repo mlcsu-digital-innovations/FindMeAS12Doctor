@@ -151,7 +151,7 @@
                       </th>
                       <th class="text-center" scope="col" sortable="section12ExpiryDate" (sort)="OnSort($event)">
                         S12 Expiry Date
-                      </th>                    
+                      </th>
                       <th class="text-center" scope="col" sortable="specialityNames" (sort)="OnSort($event)">
                         Speciality
                       </th>
@@ -172,6 +172,9 @@
                   <tbody>
                     <tr *ngFor="let availableDoctor of availableDoctors">
                       <td>
+                        <span (click)="DisplayDoctorContactDetails(availableDoctor)">
+                          <em class="fa fa-phone-square phone-icon" aria-hidden="true"></em>
+                        </span>
                         {{availableDoctor.name}}
                       </td>
                       <td>

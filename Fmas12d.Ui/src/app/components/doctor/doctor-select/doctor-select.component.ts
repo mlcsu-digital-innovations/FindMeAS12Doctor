@@ -4,6 +4,7 @@ import { AssessmentAvailability } from 'src/app/interfaces/assessment-availabili
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ContactDetailModalComponent } from 'src/app/templates/contact-detail-modal/contact-detail.modal.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -24,6 +25,7 @@ export class DoctorSelectComponent implements OnInit {
   assessmentId: number;
   availableDoctors: AvailableDoctor[];
   cancelModal: NgbModalRef;
+  contactDetailsModal: NgbModalRef;
   collectionSize: number;
   doctorForm: FormGroup;
   filteredDoctorList: AvailableDoctor[];
@@ -37,7 +39,6 @@ export class DoctorSelectComponent implements OnInit {
   referralId: number;
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
-
 
   @ViewChild('cancelSelection', null) cancelSelectionTemplate;
 
@@ -106,6 +107,17 @@ export class DoctorSelectComponent implements OnInit {
     } else {
       this.routerService.navigate([`assessment/edit/${this.referralId}`]);
     }
+  }
+
+  DisplayDoctorContactDetails(doctor: AvailableDoctor) {
+    this.contactDetailsModal =
+      this.modalService.open(ContactDetailModalComponent,
+        {
+          size: 'sm'
+        }
+      );
+
+    this.contactDetailsModal.componentInstance.contact = doctor;
   }
 
   DisplayDoctorsWithinSearchRadius(searchRadius: number) {

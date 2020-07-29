@@ -15,6 +15,7 @@ namespace Fmas12d.Api.ViewModels
       if (model == null) return;
 
       ActiveAssessments = model.ActiveAssessments.Select(aa => new PostcodeTime(aa)).ToList();
+      ContactDetails = model.ContactDetails.Select(cd => new ContactDetail(cd)).ToList();
       Distance = model.Distance;
       End = model.End;
       GenderName = model.GenderName;
@@ -28,6 +29,7 @@ namespace Fmas12d.Api.ViewModels
     }
 
     public IEnumerable<PostcodeTime> ActiveAssessments { get; set; }
+    public IEnumerable<ContactDetail> ContactDetails { get; set; }
     public decimal Distance { get; set; }
     public int Id { get; set; }
     public string GenderName { get; set; }

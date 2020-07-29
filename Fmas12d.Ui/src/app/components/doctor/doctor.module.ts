@@ -6,6 +6,7 @@ import { DoctorSelectComponent } from './doctor-select/doctor-select.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedComponentsModule } from '../shared-components.module';
+import { ContactDetailModalComponent } from 'src/app/templates/contact-detail-modal/contact-detail.modal.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { SharedComponentsModule } from '../shared-components.module';
     DoctorAllocateComponent,
     DoctorSelectComponent
   ],
+  entryComponents: [ContactDetailModalComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(DoctorRoutes),

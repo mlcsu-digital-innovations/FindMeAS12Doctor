@@ -5,6 +5,7 @@ namespace Fmas12d.Business.Models
   public interface IUserAvailabilityDoctor : IUserAvailability
   {
     IEnumerable<Assessment> ActiveAssessments { get; set; }
+    IEnumerable<ContactDetail> ContactDetails { get; set; }
     decimal Distance { get; set; }
     string GenderName { get; set; }
     string Name { get; set; }

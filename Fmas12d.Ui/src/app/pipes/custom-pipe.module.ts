@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { DateTimeFormatPipe } from 'src/app/pipes/dateTimeFormat-pipe';
 import { NgModule } from '@angular/core';
 import { TimeOnlyFormatPipe } from './timeOnlyFormat-pipe';
+import { ContactNumberPipe } from './contact-number.pipe';
 
 @NgModule({
   declarations: [
+    ContactNumberPipe,
     DateTimeFormatPipe,
     TimeOnlyFormatPipe
   ],
@@ -12,6 +14,7 @@ import { TimeOnlyFormatPipe } from './timeOnlyFormat-pipe';
     CommonModule
   ],
   exports: [
+    ContactNumberPipe,
     DateTimeFormatPipe,
     TimeOnlyFormatPipe
   ]
