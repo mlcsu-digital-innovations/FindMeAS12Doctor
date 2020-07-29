@@ -12,12 +12,12 @@ namespace Fmas12d.Api.Controllers
   [ApiController]
   [Authorize(Policy = "User")]
   public class ReferralController : ModelControllerDeletePatchBase
-  {
+   {
     public ReferralController(
       IReferralService service,
       IUserClaimsService userClaimsService)
       : base(userClaimsService, service)
-    {
+    {     
     }
 
     private IReferralService Service { get { return _service as IReferralService; } }
