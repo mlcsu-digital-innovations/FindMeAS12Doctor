@@ -1,9 +1,13 @@
+using System.Linq;
+
 namespace Fmas12d.Api.ViewModels
 {
   public class AssessmentViewDoctor
   {
     public AssessmentViewDoctor(Business.Models.AssessmentDoctor model)
     {
+      ContactDetails = model.DoctorUser.ContactDetails?
+                        .Select(cd => new ContactDetail(cd)).ToArray();
       DisplayName = model.DoctorUser.DisplayName;
       Distance = model.Distance;
       DoctorId = model.DoctorUserId;
@@ -16,6 +20,7 @@ namespace Fmas12d.Api.ViewModels
       KnownLocation = new Location(model.KnownLocation);
     }
 
+    public ContactDetail[] ContactDetails { get; set; }
     public string DisplayName { get; set; }
     public decimal? Distance { get; set; }
     public int DoctorId { get; set; }

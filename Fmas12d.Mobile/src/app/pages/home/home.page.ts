@@ -167,7 +167,6 @@ export class HomePage implements OnInit, OnDestroy {
     // this may be changed if offline data is to be used
     const request = this.assessmentService.getRequests();
     this.showLoading();
-
     request
       .subscribe(
         result => {
@@ -204,10 +203,10 @@ export class HomePage implements OnInit, OnDestroy {
 
           this.assessmentRequestsLastUpdated = new Date();
           this.closeLoading();
-          this.closeRefreshing($event);
+          // this.closeRefreshing($event);
         }, () => {
           this.closeLoading();
-          this.closeRefreshing($event);
+          // this.closeRefreshing($event);
         }
       );
 
@@ -235,10 +234,10 @@ export class HomePage implements OnInit, OnDestroy {
                (moment(av.start).isAfter(currentDate)));
           }
           this.closeLoading();
-          this.closeRefreshing($event);
+          // this.closeRefreshing($event);
         }, error => {
           this.closeLoading();
-          this.closeRefreshing($event);
+          // this.closeRefreshing($event);
         }
       );
 
@@ -266,10 +265,10 @@ export class HomePage implements OnInit, OnDestroy {
       }
 
       this.closeLoading();
-      this.closeRefreshing($event);
+      // this.closeRefreshing($event);
     }, err => {
       this.closeLoading();
-      this.closeRefreshing($event);
+      // this.closeRefreshing($event);
     });
   }
 
@@ -361,17 +360,23 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async showLoading() {
-    this.loading = await this.loadingController.create({
-      message: 'Please wait',
-      spinner: 'lines'
-    });
-    await this.loading.present();
+
+    if (!this.loading) {
+      this.loading = await this.loadingController.create({
+        message: 'Please wait',
+        spinner: 'lines'
+      });
+      await this.loading.present();
+    }
   }
 
   closeLoading() {
-    if (this.loading) {
-      setTimeout(() => { this.loading.dismiss(); }, 500);
-    }
+
+    setTimeout(() => {
+      if (this.loading) {
+        this.loading.dismiss();
+      }
+    }, 1000);
   }
 
   closeRefreshing($event?: any) {

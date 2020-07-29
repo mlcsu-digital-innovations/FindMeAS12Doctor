@@ -36,6 +36,7 @@ export class DoctorAssessmentDetailsPage implements OnInit {
 
       request.subscribe((result: AmhpAssessmentView) => {
         this.assessment = result;
+        console.log(this.assessment);
         this.closeLoading();
       }, error => {
         this.closeLoading();

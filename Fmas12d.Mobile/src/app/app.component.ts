@@ -210,6 +210,7 @@ export class AppComponent implements OnInit {
 
       this.broadcastService.subscribe('msal:notAuthorized', (payload) => {
         console.log('msal:notAuthorized', payload);
+        this.closeLoading();
       });
     });
 
@@ -283,18 +284,22 @@ export class AppComponent implements OnInit {
   }
 
   async showLoading() {
-    this.loading = await this.loadingController.create({
-      message: 'Please wait',
-      spinner: 'lines',
-      duration: 3000
-    });
-    await this.loading.present();
+    if (!this.loading) {
+      this.loading = await this.loadingController.create({
+        message: 'Please wait',
+        spinner: 'lines',
+        duration: 3000
+      });
+      await this.loading.present();
+    }
   }
 
   closeLoading() {
-    if (this.loading) {
-      setTimeout(() => { this.loading.dismiss(); }, 500);
-    }
+    setTimeout(() => {
+      if (this.loading) {
+        this.loading.dismiss();
+      }
+    }, 1000);
   }
 
   private async presentAlertConfirm(title: string, message: string) {

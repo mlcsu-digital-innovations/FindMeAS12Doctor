@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
+import { AmhpAssessmentViewPage } from './amhp-assessment-view.page';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-
-import { AmhpAssessmentViewPage } from './amhp-assessment-view.page';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { UserContactModalPage } from '../user-contact-modal/user-contact-modal.page';
 
 const routes: Routes = [
   {
@@ -23,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AmhpAssessmentViewPage]
+  declarations: [AmhpAssessmentViewPage, UserContactModalPage],
+  entryComponents: [
+    UserContactModalPage
+  ]
 })
 export class AmhpAssessmentViewPageModule {}

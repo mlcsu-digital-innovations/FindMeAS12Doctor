@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <!-- <ion-button (click)="showConfirm()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button> -->
+    </ion-buttons>
+    <ion-title class="toolbar-title">
+      {{userName}}
+    </ion-title>
+    <ion-buttons slot="end">
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+ 
+  <ion-list>
+
+    <ion-list-header>
+      Contact Details  
+    </ion-list-header>
+
+  <ion-item *ngFor="let contact of contacts">
+    <ion-label>
+      <h3 class="bold">{{contact.description}}</h3>
+      <ion-icon name="phone-portrait" class="icon">
+      </ion-icon>
+      <span class="text">{{transformNumber(contact.contactNumber)}}</span>
+    </ion-label>
+    <ion-icon 
+      name="keypad"
+      slot="end"
+      (click)="confirmCallContact(contact.contactNumber)"
+    >
+  </ion-icon>          
+  </ion-item>
+
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-tab-bar>
+    <ion-tab-button 
+      (click)="closeModal()"
+    >
+      <ion-icon color="primary" name="close-circle-outline"></ion-icon>
+      <ion-label color="primary">Cancel</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
