@@ -199,7 +199,9 @@ namespace Fmas12d.Business.Services
                 .ThenInclude(u => u.UserSpecialities)
                   .ThenInclude(us => us.Speciality)
               .Include(u => u.User)
-                .ThenInclude(u => u.Section12ApprovalStatus)                  
+                .ThenInclude(u => u.Section12ApprovalStatus)
+              .Include(u => u.ContactDetail)
+                .ThenInclude(cd => cd.ContactDetailType)                
               .Where(u => u.Start <= requiredDateTime)
               .Where(u => u.End >= requiredDateTime)
               .Where(u => u.User.ProfileTypeId == ProfileType.GP ||
@@ -226,6 +228,9 @@ namespace Fmas12d.Business.Services
                     ScheduledTime = da.Assessment.ScheduledTime
                   })
                   .ToList(),
+
+                ContactDetails = entity.User.ContactDetails
+                  .Select(cd => new Models.ContactDetail(cd, false)).ToList(),
 
                 End = entity.End,
                 Location = new Location

@@ -7,6 +7,7 @@ namespace Fmas12d.Business.Models
     public UserAvailabilityDoctor() { }
 
     public IEnumerable<Assessment> ActiveAssessments { get; set; }
+    public IEnumerable<ContactDetail> ContactDetails { get; set; }
     public decimal Distance { get; set; }
     public string GenderName { get; set; }
     public string Name { get; set; }
