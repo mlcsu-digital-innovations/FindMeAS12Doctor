@@ -1,7 +1,7 @@
 import { ApiService } from '../api/api.service';
 import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserDetails } from 'src/app/interfaces/user-details';
 
@@ -11,6 +11,7 @@ import { UserDetails } from 'src/app/interfaces/user-details';
 export class UserDetailsService {
 
   private userDetails: UserDetails;
+  public currentUser: ReplaySubject<UserDetails> = new ReplaySubject<UserDetails>(1);
 
   constructor(
     private apiService: ApiService
@@ -24,6 +25,7 @@ export class UserDetailsService {
     .pipe(
       map((result: UserDetails) => {
         this.userDetails = result;
+        this.currentUser.next(result);
         return result;
       })
     );
