@@ -5,6 +5,7 @@ import { AssessmentSelected } from 'src/app/interfaces/assessment-selected';
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ContactDetailModalComponent } from 'src/app/templates/contact-detail-modal/contact-detail.modal.component';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { of, Observable } from 'rxjs';
@@ -27,6 +28,7 @@ export class DoctorAllocateComponent implements OnInit {
   assessmentId: number;
   cancelModal: NgbModalRef;
   confirmModal: NgbModalRef;
+  contactDetailsModal: NgbModalRef;
   doctorForm: FormGroup;
   isSavingAllocation: boolean;
   isSchedulingAssessment: boolean;
@@ -146,6 +148,17 @@ export class DoctorAllocateComponent implements OnInit {
       this.confirmSelectionTemplate,
       { size: 'lg' }
     );
+  }
+
+  DisplayDoctorContactDetails(doctor: AvailableDoctor) {
+    this.contactDetailsModal =
+      this.modalService.open(ContactDetailModalComponent,
+        {
+          size: 'sm'
+        }
+      );
+
+    this.contactDetailsModal.componentInstance.contact = doctor;
   }
 
   OnAllocationAction(confirmation: AllocationConfirmation) {

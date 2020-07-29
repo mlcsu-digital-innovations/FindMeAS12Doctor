@@ -587,6 +587,9 @@ namespace Fmas12d.Business.Services
                 .Include(e => e.Doctors)
                   .ThenInclude(d => d.DoctorUser)
                     .ThenInclude(u => u.UserSpecialities)
+                .Include(e => e.Doctors)
+                  .ThenInclude(d => d.DoctorUser)
+                    .ThenInclude(du => du.ContactDetails)
                 .Include(e => e.Referral)
                   .ThenInclude(r => r.Patient)
                 .Include(e => e.PreferredDoctorGenderType)
@@ -605,6 +608,8 @@ namespace Fmas12d.Business.Services
                   {
                     DoctorUser = new User()
                     {
+                      ContactDetails = d.DoctorUser.ContactDetails
+                                        .Select(cd => new ContactDetail(cd, false)).ToList(),
                       DisplayName = d.DoctorUser.DisplayName,
                       GenderType = new GenderType()
                       {

@@ -13,6 +13,8 @@ namespace Fmas12d.Api.ViewModels
     {
       if (model == null) return;
 
+      ContactDetails = model.DoctorUser?.ContactDetails.Select(cd => new ContactDetail(cd)).ToList();
+
       Distance = model.Distance;
       GenderName = model.DoctorUser?.GenderName;
       HasAccepted = model.HasAccepted ?? false;
@@ -23,6 +25,8 @@ namespace Fmas12d.Api.ViewModels
       SpecialityNames = model.DoctorUser?.UserSpecialities.Select(us => us.Speciality.Name).ToList();
       Type = model.DoctorUser?.ProfileType?.Name;
     }    
+
+    public IEnumerable<ContactDetail> ContactDetails { get; set; }
 
     public decimal? Distance { get; set; }
     public bool HasAccepted { get; set; }

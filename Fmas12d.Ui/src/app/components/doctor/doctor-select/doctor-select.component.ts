@@ -4,6 +4,7 @@ import { AssessmentAvailability } from 'src/app/interfaces/assessment-availabili
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { AvailableDoctor } from 'src/app/interfaces/available-doctor';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ContactDetailModalComponent } from 'src/app/templates/contact-detail-modal/contact-detail.modal.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +12,6 @@ import { Observable, of } from 'rxjs';
 import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { ContactDetailModalComponent } from 'src/app/templates/contact-detail-modal/contact-detail.modal.component';
 
 @Component({
   selector: 'app-doctor-select',
