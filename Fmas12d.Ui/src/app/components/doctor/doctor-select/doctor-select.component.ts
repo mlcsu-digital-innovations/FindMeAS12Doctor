@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 import { RouterService } from 'src/app/services/router/router.service';
 import { switchMap, catchError } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { ContactDetailModalComponent } from 'src/app/templates/contact-detail-modal/contact-detail.modal.component';
 
 @Component({
   selector: 'app-doctor-select',
@@ -24,6 +25,7 @@ export class DoctorSelectComponent implements OnInit {
   assessmentId: number;
   availableDoctors: AvailableDoctor[];
   cancelModal: NgbModalRef;
+  contactDetailsModal: NgbModalRef;
   collectionSize: number;
   doctorForm: FormGroup;
   filteredDoctorList: AvailableDoctor[];
@@ -37,7 +39,6 @@ export class DoctorSelectComponent implements OnInit {
   referralId: number;
   selectDoctor: FormGroup;
   selectedDoctors: AvailableDoctor[] = [];
-
 
   @ViewChild('cancelSelection', null) cancelSelectionTemplate;
 
@@ -106,6 +107,17 @@ export class DoctorSelectComponent implements OnInit {
     } else {
       this.routerService.navigate([`assessment/edit/${this.referralId}`]);
     }
+  }
+
+  DisplayDoctorContactDetails(doctor: AvailableDoctor) {
+    this.contactDetailsModal =
+      this.modalService.open(ContactDetailModalComponent,
+        {
+          size: 'sm'
+        }
+      );
+
+    this.contactDetailsModal.componentInstance.contact = doctor;
   }
 
   DisplayDoctorsWithinSearchRadius(searchRadius: number) {
