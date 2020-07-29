@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SecurityService } from 'src/app/services/security/security.service';
 import { User } from 'src/app/interfaces/user.js';
-import { UserDetailsService } from 'src/app/services/user/user-details.service.js';
+import { UserDetailsService } from 'src/app/services/user/user-details.service';
 import { version } from '../../../../package.json';
 
 @Component({
