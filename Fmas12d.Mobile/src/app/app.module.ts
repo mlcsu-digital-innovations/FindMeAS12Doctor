@@ -1,6 +1,7 @@
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 import { ComponentsModule } from './components/components.module';
 import { environment, ProtectedResourceMap } from 'src/environments/environment';
 import { FCM } from '@ionic-native/fcm/ngx';
@@ -42,6 +43,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
     })
   ],
   providers: [
+    CallNumber,
     Geolocation,
     Network,
     StatusBar,

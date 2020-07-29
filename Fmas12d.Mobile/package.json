@@ -29,6 +29,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@azure/msal-angular": "^0.1.4",
+    "@ionic-native/call-number": "^5.27.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/fcm": "^5.21.2",
     "@ionic-native/geolocation": "^5.17.1",
@@ -39,6 +40,7 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^4.7.1",
     "@ionic/storage": "^2.2.0",
+    "call-number": "^1.0.1",
     "cordova": "^9.0.0",
     "cordova-android": "^8.1.0",
     "cordova-plugin-androidx": "^2.0.0",
@@ -121,7 +123,8 @@
         "TENANT_ID": "f47807cf-afbc-4184-a579-8678bea3019a",
         "CLIENT_ID": "9a667831-799d-4a8a-bce2-c168424cdabe"
       },
-      "cordova-plugin-pin-dialog": {}
+      "cordova-plugin-pin-dialog": {},
+      "mx.ferreyra.callnumber": {}
     },
     "platforms": [
       "android"

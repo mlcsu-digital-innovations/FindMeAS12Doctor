@@ -1,10 +1,11 @@
-import { DoctorAssessmentDetailsPage } from './doctor-assessment-details.page';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { DoctorAssessmentDetailsPage } from './doctor-assessment-details.page';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { SharedModule } from '../shared.module';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
     ComponentsModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule
   ],
   declarations: [DoctorAssessmentDetailsPage]
 })

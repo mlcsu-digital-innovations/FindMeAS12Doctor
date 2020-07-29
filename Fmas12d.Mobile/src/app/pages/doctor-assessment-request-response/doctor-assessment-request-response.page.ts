@@ -3,9 +3,10 @@ import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-ass
 import { AmhpAssessmentView } from 'src/app/models/amhp-assessment-view.model';
 import { AssessmentRequestDetails } from 'src/app/models/assessment-request-details.model';
 import { AssessmentSelectedDoctor } from 'src/app/models/assessment-selected-doctor.model';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Component, OnInit } from '@angular/core';
 import { KnownLocation } from 'src/app/models/known-location.model';
-import { LoadingController, ToastController, NavController } from '@ionic/angular';
+import { LoadingController, ToastController, NavController, AlertController } from '@ionic/angular';
 import { UserDetails } from 'src/app/interfaces/user-details';
 import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 
@@ -16,7 +17,6 @@ import { UserDetailsService } from 'src/app/services/user-details/user-details.s
 })
 export class DoctorAssessmentRequestResponsePage implements OnInit {
 
-  
   public alreadyAllocated: boolean;
   private assessmentId: number;
   public assessmentRequest: AssessmentRequestDetails;
@@ -25,7 +25,9 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
   private userDetails: UserDetails;
 
   constructor(
+    private alertController: AlertController,
     private assessmentService: AmhpAssessmentService,
+    private callNumber: CallNumber,
     private loadingController: LoadingController,
     private navController: NavController,
     private route: ActivatedRoute,
@@ -55,6 +57,7 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
           this.assessmentRequest.id = result.id;
           this.assessmentRequest.detailTypes = result.detailTypes;
           this.assessmentRequest.amhpUserName = result.amhpUserName;
+          this.assessmentRequest.amhpUserContact = result.amhpUserContact;
           this.assessmentRequest.isPlanned = result.isPlanned;
 
           // user could be allocated OR selected
@@ -100,14 +103,46 @@ export class DoctorAssessmentRequestResponsePage implements OnInit {
       assessment: this.assessmentRequest
       }
     };
-
     this.router.navigate(['/doctor-assessment-accept-request'], navigationExtras);
+  }
+
+  callContact(contactNumber: string) {
+
+    if (!isNaN(+contactNumber)) {
+      this.callNumber.callNumber(contactNumber, true)
+      .then(res => console.log('launched dialler', res))
+      .catch(err => this.showErrorToast('Unable to launch dialler'));
+    }
   }
 
   closeLoading() {
     if (this.loading) {
       setTimeout(() => { this.loading.dismiss(); }, 500);
     }
+  }
+
+  public async confirmCallContact(contactNumber: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirm Call',
+      message: `Call ${this.assessmentRequest.amhpUserName} ?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Call',
+          handler: () => {
+            this.callContact(contactNumber);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   declineRequest() {

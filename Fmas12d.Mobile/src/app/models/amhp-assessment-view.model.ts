@@ -7,6 +7,7 @@ export class AmhpAssessmentView {
   address2: string;
   address3: string;
   address4: string;
+  amhpUserContact: string;
   amhpUserName: string;
   canUpdateOutcome: boolean;
   dateTime: Date;

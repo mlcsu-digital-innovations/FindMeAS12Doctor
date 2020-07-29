@@ -517,6 +517,7 @@ namespace Fmas12d.Business.Services
       Entities.Assessment entity = await
         _context.Assessments
                 .Include(e => e.AmhpUser)
+                  .ThenInclude(a => a.ContactDetails)
                 .Include(e => e.CompletedByUser)
                 .Include(e => e.CreatedByUser)
                 .Include(e => e.Details)
