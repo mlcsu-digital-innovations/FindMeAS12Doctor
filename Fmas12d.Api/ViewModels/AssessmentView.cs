@@ -17,7 +17,12 @@ namespace Fmas12d.Api.ViewModels
       Address3 = model.Address3;
       Address4 = model.Address4;
       AmhpUserName = model.AmhpUser?.DisplayName;
-      AmhpUserContact = model.AmhpUser?.ContactDetails?[0].MobileNumber;
+
+      AmhpUserContact =
+        model.AmhpUser?.ContactDetails?.Count > 0
+          ? model.AmhpUser?.ContactDetails[0].MobileNumber
+          : null;
+
       CanUpdateOutcome = 
         model.IsSuccessful == null && 
         model.Referral?.ReferralStatusId == Business.Models.ReferralStatus.ASSESSMENT_SCHEDULED;
