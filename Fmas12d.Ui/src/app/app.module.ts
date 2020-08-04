@@ -21,6 +21,7 @@ import { RouterModule } from '@angular/router';
 import { RouterService } from './services/router/router.service';
 import { UserProfileModule } from './components/user-profile/user-profile.module';
 import { SecurityService } from './services/security/security.service';
+import { OidcConfiguration } from './interfaces/oidcConfiguration';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   // https://login.microsoftonline.com/damienbod.onmicrosoft.com/.well-known/openid-configuration
@@ -78,7 +79,7 @@ export class AppModule {
   ) {
     this.oidcConfigService.onConfigurationLoaded.subscribe((configResult: ConfigResult) => {
 
-      const config: OpenIdConfiguration = {
+      const config: OidcConfiguration = {
         auto_userinfo: false,
         client_id: "9a667831-799d-4a8a-bce2-c168424cdabe",
         forbidden_route: "/forbidden",
