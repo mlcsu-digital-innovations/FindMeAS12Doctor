@@ -98,6 +98,9 @@ export class AppModule {
         stsServer: 'https://login.microsoftonline.com/f47807cf-afbc-4184-a579-8678bea3019a/',
         trigger_authorization_result_event: true,
         unauthorized_route: '/unauthorized',
+        extraQueryParams: {
+          resource: 'api://9a667831-799d-4a8a-bce2-c168424cdabe'
+        }
       };
 
       this.oidcSecurityService.setupModule(config, configResult.authWellknownEndpoints);
