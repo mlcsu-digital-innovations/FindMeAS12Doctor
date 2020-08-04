@@ -79,20 +79,20 @@ export class AppModule {
   ) {
     this.oidcConfigService.onConfigurationLoaded.subscribe((configResult: ConfigResult) => {
 
-      const config: OidcConfiguration = {
+      const config: OpenIdConfiguration = {
         auto_userinfo: false,
-        client_id: "9a667831-799d-4a8a-bce2-c168424cdabe",
-        forbidden_route: "/forbidden",
+        client_id: '9a667831-799d-4a8a-bce2-c168424cdabe',
+        forbidden_route: '/forbidden',
         history_cleanup_off: true,
         iss_validation_off: true,
         log_console_debug_active: false, // !environment.production,
         log_console_warning_active: !environment.production,
         max_id_token_iat_offset_allowed_in_seconds: 1000,
         post_login_route: '/welcome',
-        post_logout_redirect_uri: "https://www.digitalinnovationwm.nhs.uk/",
+        post_logout_redirect_uri: 'https://www.digitalinnovationwm.nhs.uk/',
         redirect_url: environment.oidc_redirect_url,
-        response_type: "id_token token",
-        scope: "openid profile email https://graph.microsoft.com/User.Read",
+        response_type: 'id_token token',
+        scope: 'openid profile email https://graph.microsoft.com/User.Read',
         silent_renew: true,
         silent_renew_url: `${environment.oidc_redirect_url}silent-renew.html`,
         start_checksession: true,
