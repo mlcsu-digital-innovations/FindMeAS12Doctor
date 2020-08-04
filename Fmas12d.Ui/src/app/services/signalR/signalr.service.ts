@@ -22,6 +22,7 @@ export class SignalRService {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
       })
+      .configureLogging(signalR.LogLevel.Debug)
       .build();
 
     this.hubConnection

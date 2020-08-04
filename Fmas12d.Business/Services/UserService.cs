@@ -8,17 +8,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Graph = Microsoft.Graph;
+
 namespace Fmas12d.Business.Services
 {
+
+
   public class UserService :
     ServiceBase<Entities.User>,
     IUserService
   {
+    protected readonly IGraphClientService _clientService;
+
     public UserService(
       ApplicationContext context,
-      IUserClaimsService userClaimsService)
+      IUserClaimsService userClaimsService,
+      IGraphClientService graphClientService)
       : base(context, userClaimsService)
     {
+      _clientService = graphClientService;
     }
 
     public async Task<User> CreateAsync(User model)
@@ -342,6 +350,22 @@ namespace Fmas12d.Business.Services
       return user;
     }
 
+    public async Task<string> InviteUserToGroup(
+      string UserEmailAddress
+    )
+    {
+      var graphClient = await _clientService.GetGraphServiceClient();
+
+      var invitation = new Graph.Invitation{
+        InvitedUserEmailAddress = UserEmailAddress,
+        InviteRedirectUrl = "https://www.google.com"
+      };
+
+      var invite = await graphClient.Invitations.Request().AddAsync(invitation);
+
+      return invite.Id;
+
+    }
 
     private async Task<IEnumerable<User>> GetAllByNameAndProfileTypeIdAsync(
       string name,

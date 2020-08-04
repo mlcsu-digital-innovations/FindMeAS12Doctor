@@ -47,5 +47,7 @@ namespace Fmas12d.Business.Services
     Task<User> UpdateAsync(IUserProfileUpdate model);
 
     Task<User> UpdateVsrNumberAsync(VsrNumberUpdate model);
+
+    Task<string> InviteUserToGroup(string UserEmailAddress);
   }
 }

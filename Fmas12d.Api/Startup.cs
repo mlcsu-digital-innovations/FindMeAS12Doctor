@@ -189,6 +189,8 @@ namespace Fmas12d.Api
       services.AddScoped<IFinanceAssessmentClaimService, FinanceAssessmentClaimService>();
       services.AddScoped<IDistanceCalculationService, DistanceCalculationService>();
 
+      services.AddScoped<IGraphClientService, MicrosoftGraphClient>();
+
       services.AddHttpContextAccessor();
 
       services.AddCors(options =>
@@ -230,7 +232,8 @@ namespace Fmas12d.Api
       app.UseRouting();
       app.UseUserClaims();
       app.UseMiddleware<RequestResponseLoggingMiddleware>();
-      app.UseAuthorization();            
+      app.UseAuthorization();
+
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
