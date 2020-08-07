@@ -4,6 +4,7 @@ import { SecurityService } from 'src/app/services/security/security.service';
 import { User } from 'src/app/interfaces/user.js';
 import { UserDetailsService } from 'src/app/services/user/user-details.service';
 import { version } from '../../../../package.json';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -23,15 +24,28 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.isAuthorized$ = this.securityService.getIsAuthorized();
+
     this.user$ = this.userDetailsService.getCurrentUserDetails();
-    this.user$.subscribe((user: User) => {
-      if (user.isDoctor) {
-        this.homePageLink = '/doctor/claims/list';
-      } else if (user.isFinance) {
-        this.homePageLink = '/finance/claims/list';
-      } else {
-        this.homePageLink = '/referral/list';
+
+    this.isAuthorized$.subscribe( (isAuthorised) => {
+      console.log('subscribed ', isAuthorised);
+
+      if (isAuthorised) {
+
+        console.log('user authorised - fetch details ....');
+
+        this.user$.subscribe((user: User) => {
+          console.log('navbar - user details - ', user);
+          if (user.isDoctor) {
+            this.homePageLink = '/doctor/claims/list';
+          } else if (user.isFinance) {
+            this.homePageLink = '/finance/claims/list';
+          } else {
+            this.homePageLink = '/referral/list';
+          }
+        });
       }
     });
   }
