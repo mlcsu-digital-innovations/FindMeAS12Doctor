@@ -117,3 +117,7 @@ a:visited {
 .account-name {
   text-align: center;
 }
+
+.row {
+  display: block;
+}
