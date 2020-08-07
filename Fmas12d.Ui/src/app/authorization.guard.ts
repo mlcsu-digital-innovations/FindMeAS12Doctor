@@ -18,24 +18,25 @@ export class AuthorizationGuard implements CanActivate, CanLoad {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.checkUser();
+    // return this.checkUser();
 
 
-    // console.log('auth guard: canActivate');
-    // return this.oidcSecurityService.isAuthenticated$
-    //   .pipe(
-    //     map((isAuthorized: boolean) => {
-    //       console.log('AuthorizationGuard, canActivate isAuthorized:' + isAuthorized );
+    console.log('auth guard: canActivate');
+    console.log('route - ', route);
+    return this.oidcSecurityService.isAuthenticated$
+      .pipe(
+        map((isAuthorized: boolean) => {
+          console.log('AuthorizationGuard, canActivate isAuthorized:' + isAuthorized );
 
-    //       if (!isAuthorized) {
-    //         console.log('UNAUTHORIZED !!!!');
-    //         this.routerService.navigate(['/unauthorized']);
-    //         return false;
-    //       }
+          if (!isAuthorized) {
+            console.log('UNAUTHORIZED !!!!');
+            this.routerService.navigate(['/unauthorized']);
+            return false;
+          }
 
-    //       return true;
-    //     })
-    //   );
+          return true;
+        })
+      );
 
   }
 

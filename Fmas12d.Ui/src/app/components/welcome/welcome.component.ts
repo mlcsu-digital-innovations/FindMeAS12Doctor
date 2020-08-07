@@ -38,6 +38,7 @@ export class WelcomeComponent implements OnInit {
             this.userData = userData;
             if (this.userData !== null) {
               this.userData.access_token = this.oidcSecurityService.getToken();
+              console.log(this.userData.access_token);
               if (!this.isDevelopment) {
                this.routerService.navigate(['/referral/list']);
               }
