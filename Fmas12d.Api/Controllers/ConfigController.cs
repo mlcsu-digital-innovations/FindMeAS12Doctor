@@ -111,6 +111,23 @@ namespace Mep.Api.Controllers
       config.StsServer = $"{protocol}{Request.Host.ToUriComponent()}{apiPath}/config";
       config.Env = _env.EnvironmentName;
 
+      // new config
+      config.StsServer = _configuration["oidc.issuer"];
+      config.Redirect_url = _configuration["oidc.redirect_url"];
+      config.Client_id = _configuration["oidc.resource"];
+      config.Response_type = "id_token token";
+      config.Scope = _configuration["oidc.scope"];
+      config.Post_logout_redirect_uri = "https://www.digitalinnovationwm.nhs.uk/";
+      config.Start_checksession = true;
+      config.Silent_renew = true;
+      config.Post_login_route = "";
+      config.Forbidden_route = "/forbidden";
+      config.Unauthorized_route = "/unauthorized";
+      config.Auto_userinfo = false;
+      config.Max_id_token_iat_offset_allowed_in_seconds = 1000;
+      config.Additional_login_parameters.Add("response_mode", "fragment");
+      
+
       return config;
     }
   }

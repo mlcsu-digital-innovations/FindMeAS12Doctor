@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { RouterService } from 'src/app/services/router/router.service';
 import { Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-welcome',
@@ -11,11 +12,11 @@ import { environment } from 'src/environments/environment';
 })
 export class WelcomeComponent implements OnInit {
 
-  isAuthorizedSubscription: Subscription;
   isAuthorized: boolean;
+  isAuthorizedSubscription: Subscription;
   isDevelopment: boolean;
-  userDataSubscription: Subscription;
   userData: any;
+  userDataSubscription: Subscription;
 
   constructor(
     private oidcSecurityService: OidcSecurityService,
@@ -25,26 +26,26 @@ export class WelcomeComponent implements OnInit {
 
     this.isDevelopment = !environment.production;
 
-    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized().subscribe(      
+    this.oidcSecurityService.isAuthenticated$
+    .pipe(
+      map(
       (isAuthorized: boolean) => {
 
         this.isAuthorized = isAuthorized;
-        this.userDataSubscription = this.oidcSecurityService.getUserData().subscribe(userData => {
-          this.userData = userData;
-          if (this.userData !== '') {
-            this.userData.access_token = this.oidcSecurityService.getToken();
-            if (!this.isDevelopment) {
-             this.routerService.navigate(['/referral/list']);
+
+        if (isAuthorized) {
+          this.userDataSubscription = this.oidcSecurityService.userData$.subscribe(userData => {
+            this.userData = userData;
+            if (this.userData !== null) {
+              this.userData.access_token = this.oidcSecurityService.getToken();
+              if (!this.isDevelopment) {
+               this.routerService.navigate(['/referral/list']);
+              }
             }
-          }
-        });
+          });
+        }
       }
-    );
-
-  }
-
-  ngOnDestroy() {
-    this.userDataSubscription.unsubscribe();
+    ));
   }
 
   copyToken() {
@@ -54,9 +55,4 @@ export class WelcomeComponent implements OnInit {
   gotoReferralList() {
     this.routerService.navigate(['/referral/list']);
   }
-
-  login() {
-    this.oidcSecurityService.authorize();
-  }
-
 }

@@ -17,10 +17,11 @@ export class AppComponent implements OnInit {
   constructor(
     private signalRService: SignalRService,
     private toastService: ToastService,
-    private userDetails: UserDetailsService
+    private userDetails: UserDetailsService,
   ) { }
 
   ngOnInit() {
+
     this.signalRService.startConnection();
 
     this.signalRService.notification
