@@ -45,6 +45,8 @@ export class NavbarComponent implements OnInit {
           } else {
             this.homePageLink = '/referral/list';
           }
+        }, (err) => {
+          console.log('Error fetching user - ', err);
         });
       }
     });
