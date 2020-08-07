@@ -11,7 +11,7 @@ import { DoctorModule } from './components/doctor/doctor.module';
 import { FinanceModule } from './components/finance/finance.module';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { oidcConfig } from 'src/environments/environment';
+import { oidcConfig, environment } from 'src/environments/environment';
 import { OnCallDoctorModule } from './components/on-call-doctor/on-call-doctor.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { PatientModule } from './components/patient/patient.module';
@@ -19,11 +19,23 @@ import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { SecurityService } from './services/security/security.service';
 import { UserProfileModule } from './components/user-profile/user-profile.module';
+import { map, switchMap } from 'rxjs/operators';
 
 export function loadConfig(oidcConfigService: OidcConfigService, httpClient: HttpClient) {
-  return () => {
-    oidcConfigService.withConfig(oidcConfig);
-    };
+
+  const setupAction$ = httpClient.get<any>(`${oidcConfig.stsServer}/.well-known/openid-configuration`)
+    .pipe(
+      map(() => {
+      return oidcConfig;
+    }),
+    switchMap((config) => oidcConfigService.withConfig(config))
+    );
+
+  return () => setupAction$.toPromise();
+
+  // return () => {
+  //   oidcConfigService.withConfig(oidcConfig);
+  //   };
 }
 
 @NgModule({
