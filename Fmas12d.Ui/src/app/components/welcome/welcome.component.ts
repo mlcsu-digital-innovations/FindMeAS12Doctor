@@ -39,7 +39,8 @@ export class WelcomeComponent implements OnInit {
             if (this.userData !== null) {
               this.userData.access_token = this.oidcSecurityService.getToken();
               if (!this.isDevelopment) {
-               this.routerService.navigate(['/referral/list']);
+                console.log('welcome:ngOnInit:Redirect to home page');
+                this.routerService.navigate(['/referral/list']);
               }
             }
           });
@@ -53,6 +54,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   gotoReferralList() {
+    console.log('welcome:gotoReferralList:Redirect to home page');
     this.routerService.navigate(['/referral/list']);
   }
 }
