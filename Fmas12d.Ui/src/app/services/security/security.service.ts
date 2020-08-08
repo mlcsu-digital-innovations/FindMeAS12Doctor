@@ -44,7 +44,7 @@ export class SecurityService {
       .pipe(filter((notification) => notification.type === EventTypes.UserDataChanged))
       .subscribe((value) => {
         console.log('UserDataChanged with value from app', value);
-        this.onUserDataChangeComplete();
+        // this.onUserDataChangeComplete();
       });
 
       this.eventService
@@ -86,9 +86,6 @@ export class SecurityService {
 
   private onUserDataChangeComplete() {
     this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
-
-      console.log('security:onUserDataChangeComplete:Redirect to home page');
-
       if (user.isDoctor) {
         this.router.navigate(['/doctor/claims/list']);
       } else if (user.isFinance) {
