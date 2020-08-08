@@ -105,9 +105,6 @@ export class SecurityService {
       if (path === '/') {
 
         this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
-
-          console.log('security:onAuthorizationResultComplete:Redirect to home page');
-
           if (user.isDoctor) {
             this.router.navigate(['/doctor/claims/list']);
           } else if (user.isFinance) {
