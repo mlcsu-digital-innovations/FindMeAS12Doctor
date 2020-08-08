@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ContactDetailProfile } from 'src/app/interfaces/contact-detail-profile';
+import { environment } from 'src/environments/environment';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
 import { NameIdListService } from 'src/app/services/name-id-list/name-id-list.service';
 import { PostcodeRegex } from 'src/app/constants/Constants';
 import { PostcodeValidationService } from 'src/app/services/postcode-validation/postcode-validation.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user-contact-detail-modal',
@@ -21,7 +21,7 @@ export class UserContactDetailModalComponent implements OnInit {
   addressList: string[];
   contactDetailForm: FormGroup;
   contactDetailTypes: NameIdList[];
-  isSearchingForPostcode: boolean;  
+  isSearchingForPostcode: boolean;
   submitted: boolean;
 
   constructor(
@@ -31,11 +31,11 @@ export class UserContactDetailModalComponent implements OnInit {
     private toastService: ToastService
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.addressList = [];
 
     this.contactDetailForm = this.formBuilder.group({
-      address: ['', [Validators.required, this.AddressSelected]],      
+      address: ['', [Validators.required, this.AddressSelected]],
       contactDetailTypeId: [
         '1',
         Validators.required
@@ -46,16 +46,16 @@ export class UserContactDetailModalComponent implements OnInit {
       mobileNumber: [''],
       postcode: [
         '',
-        [       
+        [
           Validators.required,
-          Validators.minLength(6),        
+          Validators.minLength(6),
           Validators.maxLength(8),
           Validators.pattern(`${PostcodeRegex}$`)
         ]
-      ],      
+      ],
       telephoneNumber: ['']
     });
-  
+
     this.nameIdListService.GetListData('contactdetailtype')
       .subscribe((contactDetailTypeList: NameIdList[]) => {
         this.contactDetailTypes = contactDetailTypeList;
@@ -66,36 +66,34 @@ export class UserContactDetailModalComponent implements OnInit {
             this.contactDetail = this.contactDetails
               .find(item => item.contactDetailTypeId === this.contactDetail.contactDetailTypeId);
           }
-          
-          this.contactDetailForm.patchValue(this.contactDetail);  
-          let currentAddress: string = `${this.contactDetail.address1 ? this.contactDetail.address1 : ''}${this.contactDetail.address1 && this.contactDetail.address2 ? ', ' : ''}${this.contactDetail.address2 ? this.contactDetail.address2 : ''}${this.contactDetail.address2 && this.contactDetail.address3 ? ', ' : ''}${this.contactDetail.address3 ? this.contactDetail.address3 : ''}`
+
+          this.contactDetailForm.patchValue(this.contactDetail);
+          const currentAddress: string = `${this.contactDetail.address1 ? this.contactDetail.address1 : ''}${this.contactDetail.address1 && this.contactDetail.address2 ? ', ' : ''}${this.contactDetail.address2 ? this.contactDetail.address2 : ''}${this.contactDetail.address2 && this.contactDetail.address3 ? ', ' : ''}${this.contactDetail.address3 ? this.contactDetail.address3 : ''}`
           if (currentAddress.length > 0) {
-            this.addressList.push(currentAddress); 
+            this.addressList.push(currentAddress);
             this.controls.address.setValue(currentAddress);
-            this.controls.address.disable();      
+            this.controls.address.disable();
           }
-          
-        }
-        else if (this.contactDetails && this.contactDetails.length === 1) {
-          let remainingContactDetailTypeId: number = this.contactDetailTypes
-            .find(item => item.id != this.contactDetails[0].contactDetailTypeId).id;
+        } else if (this.contactDetails && this.contactDetails.length === 1) {
+          const remainingContactDetailTypeId: number = this.contactDetailTypes
+            .find(item => item.id !== this.contactDetails[0].contactDetailTypeId).id;
           this.contactDetailTypes = this.contactDetailTypes
-            .filter(item => item.id == remainingContactDetailTypeId);
-          this.controls.contactDetailTypeId.setValue(remainingContactDetailTypeId);            
+            .filter(item => item.id === remainingContactDetailTypeId);
+          this.controls.contactDetailTypeId.setValue(remainingContactDetailTypeId);
         }
       });
   }
 
   get controls() {
     return this.contactDetailForm.controls;
-  }  
+  }
 
-  ClearAddress() {    
+  ClearAddress() {
     this.controls.latitude.setValue(null);
-    this.controls.longitude.setValue(null);    
+    this.controls.longitude.setValue(null);
     if (this.controls.postcode.value.length > 0) {
       this.controls.postcode.setErrors({ NoAddresses: true });
-    }     
+    }
   }
 
   FormatAddress(): string[] {
@@ -114,11 +112,10 @@ export class UserContactDetailModalComponent implements OnInit {
     return addressLines;
   }
 
-  AddressSelected(control: AbstractControl) {       
+  AddressSelected(control: AbstractControl) {
     if (!control.value || control.value === 'Please Select Address') {
       return { SelectAddress: true };
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -131,9 +128,9 @@ export class UserContactDetailModalComponent implements OnInit {
       postcode = `${outwardCode} ${inwardCode}`;
     }
     this.controls.postcode.setValue(postcode);
-  }  
+  }
 
-  AddressSearch(): void {    
+  AddressSearch(): void {
     this.addressList = ['Please Select Address'];
     this.controls.address.setValue('Please Select Address');
     this.isSearchingForPostcode = true;
@@ -141,14 +138,13 @@ export class UserContactDetailModalComponent implements OnInit {
     this.FormatPostcode();
 
     this.postcodeValidationService.searchPostcode(this.controls.postcode.value)
-      .subscribe((postcodeDetails: any) => {   
-        console.log(postcodeDetails);
-        this.addressList = this.addressList.concat(postcodeDetails.addresses);          
+      .subscribe((postcodeDetails: any) => {
+        this.addressList = this.addressList.concat(postcodeDetails.addresses);
         this.isSearchingForPostcode = false;
         this.controls.latitude.setValue(postcodeDetails.latitude);
         this.controls.longitude.setValue(postcodeDetails.longitude);
         this.controls.postcode.setErrors(null);
-        this.toastService.displaySuccess({          
+        this.toastService.displaySuccess({
           message: 'Postcode is valid'
         });
       }, (error) => {
@@ -159,13 +155,12 @@ export class UserContactDetailModalComponent implements OnInit {
         this.toastService.displayError({
           title: 'Search Error',
           message: 'Error Retrieving Address Information'
-        })
+        });
       }, () => {
-        this.isSearchingForPostcode = false;        
+        this.isSearchingForPostcode = false;
         if (this.addressList.length > 0) {
           this.controls.address.enable();
-        }
-        else {          
+        } else {
           this.controls.postcode.setErrors({ NoResultsReturned: true });
         }
       }
@@ -202,8 +197,8 @@ export class UserContactDetailModalComponent implements OnInit {
       contactDetail.town = formattedAddress[3];
       contactDetail.id = this.contactDetail ? this.contactDetail.id : 0;
       contactDetail.contactDetailTypeName = this.contactDetailTypes
-        .find(item => item.id == contactDetail.contactDetailTypeId).name;
+        .find(item => item.id === contactDetail.contactDetailTypeId).name;
       this.actioned.emit(contactDetail);
-    }   
+    }
   }
 }
