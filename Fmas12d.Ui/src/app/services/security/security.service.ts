@@ -42,9 +42,9 @@ export class SecurityService {
     this.eventService
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.UserDataChanged))
-      .subscribe((value) => {
-        console.log('UserDataChanged with value from app', value);
-        // this.onUserDataChangeComplete();
+      .subscribe((result) => {
+        console.log('UserDataChanged with value from app', result);
+        this.onUserDataChangeComplete(result.value);
       });
 
     this.eventService
