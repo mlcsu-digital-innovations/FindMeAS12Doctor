@@ -15,8 +15,8 @@ export class SecurityService {
     private eventService: PublicEventsService,
     private router: Router,
     private userDetailsService: UserDetailsService
-    ) {
-      this.oidcSecurityService.checkAuth()
+  ) {
+    this.oidcSecurityService.checkAuth()
       .subscribe((isAuthenticated) => {
 
         if (!isAuthenticated) {
@@ -31,7 +31,7 @@ export class SecurityService {
         }
       });
 
-      this.eventService
+    this.eventService
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.NewAuthorizationResult))
       .subscribe((result) => {
@@ -39,7 +39,7 @@ export class SecurityService {
         this.onAuthorizationResultComplete(result.value);
       });
 
-      this.eventService
+    this.eventService
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.UserDataChanged))
       .subscribe((value) => {
@@ -47,7 +47,7 @@ export class SecurityService {
         // this.onUserDataChangeComplete();
       });
 
-      this.eventService
+    this.eventService
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.ConfigLoaded))
       .subscribe((value) => {
@@ -84,18 +84,29 @@ export class SecurityService {
     this.router.navigate(['/signout']);
   }
 
-  private onUserDataChangeComplete() {
-    this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
-      if (user.isDoctor) {
-        this.router.navigate(['/doctor/claims/list']);
-      } else if (user.isFinance) {
-        this.router.navigate(['/finance/claims/list']);
-      } else {
-        this.router.navigate(['/referral/list']);
-      }
-    });
-  }
+  private onUserDataChangeComplete(authorizationResult: AuthorizationResult) {
 
+    const path = this.read('redirect');
+
+    if (authorizationResult.authorizationState === AuthorizedState.Authorized) {
+      if (path === '/') {
+
+        this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+          if (user.isDoctor) {
+            this.router.navigate(['/doctor/claims/list']);
+          } else if (user.isFinance) {
+            this.router.navigate(['/finance/claims/list']);
+          } else {
+            this.router.navigate(['/referral/list']);
+          }
+        });
+      } else if (path) {
+        this.router.navigate([path]);
+      }
+    } else {
+      this.router.navigate(['/unauthorized']);
+    }
+  }
 
   private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
 
