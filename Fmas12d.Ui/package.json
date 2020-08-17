@@ -13,7 +13,8 @@
     "test-headless": "del-cli .testing && ng test --code-coverage --karma-config ./src/karma-headless.conf.js",
     "test-vsts": "del-cli .testing && ng test --code-coverage --karma-config ./src/karma-vsts.conf.js",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "ie11local": "ng serve --configuration es5"
   },
   "private": true,
   "dependencies": {
