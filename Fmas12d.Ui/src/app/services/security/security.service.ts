@@ -42,8 +42,8 @@ export class SecurityService {
     this.eventService
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.UserDataChanged))
-      .subscribe((value) => {
-        console.log('UserDataChanged with value from app', value);
+      .subscribe((result) => {
+        console.log('UserDataChanged with value from app', result);
         // this.onUserDataChangeComplete();
       });
 
@@ -85,15 +85,23 @@ export class SecurityService {
   }
 
   private onUserDataChangeComplete() {
-    this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
-      if (user.isDoctor) {
-        this.router.navigate(['/doctor/claims/list']);
-      } else if (user.isFinance) {
-        this.router.navigate(['/finance/claims/list']);
-      } else {
-        this.router.navigate(['/referral/list']);
-      }
-    });
+
+    const path = this.read('redirect');
+
+    if (path === '/') {
+
+      this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+        if (user.isDoctor) {
+          this.router.navigate(['/doctor/claims/list']);
+        } else if (user.isFinance) {
+          this.router.navigate(['/finance/claims/list']);
+        } else {
+          this.router.navigate(['/referral/list']);
+        }
+      });
+    } else if (path) {
+      this.router.navigate([path]);
+    }
   }
 
   private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
