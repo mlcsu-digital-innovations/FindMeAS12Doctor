@@ -1,8 +1,9 @@
+import { EventTypes, OidcSecurityService, PublicEventsService, AuthorizationResult, AuthorizedState } from 'angular-auth-oidc-client';
+import { filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { OidcSecurityService, AuthorizationResult, AuthorizationState } from 'angular-auth-oidc-client';
-import { RouterService } from '../router/router.service';
-import { UserDetailsService } from '../user/user-details.service';
+import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
+import { UserDetailsService } from '../user/user-details.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,26 +12,63 @@ export class SecurityService {
 
   constructor(
     public oidcSecurityService: OidcSecurityService,
-    private routerService: RouterService,
+    private eventService: PublicEventsService,
+    private router: Router,
     private userDetailsService: UserDetailsService
-    ) {
+  ) {
+    this.oidcSecurityService.checkAuth()
+      .subscribe((isAuthenticated) => {
 
-    if (this.oidcSecurityService.moduleSetup) {
-      this.onOidcModuleSetup();
-    } else {
-      this.oidcSecurityService.onModuleSetup.subscribe(() => {
-        this.onOidcModuleSetup();
+        if (!isAuthenticated) {
+          if ('/autologin' !== window.location.pathname) {
+            this.write('redirect', window.location.pathname);
+            this.router.navigate(['/autologin']);
+          }
+        }
+
+        if (isAuthenticated) {
+          this.navigateToStoredEndpoint();
+        }
       });
-    }
 
-    this.oidcSecurityService.onAuthorizationResult.subscribe(
-      (authorizationResult: AuthorizationResult) => {
-        this.onAuthorizationResultComplete(authorizationResult);
+    this.eventService
+      .registerForEvents()
+      .pipe(filter((notification) => notification.type === EventTypes.NewAuthorizationResult))
+      .subscribe((result) => {
+        console.log('NewAuthorizationResult with value from app', result);
+        this.onAuthorizationResultComplete(result.value);
+      });
+
+    this.eventService
+      .registerForEvents()
+      .pipe(filter((notification) => notification.type === EventTypes.UserDataChanged))
+      .subscribe((result) => {
+        console.log('UserDataChanged with value from app', result);
+        // this.onUserDataChangeComplete();
+      });
+
+    this.eventService
+      .registerForEvents()
+      .pipe(filter((notification) => notification.type === EventTypes.ConfigLoaded))
+      .subscribe((value) => {
+        console.log('ConfigLoaded with value from app', value);
       });
   }
 
+  private navigateToStoredEndpoint() {
+    const path = this.read('redirect');
+    if (this.router.url === path) {
+      return;
+    }
+    if (path.toString().includes('/unauthorized')) {
+      this.router.navigate(['/']);
+    } else {
+      this.router.navigate([path]);
+    }
+  }
+
   getIsAuthorized() {
-    return this.oidcSecurityService.getIsAuthorized();
+    return this.oidcSecurityService.isAuthenticated$;
   }
 
   login() {
@@ -43,43 +81,50 @@ export class SecurityService {
 
   logout() {
     this.oidcSecurityService.logoff();
-    this.routerService.navigate(['/signout']);
+    this.router.navigate(['/signout']);
   }
 
-  private onOidcModuleSetup() {
-    if (window.location.hash) {
-      this.oidcSecurityService.authorizedImplicitFlowCallback();
-    } else {
-      if ('/autologin' !== window.location.pathname) {
-        this.write('redirect', window.location.pathname);
-      }
-      this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
-        if (!authorized) {
-          this.routerService.navigate(['/autologin']);
+  private onUserDataChangeComplete() {
+
+    const path = this.read('redirect');
+
+    if (path === '/') {
+
+      this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+        if (user.isDoctor) {
+          this.router.navigate(['/doctor/claims/list']);
+        } else if (user.isFinance) {
+          this.router.navigate(['/finance/claims/list']);
+        } else {
+          this.router.navigate(['/referral/list']);
         }
       });
+    } else if (path) {
+      this.router.navigate([path]);
     }
   }
 
   private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
 
     const path = this.read('redirect');
-    if (authorizationResult.authorizationState === AuthorizationState.authorized) {
+
+    if (authorizationResult.authorizationState === AuthorizedState.Authorized) {
       if (path === '/') {
+
         this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
           if (user.isDoctor) {
-            this.routerService.navigate(['/doctor/claims/list']);
+            this.router.navigate(['/doctor/claims/list']);
           } else if (user.isFinance) {
-            this.routerService.navigate(['/finance/claims/list']);
+            this.router.navigate(['/finance/claims/list']);
           } else {
-            this.routerService.navigate(['/referral/list']);
+            this.router.navigate(['/referral/list']);
           }
         });
       } else if (path) {
-        this.routerService.navigate([path]);
+        this.router.navigate([path]);
       }
     } else {
-      this.routerService.navigate(['/unauthorized']);
+      this.router.navigate(['/unauthorized']);
     }
   }
 
@@ -88,7 +133,6 @@ export class SecurityService {
     if (data != null) {
       return JSON.parse(data);
     }
-
     return;
   }
 

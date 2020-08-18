@@ -148,6 +148,23 @@ namespace Fmas12d.Api.Controllers
       }
     }
 
+    [HttpPost]
+    [Route("invite")]
+    public async Task<ActionResult<ViewModels.UserAvailability>> InviteUser(
+      [FromBody] string InvitedUserEmailAddress
+    )
+    {
+      try
+      {
+        await Service.InviteUserToGroup(InvitedUserEmailAddress);
+        return Ok();
+      }
+      catch (Exception ex)
+      {
+        return ProcessException(ex);
+      }
+    }
+
     private IUserService Service { get { return _service as IUserService; } }
   }
 }

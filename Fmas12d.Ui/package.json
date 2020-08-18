@@ -13,7 +13,8 @@
     "test-headless": "del-cli .testing && ng test --code-coverage --karma-config ./src/karma-headless.conf.js",
     "test-vsts": "del-cli .testing && ng test --code-coverage --karma-config ./src/karma-vsts.conf.js",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "ie11local": "ng serve --configuration es5"
   },
   "private": true,
   "dependencies": {
@@ -29,7 +30,7 @@
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@types/rx": "^4.1.2",
     "@uiowa/digit-only": "^1.1.1",
-    "angular-auth-oidc-client": "^10.0.10",
+    "angular-auth-oidc-client": "^11.0.0",
     "exceljs": "^1.12.0",
     "file-saver": "^2.0.2",
     "moment": "^2.24.0",

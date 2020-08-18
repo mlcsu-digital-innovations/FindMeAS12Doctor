@@ -2,7 +2,7 @@
 <app-navbar></app-navbar>
 <div class="page-content">
   <div class="row">
-    <div class="col-md-10 offset-md-1">
+    <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
@@ -28,18 +28,18 @@
           <div class="flex-item">
             Lead AMHP: <strong>{{referral.leadAmhpUser.displayName}}</strong>
           </div>
-        </div>
+        </div>        
         <div class="card-body">
           <form [formGroup]="assessmentForm" novalidate>
             <div class="form-row">
               <div class="required-field col-md-3 mb-3 text-left">
                 <strong>Denotes required field.</strong>
               </div>
-            </div>
+            </div>             
             <div class="form-row">
               <!-- Planned assessment -->
               <div class="col-md-8">
-                <div class="checkmark-content">
+                <!-- <div class="checkmark-content"> -->
                   <label class="container">
                     <input class="form-control" type="checkbox" value="" id="plannedAssessment"
                       formControlName="plannedAssessment" #plannedAssessment
@@ -47,9 +47,9 @@
                     <span class="checkmark"></span>
                     Planned / Retrospective Assessment
                   </label>
-                </div>
+                <!-- </div> -->
               </div>
-            </div>
+            </div>           
             <!-- AMHP User -->
             <div class="form-row">
               <div class="col-md-8 mb-2">

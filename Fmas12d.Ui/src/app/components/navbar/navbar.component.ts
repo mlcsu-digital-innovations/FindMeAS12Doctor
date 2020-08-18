@@ -23,15 +23,25 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.isAuthorized$ = this.securityService.getIsAuthorized();
     this.user$ = this.userDetailsService.getCurrentUserDetails();
-    this.user$.subscribe((user: User) => {
-      if (user.isDoctor) {
-        this.homePageLink = '/doctor/claims/list';
-      } else if (user.isFinance) {
-        this.homePageLink = '/finance/claims/list';
-      } else {
-        this.homePageLink = '/referral/list';
+
+    this.isAuthorized$.subscribe( (isAuthorised) => {
+
+      if (isAuthorised) {
+
+        this.user$.subscribe((user: User) => {
+          if (user.isDoctor) {
+            this.homePageLink = '/doctor/claims/list';
+          } else if (user.isFinance) {
+            this.homePageLink = '/finance/claims/list';
+          } else {
+            this.homePageLink = '/referral/list';
+          }
+        }, (err) => {
+          console.log('Error fetching user - ', err);
+        });
       }
     });
   }

@@ -59,6 +59,9 @@
                 }
               ]
             },
+            "es5": {
+              "tsConfig": "./tsconfig-es5.app.json"
+            },
             "aimes-uat": {
               "fileReplacements": [
                 {
@@ -108,7 +111,10 @@
           "configurations": {
             "production": {
               "browserTarget": "Fmas12d:build:production"
-            }
+            },
+            "es5": {
+              "browserTarget": "Fmas12d:build:es5"
+            }            
           }
         },
         "extract-i18n": {
