@@ -19,6 +19,7 @@ import { ReferralModule } from './components/referral/referral.module';
 import { RouterModule } from '@angular/router';
 import { SecurityService } from './services/security/security.service';
 import { UserProfileModule } from './components/user-profile/user-profile.module';
+import { NoCacheHeadersInterceptor } from './services/no-cache-headers-interceptor';
 
 export function loadConfig(oidcConfigService: OidcConfigService, httpClient: HttpClient) {
 
@@ -67,6 +68,11 @@ export function loadConfig(oidcConfigService: OidcConfigService, httpClient: Htt
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NoCacheHeadersInterceptor,
       multi: true
     }
   ],
