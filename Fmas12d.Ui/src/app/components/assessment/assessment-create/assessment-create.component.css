@@ -39,6 +39,11 @@ form {
   margin: 20px;
 }
 
+.form-row {
+  margin-top: 10px;
+  align-items: flex-end;
+}
+
 .padding-left-1 {
   padding-left: 1px;
 }
