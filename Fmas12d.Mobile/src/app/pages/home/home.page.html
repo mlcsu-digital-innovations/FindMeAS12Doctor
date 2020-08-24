@@ -15,97 +15,6 @@
     <ion-row *ngIf="!isAuthenticated">
       <img src="../../../assets/img/icon.png" alt="Find Me An S12 Doctor" class="logo" />
     </ion-row>
-    <ion-list *ngIf="isAuthenticated">
-
-      <ion-list-header *ngIf="currentUser.isDoctor && showOnCall">
-        On Call Status
-      </ion-list-header>
-      <ion-item
-        *ngIf="currentOnCall"
-        [routerLink]="['/doctor-on-call-list']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="success"
-            size="large"
-            name="phone-portrait"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            On call now until {{currentOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
-          </h3>
-        </ion-label>
-      </ion-item>
-      <ion-item
-        *ngIf="nextOnCall"
-        [routerLink]="['/doctor-on-call-list']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="warning"
-            size="large"
-            name="phone-portrait"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            Next on call {{nextOnCall.start | date: 'dd MMMM yyyy HH:mm'}} to 
-            {{nextOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
-          </h3>
-        </ion-label>
-      </ion-item>
-
-      <br/>
-
-      <ion-list-header *ngIf="currentUser.isDoctor && showAvailability">
-        Availability
-      </ion-list-header>
-      <ion-item
-        *ngIf="currentAvailability"
-        [routerLink]="['/doctor-availability-view']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="{{currentAvailability.statusId == 1 ? 'success' : 'danger'}}"
-            size="large"
-            name="calendar"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            {{currentAvailability.statusId == 1 ? 'Available' : 'Unavailable'}}
-            until {{currentAvailability.end | date: 'dd MMMM yyyy HH:mm'}}
-          </h3>
-        </ion-label>
-      </ion-item>
-      <ion-item
-        *ngIf="nextAvailability"
-        [routerLink]="['/doctor-availability-view']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="warning"
-            size="large"
-            name="calendar"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            Next available {{nextAvailability.start | date: 'dd MMMM yyyy HH:mm'}} to  
-            {{nextAvailability.end | date: 'dd MMMM yyyy HH:mm'}} 
-          </h3>
-        </ion-label>
-      </ion-item>
-    </ion-list>
     
     <ion-list *ngIf="isAuthenticated">
       <ion-list-header>
@@ -135,7 +44,7 @@
           </ion-icon>
         </ion-avatar>
         <ion-label class="ion-text-wrap">
-          <h3>You are not currently scheduled to attend any assessments.</h3>
+          <h3>You are not currently scheduled to attend any assessments.  {{scheduledAssessments.length}}</h3>
         </ion-label>
       </ion-item>
       <br/>
@@ -203,6 +112,122 @@
       </ion-item>
     </ion-list>
 
+    <ion-list *ngIf="isAuthenticated">
+      <ion-list-header *ngIf="currentUser.isDoctor">
+        On Call Status
+      </ion-list-header>
+      <ion-item
+        *ngIf="currentOnCall"
+        [routerLink]="['/doctor-on-call-list']"
+        routerDirection="forward"
+      >
+        <ion-avatar slot="start">
+          <ion-icon
+            color="success"
+            size="large"
+            name="phone-portrait"
+          >
+          </ion-icon>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h3>
+            On call now until {{currentOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-item
+        *ngIf="nextOnCall"
+        [routerLink]="['/doctor-on-call-list']"
+        routerDirection="forward"
+      >
+        <ion-avatar slot="start">
+          <ion-icon
+            color="warning"
+            size="large"
+            name="phone-portrait"
+          >
+          </ion-icon>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h3>
+            Next on call {{nextOnCall.start | date: 'dd MMMM yyyy HH:mm'}} to 
+            {{nextOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="onCallDoctorsConfirmed.length == 0 && currentUser.isDoctor">
+        <ion-avatar slot="start">
+          <ion-icon
+            color="tertiary"
+            size="large"
+            name="information-circle"
+          >
+          </ion-icon>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h3>You do not currently have any On Call requests.</h3>
+        </ion-label>
+      </ion-item>
+
+      <br/>
+
+      <ion-list-header *ngIf="currentUser.isDoctor">
+        Availability
+      </ion-list-header>
+      <ion-item
+        *ngIf="currentAvailability"
+        [routerLink]="['/doctor-availability-view']"
+        routerDirection="forward"
+      >
+        <ion-avatar slot="start">
+          <ion-icon
+            color="{{currentAvailability.statusId == 1 ? 'success' : 'danger'}}"
+            size="large"
+            name="calendar"
+          >
+          </ion-icon>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h3>
+            {{currentAvailability.statusId == 1 ? 'Available' : 'Unavailable'}}
+            until {{currentAvailability.end | date: 'dd MMMM yyyy HH:mm'}}
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-item
+        *ngIf="nextAvailability"
+        [routerLink]="['/doctor-availability-view']"
+        routerDirection="forward"
+      >
+        <ion-avatar slot="start">
+          <ion-icon
+            color="warning"
+            size="large"
+            name="calendar"
+          >
+          </ion-icon>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h3>
+            Next available {{nextAvailability.start | date: 'dd MMMM yyyy HH:mm'}} to  
+            {{nextAvailability.end | date: 'dd MMMM yyyy HH:mm'}} 
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="availabilityList.length == 0 && currentUser.isDoctor">
+        <ion-avatar slot="start">
+          <ion-icon
+            color="tertiary"
+            size="large"
+            name="information-circle"
+          >
+          </ion-icon>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">
+          <h3>You have not registed any avaliability.</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
 
     <ion-row *ngIf="canUsePin && !isAuthenticated">
       <ion-col>
