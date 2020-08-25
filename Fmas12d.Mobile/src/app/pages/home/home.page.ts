@@ -3,6 +3,7 @@ import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.mo
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
 import { ASSESSMENTRESCHEDULING, ASSESSMENTSCHEDULED, AWAITINGREVIEW, DOCTORSTATUSALLOCATED, REFERRALSTATUS_NEW, AVAILABLE, UNAVAILABLE, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy  } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
@@ -38,7 +39,7 @@ export class HomePage implements OnInit, OnDestroy {
   public assessmentListScheduled: AmhpAssessmentList[] = [];
   public assessmentRequests: AmhpAssessmentRequest[] = [];
   public assessmentRequestsLastUpdated: Date;
-  public availabilityList: UserAvailability[] =[];
+  public availabilityList: UserAvailability[] = [];
   public availableList: UserAvailability[] = [];
   public canUsePin: boolean;
   public connection: boolean;
@@ -61,6 +62,7 @@ export class HomePage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private assessmentService: AmhpAssessmentService,
     private authService: AuthService,
+    private broadcastService: BroadcastService,
     private changeRef: ChangeDetectorRef,
     private loadingController: LoadingController,
     private networkService: NetworkService,
@@ -75,15 +77,25 @@ export class HomePage implements OnInit, OnDestroy {
   ) {
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
+
+        if (this.isAuthenticated) {
+          this.refreshPage();
+        }
+
         this.closeLoading();
       });
 
       this.userDetailsService.currentUser.subscribe(user => {
         this.currentUser = user;
       });
+
+      this.broadcastService.subscribe('NotificationReceived', () => {
+        this.refreshPage();
+      });
+
   }
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
     this.refreshPage();
     this.checkForPin();
   }
@@ -149,7 +161,7 @@ export class HomePage implements OnInit, OnDestroy {
     let colour = 'success';
 
     switch (request.doctorHasAccepted) {
-      case undefined:
+      case null:
         colour = 'warning';
         break;
       case true:
@@ -167,6 +179,11 @@ export class HomePage implements OnInit, OnDestroy {
     // this may be changed if offline data is to be used
     const request = this.assessmentService.getRequests();
     this.showLoading();
+
+    this.unscheduledAssessments = [];
+    this.assessmentRequests = [];
+    this.scheduledAssessments = [];
+
     request
       .subscribe(
         result => {
@@ -183,19 +200,24 @@ export class HomePage implements OnInit, OnDestroy {
               REFERRALSTATUS_RESPONSES_COMPLETE
             ];
 
+            // only interested in todays / future assessments
+            this.allAssessments =
+              this.allAssessments
+              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+
             // scheduled assessments will have a referralId of 6, 7 or 8
             this.scheduledAssessments = this.allAssessments
-              .filter(assessment => scheduled.includes(assessment.referralStatusId))
-              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+              .filter(assessment => scheduled.includes(assessment.referralStatusId));
 
-            this.unscheduledAssessments = this.allAssessments
-              .filter(assessment => unscheduled.includes(assessment.referralStatusId))
-              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
-
-            this.assessmentRequests = this.allAssessments
+            // amhps can view unscheduled assessments but not assessment requests
+            if (this.currentUser.isAmhp) {
+              this.unscheduledAssessments = this.allAssessments
+              .filter(assessment => unscheduled.includes(assessment.referralStatusId));
+            } else {
+              this.assessmentRequests = this.allAssessments
               .filter(assessment => !scheduled.includes(assessment.referralStatusId))
-              .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW)
-              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+              .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW);
+            }
           } else {
             this.scheduledAssessments = [];
             this.assessmentRequests = [];

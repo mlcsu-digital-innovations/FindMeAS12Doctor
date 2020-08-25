@@ -139,6 +139,9 @@ export class AppComponent implements OnInit {
       this.fcm.onNotification().subscribe(
         data => {
           this.refreshBadges();
+
+          this.broadcastService.broadcast('NotificationReceived', null);
+
           if (data.wasTapped) {
             // app is currently in background
             this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
