@@ -38,7 +38,7 @@ export const AppRoutes: Routes = [
   {
     path: 'welcome',
     component: WelcomeComponent,
-    canActivate: [AuthorizationGuard]
+    // canActivate: [AuthorizationGuard]
   },
   {
     path: '**',

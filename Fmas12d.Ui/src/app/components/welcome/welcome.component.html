@@ -1,9 +1,16 @@
 <app-navbar></app-navbar>
 <div class="page-content">
+
+  <div class="row" *ngIf="!isAuthorized">
+    <div class="col-md-12">
+      <h2>Lead on adventurer, your quest awaits ...</h2>
+    </div>
+  </div>
+
   <div class="row" *ngIf="isDevelopment && isAuthorized">
     <div class="col-md-12">
-      <button type="button" 
-              class="btn btn-primary" 
+      <button type="button"
+              class="btn btn-primary"
               (click)="gotoReferralList()">Referral List</button>
     </div>
   </div>
