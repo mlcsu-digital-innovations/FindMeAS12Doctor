@@ -7,6 +7,16 @@
 
   <ion-list>
 
+    <ion-item>
+      <ion-label>Show All</ion-label>
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="showAll"
+        (ngModelChange)="toggleChanged($event)"
+        checked>
+      </ion-toggle>  
+    </ion-item>
+
     <ion-list-header *ngIf="assessmentListScheduled.length == 0 && assessmentListUnscheduled.length == 0">
       Assessments  
     </ion-list-header>
