@@ -7,6 +7,16 @@
   <br/>
   <ion-list>
 
+    <ion-item>
+      <ion-label>Show All</ion-label>
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="showAll"
+        (ngModelChange)="toggleChanged($event)"
+        checked>
+      </ion-toggle>  
+    </ion-item>
+
     <ion-list-header *ngIf="nothingToDisplay()">
       Assessments  
     </ion-list-header>
@@ -24,7 +34,7 @@
     </ion-item>
 
     <ion-list-header *ngIf="scheduledAssessments.length > 0">
-      Scheduled Assessments  
+      <ion-label>Scheduled Assessments</ion-label>
     </ion-list-header>
 
     <ion-item 
@@ -59,7 +69,7 @@
     </ion-item>
 
     <ion-list-header *ngIf="assessmentRequests.length > 0">
-      Assessment Requests  
+      <ion-label>Assessment Requests</ion-label>
     </ion-list-header>
 
     <ion-item 
