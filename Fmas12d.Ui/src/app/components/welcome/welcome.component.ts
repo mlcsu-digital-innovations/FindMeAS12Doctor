@@ -18,11 +18,11 @@ export class WelcomeComponent implements OnInit {
   userData: any;
   userDataSubscription: Subscription;
 
-  constructor(
+constructor(
     private oidcSecurityService: OidcSecurityService,
-    private routerService: RouterService) { }
+    private routerService: RouterService) {}
 
-  ngOnInit() {
+ngOnInit() {
 
     this.isDevelopment = !environment.production;
 
@@ -52,7 +52,11 @@ export class WelcomeComponent implements OnInit {
     navigator.clipboard.writeText(this.userData.access_token);
   }
 
-  gotoReferralList() {
+scroll(el: HTMLElement) {
+  el.scrollIntoView({behavior: 'smooth'});
+}
+
+gotoReferralList() {
     this.routerService.navigate(['/referral/list']);
   }
 }
