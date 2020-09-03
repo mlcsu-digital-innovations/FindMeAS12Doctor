@@ -85,6 +85,11 @@ p.text-white {
   color: #fff !important;
 }
 
+.btn-space {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
 /*
  * Extra utilities
  */
@@ -97,6 +102,23 @@ p.text-white {
   .flex-md-equal > * {
     -ms-flex: 1;
     flex: 1;
+  }
+}
+
+@media (max-width: 410px) {
+  .store {
+    height: 75px;
+    width: 150px;
+  }
+
+  .display-4 {
+    font-size: 46px;
+  }
+}
+
+@media (max-width: 560px) {
+  a {
+    font-size: 20px;
   }
 }
 
