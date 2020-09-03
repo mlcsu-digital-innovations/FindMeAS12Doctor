@@ -9,6 +9,7 @@ import { SignOutComponent } from './components/sign-out/signout.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { RegisterComponent } from './components/register/register.component';
 
 export const AppRoutes: Routes = [
   {
@@ -38,13 +39,15 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'about',
-    component: AboutComponent,
-    // canActivate: [AuthorizationGuard]
+    component: AboutComponent
   },
   {
     path: 'welcome',
-    component: WelcomeComponent,
-    // canActivate: [AuthorizationGuard]
+    component: WelcomeComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: '**',
