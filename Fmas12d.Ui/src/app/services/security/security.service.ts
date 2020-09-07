@@ -20,7 +20,7 @@ export class SecurityService {
       .subscribe((isAuthenticated) => {
 
         if (!isAuthenticated) {
-          if ('/autologin' !== window.location.pathname) {
+          if ('/autologin' !== window.location.pathname && '/about' !== window.location.pathname) {
             this.write('redirect', window.location.pathname);
             this.router.navigate(['/welcome']);
           }
