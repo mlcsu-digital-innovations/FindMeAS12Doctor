@@ -122,6 +122,10 @@ p.text-white {
   }
 }
 
+
+
+
+
 .overflow-hidden { overflow: hidden; }
 
 
@@ -147,4 +151,18 @@ p.text-white {
   background-color: #0db3bf;
   padding: 20px;
   margin: 10px;
+}
+
+@media (max-width: 988px) {
+  .flex-md-equal > * {
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1 0 0;
+    flex: 1 0 0;
+  }
 }
