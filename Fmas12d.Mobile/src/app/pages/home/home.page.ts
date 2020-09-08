@@ -188,7 +188,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     this.tasks$ = [];
-    this.showLoading();
+    // this.showLoading();
 
     this.unscheduledAssessments = [];
     this.assessmentRequests = [];
@@ -205,10 +205,10 @@ export class HomePage implements OnInit, OnDestroy {
         this.displayRequests(result[0] as AmhpAssessmentRequest[]);
         this.displayAvailability(result[1] as UserAvailability[]);
         this.displayOncall(result[2] as OnCallDoctor[]);
-        this.closeLoading();
+        // this.closeLoading();
       }, err => {
         this.refreshingData = false;
-        this.closeLoading();
+        // this.closeLoading();
       });
   }
 
@@ -423,6 +423,7 @@ export class HomePage implements OnInit, OnDestroy {
         .subscribe((match: boolean) => {
           if (match) {
             this.authService.signinSilently();
+            this.refreshPage();
           } else {
             this.toastService.displayError({message: 'Incorrect PIN'});
           }
