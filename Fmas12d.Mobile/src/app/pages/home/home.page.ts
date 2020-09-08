@@ -22,6 +22,7 @@ import { version } from '../../../../package.json';
 import * as moment from 'moment';
 
 import 'rxjs/add/observable/zip';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -42,9 +43,9 @@ export class HomePage implements OnInit, OnDestroy {
   public appVersion: string = version;
   public assessmentListLastUpdated: Date;
   public assessmentListScheduled: AmhpAssessmentList[] = [];
-  public assessmentRequests: AmhpAssessmentRequest[] = [];
+  public assessmentRequests: AmhpAssessmentRequest[] = null;
   public assessmentRequestsLastUpdated: Date;
-  public availabilityList: UserAvailability[] = [];
+  public availabilityList: UserAvailability[] = null;
   public availableList: UserAvailability[] = [];
   public canUsePin: boolean;
   public connection: boolean;
@@ -54,14 +55,14 @@ export class HomePage implements OnInit, OnDestroy {
   public isAuthenticated: boolean;
   public nextAvailability: UserAvailability;
   public nextOnCall: OnCallDoctor;
-  public onCallDoctorsConfirmed: OnCallDoctor[] = [];
+  public onCallDoctorsConfirmed: OnCallDoctor[] = null;
   public onCallDoctorsRejected: OnCallDoctor[] = [];
   public onCallDoctorsUnconfirmedCount: number;
-  public scheduledAssessments: AmhpAssessmentRequest[] = [];
+  public scheduledAssessments: AmhpAssessmentRequest[] = null;
   public showAvailability: boolean;
   public showOnCall: boolean;
   public unavailableList: UserAvailability[] = [];
-  public unscheduledAssessments: AmhpAssessmentRequest[] = [];
+  public unscheduledAssessments: AmhpAssessmentRequest[] = null;
 
   constructor(
     private alertController: AlertController,
@@ -98,7 +99,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     if (this.isAuthenticated) {
-      this.refreshPage();
+        this.refreshPage();
     }
     this.checkForPin();
   }
@@ -188,12 +189,6 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     this.tasks$ = [];
-    // this.showLoading();
-
-    this.unscheduledAssessments = [];
-    this.assessmentRequests = [];
-    this.scheduledAssessments = [];
-
     this.tasks$.push(this.assessmentService.getRequests());
     this.tasks$.push(this.userAvailabilityService.getListForUser());
     this.tasks$.push(this.onCallService.getListForUser());
@@ -205,10 +200,8 @@ export class HomePage implements OnInit, OnDestroy {
         this.displayRequests(result[0] as AmhpAssessmentRequest[]);
         this.displayAvailability(result[1] as UserAvailability[]);
         this.displayOncall(result[2] as OnCallDoctor[]);
-        // this.closeLoading();
       }, err => {
         this.refreshingData = false;
-        // this.closeLoading();
       });
   }
 
@@ -275,7 +268,14 @@ export class HomePage implements OnInit, OnDestroy {
       this.nextAvailability =
          this.availabilityList.filter(av => av.statusId === AVAILABLE).find(av =>
            (moment(av.start).isAfter(currentDate)));
+      } else {
+        this.availabilityList = [];
       }
+
+    if (!this.currentAvailability && !this.nextAvailability) {
+      this.availabilityList = [];
+    }
+
   }
 
   displayOncall(result: OnCallDoctor[]) {
