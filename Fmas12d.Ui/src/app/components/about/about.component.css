@@ -1,0 +1,76 @@
+.navbar-brand {
+  background-image: url('../../../img/icon_round.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  height: 50px;
+  width: 50px;
+}
+
+.themed {
+  background-color: #0db3bf !important;
+}
+
+.diu {
+  position: absolute;
+  right: 10%;
+  top: 5%;
+  width: 120px;
+  height: 120px;
+
+  background-image: url('../../../img/diu.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.csu {
+  background-image: url('../../../img/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+p.text-white {
+  color: #fff !important;
+}
+
+/*
+ * Extra utilities
+ */
+
+ .flex-equal > * {
+  -ms-flex: 1;
+  flex: 1;
+}
+@media (min-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1;
+    flex: 1;
+  }
+}
+
+@media (max-width: 410px) {
+  .display-4 {
+    font-size: 46px;
+  }
+}
+
+.overflow-hidden { overflow: hidden; }
+
+
+.carousel-item {
+  /* Force to always be block */
+  display: block !important;
+  z-index: 1;
+  position: absolute;
+  transform: translateX(100%);
+  opacity: 0;
+  transition:all  0.2s;
+  visibility: hidden;
+}
+
+.carousel-item.active {
+  position: relative;
+  transform: translateX(0);
+  visibility: visible ;
+  opacity: 1;
+}
