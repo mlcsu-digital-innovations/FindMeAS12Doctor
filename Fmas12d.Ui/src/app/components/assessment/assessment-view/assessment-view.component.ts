@@ -118,7 +118,7 @@ export class AssessmentViewComponent implements OnInit {
   }
 
   AddAssessmentOutcome() {
-    this.routerService.navigateByUrl(`/assessment/outcome/${this.referralId}`);
+    this.routerService.navigateByUrl(`/assessment/outcome/${this.assessmentId}`);
   }
 
   CancelView() {

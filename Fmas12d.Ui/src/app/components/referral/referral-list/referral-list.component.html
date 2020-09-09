@@ -330,7 +330,7 @@
                                 Create Assessment
                               </a>
                               <a
-                              [routerLink]="['/assessment/outcome/', referral.referralId]"
+                              [routerLink]="['/assessment/outcome/', referral.currentAssessmentId]"
                               class="clickable"
                               ngbDropdownItem
                               *ngIf="CanAddOutcome(referral.referralStatusId)"
