@@ -24,7 +24,8 @@
         </ion-list-header>
         <div class="skeleton">
           <ion-item *ngFor="let assessment of scheduledAssessments" detail="false"
-          [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward">
+          [routerLink]="currentUser.isAmhp ? ['/amhp-assessment-view/', assessment.id] : ['/doctor-assessment-details/', assessment.id]"
+          routerDirection="forward">
           <ion-avatar slot="start">
             <ion-icon
               color="success"
@@ -59,7 +60,7 @@
         </ion-list-header>
         <div class="skeleton">
           <ion-item *ngFor="let assessment of unscheduledAssessments" detail="false"
-            [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward">
+            [routerLink]="['/amhp-assessment-view/', assessment.id]" routerDirection="forward">
             <ion-avatar slot="start">
               <ion-icon
                 color="warning"

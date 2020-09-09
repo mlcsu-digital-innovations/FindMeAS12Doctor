@@ -299,6 +299,8 @@ export class HomePage implements OnInit, OnDestroy {
 
       this.onCallDoctorsUnconfirmedCount = result
         .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
+    } else {
+      this.onCallDoctorsConfirmed = [];
     }
   }
 
