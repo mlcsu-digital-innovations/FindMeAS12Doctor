@@ -48,75 +48,75 @@
                   <table class="table table-bordered table-sm table-referral-list">
                     <thead>
                       <tr>
-                        <th class="text-center" 
-                            scope="col" 
-                            sortable="referralId" 
-                            columnType='number' 
+                        <th class="text-center"
+                            scope="col"
+                            sortable="referralId"
+                            columnType='number'
                             (sort)="onSort($event)">
                             Referral Id
                         </th>
-                        <th class="text-center" 
-                            scope="col" 
-                            sortable="patientIdentifier" 
-                            columnType='string' 
+                        <th class="text-center"
+                            scope="col"
+                            sortable="patientIdentifier"
+                            columnType='string'
                             (sort)="onSort($event)">
                             Patient Identifier
                         </th>
-                        <th class="text-center" 
-                            scope="col" 
-                            sortable="leadAmhp" 
-                            columnType='string' 
+                        <th class="text-center"
+                            scope="col"
+                            sortable="leadAmhp"
+                            columnType='string'
                             (sort)="onSort($event)">
                             Lead AMHP
                         </th>
-                        <th class="sm-col text-center" 
-                            scope="col" 
-                            sortable="numberOfAssessmentAttempts" 
-                            columnType='number' 
+                        <th class="sm-col text-center"
+                            scope="col"
+                            sortable="numberOfAssessmentAttempts"
+                            columnType='number'
                             (sort)="onSort($event)">
                             Assessment Attempts
                         </th>
-                        <th class="sm-col text-center" 
-                            scope="col" 
-                            sortable="assessmentLocationPostcode" 
-                            columnType='string' 
+                        <th class="sm-col text-center"
+                            scope="col"
+                            sortable="assessmentLocationPostcode"
+                            columnType='string'
                             (sort)="onSort($event)">
                             Assessment Postcode
                         </th>
-                        <th class="text-center" 
-                            scope="col" 
-                            sortable="specialityName" 
-                            columnType='string' 
+                        <th class="text-center"
+                            scope="col"
+                            sortable="specialityName"
+                            columnType='string'
                             (sort)="onSort($event)">
                             Speciality
                         </th>
-                        <th class="text-center" 
-                            scope="col" 
-                            sortable="timescale" 
-                            columnType='dateTime' 
+                        <th class="text-center"
+                            scope="col"
+                            sortable="timescale"
+                            columnType='dateTime'
                             (sort)="onSort($event)">
                             Timescale
                         </th>
-                        <th class="text-center" 
-                            scope="col" 
-                            sortable="statusName" 
-                            columnType='string' 
+                        <th class="text-center"
+                            scope="col"
+                            sortable="statusName"
+                            columnType='string'
                             (sort)="onSort($event)">
                             Status
                         </th>
-                        <th class="sm-col text-center" 
+                        <th class="sm-col text-center"
                             scope="col">
                           <span ngbTooltip="Received / Accepted"
                                 [openDelay]="1000"
                                 [closeDelay]="200">No. of Responses<br/>Rec. / Acc.</span>
                         </th>
-                        <th class="sm-col text-center" 
+                        <th class="sm-col text-center"
                             scope="col">
                           <span ngbTooltip="Selected / Allocated / Attended"
                                 [openDelay]="1000"
-                                [closeDelay]="200">No. of Doctors<br/>Sel. / All. / Att.</span>                       
+                                [closeDelay]="200">No. of Doctors<br/>Sel. / All. / Att.</span>
                         </th>
-                        <th class="sm-col text-center" 
+                        <th class="sm-col text-center"
                             scope="col">
                           &nbsp;
                         </th>
@@ -330,6 +330,14 @@
                                 Create Assessment
                               </a>
                               <a
+                              [routerLink]="['/assessment/outcome/', referral.referralId]"
+                              class="clickable"
+                              ngbDropdownItem
+                              *ngIf="CanAddOutcome(referral.referralStatusId)"
+                              >
+                                Add Outcome
+                              </a>
+                              <a
                                 [routerLink]="['/assessment/', referral.currentAssessmentId, 'select-doctors']"
                                 class="clickable"
                                 ngbDropdownItem
@@ -361,8 +369,8 @@
             </div>
           </div>
             <div class="d-flex justify-content-between p-2">
-              <ngb-pagination 
-                [collectionSize]="total$ | async" 
+              <ngb-pagination
+                [collectionSize]="total$ | async"
                 [(page)]="referralListService.page"
                 [pageSize]="referralListService.pageSize"
                 [maxSize]=5>
