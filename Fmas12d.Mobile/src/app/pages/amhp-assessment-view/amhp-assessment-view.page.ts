@@ -42,8 +42,6 @@ export class AmhpAssessmentViewPage implements OnInit {
         this.assessmentLastUpdated = new Date();
         this.assessmentView = result;
 
-        console.log(this.assessmentView);
-
         if (this.assessmentView.doctorsAllocated && this.assessmentView.doctorsAllocated.length > 0 ||
           this.assessmentView.doctorsSelected && this.assessmentView.doctorsSelected.length > 0)
         {
