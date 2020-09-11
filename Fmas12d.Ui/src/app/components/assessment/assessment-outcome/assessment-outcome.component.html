@@ -1,0 +1,204 @@
+<app-navbar></app-navbar>
+<div class="page-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card" *ngIf="referral$ | async as referral; else loading">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-file-alt fa-4x"></i>
+          </div>
+          <div class="card-header-text">
+            <h4 class="card-title">Add Assessment Outcome</h4>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Additional explanation text can be added here if required
+            </h6>
+          </div>
+        </div>
+        <div class="card-header-details">
+          <div class="flex-item">
+            Referral Id: <strong>{{referral.id}}</strong>
+          </div>
+          <div class="flex-item">
+            Patient Identifier: <strong>{{referral.patientIdentifier}}</strong>
+          </div>
+          <div class="flex-item">
+            Lead AMHP: <strong>{{referral.leadAmhp}}</strong>
+          </div>
+          <div class="flex-item">
+            Referral Status: <strong>{{referral.statusName}}</strong>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="currentAssessmentForm" novalidate>
+            <div class="form-row">
+              <div class="col-md-12">
+                <label for="amhpUserName">AMHP User Name</label>
+                <input
+                  class="form-control"
+                  formControlName="amhpUserName"
+                  id="amhpUserName"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-9">
+                  <label for="fullAddress">Assessment Address</label>
+                  <input
+                    class="form-control"
+                    formControlName="fullAddress"
+                    id="fullAddress"
+                    type="text"
+                  />
+                </div>
+              <div class="col-md-3">
+                <label for="postCode">Post Code</label>
+                <input
+                  class="form-control"
+                  formControlName="postCode"
+                  id="postCode"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-4">
+                <label for="mustBeCompletedBy">{{showDateTitle}}</label>
+                <input
+                  class="form-control"
+                  formControlName="mustBeCompletedBy"
+                  id="mustBeCompletedBy"
+                  type="text"
+                />
+              </div>
+            </div>
+          </form>
+            <hr>
+          <form [formGroup]="assessmentOutcomeForm" novalidate>
+            <!-- Actual assessment date / time``````````````````````````````````````````````````````````` -->
+            <div class="form-row">
+              <div class="col-md-6">
+                <label class="required-field" for="picker">Confirmed Date / Time</label>
+                <div class="row" name="picker">
+                  <div class="col-md-4">
+                    <input
+                      class="form-control"
+                      formControlName='confirmedAssessmentDate'
+                      placeholder="dd/mm/yyyy"
+                      name="confirmedAssessmentDate"
+                      [minDate]='minDate'
+                      [maxDate]='maxDate'
+                      ngbDatepicker
+                      #d="ngbDatepicker" />
+                  </div>
+                  <div class="col-md-1 padding-left-1">
+                    <button id="calendarBtn" class="btn btn-outline-secondary calendar" (click)="d.toggle()"
+                      type="button">
+                      <i class="far fa-calendar-alt"></i>
+                    </button>
+                  </div>
+                  <div class="col-md-1 at">@</div>
+                  <div class="col-md-4 mlt-less-1 mt-less-5">
+                    <ngb-timepicker formControlName="confirmedAssessmentTime" [minuteStep]="5"></ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="required-field">Assessment Outcome</label>
+                <div class="input-group">
+                  <select class="custom-select custom-select-lg mb-2 form-control" formControlName="outcome"
+                    #outcome id="outcome">
+                    <option [selected]=true></option>
+                    <option *ngFor="let outcome of outcomes; let i=index" [value]="outcomes[i].id">
+                      {{outcomes[i].name}}
+                    </option>
+                  </select>
+                </div>
+                <div class="invalid-field"
+                  *ngIf="outcomeField.errors?.MissingOutcome">
+                  <span>* Assessment outcome is required</span>
+                </div>
+              </div>
+            </div>
+            <!-- Planned Assessment Date / Time Errors-->
+            <div class="form-row">
+              <div class="col-md-6 mb-2 reduced-top-margin" *ngIf="confirmedAssessmentDateField.errors">
+                <div class="invalid-field"
+                  *ngIf="confirmedAssessmentDateField.errors?.MissingDate || confirmedAssessmentTimeField.errors?.MissingTime">
+                  <span>* Date / Time of assessment is required</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-6">
+                <label class="required-field">Attending Doctors</label>
+
+                <div class="container attending-row">
+                  <div class="row attending" *ngFor="let doctor of attendingDoctors" >
+                    <div class="col-sm">
+                      {{doctor.displayName}}
+                    </div>
+                    <div class="col">
+                      <label class="container" style="position:initial">
+                        <input
+                          class=""
+                          type="checkbox"
+                          checked={{doctor.selected}}
+                          (change)="ToggleSelection(doctor.id, $event)"
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-row mt-more-2">
+              <div class="col-md-3 mb-2 offset-md-9 text-right">
+                <button class="btn btn-standard btn-cancel" type="button" (click)="CancelView()">
+                  <i class="far fa-times-circle"></i>
+                  Cancel
+                </button>
+                <button
+                  class="btn btn-primary btn-standard btn-spaced"
+                  type="button"
+                  (click)="ConfirmOutcome()">
+                  <i class="fas fa-check"></i>
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #confirmClosure>
+  <app-cancel-action-modal
+    [modalTitle]="'Confirm Referral Closure'"
+    [modalBody]="'Please confirm that the referral can be closed.'"
+    [referralStatus]=referralStatus
+    (actioned)="OnModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #confirmCompletion>
+  <app-cancel-action-modal
+    [modalTitle]="'Confirm Review Completion'"
+    [modalBody]="'Please confirm that the review is now complete.'"
+    (actioned)="OnCompletionModalAction($event)"
+  >
+  </app-cancel-action-modal>
+</ng-template>
+
+<ng-template #loading>
+  <app-delay-spinner [delayMessage]="'Retrieving referral data'"></app-delay-spinner>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
