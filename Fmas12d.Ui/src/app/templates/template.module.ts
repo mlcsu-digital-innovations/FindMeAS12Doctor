@@ -1,4 +1,5 @@
 import { AllocationCompleteModalComponent } from './allocation-complete-modal/allocation-complete-modal.component';
+import { AssessmentOutcomeModalComponent } from './assessment-outcome-modal/assessment-outcome-modal.component';
 import { CancelActionModalComponent } from './cancel-action-modal/cancel-action-modal.component';
 import { CcgSelectionModalComponent } from './ccg-selection/ccg-selection-modal';
 import { CommonModule } from '@angular/common';
@@ -17,6 +18,7 @@ import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/use
 @NgModule({
   declarations: [
     AllocationCompleteModalComponent,
+    AssessmentOutcomeModalComponent,
     CancelActionModalComponent,
     CcgSelectionModalComponent,
     ContactDetailModalComponent,
@@ -37,6 +39,7 @@ import { UserFinanceDetailModalComponent } from './user-finance-detail-modal/use
   providers: [],
   exports: [
     AllocationCompleteModalComponent,
+    AssessmentOutcomeModalComponent,
     CancelActionModalComponent,
     CcgSelectionModalComponent,
     ContactDetailModalComponent,

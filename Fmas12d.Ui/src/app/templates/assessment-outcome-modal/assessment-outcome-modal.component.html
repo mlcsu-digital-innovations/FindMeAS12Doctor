@@ -1,0 +1,60 @@
+<div class="modal-header header-info">
+  <h4 class="modal-title"><i class="fas fa-info-circle"></i> Confirm Assessment Outcome</h4>
+</div>
+
+<div class="modal-body">
+  <h5 >
+   Please check the details below and click confirm to record the assessment outcome.
+  </h5>
+  <div class="row">
+    <div class="col-md-4 row-title">
+      AMHP User Name
+    </div>
+    <div class="col-md-8 row-value">
+       <strong>{{ currentAssessment.amhpUser.displayName }}</strong>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 row-title">
+      Patient Identifier
+    </div>
+    <div class="col-md-8 row-value">
+       <strong>{{ patientIdentifier }}</strong>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 row-title">
+      Assessment Date / Time
+    </div>
+    <div class="col-md-8 row-value">
+       <strong>{{ confirmedDate }}</strong>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 row-title">
+      Assessment Outcome
+    </div>
+    <div class="col-md-8 row-value">
+       <strong>{{ outcome.name }}</strong>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 row-title">
+      Attending Doctors
+    </div>
+    <div class="col-md-8 row-value">
+      <ul>
+        <li *ngFor="let doctor of attendingDoctors"><strong>{{doctor.displayName}}</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-cancel" (click)="modalAction(false)">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" (click)="modalAction(true)">
+    Confirm
+  </button>
+</div>
