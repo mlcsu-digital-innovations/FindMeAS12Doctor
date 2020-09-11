@@ -144,8 +144,8 @@
                         <input
                           class=""
                           type="checkbox"
-                          checked={{doctor.selected}}
                           (change)="ToggleSelection(doctor.id, $event)"
+                          [checked]="doctor.selected"
                         />
                         <span class="checkmark"></span>
                       </label>
@@ -153,6 +153,13 @@
                   </div>
                 </div>
 
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6 mb-2 reduced-top-margin" *ngIf="attendingDoctorCount === 0">
+                <div class="invalid-field">
+                  <span>* At least 1 doctor is required to attend</span>
+                </div>
               </div>
             </div>
 
@@ -178,23 +185,16 @@
   </div>
 </div>
 
-<ng-template #confirmClosure>
-  <app-cancel-action-modal
-    [modalTitle]="'Confirm Referral Closure'"
-    [modalBody]="'Please confirm that the referral can be closed.'"
-    [referralStatus]=referralStatus
-    (actioned)="OnModalAction($event)"
+<ng-template #confirmOutcome let-outcome let-confirmedDate>
+  <app-assessment-outcome-modal
+    [currentAssessment]="currentAssessment"
+    [outcome]="selectedOutcome"
+    [attendingDoctors]="attendingDoctors"
+    [patientIdentifier]="patientIdentifier"
+    [confirmedDate]="assessmentOutcomeDateTime"
+    (actioned)="OnConfirmModalAction($event)"
   >
-  </app-cancel-action-modal>
-</ng-template>
-
-<ng-template #confirmCompletion>
-  <app-cancel-action-modal
-    [modalTitle]="'Confirm Review Completion'"
-    [modalBody]="'Please confirm that the review is now complete.'"
-    (actioned)="OnCompletionModalAction($event)"
-  >
-  </app-cancel-action-modal>
+  </app-assessment-outcome-modal>
 </ng-template>
 
 <ng-template #loading>

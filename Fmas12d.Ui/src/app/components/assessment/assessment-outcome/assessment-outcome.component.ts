@@ -1,6 +1,9 @@
+import { AssessmentOutcome } from 'src/app/interfaces/assessment-outcome';
+import { AssessmentOutcomeDoctor } from 'src/app/interfaces/assessment-outcome-doctor';
 import { AssessmentService } from 'src/app/services/assessment/assessment.service';
 import { AssessmentUser } from 'src/app/interfaces/assessment-user';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CurrentAssessment } from 'src/app/interfaces/current-assessment';
 import { DatePickerFormat } from 'src/app/helpers/date-picker.validator';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NameIdList } from 'src/app/interfaces/name-id-list';
@@ -27,10 +30,11 @@ export class AssessmentOutcomeComponent implements OnInit {
   assessmentConfirmedDate: NgbDateStruct;
   assessmentConfirmedTime: NgbTimeStruct;
   assessmentId: number;
+  assessmentOutcomeDateTime: string;
   assessmentOutcomeForm: FormGroup;
   attendingDoctors: AssessmentUser[];
-  closeModal: NgbModalRef;
-  completeModal: NgbModalRef;
+  confirmModal: NgbModalRef;
+  currentAssessment: CurrentAssessment;
   currentAssessmentForm: FormGroup;
   isInReviewState: boolean;
   isPatientIdValidated: boolean;
@@ -39,16 +43,17 @@ export class AssessmentOutcomeComponent implements OnInit {
   minDate: NgbDateStruct;
   outcomes: NameIdList[];
   pageSize: number;
+  patientIdentifier: string;
   referral$: Observable<ReferralView>;
   referralCreated: Date;
   referralId: number;
   referralStatus: string;
   referralStatusId: number;
+  selectedOutcome: NameIdList;
   showDateTitle: string;
   showDateValue: Date;
 
-  @ViewChild('confirmClosure', null) closeTemplate;
-  @ViewChild('confirmCompletion', null) completeTemplate;
+  @ViewChild('confirmOutcome', null) confirmTemplate;
 
   constructor(
     private assessmentService: AssessmentService,
@@ -149,63 +154,6 @@ export class AssessmentOutcomeComponent implements OnInit {
     this.routerService.navigatePrevious();
   }
 
-  CloseReferral() {
-    let forceClose = false;
-
-    if (this.referralStatusId !== REFERRAL_STATUS_AWAITING_REVIEW
-        && this.referralStatusId !== REFERRAL_STATUS_OPEN ) {
-          forceClose = true;
-    }
-
-    this.referralService.closeReferral(this.referralId, forceClose).subscribe(
-      () => {
-        this.toastService.displaySuccess({
-          message: 'Referral closed'
-        });
-        this.routerService.navigateByUrl('/referral/list');
-      },
-      error => {
-        this.toastService.displayError({
-          title: 'Server Error',
-          message: 'Unable to close referral! Please try again in a few moments'
-        });
-      }
-    );
-
-  }
-
-  CloseReferralConfirmation() {
-    this.closeModal = this.modalService.open(this.closeTemplate, {
-      size: 'lg'
-    });
-  }
-
-  CompleteReview() {
-
-    this.assessmentService.completeReview(this.assessmentId)
-    .subscribe(
-      () => {
-        this.toastService.displaySuccess({
-          message: 'Review complete'
-        });
-        this.routerService.navigateByUrl('/referral/list');
-      },
-      error => {
-        this.toastService.displayError({
-          title: 'Server Error',
-          message: 'Unable to complete review! Please try again in a few moments'
-        });
-      }
-    );
-
-  }
-
-  CompleteReviewConfirmation() {
-    this.completeModal = this.modalService.open(this.completeTemplate, {
-      size: 'lg'
-    });
-  }
-
   ConvertToDateStruct(dateValue: Date): NgbDateStruct {
 
     const momentDate = moment(dateValue);
@@ -241,6 +189,8 @@ export class AssessmentOutcomeComponent implements OnInit {
     if (outcome === undefined || outcome.value === '' ) {
       outcome.setErrors({MissingOutcome: true});
       hasErrors = true;
+    } else {
+      this.selectedOutcome = this.outcomes.find(selected => selected.id === parseInt(outcome.value, 10));
     }
 
     if (
@@ -251,12 +201,27 @@ export class AssessmentOutcomeComponent implements OnInit {
       ) {
       this.confirmedAssessmentDateField.setErrors({MissingDate: true});
       hasErrors = true;
+    } else {
+      const confirmedDateTime =
+        this.CreateDateFromPickerObjects(
+          this.confirmedAssessmentDateField.value,
+          this.confirmedAssessmentTimeField.value
+        );
+
+      this.assessmentOutcomeDateTime = moment(confirmedDateTime).format('DD/MM/YYYY HH:mm');
+    }
+
+    if (this.attendingDoctorCount < 1) {
+      hasErrors = true;
     }
 
     if (hasErrors) {
       return;
     }
 
+    this.confirmModal = this.modalService.open(this.confirmTemplate, {
+      size: 'lg'
+    });
   }
 
   CreateDateFromPickerObjects(datePart: NgbDateStruct, timePart: NgbTimeStruct): Date {
@@ -291,12 +256,21 @@ export class AssessmentOutcomeComponent implements OnInit {
     return this.assessmentOutcomeForm.controls.outcome;
   }
 
+  get attendingDoctorCount(): number {
+    const doctorList = this.attendingDoctors.filter(doctor => doctor.selected === true);
+
+    return doctorList.length;
+  }
+
   InitialiseForm(referral: ReferralView) {
 
     this.minDate = this.ConvertToDateStruct(referral.createdAt);
     this.maxDate = this.ConvertToDateStruct(new Date());
 
     this.assessmentId = referral.currentAssessment.id;
+
+    this.currentAssessment = referral.currentAssessment;
+    this.patientIdentifier = referral.patientIdentifier;
 
     this.currentAssessmentForm.controls.amhpUserName.setValue(
       referral.currentAssessment.amhpUser.displayName
@@ -349,24 +323,59 @@ export class AssessmentOutcomeComponent implements OnInit {
 
   }
 
-  OnModalAction(event: any) {
-    this.closeModal.close();
+  OnConfirmModalAction(event: any) {
+    this.confirmModal.close();
     if (event) {
-      this.CloseReferral();
+      this.SaveOutcome();
     }
   }
 
-  OnCompletionModalAction(event: any) {
-    this.completeModal.close();
-    if (event) {
-      this.CompleteReview();
-    }
+  SaveOutcome() {
+
+    const confirmedDateTime =
+    this.CreateDateFromPickerObjects(
+      this.confirmedAssessmentDateField.value,
+      this.confirmedAssessmentTimeField.value
+    );
+
+    const doctorList: AssessmentOutcomeDoctor[] = [];
+
+    this.attendingDoctors.forEach(doctor => {
+      const attendingDoctor =  {
+        attended: doctor.selected,
+        id: doctor.doctorId
+      } as AssessmentOutcomeDoctor;
+
+      doctorList.push(attendingDoctor);
+    });
+
+    const assessmentOutcome = {
+      assessmentId: this.assessmentId,
+      attendingDoctors: doctorList,
+      completedTime: confirmedDateTime,
+      unsuccessfulAssessmentTypeId: this.selectedOutcome.id
+    } as AssessmentOutcome;
+
+    this.assessmentService.putOutcome(
+      assessmentOutcome,
+      this.assessmentId,
+      this.selectedOutcome.id === 0)
+    .subscribe((success) => {
+      this.toastService.displaySuccess({
+        message: 'Assessment Outcome Saved'
+      });
+      this.routerService.navigateByUrl('/referral/list');
+    }, (err) => {
+      this.toastService.displayError({
+        title: 'Server Error',
+        message: 'Unable to update assessment! Please try again in a few moments'
+      });
+    });
   }
 
   ToggleSelection(id: number, event) {
-    console.log(id, event);
     const idx = this.attendingDoctors.findIndex(x => x.id === id);
-    this.attendingDoctors[idx].selected = event.target.checked;
+    this.attendingDoctors[idx].selected = !this.attendingDoctors[idx].selected;
   }
 
 }
