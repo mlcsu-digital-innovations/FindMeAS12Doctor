@@ -127,6 +127,10 @@
                   *ngIf="confirmedAssessmentDateField.errors?.MissingDate || confirmedAssessmentTimeField.errors?.MissingTime">
                   <span>* Date / Time of assessment is required</span>
                 </div>
+                <div class="invalid-field"
+                  *ngIf="confirmedAssessmentDateField.errors?.InvalidDateTime">
+                  <span>* Invalid Assessment Date / Time</span>
+                </div>
               </div>
             </div>
 

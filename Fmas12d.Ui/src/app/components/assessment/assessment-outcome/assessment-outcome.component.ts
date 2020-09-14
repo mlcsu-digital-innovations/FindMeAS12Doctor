@@ -208,6 +208,12 @@ export class AssessmentOutcomeComponent implements OnInit {
           this.confirmedAssessmentTimeField.value
         );
 
+      if (moment(confirmedDateTime).isBefore(moment(this.referralCreated)) ||
+          moment(confirmedDateTime).isAfter(moment())) {
+        this.confirmedAssessmentDateField.setErrors({InvalidDateTime: true});
+        hasErrors = true;
+      }
+
       this.assessmentOutcomeDateTime = moment(confirmedDateTime).format('DD/MM/YYYY HH:mm');
     }
 
@@ -292,6 +298,7 @@ export class AssessmentOutcomeComponent implements OnInit {
     this.referralId = referral.id;
     this.referralStatusId = referral.referralStatusId;
     this.referralStatus = referral.statusName;
+    this.referralCreated = referral.createdAt;
 
     this.isInReviewState = referral.referralStatusId === REFERRAL_STATUS_AWAITING_REVIEW;
     this.isScheduled = referral.referralStatusId === REFERRAL_STATUS_ASSESSMENT_SCHEDULED;
