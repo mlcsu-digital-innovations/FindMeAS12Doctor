@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { ParamMap, ActivatedRoute } from '@angular/router';
 import { Referral } from 'src/app/interfaces/referral';
-import { REFERRAL_STATUS_AWAITING_REVIEW, REFERRAL_STATUS_OPEN } from 'src/app/constants/Constants';
+import { REFERRAL_STATUS_AWAITING_REVIEW, REFERRAL_STATUS_OPEN, REFERRAL_STATUS_ASSESSMENT_SCHEDULED } from 'src/app/constants/Constants';
 import { ReferralService } from 'src/app/services/referral/referral.service';
 import { ReferralView } from 'src/app/interfaces/referral-view';
 import { RouterService } from 'src/app/services/router/router.service';
@@ -27,6 +27,7 @@ export class AssessmentViewComponent implements OnInit {
   currentAssessmentForm: FormGroup;
   isInReviewState: boolean;
   isPatientIdValidated: boolean;
+  isScheduled: boolean;
   pageSize: number;
   referral$: Observable<ReferralView>;
   referralCreated: Date;
@@ -114,6 +115,10 @@ export class AssessmentViewComponent implements OnInit {
         ''
       ],
     });
+  }
+
+  AddAssessmentOutcome() {
+    this.routerService.navigateByUrl(`/assessment/outcome/${this.referralId}`);
   }
 
   CancelView() {
@@ -215,6 +220,7 @@ export class AssessmentViewComponent implements OnInit {
     this.referralStatus = referral.statusName;
 
     this.isInReviewState = referral.referralStatusId === REFERRAL_STATUS_AWAITING_REVIEW;
+    this.isScheduled = referral.referralStatusId === REFERRAL_STATUS_ASSESSMENT_SCHEDULED;
 
     if (referral.currentAssessment.scheduledTime !== null) {
       this.showDateTitle = 'Scheduled Date / Time';

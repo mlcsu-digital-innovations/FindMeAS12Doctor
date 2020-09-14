@@ -48,6 +48,10 @@ export class ReferralListComponent implements OnInit {
     );
   }
 
+  CanAddOutcome(referralStatusId: number): boolean {
+    return referralStatusId === REFERRAL_STATUS_ASSESSMENT_SCHEDULED;
+  }
+
   CanDoctorsBeAllocated(referralStatusId: number): boolean {
     return this.IsReferralEditableByStatus(referralStatusId);
   }

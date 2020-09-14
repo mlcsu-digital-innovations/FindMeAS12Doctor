@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Fmas12d.Api.ViewModels
 {
@@ -10,6 +11,7 @@ namespace Fmas12d.Api.ViewModels
     {
       if (model == null) return;
 
+      CreatedAt = model.CreatedAt;
       CurrentAssessment = new ReferralViewCurrentAssessment(model.CurrentAssessment);
       Id = model.Id;
       LeadAmhp = model.LeadAmhpName;
@@ -18,8 +20,10 @@ namespace Fmas12d.Api.ViewModels
         ?.Select(p => new ReferralViewPreviousAssessment(p)).ToList();
       ReferralStatusId = model.ReferralStatusId;
       StatusName = model.StatusName;
+      
     }
 
+    public DateTimeOffset CreatedAt { get; set; }
     public ReferralViewCurrentAssessment CurrentAssessment { get; set; }
     public int Id { get; set; }
     public string LeadAmhp { get; set; }

@@ -4,6 +4,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { UserDetails } from 'src/app/interfaces/user-details';
+import { AssessmentOutcome } from 'src/app/interfaces/assessment-outcome';
 
 @Injectable({
   providedIn: 'root'
@@ -117,6 +118,16 @@ export class AssessmentService {
       user,
       { headers }
     );
+  }
+
+  public putOutcome(
+    assessmentOutcome: AssessmentOutcome,
+    assessmentId: number,
+    success: boolean) {
+    const url = `${environment.apiEndpoint}/assessment/${assessmentId}/outcome/${success ?
+      'success' : 'failure'}`;
+
+    return this.httpClient.put(url, assessmentOutcome);
   }
 
   public allocateNewUnregisteredDoctor(assessmentId: number, user: UserDetails) {
