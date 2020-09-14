@@ -1,9 +1,9 @@
-<app-navbar></app-navbar>
-<div class="page-content">
+<!-- <app-navbar></app-navbar> -->
+<!-- <div class="page-content">
   <div class="row" *ngIf="isDevelopment && isAuthorized">
     <div class="col-md-12">
-      <button type="button" 
-              class="btn btn-primary" 
+      <button type="button"
+              class="btn btn-primary"
               (click)="gotoReferralList()">Referral List</button>
     </div>
   </div>
@@ -14,4 +14,205 @@
       <pre><code>{{userData | json}}</code></pre>
     </div>
   </div>
+</div> -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon">
+    </span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="login()">Sign In <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/register">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/about">About Us</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+  <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <h1 class="display-4 font-weight-normal">Find Me An S12 Doctor</h1>
+    <p class="lead font-weight-normal">Streamline the mental health assessment and payment process.</p>
+    <p class="text-muted font-weight-normal">MLCSU finance experts working in house with our
+      in-house app development team, Digital Innovation have developed our innovative digital
+      solution ‘Find me an S.12 Doctor’. Our solution crafted from within the NHS and for the NHS
+      makes sourcing an S.12 doctor rapid and hassle-free and is available through an innovative
+      web portal and phone app.</p>
+    <p class="text-muted font-weight-normal">Our NHS-built app meets all our shared information
+      governance standards and is made purely to free-up capacity in the NHS. With no shareholders
+      or owners to pay, every penny of investment in our tool goes back into the NHS – either by
+      freeing up resource or investing in more innovation that benefits our staff and patients. </p>
+    <a class="btn btn-outline-secondary" (click)="scroll(main)">Read More</a>
+
+
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+      <div class="bg-dark d-flex flex-column flex-lg-row bd-highlight mb-6 flex-md-equal">
+        <div class="my-3 p-3">
+          <h4 class="display-5 text-white">Already registered ? </h4>
+          <a class="btn btn-outline-secondary text-white btn-space" (click)="login()">Sign In</a>
+        </div>
+        <div class="my-3 p-3">
+          <h4 class="display-5 text-white">Require Access ? </h4>
+          <a class="btn btn-outline-secondary text-white btn-space" href="/register">Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="product-device shadow-sm d-none d-md-block"></div>
+  <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
 </div>
+
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3" #main>
+  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden themed">
+    <div class="my-3 p-3">
+      <h2 class="display-5">Streamline the mental health assessment and payment process</h2>
+      <p class="text-muted font-weight-normal text-white text-left">Mental Health Act assessments are an essential tool that help care specialists get patients to the care they need. To carry out an assessment, Approved Mental Health Professionals (AMHPs) arrange ‘section 12’ qualified and registered doctors to visit their patient so that a full assessment of care need can take place. Arranging all of this isn’t easy – AMHPs have to trawl through contact lists, often paper-based and out of date, to try to contact a doctor who is qualified, local and available. This can take hours, even longer... and all the while, a patient remains waiting to receive the potentially lifesaving care and protection they need.</p>
+      <p class="text-muted font-weight-normal text-white text-left">The NHS Midlands and Lancashire Commissioning Support Unit’s Customer Finance team recognise the inefficiency in the end-to-end process and the significant risks due to poor controls. They also currently have to deal with daily calls from doctors chasing for payment and, as it is paper-based, reporting is very limited.</p>
+      <p class="text-muted font-weight-normal text-white text-left">It was clear to us there are both patient safety and experience benefits, along with efficiency savings for both Clinical Commissioning Groups and Commissioning Support Units, s12 Doctors, AMHPs and Finance staff to be realised with a better solution.</p>
+      <p class="text-muted font-weight-normal text-white text-left">Our in-house app development team, Digital Innovation – working with expert finance colleagues – have developed our innovative digital solution ‘Find me an S.12 Doctor’. Available through an innovative web portal and phone app, our solution crafted from within the NHS and for the NHS makes sourcing an S.12 doctor rapid and hassle-free. Within minutes, AMHPs can geo-locate and select appropriate doctors from the local area and book them. Then, once the assessment is complete, the system offers an error and fraud-safe automated claims process that gives Clinical Commissioning Groups critical financial control. </p>
+      <p class="text-muted font-weight-normal text-white text-left">Our NHS-built app meets all our shared information governance standards and is made purely to free-up capacity in the NHS. With no shareholders or owners to pay, every penny of investment in our tool goes back into the NHS – either by freeing up resource or investing in more innovation that benefits our staff and patients. </p>
+      <p class="lead font-weight-normal text-white text-left">Developed from within the NHS, for the NHS by the Digital Innovation Unit </p>
+    </div>
+  </div>
+</div>
+
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+    <div class="my-3 p-3">
+      <h2 class="display-5">Speak to us today for a demonstration or email: <a href="mailTo:hello@digitalinnovationwm.nhs.uk">hello@digitalinnovationwm.nhs.uk</a></h2>
+    </div>
+  </div>
+</div>
+
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+
+    <div class="my-3 p-3">
+      <h2 class="display-5">Benefits Overview</h2>
+
+      <div class="d-flex flex-column flex-lg-row bd-highlight mb-6 flex-md-equal">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Patients</h4>
+            <ul class="text-left text-white">
+              <li>Fast decisions mean a fast assessment so that the right care can be provided as quickly as possible</li>
+              <li>Less distress and confusion for friends and family</li>
+              <li>Better use of all public resources – A&E, policing, social care</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">AMHPs</h4>
+            <ul class="text-left text-white">
+              <li>Quickly locate local, available and qualified S.12 doctors – no more lists, no more countless and fruitless phone calls</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">S.12 Doctors</h4>
+            <ul class="text-left text-white">
+              <li>Maximise their time and income by sharing their availability with local AMHPs</li>
+              <li>Retention and growth of experience, skills and professional relationships</li>
+              <li>One-click accept or decline assessment requests on their phone, whenever and wherever</li>
+              <li>Easily submit claims and check on status – all paper-free!</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">NHS CCGs</h4>
+            <ul class="text-left text-white">
+              <li>Streamline invoicing and payments – a finance claims processor is no-longer required</li>
+              <li>Prevent errors or fraud that can and does occur with manual/paper systems, which also minimises the risk of legal action/litigation</li>
+              <li>Advanced query and reporting tools</li>
+              <li>Enables a faster clinical response, minimising delays and avoiding escalation </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="my-3 p-3">
+      <p class="lead font-weight-normal text-left">Our NHS-built app meets all our shared information governance standards and is made purely to free-up capacity in the NHS. With no shareholders or owners to pay, every penny of investment in our tool goes back into the NHS – either by freeing up resource or investing in more innovation that benefits our staff and patients. </p>
+    </div>
+  </div>
+</div>
+
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+  <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden themed">
+    <div class="d-flex flex-column flex-lg-row bd-highlight mb-6 justify-content-center">
+      <div class="my-3 p-3">
+        <div>
+          <div class="logo">
+          </div>
+        </div>
+      </div>
+      <div class="my-3 p-3">
+        <div class="flex-fill">
+          <h2 class="display-5">Find Me An S12 Doctor is now available on the Android and Apple App Stores</h2>
+        </div>
+        <div class="d-flex flex-row justify-content-center">
+
+          <div>
+            <a href="https://www.apple.com/uk/ios/app-store/" _target="blank">
+              <span class="apple store"></span>
+            </a>
+          </div>
+          <div>
+            <a href="https://play.google.com/store" _target="blank">
+              <span class="store google"></span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="container py-5">
+
+  <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+    <div class=" mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden ">
+
+      <div class="d-flex flex-column flex-md-row bd-highlight mb-6">
+
+      <div class="my-3 p-3 flex-fill">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+        <small class="d-block mb-3 text-muted text-left">&copy; 2019-2020 Midlands and Lancashire CSU</small>
+      </div>
+
+      <div class="my-3 p-3 flex-fill">
+        <h5 class="text-left">Contact</h5>
+        <ul class="list-unstyled text-small text-left">
+          <li><a class="text-muted" href="#">midlands.lancashire@nhs.net</a></li>
+          <li><a class="text-muted" href="#">0121 612 1500</a></li>
+        </ul>
+      </div>
+
+      <div class="my-3 p-3 flex-fill">
+        <h5 class="text-left">Address</h5>
+        <ul class="list-unstyled text-small text-left">
+          <li><a class="text-muted" href="#">Midlands and Lancashire CSU</a></li>
+          <li><a class="text-muted" href="#">Kingston House, 438-450 High Street</a></li>
+          <li><a class="text-muted" href="#">West Bromwich</a></li>
+          <li><a class="text-muted" href="#">West Midlands</a></li>
+          <li><a class="text-muted" href="#">B70 9LD</a></li>
+        </ul>
+      </div>
+      </div>
+    </div>
+  </div>
+
+</footer>
+

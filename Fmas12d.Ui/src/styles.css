@@ -487,3 +487,8 @@ a:hover {
   text-align: center;
   width: 100%;
 }
+
+.required-field::after {
+  color: red;
+  content: " *";
+}

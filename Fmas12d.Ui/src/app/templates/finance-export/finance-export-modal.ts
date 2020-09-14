@@ -22,8 +22,6 @@ export class FinanceExportModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init modal');
-
     this.exportingCcgs =
       this.exportClaims.map((x: FinanceClaim) => x.ccg)
       .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);

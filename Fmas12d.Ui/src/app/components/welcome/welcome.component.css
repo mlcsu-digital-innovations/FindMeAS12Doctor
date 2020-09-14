@@ -1,3 +1,172 @@
 .row {
   padding-bottom: 15px;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+.navbar-brand {
+  background-image: url('../../../img/icon_round.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  height: 50px;
+  width: 50px;
+}
+
+.product-device {
+  position: absolute;
+  right: 10%;
+  bottom: -30%;
+  width: 260px;
+  height: 540px;
+  background-color: #333;
+  border-radius: 21px;
+
+  -webkit-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+
+.apple {
+  background-image: url('../../../img/app-store-badge.png');
+}
+
+.google {
+  background-image: url('../../../img/google-play-badge.png');
+}
+
+.store {
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  height: 100px;
+  margin: auto;
+  width: 200px;
+}
+
+.logo {
+  background-image: url('../../../img/icon_round.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  height: 150px;
+  margin: auto;
+  width: 150px;
+}
+
+.product-device::before {
+  position: absolute;
+  top: 10%;
+  right: 10px;
+  bottom: 10%;
+  left: 10px;
+  content: "";
+  background-color: rgba(255, 255, 255, .1);
+  border-radius: 5px;
+  background-image: url('../../../img/fmas_signin.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.product-device-2 {
+  top: -25%;
+  right: auto;
+  bottom: 0;
+  left: 5%;
+  background-color: #e5e5e5;
+}
+
+.themed {
+  background-color: #0db3bf !important;
+}
+
+p.text-white {
+  color: #fff !important;
+}
+
+.btn-space {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/*
+ * Extra utilities
+ */
+
+.flex-equal > * {
+  -ms-flex: 1;
+  flex: 1;
+}
+@media (min-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1;
+    flex: 1;
+  }
+}
+
+@media (max-width: 410px) {
+  .store {
+    height: 75px;
+    width: 150px;
+  }
+
+  .display-4 {
+    font-size: 46px;
+  }
+}
+
+@media (max-width: 560px) {
+  a {
+    font-size: 20px;
+  }
+}
+
+
+
+
+
+.overflow-hidden { overflow: hidden; }
+
+
+.carousel-item {
+  /* Force to always be block */
+  display: block !important;
+  z-index: 1;
+  position: absolute;
+  transform: translateX(100%);
+  opacity: 0;
+  transition:all  0.2s;
+  visibility: hidden;
+}
+
+.carousel-item.active {
+  position: relative;
+  transform: translateX(0);
+  visibility: visible ;
+  opacity: 1;
+}
+
+.card {
+  background-color: #0db3bf;
+  padding: 20px;
+  margin: 10px;
+}
+
+@media (max-width: 988px) {
+  .flex-md-equal > * {
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1 0 0;
+    flex: 1 0 0;
+  }
+}

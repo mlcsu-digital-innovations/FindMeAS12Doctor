@@ -198,7 +198,7 @@
               </div>
             </div>
             <div class="form-row mt-more-2">
-              <div class="col-md-3 mb-2">
+              <div class="col-md-2 mb-2">
                 <button
                   class="btn btn-outline btn-fill btn-spaced"
                   type="button"
@@ -217,6 +217,15 @@
                 >
                   <i class="fas fa-clipboard-check"></i>
                   Complete Review
+                </button>
+                <button
+                  class="btn btn-primary btn-spaced"
+                  type="button"
+                  (click)="AddAssessmentOutcome()"
+                  *ngIf="isScheduled"
+                >
+                  <i class="fas fa-poll"></i>
+                  Assessment Outcome
                 </button>
               </div>
               <div class="col-md-3 mb-2 offset-md-3 text-right">
@@ -245,7 +254,7 @@
                   <thead>
                     <tr>
                       <th scope="col" sortable="dateTime" (sort)="onSort($event)">Scheduled Date/Time</th>
-                      <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Postcode</th>                    
+                      <th scope="col" sortable="assessmentPostcode" (sort)="onSort($event)">Postcode</th>
                       <th scope="col" sortable="assessmentStatus" (sort)="onSort($event)">Status</th>
                       <th scope="col" sortable="reason" (sort)="onSort($event)">Reason</th>
                       <th scope="col" sortable="amhp" (sort)="onSort($event)">AMHP</th>
@@ -278,8 +287,8 @@
               </div>
             </div>
             <div class="d-flex justify-content-between p-2" *ngIf="referral.previousAssessments.length > 0">
-              <ngb-pagination 
-                [collectionSize]="" 
+              <ngb-pagination
+                [collectionSize]=""
                 [pageSize]=""
                 [maxSize]=5>
               </ngb-pagination>
