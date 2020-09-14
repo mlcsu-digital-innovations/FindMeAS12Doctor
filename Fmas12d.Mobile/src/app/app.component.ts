@@ -167,7 +167,7 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
         this.toastService.displaySuccess({message: 'Signed in'});
         this.refreshBadges();
-        this.authService.authState.next(true);
+        this.changeAuthState(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
@@ -179,7 +179,7 @@ export class AppComponent implements OnInit {
 
         this.toastService.displaySuccess({message: 'Signed in'});
         this.refreshBadges();
-        this.authService.authState.next(true);
+        this.changeAuthState(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
@@ -190,7 +190,7 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:logoutSuccess', () => {
         this.router.navigate(['/home'])
         .then(r => {
-          this.authService.authState.next(false);
+          this.changeAuthState(false);
         });
       });
 
@@ -224,6 +224,12 @@ export class AppComponent implements OnInit {
     }, error => {
       this.toastService.displayError({ message: error });
     });
+  }
+
+  private changeAuthState(authState: boolean) {
+    if (!this.platform.is('cordova')) {
+      this.authService.authState.next(authState);
+    }
   }
 
   private hasPin(): Observable<any> {

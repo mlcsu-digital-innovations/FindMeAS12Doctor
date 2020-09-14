@@ -10,7 +10,7 @@ import { NetworkService, ConnectionStatus } from 'src/app/services/network/netwo
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
 import { OnCallService } from 'src/app/services/on-call/on-call.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
-import { Platform, AlertController, ToastController, LoadingController, IonItemSliding } from '@ionic/angular';
+import { Platform, AlertController, LoadingController, IonItemSliding } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Subscription, Observable } from 'rxjs';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -31,13 +31,12 @@ import { take } from 'rxjs/operators';
 })
 export class HomePage implements OnInit, OnDestroy {
 
-  private hasData: boolean;
   private loading: HTMLIonLoadingElement;
   private networkSubscription: Subscription;
+  private refreshingData: boolean;
+  private spinnerVisible: boolean;
   private subscriptions: Subscription[] = [];
   private tasks$ = [];
-  private spinnerVisible: boolean;
-  private refreshingData: boolean;
 
   public allAssessments: AmhpAssessmentRequest[] = [];
   public appVersion: string = version;
@@ -81,14 +80,21 @@ export class HomePage implements OnInit, OnDestroy {
     private userAvailabilityService: UserAvailabilityService,
     private userDetailsService: UserDetailsService
   ) {
+      console.log('home page constructed');
+
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
         if (this.isAuthenticated) {
-          this.refreshPage();
+          console.log('authState change + authenticated');
+
+          setTimeout(() => {
+            this.refreshPage();
+          }, 750);
+
         }
       });
 
-      this.userDetailsService.currentUser.subscribe(user => {
+      this.userDetailsService.currentUser.pipe(take(1)).subscribe(user => {
         this.currentUser = user;
       });
 
@@ -99,6 +105,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     if (this.isAuthenticated) {
+        console.log('page entered + authenticated');
         this.refreshPage();
     }
     this.checkForPin();
@@ -196,12 +203,18 @@ export class HomePage implements OnInit, OnDestroy {
     Observable.zip(...this.tasks$)
       .subscribe((result) => {
         this.refreshingData = false;
-        this.hasData = true;
         this.displayRequests(result[0] as AmhpAssessmentRequest[]);
         this.displayAvailability(result[1] as UserAvailability[]);
         this.displayOncall(result[2] as OnCallDoctor[]);
       }, err => {
+        this.scheduledAssessments = [];
+        this.currentOnCall = null;
+        this.currentAvailability = null;
+        this.nextAvailability = null;
+        this.availabilityList = [];
+        this.unscheduledAssessments = [];
         this.refreshingData = false;
+        this.toastService.displayError({message: 'Unable to retrieve data'});
       });
   }
 
