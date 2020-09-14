@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
   public isAuthenticated: boolean;
   public unconfirmedOnCallCount: number;
 
+  private runningOnDevice = false;
+
   constructor(
     private alertController: AlertController,
     private assessmentClaimService: AssessmentClaimService,
@@ -114,6 +116,7 @@ export class AppComponent implements OnInit {
       this.refreshBadges();
 
       if (this.platform.is('cordova')) {
+        this.runningOnDevice = true;
         this.showLoading();
         this.cordovaMsalService.msalInit()
         .subscribe(success => {
@@ -227,7 +230,7 @@ export class AppComponent implements OnInit {
   }
 
   private changeAuthState(authState: boolean) {
-    if (!this.platform.is('cordova')) {
+    if (!this.runningOnDevice) {
       this.authService.authState.next(authState);
     }
   }
