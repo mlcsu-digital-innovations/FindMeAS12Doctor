@@ -80,17 +80,13 @@ export class HomePage implements OnInit, OnDestroy {
     private userAvailabilityService: UserAvailabilityService,
     private userDetailsService: UserDetailsService
   ) {
-      console.log('home page constructed');
 
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
         if (this.isAuthenticated) {
-          console.log('authState change + authenticated');
-
           setTimeout(() => {
             this.refreshPage();
           }, 750);
-
         }
       });
 
@@ -105,7 +101,6 @@ export class HomePage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     if (this.isAuthenticated) {
-        console.log('page entered + authenticated');
         this.refreshPage();
     }
     this.checkForPin();
