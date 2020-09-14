@@ -1,5 +1,5 @@
 import { EventTypes, OidcSecurityService, PublicEventsService, AuthorizationResult, AuthorizedState } from 'angular-auth-oidc-client';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
@@ -35,6 +35,7 @@ export class SecurityService {
       .registerForEvents()
       .pipe(filter((notification) => notification.type === EventTypes.NewAuthorizationResult))
       .subscribe((result) => {
+        console.log('==================================================');
         console.log('NewAuthorizationResult with value from app', result);
         this.onAuthorizationResultComplete(result.value);
       });
@@ -90,7 +91,9 @@ export class SecurityService {
 
     if (path === '/') {
 
-      this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+      this.userDetailsService.getCurrentUserDetails()
+      .pipe(take(1))
+      .subscribe((user: User) => {
         if (user.isDoctor) {
           this.router.navigate(['/doctor/claims/list']);
         } else if (user.isFinance) {
@@ -111,7 +114,9 @@ export class SecurityService {
     if (authorizationResult.authorizationState === AuthorizedState.Authorized) {
       if (path === '/') {
 
-        this.userDetailsService.getCurrentUserDetails().subscribe((user: User) => {
+        this.userDetailsService.getCurrentUserDetails()
+        .pipe(take(1))
+        .subscribe((user: User) => {
           if (user.isDoctor) {
             this.router.navigate(['/doctor/claims/list']);
           } else if (user.isFinance) {

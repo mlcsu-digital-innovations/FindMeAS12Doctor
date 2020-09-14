@@ -22,6 +22,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
+    // clear any existing redirects
+    localStorage.setItem('redirect', JSON.stringify('/'));
+
     this.signalRService.startConnection();
 
     this.signalRService.notification
