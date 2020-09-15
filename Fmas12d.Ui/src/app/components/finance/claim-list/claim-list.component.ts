@@ -205,8 +205,6 @@ export class ClaimListComponent implements OnInit {
         this.activeClaims.map((x: FinanceClaim) => x.ccg)
         .filter((ccg, i, arr) => arr.findIndex(t => t.id === ccg.id) === i);
 
-      console.log(exportCcgs);
-
       exportCcgs.forEach(ccg => {
         if (this.exportCcgClaims(ccg) === 0) {
           this.toastService.displayInfo({

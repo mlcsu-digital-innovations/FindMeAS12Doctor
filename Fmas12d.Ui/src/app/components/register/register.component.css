@@ -1,0 +1,31 @@
+.navbar-brand {
+  background-image: url('../../../img/icon_round.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  height: 50px;
+  width: 50px;
+}
+
+/*
+ * Extra utilities
+ */
+
+ .flex-equal > * {
+  -ms-flex: 1;
+  flex: 1;
+}
+@media (min-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1;
+    flex: 1;
+  }
+}
+
+@media (max-width: 410px) {
+  .display-4 {
+    font-size: 46px;
+  }
+}
+
+.overflow-hidden { overflow: hidden; }

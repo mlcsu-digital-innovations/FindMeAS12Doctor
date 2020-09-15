@@ -35,3 +35,15 @@ ion-icon {
 }
 
 ion-col { text-align: center;}
+
+.skeleton:empty {background-color: #FFFFFF;}
+.skeleton:empty {
+  background-image: linear-gradient( 100deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ),linear-gradient( #cccccc 20px, transparent 0 ),radial-gradient( circle 14px at 14px 14px, #cccccc 13px, transparent 14px );
+  background-repeat: repeat-y;background-size: 50px 170px,300px 170px,28px 170px;
+  background-position: 0 0,70px 25px,20px 20px;
+  animation: shineForSkeleton 3s infinite;
+  height: 80px;
+}
+
+@keyframes shineForSkeleton {to {background-position: 100% 0,70px 25px,20px 20px;}}
+

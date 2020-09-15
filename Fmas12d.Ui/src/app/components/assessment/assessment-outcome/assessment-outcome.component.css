@@ -1,0 +1,106 @@
+button.less-padding {
+  bottom:2px !important;
+}
+
+form {
+  margin:20px;
+}
+
+.validating {
+  min-width: 150px;
+}
+
+form {
+  margin:10px;
+}
+
+.table-referral-list {
+  background-color:#6AB0ED;
+  font-size: smaller;
+  margin: 10px;
+}
+
+.table-referral-list th {
+  background-color: #0dadb7;
+  color: #fff;
+}
+
+th[sortable] {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+th[sortable].desc:before, th[sortable].asc:before {
+  content: '';
+  display: block;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAmxJREFUeAHtmksrRVEUx72fH8CIGQNJkpGUUmakDEiZSJRIZsRQmCkTJRmZmJgQE0kpX0D5DJKJgff7v+ru2u3O3vvc67TOvsdatdrnnP1Y///v7HvvubdbUiIhBISAEBACQkAICAEhIAQ4CXSh2DnyDfmCPEG2Iv9F9MPlM/LHyAecdyMzHYNwR3fdNK/OH9HXl1UCozD24TCvILxizEDWIEzA0FcM8woCgRrJCoS5PIwrANQSMAJX1LEI9bqpQo4JYNFFKRSvIgsxHDVnqZgIkPnNBM0rIGtYk9YOOsqgbgepRCfdbmFtqhFkVEDVPjJp0+Z6e6hRHhqBKgg6ZDCvYBygVmUoEGoh5JTRvIJwhJo1aUOoh4CLPMyvxxi7EWOMgnCGsXXI1GIXlZUYX7ucU+kbR8NW8lh3O7cue0Pk32MKndfUxQFAwxdirk3fHappAnc0oqDPzDfGTBrCfHP04dM4oTV8cxr0SVzH9FF07xD3ib6xCDE+M+aUcVygtWzzbtGX2rPBrEUYfecfQkaFzYi6HjVnGBdtL7epqAlc1+jRdAap74RrnPc4BCijttY2tRcdN0g17w7HqZrXhdJTYAuS3hd8z+vKgK3V1zWPae0mZDMykadBn1hTQBLnZNwVrJpSe/NwEeDsEwCctEOsJTsgxLvCqUl2ACftEGvJDgjxrnBqkh3ASTvEWrIDQrwrnJpkB3DSDrGW7IAQ7wqnJtkBnLRztejXXVu4+mxz/nQ9jR1w5VB86ejLTFcnnDwhzV+F6T+CHZlx6THSjn76eyyBIOPHyDakhBAQAkJACAgBISAEhIAQYCLwC8JxpAmsEGt6AAAAAElFTkSuQmCC') no-repeat;
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  float: right;
+}
+
+th[sortable].desc:before {
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+}
+
+th {
+  border-top: 0;
+}
+
+.btn-spaced {
+  margin-left: 10px;
+}
+
+.gmc-number {
+  font-size: 0.8em;
+  padding-left: 5px;
+}
+
+.read-only {
+  background-color: #ddd;
+  border-radius: .25rem;
+  border: 1px solid #ced4da;
+  color: #495057;
+  font-size: 1.2em;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  min-height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+}
+
+.no-previous{
+  background-color: #ec5a3b;
+  color: #fff;
+  margin: 10px;
+  padding: .375rem .75rem;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-fill {
+  min-width: 200px;
+}
+
+.btn-outline {
+  border: 2px solid #ec5a3b;
+  color: #ec5a3b;
+}
+
+hr {
+  margin: 30px 10px;
+  border-color: #0dadb7;
+}
+
+.attending {
+   padding: 5px;
+}
+
+.attending-row {
+  padding-left: 0;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #495057;
+}

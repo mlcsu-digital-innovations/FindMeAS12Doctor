@@ -10,7 +10,7 @@ import { NetworkService, ConnectionStatus } from 'src/app/services/network/netwo
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
 import { OnCallService } from 'src/app/services/on-call/on-call.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
-import { Platform, AlertController, ToastController, LoadingController, IonItemSliding } from '@ionic/angular';
+import { Platform, AlertController, LoadingController, IonItemSliding } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Subscription, Observable } from 'rxjs';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -22,6 +22,7 @@ import { version } from '../../../../package.json';
 import * as moment from 'moment';
 
 import 'rxjs/add/observable/zip';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -30,21 +31,20 @@ import 'rxjs/add/observable/zip';
 })
 export class HomePage implements OnInit, OnDestroy {
 
-  private hasData: boolean;
   private loading: HTMLIonLoadingElement;
   private networkSubscription: Subscription;
+  private refreshingData: boolean;
+  private spinnerVisible: boolean;
   private subscriptions: Subscription[] = [];
   private tasks$ = [];
-  private spinnerVisible: boolean;
-  private refreshingData: boolean;
 
   public allAssessments: AmhpAssessmentRequest[] = [];
   public appVersion: string = version;
   public assessmentListLastUpdated: Date;
   public assessmentListScheduled: AmhpAssessmentList[] = [];
-  public assessmentRequests: AmhpAssessmentRequest[] = [];
+  public assessmentRequests: AmhpAssessmentRequest[] = null;
   public assessmentRequestsLastUpdated: Date;
-  public availabilityList: UserAvailability[] = [];
+  public availabilityList: UserAvailability[] = null;
   public availableList: UserAvailability[] = [];
   public canUsePin: boolean;
   public connection: boolean;
@@ -54,14 +54,14 @@ export class HomePage implements OnInit, OnDestroy {
   public isAuthenticated: boolean;
   public nextAvailability: UserAvailability;
   public nextOnCall: OnCallDoctor;
-  public onCallDoctorsConfirmed: OnCallDoctor[] = [];
+  public onCallDoctorsConfirmed: OnCallDoctor[] = null;
   public onCallDoctorsRejected: OnCallDoctor[] = [];
   public onCallDoctorsUnconfirmedCount: number;
-  public scheduledAssessments: AmhpAssessmentRequest[] = [];
+  public scheduledAssessments: AmhpAssessmentRequest[] = null;
   public showAvailability: boolean;
   public showOnCall: boolean;
   public unavailableList: UserAvailability[] = [];
-  public unscheduledAssessments: AmhpAssessmentRequest[] = [];
+  public unscheduledAssessments: AmhpAssessmentRequest[] = null;
 
   constructor(
     private alertController: AlertController,
@@ -80,14 +80,17 @@ export class HomePage implements OnInit, OnDestroy {
     private userAvailabilityService: UserAvailabilityService,
     private userDetailsService: UserDetailsService
   ) {
+
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
         if (this.isAuthenticated) {
-          this.refreshPage();
+          setTimeout(() => {
+            this.refreshPage();
+          }, 750);
         }
       });
 
-      this.userDetailsService.currentUser.subscribe(user => {
+      this.userDetailsService.currentUser.pipe(take(1)).subscribe(user => {
         this.currentUser = user;
       });
 
@@ -98,7 +101,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     if (this.isAuthenticated) {
-      this.refreshPage();
+        this.refreshPage();
     }
     this.checkForPin();
   }
@@ -188,12 +191,6 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     this.tasks$ = [];
-    this.showLoading();
-
-    this.unscheduledAssessments = [];
-    this.assessmentRequests = [];
-    this.scheduledAssessments = [];
-
     this.tasks$.push(this.assessmentService.getRequests());
     this.tasks$.push(this.userAvailabilityService.getListForUser());
     this.tasks$.push(this.onCallService.getListForUser());
@@ -201,14 +198,18 @@ export class HomePage implements OnInit, OnDestroy {
     Observable.zip(...this.tasks$)
       .subscribe((result) => {
         this.refreshingData = false;
-        this.hasData = true;
         this.displayRequests(result[0] as AmhpAssessmentRequest[]);
         this.displayAvailability(result[1] as UserAvailability[]);
         this.displayOncall(result[2] as OnCallDoctor[]);
-        this.closeLoading();
       }, err => {
+        this.scheduledAssessments = [];
+        this.currentOnCall = null;
+        this.currentAvailability = null;
+        this.nextAvailability = null;
+        this.availabilityList = [];
+        this.unscheduledAssessments = [];
         this.refreshingData = false;
-        this.closeLoading();
+        this.toastService.displayError({message: 'Unable to retrieve data'});
       });
   }
 
@@ -275,7 +276,14 @@ export class HomePage implements OnInit, OnDestroy {
       this.nextAvailability =
          this.availabilityList.filter(av => av.statusId === AVAILABLE).find(av =>
            (moment(av.start).isAfter(currentDate)));
+      } else {
+        this.availabilityList = [];
       }
+
+    if (!this.currentAvailability && !this.nextAvailability) {
+      this.availabilityList = [];
+    }
+
   }
 
   displayOncall(result: OnCallDoctor[]) {
@@ -299,6 +307,8 @@ export class HomePage implements OnInit, OnDestroy {
 
       this.onCallDoctorsUnconfirmedCount = result
         .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
+    } else {
+      this.onCallDoctorsConfirmed = [];
     }
   }
 
@@ -423,6 +433,7 @@ export class HomePage implements OnInit, OnDestroy {
         .subscribe((match: boolean) => {
           if (match) {
             this.authService.signinSilently();
+            this.refreshPage();
           } else {
             this.toastService.displayError({message: 'Incorrect PIN'});
           }

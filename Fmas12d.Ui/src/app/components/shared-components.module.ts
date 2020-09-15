@@ -20,9 +20,12 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ListFilterComponent } from 'src/app/components/list-filter/list-filter.component';
 import { SignOutComponent } from './sign-out/signout.component';
+import { AboutComponent } from './about/about.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
+    AboutComponent,
     AutoLoginComponent,
     DelaySpinnerComponent,
     DisableControlDirective,
@@ -34,7 +37,8 @@ import { SignOutComponent } from './sign-out/signout.component';
     UnauthorizedComponent,
     UserProfileComponent,
     WelcomeComponent,
-    SignOutComponent
+    SignOutComponent,
+    RegisterComponent
   ],
   imports: [
     CommonModule,

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { RouterService } from 'src/app/services/router/router.service';
 import { Subscription } from 'rxjs';
+import { SecurityService } from 'src/app/services/security/security.service';
+import { User } from 'src/app/interfaces/user';
+import { UserDetailsService } from 'src/app/services/user/user-details.service';
 
 @Component({
   selector: 'app-welcome',
@@ -12,47 +14,62 @@ import { Subscription } from 'rxjs';
 })
 export class WelcomeComponent implements OnInit {
 
-  isAuthorized: boolean;
-  isAuthorizedSubscription: Subscription;
-  isDevelopment: boolean;
   userData: any;
   userDataSubscription: Subscription;
 
-  constructor(
+constructor(
     private oidcSecurityService: OidcSecurityService,
-    private routerService: RouterService) { }
+    private securityService: SecurityService,
+    private userDetailsService: UserDetailsService,
+    private routerService: RouterService) {}
 
-  ngOnInit() {
+ngOnInit() {
 
-    this.isDevelopment = !environment.production;
+    this.oidcSecurityService.checkAuth()
+    .pipe(take(1))
+    .subscribe((auth) => {
 
-    this.oidcSecurityService.isAuthenticated$
-    .pipe(
-      map(
-      (isAuthorized: boolean) => {
+      if (auth) {
+        this.oidcSecurityService.userData$
+        .pipe(take(1))
+        .subscribe((userData) => {
+          this.userData = userData;
 
-        this.isAuthorized = isAuthorized;
+          if (this.userData !== null) {
+            this.userData.access_token = this.oidcSecurityService.getToken();
 
-        if (isAuthorized) {
-          this.userDataSubscription = this.oidcSecurityService.userData$.subscribe(userData => {
-            this.userData = userData;
-            if (this.userData !== null) {
-              this.userData.access_token = this.oidcSecurityService.getToken();
-              if (!this.isDevelopment) {
-                this.routerService.navigate(['/referral/list']);
-              }
-            }
-          });
-        }
+            let url = '/referral/list';
+
+            this.userDetailsService.getCurrentUserDetails()
+            .pipe(take(1))
+            .subscribe((user: User) => {
+
+              if (user.isDoctor) { url = '/doctor/claims/list'; }
+
+              if (user.isFinance) { url = '/finance/claims/list'; }
+
+              this.routerService.navigate([url]);
+            });
+          }
+        });
       }
-    ));
+
+    });
   }
 
-  copyToken() {
-    navigator.clipboard.writeText(this.userData.access_token);
-  }
+login() {
+  this.securityService.login();
+}
 
-  gotoReferralList() {
+copyToken() {
+  navigator.clipboard.writeText(this.userData.access_token);
+}
+
+scroll(el: HTMLElement) {
+  el.scrollIntoView({behavior: 'smooth'});
+}
+
+gotoReferralList() {
     this.routerService.navigate(['/referral/list']);
   }
 }
