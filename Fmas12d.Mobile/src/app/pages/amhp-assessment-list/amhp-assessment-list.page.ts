@@ -9,6 +9,8 @@ import {
   REFERRALSTATUS_RESPONSES_COMPLETE
 } from 'src/app/constants/app.constants';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-amhp-assessment-list',
   templateUrl: './amhp-assessment-list.page.html',
@@ -21,6 +23,18 @@ export class AmhpAssessmentListPage {
   public assessmentListUnscheduled: AmhpAssessmentList[] = [];
   private loading: HTMLIonLoadingElement;
 
+  private allResults: AmhpAssessmentList[] = [];
+  public showAll: boolean;
+
+  private readonly scheduledStatuses: number[] =
+  [REFERRALSTATUS_SCHEDULED, REFERRALSTATUS_RESCHEDULING];
+
+  private readonly completedStatuses: number[] = [REFERRALSTATUS_AWAITING_REVIEW];
+
+  private readonly unscheduledStatuses: number[] =
+  [REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
+    REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
+
   constructor(
     private assessmentService: AmhpAssessmentService,
     private loadingController: LoadingController
@@ -30,32 +44,50 @@ export class AmhpAssessmentListPage {
     this.refreshPage();
   }
 
+  toggleChanged(showAll: boolean) {
+    this.filterData();
+  }
+
+  filterData() {
+
+    this.assessmentListScheduled = this.allResults
+    .filter(assessment => this.scheduledStatuses.includes(assessment.referralStatusId));
+
+    this.assessmentListUnscheduled = this.allResults
+    .filter(assessment => this.unscheduledStatuses.includes(assessment.referralStatusId));
+
+    this.assessmentListComplete = this.allResults
+    .filter(assessment => this.completedStatuses.includes(assessment.referralStatusId));
+
+    if (!this.showAll) {
+      const currentDate = moment().startOf('day');
+
+      this.assessmentListScheduled =
+        this.assessmentListScheduled
+        .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+
+      this.assessmentListUnscheduled =
+        this.assessmentListUnscheduled
+        .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+
+      this.assessmentListComplete =
+        this.assessmentListComplete
+        .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+    }
+  }
+
   refreshPage($event?: any) {
     const request = this.assessmentService.getList();
     this.showLoading();
 
-    const scheduledStatuses: number[] =
-      [REFERRALSTATUS_SCHEDULED, REFERRALSTATUS_RESCHEDULING];
+    this.assessmentListScheduled = [];
+    this.assessmentListUnscheduled = [];
+    this.assessmentListComplete = [];
 
-    const completedStatuses: number[] =
-      [REFERRALSTATUS_AWAITING_REVIEW];
-
-    const unscheduledStatuses: number[] =
-      [REFERRALSTATUS_NEW, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES,
-        REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE];
 
     request.subscribe((result: AmhpAssessmentList[]) => {
       this.assessmentListLastUpdated = new Date();
-
-      this.assessmentListScheduled = result
-        .filter(assessment => scheduledStatuses.includes(assessment.referralStatusId));
-
-      this.assessmentListUnscheduled = result
-        .filter(assessment => unscheduledStatuses.includes(assessment.referralStatusId));
-
-      this.assessmentListComplete = result
-        .filter(assessment => completedStatuses.includes(assessment.referralStatusId));
-
+      this.allResults = result;
       this.closeLoading();
       this.closeRefreshing($event);
     }, error => {
