@@ -1,19 +1,16 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { MsalService as CordovaMsalService } from '../msal/msal.service';
 import { Platform } from '@ionic/angular';
+import { ReplaySubject, Observable } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
-import { Subscription, ReplaySubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ToastService } from '../toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements OnDestroy {
-
-  login: Subscription;
-  logout: Subscription;
+export class AuthService {
 
   public readonly authState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
@@ -36,11 +33,6 @@ export class AuthService implements OnDestroy {
       });
     }
 
-  ngOnDestroy(): void {
-    this.login.unsubscribe();
-    this.logout.unsubscribe();
-  }
-
   public async isAuthenticated(): Promise<boolean> {
     return this.authState.asObservable().pipe(take(1)).toPromise();
   }
@@ -54,7 +46,6 @@ export class AuthService implements OnDestroy {
   }
 
   public logoutUsingMsal() {
-    console.log('auth.service.logoutUsingMsal()');
     if (this.platform.is('cordova')) {
       this.logoutCordovaMsal();
     } else {
@@ -77,8 +68,11 @@ export class AuthService implements OnDestroy {
   }
 
   public signinSilently(): void {
-    this.login = this.cordovaMsal.signinSilently()
+
+    this.cordovaMsal.signinSilently()
+    .pipe(take(1))
     .subscribe(success => {
+      console.log('update authstate - signinSilently');
       this.authState.next(true);
     }, error => {
       this.authState.next(false);
@@ -87,9 +81,10 @@ export class AuthService implements OnDestroy {
 
   public loginCordovaMsal(): void {
 
-    this.login =
-      this.cordovaMsal.loginMsalInteractive()
+    this.cordovaMsal.loginMsalInteractive()
+      .pipe(take(1))
       .subscribe(success => {
+      console.log('update authstate - loginCordovaMsal');
       this.authState.next(true);
     }, error => {
       this.authState.next(false);
@@ -98,9 +93,9 @@ export class AuthService implements OnDestroy {
 
   public logoutCordovaMsal(): void {
 
-    console.log('auth.service.logoutCordovaMsal()');
-
-    this.logout = this.cordovaMsal.logoutMsal().subscribe(success => {
+    this.cordovaMsal.logoutMsal()
+    .pipe(take(1))
+    .subscribe(success => {
       console.log('auth.service.logoutCordovaMsal().success');
       this.authState.next(false);
       this.toastService.displaySuccess({message: 'Signed out'});

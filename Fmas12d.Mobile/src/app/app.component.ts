@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
   public isAuthenticated: boolean;
   public unconfirmedOnCallCount: number;
 
+  private runningOnDevice = false;
+
   constructor(
     private alertController: AlertController,
     private assessmentClaimService: AssessmentClaimService,
@@ -114,6 +116,7 @@ export class AppComponent implements OnInit {
       this.refreshBadges();
 
       if (this.platform.is('cordova')) {
+        this.runningOnDevice = true;
         this.showLoading();
         this.cordovaMsalService.msalInit()
         .subscribe(success => {
@@ -139,6 +142,9 @@ export class AppComponent implements OnInit {
       this.fcm.onNotification().subscribe(
         data => {
           this.refreshBadges();
+
+          this.broadcastService.broadcast('NotificationReceived', null);
+
           if (data.wasTapped) {
             // app is currently in background
             this.presentAlertConfirm(data.notificationTitle, data.notificationMessage);
@@ -164,7 +170,7 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:silentLoginSuccess', (payload) => {
         this.toastService.displaySuccess({message: 'Signed in'});
         this.refreshBadges();
-        this.authService.authState.next(true);
+        this.changeAuthState(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
@@ -176,7 +182,7 @@ export class AppComponent implements OnInit {
 
         this.toastService.displaySuccess({message: 'Signed in'});
         this.refreshBadges();
-        this.authService.authState.next(true);
+        this.changeAuthState(true);
         this.storageService.storeAccessToken(this.convertToken(payload));
         this.setUserDetails(payload);
         this.fcm.getToken().then(token => {
@@ -187,7 +193,7 @@ export class AppComponent implements OnInit {
       this.broadcastService.subscribe('msal:logoutSuccess', () => {
         this.router.navigate(['/home'])
         .then(r => {
-          this.authService.authState.next(false);
+          this.changeAuthState(false);
         });
       });
 
@@ -221,6 +227,12 @@ export class AppComponent implements OnInit {
     }, error => {
       this.toastService.displayError({ message: error });
     });
+  }
+
+  private changeAuthState(authState: boolean) {
+    if (!this.runningOnDevice) {
+      this.authService.authState.next(authState);
+    }
   }
 
   private hasPin(): Observable<any> {

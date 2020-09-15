@@ -1,17 +1,18 @@
 import { AmhpAssessmentList } from 'src/app/models/amhp-assessment-list.model';
 import { AmhpAssessmentRequest } from 'src/app/models/amhp-assessment-request.model';
 import { AmhpAssessmentService } from 'src/app/services/amhp-assessment/amhp-assessment.service';
-import { ASSESSMENTRESCHEDULING, ASSESSMENTSCHEDULED, AWAITINGREVIEW, DOCTORSTATUSALLOCATED, REFERRALSTATUS_NEW, AVAILABLE, UNAVAILABLE, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE } from 'src/app/constants/app.constants';
+import { ASSESSMENTRESCHEDULING, ASSESSMENTSCHEDULED, AWAITINGREVIEW, DOCTORSTATUSALLOCATED, REFERRALSTATUS_NEW, AVAILABLE, UNAVAILABLE, REFERRALSTATUS_SELECTING, REFERRALSTATUS_AWAITING_RESPONSES, REFERRALSTATUS_RESPONSES_PARTIAL, REFERRALSTATUS_RESPONSES_COMPLETE, REFERRALSTATUS_AWAITING_REVIEW, REFERRALSTATUS_CLOSED, REFERRALSTATUS_OPEN } from 'src/app/constants/app.constants';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { BroadcastService } from '@azure/msal-angular';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy  } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 import { OnCallDoctor } from 'src/app/interfaces/on-call-doctor.interface';
 import { OnCallService } from 'src/app/services/on-call/on-call.service';
 import { PinDialog } from '@ionic-native/pin-dialog/ngx';
-import { Platform, AlertController, ToastController, LoadingController, IonItemSliding } from '@ionic/angular';
+import { Platform, AlertController, LoadingController, IonItemSliding } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserAvailability } from 'src/app/interfaces/user-availability.interface';
 import { UserAvailabilityService } from 'src/app/services/user-availability/user-availability.service';
@@ -20,6 +21,9 @@ import { UserDetailsService } from 'src/app/services/user-details/user-details.s
 import { version } from '../../../../package.json';
 import * as moment from 'moment';
 
+import 'rxjs/add/observable/zip';
+import { take } from 'rxjs/operators';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -27,18 +31,20 @@ import * as moment from 'moment';
 })
 export class HomePage implements OnInit, OnDestroy {
 
-  private hasData: boolean;
   private loading: HTMLIonLoadingElement;
   private networkSubscription: Subscription;
+  private refreshingData: boolean;
+  private spinnerVisible: boolean;
   private subscriptions: Subscription[] = [];
+  private tasks$ = [];
 
   public allAssessments: AmhpAssessmentRequest[] = [];
   public appVersion: string = version;
   public assessmentListLastUpdated: Date;
   public assessmentListScheduled: AmhpAssessmentList[] = [];
-  public assessmentRequests: AmhpAssessmentRequest[] = [];
+  public assessmentRequests: AmhpAssessmentRequest[] = null;
   public assessmentRequestsLastUpdated: Date;
-  public availabilityList: UserAvailability[] =[];
+  public availabilityList: UserAvailability[] = null;
   public availableList: UserAvailability[] = [];
   public canUsePin: boolean;
   public connection: boolean;
@@ -48,19 +54,20 @@ export class HomePage implements OnInit, OnDestroy {
   public isAuthenticated: boolean;
   public nextAvailability: UserAvailability;
   public nextOnCall: OnCallDoctor;
-  public onCallDoctorsConfirmed: OnCallDoctor[] = [];
+  public onCallDoctorsConfirmed: OnCallDoctor[] = null;
   public onCallDoctorsRejected: OnCallDoctor[] = [];
   public onCallDoctorsUnconfirmedCount: number;
-  public scheduledAssessments: AmhpAssessmentRequest[] = [];
+  public scheduledAssessments: AmhpAssessmentRequest[] = null;
   public showAvailability: boolean;
   public showOnCall: boolean;
   public unavailableList: UserAvailability[] = [];
-  public unscheduledAssessments: AmhpAssessmentRequest[] = [];
+  public unscheduledAssessments: AmhpAssessmentRequest[] = null;
 
   constructor(
     private alertController: AlertController,
     private assessmentService: AmhpAssessmentService,
     private authService: AuthService,
+    private broadcastService: BroadcastService,
     private changeRef: ChangeDetectorRef,
     private loadingController: LoadingController,
     private networkService: NetworkService,
@@ -73,18 +80,29 @@ export class HomePage implements OnInit, OnDestroy {
     private userAvailabilityService: UserAvailabilityService,
     private userDetailsService: UserDetailsService
   ) {
+
       this.authService.authState.subscribe(authState => {
         this.isAuthenticated = authState;
-        this.closeLoading();
+        if (this.isAuthenticated) {
+          setTimeout(() => {
+            this.refreshPage();
+          }, 750);
+        }
       });
 
-      this.userDetailsService.currentUser.subscribe(user => {
+      this.userDetailsService.currentUser.pipe(take(1)).subscribe(user => {
         this.currentUser = user;
+      });
+
+      this.broadcastService.subscribe('NotificationReceived', () => {
+        this.refreshPage();
       });
   }
 
-  ionViewDidEnter() {
-    this.refreshPage();
+  ionViewWillEnter() {
+    if (this.isAuthenticated) {
+        this.refreshPage();
+    }
     this.checkForPin();
   }
 
@@ -149,7 +167,7 @@ export class HomePage implements OnInit, OnDestroy {
     let colour = 'success';
 
     switch (request.doctorHasAccepted) {
-      case undefined:
+      case null:
         colour = 'warning';
         break;
       case true:
@@ -165,111 +183,133 @@ export class HomePage implements OnInit, OnDestroy {
   refreshPage($event?: any) {
     // load data each time the page is shown
     // this may be changed if offline data is to be used
-    const request = this.assessmentService.getRequests();
-    this.showLoading();
-    request
-      .subscribe(
-        result => {
-          this.allAssessments = result;
 
-          if (result && result.length > 0) {
+    if (this.refreshingData) {
+      return;
+    } else {
+      this.refreshingData = true;
+    }
 
-            const currentDate = moment().startOf('day');
-            const scheduled = [ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW];
-            const unscheduled = [
-              REFERRALSTATUS_SELECTING,
-              REFERRALSTATUS_AWAITING_RESPONSES,
-              REFERRALSTATUS_RESPONSES_PARTIAL,
-              REFERRALSTATUS_RESPONSES_COMPLETE
-            ];
+    this.tasks$ = [];
+    this.tasks$.push(this.assessmentService.getRequests());
+    this.tasks$.push(this.userAvailabilityService.getListForUser());
+    this.tasks$.push(this.onCallService.getListForUser());
 
-            // scheduled assessments will have a referralId of 6, 7 or 8
-            this.scheduledAssessments = this.allAssessments
-              .filter(assessment => scheduled.includes(assessment.referralStatusId))
-              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+    Observable.zip(...this.tasks$)
+      .subscribe((result) => {
+        this.refreshingData = false;
+        this.displayRequests(result[0] as AmhpAssessmentRequest[]);
+        this.displayAvailability(result[1] as UserAvailability[]);
+        this.displayOncall(result[2] as OnCallDoctor[]);
+      }, err => {
+        this.scheduledAssessments = [];
+        this.currentOnCall = null;
+        this.currentAvailability = null;
+        this.nextAvailability = null;
+        this.availabilityList = [];
+        this.unscheduledAssessments = [];
+        this.refreshingData = false;
+        this.toastService.displayError({message: 'Unable to retrieve data'});
+      });
+  }
 
-            this.unscheduledAssessments = this.allAssessments
-              .filter(assessment => unscheduled.includes(assessment.referralStatusId))
-              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+  displayRequests(result: AmhpAssessmentRequest[]) {
 
-            this.assessmentRequests = this.allAssessments
-              .filter(assessment => !scheduled.includes(assessment.referralStatusId))
-              .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW)
-              .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
-          } else {
-            this.scheduledAssessments = [];
-            this.assessmentRequests = [];
-          }
+    if (result && result.length > 0) {
 
-          this.assessmentRequestsLastUpdated = new Date();
-          this.closeLoading();
-          // this.closeRefreshing($event);
-        }, () => {
-          this.closeLoading();
-          // this.closeRefreshing($event);
+      const currentDate = moment().startOf('day');
+      const scheduled = [ASSESSMENTSCHEDULED, ASSESSMENTRESCHEDULING, AWAITINGREVIEW];
+      const unscheduled = [
+        REFERRALSTATUS_SELECTING,
+        REFERRALSTATUS_AWAITING_RESPONSES,
+        REFERRALSTATUS_RESPONSES_PARTIAL,
+        REFERRALSTATUS_RESPONSES_COMPLETE
+      ];
+      const completed = [
+        REFERRALSTATUS_AWAITING_REVIEW,
+        REFERRALSTATUS_CLOSED,
+        REFERRALSTATUS_OPEN
+      ];
+
+      // only interested in todays / future assessments
+      this.allAssessments = result
+        .filter(assessment => moment(assessment.dateTime).isAfter(currentDate));
+
+      // scheduled assessments will have a referralId of 6, 7 or 8
+      this.scheduledAssessments = this.allAssessments
+        .filter(assessment => scheduled.includes(assessment.referralStatusId));
+
+      // amhps can view unscheduled assessments but not assessment requests
+      if (this.currentUser.isAmhp) {
+        this.unscheduledAssessments = this.allAssessments
+          .filter(assessment => unscheduled.includes(assessment.referralStatusId));
+      } else {
+        this.assessmentRequests = this.allAssessments
+          .filter(assessment => !scheduled.includes(assessment.referralStatusId))
+          .filter(assessment => assessment.referralStatusId !== REFERRALSTATUS_NEW)
+          .filter(assessment => !completed.includes(assessment.referralStatusId));
         }
-      );
-
-    this.userAvailabilityService.getListForUser()
-      .subscribe(
-        (result: UserAvailability[]) => {
-          this.hasData = true;
-
-          if (result && result.length > 0) {
-
-            this.showAvailability = true;
-            this.availabilityList = result.sort(this.compareAvailability);
-
-            const availabilityStatus = [AVAILABLE, UNAVAILABLE];
-            const currentDate = moment();
-
-            this.currentAvailability =
-              this.availabilityList.filter(av => availabilityStatus.includes(av.statusId))
-                .find(av => (
-                  moment(av.start).isBefore(currentDate)) && (moment(av.end).isAfter(currentDate)
-                ));
-
-            this.nextAvailability =
-               this.availabilityList.filter(av => av.statusId === AVAILABLE).find(av =>
-               (moment(av.start).isAfter(currentDate)));
-          }
-          this.closeLoading();
-          // this.closeRefreshing($event);
-        }, error => {
-          this.closeLoading();
-          // this.closeRefreshing($event);
-        }
-      );
-
-    this.onCallService.getListForUser().subscribe((result: OnCallDoctor[]) => {
-      this.hasData = true;
-      if (result && result.length > 0) {
-        const currentDate = moment();
-
-        this.onCallDoctorsConfirmed = result
-          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
-
-        this.onCallDoctorsConfirmed.sort(this.compareOnCall);
-
-        this.showOnCall = this.onCallDoctorsConfirmed.length > 0;
-
-        this.currentOnCall = this.onCallDoctorsConfirmed
-          .find(ocd =>
-            (moment(ocd.start).isBefore(currentDate)) && (moment(ocd.end).isAfter(currentDate)));
-
-        this.nextOnCall = this.onCallDoctorsConfirmed
-          .find(ocd => moment(ocd.start).isAfter(currentDate));
-
-        this.onCallDoctorsUnconfirmedCount = result
-          .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
+      } else {
+          this.scheduledAssessments = [];
+          this.assessmentRequests = [];
       }
 
-      this.closeLoading();
-      // this.closeRefreshing($event);
-    }, err => {
-      this.closeLoading();
-      // this.closeRefreshing($event);
-    });
+    this.assessmentRequestsLastUpdated = new Date();
+  }
+
+  displayAvailability(result: UserAvailability[]) {
+
+    if (result && result.length > 0) {
+
+      this.showAvailability = true;
+      this.availabilityList = result.sort(this.compareAvailability);
+
+      const availabilityStatus = [AVAILABLE, UNAVAILABLE];
+      const currentDate = moment();
+
+      this.currentAvailability =
+        this.availabilityList.filter(av => availabilityStatus.includes(av.statusId))
+          .find(av => (
+            moment(av.start).isBefore(currentDate)) && (moment(av.end).isAfter(currentDate)
+          ));
+
+      this.nextAvailability =
+         this.availabilityList.filter(av => av.statusId === AVAILABLE).find(av =>
+           (moment(av.start).isAfter(currentDate)));
+      } else {
+        this.availabilityList = [];
+      }
+
+    if (!this.currentAvailability && !this.nextAvailability) {
+      this.availabilityList = [];
+    }
+
+  }
+
+  displayOncall(result: OnCallDoctor[]) {
+
+    if (result && result.length > 0) {
+      const currentDate = moment();
+
+      this.onCallDoctorsConfirmed = result
+        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === true);
+
+      this.onCallDoctorsConfirmed.sort(this.compareOnCall);
+
+      this.showOnCall = this.onCallDoctorsConfirmed.length > 0;
+
+      this.currentOnCall = this.onCallDoctorsConfirmed
+        .find(ocd =>
+          (moment(ocd.start).isBefore(currentDate)) && (moment(ocd.end).isAfter(currentDate)));
+
+      this.nextOnCall = this.onCallDoctorsConfirmed
+        .find(ocd => moment(ocd.start).isAfter(currentDate));
+
+      this.onCallDoctorsUnconfirmedCount = result
+        .filter((onCall: OnCallDoctor) => onCall.onCallIsConfirmed === null).length;
+    } else {
+      this.onCallDoctorsConfirmed = [];
+    }
   }
 
   compareAvailability = (a: UserAvailability, b: UserAvailability) => {
@@ -306,7 +346,7 @@ export class HomePage implements OnInit, OnDestroy {
   confirmOrReject(onCallDoctor: OnCallDoctor) {
     const navigationExtras: NavigationExtras = {
       state: {
-        onCallDoctor: onCallDoctor
+        onCallDoctor
       }
     };
     this.router.navigate(['/doctor-on-call-confirm-reject'], navigationExtras);
@@ -323,8 +363,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   public logIn(): void {
-
-    this.showLoading();
     if (this.platform.is('cordova')) {
       this.authService.loginCordovaMsal();
     } else {
@@ -361,11 +399,12 @@ export class HomePage implements OnInit, OnDestroy {
 
   async showLoading() {
 
-    if (!this.loading) {
+    if (!this.spinnerVisible) {
       this.loading = await this.loadingController.create({
         message: 'Please wait',
         spinner: 'lines'
       });
+      this.spinnerVisible = true;
       await this.loading.present();
     }
   }
@@ -374,9 +413,9 @@ export class HomePage implements OnInit, OnDestroy {
 
     setTimeout(() => {
       if (this.loading) {
-        this.loading.dismiss();
+        this.loading.dismiss().then(() => this.spinnerVisible = false);
       }
-    }, 1000);
+    }, 1500);
   }
 
   closeRefreshing($event?: any) {
@@ -394,6 +433,7 @@ export class HomePage implements OnInit, OnDestroy {
         .subscribe((match: boolean) => {
           if (match) {
             this.authService.signinSilently();
+            this.refreshPage();
           } else {
             this.toastService.displayError({message: 'Incorrect PIN'});
           }
@@ -404,6 +444,5 @@ export class HomePage implements OnInit, OnDestroy {
         console.log('Cancelled');
       }
     });
-    // this.loading.present();
   }
 }

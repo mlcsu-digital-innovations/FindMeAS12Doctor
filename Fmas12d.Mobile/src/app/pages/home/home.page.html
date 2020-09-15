@@ -15,194 +15,236 @@
     <ion-row *ngIf="!isAuthenticated">
       <img src="../../../assets/img/icon.png" alt="Find Me An S12 Doctor" class="logo" />
     </ion-row>
-    <ion-list *ngIf="isAuthenticated">
-
-      <ion-list-header *ngIf="currentUser.isDoctor && showOnCall">
-        On Call Status
-      </ion-list-header>
-      <ion-item
-        *ngIf="currentOnCall"
-        [routerLink]="['/doctor-on-call-list']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="success"
-            size="large"
-            name="phone-portrait"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            On call now until {{currentOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
-          </h3>
-        </ion-label>
-      </ion-item>
-      <ion-item
-        *ngIf="nextOnCall"
-        [routerLink]="['/doctor-on-call-list']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="warning"
-            size="large"
-            name="phone-portrait"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            Next on call {{nextOnCall.start | date: 'dd MMMM yyyy HH:mm'}} to 
-            {{nextOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
-          </h3>
-        </ion-label>
-      </ion-item>
-
-      <br/>
-
-      <ion-list-header *ngIf="currentUser.isDoctor && showAvailability">
-        Availability
-      </ion-list-header>
-      <ion-item
-        *ngIf="currentAvailability"
-        [routerLink]="['/doctor-availability-view']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="{{currentAvailability.statusId == 1 ? 'success' : 'danger'}}"
-            size="large"
-            name="calendar"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            {{currentAvailability.statusId == 1 ? 'Available' : 'Unavailable'}}
-            until {{currentAvailability.end | date: 'dd MMMM yyyy HH:mm'}}
-          </h3>
-        </ion-label>
-      </ion-item>
-      <ion-item
-        *ngIf="nextAvailability"
-        [routerLink]="['/doctor-availability-view']"
-        routerDirection="forward"
-      >
-        <ion-avatar slot="start">
-          <ion-icon
-            color="warning"
-            size="large"
-            name="calendar"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>
-            Next available {{nextAvailability.start | date: 'dd MMMM yyyy HH:mm'}} to  
-            {{nextAvailability.end | date: 'dd MMMM yyyy HH:mm'}} 
-          </h3>
-        </ion-label>
-      </ion-item>
-    </ion-list>
     
-    <ion-list *ngIf="isAuthenticated">
-      <ion-list-header>
-        Scheduled Assessments
-      </ion-list-header>
-      <ion-item *ngFor="let assessment of scheduledAssessments" detail="false"
-        [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward">
-        <ion-avatar slot="start">
-          <ion-icon
-            color="success"
-            size="large"
-            name="checkmark-circle"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label>
-          <h3>{{assessment.postcode}} - {{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
-        </ion-label>
-      </ion-item>
-      <ion-item *ngIf="scheduledAssessments.length == 0">
-        <ion-avatar slot="start">
-          <ion-icon
-            color="tertiary"
-            size="large"
-            name="information-circle"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>You are not currently scheduled to attend any assessments.</h3>
-        </ion-label>
-      </ion-item>
-      <br/>
+    <div *ngIf="isAuthenticated && currentUser">
+      <!-- All users see this -->
+      <ion-list>
+        <ion-list-header>
+          Scheduled Assessments
+        </ion-list-header>
+        <div class="skeleton">
+          <ion-item *ngFor="let assessment of scheduledAssessments" detail="false"
+          [routerLink]="currentUser.isAmhp ? ['/amhp-assessment-view/', assessment.id] : ['/doctor-assessment-details/', assessment.id]"
+          routerDirection="forward">
+          <ion-avatar slot="start">
+            <ion-icon
+              color="success"
+              size="large"
+              name="checkmark-circle"
+            >
+            </ion-icon>
+          </ion-avatar>
+          <ion-label>
+            <h3>{{assessment.postcode}} - {{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="scheduledAssessments && scheduledAssessments.length == 0">
+          <ion-avatar slot="start">
+            <ion-icon
+              color="tertiary"
+              size="large"
+              name="information-circle"
+            >
+            </ion-icon>
+          </ion-avatar>
+          <ion-label class="ion-text-wrap">
+            <h3>You are not currently scheduled to attend any assessments.</h3>
+          </ion-label>
+        </ion-item>
+        </div>
+      </ion-list>
 
-      <ion-list-header *ngIf="currentUser.isAmhp">
-        Other Assessments
-      </ion-list-header>
-      <ion-item *ngFor="let assessment of unscheduledAssessments" detail="false"
-        [routerLink]="['/doctor-assessment-details/', assessment.id]" routerDirection="forward">
-        <ion-avatar slot="start">
-          <ion-icon
-            color="warning"
-            size="large"
-            name="help-circle"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label>
-          <h3>{{assessment.postcode}} - {{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
-        </ion-label>
-      </ion-item>
-      <ion-item *ngIf="unscheduledAssessments.length == 0 && currentUser.isAmhp">
-        <ion-avatar slot="start">
-          <ion-icon
-            color="tertiary"
-            size="large"
-            name="information-circle"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>You are not currently assigned to any unscheduled assessments.</h3>
-        </ion-label>
-      </ion-item>
+      <ion-list *ngIf="currentUser.isAmhp">
+        <ion-list-header>
+          Other Assessments
+        </ion-list-header>
+        <div class="skeleton">
+          <ion-item *ngFor="let assessment of unscheduledAssessments" detail="false"
+            [routerLink]="['/amhp-assessment-view/', assessment.id]" routerDirection="forward">
+            <ion-avatar slot="start">
+              <ion-icon
+                color="warning"
+                size="large"
+                name="help-circle"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label>
+              <h3>{{assessment.postcode}} - {{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="unscheduledAssessments && unscheduledAssessments.length == 0">
+            <ion-avatar slot="start">
+              <ion-icon
+                color="tertiary"
+                size="large"
+                name="information-circle"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>You are not currently assigned to any unscheduled assessments.</h3>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-list>
 
-      <ion-list-header *ngIf="currentUser.isDoctor">
-        Assessment Requests
-      </ion-list-header>
-      <ion-item *ngFor="let assessment of assessmentRequests" detail="false"
-        [routerLink]="['/doctor-assessment-request-response/', assessment.id]" routerDirection="forward">
-        <ion-avatar slot="start" *ngIf="currentUser.isDoctor">
-          <ion-icon
-            color={{getStatusColour(assessment)}}
-            size="large"
-            name={{getStatusIcon(assessment)}}
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label *ngIf="currentUser.isDoctor">
-          <h3>{{assessment.postcode}} - {{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
-        </ion-label>
-      </ion-item>
-      <ion-item *ngIf="assessmentRequests.length == 0 && currentUser.isDoctor">
-        <ion-avatar slot="start">
-          <ion-icon
-            color="tertiary"
-            size="large"
-            name="information-circle"
-          >
-          </ion-icon>
-        </ion-avatar>
-        <ion-label class="ion-text-wrap">
-          <h3>You do not currently have any assessment requests.</h3>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+      <ion-list *ngIf="currentUser.isDoctor">
+        <ion-list-header>
+          Assessment Requests
+        </ion-list-header>
+        <div class="skeleton">
+          <ion-item *ngFor="let assessment of assessmentRequests" detail="false"
+            [routerLink]="['/doctor-assessment-request-response/', assessment.id]" routerDirection="forward">
+            <ion-avatar slot="start">
+              <ion-icon
+                color={{getStatusColour(assessment)}}
+                size="large"
+                name={{getStatusIcon(assessment)}}
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label>
+              <h3>{{assessment.postcode}} - {{assessment.dateTime | date: "d MMMM yyyy H:mm"}}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="assessmentRequests && assessmentRequests.length == 0 && currentUser.isDoctor">
+            <ion-avatar slot="start">
+              <ion-icon
+                color="tertiary"
+                size="large"
+                name="information-circle"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>You do not currently have any assessment requests.</h3>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-list>
 
+      <ion-list *ngIf="currentUser.isDoctor">
+        <ion-list-header >
+          On Call Status
+        </ion-list-header>
+        <div class="skeleton">
+          <ion-item
+            *ngIf="currentOnCall"
+            [routerLink]="['/doctor-on-call-list']"
+            routerDirection="forward"
+          >
+            <ion-avatar slot="start">
+              <ion-icon
+                color="success"
+                size="large"
+                name="phone-portrait"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>
+                On call now until {{currentOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
+              </h3>
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngIf="nextOnCall"
+            [routerLink]="['/doctor-on-call-list']"
+            routerDirection="forward"
+          >
+            <ion-avatar slot="start">
+              <ion-icon
+                color="warning"
+                size="large"
+                name="phone-portrait"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>
+                Next on call {{nextOnCall.start | date: 'dd MMMM yyyy HH:mm'}} to 
+                {{nextOnCall.end | date: 'dd MMMM yyyy HH:mm'}}
+              </h3>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="onCallDoctorsConfirmed && onCallDoctorsConfirmed.length == 0">
+            <ion-avatar slot="start">
+              <ion-icon
+                color="tertiary"
+                size="large"
+                name="information-circle"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>You do not currently have any On Call requests.</h3>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-list>
+
+      <ion-list *ngIf="currentUser.isDoctor">
+        <ion-list-header>
+          Availability
+        </ion-list-header>
+        <div class="skeleton">
+          <ion-item
+            *ngIf="currentAvailability"
+            [routerLink]="['/doctor-availability-view']"
+            routerDirection="forward"
+          >
+            <ion-avatar slot="start">
+              <ion-icon
+                color="{{currentAvailability.statusId == 1 ? 'success' : 'danger'}}"
+                size="large"
+                name="calendar"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>
+                {{currentAvailability.statusId == 1 ? 'Available' : 'Unavailable'}}
+                until {{currentAvailability.end | date: 'dd MMMM yyyy HH:mm'}}
+              </h3>
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngIf="nextAvailability"
+            [routerLink]="['/doctor-availability-view']"
+            routerDirection="forward"
+          >
+            <ion-avatar slot="start">
+              <ion-icon
+                color="warning"
+                size="large"
+                name="calendar"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>
+                Next available {{nextAvailability.start | date: 'dd MMMM yyyy HH:mm'}} to  
+                {{nextAvailability.end | date: 'dd MMMM yyyy HH:mm'}} 
+              </h3>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="availabilityList && availabilityList.length == 0">
+            <ion-avatar slot="start">
+              <ion-icon
+                color="tertiary"
+                size="large"
+                name="information-circle"
+              >
+              </ion-icon>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <h3>You have not registered any availability.</h3>
+            </ion-label>
+          </ion-item>
+        </div>
+      </ion-list>
+    </div>
 
     <ion-row *ngIf="canUsePin && !isAuthenticated">
       <ion-col>
